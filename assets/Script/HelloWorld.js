@@ -1,4 +1,5 @@
 var MyMessage = require('initialize_pb');
+var NetworkManager = require('NetworkManager');
 
 cc.Class({
     extends: cc.Component,
@@ -16,26 +17,39 @@ cc.Class({
     onLoad: function () {
         this.label.string = this.text;
         console.log(">>>>:" + MyMessage);
-        console.log(ByteBuffer);
-        var bb = new ByteBuffer().writeIString("Hello World");
-        console.log("bb : " + bb);
+        var message = new MyMessage.BINInitializeRequest();
+        message.setCp("1");
+        message.setCountry("vn");
+        message.setDeviceid("12345678909");
+        message.setPakagename("com.packagename.com");
+        message.setAppversion("1");
 
-        var ws = new WebSocket("ws://14.225.2.111:1280/megajackpot");
 
-        ws.onopen = function (event) {
+        window.ws = new WebSocket("ws://192.168.0.32:1280/megajackpot");
+        window.ws.binaryType = "arraybuffer";
+
+        window.ws.onopen = function (event) {
             console.log("Web socket");
+            setTimeout(function() {
+                var data = NetworkManager.initData(message.serializeBinary(), NetworkManager.OS.ANDROID,
+                    NetworkManager.MESSAGE_ID.INITIALIZE, "");
+                cc.log("data:", data);
+                window.ws.send(data);
+            }, 1);
+
         };
-        ws.onclose = function (event) {
+        window.ws.onclose = function (event) {
             console.log("Websocket instance was closed");
         };
 
-        ws.onmessage = function (event) {
-            console.log("response text msg:" + event.data);
+        window.ws.onmessage = function (event) {
+            console.log("response text msg:" + event);
+            NetworkManager.parseFrom(event.data, event.data.byteLength);
         };
 
         setTimeout(function () {
-            if(ws.readyState == WebSocket.OPEN) {
-                ws.send("1234432");
+            if(window.ws.readyState == WebSocket.OPEN) {
+                cc.log("web socket is open");
             } else {
                 console.log("Web socket instance wasn't ready");
             }
@@ -45,5 +59,5 @@ cc.Class({
     // called every frame
     update: function (dt) {
 
-    },
+    }
 });
