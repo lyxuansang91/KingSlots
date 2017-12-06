@@ -1,6 +1,5 @@
 var MyMessage = require('initialize_pb');
 
-
 var NetworkManager = {
     MESSAGE_ID: {
         INITIALIZE: 1111
@@ -53,9 +52,10 @@ var NetworkManager = {
     },
 
     getTypeMessage: function(msg, messageid, protoBufVar) {
+        var bytes = new Uint8Array(protoBufVar.toArrayBuffer());
         switch (messageid) {
             case NetworkManager.MESSAGE_ID.INITIALIZE:
-                msg = new MyMessage.BINInitializeResponse(protoBufVar);
+                msg = MyMessage.BINInitializeResponse.deserializeBinary(bytes);
                 break;
         }
 
@@ -148,39 +148,32 @@ var NetworkManager = {
                 else {
                     cc.error("unknown message");
                 }
-
-
             }
             else {
 
                 while (left_byte_size > 0) {
+
+                    var response = 0;
                     //read protobuf + data_size_block + mid
                     //read datasizeblock
+                    cc.log("left byte size:", left_byte_size);
 
                     var _offsetUnzip = 0;
 
 
                     var data_size_block = bb.readInt16(_offsetUnzip);
+                    cc.log("data size block:", data_size_block);
                     _offsetUnzip+= 2;
-
-
-                    // if(data_size_block != bb.limit - _offset){
-                    //     data_size_block = bb.limit - _offset;
-                    // }
 
                     // read messageid
                     var messageid = bb.readInt16(_offsetUnzip);
-                    _offsetUnzip+= 2;
-
-
+                    _offsetUnzip += 2;
                     //read protobuf
 
                     var protoBufVar = bb.copy(_offsetUnzip, data_size_block + _offsetUnzip - 2);
 
-
                     response = NetworkManager.getTypeMessage(response, messageid, protoBufVar);
-
-
+                    cc.log("response: ", response);
                     if (response != 0) {
                         left_byte_size -= (data_size_block + 2);
                         bb = bb.copy(data_size_block + _offsetUnzip - 2);

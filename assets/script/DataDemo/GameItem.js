@@ -25,7 +25,6 @@ cc.Class({
         var image = cc.url.raw(url);
         var texture = cc.textureCache.addImage(image);
         this.background.getComponent(cc.Sprite).spriteFrame = new cc.SpriteFrame(texture);
-        cc.textureCache.
         
         this.money1.string = playerInfo.money1;
         this.money2.string = playerInfo.money2;

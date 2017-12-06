@@ -24,8 +24,13 @@ cc.Class({
         message.setPakagename("com.packagename.com");
         message.setAppversion("1");
 
+        cc.log("message:" + message);
 
-        window.ws = new WebSocket("ws://192.168.0.32:1280/megajackpot");
+        var bytes = MyMessage.BINInitializeRequest.deserializeBinary(message.serializeBinary());
+        cc.log("bytes:" + bytes);
+
+
+        window.ws = new WebSocket("ws://14.225.2.111:1280/megajackpot");
         window.ws.binaryType = "arraybuffer";
 
         window.ws.onopen = function (event) {
@@ -43,7 +48,7 @@ cc.Class({
         };
 
         window.ws.onmessage = function (event) {
-            console.log("response text msg:" + event);
+            cc.log("response text msg:" + event);
             NetworkManager.parseFrom(event.data, event.data.byteLength);
         };
 
