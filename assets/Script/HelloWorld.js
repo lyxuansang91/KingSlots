@@ -68,12 +68,11 @@ cc.Class({
         }
     },
     handleMessage: function(buffer) {
-
         switch (buffer.message_id) {
             case NetworkManager.MESSAGE_ID.INITIALIZE:
                 var msg = buffer.response;
                 cc.log("message: " + msg.getMessage());
-                alert(msg.getMessage());
+                // alert(msg.getMessage());
                 break;
         }
     }
