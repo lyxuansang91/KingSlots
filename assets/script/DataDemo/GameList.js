@@ -20,6 +20,8 @@ cc.Class({
             var gameItem = gameItems[i];
             var item = cc.instantiate(this.prefabGameItem);
             item.getComponent('GameItem').init(i, gameItem);
+            item.setPositionY(this.content.getContentSize().height*0.06);
+            // item.setPositionX(item.getContentSize().width* (1.8*i + 0.2));
             this.content.addChild(item);
             cc.log(i);
         }
