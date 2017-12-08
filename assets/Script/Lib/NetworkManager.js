@@ -1,4 +1,4 @@
-var MyMessage = require('initialize_pb');
+var InitializeMessage = require('initialize_pb');
 
 var NetworkManager = {
     MESSAGE_ID: {
@@ -8,8 +8,9 @@ var NetworkManager = {
        ANDROID: 1,
        IOS: 2
     },
+
+
     requestMessage: function(request, os, message_id, session_id) {
-        var size = 32;
         var ackBuf = NetworkManager.initData(request, os, message_id, session_id);
         NetworkManager.callNetwork(ackBuf);
     }, 
@@ -210,10 +211,41 @@ var NetworkManager = {
 
         // cc.log("listMessages parse", listMessages);
         return lstMess;
+    }, initInitializeMessage: function() {
+
     },
 
     callNetwork: function(ackBuf) {
-        window.ws.send(ackBuf);
+        cc.log("websocket:", window.ws);
+        if(window.ws === null || window.ws === 'undefined' || window.ws.readyState === WebSocket.CLOSED) {
+            window.ws = new WebSocket("ws://14.225.2.111:1280/megajackpot");
+            window.listMessage = [];
+            window.ws.binaryType = "arraybuffer";
+
+            window.ws.onopen = function (event) {
+                console.log("Web socket");
+                setTimeout(function() {
+                    var message = new InitializeMessage.BINInitializeRequest();
+                    message.setCp("1");
+                    message.setCountry("vn");
+                    message.setDeviceid("12345678909");
+                    message.setPakagename("com.packagename.com");
+                    message.setAppversion("1");
+                    var data = NetworkManager.initData(message.serializeBinary(), NetworkManager.OS.ANDROID,
+                        NetworkManager.MESSAGE_ID.INITIALIZE, "");
+                    cc.log("data:", data);
+                    window.ws.send(data);
+                }, 1);
+            };
+            window.ws.onclose = function (event) {
+                console.log("Websocket instance was closed");
+            };
+        }
+
+        if(window.ws.readyState == WebSocket.OPEN) {
+            window.ws.send(ackBuf);
+        }
+
     }
 };
 
