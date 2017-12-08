@@ -56,7 +56,7 @@ var NetworkManager = {
         var bytes = new Uint8Array(protoBufVar.toArrayBuffer());
         switch (messageid) {
             case NetworkManager.MESSAGE_ID.INITIALIZE:
-                msg = MyMessage.BINInitializeResponse.deserializeBinary(bytes);
+                msg = InitializeMessage.BINInitializeResponse.deserializeBinary(bytes);
                 break;
         }
 

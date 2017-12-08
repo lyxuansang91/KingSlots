@@ -50,7 +50,7 @@ cc.Class({
 
     },
     goGame: function() {
-        window.ws = new WebSocket("ws://192.168.0.32:1280/megajackpot");
+        window.ws = new WebSocket("ws://kingviet.top:1280/megajackpot");
         window.listMessage = [];
         window.ws.binaryType = "arraybuffer";
 
