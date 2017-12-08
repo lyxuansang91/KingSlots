@@ -54,9 +54,12 @@ var NetworkManager = {
 
     getTypeMessage: function(msg, messageid, protoBufVar) {
         var bytes = new Uint8Array(protoBufVar.toArrayBuffer());
+        cc.log("bytes:", bytes);
         switch (messageid) {
             case NetworkManager.MESSAGE_ID.INITIALIZE:
-                msg = InitializeMessage.BINInitializeResponse.deserializeBinary(bytes);
+                    // InitializeMessage..deserializeBinary(bytes);
+                msg = proto.BINInitializeResponse.deserializeBinary(bytes);
+                cc.log("message:", msg);
                 break;
         }
 
@@ -164,9 +167,12 @@ var NetworkManager = {
                     // read messageid
                     var messageid = bb.readInt16(_offsetUnzip);
                     _offsetUnzip += 2;
+                    cc.log("message id:", messageid);
                     //read protobuf
 
                     var protoBufVar = bb.copy(_offsetUnzip, data_size_block + _offsetUnzip - 2);
+
+                    cc.log("protobuf var:", protoBufVar);
 
                     response = NetworkManager.getTypeMessage(response, messageid, protoBufVar);
                     cc.log("response: ", response);

@@ -23,56 +23,56 @@ goog.exportSymbol('proto.BINInitializeResponse', null, global);
  * @constructor
  */
 proto.BINInitializeRequest = function(opt_data) {
-    jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
 };
 goog.inherits(proto.BINInitializeRequest, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
-    proto.BINInitializeRequest.displayName = 'proto.BINInitializeRequest';
+  proto.BINInitializeRequest.displayName = 'proto.BINInitializeRequest';
 }
 
 
 if (jspb.Message.GENERATE_TO_OBJECT) {
-    /**
-     * Creates an object representation of this proto suitable for use in Soy templates.
-     * Field names that are reserved in JavaScript and will be renamed to pb_name.
-     * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
-     * For the list of reserved names please see:
-     *     com.google.apps.jspb.JsClassTemplate.JS_RESERVED_WORDS.
-     * @param {boolean=} opt_includeInstance Whether to include the JSPB instance
-     *     for transitional soy proto support: http://goto/soy-param-migration
-     * @return {!Object}
-     */
-    proto.BINInitializeRequest.prototype.toObject = function(opt_includeInstance) {
-        return proto.BINInitializeRequest.toObject(opt_includeInstance, this);
-    };
+/**
+ * Creates an object representation of this proto suitable for use in Soy templates.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     com.google.apps.jspb.JsClassTemplate.JS_RESERVED_WORDS.
+ * @param {boolean=} opt_includeInstance Whether to include the JSPB instance
+ *     for transitional soy proto support: http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.BINInitializeRequest.prototype.toObject = function(opt_includeInstance) {
+  return proto.BINInitializeRequest.toObject(opt_includeInstance, this);
+};
 
 
-    /**
-     * Static version of the {@see toObject} method.
-     * @param {boolean|undefined} includeInstance Whether to include the JSPB
-     *     instance for transitional soy proto support:
-     *     http://goto/soy-param-migration
-     * @param {!proto.BINInitializeRequest} msg The msg instance to transform.
-     * @return {!Object}
-     */
-    proto.BINInitializeRequest.toObject = function(includeInstance, msg) {
-        var f, obj = {
-            cp: jspb.Message.getFieldWithDefault(msg, 1, ""),
-            appversion: jspb.Message.getFieldWithDefault(msg, 2, ""),
-            deviceid: jspb.Message.getFieldWithDefault(msg, 3, ""),
-            deviceinfo: jspb.Message.getFieldWithDefault(msg, 4, ""),
-            country: jspb.Message.getFieldWithDefault(msg, 5, ""),
-            language: jspb.Message.getFieldWithDefault(msg, 6, ""),
-            pakagename: jspb.Message.getFieldWithDefault(msg, 7, ""),
-            liteversion: jspb.Message.getFieldWithDefault(msg, 8, false),
-            referencecode: jspb.Message.getFieldWithDefault(msg, 9, "")
-        };
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Whether to include the JSPB
+ *     instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.BINInitializeRequest} msg The msg instance to transform.
+ * @return {!Object}
+ */
+proto.BINInitializeRequest.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    cp: jspb.Message.getField(msg, 1),
+    appversion: jspb.Message.getField(msg, 2),
+    deviceid: jspb.Message.getField(msg, 3),
+    deviceinfo: jspb.Message.getField(msg, 4),
+    country: jspb.Message.getField(msg, 5),
+    language: jspb.Message.getField(msg, 6),
+    pakagename: jspb.Message.getField(msg, 7),
+    liteversion: jspb.Message.getField(msg, 8),
+    referencecode: jspb.Message.getField(msg, 9)
+  };
 
-        if (includeInstance) {
-            obj.$jspbMessageInstance = msg;
-        }
-        return obj;
-    };
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
 }
 
 
@@ -82,9 +82,9 @@ if (jspb.Message.GENERATE_TO_OBJECT) {
  * @return {!proto.BINInitializeRequest}
  */
 proto.BINInitializeRequest.deserializeBinary = function(bytes) {
-    var reader = new jspb.BinaryReader(bytes);
-    var msg = new proto.BINInitializeRequest;
-    return proto.BINInitializeRequest.deserializeBinaryFromReader(msg, reader);
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.BINInitializeRequest;
+  return proto.BINInitializeRequest.deserializeBinaryFromReader(msg, reader);
 };
 
 
@@ -96,54 +96,54 @@ proto.BINInitializeRequest.deserializeBinary = function(bytes) {
  * @return {!proto.BINInitializeRequest}
  */
 proto.BINInitializeRequest.deserializeBinaryFromReader = function(msg, reader) {
-    while (reader.nextField()) {
-        if (reader.isEndGroup()) {
-            break;
-        }
-        var field = reader.getFieldNumber();
-        switch (field) {
-            case 1:
-                var value = /** @type {string} */ (reader.readString());
-                msg.setCp(value);
-                break;
-            case 2:
-                var value = /** @type {string} */ (reader.readString());
-                msg.setAppversion(value);
-                break;
-            case 3:
-                var value = /** @type {string} */ (reader.readString());
-                msg.setDeviceid(value);
-                break;
-            case 4:
-                var value = /** @type {string} */ (reader.readString());
-                msg.setDeviceinfo(value);
-                break;
-            case 5:
-                var value = /** @type {string} */ (reader.readString());
-                msg.setCountry(value);
-                break;
-            case 6:
-                var value = /** @type {string} */ (reader.readString());
-                msg.setLanguage(value);
-                break;
-            case 7:
-                var value = /** @type {string} */ (reader.readString());
-                msg.setPakagename(value);
-                break;
-            case 8:
-                var value = /** @type {boolean} */ (reader.readBool());
-                msg.setLiteversion(value);
-                break;
-            case 9:
-                var value = /** @type {string} */ (reader.readString());
-                msg.setReferencecode(value);
-                break;
-            default:
-                reader.skipField();
-                break;
-        }
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
     }
-    return msg;
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setCp(value);
+      break;
+    case 2:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setAppversion(value);
+      break;
+    case 3:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setDeviceid(value);
+      break;
+    case 4:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setDeviceinfo(value);
+      break;
+    case 5:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setCountry(value);
+      break;
+    case 6:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setLanguage(value);
+      break;
+    case 7:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setPakagename(value);
+      break;
+    case 8:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setLiteversion(value);
+      break;
+    case 9:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setReferencecode(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
 };
 
 
@@ -154,7 +154,7 @@ proto.BINInitializeRequest.deserializeBinaryFromReader = function(msg, reader) {
  * @param {!jspb.BinaryWriter} writer
  */
 proto.BINInitializeRequest.serializeBinaryToWriter = function(message, writer) {
-    message.serializeBinaryToWriter(writer);
+  message.serializeBinaryToWriter(writer);
 };
 
 
@@ -163,9 +163,9 @@ proto.BINInitializeRequest.serializeBinaryToWriter = function(message, writer) {
  * @return {!Uint8Array}
  */
 proto.BINInitializeRequest.prototype.serializeBinary = function() {
-    var writer = new jspb.BinaryWriter();
-    this.serializeBinaryToWriter(writer);
-    return writer.getResultBuffer();
+  var writer = new jspb.BinaryWriter();
+  this.serializeBinaryToWriter(writer);
+  return writer.getResultBuffer();
 };
 
 
@@ -175,100 +175,128 @@ proto.BINInitializeRequest.prototype.serializeBinary = function() {
  * @param {!jspb.BinaryWriter} writer
  */
 proto.BINInitializeRequest.prototype.serializeBinaryToWriter = function (writer) {
-    var f = undefined;
-    f = this.getCp();
-    if (f.length > 0) {
-        writer.writeString(
-            1,
-            f
-        );
-    }
-    f = this.getAppversion();
-    if (f.length > 0) {
-        writer.writeString(
-            2,
-            f
-        );
-    }
-    f = this.getDeviceid();
-    if (f.length > 0) {
-        writer.writeString(
-            3,
-            f
-        );
-    }
-    f = this.getDeviceinfo();
-    if (f.length > 0) {
-        writer.writeString(
-            4,
-            f
-        );
-    }
-    f = this.getCountry();
-    if (f.length > 0) {
-        writer.writeString(
-            5,
-            f
-        );
-    }
-    f = this.getLanguage();
-    if (f.length > 0) {
-        writer.writeString(
-            6,
-            f
-        );
-    }
-    f = this.getPakagename();
-    if (f.length > 0) {
-        writer.writeString(
-            7,
-            f
-        );
-    }
-    f = this.getLiteversion();
-    if (f) {
-        writer.writeBool(
-            8,
-            f
-        );
-    }
-    f = this.getReferencecode();
-    if (f.length > 0) {
-        writer.writeString(
-            9,
-            f
-        );
-    }
+  var f = undefined;
+  f = /** @type {string} */ (jspb.Message.getField(this, 1));
+  if (f != null) {
+    writer.writeString(
+      1,
+      f
+    );
+  }
+  f = /** @type {string} */ (jspb.Message.getField(this, 2));
+  if (f != null) {
+    writer.writeString(
+      2,
+      f
+    );
+  }
+  f = /** @type {string} */ (jspb.Message.getField(this, 3));
+  if (f != null) {
+    writer.writeString(
+      3,
+      f
+    );
+  }
+  f = /** @type {string} */ (jspb.Message.getField(this, 4));
+  if (f != null) {
+    writer.writeString(
+      4,
+      f
+    );
+  }
+  f = /** @type {string} */ (jspb.Message.getField(this, 5));
+  if (f != null) {
+    writer.writeString(
+      5,
+      f
+    );
+  }
+  f = /** @type {string} */ (jspb.Message.getField(this, 6));
+  if (f != null) {
+    writer.writeString(
+      6,
+      f
+    );
+  }
+  f = /** @type {string} */ (jspb.Message.getField(this, 7));
+  if (f != null) {
+    writer.writeString(
+      7,
+      f
+    );
+  }
+  f = /** @type {boolean} */ (jspb.Message.getField(this, 8));
+  if (f != null) {
+    writer.writeBool(
+      8,
+      f
+    );
+  }
+  f = /** @type {string} */ (jspb.Message.getField(this, 9));
+  if (f != null) {
+    writer.writeString(
+      9,
+      f
+    );
+  }
 };
 
 
 /**
- * optional string cp = 1;
+ * required string cp = 1;
  * @return {string}
  */
 proto.BINInitializeRequest.prototype.getCp = function() {
-    return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
 
 /** @param {string} value */
 proto.BINInitializeRequest.prototype.setCp = function(value) {
-    jspb.Message.setField(this, 1, value);
+  jspb.Message.setField(this, 1, value);
+};
+
+
+proto.BINInitializeRequest.prototype.clearCp = function() {
+  jspb.Message.setField(this, 1, undefined);
 };
 
 
 /**
- * optional string appVersion = 2;
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINInitializeRequest.prototype.hasCp = function() {
+  return jspb.Message.getField(this, 1) != null;
+};
+
+
+/**
+ * required string appVersion = 2;
  * @return {string}
  */
 proto.BINInitializeRequest.prototype.getAppversion = function() {
-    return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
 };
 
 
 /** @param {string} value */
 proto.BINInitializeRequest.prototype.setAppversion = function(value) {
-    jspb.Message.setField(this, 2, value);
+  jspb.Message.setField(this, 2, value);
+};
+
+
+proto.BINInitializeRequest.prototype.clearAppversion = function() {
+  jspb.Message.setField(this, 2, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINInitializeRequest.prototype.hasAppversion = function() {
+  return jspb.Message.getField(this, 2) != null;
 };
 
 
@@ -277,13 +305,27 @@ proto.BINInitializeRequest.prototype.setAppversion = function(value) {
  * @return {string}
  */
 proto.BINInitializeRequest.prototype.getDeviceid = function() {
-    return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
 };
 
 
 /** @param {string} value */
 proto.BINInitializeRequest.prototype.setDeviceid = function(value) {
-    jspb.Message.setField(this, 3, value);
+  jspb.Message.setField(this, 3, value);
+};
+
+
+proto.BINInitializeRequest.prototype.clearDeviceid = function() {
+  jspb.Message.setField(this, 3, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINInitializeRequest.prototype.hasDeviceid = function() {
+  return jspb.Message.getField(this, 3) != null;
 };
 
 
@@ -292,13 +334,27 @@ proto.BINInitializeRequest.prototype.setDeviceid = function(value) {
  * @return {string}
  */
 proto.BINInitializeRequest.prototype.getDeviceinfo = function() {
-    return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
 };
 
 
 /** @param {string} value */
 proto.BINInitializeRequest.prototype.setDeviceinfo = function(value) {
-    jspb.Message.setField(this, 4, value);
+  jspb.Message.setField(this, 4, value);
+};
+
+
+proto.BINInitializeRequest.prototype.clearDeviceinfo = function() {
+  jspb.Message.setField(this, 4, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINInitializeRequest.prototype.hasDeviceinfo = function() {
+  return jspb.Message.getField(this, 4) != null;
 };
 
 
@@ -307,13 +363,27 @@ proto.BINInitializeRequest.prototype.setDeviceinfo = function(value) {
  * @return {string}
  */
 proto.BINInitializeRequest.prototype.getCountry = function() {
-    return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
 };
 
 
 /** @param {string} value */
 proto.BINInitializeRequest.prototype.setCountry = function(value) {
-    jspb.Message.setField(this, 5, value);
+  jspb.Message.setField(this, 5, value);
+};
+
+
+proto.BINInitializeRequest.prototype.clearCountry = function() {
+  jspb.Message.setField(this, 5, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINInitializeRequest.prototype.hasCountry = function() {
+  return jspb.Message.getField(this, 5) != null;
 };
 
 
@@ -322,13 +392,27 @@ proto.BINInitializeRequest.prototype.setCountry = function(value) {
  * @return {string}
  */
 proto.BINInitializeRequest.prototype.getLanguage = function() {
-    return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 6, ""));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 6, ""));
 };
 
 
 /** @param {string} value */
 proto.BINInitializeRequest.prototype.setLanguage = function(value) {
-    jspb.Message.setField(this, 6, value);
+  jspb.Message.setField(this, 6, value);
+};
+
+
+proto.BINInitializeRequest.prototype.clearLanguage = function() {
+  jspb.Message.setField(this, 6, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINInitializeRequest.prototype.hasLanguage = function() {
+  return jspb.Message.getField(this, 6) != null;
 };
 
 
@@ -337,13 +421,27 @@ proto.BINInitializeRequest.prototype.setLanguage = function(value) {
  * @return {string}
  */
 proto.BINInitializeRequest.prototype.getPakagename = function() {
-    return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 7, ""));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 7, ""));
 };
 
 
 /** @param {string} value */
 proto.BINInitializeRequest.prototype.setPakagename = function(value) {
-    jspb.Message.setField(this, 7, value);
+  jspb.Message.setField(this, 7, value);
+};
+
+
+proto.BINInitializeRequest.prototype.clearPakagename = function() {
+  jspb.Message.setField(this, 7, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINInitializeRequest.prototype.hasPakagename = function() {
+  return jspb.Message.getField(this, 7) != null;
 };
 
 
@@ -354,13 +452,27 @@ proto.BINInitializeRequest.prototype.setPakagename = function(value) {
  * @return {boolean}
  */
 proto.BINInitializeRequest.prototype.getLiteversion = function() {
-    return /** @type {boolean} */ (jspb.Message.getFieldWithDefault(this, 8, false));
+  return /** @type {boolean} */ (jspb.Message.getFieldWithDefault(this, 8, false));
 };
 
 
 /** @param {boolean} value */
 proto.BINInitializeRequest.prototype.setLiteversion = function(value) {
-    jspb.Message.setField(this, 8, value);
+  jspb.Message.setField(this, 8, value);
+};
+
+
+proto.BINInitializeRequest.prototype.clearLiteversion = function() {
+  jspb.Message.setField(this, 8, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINInitializeRequest.prototype.hasLiteversion = function() {
+  return jspb.Message.getField(this, 8) != null;
 };
 
 
@@ -369,13 +481,27 @@ proto.BINInitializeRequest.prototype.setLiteversion = function(value) {
  * @return {string}
  */
 proto.BINInitializeRequest.prototype.getReferencecode = function() {
-    return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 9, ""));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 9, ""));
 };
 
 
 /** @param {string} value */
 proto.BINInitializeRequest.prototype.setReferencecode = function(value) {
-    jspb.Message.setField(this, 9, value);
+  jspb.Message.setField(this, 9, value);
+};
+
+
+proto.BINInitializeRequest.prototype.clearReferencecode = function() {
+  jspb.Message.setField(this, 9, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINInitializeRequest.prototype.hasReferencecode = function() {
+  return jspb.Message.getField(this, 9) != null;
 };
 
 
@@ -391,11 +517,11 @@ proto.BINInitializeRequest.prototype.setReferencecode = function(value) {
  * @constructor
  */
 proto.BINInitializeResponse = function(opt_data) {
-    jspb.Message.initialize(this, opt_data, 0, -1, proto.BINInitializeResponse.repeatedFields_, null);
+  jspb.Message.initialize(this, opt_data, 0, -1, proto.BINInitializeResponse.repeatedFields_, null);
 };
 goog.inherits(proto.BINInitializeResponse, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
-    proto.BINInitializeResponse.displayName = 'proto.BINInitializeResponse';
+  proto.BINInitializeResponse.displayName = 'proto.BINInitializeResponse';
 }
 /**
  * List of repeated fields within this message type.
@@ -407,58 +533,58 @@ proto.BINInitializeResponse.repeatedFields_ = [16,19];
 
 
 if (jspb.Message.GENERATE_TO_OBJECT) {
-    /**
-     * Creates an object representation of this proto suitable for use in Soy templates.
-     * Field names that are reserved in JavaScript and will be renamed to pb_name.
-     * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
-     * For the list of reserved names please see:
-     *     com.google.apps.jspb.JsClassTemplate.JS_RESERVED_WORDS.
-     * @param {boolean=} opt_includeInstance Whether to include the JSPB instance
-     *     for transitional soy proto support: http://goto/soy-param-migration
-     * @return {!Object}
-     */
-    proto.BINInitializeResponse.prototype.toObject = function(opt_includeInstance) {
-        return proto.BINInitializeResponse.toObject(opt_includeInstance, this);
-    };
+/**
+ * Creates an object representation of this proto suitable for use in Soy templates.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     com.google.apps.jspb.JsClassTemplate.JS_RESERVED_WORDS.
+ * @param {boolean=} opt_includeInstance Whether to include the JSPB instance
+ *     for transitional soy proto support: http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.BINInitializeResponse.prototype.toObject = function(opt_includeInstance) {
+  return proto.BINInitializeResponse.toObject(opt_includeInstance, this);
+};
 
 
-    /**
-     * Static version of the {@see toObject} method.
-     * @param {boolean|undefined} includeInstance Whether to include the JSPB
-     *     instance for transitional soy proto support:
-     *     http://goto/soy-param-migration
-     * @param {!proto.BINInitializeResponse} msg The msg instance to transform.
-     * @return {!Object}
-     */
-    proto.BINInitializeResponse.toObject = function(includeInstance, msg) {
-        var f, obj = {
-            responsecode: jspb.Message.getFieldWithDefault(msg, 1, false),
-            message: jspb.Message.getFieldWithDefault(msg, 2, ""),
-            currentappversion: jspb.Message.getFieldWithDefault(msg, 3, ""),
-            downloadurl: jspb.Message.getFieldWithDefault(msg, 4, ""),
-            cashcurrency: jspb.Message.getFieldWithDefault(msg, 5, ""),
-            goldcurrency: jspb.Message.getFieldWithDefault(msg, 6, ""),
-            forceupdate: jspb.Message.getFieldWithDefault(msg, 7, false),
-            enablequickplay: jspb.Message.getFieldWithDefault(msg, 8, false),
-            enablecashsystem: jspb.Message.getFieldWithDefault(msg, 9, false),
-            enablepurchasecash: jspb.Message.getFieldWithDefault(msg, 10, false),
-            enabletopup: jspb.Message.getFieldWithDefault(msg, 11, false),
-            enablecashtogold: jspb.Message.getFieldWithDefault(msg, 12, false),
-            enablecashtransfer: jspb.Message.getFieldWithDefault(msg, 13, false),
-            enablegiftcode: jspb.Message.getFieldWithDefault(msg, 14, false),
-            cashtogoldratio: jspb.Message.getFieldWithDefault(msg, 15, 0),
-            hotlinesList: jspb.Message.getField(msg, 16),
-            fanpageurl: jspb.Message.getFieldWithDefault(msg, 17, ""),
-            websiteurl: jspb.Message.getFieldWithDefault(msg, 18, ""),
-            enablegameidsList: jspb.Message.getField(msg, 19),
-            resetpwsmssyntax: jspb.Message.getFieldWithDefault(msg, 20, "")
-        };
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Whether to include the JSPB
+ *     instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.BINInitializeResponse} msg The msg instance to transform.
+ * @return {!Object}
+ */
+proto.BINInitializeResponse.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    responsecode: jspb.Message.getField(msg, 1),
+    message: jspb.Message.getField(msg, 2),
+    currentappversion: jspb.Message.getField(msg, 3),
+    downloadurl: jspb.Message.getField(msg, 4),
+    cashcurrency: jspb.Message.getField(msg, 5),
+    goldcurrency: jspb.Message.getField(msg, 6),
+    forceupdate: jspb.Message.getField(msg, 7),
+    enablequickplay: jspb.Message.getField(msg, 8),
+    enablecashsystem: jspb.Message.getField(msg, 9),
+    enablepurchasecash: jspb.Message.getField(msg, 10),
+    enabletopup: jspb.Message.getField(msg, 11),
+    enablecashtogold: jspb.Message.getField(msg, 12),
+    enablecashtransfer: jspb.Message.getField(msg, 13),
+    enablegiftcode: jspb.Message.getField(msg, 14),
+    cashtogoldratio: jspb.Message.getField(msg, 15),
+    hotlinesList: jspb.Message.getField(msg, 16),
+    fanpageurl: jspb.Message.getField(msg, 17),
+    websiteurl: jspb.Message.getField(msg, 18),
+    enablegameidsList: jspb.Message.getField(msg, 19),
+    resetpwsmssyntax: jspb.Message.getField(msg, 20)
+  };
 
-        if (includeInstance) {
-            obj.$jspbMessageInstance = msg;
-        }
-        return obj;
-    };
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
 }
 
 
@@ -468,9 +594,9 @@ if (jspb.Message.GENERATE_TO_OBJECT) {
  * @return {!proto.BINInitializeResponse}
  */
 proto.BINInitializeResponse.deserializeBinary = function(bytes) {
-    var reader = new jspb.BinaryReader(bytes);
-    var msg = new proto.BINInitializeResponse;
-    return proto.BINInitializeResponse.deserializeBinaryFromReader(msg, reader);
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.BINInitializeResponse;
+  return proto.BINInitializeResponse.deserializeBinaryFromReader(msg, reader);
 };
 
 
@@ -482,98 +608,98 @@ proto.BINInitializeResponse.deserializeBinary = function(bytes) {
  * @return {!proto.BINInitializeResponse}
  */
 proto.BINInitializeResponse.deserializeBinaryFromReader = function(msg, reader) {
-    while (reader.nextField()) {
-        if (reader.isEndGroup()) {
-            break;
-        }
-        var field = reader.getFieldNumber();
-        switch (field) {
-            case 1:
-                var value = /** @type {boolean} */ (reader.readBool());
-                msg.setResponsecode(value);
-                break;
-            case 2:
-                var value = /** @type {string} */ (reader.readString());
-                msg.setMessage(value);
-                break;
-            case 3:
-                var value = /** @type {string} */ (reader.readString());
-                msg.setCurrentappversion(value);
-                break;
-            case 4:
-                var value = /** @type {string} */ (reader.readString());
-                msg.setDownloadurl(value);
-                break;
-            case 5:
-                var value = /** @type {string} */ (reader.readString());
-                msg.setCashcurrency(value);
-                break;
-            case 6:
-                var value = /** @type {string} */ (reader.readString());
-                msg.setGoldcurrency(value);
-                break;
-            case 7:
-                var value = /** @type {boolean} */ (reader.readBool());
-                msg.setForceupdate(value);
-                break;
-            case 8:
-                var value = /** @type {boolean} */ (reader.readBool());
-                msg.setEnablequickplay(value);
-                break;
-            case 9:
-                var value = /** @type {boolean} */ (reader.readBool());
-                msg.setEnablecashsystem(value);
-                break;
-            case 10:
-                var value = /** @type {boolean} */ (reader.readBool());
-                msg.setEnablepurchasecash(value);
-                break;
-            case 11:
-                var value = /** @type {boolean} */ (reader.readBool());
-                msg.setEnabletopup(value);
-                break;
-            case 12:
-                var value = /** @type {boolean} */ (reader.readBool());
-                msg.setEnablecashtogold(value);
-                break;
-            case 13:
-                var value = /** @type {boolean} */ (reader.readBool());
-                msg.setEnablecashtransfer(value);
-                break;
-            case 14:
-                var value = /** @type {boolean} */ (reader.readBool());
-                msg.setEnablegiftcode(value);
-                break;
-            case 15:
-                var value = /** @type {number} */ (reader.readInt32());
-                msg.setCashtogoldratio(value);
-                break;
-            case 16:
-                var value = /** @type {string} */ (reader.readString());
-                msg.addHotlines(value);
-                break;
-            case 17:
-                var value = /** @type {string} */ (reader.readString());
-                msg.setFanpageurl(value);
-                break;
-            case 18:
-                var value = /** @type {string} */ (reader.readString());
-                msg.setWebsiteurl(value);
-                break;
-            case 19:
-                var value = /** @type {!Array.<number>} */ (reader.readPackedInt32());
-                msg.setEnablegameidsList(value);
-                break;
-            case 20:
-                var value = /** @type {string} */ (reader.readString());
-                msg.setResetpwsmssyntax(value);
-                break;
-            default:
-                reader.skipField();
-                break;
-        }
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
     }
-    return msg;
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setResponsecode(value);
+      break;
+    case 2:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setMessage(value);
+      break;
+    case 3:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setCurrentappversion(value);
+      break;
+    case 4:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setDownloadurl(value);
+      break;
+    case 5:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setCashcurrency(value);
+      break;
+    case 6:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setGoldcurrency(value);
+      break;
+    case 7:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setForceupdate(value);
+      break;
+    case 8:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setEnablequickplay(value);
+      break;
+    case 9:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setEnablecashsystem(value);
+      break;
+    case 10:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setEnablepurchasecash(value);
+      break;
+    case 11:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setEnabletopup(value);
+      break;
+    case 12:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setEnablecashtogold(value);
+      break;
+    case 13:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setEnablecashtransfer(value);
+      break;
+    case 14:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setEnablegiftcode(value);
+      break;
+    case 15:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setCashtogoldratio(value);
+      break;
+    case 16:
+      var value = /** @type {string} */ (reader.readString());
+      msg.addHotlines(value);
+      break;
+    case 17:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setFanpageurl(value);
+      break;
+    case 18:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setWebsiteurl(value);
+      break;
+    case 19:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.addEnablegameids(value);
+      break;
+    case 20:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setResetpwsmssyntax(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
 };
 
 
@@ -584,7 +710,7 @@ proto.BINInitializeResponse.deserializeBinaryFromReader = function(msg, reader) 
  * @param {!jspb.BinaryWriter} writer
  */
 proto.BINInitializeResponse.serializeBinaryToWriter = function(message, writer) {
-    message.serializeBinaryToWriter(writer);
+  message.serializeBinaryToWriter(writer);
 };
 
 
@@ -593,9 +719,9 @@ proto.BINInitializeResponse.serializeBinaryToWriter = function(message, writer) 
  * @return {!Uint8Array}
  */
 proto.BINInitializeResponse.prototype.serializeBinary = function() {
-    var writer = new jspb.BinaryWriter();
-    this.serializeBinaryToWriter(writer);
-    return writer.getResultBuffer();
+  var writer = new jspb.BinaryWriter();
+  this.serializeBinaryToWriter(writer);
+  return writer.getResultBuffer();
 };
 
 
@@ -605,164 +731,178 @@ proto.BINInitializeResponse.prototype.serializeBinary = function() {
  * @param {!jspb.BinaryWriter} writer
  */
 proto.BINInitializeResponse.prototype.serializeBinaryToWriter = function (writer) {
-    var f = undefined;
-    f = this.getResponsecode();
-    if (f) {
-        writer.writeBool(
-            1,
-            f
-        );
-    }
-    f = this.getMessage();
-    if (f.length > 0) {
-        writer.writeString(
-            2,
-            f
-        );
-    }
-    f = this.getCurrentappversion();
-    if (f.length > 0) {
-        writer.writeString(
-            3,
-            f
-        );
-    }
-    f = this.getDownloadurl();
-    if (f.length > 0) {
-        writer.writeString(
-            4,
-            f
-        );
-    }
-    f = this.getCashcurrency();
-    if (f.length > 0) {
-        writer.writeString(
-            5,
-            f
-        );
-    }
-    f = this.getGoldcurrency();
-    if (f.length > 0) {
-        writer.writeString(
-            6,
-            f
-        );
-    }
-    f = this.getForceupdate();
-    if (f) {
-        writer.writeBool(
-            7,
-            f
-        );
-    }
-    f = this.getEnablequickplay();
-    if (f) {
-        writer.writeBool(
-            8,
-            f
-        );
-    }
-    f = this.getEnablecashsystem();
-    if (f) {
-        writer.writeBool(
-            9,
-            f
-        );
-    }
-    f = this.getEnablepurchasecash();
-    if (f) {
-        writer.writeBool(
-            10,
-            f
-        );
-    }
-    f = this.getEnabletopup();
-    if (f) {
-        writer.writeBool(
-            11,
-            f
-        );
-    }
-    f = this.getEnablecashtogold();
-    if (f) {
-        writer.writeBool(
-            12,
-            f
-        );
-    }
-    f = this.getEnablecashtransfer();
-    if (f) {
-        writer.writeBool(
-            13,
-            f
-        );
-    }
-    f = this.getEnablegiftcode();
-    if (f) {
-        writer.writeBool(
-            14,
-            f
-        );
-    }
-    f = this.getCashtogoldratio();
-    if (f !== 0) {
-        writer.writeInt32(
-            15,
-            f
-        );
-    }
-    f = this.getHotlinesList();
-    if (f.length > 0) {
-        writer.writeRepeatedString(
-            16,
-            f
-        );
-    }
-    f = this.getFanpageurl();
-    if (f.length > 0) {
-        writer.writeString(
-            17,
-            f
-        );
-    }
-    f = this.getWebsiteurl();
-    if (f.length > 0) {
-        writer.writeString(
-            18,
-            f
-        );
-    }
-    f = this.getEnablegameidsList();
-    if (f.length > 0) {
-        writer.writePackedInt32(
-            19,
-            f
-        );
-    }
-    f = this.getResetpwsmssyntax();
-    if (f.length > 0) {
-        writer.writeString(
-            20,
-            f
-        );
-    }
+  var f = undefined;
+  f = /** @type {boolean} */ (jspb.Message.getField(this, 1));
+  if (f != null) {
+    writer.writeBool(
+      1,
+      f
+    );
+  }
+  f = /** @type {string} */ (jspb.Message.getField(this, 2));
+  if (f != null) {
+    writer.writeString(
+      2,
+      f
+    );
+  }
+  f = /** @type {string} */ (jspb.Message.getField(this, 3));
+  if (f != null) {
+    writer.writeString(
+      3,
+      f
+    );
+  }
+  f = /** @type {string} */ (jspb.Message.getField(this, 4));
+  if (f != null) {
+    writer.writeString(
+      4,
+      f
+    );
+  }
+  f = /** @type {string} */ (jspb.Message.getField(this, 5));
+  if (f != null) {
+    writer.writeString(
+      5,
+      f
+    );
+  }
+  f = /** @type {string} */ (jspb.Message.getField(this, 6));
+  if (f != null) {
+    writer.writeString(
+      6,
+      f
+    );
+  }
+  f = /** @type {boolean} */ (jspb.Message.getField(this, 7));
+  if (f != null) {
+    writer.writeBool(
+      7,
+      f
+    );
+  }
+  f = /** @type {boolean} */ (jspb.Message.getField(this, 8));
+  if (f != null) {
+    writer.writeBool(
+      8,
+      f
+    );
+  }
+  f = /** @type {boolean} */ (jspb.Message.getField(this, 9));
+  if (f != null) {
+    writer.writeBool(
+      9,
+      f
+    );
+  }
+  f = /** @type {boolean} */ (jspb.Message.getField(this, 10));
+  if (f != null) {
+    writer.writeBool(
+      10,
+      f
+    );
+  }
+  f = /** @type {boolean} */ (jspb.Message.getField(this, 11));
+  if (f != null) {
+    writer.writeBool(
+      11,
+      f
+    );
+  }
+  f = /** @type {boolean} */ (jspb.Message.getField(this, 12));
+  if (f != null) {
+    writer.writeBool(
+      12,
+      f
+    );
+  }
+  f = /** @type {boolean} */ (jspb.Message.getField(this, 13));
+  if (f != null) {
+    writer.writeBool(
+      13,
+      f
+    );
+  }
+  f = /** @type {boolean} */ (jspb.Message.getField(this, 14));
+  if (f != null) {
+    writer.writeBool(
+      14,
+      f
+    );
+  }
+  f = /** @type {number} */ (jspb.Message.getField(this, 15));
+  if (f != null) {
+    writer.writeInt32(
+      15,
+      f
+    );
+  }
+  f = this.getHotlinesList();
+  if (f.length > 0) {
+    writer.writeRepeatedString(
+      16,
+      f
+    );
+  }
+  f = /** @type {string} */ (jspb.Message.getField(this, 17));
+  if (f != null) {
+    writer.writeString(
+      17,
+      f
+    );
+  }
+  f = /** @type {string} */ (jspb.Message.getField(this, 18));
+  if (f != null) {
+    writer.writeString(
+      18,
+      f
+    );
+  }
+  f = this.getEnablegameidsList();
+  if (f.length > 0) {
+    writer.writeRepeatedInt32(
+      19,
+      f
+    );
+  }
+  f = /** @type {string} */ (jspb.Message.getField(this, 20));
+  if (f != null) {
+    writer.writeString(
+      20,
+      f
+    );
+  }
 };
 
 
 /**
- * optional bool responseCode = 1;
+ * required bool responseCode = 1;
  * Note that Boolean fields may be set to 0/1 when serialized from a Java server.
  * You should avoid comparisons like {@code val === true/false} in those cases.
  * @return {boolean}
  */
 proto.BINInitializeResponse.prototype.getResponsecode = function() {
-    return /** @type {boolean} */ (jspb.Message.getFieldWithDefault(this, 1, false));
+  return /** @type {boolean} */ (jspb.Message.getFieldWithDefault(this, 1, false));
 };
 
 
 /** @param {boolean} value */
 proto.BINInitializeResponse.prototype.setResponsecode = function(value) {
-    jspb.Message.setField(this, 1, value);
+  jspb.Message.setField(this, 1, value);
+};
+
+
+proto.BINInitializeResponse.prototype.clearResponsecode = function() {
+  jspb.Message.setField(this, 1, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINInitializeResponse.prototype.hasResponsecode = function() {
+  return jspb.Message.getField(this, 1) != null;
 };
 
 
@@ -771,13 +911,27 @@ proto.BINInitializeResponse.prototype.setResponsecode = function(value) {
  * @return {string}
  */
 proto.BINInitializeResponse.prototype.getMessage = function() {
-    return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
 };
 
 
 /** @param {string} value */
 proto.BINInitializeResponse.prototype.setMessage = function(value) {
-    jspb.Message.setField(this, 2, value);
+  jspb.Message.setField(this, 2, value);
+};
+
+
+proto.BINInitializeResponse.prototype.clearMessage = function() {
+  jspb.Message.setField(this, 2, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINInitializeResponse.prototype.hasMessage = function() {
+  return jspb.Message.getField(this, 2) != null;
 };
 
 
@@ -786,13 +940,27 @@ proto.BINInitializeResponse.prototype.setMessage = function(value) {
  * @return {string}
  */
 proto.BINInitializeResponse.prototype.getCurrentappversion = function() {
-    return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
 };
 
 
 /** @param {string} value */
 proto.BINInitializeResponse.prototype.setCurrentappversion = function(value) {
-    jspb.Message.setField(this, 3, value);
+  jspb.Message.setField(this, 3, value);
+};
+
+
+proto.BINInitializeResponse.prototype.clearCurrentappversion = function() {
+  jspb.Message.setField(this, 3, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINInitializeResponse.prototype.hasCurrentappversion = function() {
+  return jspb.Message.getField(this, 3) != null;
 };
 
 
@@ -801,13 +969,27 @@ proto.BINInitializeResponse.prototype.setCurrentappversion = function(value) {
  * @return {string}
  */
 proto.BINInitializeResponse.prototype.getDownloadurl = function() {
-    return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
 };
 
 
 /** @param {string} value */
 proto.BINInitializeResponse.prototype.setDownloadurl = function(value) {
-    jspb.Message.setField(this, 4, value);
+  jspb.Message.setField(this, 4, value);
+};
+
+
+proto.BINInitializeResponse.prototype.clearDownloadurl = function() {
+  jspb.Message.setField(this, 4, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINInitializeResponse.prototype.hasDownloadurl = function() {
+  return jspb.Message.getField(this, 4) != null;
 };
 
 
@@ -816,13 +998,27 @@ proto.BINInitializeResponse.prototype.setDownloadurl = function(value) {
  * @return {string}
  */
 proto.BINInitializeResponse.prototype.getCashcurrency = function() {
-    return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
 };
 
 
 /** @param {string} value */
 proto.BINInitializeResponse.prototype.setCashcurrency = function(value) {
-    jspb.Message.setField(this, 5, value);
+  jspb.Message.setField(this, 5, value);
+};
+
+
+proto.BINInitializeResponse.prototype.clearCashcurrency = function() {
+  jspb.Message.setField(this, 5, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINInitializeResponse.prototype.hasCashcurrency = function() {
+  return jspb.Message.getField(this, 5) != null;
 };
 
 
@@ -831,13 +1027,27 @@ proto.BINInitializeResponse.prototype.setCashcurrency = function(value) {
  * @return {string}
  */
 proto.BINInitializeResponse.prototype.getGoldcurrency = function() {
-    return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 6, ""));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 6, ""));
 };
 
 
 /** @param {string} value */
 proto.BINInitializeResponse.prototype.setGoldcurrency = function(value) {
-    jspb.Message.setField(this, 6, value);
+  jspb.Message.setField(this, 6, value);
+};
+
+
+proto.BINInitializeResponse.prototype.clearGoldcurrency = function() {
+  jspb.Message.setField(this, 6, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINInitializeResponse.prototype.hasGoldcurrency = function() {
+  return jspb.Message.getField(this, 6) != null;
 };
 
 
@@ -848,13 +1058,27 @@ proto.BINInitializeResponse.prototype.setGoldcurrency = function(value) {
  * @return {boolean}
  */
 proto.BINInitializeResponse.prototype.getForceupdate = function() {
-    return /** @type {boolean} */ (jspb.Message.getFieldWithDefault(this, 7, false));
+  return /** @type {boolean} */ (jspb.Message.getFieldWithDefault(this, 7, false));
 };
 
 
 /** @param {boolean} value */
 proto.BINInitializeResponse.prototype.setForceupdate = function(value) {
-    jspb.Message.setField(this, 7, value);
+  jspb.Message.setField(this, 7, value);
+};
+
+
+proto.BINInitializeResponse.prototype.clearForceupdate = function() {
+  jspb.Message.setField(this, 7, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINInitializeResponse.prototype.hasForceupdate = function() {
+  return jspb.Message.getField(this, 7) != null;
 };
 
 
@@ -865,13 +1089,27 @@ proto.BINInitializeResponse.prototype.setForceupdate = function(value) {
  * @return {boolean}
  */
 proto.BINInitializeResponse.prototype.getEnablequickplay = function() {
-    return /** @type {boolean} */ (jspb.Message.getFieldWithDefault(this, 8, false));
+  return /** @type {boolean} */ (jspb.Message.getFieldWithDefault(this, 8, false));
 };
 
 
 /** @param {boolean} value */
 proto.BINInitializeResponse.prototype.setEnablequickplay = function(value) {
-    jspb.Message.setField(this, 8, value);
+  jspb.Message.setField(this, 8, value);
+};
+
+
+proto.BINInitializeResponse.prototype.clearEnablequickplay = function() {
+  jspb.Message.setField(this, 8, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINInitializeResponse.prototype.hasEnablequickplay = function() {
+  return jspb.Message.getField(this, 8) != null;
 };
 
 
@@ -882,13 +1120,27 @@ proto.BINInitializeResponse.prototype.setEnablequickplay = function(value) {
  * @return {boolean}
  */
 proto.BINInitializeResponse.prototype.getEnablecashsystem = function() {
-    return /** @type {boolean} */ (jspb.Message.getFieldWithDefault(this, 9, false));
+  return /** @type {boolean} */ (jspb.Message.getFieldWithDefault(this, 9, false));
 };
 
 
 /** @param {boolean} value */
 proto.BINInitializeResponse.prototype.setEnablecashsystem = function(value) {
-    jspb.Message.setField(this, 9, value);
+  jspb.Message.setField(this, 9, value);
+};
+
+
+proto.BINInitializeResponse.prototype.clearEnablecashsystem = function() {
+  jspb.Message.setField(this, 9, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINInitializeResponse.prototype.hasEnablecashsystem = function() {
+  return jspb.Message.getField(this, 9) != null;
 };
 
 
@@ -899,13 +1151,27 @@ proto.BINInitializeResponse.prototype.setEnablecashsystem = function(value) {
  * @return {boolean}
  */
 proto.BINInitializeResponse.prototype.getEnablepurchasecash = function() {
-    return /** @type {boolean} */ (jspb.Message.getFieldWithDefault(this, 10, false));
+  return /** @type {boolean} */ (jspb.Message.getFieldWithDefault(this, 10, false));
 };
 
 
 /** @param {boolean} value */
 proto.BINInitializeResponse.prototype.setEnablepurchasecash = function(value) {
-    jspb.Message.setField(this, 10, value);
+  jspb.Message.setField(this, 10, value);
+};
+
+
+proto.BINInitializeResponse.prototype.clearEnablepurchasecash = function() {
+  jspb.Message.setField(this, 10, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINInitializeResponse.prototype.hasEnablepurchasecash = function() {
+  return jspb.Message.getField(this, 10) != null;
 };
 
 
@@ -916,13 +1182,27 @@ proto.BINInitializeResponse.prototype.setEnablepurchasecash = function(value) {
  * @return {boolean}
  */
 proto.BINInitializeResponse.prototype.getEnabletopup = function() {
-    return /** @type {boolean} */ (jspb.Message.getFieldWithDefault(this, 11, false));
+  return /** @type {boolean} */ (jspb.Message.getFieldWithDefault(this, 11, false));
 };
 
 
 /** @param {boolean} value */
 proto.BINInitializeResponse.prototype.setEnabletopup = function(value) {
-    jspb.Message.setField(this, 11, value);
+  jspb.Message.setField(this, 11, value);
+};
+
+
+proto.BINInitializeResponse.prototype.clearEnabletopup = function() {
+  jspb.Message.setField(this, 11, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINInitializeResponse.prototype.hasEnabletopup = function() {
+  return jspb.Message.getField(this, 11) != null;
 };
 
 
@@ -933,13 +1213,27 @@ proto.BINInitializeResponse.prototype.setEnabletopup = function(value) {
  * @return {boolean}
  */
 proto.BINInitializeResponse.prototype.getEnablecashtogold = function() {
-    return /** @type {boolean} */ (jspb.Message.getFieldWithDefault(this, 12, false));
+  return /** @type {boolean} */ (jspb.Message.getFieldWithDefault(this, 12, false));
 };
 
 
 /** @param {boolean} value */
 proto.BINInitializeResponse.prototype.setEnablecashtogold = function(value) {
-    jspb.Message.setField(this, 12, value);
+  jspb.Message.setField(this, 12, value);
+};
+
+
+proto.BINInitializeResponse.prototype.clearEnablecashtogold = function() {
+  jspb.Message.setField(this, 12, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINInitializeResponse.prototype.hasEnablecashtogold = function() {
+  return jspb.Message.getField(this, 12) != null;
 };
 
 
@@ -950,13 +1244,27 @@ proto.BINInitializeResponse.prototype.setEnablecashtogold = function(value) {
  * @return {boolean}
  */
 proto.BINInitializeResponse.prototype.getEnablecashtransfer = function() {
-    return /** @type {boolean} */ (jspb.Message.getFieldWithDefault(this, 13, false));
+  return /** @type {boolean} */ (jspb.Message.getFieldWithDefault(this, 13, false));
 };
 
 
 /** @param {boolean} value */
 proto.BINInitializeResponse.prototype.setEnablecashtransfer = function(value) {
-    jspb.Message.setField(this, 13, value);
+  jspb.Message.setField(this, 13, value);
+};
+
+
+proto.BINInitializeResponse.prototype.clearEnablecashtransfer = function() {
+  jspb.Message.setField(this, 13, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINInitializeResponse.prototype.hasEnablecashtransfer = function() {
+  return jspb.Message.getField(this, 13) != null;
 };
 
 
@@ -967,13 +1275,27 @@ proto.BINInitializeResponse.prototype.setEnablecashtransfer = function(value) {
  * @return {boolean}
  */
 proto.BINInitializeResponse.prototype.getEnablegiftcode = function() {
-    return /** @type {boolean} */ (jspb.Message.getFieldWithDefault(this, 14, false));
+  return /** @type {boolean} */ (jspb.Message.getFieldWithDefault(this, 14, false));
 };
 
 
 /** @param {boolean} value */
 proto.BINInitializeResponse.prototype.setEnablegiftcode = function(value) {
-    jspb.Message.setField(this, 14, value);
+  jspb.Message.setField(this, 14, value);
+};
+
+
+proto.BINInitializeResponse.prototype.clearEnablegiftcode = function() {
+  jspb.Message.setField(this, 14, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINInitializeResponse.prototype.hasEnablegiftcode = function() {
+  return jspb.Message.getField(this, 14) != null;
 };
 
 
@@ -982,13 +1304,27 @@ proto.BINInitializeResponse.prototype.setEnablegiftcode = function(value) {
  * @return {number}
  */
 proto.BINInitializeResponse.prototype.getCashtogoldratio = function() {
-    return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 15, 0));
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 15, 0));
 };
 
 
 /** @param {number} value */
 proto.BINInitializeResponse.prototype.setCashtogoldratio = function(value) {
-    jspb.Message.setField(this, 15, value);
+  jspb.Message.setField(this, 15, value);
+};
+
+
+proto.BINInitializeResponse.prototype.clearCashtogoldratio = function() {
+  jspb.Message.setField(this, 15, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINInitializeResponse.prototype.hasCashtogoldratio = function() {
+  return jspb.Message.getField(this, 15) != null;
 };
 
 
@@ -999,13 +1335,13 @@ proto.BINInitializeResponse.prototype.setCashtogoldratio = function(value) {
  * @return {!Array.<string>}
  */
 proto.BINInitializeResponse.prototype.getHotlinesList = function() {
-    return /** @type {!Array.<string>} */ (jspb.Message.getField(this, 16));
+  return /** @type {!Array.<string>} */ (jspb.Message.getField(this, 16));
 };
 
 
 /** @param {!Array.<string>} value */
 proto.BINInitializeResponse.prototype.setHotlinesList = function(value) {
-    jspb.Message.setField(this, 16, value || []);
+  jspb.Message.setField(this, 16, value || []);
 };
 
 
@@ -1014,12 +1350,12 @@ proto.BINInitializeResponse.prototype.setHotlinesList = function(value) {
  * @param {number=} opt_index
  */
 proto.BINInitializeResponse.prototype.addHotlines = function(value, opt_index) {
-    jspb.Message.addToRepeatedField(this, 16, value, opt_index);
+  jspb.Message.addToRepeatedField(this, 16, value, opt_index);
 };
 
 
 proto.BINInitializeResponse.prototype.clearHotlinesList = function() {
-    this.setHotlinesList([]);
+  this.setHotlinesList([]);
 };
 
 
@@ -1028,13 +1364,27 @@ proto.BINInitializeResponse.prototype.clearHotlinesList = function() {
  * @return {string}
  */
 proto.BINInitializeResponse.prototype.getFanpageurl = function() {
-    return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 17, ""));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 17, ""));
 };
 
 
 /** @param {string} value */
 proto.BINInitializeResponse.prototype.setFanpageurl = function(value) {
-    jspb.Message.setField(this, 17, value);
+  jspb.Message.setField(this, 17, value);
+};
+
+
+proto.BINInitializeResponse.prototype.clearFanpageurl = function() {
+  jspb.Message.setField(this, 17, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINInitializeResponse.prototype.hasFanpageurl = function() {
+  return jspb.Message.getField(this, 17) != null;
 };
 
 
@@ -1043,13 +1393,27 @@ proto.BINInitializeResponse.prototype.setFanpageurl = function(value) {
  * @return {string}
  */
 proto.BINInitializeResponse.prototype.getWebsiteurl = function() {
-    return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 18, ""));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 18, ""));
 };
 
 
 /** @param {string} value */
 proto.BINInitializeResponse.prototype.setWebsiteurl = function(value) {
-    jspb.Message.setField(this, 18, value);
+  jspb.Message.setField(this, 18, value);
+};
+
+
+proto.BINInitializeResponse.prototype.clearWebsiteurl = function() {
+  jspb.Message.setField(this, 18, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINInitializeResponse.prototype.hasWebsiteurl = function() {
+  return jspb.Message.getField(this, 18) != null;
 };
 
 
@@ -1060,13 +1424,13 @@ proto.BINInitializeResponse.prototype.setWebsiteurl = function(value) {
  * @return {!Array.<number>}
  */
 proto.BINInitializeResponse.prototype.getEnablegameidsList = function() {
-    return /** @type {!Array.<number>} */ (jspb.Message.getField(this, 19));
+  return /** @type {!Array.<number>} */ (jspb.Message.getField(this, 19));
 };
 
 
 /** @param {!Array.<number>} value */
 proto.BINInitializeResponse.prototype.setEnablegameidsList = function(value) {
-    jspb.Message.setField(this, 19, value || []);
+  jspb.Message.setField(this, 19, value || []);
 };
 
 
@@ -1075,12 +1439,12 @@ proto.BINInitializeResponse.prototype.setEnablegameidsList = function(value) {
  * @param {number=} opt_index
  */
 proto.BINInitializeResponse.prototype.addEnablegameids = function(value, opt_index) {
-    jspb.Message.addToRepeatedField(this, 19, value, opt_index);
+  jspb.Message.addToRepeatedField(this, 19, value, opt_index);
 };
 
 
 proto.BINInitializeResponse.prototype.clearEnablegameidsList = function() {
-    this.setEnablegameidsList([]);
+  this.setEnablegameidsList([]);
 };
 
 
@@ -1089,13 +1453,27 @@ proto.BINInitializeResponse.prototype.clearEnablegameidsList = function() {
  * @return {string}
  */
 proto.BINInitializeResponse.prototype.getResetpwsmssyntax = function() {
-    return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 20, ""));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 20, ""));
 };
 
 
 /** @param {string} value */
 proto.BINInitializeResponse.prototype.setResetpwsmssyntax = function(value) {
-    jspb.Message.setField(this, 20, value);
+  jspb.Message.setField(this, 20, value);
+};
+
+
+proto.BINInitializeResponse.prototype.clearResetpwsmssyntax = function() {
+  jspb.Message.setField(this, 20, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINInitializeResponse.prototype.hasResetpwsmssyntax = function() {
+  return jspb.Message.getField(this, 20) != null;
 };
 
 
