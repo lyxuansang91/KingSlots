@@ -18,7 +18,7 @@ cc.Class({
         this.label.string = this.text;
         console.log(">>>>:" + MyMessage);
 
-        window.ws = new WebSocket("ws://14.225.2.111:1280/megajackpot");
+        window.ws = new WebSocket("ws://192.168.0.32:1280/megajackpot");
         window.listMessage = [];
         window.ws.binaryType = "arraybuffer";
 

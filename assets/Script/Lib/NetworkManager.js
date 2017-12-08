@@ -56,7 +56,7 @@ var NetworkManager = {
         var bytes = new Uint8Array(protoBufVar.toArrayBuffer());
         switch (messageid) {
             case NetworkManager.MESSAGE_ID.INITIALIZE:
-                msg = MyMessage.BINInitializeResponse.deserializeBinary(bytes);
+                msg = InitializeMessage.BINInitializeResponse.deserializeBinary(bytes);
                 break;
         }
 
@@ -65,13 +65,9 @@ var NetworkManager = {
     parseFrom: function(read_str, len) {
         var lstMess = [];
         var bb = new ByteBuffer(len);
-
         bb.append(read_str);
-
+        cc.log("bb parse form = ", bb);
         var lenPacket = len;
-
-        cc.log("read str:" + read_str);
-
         cc.log("len:", len);
         while (lenPacket > 0) {
             var listMessages = [];
@@ -154,7 +150,6 @@ var NetworkManager = {
 
                 while (left_byte_size > 0) {
 
-                    var response = 0;
                     //read protobuf + data_size_block + mid
                     //read datasizeblock
                     cc.log("left byte size:", left_byte_size);
