@@ -45,7 +45,6 @@ cc.Class({
             if (this.deltaTime > this.timeSchedule) {
                 this.deltaTime = 0;
                 this.isProgressing = false;
-
             }
         }
 
@@ -72,7 +71,6 @@ cc.Class({
                 var msg = buffer.response;
                 cc.log("message: " + msg.getMessage());
                 this.initialMessageResponseHandler(msg);
-                //cc.director.loadScene('Lobby');
                 break;
         }
     },

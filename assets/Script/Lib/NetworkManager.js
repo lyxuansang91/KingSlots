@@ -1,14 +1,19 @@
 var InitializeMessage = require('initialize_pb');
+var LoginMessage = require('login_pb');
 
 var NetworkManager = {
     MESSAGE_ID: {
-        INITIALIZE: 1111
+        REGISTER: 1000,
+        LOGIN: 1001,
+        QUICK_PLAY: 1002,
+        INITIALIZE: 1111,
+        PING: 8888
     },
     OS : {
        ANDROID: 1,
         IOS: 2
     },
-    URL: "ws://14.225.2.111:1280/megajackpot",
+    URL: "ws://192.168.0.32:1280/megajackpot",
     sessionId: "",
     getSessionId: function() {
         return NetworkManager.sessionId;
@@ -60,12 +65,17 @@ var NetworkManager = {
 
     getTypeMessage: function(msg, messageid, protoBufVar) {
         var bytes = new Uint8Array(protoBufVar.toArrayBuffer());
-        cc.log("bytes:", bytes);
         switch (messageid) {
             case NetworkManager.MESSAGE_ID.INITIALIZE:
-                    // InitializeMessage..deserializeBinary(bytes);
-                msg = InitializeMessage.BINInitializeResponse.deserializeBinary(bytes);
-                cc.log("message:", msg);
+                msg = proto.BINInitializeResponse.deserializeBinary(bytes);
+                break;
+            case NetworkManager.MESSAGE_ID.LOGIN:
+                msg = proto.BINLoginResponse.deserializeBinary(bytes);
+                break;
+            case NetworkManager.MESSAGE_ID.REGISTER:
+                break;
+            case NetworkManager.MESSAGE_ID.PING:
+                msg = proto.BINPingResponse.deserializeBinary(bytes);
                 break;
         }
 
@@ -161,27 +171,25 @@ var NetworkManager = {
 
                     //read protobuf + data_size_block + mid
                     //read datasizeblock
-                    // cc.log("left byte size:", left_byte_size);
+                    cc.log("left byte size:", left_byte_size);
 
                     var _offsetUnzip = 0;
 
 
                     var data_size_block = bb.readInt16(_offsetUnzip);
-                    // cc.log("data size block:", data_size_block);
+                    cc.log("data size block:", data_size_block);
                     _offsetUnzip+= 2;
 
                     // read messageid
                     var messageid = bb.readInt16(_offsetUnzip);
                     _offsetUnzip += 2;
-                    // cc.log("message id:", messageid);
+                    cc.log("message id:", messageid);
                     //read protobuf
 
                     var protoBufVar = bb.copy(_offsetUnzip, data_size_block + _offsetUnzip - 2);
 
-                    // cc.log("protobuf var:", protoBufVar);
-
                     response = NetworkManager.getTypeMessage(response, messageid, protoBufVar);
-                    // cc.log("response: ", response);
+
                     if (response != 0) {
                         left_byte_size -= (data_size_block + 2);
                         bb = bb.copy(data_size_block + _offsetUnzip - 2);
@@ -206,6 +214,8 @@ var NetworkManager = {
                     }
                     else {
                         cc.error("unknown message");
+                        left_byte_size -= (data_size_block + 2);
+                        bb = bb.copy(data_size_block + _offsetUnzip - 2);
                     }
 
                 }
@@ -218,7 +228,9 @@ var NetworkManager = {
 
         // cc.log("listMessages parse", listMessages);
         return lstMess;
-    }, initInitializeMessage: function(cp, appVersion, deviceId, deviceInfo, country, language, packageName,
+
+    }, // init message
+    initInitializeMessage: function(cp, appVersion, deviceId, deviceInfo, country, language, packageName,
                                        liteVersion, referenceCode) {
         var message = new InitializeMessage.BINInitializeRequest();
         message.setCp(cp);
@@ -230,21 +242,58 @@ var NetworkManager = {
         message.setPakagename(packageName);
         message.setLiteversion(liteVersion);
         message.setReferencecode(referenceCode);
-        cc.log("init message:", message);
         return message;
     },
     requestInitializeMessage: function(cp, appVersion, deviceId, deviceInfo, country, language, packageName,
                                        liteVersion, referenceCode) {
         var message = NetworkManager.initInitializeMessage(cp, appVersion, deviceId, deviceInfo, country, language,
             packageName, liteVersion, referenceCode);
-        cc.log("message:", message);
         var data = NetworkManager.initData(message.serializeBinary(), NetworkManager.OS.ANDROID, NetworkManager.MESSAGE_ID.INITIALIZE, "");
-        cc.log("data:", data);
         NetworkManager.callNetwork(data);
+    }, initLoginMessage: function(userName, password) {
+        var message = new proto.BINLoginRequest();
+        message.setUsername(userName);
+        message.setPassword(password);
+        return message;
+    }, requestLoginMessage: function(userName, password){
+        const message = NetworkManager.initInitializeMessage(userName, password);
+        this.callNetwork(this.initData(message.serializeBinary(), NetworkManager.OS.ANDROID, NetworkManager.MESSAGE_ID.LOGIN, ""));
+    },
+
+    initPingMessage: function(disconnectTime) {
+        var message = new proto.BINPingRequest();
+        message.setDisconecttime(disconnectTime);
+        return message;
+    },
+    requestPingMessage: function(disconnectTime) {
+        var message = NetworkManager.initPingMessage(disconnectTime);
+        this.callNetwork(this.initData(message.serializeBinary(), NetworkManager.OS.ANDROID, NetworkManager.MESSAGE_ID.PING, ""));
+    },
+
+    connectNetwork: function() {
+        if(window.ws === null || typeof(window.ws) === 'undefined' || window.ws.readyState === WebSocket.CLOSED) {
+
+            window.ws = new WebSocket(NetworkManager.URL);
+            window.listMessage = [];
+            window.ws.binaryType = "arraybuffer";
+
+            window.ws.onopen = function (event) {
+                console.log("on web socket");
+                setTimeout(function(){
+                    NetworkManager.requestInitializeMessage("18", "19", "00000000", "NO_DEVICE", "vn", "vi", "com.daigia777.gamemon", false, "");
+                    setInterval(function(){
+                        NetworkManager.requestPingMessage(0);
+                    }, 15000);
+
+                }, 1);
+            };
+            window.ws.onclose = function (event) {
+                console.log("Websocket instance was closed");
+            };
+        }
     },
 
     callNetwork: function(ackBuf) {
-        cc.log("websocket:", typeof(window.ws) === 'undefined');
         if(window.ws === null || typeof(window.ws) === 'undefined' || window.ws.readyState === WebSocket.CLOSED) {
 
             window.ws = new WebSocket(NetworkManager.URL);
