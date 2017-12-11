@@ -6,16 +6,22 @@ var NetworkManager = {
     },
     OS : {
        ANDROID: 1,
-       IOS: 2
+        IOS: 2
     },
-
-
+    URL: "ws://14.225.2.111:1280/megajackpot",
+    sessionId: "",
+    getSessionId: function() {
+        return NetworkManager.sessionId;
+    },
+    setSessionId: function(_sessionId) {
+        NetworkManager.sessionId = _sessionId;
+    },
     requestMessage: function(request, os, message_id, session_id) {
         var ackBuf = NetworkManager.initData(request, os, message_id, session_id);
         NetworkManager.callNetwork(ackBuf);
     }, 
     initData: function(request, os, messid, _session) {
-        cc.log("request", request);
+        // cc.log("request", request);
         var lenSession = 0;
         if(_session != null) {
             lenSession = _session.length;
@@ -31,7 +37,7 @@ var NetworkManager = {
         var dataSize = request.length + 4;
         _offset++;
 
-        cc.log("size:" + size);
+        // cc.log("size:" + size);
 
         bb.writeUint32(dataSize, _offset);
         _offset+= 4;
@@ -47,7 +53,7 @@ var NetworkManager = {
         _offset+= 2;
 
         bb.append(request, "", _offset);
-        cc.log("bb:", bb.toBuffer());
+        // cc.log("bb:", bb.toBuffer());
 
         return bb.toBuffer();
     },
@@ -58,7 +64,7 @@ var NetworkManager = {
         switch (messageid) {
             case NetworkManager.MESSAGE_ID.INITIALIZE:
                     // InitializeMessage..deserializeBinary(bytes);
-                msg = proto.BINInitializeResponse.deserializeBinary(bytes);
+                msg = InitializeMessage.BINInitializeResponse.deserializeBinary(bytes);
                 cc.log("message:", msg);
                 break;
         }
@@ -69,9 +75,9 @@ var NetworkManager = {
         var lstMess = [];
         var bb = new ByteBuffer(len);
         bb.append(read_str);
-        cc.log("bb parse form = ", bb);
+        // cc.log("bb parse form = ", bb);
         var lenPacket = len;
-        cc.log("len:", len);
+        // cc.log("len:", len);
         while (lenPacket > 0) {
             var listMessages = [];
             var _offset = 0;
@@ -125,7 +131,7 @@ var NetworkManager = {
                 response = NetworkManager.getTypeMessage(response, messageidZip, protoBufVarZip);
 
 
-                if (response != 0) {
+                if (response !== 0) {
                     left_byte_size -= (data_size_block_zip + 2);
                     var pairZip = {
                         message_id: messageidZip,
@@ -135,7 +141,7 @@ var NetworkManager = {
                     for(var i = 0; i < listMessages.length; i++) {
                         var obj = listMessages[i];
 
-                        if(obj.message_id == messageidZip) {
+                        if(obj.message_id === messageidZip) {
                             listMessages.splice(i, 1);
                         }
                     }
@@ -155,27 +161,27 @@ var NetworkManager = {
 
                     //read protobuf + data_size_block + mid
                     //read datasizeblock
-                    cc.log("left byte size:", left_byte_size);
+                    // cc.log("left byte size:", left_byte_size);
 
                     var _offsetUnzip = 0;
 
 
                     var data_size_block = bb.readInt16(_offsetUnzip);
-                    cc.log("data size block:", data_size_block);
+                    // cc.log("data size block:", data_size_block);
                     _offsetUnzip+= 2;
 
                     // read messageid
                     var messageid = bb.readInt16(_offsetUnzip);
                     _offsetUnzip += 2;
-                    cc.log("message id:", messageid);
+                    // cc.log("message id:", messageid);
                     //read protobuf
 
                     var protoBufVar = bb.copy(_offsetUnzip, data_size_block + _offsetUnzip - 2);
 
-                    cc.log("protobuf var:", protoBufVar);
+                    // cc.log("protobuf var:", protoBufVar);
 
                     response = NetworkManager.getTypeMessage(response, messageid, protoBufVar);
-                    cc.log("response: ", response);
+                    // cc.log("response: ", response);
                     if (response != 0) {
                         left_byte_size -= (data_size_block + 2);
                         bb = bb.copy(data_size_block + _offsetUnzip - 2);
@@ -212,41 +218,53 @@ var NetworkManager = {
 
         // cc.log("listMessages parse", listMessages);
         return lstMess;
-    }, initInitializeMessage: function() {
-
+    }, initInitializeMessage: function(cp, appVersion, deviceId, deviceInfo, country, language, packageName,
+                                       liteVersion, referenceCode) {
+        var message = new InitializeMessage.BINInitializeRequest();
+        message.setCp(cp);
+        message.setAppversion(appVersion);
+        message.setDeviceid(deviceId);
+        message.setDeviceinfo(deviceInfo);
+        message.setCountry(country);
+        message.setLanguage(language);
+        message.setPakagename(packageName);
+        message.setLiteversion(liteVersion);
+        message.setReferencecode(referenceCode);
+        cc.log("init message:", message);
+        return message;
+    },
+    requestInitializeMessage: function(cp, appVersion, deviceId, deviceInfo, country, language, packageName,
+                                       liteVersion, referenceCode) {
+        var message = NetworkManager.initInitializeMessage(cp, appVersion, deviceId, deviceInfo, country, language,
+            packageName, liteVersion, referenceCode);
+        cc.log("message:", message);
+        var data = NetworkManager.initData(message.serializeBinary(), NetworkManager.OS.ANDROID, NetworkManager.MESSAGE_ID.INITIALIZE, "");
+        cc.log("data:", data);
+        NetworkManager.callNetwork(data);
     },
 
     callNetwork: function(ackBuf) {
-        cc.log("websocket:", window.ws);
-        if(window.ws === null || window.ws === 'undefined' || window.ws.readyState === WebSocket.CLOSED) {
-            window.ws = new WebSocket("ws://14.225.2.111:1280/megajackpot");
+        cc.log("websocket:", typeof(window.ws) === 'undefined');
+        if(window.ws === null || typeof(window.ws) === 'undefined' || window.ws.readyState === WebSocket.CLOSED) {
+
+            window.ws = new WebSocket(NetworkManager.URL);
             window.listMessage = [];
             window.ws.binaryType = "arraybuffer";
 
             window.ws.onopen = function (event) {
-                console.log("Web socket");
-                setTimeout(function() {
-                    var message = new InitializeMessage.BINInitializeRequest();
-                    message.setCp("1");
-                    message.setCountry("vn");
-                    message.setDeviceid("12345678909");
-                    message.setPakagename("com.packagename.com");
-                    message.setAppversion("1");
-                    var data = NetworkManager.initData(message.serializeBinary(), NetworkManager.OS.ANDROID,
-                        NetworkManager.MESSAGE_ID.INITIALIZE, "");
-                    cc.log("data:", data);
-                    window.ws.send(data);
+                console.log("on web socket");
+                setTimeout(function(){
+                    window.ws.send(ackBuf);
                 }, 1);
             };
             window.ws.onclose = function (event) {
                 console.log("Websocket instance was closed");
             };
+        } else {
+            if(window.ws.readyState == WebSocket.OPEN) {
+                window.ws.send(ackBuf);
+            }
         }
-
-        if(window.ws.readyState == WebSocket.OPEN) {
-            window.ws.send(ackBuf);
-        }
-
     }
 };
 

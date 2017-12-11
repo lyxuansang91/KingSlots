@@ -30,6 +30,7 @@ cc.Class({
         cc.director.preloadScene('Lobby', function () {
             cc.log('Next scene preloaded');
         });
+        // NetworkManager.requestInitializeMessage("18", "19", "00000000", "NO_DEVICE", "vn", "vi", "com.daigia777.gamemon", false, "");
         this.scheduleOnce(this.goGame, this.timeSchedule);
     },
 
@@ -50,40 +51,7 @@ cc.Class({
 
     },
     goGame: function() {
-        window.ws = new WebSocket("ws://kingviet.top:1280/megajackpot");
-        window.listMessage = [];
-        window.ws.binaryType = "arraybuffer";
-
-        window.ws.onopen = function (event) {
-            console.log("Web socket");
-            setTimeout(function() {
-                var message = new MyMessage.BINInitializeRequest();
-                message.setCp("18");
-                message.setAppversion("19");
-                message.setDeviceid("00000000");
-                message.setDeviceinfo("NO_DEVICE");
-                message.setCountry("vn");
-                message.setLanguage("vi");
-                message.setPakagename("com.daigia777.gamemon");
-                var data = NetworkManager.initData(message.serializeBinary(), NetworkManager.OS.ANDROID,
-                    NetworkManager.MESSAGE_ID.INITIALIZE, "");
-                cc.log("data:", data);
-                window.ws.send(data);
-            }, 1);
-        };
-        window.ws.onclose = function (event) {
-            console.log("Websocket instance was closed");
-        };
-        window.ws.onmessage = this.ongamestatus.bind(this);
-
-        setTimeout(function () {
-            if(window.ws.readyState == WebSocket.OPEN) {
-                cc.log("web socket is open");
-            } else {
-                console.log("Web socket instance wasn't ready");
-            }
-        }, 3);
-
+        NetworkManager.requestInitializeMessage("18", "19", "00000000", "NO_DEVICE", "vn", "vi", "com.daigia777.gamemon", false, "");
         this.unschedule(this.goGame);
     },
     ongamestatus: function(event) {
