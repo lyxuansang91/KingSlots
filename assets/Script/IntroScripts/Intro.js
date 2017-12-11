@@ -86,7 +86,7 @@ cc.Class({
                 for (var i = 0; i < initialMessage.getHotlinesList().length; i++){
                     hot_lines.push(initialMessage.getHotlinesList()[i]);
                 }
-
+                cc.log("hot_lines = ", hot_lines);
                 /*Set enable game ids*/
                 var _gameIds = [];
                 for (var i = 0; i < initialMessage.getEnablegameidsList().length; i++) {
