@@ -1,4 +1,3 @@
-var aaa = require('Popup');
 cc.Class({
     extends: cc.Component,
 
@@ -13,17 +12,26 @@ cc.Class({
         //    readonly: false,    // optional, default is false
         // },
         // ...
-
+        type: cc.Node,
+        prefabPopup: cc.Prefab
     },
 
     // use this for initialization
     onLoad: function () {
-
+        //this.pList();
     },
+    pList: function() {
+        // if(this.isVisible == true){
+            cc.log('aaaaaaaa', this.type.getContentSize().height*0.06);
+            var item = cc.instantiate(this.prefabPopup);
+            this.setPosition(cc.p(0,0));
+            this.node.addChild(item);
+        // }
+
+    }
 
     // called every frame, uncomment this function to activate update callback
     // update: function (dt) {
 
     // },
-
 });
