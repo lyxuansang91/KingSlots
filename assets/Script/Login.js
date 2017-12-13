@@ -1,27 +1,35 @@
 var NetworkManager = require('NetworkManager');
+var Common = require('Common');
 
 cc.Class({
     extends: cc.Component,
 
     properties: {
         edt_username: cc.EditBox,
-        edt_password: cc.EditBox,
+        edt_password: cc.EditBox
     },
-
     // use this for initialization
     onLoad: function () {
+        // var _uuid = Common.getUUID();
+        //
+        // if(_uuid == "" || _uuid == null) {
+        //     var uuid = Common.guid();
+        //     cc.sys.localStorage.setItem("uuid", uuid);
+        //     Common.setUUID(uuid);
+        // }
+
+        // var fingerprint = new Fingerprint({screen_resolution: true}).get();
+        // cc.log("finger print:", fingerprint);
+        Common.setFingerprint();
         NetworkManager.connectNetwork();
         window.ws.onmessage = this.ongamestatus.bind(this);
     },
 
-    ongamestatus: function(e) {
-        cc.log("response text msg:" + event);
-        if(event.data!==null || event.data !== 'undefined') {
+    ongamestatus: function(event) {
+        if(event.data!==null || typeof(event.data) !== 'undefined') {
             var lstMessage = NetworkManager.parseFrom(event.data, event.data.byteLength);
-            cc.log("list message size:" + lstMessage.length);
             if(lstMessage.length > 0) {
                 var buffer = lstMessage.shift();
-                cc.log("buffer:" , buffer);
                 this.handleMessage(buffer);
             }
         }
@@ -32,8 +40,6 @@ cc.Class({
         switch (buffer.message_id) {
             case NetworkManager.MESSAGE_ID.INITIALIZE:
                 var msg = buffer.response;
-                cc.log("message: " + msg);
-                // alert(msg.getMessage());
                 break;
             case NetworkManager.MESSAGE_ID.LOGIN:
                 var msg = buffer.response;
@@ -41,19 +47,41 @@ cc.Class({
                 break;
             case NetworkManager.MESSAGE_ID.PING:
                 var msg = buffer.response;
-                cc.log("message:" , msg);
-
+                this.handlePingResponseHandler(msg);
+                break;
         }
     },
     handleLoginResponseHandler: function(res) {
         cc.log("login response handler:", res);
+        if(res.getResponsecode()) {
+            var session_id = res.getSessionid();
+            Common.setSessionId(session_id);
+            cc.UserDefault.getInstance().setStringForKey("session_id", session_id);
+l        }
+
+    },
+    handlePingResponseHandler: function(res) {
+        cc.log("ping response handler:", res);
+        if(res.getResponsecode()) {
+            if(res.getDisconnect()) {
+                Common.setSessionId("-1");
+                if(res.hasMessage() && !res.getMessage() != "") {
+                    cc.alert(res.getMessage());
+                }
+                NetworkManager.closeConnection();
+                this.scheduleOnce(this.goIntroScene, 2.0);
+            }
+        }
+    },
+    goIntroScene: function(e) {
+        cc.director.runScene('Intro');
     },
 
     login: function() {
         cc.log("login normal");
         var username = this.edt_username.string;
         var password = this.edt_password.string;
-        if(this.edt_username.string == "" || this.edt_password.string == "") {
+        if(this.edt_username.string === "" || this.edt_password.string === "") {
             cc.alert("Tài khoản và mật khẩu không được để trống!");
             return;
         }

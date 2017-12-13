@@ -280,7 +280,7 @@ var NetworkManager = {
             window.ws.onopen = function (event) {
                 console.log("on web socket");
                 setTimeout(function(){
-                    NetworkManager.requestInitializeMessage("18", "19", "00000000", "NO_DEVICE", "vn", "vi", "com.daigia777.gamemon", false, "");
+                    NetworkManager.requestInitializeMessage("24", "14", Common.getFingerprint(), Common.getFingerprint(), "vn", "vi", "com.gamebai.tienlen", false, "");
                     setInterval(function(){
                         NetworkManager.requestPingMessage(0);
                     }, 15000);
@@ -290,6 +290,11 @@ var NetworkManager = {
             window.ws.onclose = function (event) {
                 console.log("Websocket instance was closed");
             };
+        }
+    },
+    closeConnection: function() {
+        if(window.ws.readyState == WebSocket.OPEN) {
+            window.ws.close();
         }
     },
 
