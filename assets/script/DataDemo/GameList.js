@@ -28,7 +28,7 @@ cc.Class({
     },
 
     scrollToLeft: function(){
-        this.scrollView.jumpTo()
+       //this.scrollView.jumpTo()
     },
 
     scrollToRight: function(){

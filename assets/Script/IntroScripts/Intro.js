@@ -22,7 +22,8 @@ cc.Class({
         isProgressing: false,
         toProgress: 0,
         deltaTime : 0,
-        timeSchedule: 0
+        timeSchedule: 0,
+        setting: cc.Prefab
     },
 
     // use this for initialization
@@ -51,6 +52,7 @@ cc.Class({
     },
     goGame: function() {
         NetworkManager.requestInitializeMessage("18", "19", "00000000", "NO_DEVICE", "vn", "vi", "com.daigia777.gamemon", false, "");
+        window.ws.onmessage = this.ongamestatus.bind(this);
         this.unschedule(this.goGame);
     },
     ongamestatus: function(event) {
@@ -86,7 +88,7 @@ cc.Class({
                 for (var i = 0; i < initialMessage.getHotlinesList().length; i++){
                     hot_lines.push(initialMessage.getHotlinesList()[i]);
                 }
-
+                cc.log("hot_lines = ", hot_lines);
                 /*Set enable game ids*/
                 var _gameIds = [];
                 for (var i = 0; i < initialMessage.getEnablegameidsList().length; i++) {
@@ -101,5 +103,8 @@ cc.Class({
                 // popupMessage.showPopup(init_response.message());
             }
         }
+    },
+    openPopup: function() {
+        this.addChild(this.setting);
     }
 });
