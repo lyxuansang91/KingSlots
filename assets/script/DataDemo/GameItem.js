@@ -35,4 +35,8 @@ cc.Class({
     update: function (dt) {
 
     },
+
+    buttonEvent: function () {
+     cc.log("buttonEvent");
+    }
 });
