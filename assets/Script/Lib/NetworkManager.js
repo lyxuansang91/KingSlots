@@ -1,3 +1,4 @@
+var Common = require('Common');
 var InitializeMessage = require('initialize_pb');
 var LoginMessage = require('login_pb');
 
@@ -279,8 +280,8 @@ var NetworkManager = {
 
             window.ws.onopen = function (event) {
                 console.log("on web socket");
+                NetworkManager.requestInitializeMessage("24", "14", Common.getFingerprint(), Common.getFingerprint(), "vn", "vi", "com.gamebai.tienlen", false, "");
                 setTimeout(function(){
-                    NetworkManager.requestInitializeMessage("24", "14", Common.getFingerprint(), Common.getFingerprint(), "vn", "vi", "com.gamebai.tienlen", false, "");
                     setInterval(function(){
                         NetworkManager.requestPingMessage(0);
                     }, 15000);
@@ -315,6 +316,7 @@ var NetworkManager = {
                 console.log("Websocket instance was closed");
             };
         } else {
+            cc.log("web socket state:", window.ws.readyState, " ", WebSocket.OPEN);
             if(window.ws.readyState == WebSocket.OPEN) {
                 window.ws.send(ackBuf);
             }

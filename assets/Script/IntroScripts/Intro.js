@@ -1,8 +1,9 @@
 var MyMessage = require('initialize_pb');
 var NetworkManager = require('NetworkManager');
-
+var Common = require('Common');
+var BaseScene = require('BaseScene');
 cc.Class({
-    extends: cc.Component,
+    extends: BaseScene,
 
     properties: {
         // foo: {
@@ -28,10 +29,10 @@ cc.Class({
 
     // use this for initialization
     onLoad: function () {
+        this._super();
         cc.director.preloadScene('Lobby', function () {
             cc.log('Next scene preloaded');
         });
-        // NetworkManager.requestInitializeMessage("18", "19", "00000000", "NO_DEVICE", "vn", "vi", "com.daigia777.gamemon", false, "");
         this.scheduleOnce(this.goGame, this.timeSchedule);
     },
 
@@ -48,10 +49,10 @@ cc.Class({
                 this.isProgressing = false;
             }
         }
-
     },
     goGame: function() {
-        NetworkManager.requestInitializeMessage("18", "19", "00000000", "NO_DEVICE", "vn", "vi", "com.daigia777.gamemon", false, "");
+        Common.setFingerprint();
+        NetworkManager.connectNetwork();
         window.ws.onmessage = this.ongamestatus.bind(this);
         this.unschedule(this.goGame);
     },
@@ -68,43 +69,11 @@ cc.Class({
         }
     },
     handleMessage: function(buffer) {
-        switch (buffer.message_id) {
-            case NetworkManager.MESSAGE_ID.INITIALIZE:
-                var msg = buffer.response;
-                cc.log("message: " + msg.getMessage());
-                this.initialMessageResponseHandler(msg);
-                break;
-        }
-    },
-    initialMessageResponseHandler: function(initialMessage) {
-        cc.log("initialMessage", initialMessage);
-        if (initialMessage != 0) {
-            //common.initialize = initialMessage.responseCode;
-            if (initialMessage.getResponsecode()) {
-                var serverAppVersion = initialMessage.getCurrentappversion();
-                cc.log("serverAppVersion = ", serverAppVersion);
-                var hot_lines = [];
-                cc.log("hot_line size", initialMessage.getHotlinesList().length);
-                for (var i = 0; i < initialMessage.getHotlinesList().length; i++){
-                    hot_lines.push(initialMessage.getHotlinesList()[i]);
-                }
-                cc.log("hot_lines = ", hot_lines);
-                /*Set enable game ids*/
-                var _gameIds = [];
-                for (var i = 0; i < initialMessage.getEnablegameidsList().length; i++) {
-                    _gameIds.push(initialMessage.getEnablegameidsList()[i]);
-                }
+        this._super(buffer);
 
-                cc.log("game id = ", _gameIds);
-                cc.director.loadScene('Lobby');
-
-            }else {
-                // PopupMessageBox* popupMessage = new PopupMessageBox();
-                // popupMessage.showPopup(init_response.message());
-            }
-        }
     },
     openPopup: function() {
         this.addChild(this.setting);
     }
 });
+

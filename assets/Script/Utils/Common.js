@@ -19,6 +19,7 @@ var Common = {
     fingerprint: "",
     setFingerprint: function() {
         var fp = cc.sys.localStorage.getItem("fingerprint");
+        cc.log("fp:", fp);
         if(fp == null) {
             new Fingerprint2().get(function(result, components){
                 console.log("result:", result); //a hash, representing your device fingerprint
@@ -26,7 +27,10 @@ var Common = {
                 this.fingerprint = result;
                 console.log("component:", components); // an array of FP components
             });
+        } else {
+            this.fingerprint = fp;
         }
+
     },
     getFingerprint: function() {
         if(this.fingerprint == "") {

@@ -1,8 +1,9 @@
 var NetworkManager = require('NetworkManager');
 var Common = require('Common');
+var BaseScene = require('BaseScene');
 
 cc.Class({
-    extends: cc.Component,
+    extends: BaseScene,
 
     properties: {
         edt_username: cc.EditBox,
@@ -10,16 +11,6 @@ cc.Class({
     },
     // use this for initialization
     onLoad: function () {
-        // var _uuid = Common.getUUID();
-        //
-        // if(_uuid == "" || _uuid == null) {
-        //     var uuid = Common.guid();
-        //     cc.sys.localStorage.setItem("uuid", uuid);
-        //     Common.setUUID(uuid);
-        // }
-
-        // var fingerprint = new Fingerprint({screen_resolution: true}).get();
-        // cc.log("finger print:", fingerprint);
         Common.setFingerprint();
         NetworkManager.connectNetwork();
         window.ws.onmessage = this.ongamestatus.bind(this);
@@ -37,26 +28,28 @@ cc.Class({
     handleMessage: function(e) {
         const buffer = e;
         cc.log("response:", buffer);
+        this._super(buffer);
         switch (buffer.message_id) {
-            case NetworkManager.MESSAGE_ID.INITIALIZE:
-                var msg = buffer.response;
-                break;
+            // case NetworkManager.MESSAGE_ID.INITIALIZE:
+            //     var msg = buffer.response;
+            //     break;
             case NetworkManager.MESSAGE_ID.LOGIN:
                 var msg = buffer.response;
                 this.handleLoginResponseHandler(msg);
                 break;
-            case NetworkManager.MESSAGE_ID.PING:
-                var msg = buffer.response;
-                this.handlePingResponseHandler(msg);
-                break;
+            // case NetworkManager.MESSAGE_ID.PING:
+            //     var msg = buffer.response;
+            //     this.handlePingResponseHandler(msg);
+            //     break;
         }
     },
     handleLoginResponseHandler: function(res) {
         cc.log("login response handler:", res);
         if(res.getResponsecode()) {
             var session_id = res.getSessionid();
+            cc.log("session id:", session_id);
             Common.setSessionId(session_id);
-            cc.UserDefault.getInstance().setStringForKey("session_id", session_id);
+            cc.sys.localStorage.setItem("session_id", session_id);
 l        }
 
     },
@@ -89,6 +82,7 @@ l        }
     },
     register: function() {
         cc.log("register normal");
+        cc.director.runScene('Register');
     },
     loginFacebook: function() {
         cc.log("login facebook ");
