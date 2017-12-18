@@ -28,17 +28,12 @@ cc.Class({
 
     // },
     disappear:function () {
-        // var self = this;
-        // var callDisappear = cc.callFunc(function(){
-        //     this.removeFromParentAndCleanup(true);
-        // },this);
-        //
-        // this.background.runAction(cc.sequence(cc.fadeTo(0.05, 0),cc.callFunc(function(){
-        //     var move = cc.moveTo(0.05,cc.p(0.5,0.5));
-        //     self.runAction(cc.sequence(move,callDisappear));
-        // })));
-        //
-        // return true;
+        var callDisappear = cc.callFunc(function(){
+            this.node.removeFromParent(true);
+        },this);
+
+        var move = cc.moveTo(0.05,cc.p(0,-200));
+        this.background.node.runAction(cc.sequence(move,callDisappear));
     },
 
     appear:function () {

@@ -24,6 +24,7 @@ cc.Class({
         var item = cc.instantiate(this.popupSetting);
         cc.log("item", item);
         item.setPosition(cc.p(0,0));
+        item.zIndex = 1000;
         this.node.addChild(item);
     }
 });
