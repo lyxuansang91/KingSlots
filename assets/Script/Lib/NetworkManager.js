@@ -1,6 +1,7 @@
 var Common = require('Common');
 var InitializeMessage = require('initialize_pb');
 var LoginMessage = require('login_pb');
+var Common = require('Common');
 
 var NetworkManager = {
     MESSAGE_ID: {

@@ -1,5 +1,5 @@
 const gameItems = require('GameItemData').gameItems;
-
+var Common = require('Common');
 cc.Class({
     extends: cc.Component,
 
@@ -16,14 +16,15 @@ cc.Class({
     },
 
     populateList: function() {
-        for (var i = 0; i < this.rankCount; ++i) {
+        var listGame = Common.getEnableGameIds();
+        for (var i = 0; i < listGame.length; ++i) {
             var gameItem = gameItems[i];
             var item = cc.instantiate(this.prefabGameItem);
             item.getComponent('GameItem').init(i, gameItem);
             item.setPositionY(this.content.getContentSize().height*0.06);
             // item.setPositionX(item.getContentSize().width* (1.8*i + 0.2));
+            item.setTag(this.getGameTag());
             this.content.addChild(item);
-            cc.log(i);
         }
     },
 
@@ -39,4 +40,12 @@ cc.Class({
     update: function (dt) {
 
     },
+
+    getGameTag: function () {
+        var enableGameIds = Common.getEnableGameIds();
+        cc.log()
+        for (var j = 0; j < enableGameIds.length; j++) {
+            return enableGameIds[j];
+        }
+    }
 });
