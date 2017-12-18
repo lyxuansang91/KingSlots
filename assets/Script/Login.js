@@ -50,6 +50,8 @@ cc.Class({
             cc.log("session id:", session_id);
             Common.setSessionId(session_id);
             cc.sys.localStorage.setItem("session_id", session_id);
+
+            cc.director.loadScene('Lobby');
 l        }
 
     },
@@ -58,7 +60,7 @@ l        }
         if(res.getResponsecode()) {
             if(res.getDisconnect()) {
                 Common.setSessionId("-1");
-                if(res.hasMessage() && !res.getMessage() != "") {
+                if(res.hasMessage() && res.getMessage() != "") {
                     cc.alert(res.getMessage());
                 }
                 NetworkManager.closeConnection();
@@ -82,7 +84,7 @@ l        }
     },
     register: function() {
         cc.log("register normal");
-        cc.director.runScene('Register');
+        cc.director.loadScene('Register');
     },
     loginFacebook: function() {
         cc.log("login facebook ");
