@@ -1,6 +1,5 @@
 var MyMessage = require('initialize_pb');
 var NetworkManager = require('NetworkManager');
-var Common = require('Common');
 var BaseScene = require('BaseScene');
 cc.Class({
     extends: BaseScene,
@@ -70,7 +69,6 @@ cc.Class({
     },
     handleMessage: function(buffer) {
         this._super(buffer);
-
     },
     openPopup: function() {
         this.addChild(this.setting);
