@@ -1,7 +1,6 @@
-var Common = require('Common');
 var InitializeMessage = require('initialize_pb');
 var LoginMessage = require('login_pb');
-var Common = require('Common');
+var EnterZoneMessage = require('enter_zone_pb');
 
 var NetworkManager = {
     MESSAGE_ID: {
@@ -9,7 +8,8 @@ var NetworkManager = {
         LOGIN: 1001,
         QUICK_PLAY: 1002,
         INITIALIZE: 1111,
-        PING: 8888
+        PING: 8888,
+        ENTER_ZONE: 1005
     },
     OS : {
        ANDROID: 1,
@@ -28,7 +28,6 @@ var NetworkManager = {
         NetworkManager.callNetwork(ackBuf);
     }, 
     initData: function(request, os, messid, _session) {
-        // cc.log("request", request);
         var lenSession = 0;
         if(_session != null) {
             lenSession = _session.length;
@@ -60,7 +59,6 @@ var NetworkManager = {
         _offset+= 2;
 
         bb.append(request, "", _offset);
-        // cc.log("bb:", bb.toBuffer());
 
         return bb.toBuffer();
     },
@@ -78,6 +76,9 @@ var NetworkManager = {
                 break;
             case NetworkManager.MESSAGE_ID.PING:
                 msg = proto.BINPingResponse.deserializeBinary(bytes);
+                break;
+            case NetworkManager.MESSAGE_ID.ENTER_ZONE:
+                msg = proto.BINEnterZoneResponse.deserializeBinary(bytes);
                 break;
         }
 
@@ -271,7 +272,16 @@ var NetworkManager = {
         var message = NetworkManager.initPingMessage(disconnectTime);
         this.callNetwork(this.initData(message.serializeBinary(), NetworkManager.OS.ANDROID, NetworkManager.MESSAGE_ID.PING, ""));
     },
-
+    initEnterZoneMessage: function(zoneId) {
+        var message = new proto.BINEnterZoneRequest();
+        message.setZoneid(zoneId);
+        return message;
+    },
+    requestEnterZoneMessage: function(zoneId) {
+        var message = NetworkManager.initEnterZoneMessage(zoneId);
+        cc.log("message = ", message);
+        this.callNetwork(this.initData(message.serializeBinary(), NetworkManager.OS.ANDROID, NetworkManager.MESSAGE_ID.ENTER_ZONE, Common.getSessionId()));
+    },
     connectNetwork: function() {
         if(window.ws === null || typeof(window.ws) === 'undefined' || window.ws.readyState === WebSocket.CLOSED) {
 

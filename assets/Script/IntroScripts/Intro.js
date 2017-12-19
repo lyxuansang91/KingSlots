@@ -1,11 +1,6 @@
 var MyMessage = require('initialize_pb');
 var NetworkManager = require('NetworkManager');
-var Common = require('Common');
-<<<<<<< HEAD
 var BaseScene = require('BaseScene');
-=======
-
->>>>>>> lobby_event
 cc.Class({
     extends: BaseScene,
 

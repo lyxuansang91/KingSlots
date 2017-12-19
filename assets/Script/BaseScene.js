@@ -53,6 +53,7 @@ cc.Class({
                 }
 
                 cc.log("game id = ", _gameIds);
+                Common.setEnableGameIds(_gameIds);
                 cc.director.loadScene('Login');
 
             }else {

@@ -230,7 +230,7 @@
     "asset": {
       "__uuid__": "fa07d8ee-7c5d-4a28-9b3e-33d1cc89b37c"
     },
-    "fileId": "a3BwAMamBJ572ibIfSyvBp",
+    "fileId": "d7d8OlCUJIQKbnDeIx4mdy",
     "sync": false
   },
   {
@@ -586,7 +586,7 @@
     "sync": false
   },
   {
-    "__type__": "a8e1doI6DdIBYKrBeVR2xfx",
+    "__type__": "859a2Sd0spOhLqqtX1Fexgr",
     "_name": "",
     "_objFlags": 0,
     "node": {
@@ -594,7 +594,7 @@
     },
     "_enabled": true,
     "background": {
-      "__id__": 3
+      "__id__": 4
     },
     "money1": {
       "__id__": 11

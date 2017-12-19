@@ -1,5 +1,4 @@
 var NetworkManager = require('NetworkManager');
-var Common = require('Common');
 var BaseScene = require('BaseScene');
 
 cc.Class({
