@@ -86,13 +86,64 @@ l        }
         cc.director.loadScene('Register');
     },
     loginFacebook: function() {
-        cc.log("login facebook ");
+        // var loginStt = FB.getLoginStatus(response);
+        // var response = window.loginFB();
+        // if(response.authResponse){
+        //     cc.director.loadScene('Lobby');
+        // }
+
+        this.loginFb(["public_profile"], function(code, response){
+            cc.log("code:", code);
+            if(code === 0){
+                cc.log("login succeeded");
+                cc.director.loadScene('Lobby');
+
+            } else {
+                cc.log("Login failed, error #" + code + ": " + response);
+            }
+        });
+
     },
     loginGoogle: function() {
         cc.log("login google");
     },
     close: function(){
         cc.log("close");
+    },
+    loginFb: function (permissions, callback) {
+        var self = this;
+        if (typeof permissions == 'function') {
+            callback = permissions;
+            permissions = [];
+        }
+        if (permissions.every(function (item) {
+                if (item != 'public_profile')
+                    return true;
+            })) {
+            permissions.push("public_profile");
+        }
+        var permissionsStr = permissions.join(',');
+        FB.login(function (response) {
+            if (response['authResponse']) {
+                //save user info
+                self._isLoggedIn = true;
+                self._userInfo = response['authResponse'];
+                var permissList = response['authResponse']['grantedScopes'].split(",");
+                typeof callback === 'function' && callback(0, {
+                    accessToken: response['authResponse']['accessToken'],
+                    permissions: permissList
+                });
+            } else {
+                self._isLoggedIn = false;
+                self._userInfo = {};
+                typeof callback === 'function' && callback(response['error_code'] || 1, {
+                    error_message: response['error_message'] || "Unknown error"
+                });
+            }
+        }, {
+            scope: permissionsStr,
+            return_scopes: true
+        });
     }
 
     // called every frame, uncomment this function to activate update callback
