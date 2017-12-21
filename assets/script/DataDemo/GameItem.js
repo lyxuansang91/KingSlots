@@ -18,15 +18,15 @@ cc.Class({
         var tagTabButton = [Config.TAG_GAME_ITEM.BACAY, Config.TAG_GAME_ITEM.POKER,
             Config.TAG_GAME_ITEM.TAIXIU, Config.TAG_GAME_ITEM.VQMM ];
 
-        var url = "resources/icon_bacay.png";
+        var url = "resources/common/scene/lobby/icon_bacay.png";
         if(playerInfo === Config.TAG_GAME_ITEM.TAIXIU){
-            url = "resources/icon_taixiu.png";
+            url = "resources/common/scene/lobby/icon_taixiu.png";
         }else if(playerInfo === Config.TAG_GAME_ITEM.VQMM){
-            url =  "resources/icon_vqmm.png";
+            url =  "resources/common/scene/lobby/icon_vqmm.png";
         }else if(playerInfo === Config.TAG_GAME_ITEM.POKER){
-            url = "resources/icon_pocker.png";
+            url = "resources/common/scene/lobby/icon_pocker.png";
         }else if(playerInfo === Config.TAG_GAME_ITEM.BACAY){
-            url =  "resources/icon_bacay.png";
+            url =  "resources/common/scene/lobby/icon_bacay.png";
         }
 
         var image = cc.url.raw(url);
