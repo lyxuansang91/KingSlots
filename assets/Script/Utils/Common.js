@@ -1,4 +1,10 @@
 var Common = {
+    OS : {
+        ANDROID: 1,
+        IOS: 2,
+        WEB: 5
+
+    },
     ZONE_ID: {
         BACAY: 1,
         XITO: 2,
@@ -16,6 +22,20 @@ var Common = {
         MINI_BACAY: 20,
         XOCDIA2: 21,
         EGG: 22
+    },
+    getOS: function() {
+        var os = -1;
+        if(cc.sys.isNative) {
+            if(cc.sys.platform == sys.ANDROID) {
+                os = Common.OS.ANDROID;
+            } else if(cc.sys.platform == sys.IOS) {
+                os = Common.OS.IOS;
+            }
+        } else if(cc.sys.isBrowser) {
+            os = Common.OS.WEB;
+        }
+        cc.log("get os:", os);
+        return os;
     },
     sessionId: "-1",
     getSessionId: function() {

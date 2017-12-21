@@ -11,10 +11,6 @@ var NetworkManager = {
         PING: 8888,
         ENTER_ZONE: 1005
     },
-    OS : {
-       ANDROID: 1, IOS: 2, WEB: 5
-
-    },
     URL: "ws://192.168.0.32:1280/megajackpot",
     sessionId: "",
     getSessionId: function() {
@@ -251,7 +247,7 @@ var NetworkManager = {
                                        liteVersion, referenceCode) {
         var message = NetworkManager.initInitializeMessage(cp, appVersion, deviceId, deviceInfo, country, language,
             packageName, liteVersion, referenceCode);
-        var data = NetworkManager.initData(message.serializeBinary(), NetworkManager.OS.WEB, NetworkManager.MESSAGE_ID.INITIALIZE, "");
+        var data = NetworkManager.initData(message.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.INITIALIZE, "");
         NetworkManager.callNetwork(data);
     }, initLoginMessage: function(userName, password) {
         var message = new proto.BINLoginRequest();
@@ -260,7 +256,7 @@ var NetworkManager = {
         return message;
     }, requestLoginMessage: function(userName, password){
         const message = NetworkManager.initInitializeMessage(userName, password);
-        this.callNetwork(this.initData(message.serializeBinary(), NetworkManager.OS.WEB, NetworkManager.MESSAGE_ID.LOGIN, ""));
+        this.callNetwork(this.initData(message.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.LOGIN, ""));
     },
 
     initPingMessage: function(disconnectTime) {
@@ -270,7 +266,7 @@ var NetworkManager = {
     },
     requestPingMessage: function(disconnectTime) {
         var message = NetworkManager.initPingMessage(disconnectTime);
-        this.callNetwork(this.initData(message.serializeBinary(), NetworkManager.OS.WEB, NetworkManager.MESSAGE_ID.PING, ""));
+        this.callNetwork(this.initData(message.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.PING, ""));
     },
     initEnterZoneMessage: function(zoneId) {
         var message = new proto.BINEnterZoneRequest();
@@ -280,7 +276,7 @@ var NetworkManager = {
     requestEnterZoneMessage: function(zoneId) {
         var message = NetworkManager.initEnterZoneMessage(zoneId);
         cc.log("message = ", message);
-        this.callNetwork(this.initData(message.serializeBinary(), NetworkManager.OS.WEB, NetworkManager.MESSAGE_ID.ENTER_ZONE, Common.getSessionId()));
+        this.callNetwork(this.initData(message.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.ENTER_ZONE, Common.getSessionId()));
     },
     connectNetwork: function() {
         if(window.ws === null || typeof(window.ws) === 'undefined' || window.ws.readyState === WebSocket.CLOSED) {
