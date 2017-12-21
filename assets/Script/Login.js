@@ -51,7 +51,7 @@ cc.Class({
             cc.sys.localStorage.setItem("session_id", session_id);
 
             cc.director.loadScene('Lobby');
-l        }
+        }
 
     },
     handlePingResponseHandler: function(res) {

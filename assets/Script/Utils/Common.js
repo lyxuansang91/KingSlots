@@ -26,9 +26,9 @@ var Common = {
     getOS: function() {
         var os = -1;
         if(cc.sys.isNative) {
-            if(cc.sys.platform == sys.ANDROID) {
+            if(cc.sys.platform == cc.sys.ANDROID) {
                 os = Common.OS.ANDROID;
-            } else if(cc.sys.platform == sys.IOS) {
+            } else if(cc.sys.platform == cc.sys.IOS) {
                 os = Common.OS.IOS;
             }
         } else if(cc.sys.isBrowser) {

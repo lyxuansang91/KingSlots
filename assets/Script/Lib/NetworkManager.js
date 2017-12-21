@@ -1,6 +1,7 @@
 var InitializeMessage = require('initialize_pb');
 var LoginMessage = require('login_pb');
 var EnterZoneMessage = require('enter_zone_pb');
+var RegisterMessage = require('register_pb');
 
 var NetworkManager = {
     MESSAGE_ID: {
@@ -69,6 +70,7 @@ var NetworkManager = {
                 msg = proto.BINLoginResponse.deserializeBinary(bytes);
                 break;
             case NetworkManager.MESSAGE_ID.REGISTER:
+                msg = proto.BINRegisterResponse.deserializeBinary(bytes);
                 break;
             case NetworkManager.MESSAGE_ID.PING:
                 msg = proto.BINPingResponse.deserializeBinary(bytes);
@@ -278,6 +280,21 @@ var NetworkManager = {
         cc.log("message = ", message);
         this.callNetwork(this.initData(message.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.ENTER_ZONE, Common.getSessionId()));
     },
+    /* Register */
+    requestRegisterMessage: function(username, password, repass, displayname, mobile) {
+        var message = NetworkManager.initRegisterMessage(username, password, repass, displayname, mobile);
+        this.callNetwork(this.initData(message.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.REGISTER, ""));
+    },
+    initRegisterMessage: function(username, password, repass, displayname, mobile) {
+        var message = new proto.BINRegisterRequest();
+        message.setUsername(username);
+        message.setPassword(password);
+        message.setConfirmpassword(repass);
+        message.setDisplayname(displayname);
+        message.setMobile(mobile);
+        return message;
+    },
+
     connectNetwork: function() {
         if(window.ws === null || typeof(window.ws) === 'undefined' || window.ws.readyState === WebSocket.CLOSED) {
 
