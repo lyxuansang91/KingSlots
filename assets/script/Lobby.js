@@ -12,12 +12,19 @@ cc.Class({
         //    readonly: false,    // optional, default is false
         // },
         // ...
+        prefabPopupTaiXiu: cc.Prefab
 
     },
 
     // use this for initialization
     onLoad: function () {
+    },
+    onClickSetting: function() {
 
+        cc.log("on click setting");
+        var item = cc.instantiate(this.prefabPopupTaiXiu);
+        this.node.setPosition(cc.p(0,0));
+        this.node.addChild(item);
     }
 
 });
