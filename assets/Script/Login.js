@@ -48,8 +48,9 @@ cc.Class({
             var session_id = res.getSessionid();
             cc.log("session id:", session_id);
             Common.setSessionId(session_id);
+            Common.setUserInfo(res.getUserinfo().toObject());
+            cc.log("get user info:", res.getUserinfo().toObject());
             cc.sys.localStorage.setItem("session_id", session_id);
-
             cc.director.loadScene('Lobby');
         }
 

@@ -3,8 +3,8 @@ var Common = {
         ANDROID: 1,
         IOS: 2,
         WEB: 5
-
     },
+    userInfo: null,
     ZONE_ID: {
         BACAY: 1,
         XITO: 2,
@@ -22,6 +22,12 @@ var Common = {
         MINI_BACAY: 20,
         XOCDIA2: 21,
         EGG: 22
+    },
+    getUserInfo: function () {
+       return this.userInfo;
+    },
+    setUserInfo: function(e) {
+        this.userInfo = e;
     },
     getOS: function() {
         var os = -1;
