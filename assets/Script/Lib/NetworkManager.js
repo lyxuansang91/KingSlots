@@ -291,6 +291,9 @@ var NetworkManager = {
             case NetworkManager.MESSAGE_ID.ENTER_ZONE:
                 msg = proto.BINEnterZoneResponse.deserializeBinary(bytes);
                 break;
+            case NetworkManager.MESSAGE_ID.LOOK_UP_ROOM:
+                msg = proto.BINLookUpRoomResponse.deserializeBinary(bytes);
+                break;
         }
 
         return msg;
@@ -507,7 +510,31 @@ var NetworkManager = {
         message.setMobile(mobile);
         return message;
     },
-
+    initLookUpRoomRequest: function(zoneId, type, firstResult, maxResult, orderByField, asc, roomGroup){
+        var request = new proto.BINLookUpRoomRequest();
+        request.setZoneid(zoneId);
+        request.setType(type);
+        request.setFirstresult(firstResult);
+        request.setMaxresult(maxResult);
+        request.setOrderbyfield(orderByField);
+        request.setAsc(asc);
+        request.setRoomgroup(roomGroup);
+        return request;
+    },
+    getLookUpRoomRequest: function(zoneId, type, firstResult, maxResult, orderByField, asc, roomGroup){
+        var request = this.initLookUpRoomRequest(zoneId, type, firstResult, maxResult, orderByField, asc, roomGroup);
+        this.callNetwork(this.initData(request.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.LOOK_UP_ROOM, Common.getSessionId()));
+    },
+    getEnterRoomMessageFromServer: function(room_index, password) {
+        var request = this.initEnterRoomMessage(room_index, password);
+        this.callNetwork(this.initData(request.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.ENTER_ROOM, Common.getSessionId()));
+    },
+    initEnterRoomMessage: function(room_index, password) {
+        var request = proto.BINEnterRoomRequest();
+        request.setRoomindex(room_index);
+        request.setPassword(password);
+        return request;
+    },
     connectNetwork: function() {
         if(window.ws === null || typeof(window.ws) === 'undefined' || window.ws.readyState === WebSocket.CLOSED) {
 

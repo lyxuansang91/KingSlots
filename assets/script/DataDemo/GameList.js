@@ -51,7 +51,7 @@ cc.Class({
     },
 
     goSceneTable: function() {
-        // window.ws.onmessage = this.ongamestatus.bind(this);
+        window.ws.onmessage = this.ongamestatus.bind(this);
         this.unschedule(this.goSceneTable);
     },
 

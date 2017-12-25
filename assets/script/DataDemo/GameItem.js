@@ -61,7 +61,7 @@ cc.Class({
         var tag = e.target._tag;
         Common.setGameTag(tag);
         var zoneId = Common.getZoneId();
-        Common.setZoneId(zoneId);
+        Common.setCurrentZoneId(zoneId);
         NetworkManager.requestEnterZoneMessage(Common.getZoneId());
     }
 

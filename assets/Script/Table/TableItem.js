@@ -6,10 +6,22 @@ cc.Class({
             default: null,
             type: cc.Button
         },
-        imgTable: cc.Sprite,
-        imgHu: cc.Sprite,
-        lblHu: cc.Label,
-        lblMoney: cc.Label
+        imgTable: {
+            default: null,
+            type: cc.Sprite
+        },
+        imgHu: {
+            default: null,
+            type: cc.Sprite
+        },
+        lblHu: {
+            default: null,
+            type: cc.Label
+        },
+        lblMoney: {
+            default: null,
+            type: cc.Label
+        }
     },
 
     // use this for initialization
@@ -21,46 +33,43 @@ cc.Class({
 
         cc.log("cashRoomList =", cashRoomList);
 
-        var groupId = cashRoomList.getRoomgroupid();
+        var roomIndex = cashRoomList.getRoomindex();
         var minBet = cashRoomList.getMinbet();
-        var minCash = cashRoomList.getMincash();
-        var roomname = cashRoomList.getRoomname();
-        var viproom = cashRoomList.getViproom();
-        var minlevel = cashRoomList.getMinlevel();
-        var roomcapacity = cashRoomList.getRoomcapacity();
-        var playersize = cashRoomList.getPlayersize();
-        var tax = cashRoomList.getTax();
-        var active = cashRoomList.getActive();
+        var minEnterMoney = cashRoomList.getMinentermoney();
+        var playerSize = cashRoomList.getPlayersize();//số người chơi tối đa
+        var playingPlayer = cashRoomList.getPlayingplayer();//số người đang ngồi chơi
+        var isPlaying = cashRoomList.getIsplaying();
+        var roomConfig = cashRoomList.getRoomconfig();
 
-        var url = "resources/Table/BaCay/btn_tapsu.png";
+        var url = "resources/common/scene/table/btn_tapsu.png";
+        var url_imgTable = "resources/common/scene/table/txt_tapsu.png";
         if(minBet <= 5000){
-            url = "resources/Table/BaCay/btn_choithu.png";
+            url = "resources/common/scene/table/btn_choithu.png";
+            url_imgTable = "resources/common/scene/table/txt_choithu.png";
         }else if(minBet <= 10000 && minBet > 5000){
-            url =  "resources/Table/BaCay/btn_tapsu.png";
+            url =  "resources/common/scene/table/btn_tapsu.png";
+            url_imgTable = "resources/common/scene/table/txt_tapsu.png";
         }else if(minBet <= 100000 && minBet > 10000){
-            url = "resources/Table/BaCay/btn_caothu.png";
+            url = "resources/common/scene/table/btn_caothu.png";
+            url_imgTable = "resources/common/scene/table/txt_caothu.png";
         }else if(minBet > 100000){
-            url =  "resources/Table/BaCay/btn_badao.png"; 
+            url =  "resources/common/scene/table/btn_badao.png";
+            url_imgTable = "resources/common/scene/table/txt_badao.png";
         }
-        cc.log("url =", url);
         var image = cc.url.raw(url);
         var texture = cc.textureCache.addImage(image);
         this.btnTable.getComponent(cc.Sprite).spriteFrame = new cc.SpriteFrame(texture);
 
-        //
-        // var btn = this.background.getComponent(cc.Button);
-        //
-        // if(playerInfo === Config.TAG_GAME_ITEM.TAIXIU){
-        //     btn.node._tag = Config.TAG_GAME_ITEM.TAIXIU;
-        // }else if(playerInfo === Config.TAG_GAME_ITEM.VQMM){
-        //     btn.node._tag = Config.TAG_GAME_ITEM.VQMM;
-        // }else if(playerInfo === Common.ZONE_ID.POKER){
-        //     btn.node._tag = Config.TAG_GAME_ITEM.POKER;
-        // }else if(playerInfo === Config.TAG_GAME_ITEM.BACAY){
-        //     btn.node._tag = Config.TAG_GAME_ITEM.BACAY;
-        // }
+        var imageTable = cc.url.raw(url_imgTable);
+        var textureTable = cc.textureCache.addImage(imageTable);
+        this.imgTable.getComponent(cc.Sprite).spriteFrame = new cc.SpriteFrame(textureTable);
 
+        var btn = this.btnTable.getComponent(cc.Button);
+        btn.node._tag = roomIndex;
 
-
+    },
+    enterRoom: function (e) {
+        var tag = e.target._tag;
+        NetworkManager.getEnterRoomMessageFromServer(tag, "");
     }
 });
