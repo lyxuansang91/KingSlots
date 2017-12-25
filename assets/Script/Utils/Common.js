@@ -136,5 +136,19 @@ var Common = {
     },
     getCashRoomList: function() {
         return this.cashRoomList;
+    },
+    listRoomPlay: [],
+    setListRoomPlay: function(listRoomPlay) {
+        this.listRoomPlay = listRoomPlay;
+    },
+    getListRoomPlay: function() {
+        return this.listRoomPlay;
+    },
+    currentZoneId: -1,
+    setCurrentZoneId: function(currentZoneId) {
+        this.currentZoneId = currentZoneId;
+    },
+    getCurrentZoneId: function() {
+        return this.currentZoneId;
     }
 };
