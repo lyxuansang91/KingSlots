@@ -14,7 +14,7 @@ cc.Class({
         this.content = this.scrollView.content;
         this.populateList();
 
-        cc.director.preloadScene('Login', function () {
+        cc.director.preloadScene('Table', function () {
             cc.log('Next Login scene preloaded');
         });
         this.scheduleOnce(this.goSceneTable, 1);
@@ -51,7 +51,7 @@ cc.Class({
     },
 
     goSceneTable: function() {
-        // window.ws.onmessage = this.ongamestatus.bind(this);
+        window.ws.onmessage = this.ongamestatus.bind(this);
         this.unschedule(this.goSceneTable);
     },
 
@@ -114,7 +114,7 @@ cc.Class({
                     // auto scene = SceneTable::createScene(enter_zone_response->enabledisplayroomlist(),
                     //     enter_zone_response->defaultroomtypeload());
                     // REPLACESCENE_NO_ACTION(scene);
-                    cc.director.loadScene('Login');
+                    cc.director.loadScene('Table');
                 }
 
             }else {

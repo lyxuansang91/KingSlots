@@ -19,5 +19,10 @@ var Config = {
         MINI_BACAY: 20,
         XOCDIA2: 21,
         EGG: 22
+    },
+    TABLE_ORDERBY: {
+        MIN_BET : 1,
+        NUM_PLAYER : 2,
+        INDEX : 3
     }
 }
