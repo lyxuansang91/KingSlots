@@ -40,7 +40,6 @@ var Common = {
         } else if(cc.sys.isBrowser) {
             os = Common.OS.WEB;
         }
-        cc.log("get os:", os);
         return os;
     },
     sessionId: "-1",

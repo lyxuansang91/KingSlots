@@ -1,0 +1,30 @@
+{
+  "ver": "1.0.0",
+  "uuid": "a4690eee-33f5-4221-9eb5-3dee700d8683",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "subMetas": {
+    "poker_ingame_bg_tiencuoc_hu": {
+      "ver": "1.0.3",
+      "uuid": "5e16ada5-48e5-4759-9558-053939d04b6c",
+      "rawTextureUuid": "a4690eee-33f5-4221-9eb5-3dee700d8683",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 155,
+      "height": 39,
+      "rawWidth": 155,
+      "rawHeight": 39,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

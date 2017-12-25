@@ -2,6 +2,7 @@ var InitializeMessage = require('initialize_pb');
 var LoginMessage = require('login_pb');
 var EnterZoneMessage = require('enter_zone_pb');
 var RegisterMessage = require('register_pb');
+var NotificationMessage = require('notification_pb');
 
 var NetworkManager = {
     MESSAGE_ID: {
@@ -291,6 +292,13 @@ var NetworkManager = {
             case NetworkManager.MESSAGE_ID.ENTER_ZONE:
                 msg = proto.BINEnterZoneResponse.deserializeBinary(bytes);
                 break;
+            case NetworkManager.MESSAGE_ID.HEAD_LINE:
+                msg = proto.BINHeadlineResponse.deserializeBinary(bytes);
+                break;
+            case NetworkManager.MESSAGE_ID.MATCH_END:
+                msg = proto.BINMatchBeginResponse.deserializeBinary(bytes);
+                break;
+
         }
 
         return msg;
@@ -299,9 +307,7 @@ var NetworkManager = {
         var lstMess = [];
         var bb = new ByteBuffer(len);
         bb.append(read_str);
-        // cc.log("bb parse form = ", bb);
         var lenPacket = len;
-        // cc.log("len:", len);
         while (lenPacket > 0) {
             var listMessages = [];
             var _offset = 0;
@@ -337,21 +343,12 @@ var NetworkManager = {
 
                 var data_size_block_zip = bbZip.readInt16(_offsetZip);
                 _offsetZip+= 2;
-
-
                 // read messageid
-
                 var messageidZip = bbZip.readInt16(_offsetZip);
                 _offsetZip+= 2;
-
-
                 left_byte_size -= (data_size_block_zip + 2);
-
                 //read protobuf
-
-
                 var protoBufVarZip = bbZip.copy(_offsetZip, data_size_block_zip + _offsetZip - 2);
-
                 response = NetworkManager.getTypeMessage(response, messageidZip, protoBufVarZip);
 
 
@@ -376,28 +373,24 @@ var NetworkManager = {
 
                 }
                 else {
-                    cc.error("unknown message");
+                    cc.error("unknown message with message id:", messageidZip);
                 }
             }
             else {
 
                 while (left_byte_size > 0) {
-
                     //read protobuf + data_size_block + mid
                     //read datasizeblock
-                    cc.log("left byte size:", left_byte_size);
-
                     var _offsetUnzip = 0;
 
 
                     var data_size_block = bb.readInt16(_offsetUnzip);
-                    cc.log("data size block:", data_size_block);
                     _offsetUnzip+= 2;
 
                     // read messageid
                     var messageid = bb.readInt16(_offsetUnzip);
                     _offsetUnzip += 2;
-                    cc.log("message id:", messageid);
+                    // cc.log("message id:", messageid);
                     //read protobuf
 
                     var protoBufVar = bb.copy(_offsetUnzip, data_size_block + _offsetUnzip - 2);
@@ -427,7 +420,7 @@ var NetworkManager = {
 
                     }
                     else {
-                        cc.error("unknown message");
+                        cc.error("unknown message with message id:", messageid);
                         left_byte_size -= (data_size_block + 2);
                         bb = bb.copy(data_size_block + _offsetUnzip - 2);
                     }
@@ -439,14 +432,12 @@ var NetworkManager = {
         if (lenPacket > 0) {
             cc.log("NetworkManager: error packet length = 0");
         }
-
-        // cc.log("listMessages parse", listMessages);
         return lstMess;
 
     }, // init message
     initInitializeMessage: function(cp, appVersion, deviceId, deviceInfo, country, language, packageName,
                                        liteVersion, referenceCode) {
-        var message = new InitializeMessage.BINInitializeRequest();
+        var message = new proto.BINInitializeRequest();
         message.setCp(cp);
         message.setAppversion(appVersion);
         message.setDeviceid(deviceId);
@@ -547,13 +538,12 @@ var NetworkManager = {
                 console.log("on web socket");
                 setTimeout(function(){
                     window.ws.send(ackBuf);
-                }, 1);
+                }, 0.5);
             };
             window.ws.onclose = function (event) {
                 console.log("Websocket instance was closed");
             };
         } else {
-            cc.log("web socket state:", window.ws.readyState, " ", WebSocket.OPEN);
             if(window.ws.readyState == WebSocket.OPEN) {
                 window.ws.send(ackBuf);
             }

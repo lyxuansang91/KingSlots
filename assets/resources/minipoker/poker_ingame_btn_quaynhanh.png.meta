@@ -1,0 +1,30 @@
+{
+  "ver": "1.0.0",
+  "uuid": "be145cf9-e5d7-4382-8114-bfb614dd4846",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "subMetas": {
+    "poker_ingame_btn_quaynhanh": {
+      "ver": "1.0.3",
+      "uuid": "49f1c34b-80ee-4ddf-9f10-83a264382da4",
+      "rawTextureUuid": "be145cf9-e5d7-4382-8114-bfb614dd4846",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 281,
+      "height": 79,
+      "rawWidth": 281,
+      "rawHeight": 79,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}
