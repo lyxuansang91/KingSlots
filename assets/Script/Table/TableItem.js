@@ -1,3 +1,4 @@
+var NetworkManager = require('../Lib/NetworkManager.js');
 cc.Class({
     extends: cc.Component,
 
@@ -70,6 +71,7 @@ cc.Class({
     },
     enterRoom: function (e) {
         var tag = e.target._tag;
+        cc.log("tag =", tag);
         NetworkManager.getEnterRoomMessageFromServer(tag, "");
     }
 });
