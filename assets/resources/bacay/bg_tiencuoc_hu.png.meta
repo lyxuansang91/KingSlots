@@ -1,0 +1,30 @@
+{
+  "ver": "1.0.0",
+  "uuid": "c2ebe319-4ee0-4e1b-987b-4b30dd13739a",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "subMetas": {
+    "bg_tiencuoc_hu": {
+      "ver": "1.0.3",
+      "uuid": "13ebc289-18d1-4223-98bc-af4c414eedbb",
+      "rawTextureUuid": "c2ebe319-4ee0-4e1b-987b-4b30dd13739a",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 162,
+      "height": 55,
+      "rawWidth": 162,
+      "rawHeight": 55,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}
