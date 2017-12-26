@@ -301,6 +301,9 @@ var NetworkManager = {
             case NetworkManager.MESSAGE_ID.LOOK_UP_ROOM:
                 msg = proto.BINLookUpRoomResponse.deserializeBinary(bytes);
                 break;
+            case NetworkManager.MESSAGE_ID.ENTER_ROOM:
+                msg = proto.BINEnterRoomResponse.deserializeBinary(bytes);
+                break;
         }
 
         return msg;
@@ -520,7 +523,7 @@ var NetworkManager = {
         this.callNetwork(this.initData(request.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.ENTER_ROOM, Common.getSessionId()));
     },
     initEnterRoomMessage: function(room_index, password) {
-        var request = proto.BINEnterRoomRequest();
+        var request = new proto.BINEnterRoomRequest();
         request.setRoomindex(room_index);
         request.setPassword(password);
         return request;

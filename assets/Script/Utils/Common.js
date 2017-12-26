@@ -149,5 +149,12 @@ var Common = {
     },
     getCurrentZoneId: function() {
         return this.currentZoneId;
+    },
+    ownerUserId: 0,
+    getOwnerUserId: function() {
+        return this.ownerUserId;
+    },
+    setOwnerUserId: function(ownerUserId) {
+        this.ownerUserId = ownerUserId;
     }
 };

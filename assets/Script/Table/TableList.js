@@ -27,10 +27,13 @@ cc.Class({
         //cc.log("cashRoomList = ", cashRoomList[0].getRoomgroupid());
         var zoneId = Common.getZoneId();
 
-        var contentWidth = cashRoomList.length * 420;
+        cc.log("content =", this.content.getContentSize().width);
 
-        // this.content.setInnerContainerSize(contentWidth, this.content.getContentSize().height);
+        var contentWidth = cashRoomList.length * 320;
 
+        this.content.setContentSize(contentWidth, this.content.getContentSize().height);
+
+        cc.log("contentWidth =", this.content.getContentSize().width);
 
         var url = "resources/common/scene/table/lbl_title_3cay.png";
         if(zoneId === Config.TAG_GAME_ITEM.TAIXIU){
@@ -76,6 +79,10 @@ cc.Class({
                 var msg = buffer.response;
                 this.getLookupRoomResponse(msg);
                 break;
+            case NetworkManager.MESSAGE_ID.ENTER_ROOM:
+                var msg = buffer.response;
+                this.enterRoomResponse(msg);
+                break;
         }
     },
     getLookupRoomResponse: function(response){
@@ -97,6 +104,76 @@ cc.Class({
             // if (response->has_message() && !response->message().empty()) {
             //     this->showToast(response->message().c_str(), TIME_SHOW_TOAST);
             // }
+        }
+    },
+    enterRoomResponse: function(response){
+        if (response !== 0) {
+            if(response.hasZoneid()){
+                var zoneId = response.getZoneid();
+                if(zoneId === Common.getZoneId()){
+                    if (response.getResponsecode()) {
+                        var waitingPlayerList = [];
+                        Common.setOwnerUserId(response.getOwneruserid());
+                        var playerList = [];
+                        for (var i = 0; i < response.getPlayingplayersList().length; i++) {
+                            playerList.push(response.getPlayingplayersList()[i]);
+                        }
+                        for (var j = 0; j < response.getWaitingplayersList().length; j++){
+                            waitingPlayerList.push(response.getWaitingplayersList()[j]);
+                        }
+
+                        if (response.hasRoomplay()){
+                            // this.unscheduleUpdate();
+
+                            var roomPlay = response.getRoomplay();
+
+                            cc.log("roomPlay =", roomPlay);
+
+                            //notify->onHideNotify();  //an thong bao di
+
+                            // var is_create_room = (Common::getInstance()->getUserId() ==
+                            // enterroomresponse->owneruserid()) ? true : false;
+
+                            var is_create_room = true;
+
+                            // auto miniGame = MiniGamePopUp::getInstance();
+                            // miniGame->hiddenInfoExtend(true);
+                            // miniGame->removeFromParentAndCleanup(true);
+
+                            if (Common.getZoneId() === Common.ZONE_ID.BACAY) {
+                                // cc.director.preloadScene('Table', function () {
+                                //     cc.log('Next BaCay scene preloaded');
+                                // });
+                                cc.director.loadScene('BaCay');
+                                // var bacay = ThreeCardsScene::createScene(roomPlay, playerList,
+                                //     waitingPlayerList, is_create_room,
+                                //     this->getEnableDisplayRoomList(), enterroomresponse);
+                                // REPLACESCENE(TIME_REPLACE_SCENE, bacay);
+                            }
+                            else if (Common.getZoneId() === Common.ZONE_ID.POKER) {
+                                cc.log("poker");
+                                // auto poker = PokerScene::createScene(roomPlay, playerList, waitingPlayerList, is_create_room,
+                                //     this->getEnableDisplayRoomList(), enterroomresponse);
+                                // REPLACESCENE(TIME_REPLACE_SCENE, poker);
+                            }
+                        }
+                    }else{
+                        // if (Common::getInstance()->isEnabledPurchaseCash() &&
+                        //     !currentRoomTouch.passwordrequired() && !isEnoughEnterMoney()){
+                        //     EnoughMoneyOnEventListener* b = new EnoughMoneyOnEventListener();
+                        //     PopupMessageBox* popupMessage = new PopupMessageBox();
+                        //     popupMessage->setEvent(b);
+                        //     popupMessage->showPopup(enterroomresponse->message());
+                        // }
+                        // else {
+                        //     showToast(enterroomresponse->message().c_str(), TIME_SHOW_TOAST);
+                        // }
+                    }
+                }
+                // else if(Common::getInstance()->inMiniGame(zoneId)){
+                //     this->handlerMessageMiniGame(zoneId, enterroomresponse, NetworkManager::ENTER_ROOM);
+                // }
+            }
         }
     }
 });
