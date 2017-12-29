@@ -1,18 +1,29 @@
-var Card = require('Card');
+var Types = require('Types');
 cc.Class({
     extends: cc.Component,
 
     properties: {
-        // foo: {
-        //    default: null,      // The default value will be used only when the component attaching
-        //                           to a node for the first time
-        //    url: cc.Texture2D,  // optional, default is typeof default
-        //    serializable: true, // optional, default is true
-        //    visible: true,      // optional, default is true
-        //    displayName: 'Foo', // optional
-        //    readonly: false,    // optional, default is false
-        // },
-        // ...
+        point: cc.Label,
+        suit: cc.Sprite,
+        mainPic: cc.Sprite,
+        cardBG: cc.Sprite,
+        // resources
+        redTextColor: cc.Color.WHITE,
+        blackTextColor: cc.Color.WHITE,
+        texFrontBG: cc.SpriteFrame,
+        texBackBG: cc.SpriteFrame,
+        texFaces: {
+            default: [],
+            type: cc.SpriteFrame
+        },
+        texSuitBig: {
+            default: [],
+            type: cc.SpriteFrame
+        },
+        texSuitSmall: {
+            default: [],
+            type: cc.SpriteFrame
+        }
     },
 
     // use this for initialization
@@ -21,6 +32,61 @@ cc.Class({
     },
 
     init: function (cardValue) {
-        // var suit =
-    }
+        cc.log("cardValue =", cardValue);
+        var pointValue = CardType.getPoint(cardValue);
+        var suitValue = CardType.getSuit(cardValue);
+
+        var card = new Types.Card(pointValue, suitValue);
+
+        var isFaceCard = card.point > 10;
+
+        if (isFaceCard) {
+            this.mainPic.spriteFrame = this.texFaces[card.point - 10 - 1];
+        }
+        else {
+            this.mainPic.spriteFrame = this.texSuitBig[card.suit];
+        }
+
+        // for jsb
+        this.point.string = card.pointName;
+
+        if (card.isRedSuit) {
+            this.point.node.color = this.redTextColor;
+        }
+        else {
+            this.point.node.color = this.blackTextColor;
+        }
+
+        this.suit.spriteFrame = this.texSuitSmall[card.suit];
+
+    },
+    replaceCard: function (cardValue) {
+        cc.log("cardValue =", cardValue);
+        var pointValue = CardType.getPoint(cardValue);
+        var suitValue = CardType.getSuit(cardValue);
+
+        var card = new Types.Card(pointValue, suitValue);
+
+        var isFaceCard = card.point > 10;
+
+        if (isFaceCard) {
+            this.mainPic.spriteFrame = this.texFaces[card.point - 10 - 1];
+        }
+        else {
+            this.mainPic.spriteFrame = this.texSuitBig[card.suit];
+        }
+
+        // for jsb
+        this.point.string = card.pointName;
+
+        if (card.isRedSuit) {
+            this.point.node.color = this.redTextColor;
+        }
+        else {
+            this.point.node.color = this.blackTextColor;
+        }
+
+        this.suit.spriteFrame = this.texSuitSmall[card.suit];
+
+    },
 });

@@ -140,7 +140,8 @@ cc.Class({
                             // miniGame->hiddenInfoExtend(true);
                             // miniGame->removeFromParentAndCleanup(true);
 
-                            if (Common.getZoneId() === Common.ZONE_ID.BACAY) {
+                            if (Common.getZoneId() === Common.ZONE_ID.MINI_BACAY) {
+                                cc.log("poker");
                                 // cc.director.preloadScene('Table', function () {
                                 //     cc.log('Next BaCay scene preloaded');
                                 // });
@@ -150,7 +151,7 @@ cc.Class({
                                 //     this->getEnableDisplayRoomList(), enterroomresponse);
                                 // REPLACESCENE(TIME_REPLACE_SCENE, bacay);
                             }
-                            else if (Common.getZoneId() === Common.ZONE_ID.POKER) {
+                            else if (Common.getZoneId() === Common.ZONE_ID.MINI_POKER) {
                                 cc.log("poker");
                                 // auto poker = PokerScene::createScene(roomPlay, playerList, waitingPlayerList, is_create_room,
                                 //     this->getEnableDisplayRoomList(), enterroomresponse);

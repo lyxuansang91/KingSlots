@@ -91,11 +91,11 @@ var Common = {
         cc.log("game tag =", this.gameTag);
         switch (this.gameTag)
         {
-            case Config.TAG_GAME_ITEM.BACAY:
-                result = Common.ZONE_ID.BACAY;
+            case Config.TAG_GAME_ITEM.MINI_BACAY:
+                result = Common.ZONE_ID.MINI_BACAY;
                 break;
-            case Config.TAG_GAME_ITEM.POKER:
-                result = Common.ZONE_ID.POKER;
+            case Config.TAG_GAME_ITEM.MINI_POKER:
+                result = Common.ZONE_ID.MINI_POKER;
                 break;
             case Config.TAG_GAME_ITEM.TAIXIU:
                 result = Common.ZONE_ID.TAIXIU;
@@ -104,7 +104,7 @@ var Common = {
                 result = Common.ZONE_ID.VQMM;
                 break;
             default:
-                result = Common.ZONE_ID.BACAY;
+                result = Common.ZONE_ID.MINI_BACAY;
                 break;
         }
         return this._zoneId != -1 ? this._zoneId : result;
@@ -156,5 +156,12 @@ var Common = {
     },
     setOwnerUserId: function(ownerUserId) {
         this.ownerUserId = ownerUserId;
+    },
+    cash: 0,
+    setCash: function(cash) {
+        this.cash = cash;
+    },
+    getCash: function() {
+        return this.cash;
     }
 };

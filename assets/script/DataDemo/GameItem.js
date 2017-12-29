@@ -15,7 +15,7 @@ cc.Class({
     // use this for initialization
     init: function (rank, playerInfo) {
 
-        var tagTabButton = [Config.TAG_GAME_ITEM.BACAY, Config.TAG_GAME_ITEM.POKER,
+        var tagTabButton = [Config.TAG_GAME_ITEM.MINI_BACAY, Config.TAG_GAME_ITEM.MINI_POKER,
             Config.TAG_GAME_ITEM.TAIXIU, Config.TAG_GAME_ITEM.VQMM ];
 
         var url = "resources/common/scene/lobby/icon_bacay.png";
@@ -23,9 +23,9 @@ cc.Class({
             url = "resources/common/scene/lobby/icon_taixiu.png";
         }else if(playerInfo === Config.TAG_GAME_ITEM.VQMM){
             url =  "resources/common/scene/lobby/icon_vqmm.png";
-        }else if(playerInfo === Config.TAG_GAME_ITEM.POKER){
+        }else if(playerInfo === Config.TAG_GAME_ITEM.MINI_POKER){
             url = "resources/common/scene/lobby/icon_pocker.png";
-        }else if(playerInfo === Config.TAG_GAME_ITEM.BACAY){
+        }else if(playerInfo === Config.TAG_GAME_ITEM.MINI_BACAY){
             url =  "resources/common/scene/lobby/icon_bacay.png";
         }
 
@@ -39,10 +39,10 @@ cc.Class({
             btn.node._tag = Config.TAG_GAME_ITEM.TAIXIU;
         }else if(playerInfo === Config.TAG_GAME_ITEM.VQMM){
             btn.node._tag = Config.TAG_GAME_ITEM.VQMM;
-        }else if(playerInfo === Common.ZONE_ID.POKER){
-            btn.node._tag = Config.TAG_GAME_ITEM.POKER;
-        }else if(playerInfo === Config.TAG_GAME_ITEM.BACAY){
-            btn.node._tag = Config.TAG_GAME_ITEM.BACAY;
+        }else if(playerInfo === Common.ZONE_ID.MINI_POKER){
+            btn.node._tag = Config.TAG_GAME_ITEM.MINI_POKER;
+        }else if(playerInfo === Config.TAG_GAME_ITEM.MINI_BACAY){
+            btn.node._tag = Config.TAG_GAME_ITEM.MINI_BACAY;
         }
 
         // this.money1.string = playerInfo.money1;
