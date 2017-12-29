@@ -296,13 +296,19 @@ var NetworkManager = {
                 msg = proto.BINHeadlineResponse.deserializeBinary(bytes);
                 break;
             case NetworkManager.MESSAGE_ID.MATCH_END:
-                msg = proto.BINMatchBeginResponse.deserializeBinary(bytes);
+                msg = proto.BINMatchEndResponse.deserializeBinary(bytes);
                 break;
             case NetworkManager.MESSAGE_ID.LOOK_UP_ROOM:
                 msg = proto.BINLookUpRoomResponse.deserializeBinary(bytes);
                 break;
             case NetworkManager.MESSAGE_ID.ENTER_ROOM:
                 msg = proto.BINEnterRoomResponse.deserializeBinary(bytes);
+                break;
+            case NetworkManager.MESSAGE_ID.TURN:
+                msg = proto.BINTurnResponse.deserializeBinary(bytes);
+                break;
+            case NetworkManager.MESSAGE_ID.UPDATE_MONEY:
+                msg = proto.BINUpdateMoneyResponse.deserializeBinary(bytes);
                 break;
         }
 
@@ -437,6 +443,8 @@ var NetworkManager = {
         if (lenPacket > 0) {
             cc.log("NetworkManager: error packet length = 0");
         }
+
+        cc.log("lstMess =", lstMess);
         return lstMess;
 
     }, // init message
@@ -527,6 +535,24 @@ var NetworkManager = {
         request.setRoomindex(room_index);
         request.setPassword(password);
         return request;
+    },
+    initTurnMessage: function(room_index, entries) {
+        cc.log("entries =", entries);
+        var request = new proto.BINTurnRequest();
+        request.setRoomindex(room_index);
+        request.setArgsList(entries);
+        // for (var i = 0; i < entries.length; i++) {
+        //     // var map_field = request->add_args();
+        //     // map_field->set_key(it->key());
+        //     // map_field->set_value(it->value());
+        //     request.setArgsList(entries[i]);
+        // }
+        cc.log("request =", request);
+        return request;
+    },
+    getTurnMessageFromServer: function(room_index, entries) {
+        var request = this.initTurnMessage(room_index, entries);
+        this.callNetwork(this.initData(request.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.TURN, Common.getSessionId()));
     },
     connectNetwork: function() {
         if(window.ws === null || typeof(window.ws) === 'undefined' || window.ws.readyState === WebSocket.CLOSED) {

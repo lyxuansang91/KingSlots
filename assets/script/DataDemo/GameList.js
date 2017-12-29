@@ -22,7 +22,7 @@ cc.Class({
 
     populateList: function() {
         // var listGame = Common.getEnableGameIds();
-        var listGame = [1,3,17,18,27,28];
+        var listGame = [20,19,17,18];
         cc.log("listGame", listGame);
         for (var i = 0; i < listGame.length; ++i) {
             // var gameItem = gameItems[i];
