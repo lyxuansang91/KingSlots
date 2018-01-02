@@ -10,6 +10,11 @@ cc.Class({
         cards: []
     },
 
+    exitRoom: function() {
+        cc.log("click exit room");
+        NetworkManager.requestExitRoomMessage(0);
+    },
+
     // use this for initialization
     onLoad: function () {
         window.ws.onmessage = this.ongamestatus.bind(this);
@@ -96,6 +101,22 @@ cc.Class({
         }
     },
 
+    exitRoomResponsehandler: function (resp) {
+        cc.log("exit room response handler:", resp);
+    },
+
+    exitZoneResponseHandler: function(resp) {
+        cc.log("exit zone response handler:", resp.toObject());
+        if(resp.getResponsecode()) {
+            Common.setZoneId(-1);
+            cc.director.loadScene("Lobby");
+        }
+
+        if(resp.hasMessage()) {
+            // TODO: display message
+        }
+    },
+
     handleMessage: function(buffer) {
         cc.log("buffer =", buffer.message_id);
         switch (buffer.message_id) {
@@ -106,18 +127,18 @@ cc.Class({
             case NetworkManager.MESSAGE_ID.MATCH_END:
                 this.matchEndResponseHandler(buffer.response);
                 break;
-            // case NetworkManager.MESSAGE_ID.EXIT_ROOM:
-            //     var msg = buffer.response;
-            //     this.exitRoomResponsehandler(msg);
-            //     break;
+            case NetworkManager.MESSAGE_ID.EXIT_ROOM:
+                var msg = buffer.response;
+                this.exitRoomResponsehandler(msg);
+                break;
             // case NetworkManager.MESSAGE_ID.ENTER_ROOM:
             //     var msg = buffer.response;
             //     this.enterRoomResponseHandler(msg);
             //     break;
-            // case NetworkManager.MESSAGE_ID.EXIT_ZONE:
-            //     var msg = buffer.response;
-            //     this.exitZoneResponseHandler(msg);
-            //     break;
+            case NetworkManager.MESSAGE_ID.EXIT_ZONE:
+                var msg = buffer.response;
+                this.exitZoneResponseHandler(msg);
+                break;
         }
     },
     updateMoneyMessageResponseHandler: function (response) {

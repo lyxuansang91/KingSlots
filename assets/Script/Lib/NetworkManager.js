@@ -310,6 +310,12 @@ var NetworkManager = {
             case NetworkManager.MESSAGE_ID.UPDATE_MONEY:
                 msg = proto.BINUpdateMoneyResponse.deserializeBinary(bytes);
                 break;
+            case NetworkManager.MESSAGE_ID.EXIT_ZONE:
+                msg = proto.BINExitZoneResponse.deserializeBinary(bytes);
+                break;
+            case NetworkManager.MESSAGE_ID.EXIT_ROOM:
+                msg = proto.BINExitRoomResponse.deserializeBinary(bytes);
+                break;
         }
 
         return msg;
@@ -491,6 +497,17 @@ var NetworkManager = {
         var message = new proto.BINEnterZoneRequest();
         message.setZoneid(zoneId);
         return message;
+    },
+    /* Exit room */
+    initExitRoomMessage: function(roomIndex) {
+        var message = new proto.BINExitRoomRequest();
+        message.setRoomindex(roomIndex);
+        return message;
+    },
+    requestExitRoomMessage: function(roomIndex) {
+        var message = this.initExitRoomMessage(roomIndex);
+        cc.log("message = ", message);
+        this.callNetwork(this.initData(message.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.EXIT_ROOM, Common.getSessionId()));
     },
     requestEnterZoneMessage: function(zoneId) {
         var message = NetworkManager.initEnterZoneMessage(zoneId);
