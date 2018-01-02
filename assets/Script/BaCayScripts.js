@@ -18,39 +18,39 @@ cc.Class({
     // use this for initialization
     onLoad: function () {
         window.ws.onmessage = this.ongamestatus.bind(this);
-
-        var rs = this.genRandomNumber(null);
-        var test = this.genArrayToMultiArray(rs);
-        for(var i = 0; i < test.length; i++){
-            for(var j = 0; j < test[i].length; j++){
-                var item = cc.instantiate(this.cardPrefab);
-                var cardValue = test[i][j];
-                var posX =  0;
-                if(j === 0){
-                    posX = - item.getContentSize().width ;
-                } else if(j === 2){
-                    posX = item.getContentSize().width ;
-                } else {
-                    posX = 0;
-                }
-
-                var posY = 0;
-                if(i === 0){
-                    posY = item.getContentSize().height;
-                } else if (i === 1){
-                    posY = 0;
-                } else {
-                    posY = - (i - 1)*item.getContentSize().height;
-                }
-
-                item.getComponent('CardItem').init(cardValue);
-                item.setPositionY(posY);
-                item.setPositionX(posX);
-
-                this.cardView.node.addChild(item);
-            }
-
-        }
+        // var stepCard = 12;
+        // var rs = this.genRandomNumber(null,stepCard);
+        // var test = this.genArrayToMultiArray(rs, stepCard);
+        // for(var i = 0; i < test.length; i++){
+        //     for(var j = 0; j < test[i].length; j++){
+        //         var item = cc.instantiate(this.cardPrefab);
+        //         var cardValue = test[i][j];
+        //         var posX =  0;
+        //         if(j === 0){
+        //             posX = - item.getContentSize().width ;
+        //         } else if(j === 2){
+        //             posX = item.getContentSize().width ;
+        //         } else {
+        //             posX = 0;
+        //         }
+        //
+        //         var posY = 0;
+        //         if(i === 0){
+        //             posY = item.getContentSize().height;
+        //         } else if (i === 1){
+        //             posY = 0;
+        //         } else {
+        //             posY = - (i - 1)*item.getContentSize().height;
+        //         }
+        //
+        //         item.getComponent('CardItem').init(cardValue);
+        //         item.setPositionY(posY);
+        //         item.setPositionX(posX);
+        //
+        //         this.cardView.node.addChild(item);
+        //     }
+        //
+        // }
 
 
     },
@@ -197,30 +197,17 @@ cc.Class({
          this->showToast(response->message().c_str(), 2);*/
     },
     implementSpinMiniThreeCards: function(carx,response) {
-        cc.log("carx =", carx);
-        cc.log("response =", response);
+        this.cardView.node.removeAllChildren(true);
         var text_emoticon = response.getTextemoticonsList()[0];
         var isFinishSpin = false;
         var isBreakJar = (text_emoticon.getEmoticonid() === 54); //54: nổ hũ
-        /*for (int i = 0; i < 5; i++){
-         for (int j = (int)cards[i].size() - 1; j >= 1; j--){
-         bg_content->removeChild(cards[i][j], true);
-         cards[i].erase(cards[i].begin() + j);
-         }
-         }*/
 
-        //Du lieu tra ve = carx
+        var stepCard = 4;
 
-        //Tao mang du lieu fake
-
-
-        var card_values = [[]];
-        var stepCard = 12;
-
-        var rs = this.genRandomNumber(carx);
-        var test = this.genArrayToMultiArray(rs);
-        test[1] = carx;
-        cc.log("test carx =", test);
+        var rs = this.genRandomNumber(carx, stepCard * 3);
+        var test = this.genArrayToMultiArray(rs, stepCard);
+        test[stepCard-2] = carx;
+        cc.log("test carx =", test.length);
         for(var i = 0; i < test.length; i++){
             for(var j = 0; j < test[i].length; j++){
                 var item = cc.instantiate(this.cardPrefab);
@@ -235,108 +222,72 @@ cc.Class({
                 }
 
                 var posY = 0;
+
                 if(i === 0){
-                    posY = item.getContentSize().height;
+                    posY = - item.getContentSize().height;
                 } else if (i === 1){
                     posY = 0;
                 } else {
-                    posY = - (i - 1)*item.getContentSize().height;
+                    posY = (i - 1)*item.getContentSize().height;
                 }
 
+
                 item.getComponent('CardItem').replaceCard(cardValue);
+
                 item.setPositionY(posY);
                 item.setPositionX(posX);
 
                 this.cardView.node.addChild(item);
+
+                var paddingCard = item.getContentSize().height;
+
+                var moveAction = cc.moveBy(1.5 + j*0.25,
+                    cc.p(0, - (test.length - 3)*paddingCard));
+
+                if(j === 0){
+                    moveAction = cc.moveBy(1.5 + j*0.25,
+                        cc.p(0, - (test.length - 3)*paddingCard));
+                }else{
+                    moveAction = cc.moveBy((j-1) + 1.5 + (j-1)*0.25 + (test.length - test[i].length) / stepCard,
+                        cc.p(0, (test.length - 4)*paddingCard));
+                    // moveAction = cc.moveBy(1.5 + j*0.25,
+                    //     cc.p(0, - (test.length - 4)*paddingCard));
+                }
+
+                if(j === 2){
+                    // auto callFunc = CallFunc::create([=]{
+                    //     if (response->textemoticons_size() > 0){
+                    //         BINTextEmoticon emoticon = response->textemoticons(0);
+                    //         handleRanking(emoticon.emoticonid(), emoticon.message(), getBINUpdateMoneyResponse());
+                    //     }
+                    // });
+
+                    // auto callFuncAutoSpin = CallFunc::create([=]{
+                    //     if(!isBreakJar)
+                    //         isFinishSpin = true;
+                    // });
+
+                    item.runAction(cc.sequence(moveAction, cc.moveBy(1.5, cc.p(0, -paddingCard))));
+                }else{
+                    if(j === 0){
+                        item.runAction(moveAction);
+                    }else{
+                        item.runAction(cc.sequence(moveAction, cc.moveBy(1.5, cc.p(0, -paddingCard))));
+                    }
+
+                }
+
+                // var moveAction = cc.moveBy(1.5, cc.p(0,- (test.length - 3)*item.getContentSize().height));
+                item.runAction(moveAction);
+
             }
 
         }
 
-        // for (var i = 0; i < carx.length; i++) {
-        //     card_values[i].push(carx[i]);
-        //     cc.log("card_values", card_values);
-        //     for (var k = 1; k <= 3; k++) {
-        //         var card_value = 1;
-        //         do{
-        //             card_value = Math.floor(Math.random() * 52) + 1;
-        //         } while (card_value === carx[i] || this.checkCard(card_values[i], card_value));
-        //         card_values[i].push(card_value);
-        //     }
-        //
-        //     for (var j = 0; j < card_values[i].length; j++){
-        //         var nameValue = card_values[i][j] - 8;
-        //         if (nameValue < 1) nameValue = nameValue + 52;
-        //         if (nameValue % 4 === 0) {
-        //             nameValue--;
-        //         }
-        //         else if (nameValue % 4 === 3) {
-        //             nameValue++;
-        //         }
-        //
-        //         var paddingCard = this.cards[i][0].getContentSize().height*this.cards[i][j].getContentSize() * 1.1;
-        //
-        //         if (j === 0){
-        //
-        //             this.cards[i][0]->setSpriteFrame(StringUtils::format(CARD_FORMAT, nameValue));
-        //             cards[i][0]->setPosition(cards[i][0]->getPosition() + Vec2(0, (card_values[i].size() - 1)*paddingCard));
-        //             MoveBy* move;
-        //             if(i == 0){
-        //                 move = MoveBy::create(1.5f + i*0.25f,
-        //                     -Vec2(0, (card_values[i].size() - 1)*paddingCard));
-        //             }else{
-        //                 move = MoveBy::create((i-1) + 1.5f + (i-1)*0.25f + (card_values[i].size() - cards[i].size()) / stepCard,
-        //                     -Vec2(0, (card_values[i].size() - 2)*paddingCard));
-        //             }
-        //             if(i == 2){
-        //                 auto callFunc = CallFunc::create([=]{
-        //                     if (response->textemoticons_size() > 0){
-        //                         BINTextEmoticon emoticon = response->textemoticons(0);
-        //                         handleRanking(emoticon.emoticonid(), emoticon.message(), getBINUpdateMoneyResponse());
-        //                     }
-        //                 });
-        //
-        //                 auto callFuncAutoSpin = CallFunc::create([=]{
-        //                     if(!isBreakJar)
-        //                         isFinishSpin = true;
-        //                 });
-        //
-        //                 cards[i][0]->runAction(Sequence::create(move,
-        //                     MoveBy::create(1.5f,Vec2(0, -paddingCard)),
-        //                 callFunc, DelayTime::create(2.0f), callFuncAutoSpin, NULL));
-        //             }else{
-        //                 if(i == 0){
-        //                     cards[i][0]->runAction(move);
-        //                 }else{
-        //                     cards[i][0]->runAction(Sequence::create(move,
-        //                         MoveBy::create(1.5f,Vec2(0, -paddingCard)), NULL));
-        //                 }
-        //
-        //             }
-        //
-        //             continue;
-        //         }else{
-        //             cards[i][j]->setSpriteFrame(StringUtils::format(CARD_FORMAT, nameValue));
-        //             auto pos = Vec2((0.1f + 1.25f*i)*cards[i][j]->getWidth()*cards[i][j]->getScale(),
-        //             bg_card_inside->getHeight() / 2 - cards[i][j]->getHeight()*cards[i][j]->getScale() / 2
-        //             + (card_values[i].size() - j - 1)*paddingCard);
-        //             cards[i][j]->setPosition(pos);
-        //         }
-        //
-        //         float timeMove = 1.5f + (card_values[i].size() - cards[i].size()) / stepCard;
-        //         MoveBy* move;
-        //         if(i == 0){
-        //             timeMove = 1.5f + i*0.25f;
-        //             move = MoveBy::create(timeMove,
-        //                 -Vec2(0, (card_values[i].size() - 1)*paddingCard));
-        //             cards[i][j]->runAction(move);
-        //         }else{
-        //             move = MoveBy::create(timeMove + (i-1),
-        //                 -Vec2(0, (card_values[i].size() - 2)*paddingCard));
-        //             cards[i][j]->runAction(Sequence::create(move,MoveBy::create(0.25f, Vec2(0, -paddingCard)), NULL));
-        //         }
-        //     }
-        //
-        // }
+
+    },
+    _onDealEnd: function() {
+        cc.log("run action");
     },
     checkCard: function(card_values,value){
         for (var i = 0; i < card_values.length; i++){
@@ -346,8 +297,9 @@ cc.Class({
         }
         return false;
     },
-    genRandomNumber: function (arrCard) {
+    genRandomNumber: function (arrCard, stepCard) {
         arrCard = arrCard === null ? [0,0,0] : arrCard;
+        cc.log("stepCard =", stepCard);
         var results = [];
         do {
             var cardValue = Math.floor(Math.random() * 36) + 1;
@@ -355,17 +307,18 @@ cc.Class({
                 results.push(cardValue);
             }
         }
-        while (results.length < 9);
-        cc.log("results =", results);
+        while (results.length < stepCard);
         return results;
     },
-    genArrayToMultiArray: function (arrNumber) {
+    genArrayToMultiArray: function (arrNumber, stepCard) {
+        cc.log("arrNumber =", arrNumber);
         var i , j  , results = [];
         var number = Math.ceil(arrNumber.length/3);
+        cc.log("number =", number);
         for(i = 0; i < number; i++){
             results[i]=new Array(3);
             for(j = 0; j < 3 ; j++){
-                var k = i*number + j;
+                var k = i*3 + j;
                 results[i][j] = arrNumber[k];
             }
         }
