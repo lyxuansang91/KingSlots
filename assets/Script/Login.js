@@ -74,12 +74,14 @@ cc.Class({
 
     login: function() {
         cc.log("login normal");
-        var username = this.edt_username.string;
-        var password = this.edt_password.string;
-        if(this.edt_username.string === "" || this.edt_password.string === "") {
-            cc.alert("Tài khoản và mật khẩu không được để trống!");
-            return;
-        }
+        // var username = this.edt_username.string;
+        // var password = this.edt_password.string;
+        var username = "lyxuansangzz";
+        var password = "12341234";
+        // if(this.edt_username.string === "" || this.edt_password.string === "") {
+        //     cc.alert("Tài khoản và mật khẩu không được để trống!");
+        //     return;
+        // }
         NetworkManager.requestLoginMessage(username, password);
     },
     register: function() {
