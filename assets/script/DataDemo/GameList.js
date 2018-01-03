@@ -69,7 +69,6 @@ cc.Class({
     },
 
     handleMessage: function(buffer) {
-        cc.log("buffer:", buffer);
         switch (buffer.message_id) {
             case NetworkManager.MESSAGE_ID.ENTER_ZONE:
                 var msg = buffer.response;
@@ -79,10 +78,13 @@ cc.Class({
     },
 
     enterZoneMessageResponseHandler: function(enterZoneMessage) {
-        cc.log("enterZoneMessage", enterZoneMessage);
+        cc.log("enterZoneMessage: ", enterZoneMessage.toObject());
         if (enterZoneMessage != 0) {
             //common.initialize = initialMessage.responseCode;
             if (enterZoneMessage.getResponsecode()) {
+
+                var zoneId = enterZoneMessage.getZoneid();
+                Common.setZoneId(zoneId);
 
                 Common.setRequestRoomType(enterZoneMessage.getDefaultroomtypeload());
                 if (enterZoneMessage.hasEnabledisplayroomlist() &&
@@ -97,7 +99,6 @@ cc.Class({
                         }
                     }
                     Common.setCashRoomList(cashRoomList);
-
                 }
 
                 if (Common.getZoneId() !== -1) {

@@ -27,6 +27,8 @@ cc.Class({
         //cc.log("cashRoomList = ", cashRoomList[0].getRoomgroupid());
         var zoneId = Common.getZoneId();
 
+        cc.log("zone id 1:", zoneId);
+
         cc.log("content =", this.content.getContentSize().width);
 
         var contentWidth = cashRoomList.length * 320;
@@ -40,9 +42,9 @@ cc.Class({
             url = "resources/common/scene/table/lbl_title_vqmm.png";
         }else if(zoneId === Config.TAG_GAME_ITEM.VQMM){
             url =  "resources/common/scene/table/lbl_title_vqmm.png";
-        }else if(zoneId === Config.TAG_GAME_ITEM.POKER){
+        }else if(zoneId === Config.TAG_GAME_ITEM.MINI_POKER){
             url = "resources/common/scene/table/lbl_title_poker.png";
-        }else if(zoneId === Config.TAG_GAME_ITEM.BACAY){
+        }else if(zoneId === Config.TAG_GAME_ITEM.MINI_BACAY){
             url =  "resources/common/scene/table/lbl_title_3cay.png";
         }
 
@@ -141,7 +143,7 @@ cc.Class({
                             // miniGame->removeFromParentAndCleanup(true);
 
                             if (Common.getZoneId() === Common.ZONE_ID.MINI_BACAY) {
-                                cc.log("poker");
+                                cc.log("ba cay");
                                 // cc.director.preloadScene('Table', function () {
                                 //     cc.log('Next BaCay scene preloaded');
                                 // });
@@ -153,6 +155,7 @@ cc.Class({
                             }
                             else if (Common.getZoneId() === Common.ZONE_ID.MINI_POKER) {
                                 cc.log("poker");
+                                cc.director.loadScene('minipoker');
                                 // auto poker = PokerScene::createScene(roomPlay, playerList, waitingPlayerList, is_create_room,
                                 //     this->getEnableDisplayRoomList(), enterroomresponse);
                                 // REPLACESCENE(TIME_REPLACE_SCENE, poker);
