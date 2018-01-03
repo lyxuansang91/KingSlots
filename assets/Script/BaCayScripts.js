@@ -102,7 +102,14 @@ cc.Class({
     },
 
     exitRoomResponsehandler: function (resp) {
-        cc.log("exit room response handler:", resp);
+        cc.log("exit room response handler:", resp.toObject());
+        if(resp.getResponsecode()) {
+
+        }
+
+        if(resp.hasMessage()) {
+            // show toast
+        }
     },
 
     exitZoneResponseHandler: function(resp) {
