@@ -17,39 +17,36 @@ cc.Class({
     // use this for initialization
     onLoad: function () {
         window.ws.onmessage = this.ongamestatus.bind(this);
-        // var stepCard = 12;
-        // var rs = this.genRandomNumber(null,stepCard);
-        // var test = this.genArrayToMultiArray(rs, stepCard);
-        // for(var i = 0; i < test.length; i++){
-        //     for(var j = 0; j < test[i].length; j++){
-        //         var item = cc.instantiate(this.cardPrefab);
-        //         var cardValue = test[i][j];
-        //         var posX =  0;
-        //         if(j === 0){
-        //             posX = - item.getContentSize().width ;
-        //         } else if(j === 2){
-        //             posX = item.getContentSize().width ;
-        //         } else {
-        //             posX = 0;
-        //         }
-        //
-        //         var posY = 0;
-        //         if(i === 0){
-        //             posY = item.getContentSize().height;
-        //         } else if (i === 1){
-        //             posY = 0;
-        //         } else {
-        //             posY = - (i - 1)*item.getContentSize().height;
-        //         }
-        //
-        //         item.getComponent('CardItem').init(cardValue);
-        //         item.setPositionY(posY);
-        //         item.setPositionX(posX);
-        //
-        //         this.cardView.node.addChild(item);
-        //     }
-        //
-        // }
+
+        for(var i = 0; i < 3; i++){
+            for(var j = 0; j < 3; j++){
+                var item = cc.instantiate(this.cardPrefab);
+                var posX =  0;
+                if(j === 0){
+                    posX = - item.getContentSize().width ;
+                } else if(j === 2){
+                    posX = item.getContentSize().width ;
+                } else {
+                    posX = 0;
+                }
+
+                var posY = 0;
+                if(i === 0){
+                    posY = item.getContentSize().height;
+                } else if (i === 1){
+                    posY = 0;
+                } else {
+                    posY = - (i - 1)*item.getContentSize().height;
+                }
+
+                item.getComponent('CardItem').init();
+                item.setPositionY(posY);
+                item.setPositionX(posX);
+
+                this.cardView.node.addChild(item);
+            }
+
+        }
 
 
     },
@@ -208,10 +205,10 @@ cc.Class({
         var isFinishSpin = false;
         var isBreakJar = (text_emoticon.getEmoticonid() === 54); //54: nổ hũ
 
-        var stepCard = 4;
-
-        var rs = this.genRandomNumber(carx, stepCard * 3);
-        var test = this.genArrayToMultiArray(rs, stepCard);
+        var stepCard = 11;
+        var number = 3;
+        var rs = this.genRandomNumber(carx, stepCard, number);
+        var test = this.genArrayToMultiArray(rs, stepCard, number);
         test[stepCard-2] = carx;
         cc.log("test carx =", test.length);
         for(var i = 0; i < test.length; i++){
@@ -283,7 +280,6 @@ cc.Class({
 
                 }
 
-                // var moveAction = cc.moveBy(1.5, cc.p(0,- (test.length - 3)*item.getContentSize().height));
                 item.runAction(moveAction);
 
             }
@@ -295,33 +291,26 @@ cc.Class({
     _onDealEnd: function() {
         cc.log("run action");
     },
-    checkCard: function(card_values,value){
-        for (var i = 0; i < card_values.length; i++){
-            if(value === card_values[i]){
-                return true;
-            }
-        }
-        return false;
-    },
     genRandomNumber: function (arrCard, stepCard) {
-        arrCard = arrCard === null ? [0,0,0] : arrCard;
-        cc.log("stepCard =", stepCard);
         var results = [];
         do {
             var cardValue = Math.floor(Math.random() * 36) + 1;
-            if(!results.includes(cardValue) && !arrCard.includes(cardValue)){
-                results.push(cardValue);
+            if(arrCard !== null){
+                if(!results.includes(cardValue)  && !arrCard.includes(cardValue)){
+                    results.push(cardValue);
+                }
+            } else {
+                if(!results.includes(cardValue)){
+                    results.push(cardValue);
+                }
             }
         }
-        while (results.length < stepCard);
+        while (results.length < stepCard * 3);
         return results;
     },
     genArrayToMultiArray: function (arrNumber, stepCard) {
-        cc.log("arrNumber =", arrNumber);
         var i , j  , results = [];
-        var number = Math.ceil(arrNumber.length/3);
-        cc.log("number =", number);
-        for(i = 0; i < number; i++){
+        for(i = 0; i < stepCard; i++){
             results[i]=new Array(3);
             for(j = 0; j < 3 ; j++){
                 var k = i*3 + j;

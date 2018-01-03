@@ -163,5 +163,33 @@ var Common = {
     },
     getCash: function() {
         return this.cash;
+    },
+    genRandomNumber: function (arrCard, stepCard, number) {
+        var results = [];
+        do {
+            var cardValue = number === 3 ? Math.floor(Math.random() * 36) + 1 : Math.floor(Math.random() * 52) + 1;
+            if(arrCard !== null){
+                if(!results.includes(cardValue)  && !arrCard.includes(cardValue)){
+                    results.push(cardValue);
+                }
+            } else {
+                if(!results.includes(cardValue)){
+                    results.push(cardValue);
+                }
+            }
+        }
+        while (results.length < stepCard * number);
+        return results;
+    },
+    genArrayToMultiArray: function (arrNumber, stepCard, number) {
+        var i , j  , results = [];
+        for(i = 0; i < stepCard; i++){
+            results[i]=new Array(number);
+            for(j = 0; j < number ; j++){
+                var k = i*number + j;
+                results[i][j] = arrNumber[k];
+            }
+        }
+        return results;
     }
 };
