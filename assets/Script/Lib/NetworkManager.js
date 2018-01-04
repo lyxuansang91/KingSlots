@@ -226,7 +226,7 @@ var NetworkManager = {
 /** The Constant EXPIRED_SESSION. */
         EXPIRED_SESSION: 9999
     },
-    URL: "ws://192.168.0.32:1280/megajackpot",
+    URL: "ws://150.95.109.149:1280/megajackpot",
     sessionId: "",
     getSessionId: function() {
         return NetworkManager.sessionId;
@@ -514,6 +514,17 @@ var NetworkManager = {
         cc.log("message = ", message);
         this.callNetwork(this.initData(message.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.ENTER_ZONE, Common.getSessionId()));
     },
+    /* exit zone */
+    requestExitZoneMessage: function(zoneId) {
+        var message = this.initExitZoneMessage(zoneId);
+        this.callNetwork(this.initData(message.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.EXIT_ZONE, Common.getSessionId()));
+    },
+    initExitZoneMessage: function(zoneId) {
+        var message = new proto.BINExitZoneRequest();
+        message.setZoneid(zoneId);
+        return message;
+    },
+
     /* Register */
     requestRegisterMessage: function(username, password, repass, displayname, mobile) {
         var message = NetworkManager.initRegisterMessage(username, password, repass, displayname, mobile);

@@ -15,6 +15,9 @@ cc.Class({
         // },
         // ...
     },
+    exitRoom: function() {
+        cc.director.loadScene("Table");
+    },
 
     getTurnMiniPokerRequest: function(turnType) {
 
@@ -51,9 +54,42 @@ cc.Class({
     },
     matchEndResponseHandler: function(resp) {
       cc.log("match end response handler:", resp.toObject());
+      if(resp.getResponsecode()) {
+          //
+      }
+
+      if(resp.hasMessage() && resp.getMessage() !== "") {
+
+      }
     },
     updateMoneyMessageResponseHandler: function(resp) {
         cc.log("update money response: ", resp.toObject());
+        if(resp.getResponsecode()) {
+
+        }
+
+        if(resp.hasMessage() && resp.getMessage() !== "") {
+            // show dialog
+        }
+    },
+    exitRoomResponseHandler: function(resp) {
+        cc.log("exit room response handler:", resp.toObject());
+        if(resp.getResponsecode()) {
+
+        }
+        if(resp.hasMessage() && resp.getMessage() !== "") {
+
+        }
+    },
+    exitZoneResponseHandler: function(resp) {
+        cc.log("exit zone response handler:", resp.toObject());
+        if(resp.getResponsecode()) {
+
+        }
+
+        if(resp.hasMessage() && resp.getMessage() !== "") {
+            // show toast
+        }
     },
     handleMessage: function(buffer) {
       //  cc.log("buffer =", buffer.message_id);
@@ -65,18 +101,18 @@ cc.Class({
             case NetworkManager.MESSAGE_ID.MATCH_END:
                 this.matchEndResponseHandler(buffer.response);
                 break;
-            // case NetworkManager.MESSAGE_ID.EXIT_ROOM:
-            //     var msg = buffer.response;
-            //     this.exitRoomResponsehandler(msg);
-            //     break;
+            case NetworkManager.MESSAGE_ID.EXIT_ROOM:
+                var msg = buffer.response;
+                this.exitRoomResponsehandler(msg);
+                break;
             // // case NetworkManager.MESSAGE_ID.ENTER_ROOM:
             // //     var msg = buffer.response;
             // //     this.enterRoomResponseHandler(msg);
             // //     break;
-            // case NetworkManager.MESSAGE_ID.EXIT_ZONE:
-            //     var msg = buffer.response;
-            //     this.exitZoneResponseHandler(msg);
-            //     break;
+            case NetworkManager.MESSAGE_ID.EXIT_ZONE:
+                var msg = buffer.response;
+                this.exitZoneResponseHandler(msg);
+                break;
         }
     }
 

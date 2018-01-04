@@ -11,8 +11,7 @@ cc.Class({
     },
 
     exitRoom: function() {
-        cc.log("click exit room");
-        NetworkManager.requestExitRoomMessage(0);
+        cc.director.loadScene("Table");
     },
 
     // use this for initialization
@@ -115,8 +114,8 @@ cc.Class({
     exitZoneResponseHandler: function(resp) {
         cc.log("exit zone response handler:", resp.toObject());
         if(resp.getResponsecode()) {
-            Common.setZoneId(-1);
-            cc.director.loadScene("Lobby");
+            // Common.setZoneId(-1);
+            // cc.director.loadScene("Lobby");
         }
 
         if(resp.hasMessage()) {
