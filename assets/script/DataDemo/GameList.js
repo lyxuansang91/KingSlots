@@ -21,18 +21,13 @@ cc.Class({
     },
 
     populateList: function() {
-        // var listGame = Common.getEnableGameIds();
         var listGame = [20,19,17,18];
-        cc.log("listGame", listGame);
+        var contentWidth = listGame.length * 300;
+        this.content.setContentSize(contentWidth, this.content.getContentSize().height);
         for (var i = 0; i < listGame.length; ++i) {
-            // var gameItem = gameItems[i];
-            // cc.log("gameItem", gameItem);
             var item = cc.instantiate(this.prefabGameItem);
             item.getComponent('GameItem').init(i, listGame[i]);
             item.setPositionY(this.content.getContentSize().height*0.06);
-            // var btn = item.getComponent('GameItem').background;
-            // cc.log("btn = ", btn.node._tag);
-            // btn.node._tag = listGame[i];
             this.content.addChild(item);
         }
     },
@@ -56,13 +51,10 @@ cc.Class({
     },
 
     ongamestatus: function(event) {
-        cc.log("response text msg:" + event);
         if(event.data!==null || event.data !== 'undefined') {
             var lstMessage = NetworkManager.parseFrom(event.data, event.data.byteLength);
-            cc.log("list message size:" + lstMessage.length);
             if(lstMessage.length > 0) {
                 var buffer = lstMessage.shift();
-                cc.log("buffer:" , buffer);
                 this.handleMessage(buffer);
             }
         }
@@ -78,7 +70,6 @@ cc.Class({
     },
 
     enterZoneMessageResponseHandler: function(enterZoneMessage) {
-        cc.log("enterZoneMessage: ", enterZoneMessage.toObject());
         if (enterZoneMessage != 0) {
             //common.initialize = initialMessage.responseCode;
             if (enterZoneMessage.getResponsecode()) {

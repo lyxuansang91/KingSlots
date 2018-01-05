@@ -6,7 +6,8 @@ cc.Class({
 
     properties: {
         edt_username: cc.EditBox,
-        edt_password: cc.EditBox
+        edt_password: cc.EditBox,
+        toastPrefab: cc.Prefab
     },
     // use this for initialization
     onLoad: function () {
@@ -51,6 +52,26 @@ cc.Class({
             Common.setUserInfo(res.getUserinfo().toObject());
             cc.log("get user info:", res.getUserinfo().toObject());
             cc.sys.localStorage.setItem("session_id", session_id);
+
+            if (res.hasUserinfo()) {
+                this.saveUserInfo(res.getUserinfo());
+            }
+            if (res.hasUsersetting()) {
+                this.saveUserSetting(res.getUsersetting());
+            }
+            if (res.hasEnableevent()) {
+                Common.setEnableEvent(res.getEnableevent());
+            }
+            if (res.hasEnablenotification()) {
+                Common.setEnableNotification(res.getEnablenotification());
+            }
+            if(res.hasEnabletx()){
+                Common.setEnableTaixiu(res.getEnabletx());
+            }
+            if (res.hasNoticetext()){
+                Common.setNoticeText(res.getNoticetext());
+            }
+
             cc.director.loadScene('Lobby');
         }
 
@@ -79,7 +100,11 @@ cc.Class({
         var username = "lyxuansangzz";
         var password = "12341234";
         // if(this.edt_username.string === "" || this.edt_password.string === "") {
-        //     cc.alert("Tài khoản và mật khẩu không được để trống!");
+        //     // cc.alert("Tài khoản và mật khẩu không được để trống!");
+        //     var item = cc.instantiate(this.toastPrefab).getComponent("ToastScripts");
+        //     var strMess = "Tài khoản và mật khẩu không được để trống!";
+        //     item.showToast(strMess);
+        //     this.node.addChild(item.node);
         //     return;
         // }
         NetworkManager.requestLoginMessage(username, password);
@@ -147,10 +172,50 @@ cc.Class({
             scope: permissionsStr,
             return_scopes: true
         });
+    },
+    saveUserInfo: function(userInfo) {
+        Common.setUserName(userInfo.getUsername());
+        if (userInfo.hasDisplayname()) {
+            Common.setDisplayName(userInfo.getDisplayname());
+        }
+
+        if (userInfo.hasLevel()) {
+            Common.setLevel(userInfo.getLevel().getLevel());
+        }
+
+        if (userInfo.hasCash()) {
+            Common.setCash(userInfo.getCash());
+        }
+
+        if (userInfo.hasAvatarid()) {
+            Common.setAvatarId(userInfo.getAvatarid());
+        }
+
+        if (userInfo.hasMobile()){
+            Common.setPhoneNunber(userInfo.getMobile());
+        }
+
+        if (userInfo.hasAccountverified()){
+            Common.setAccountVerify(userInfo.getAccountverified());
+        }
+
+        if (userInfo.hasDisablecashtransaction()){
+            Common.setDisableCashTransaction(userInfo.getDisablecashtransaction());
+        }
+
+        if (userInfo.hasSecuritykeyset()){
+            Common.setSecurityKeySeted(userInfo.getSecuritykeyset());
+        }
+    },
+    saveUserSetting: function(userSetting) {
+        if (userSetting.hasAutoready()) {
+            Common.setAutoReady(userSetting.getAutoready());
+            cc.sys.localStorage.setItem("AUTOREADY", userSetting.getAutoready());
+        }
+
+        if (userSetting.hasAutodenyinvitation()) {
+            Common.setAutoDenyInvitation(userSetting.getAutodenyinvitation());
+            cc.sys.localStorage.setItem("DENY_INVITES", userSetting.getAutodenyinvitation());
+        }
     }
-
-    // called every frame, uncomment this function to activate update callback
-    // update: function (dt) {
-
-    // },
 });

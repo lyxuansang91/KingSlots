@@ -5,9 +5,19 @@ cc.Class({
 
     properties: {
         cardPrefab: cc.Prefab,
+        toastPrefab: cc.Prefab,
         cardView: cc.Mask,
+        userMoney: cc.Label,
+        moneyBet: cc.Label,
+        moneyJar: cc.Label,
+        roomName: cc.Sprite,
+        fastSpinToggle: cc.Toggle,
+        autoSpinToggle: cc.Toggle,
+        isFinishSpin: true,
+        isRun: false,
         updateMoneyResponse: [],
-        cards: []
+
+
     },
 
     exitRoom: function() {
@@ -17,7 +27,7 @@ cc.Class({
     // use this for initialization
     onLoad: function () {
         window.ws.onmessage = this.ongamestatus.bind(this);
-
+        this.userMoney.string = Common.getCash();
         for(var i = 0; i < 3; i++){
             for(var j = 0; j < 3; j++){
                 var item = cc.instantiate(this.cardPrefab);
@@ -51,31 +61,36 @@ cc.Class({
 
     },
 
-    quayEvent: function () {
-        cc.log("ba cay =", this.node);
-        // int valMoney = (isCash ? turnCashValue[indexCash] : turnGoldValue[indexCash]);
-        // int money = (isCash ? (int)Common::getInstance()->getCash() : (int)Common::getInstance()->getGold());
-        // if(valMoney > money){
-        //     string message = getLanguageStringWithKey("MESSAGE_NOTENOUGHMONEY1") +
-        //         (isCash ? getLanguageStringWithKey("TXT_KEN") : getLanguageStringWithKey("TXT_COIN")) +
-        //         getLanguageStringWithKey("MESSAGE_NOTENOUGHMONEY2");
-        //     this->showToast(message.c_str(), 2);
-        //     return;
-        // }
-        // if (autoSpin) {
-        //     return;
-        // }
+    update: function (dt) {
+        this.handleAutoSpin();
+    },
 
-        // if (!isRunning) {
+    quayEvent: function () {
+        var item = cc.instantiate(this.toastPrefab).getComponent("ToastScripts");
+        // var valMoney = (isCash ? turnCashValue[indexCash] : turnGoldValue[indexCash]);
+        var money = Common.getCash();
+        if(1000 > money){
+            var message = "Bạn không có đủ tiền!";
+            item.showToast(message);
+            this.node.addChild(item.node);
+            return;
+        }
+        if (this.autoSpinToggle.isChecked) {
+            return;
+        }
+
+        if (!this.isRun) {
             this.getTurnMiniThreeCardsRequest(1);
-        // }else{
-        //     this->showToast(getLanguageStringWithKey("MESSAGE_WAIT").c_str(), 2);
-        // }
+        }else{
+            var message = "Xin vui lòng đợi!";
+            item.showToast(message);
+            this.node.addChild(item.node);
+        }
     },
     getTurnMiniThreeCardsRequest: function(turnType) {
 
         // cangatAnimation();
-        // isRunning = true;
+        this.isRun = true;
 
         var entries = [];
         var entry = new proto.BINMapFieldEntry();
@@ -167,6 +182,7 @@ cc.Class({
                     //set lai tien cho nguoi choi
 
                     Common.setCash(origin_money);
+                    this.userMoney.string = origin_money;
                     //this->moneyEvent->onEventMoneyMiniGame(true,origin_money);
 
                 }
@@ -189,26 +205,24 @@ cc.Class({
              BINTextEmoticon emoticon = response->textemoticons(0);
              handleRanking(emoticon.emoticonid(), emoticon.message());
              }*/
-
         } else {
-            // isRunning = false;
-            // autoSpin = false;
-            //btn_auto_quay->loadDecryptTextTure(MINIPOKER_CHECK_BOX_UNSELECT);
-
+            this.isRun = false;
+            this.autoSpinToggle.isChecked = false;
         }
         /* if (response->has_message() && !response->message().empty())
          this->showToast(response->message().c_str(), 2);*/
     },
     implementSpinMiniThreeCards: function(carx,response) {
+        cc.log("carx =", carx);
         this.cardView.node.removeAllChildren(true);
         var text_emoticon = response.getTextemoticonsList()[0];
-        var isFinishSpin = false;
+        this.isFinishSpin = false;
         var isBreakJar = (text_emoticon.getEmoticonid() === 54); //54: nổ hũ
 
         var stepCard = 11;
         var number = 3;
-        var rs = this.genRandomNumber(carx, stepCard, number);
-        var test = this.genArrayToMultiArray(rs, stepCard, number);
+        var rs = Common.genRandomNumber(carx, stepCard, number);
+        var test = Common.genArrayToMultiArray(rs, stepCard, number);
         test[stepCard-2] = carx;
         cc.log("test carx =", test.length);
         for(var i = 0; i < test.length; i++){
@@ -252,25 +266,25 @@ cc.Class({
                         cc.p(0, - (test.length - 3)*paddingCard));
                 }else{
                     moveAction = cc.moveBy((j-1) + 1.5 + (j-1)*0.25 + (test.length - test[i].length) / stepCard,
-                        cc.p(0, (test.length - 4)*paddingCard));
+                        cc.p(0, - (test.length - 4)*paddingCard));
                     // moveAction = cc.moveBy(1.5 + j*0.25,
-                    //     cc.p(0, - (test.length - 4)*paddingCard));
+                    //     cc.p(0, - (test.length - 3)*paddingCard));
                 }
 
                 if(j === 2){
-                    // auto callFunc = CallFunc::create([=]{
-                    //     if (response->textemoticons_size() > 0){
-                    //         BINTextEmoticon emoticon = response->textemoticons(0);
-                    //         handleRanking(emoticon.emoticonid(), emoticon.message(), getBINUpdateMoneyResponse());
-                    //     }
-                    // });
+                    var emoticon = response.getTextemoticonsList()[0];
+                    var emotionId = emoticon.getEmoticonid();
+                    var message = emoticon.getMessage();
+                    var moneyResponse = this.getBINUpdateMoneyResponse();
+                    var callFunc = cc.callFunc(this.handleRanking(emotionId, message, moneyResponse), this);
 
-                    // auto callFuncAutoSpin = CallFunc::create([=]{
-                    //     if(!isBreakJar)
-                    //         isFinishSpin = true;
-                    // });
+                    var callFuncAutoSpin = cc.callFunc(function () {
+                        if(!isBreakJar)
+                             this.isFinishSpin = true;
+                    }, this);
 
-                    item.runAction(cc.sequence(moveAction, cc.moveBy(1.5, cc.p(0, -paddingCard))));
+                    item.runAction(cc.sequence(moveAction, cc.moveBy(1.5, cc.p(0, -paddingCard)), callFunc, cc.delayTime(2), callFuncAutoSpin, null));
+
                 }else{
                     if(j === 0){
                         item.runAction(moveAction);
@@ -291,33 +305,85 @@ cc.Class({
     _onDealEnd: function() {
         cc.log("run action");
     },
-    genRandomNumber: function (arrCard, stepCard) {
-        var results = [];
-        do {
-            var cardValue = Math.floor(Math.random() * 36) + 1;
-            if(arrCard !== null){
-                if(!results.includes(cardValue)  && !arrCard.includes(cardValue)){
-                    results.push(cardValue);
-                }
-            } else {
-                if(!results.includes(cardValue)){
-                    results.push(cardValue);
-                }
+    handleAutoSpin: function() {
+
+        if (this.autoSpinToggle.isChecked && !this.isRun && this.isFinishSpin) {
+            var item = cc.instantiate(this.toastPrefab).getComponent("ToastScripts");
+            // var valMoney = (isCash ? turnCashValue[indexCash] : turnGoldValue[indexCash]);
+            var money = Common.getCash();
+            if(1000 > money){
+                var message = "Bạn không có đủ tiền!";
+                item.showToast(message);
+                this.autoSpinToggle.isChecked = false;
+                return;
             }
+            this.getTurnMiniThreeCardsRequest(1);
         }
-        while (results.length < stepCard * 3);
-        return results;
     },
-    genArrayToMultiArray: function (arrNumber, stepCard) {
-        var i , j  , results = [];
-        for(i = 0; i < stepCard; i++){
-            results[i]=new Array(3);
-            for(j = 0; j < 3 ; j++){
-                var k = i*3 + j;
-                results[i][j] = arrNumber[k];
+    handleRanking: function(emoticonId, message, response) {
+
+        //TODO: HungLe - Handle Ranking
+
+        // //emoticonId = 54;
+        // if(emoticonId === 54) {
+        //     showNoHu();
+        //     this.isRun = false;
+        //     return ;
+        // }
+        // if (emoticonId !== 72) {
+        //     isUpdateMoney = false;
+        //     var label_text = MLabel::createTitle(message,bg_card_outside->getHeight()*0.25f);
+        //     label_text->setAnchorPoint(Point::ANCHOR_MIDDLE);
+        //     label_text->enableOutline(Color4B(255,0,0,255),3);
+        //     label_text->setPosition(bg_card_outside->getSize()/2);
+        //     auto fadeout = FadeOut::create(1.0f);
+        //     auto callFunc = CallFunc::create([=]{
+        //         for (int i = 0; i < response->moneyboxes_size(); i++) {
+        //             BINMoneyBox moneybox = response->moneyboxes(i);
+        //             if (moneybox.displaychangemoney() > 0) {
+        //                 isUpdateMoney = true;
+        //                 auto label_money = MLabel::createUpdateMoney(moneybox.displaychangemoney());
+        //                 label_money->setPosition(bg_card_outside->getSize() / 2);
+        //                 bg_card_outside->addChild(label_money);
+        //             }
+        //         }
+        //     });
+        //
+        //     auto callFuncUpdateMoney = CallFunc::create([=]{
+        //         if (isUpdateMoney) {
+        //             this->setOriginMoney();
+        //         }
+        //         this.isRun = false;
+        //     });
+        //
+        //     label_text->runAction(Sequence::create(MoveBy::create(0.5f, Vec2(0, 50)),
+        //     callFunc, Spawn::create(MoveBy::create(1.0f, Vec2(0, 50)), fadeout, NULL),
+        //     callFuncUpdateMoney, RemoveSelf::create(), NULL));
+        //     bg_card_outside->addChild(label_text);
+        // }
+        // else {
+            this.setOriginMoney();
+            this.isRun = false;
+        // }
+    },
+    setOriginMoney: function() {
+        var response = this.getBINUpdateMoneyResponse();
+        if(response !== 0){
+            for (var i = 0; i < response.getMoneyboxesList().length; i++) {
+                var moneybox = response.getMoneyboxesList()[i];
+                if (moneybox.getDisplaychangemoney() > 0) {
+                    var userInfo = Common.getUserInfo();
+                    if (moneybox.getUserid() == userInfo.userid){
+                        var origin_money = moneybox.getCurrentmoney();
+                        //set lai tien cho nguoi choi
+                        Common.setCash(origin_money);
+                        this.userMoney.string = origin_money;
+                    }
+                }
             }
         }
-        return results;
+
+        this.isRun = false;
     }
 
 });

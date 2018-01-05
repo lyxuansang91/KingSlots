@@ -12,12 +12,16 @@ cc.Class({
         //    readonly: false,    // optional, default is false
         // },
         // ...
-        popupSetting: cc.Prefab
+        popupSetting: cc.Prefab,
+        userName: cc.Label ,
+        userAvatar: cc.Sprite ,
+        userGold: cc.Label
     },
 
     // use this for initialization
     onLoad: function () {
-
+        this.userName.string = Common.getUserName();
+        this.userGold.string = Common.getCash();
     },
 
     openPopup: function () {

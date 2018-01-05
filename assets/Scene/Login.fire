@@ -479,6 +479,9 @@
     },
     "edt_password": {
       "__id__": 16
+    },
+    "toastPrefab": {
+      "__uuid__": "c19af3fa-7297-48f4-b2f0-c08d0184e7bf"
     }
   },
   {
@@ -838,7 +841,8 @@
     },
     "_enabled": true,
     "edt_username": null,
-    "edt_password": null
+    "edt_password": null,
+    "toastPrefab": null
   },
   {
     "__type__": "766c2loLlJPba69AJmZx9M3",

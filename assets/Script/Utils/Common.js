@@ -191,5 +191,109 @@ var Common = {
             }
         }
         return results;
+    },
+    userName: "",
+    setUserName: function(userName) {
+        this.userName = userName;
+    },
+    getUserName: function() {
+        return this.userName;
+    },
+    displayName: "",
+    setDisplayName: function(displayName) {
+        this.displayName = displayName;
+    },
+    getDisplayName: function() {
+        if (this.displayName.empty()){
+            return getUserName();
+        }
+        return this.displayName;
+    },
+    level: 0,
+    setLevel: function(level) {
+        this.level = level;
+    },
+    getLevel: function() {
+        return this.level;
+    },
+    avatarId: 0,
+    setAvatarId: function(avatarId) {
+        this.avatarId = avatarId;
+    },
+    getAvatarId: function() {
+        if (this.avatarId < 100000 || this.avatarId > 100021){
+            return 100000;
+        }
+        return this.avatarId;
+    },
+    phoneNumber: "",
+    setPhoneNunber: function(phoneNumber){
+        this.phoneNumber = phoneNumber;
+    },
+    getPhoneNumber: function(){
+        return this.phoneNumber;
+    },
+    accountVerify: true,
+    setAccountVerify: function(accountVerify){
+        this.accountVerify = accountVerify;
+    },
+    getAccountVerify: function(){
+        return this.accountVerify;
+    },
+    disableCashTransaction: false,
+    setDisableCashTransaction: function(disableCashTransaction){
+        this.disableCashTransaction = disableCashTransaction;
+    },
+    getDisableCashTransaction:function(){
+        return this.disableCashTransaction;
+    },
+    securityKeySeted: false,
+    setSecurityKeySeted: function(securityKeySeted){
+        this.securityKeySeted = securityKeySeted;
+    },
+    getSecurityKeySeted: function(){
+        return this.securityKeySeted;
+    },
+    _autoReady: false,
+    setAutoReady: function(autoReady) {
+        this._autoReady = autoReady;
+    },
+    isAutoRead: function() {
+        return this._autoReady;
+    },
+    _autoDenyInvitation: false,
+    setAutoDenyInvitation: function(autoDenyInvitation) {
+        this._autoDenyInvitation = autoDenyInvitation;
+    },
+    isAutoDenyInvitation: function() {
+        return this._autoDenyInvitation;
+    },
+    enableEvent: false,
+    setEnableEvent: function(enable) {
+        this.enableEvent = enable;
+    },
+    isEnableEvent: function() {
+        return this.enableEvent;
+    },
+    enableNotify: false,
+    setEnableNotification: function(enable) {
+        this.enableNotify = enable;
+    },
+    isEnableNotification: function() {
+        return this.enableNotify;
+    },
+    enableTaixiu: true,
+    setEnableTaixiu: function(enableTaixiu){
+        this.enableTaixiu = enableTaixiu;
+    },
+    isEnableTaixiu: function(){
+        return this.enableTaixiu;
+    },
+    noticeText:"",
+    setNoticeText: function(noticeText){
+        this.noticeText = noticeText;
+    },
+    getNoticeText: function(){
+        return this.noticeText;
     }
 };

@@ -9,12 +9,17 @@ cc.Class({
         },
         scrollView: cc.ScrollView,
         prefabTableItem: cc.Prefab,
-        rankCount: 0
+        rankCount: 0,
+        userName: cc.Label ,
+        userAvatar: cc.Sprite ,
+        userGold: cc.Label
     },
 
     // use this for initialization
     onLoad: function () {
         this.content = this.scrollView.content;
+        this.userName.string = Common.getUserName();
+        this.userGold.string = Common.getCash();
         NetworkManager.getLookUpRoomRequest(Common.getZoneId(), 1, -1, -1, Config.TABLE_ORDERBY.NUM_PLAYER, false, -1);  //TABLE_ORDERBY::NUM_PLAYER, false
         window.ws.onmessage = this.ongamestatus.bind(this);
     },
@@ -24,20 +29,11 @@ cc.Class({
     },
 
     tableList: function() {
-
-        cc.log("listRoomPlay = ", Common.getListRoomPlay());
         var cashRoomList = Common.getListRoomPlay();
         var zoneId = Common.getZoneId();
-
-        cc.log("zone id 1:", zoneId);
-
-        cc.log("content =", this.content.getContentSize().width);
-
         var contentWidth = cashRoomList.length * 320;
 
         this.content.setContentSize(contentWidth, this.content.getContentSize().height);
-
-        cc.log("contentWidth =", this.content.getContentSize().width);
 
         var url = "resources/common/scene/table/lbl_title_3cay.png";
         if(zoneId === Config.TAG_GAME_ITEM.TAIXIU){
@@ -64,10 +60,8 @@ cc.Class({
     },
 
     ongamestatus: function(event) {
-        cc.log("response text msg:" + event);
         if(event.data!==null || event.data !== 'undefined') {
             var lstMessage = NetworkManager.parseFrom(event.data, event.data.byteLength);
-            cc.log("list message size:" + lstMessage.length);
             if(lstMessage.length > 0) {
                 for(var i = 0; i < lstMessage.length; i++) {
                     var buffer = lstMessage[i];
@@ -93,7 +87,6 @@ cc.Class({
     },
 
     handleMessage: function(buffer) {
-        cc.log("buffer:", buffer);
         switch (buffer.message_id) {
             case NetworkManager.MESSAGE_ID.LOOK_UP_ROOM:
                 var msg = buffer.response;
