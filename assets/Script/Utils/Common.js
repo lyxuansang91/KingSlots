@@ -29,6 +29,13 @@ var Common = {
     setUserInfo: function(e) {
         this.userInfo = e;
     },
+    create2DArray: function(nRows) {
+        var rs = new Array(nRows);
+        for(var i = 0; i < nRows; i++) {
+            rs[i] = [];
+        }
+        return rs;
+    },
     getOS: function() {
         var os = -1;
         if(cc.sys.isNative) {
