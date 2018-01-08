@@ -182,12 +182,11 @@ var Common = {
         return results;
     },
     genArrayToMultiArray: function (arrNumber, stepCard, number) {
-        var i , j  , results = [];
+        var i, j, k = 0,results = [];
         for(i = 0; i < stepCard; i++){
-            results[i]=new Array(number);
-            for(j = 0; j < number ; j++){
-                var k = i*number + j;
-                results[i][j] = arrNumber[k];
+            results[i]= new Array(number);
+            for(j = 0; j < number;j++){
+                results[i][j] = arrNumber[k++];
             }
         }
         return results;

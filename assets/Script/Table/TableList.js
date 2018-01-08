@@ -18,8 +18,8 @@ cc.Class({
     // use this for initialization
     onLoad: function () {
         this.content = this.scrollView.content;
-        this.userName.string = Common.getUserName();
-        this.userGold.string = Common.getCash();
+        // this.userName.string = Common.getUserName();
+        // this.userGold.string = Common.getCash();
         NetworkManager.getLookUpRoomRequest(Common.getZoneId(), 1, -1, -1, Config.TABLE_ORDERBY.NUM_PLAYER, false, -1);  //TABLE_ORDERBY::NUM_PLAYER, false
         window.ws.onmessage = this.ongamestatus.bind(this);
     },

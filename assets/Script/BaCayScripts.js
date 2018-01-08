@@ -15,9 +15,7 @@ cc.Class({
         autoSpinToggle: cc.Toggle,
         isFinishSpin: true,
         isRun: false,
-        updateMoneyResponse: [],
-
-
+        updateMoneyResponse: []
     },
 
     exitRoom: function() {
@@ -100,7 +98,7 @@ cc.Class({
         NetworkManager.getTurnMessageFromServer(0, entries);
     },
     ongamestatus: function(event) {
-        if(event.data!==null || event.data !== 'undefined') {
+        if(event.data!==null || typeof(event.data) !== 'undefined') {
             var lstMessage = NetworkManager.parseFrom(event.data, event.data.byteLength);
             // cc.log("lstMessage =", lstMessage.shift());
             if(lstMessage.length > 0) {
@@ -219,7 +217,7 @@ cc.Class({
         this.isFinishSpin = false;
         var isBreakJar = (text_emoticon.getEmoticonid() === 54); //54: nổ hũ
 
-        var stepCard = 11;
+        var stepCard = 4;
         var number = 3;
         var rs = Common.genRandomNumber(carx, stepCard, number);
         var test = Common.genArrayToMultiArray(rs, stepCard, number);

@@ -28,7 +28,7 @@ cc.Class({
 
     // use this for initialization
     onLoad: function () {
-
+        this.node.getComponent(cc.Sprite).spriteFrame = null;
     },
 
     init: function () {
