@@ -63,7 +63,9 @@ cc.Class({
         if(buffer.getResponsecode()) {
             NetworkManager.requestLoginMessage(this.edt_username.string, this.edt_pass.string);
         } else {
-            cc.alert(buffer.getMessage());
+            var nodeChild = cc.Node();
+            nodeChild.parent = this.node;
+            this.showToast(buffer.getMessage(), nodeChild);
         }
     },
 
@@ -84,18 +86,16 @@ cc.Class({
     },
     register: function() {
         if(this.edt_username.string == "" || this.edt_pass.string == "" || this.edt_repass.string == "" || this.edt_displayname == "") {
-            cc.alert("Dữ liệu không được để trống");
+            this.showToast("Dữ liệu không được để trống", this.node);
             return;
         }
         if(this.edt_pass.string != this.edt_repass.string) {
-            cc.alert("Mật khẩu phải giống nhau!");
+            this.showToast("Mật khẩu phải giống nhau!", this.node);
             return;
         }
         NetworkManager.requestRegisterMessage(this.edt_username.string, this.edt_pass.string, this.edt_repass.string, this.edt_displayname.string, "");
+    },
+    showToast: function (strMess, target) {
+        this._super(strMess, target);
     }
-
-    // called every frame, uncomment this function to activate update callback
-    // update: function (dt) {
-
-    // },
 });

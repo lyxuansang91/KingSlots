@@ -807,7 +807,8 @@
     },
     "isFinishSpin": true,
     "isRun": false,
-    "updateMoneyResponse": []
+    "updateMoneyResponse": [],
+    "isUpdateMoney": false
   },
   {
     "__type__": "cc.Label",
