@@ -1,7 +1,7 @@
 var NetworkManager = require('NetworkManager');
-
+var BaseScene = require('BaseScene');
 cc.Class({
-    extends: cc.Component,
+    extends: BaseScene,
 
     properties: {
         cardPrefab: cc.Prefab,
@@ -15,7 +15,8 @@ cc.Class({
         autoSpinToggle: cc.Toggle,
         isFinishSpin: true,
         isRun: false,
-        updateMoneyResponse: []
+        updateMoneyResponse: [],
+        isUpdateMoney : false
     },
 
     exitRoom: function() {
@@ -69,8 +70,9 @@ cc.Class({
         var money = Common.getCash();
         if(1000 > money){
             var message = "Bạn không có đủ tiền!";
-            item.showToast(message);
-            this.node.addChild(item.node);
+            // item.showToast(message);
+            // this.node.addChild(item.node);
+            this.showToast(message, this);
             return;
         }
         if (this.autoSpinToggle.isChecked) {
@@ -81,8 +83,9 @@ cc.Class({
             this.getTurnMiniThreeCardsRequest(1);
         }else{
             var message = "Xin vui lòng đợi!";
-            item.showToast(message);
-            this.node.addChild(item.node);
+            this.showToast(message, this);
+            // item.showToast(message);
+            // this.node.addChild(item.node);
         }
     },
     getTurnMiniThreeCardsRequest: function(turnType) {
@@ -154,6 +157,10 @@ cc.Class({
             case NetworkManager.MESSAGE_ID.EXIT_ZONE:
                 var msg = buffer.response;
                 this.exitZoneResponseHandler(msg);
+                break;
+            case NetworkManager.MESSAGE_ID.JAR:
+                var msg = buffer.response;
+                this.jarResponseHandler(msg);
                 break;
         }
     },
@@ -311,7 +318,8 @@ cc.Class({
             var money = Common.getCash();
             if(1000 > money){
                 var message = "Bạn không có đủ tiền!";
-                item.showToast(message);
+                // item.showToast(message);
+                this.showToast(message, this);
                 this.autoSpinToggle.isChecked = false;
                 return;
             }
@@ -322,47 +330,60 @@ cc.Class({
 
         //TODO: HungLe - Handle Ranking
 
-        // //emoticonId = 54;
-        // if(emoticonId === 54) {
-        //     showNoHu();
-        //     this.isRun = false;
-        //     return ;
-        // }
-        // if (emoticonId !== 72) {
-        //     isUpdateMoney = false;
-        //     var label_text = MLabel::createTitle(message,bg_card_outside->getHeight()*0.25f);
-        //     label_text->setAnchorPoint(Point::ANCHOR_MIDDLE);
-        //     label_text->enableOutline(Color4B(255,0,0,255),3);
-        //     label_text->setPosition(bg_card_outside->getSize()/2);
-        //     auto fadeout = FadeOut::create(1.0f);
-        //     auto callFunc = CallFunc::create([=]{
-        //         for (int i = 0; i < response->moneyboxes_size(); i++) {
-        //             BINMoneyBox moneybox = response->moneyboxes(i);
-        //             if (moneybox.displaychangemoney() > 0) {
-        //                 isUpdateMoney = true;
-        //                 auto label_money = MLabel::createUpdateMoney(moneybox.displaychangemoney());
-        //                 label_money->setPosition(bg_card_outside->getSize() / 2);
-        //                 bg_card_outside->addChild(label_money);
-        //             }
-        //         }
-        //     });
-        //
-        //     auto callFuncUpdateMoney = CallFunc::create([=]{
-        //         if (isUpdateMoney) {
-        //             this->setOriginMoney();
-        //         }
-        //         this.isRun = false;
-        //     });
-        //
-        //     label_text->runAction(Sequence::create(MoveBy::create(0.5f, Vec2(0, 50)),
-        //     callFunc, Spawn::create(MoveBy::create(1.0f, Vec2(0, 50)), fadeout, NULL),
-        //     callFuncUpdateMoney, RemoveSelf::create(), NULL));
-        //     bg_card_outside->addChild(label_text);
-        // }
-        // else {
+        //emoticonId = 54;
+        if(emoticonId === 54) {
+            //showNoHu();
+            this.isRun = false;
+            return ;
+        }
+        if (emoticonId !== 72) {
+            this.isUpdateMoney = false;
+            cc.log("mess =", message);
+            var nodeChild = new cc.Node();
+            nodeChild.parent = this.node;
+            var lbl_text = nodeChild.addComponent(cc.Label);
+            lbl_text.string = message;
+
+            lbl_text.node.setPosition(cc.p(1334/2,750/2));
+            lbl_text.node.color = cc.color(248,213,82,255);
+            var fadeout = cc.fadeOut(1.0);
+            var callFunc = cc.callFunc(function () {
+                for (var i = 0; i < response.getMoneyboxesList().length; i++) {
+                    var nodeMoney = new cc.Node();
+                    nodeMoney.parent = this.node;
+                    var moneybox = response.getMoneyboxesList()[i];
+                    if (moneybox.getDisplaychangemoney() > 0) {
+                        this.isUpdateMoney = true;
+                        var label_money = nodeMoney.addComponent(cc.Label);
+                        label_money.string = moneybox.getDisplaychangemoney().toString();
+                        // MLabel::createUpdateMoney(moneybox.displaychangemoney());
+                        label_money.node.setPosition(cc.p(1334/2,750/2));
+                        label_money.node.color = cc.color(248,213,82,255);
+                        // this.cardView.node.addChild(this.label_money);
+                        var fadeout = cc.fadeOut(1.5);
+                        label_money.node.runAction(cc.sequence(cc.moveBy(0.5, cc.p(0,20)),cc.delayTime(0.25),
+                            cc.spawn(cc.moveBy(1.0,cc.p(0,20)),fadeout,null), cc.removeSelf(),null));
+
+                    }
+                }
+            }, this);
+
+            var callFuncUpdateMoney = cc.callFunc(function () {
+                if (this.isUpdateMoney) {
+                    this.setOriginMoney();
+                }
+                this.isRun = false;
+            }, this);
+
+            lbl_text.node.runAction(cc.sequence(cc.moveBy(0.5, cc.p(0, 50)),
+            callFunc, cc.spawn(cc.moveBy(1.0, cc.p(0, 50)), fadeout, null),
+            callFuncUpdateMoney, cc.removeSelf(), null));
+            // this.cardView.node.addChild(this.label_text);
+        }
+        else {
             this.setOriginMoney();
             this.isRun = false;
-        // }
+        }
     },
     setOriginMoney: function() {
         var response = this.getBINUpdateMoneyResponse();
@@ -382,6 +403,42 @@ cc.Class({
         }
 
         this.isRun = false;
+    },
+    jarResponseHandler: function(response) {
+        cc.log("jarResponseHandler = ", response);
+        // if (response.getResponsecode()) {
+        //     var jar_type_response = 0;
+        //     preJarValue = jarValue;
+        //     jarValue = response.getJarstatus();
+        //     auto common = Common::getInstance();
+        //     if (response->args_size() > 0) {
+        //         BINMapFieldEntry entry = response->args(0);
+        //         if (entry.key() == "jarType") {
+        //             jar_type_response = Common::getInstance()->convertStringToInt(entry.value());
+        //         }
+        //     }
+        //
+        //     if (jar_type_response == calculateTurnType()) {
+        //         if (jarType == jar_type_response) {
+        //             hu_text->runAction(ActionFloat::create(1.0f, preJarValue, jarValue, [&](float val){
+        //                 string number_cash = common->numberFormatWithCommas(val);
+        //                 hu_text->setString(number_cash);
+        //             }));
+        //         }else {
+        //             showJarValue(jarValue);
+        //         }
+        //         jarType = jar_type_response;
+        //     }
+        // }
+        //
+        // if (response->has_message() && !response->message().empty()) {
+        //     this->showToast(response->message().c_str(), 2);
+        // }
+        //
+        // isRequestJar = false;
+    },
+    showToast: function (strMess, target) {
+        this._super(strMess, target);
     }
 
 });

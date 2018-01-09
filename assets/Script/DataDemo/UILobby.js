@@ -22,6 +22,7 @@ cc.Class({
     onLoad: function () {
         this.userName.string = Common.getUserName();
         this.userGold.string = Common.getCash();
+        cc.log("user info =",Common.getUserInfo());
     },
 
     openPopup: function () {

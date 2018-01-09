@@ -97,8 +97,8 @@ cc.Class({
         cc.log("login normal");
         // var username = this.edt_username.string;
         // var password = this.edt_password.string;
-        var username = "lyxuansangzz";
-        var password = "12341234";
+        var username = "anhtu3004";
+        var password = "a123456a@";
         // if(this.edt_username.string === "" || this.edt_password.string === "") {
         //     // cc.alert("Tài khoản và mật khẩu không được để trống!");
         //     var item = cc.instantiate(this.toastPrefab).getComponent("ToastScripts");

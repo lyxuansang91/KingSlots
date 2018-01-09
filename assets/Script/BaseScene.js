@@ -74,12 +74,25 @@ cc.Class({
                 this.scheduleOnce(this.goIntroScene, 2.0);
             }
         }
-    }
+    },
+    showToast: function (strMess, target) {
+        // target.node.addComponent(cc.Sprite).spriteFrame = 'resources/common/popup/setting/bg_popup_setting_text.png';
+        var nodeChild = new cc.Node();
+        nodeChild.parent = target.node;
+        var mess_bg = nodeChild.addComponent(cc.Sprite);
+        mess_bg.node.setPosition(cc.p(cc.winSize.width/2, cc.winSize.height/2));
+        var url = "resources/common/popup/setting/bg_popup_setting_text.png";
+        var image = cc.url.raw(url);
+        var texture = cc.textureCache.addImage(image);
+        mess_bg.node.getComponent(cc.Sprite).spriteFrame = new cc.SpriteFrame(texture);
+
+        var message = nodeChild.addComponent(cc.Label);
+        message.node.setPosition(cc.p(1334/2,750/2));
+        message.string = strMess;
+
+        // mess_bg.node.addChild(message.node);
+    },
 
 
-    // called every frame, uncomment this function to activate update callback
-    // update: function (dt) {
-
-    // },
 });
 
