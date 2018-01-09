@@ -18,22 +18,17 @@ cc.Class({
         cardPrefab: cc.Prefab,
         isFinishSpin: true,
         isRun: false,
-        stepCard : 5,
+        stepCard : 9,
         number : 5,
-        time_move: 2,
+        time_move: 1,
         list_item: [],
-        list_item_move: null,
-        list_recent_items: []
-
+        list_recent_value: null
     },
     exitRoom: function() {
         cc.director.loadScene("Table");
     },
 
     getTurnMiniPokerRequest: function(turnType) {
-
-        // cangatAnimation();
-        // isRunning = true;
 
         var entries = [];
         var entry = new proto.BINMapFieldEntry();
@@ -50,29 +45,22 @@ cc.Class({
     initFirstCard: function() {
         var random_number = Common.genRandomNumber(null, this.stepCard, this.number);
         var items_value = Common.genArrayToMultiArray(random_number, this.stepCard, this.number);
+        this.list_recent_value = Common.create2DArray(this.stepCard);
         for(var i = 0; i < this.stepCard; i++){
             for(var j = 0; j < this.number; j++){
                 var item = cc.instantiate(this.cardPrefab);
                 var posX = (j - 2) * item.getContentSize().width * 0.75;
-                var posY = (1 - i) * item.getContentSize().height;
+                var posY = (i - 1) * item.getContentSize().height;
                 item.getComponent('CardItem').replaceCard(items_value[i][j]);
                 item.setPositionY(posY);
                 item.setPositionX(posX);
 
-                this.list_recent_items.push(item);
                 this.list_item.push(item);
                 this.cardView.node.addChild(item);
             }
         }
 
-        this.list_item_move = Common.create2DArray(this.number);
-
-        for(var i = 0; i < this.list_item.length; i++){
-            this.list_item_move[i%this.number].push(this.list_item[i]);
-        }
-
-        // cc.log(this.list_item);
-        cc.log(this.list_item_move);
+        this.list_recent_value = items_value;
     },
 
     // use this for initialization
@@ -95,7 +83,7 @@ cc.Class({
 
     implementSpinMiniPokerCards: function(carx, response) {
         cc.log("carx =", carx);
-        // cc.log("list item move:", this.list_item_move);
+
         var text_emoticon = response.getTextemoticonsList()[0];
         this.isFinishSpin = false;
         var isBreakJar = (text_emoticon.getEmoticonid() === 54); //54: nổ hũ
@@ -104,42 +92,61 @@ cc.Class({
         var items_value = Common.genArrayToMultiArray(random_number, this.stepCard, this.number);
         items_value[this.stepCard-2] = carx;
 
+        /*var items_value_convert = [];
+        for(var i = 0; i < items_value.length; i++){
+            for(var j = 0; j < items_value[i].length; j++){
+                items_value_convert.push(items_value[i][j]);
+            }
+        }
+
+        var items_value_display = Common.create2DArray(this.number);
+        for(var i = 0; i < items_value_convert.length; i++){
+            items_value_display[i%this.number].push(items_value_convert[i]);
+        }*/
+
         if(items_value.length * this.number != this.list_item.length){
             return;
         }
 
         for(var i = 0; i < this.list_item.length; i++){
-            var x = i/this.number;
-            var y = i%this.number;
+            var x = parseInt(i/this.number);
+            var y = parseInt(i%this.number);
 
-           var posX = (y - 2) * this.list_item[i].getContentSize().width * 0.75;
-            var posY = (1 - x) * this.list_item[i].getContentSize().height;
+            if(i < 3*this.number){
+                var i1 = this.stepCard - (3 - x);
+                var j1 = y;
+                this.list_item[i].getComponent('CardItem').replaceCard(this.list_recent_value[i1][j1]);
+            }
 
-            // cc.log("x/y: " + posX +"/" + posY);
-            //this.list_item[i].setPositionX(posX);
-            //this.list_item[i].setPositionY(posY);
+            var posX = (y - 2) * this.list_item[i].getContentSize().width * 0.75;
+            var posY = (x - 1) * this.list_item[i].getContentSize().height;
+
+            this.list_item[i].setPositionX(posX);
+            this.list_item[i].setPositionY(posY);
         }
 
-        cc.log("LIST_ITEM: ", this.list_item_move);
+        this.list_recent_value = items_value;
 
         for(var i = 0; i < this.list_item.length; i++){
             var x = parseInt(i/this.number);
             var y = parseInt(i%this.number);
 
-            var card = this.list_item_move[y][x];
+            var card = this.list_item[i];
 
             var card_value = items_value[x][y];
-            card.getComponent('CardItem').replaceCard(card_value);
+            if(i >= 3*this.number){
+                card.getComponent('CardItem').replaceCard(card_value);
+            }
 
             var h = card.getContentSize().height;
 
             var move1 = cc.moveBy(0.2, cc.p(0,h*0.25));
             var move2 = cc.moveBy(0.15, cc.p(0,h*0.25));
-            var move3 = cc.moveBy(this.time_move,cc.p(0,-(this.stepCard - 4)*h - 0.5*h));
-
+            var move3 = cc.moveBy(this.time_move,cc.p(0,-(this.stepCard - 3.0)*h - 0.5*h));
             var delay = cc.delayTime(y*0.3);
+
             if(i == this.list_item.length - 1){
-                // khi dừng giệu ứng
+                // khi dừng hiệu ứng
                 var call_func = cc.callFunc(function () {
                     cc.log("FINISH!!!!");
                 });
@@ -147,8 +154,6 @@ cc.Class({
             }else{
                 card.runAction(cc.sequence(delay,move1,move3,move2));
             }
-
-            cc.log(card_value);
         }
 
         /*for(var i = 0; i < items_value.length; i++){ //size = stepCard
@@ -164,9 +169,6 @@ cc.Class({
                 item.setPositionX(posX);
 
                 this.cardView.node.addChild(item);
-
-
-
 
                 //
                 // if(j === 0){
@@ -203,9 +205,7 @@ cc.Class({
                 }
 
                 // item.runAction(moveAction);
-
             }
-
         }*/
 
     },
