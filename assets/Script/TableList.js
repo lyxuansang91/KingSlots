@@ -1,7 +1,7 @@
 var NetworkManager = require('NetworkManager');
-cc.Class({
+var BacayScene = require('BaCayScripts');
+var TableScene = cc.Class({
     extends: cc.Component,
-
     properties: {
         titleGame: {
             default: null,
@@ -20,6 +20,7 @@ cc.Class({
         this.content = this.scrollView.content;
         // this.userName.string = Common.getUserName();
         // this.userGold.string = Common.getCash();
+
         NetworkManager.getLookUpRoomRequest(Common.getZoneId(), 1, -1, -1, Config.TABLE_ORDERBY.NUM_PLAYER, false, -1);  //TABLE_ORDERBY::NUM_PLAYER, false
         window.ws.onmessage = this.ongamestatus.bind(this);
     },
@@ -133,6 +134,7 @@ cc.Class({
                 var zoneId = response.getZoneid();
                 if(zoneId === Common.getZoneId()){
                     if (response.getResponsecode()) {
+                        cc.log("response room config =", response.getArgsList());
                         var waitingPlayerList = [];
                         Common.setOwnerUserId(response.getOwneruserid());
                         var playerList = [];
@@ -148,8 +150,6 @@ cc.Class({
 
                             var roomPlay = response.getRoomplay();
 
-                            cc.log("roomPlay =", roomPlay);
-
                             //notify->onHideNotify();  //an thong bao di
 
                             // var is_create_room = (Common::getInstance()->getUserId() ==
@@ -162,15 +162,10 @@ cc.Class({
                             // miniGame->removeFromParentAndCleanup(true);
 
                             if (Common.getZoneId() === Common.ZONE_ID.MINI_BACAY) {
-                                cc.log("ba cay");
-                                // cc.director.preloadScene('Table', function () {
-                                //     cc.log('Next BaCay scene preloaded');
-                                // });
-                                cc.director.loadScene('BaCay');
-                                // var bacay = ThreeCardsScene::createScene(roomPlay, playerList,
-                                //     waitingPlayerList, is_create_room,
-                                //     this->getEnableDisplayRoomList(), enterroomresponse);
-                                // REPLACESCENE(TIME_REPLACE_SCENE, bacay);
+                                cc.director.loadScene('BaCay',function(){
+                                    BacayScene.instance.initDataFromLoading(response.getArgsList());
+                                });
+
                             }
                             else if (Common.getZoneId() === Common.ZONE_ID.MINI_POKER) {
                                 cc.log("poker");

@@ -316,6 +316,9 @@ var NetworkManager = {
             case NetworkManager.MESSAGE_ID.EXIT_ROOM:
                 msg = proto.BINExitRoomResponse.deserializeBinary(bytes);
                 break;
+            case NetworkManager.MESSAGE_ID.JAR:
+                msg = proto.BINJarResponse.deserializeBinary(bytes);
+                break;
         }
 
         return msg;
@@ -581,6 +584,16 @@ var NetworkManager = {
     getTurnMessageFromServer: function(room_index, entries) {
         var request = this.initTurnMessage(room_index, entries);
         this.callNetwork(this.initData(request.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.TURN, Common.getSessionId()));
+    },
+    getJarRequest: function(zone_id, jarType) {
+        var request = this.initJarRequest(zone_id, jarType);
+        this.callNetwork(this.initData(request.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.JAR, Common.getSessionId()));
+    },
+    initJarRequest: function(zone_id, jarType) {
+        var request = new proto.BINJarRequest();
+        request.setZoneid(zone_id);
+        request.setJartype(jarType);
+        return request;
     },
     connectNetwork: function() {
         if(window.ws === null || typeof(window.ws) === 'undefined' || window.ws.readyState === WebSocket.CLOSED) {
