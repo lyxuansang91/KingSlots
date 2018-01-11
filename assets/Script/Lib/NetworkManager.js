@@ -3,6 +3,7 @@ var LoginMessage = require('login_pb');
 var EnterZoneMessage = require('enter_zone_pb');
 var RegisterMessage = require('register_pb');
 var NotificationMessage = require('notification_pb');
+var LogoutMessage = require('logout_pb');
 
 var NetworkManager = {
     MESSAGE_ID: {
@@ -319,6 +320,9 @@ var NetworkManager = {
             case NetworkManager.MESSAGE_ID.JAR:
                 msg = proto.BINJarResponse.deserializeBinary(bytes);
                 break;
+            case NetworkManager.MESSAGE_ID.LOGOUT:
+                msg = proto.BINLogoutResponse.deserializeBinary(bytes);
+                break;
         }
 
         return msg;
@@ -456,7 +460,15 @@ var NetworkManager = {
         cc.log("lstMess =", lstMess);
         return lstMess;
 
-    }, // init message
+    },
+    initLogoutMessage: function() {
+
+    },
+
+    requestLoginMessage: function() {
+
+    },
+    // init message
     initInitializeMessage: function(cp, appVersion, deviceId, deviceInfo, country, language, packageName,
                                        liteVersion, referenceCode) {
         var message = new proto.BINInitializeRequest();

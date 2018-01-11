@@ -31,6 +31,16 @@ cc.Class({
                 var msg = buffer.response;
                 this.pingMessageResponseHandler(msg);
                 break;
+            case NetworkManager.MESSAGE_ID.LOGOUT:
+                var msg = buffer.response;
+                this.logOutMessageResponseHandler(msg);
+                break;
+        }
+    },
+    logOutMessageResponseHandler: function(resp) {
+        cc.log("log out message:", resp.toObject());
+        if(resp.getResponsecode()) {
+            cc.director.runScene('Intro');
         }
     },
     initialMessageResponseHandler: function(initialMessage) {
