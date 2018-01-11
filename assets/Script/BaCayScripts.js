@@ -1,9 +1,10 @@
 var NetworkManager = require('NetworkManager');
 var BaseScene = require('BaseScene');
-cc.Class({
+var BacaySence = cc.Class({
     extends: BaseScene,
 
     properties: {
+        bg: cc.Sprite,
         cardPrefab: cc.Prefab,
         toastPrefab: cc.Prefab,
         cardView: cc.Mask,
@@ -13,18 +14,30 @@ cc.Class({
         roomName: cc.Sprite,
         fastSpinToggle: cc.Toggle,
         autoSpinToggle: cc.Toggle,
+        betToggle: cc.ToggleGroup,
         isFinishSpin: true,
         isRun: false,
         updateMoneyResponse: [],
-        isUpdateMoney : false
-    },
+        enterZoneResponse: [],
+        enterRoomResponse: [],
+        isUpdateMoney : false,
+        nohuPrefab: cc.Prefab,
+        isBreakJar: false,
+        bet: 0,
+        jarType: 1,
+        isRequestJar: false
 
+    },
+    statics: {
+        instance: null
+    },
     exitRoom: function() {
         cc.director.loadScene("Table");
     },
 
     // use this for initialization
     onLoad: function () {
+        BacaySence.instance = this;
         window.ws.onmessage = this.ongamestatus.bind(this);
         this.userMoney.string = Common.getCash();
         for(var i = 0; i < 3; i++){
@@ -60,19 +73,41 @@ cc.Class({
 
     },
 
+    initDataFromLoading: function(enterZone, enterRoom){
+        this.setEnterZoneResponse(enterZone);
+        Common.setMiniGameZoneId(enterZone.getZoneid());
+        this.setEnterRoomResponse(enterRoom);
+        this.init(enterRoom);
+    },
+
+    init: function (response) {
+        var roomPlay = response.getRoomplay();
+        this.roomIndex = roomPlay.getRoomindex();
+
+        if (response.getArgsList().length > 0) {
+            var entry = response.getArgsList()[0];
+            if (entry.getKey() === "initValue") {
+                this.initValue(entry.getValue());
+            }
+        }
+    },
+
     update: function (dt) {
         this.handleAutoSpin();
+        this.requestJar();
     },
 
     quayEvent: function () {
         var item = cc.instantiate(this.toastPrefab).getComponent("ToastScripts");
         // var valMoney = (isCash ? turnCashValue[indexCash] : turnGoldValue[indexCash]);
         var money = Common.getCash();
-        if(1000 > money){
+        var betMoney = this.getBetMoney();
+        cc.log("betMoney =", betMoney);
+        if(betMoney > money){
             var message = "Bạn không có đủ tiền!";
             // item.showToast(message);
             // this.node.addChild(item.node);
-            this.showToast(message, this);
+            this.showToast(message, this, 2);
             return;
         }
         if (this.autoSpinToggle.isChecked) {
@@ -80,10 +115,10 @@ cc.Class({
         }
 
         if (!this.isRun) {
-            this.getTurnMiniThreeCardsRequest(1);
+            this.getTurnMiniThreeCardsRequest(this.calculateTurnType());
         }else{
             var message = "Xin vui lòng đợi!";
-            this.showToast(message, this);
+            this.showToast(message, this, 2);
             // item.showToast(message);
             // this.node.addChild(item.node);
         }
@@ -150,10 +185,10 @@ cc.Class({
                 var msg = buffer.response;
                 this.exitRoomResponsehandler(msg);
                 break;
-            // case NetworkManager.MESSAGE_ID.ENTER_ROOM:
-            //     var msg = buffer.response;
-            //     this.enterRoomResponseHandler(msg);
-            //     break;
+            case NetworkManager.MESSAGE_ID.ENTER_ROOM:
+                var msg = buffer.response;
+                this.enterRoomResponseHandler(msg);
+                break;
             case NetworkManager.MESSAGE_ID.EXIT_ZONE:
                 var msg = buffer.response;
                 this.exitZoneResponseHandler(msg);
@@ -175,6 +210,18 @@ cc.Class({
     },
     getBINUpdateMoneyResponse: function(){
         return this.updateMoneyResponse;
+    },
+    setEnterZoneResponse: function(response) {
+        this.enterZoneResponse = response;
+    },
+    getEnterZoneResponse: function(){
+        return this.enterZoneResponse;
+    },
+    setEnterRoomResponse: function(response) {
+        this.enterRoomResponse = response;
+    },
+    getEnterRoomResponse: function(){
+        return this.enterRoomResponse;
     },
     removeTurnUpdateMoney: function(){
         var updateMoneyResponse = this.getBINUpdateMoneyResponse();
@@ -222,9 +269,9 @@ cc.Class({
         this.cardView.node.removeAllChildren(true);
         var text_emoticon = response.getTextemoticonsList()[0];
         this.isFinishSpin = false;
-        var isBreakJar = (text_emoticon.getEmoticonid() === 54); //54: nổ hũ
+        this.isBreakJar = (text_emoticon.getEmoticonid() === 54); //54: nổ hũ
 
-        var stepCard = 4;
+        var stepCard = 11;
         var number = 3;
         var rs = Common.genRandomNumber(carx, stepCard, number);
         var test = Common.genArrayToMultiArray(rs, stepCard, number);
@@ -276,15 +323,17 @@ cc.Class({
                     //     cc.p(0, - (test.length - 3)*paddingCard));
                 }
 
-                if(j === 2){
+                if(j === 2 && i === (test.length -1)){
                     var emoticon = response.getTextemoticonsList()[0];
                     var emotionId = emoticon.getEmoticonid();
                     var message = emoticon.getMessage();
                     var moneyResponse = this.getBINUpdateMoneyResponse();
-                    var callFunc = cc.callFunc(this.handleRanking(emotionId, message, moneyResponse), this);
+                    var callFunc = cc.callFunc(function () {
+                        this.handleRanking(emotionId, message, moneyResponse);
+                    },this);
 
                     var callFuncAutoSpin = cc.callFunc(function () {
-                        if(!isBreakJar)
+                        if(!this.isBreakJar)
                              this.isFinishSpin = true;
                     }, this);
 
@@ -316,14 +365,16 @@ cc.Class({
             var item = cc.instantiate(this.toastPrefab).getComponent("ToastScripts");
             // var valMoney = (isCash ? turnCashValue[indexCash] : turnGoldValue[indexCash]);
             var money = Common.getCash();
-            if(1000 > money){
+            var betMoney = this.getBetMoney();
+            cc.log("betMoney =", betMoney);
+            if(betMoney > money){
                 var message = "Bạn không có đủ tiền!";
                 // item.showToast(message);
-                this.showToast(message, this);
+                this.showToast(message, this, 2);
                 this.autoSpinToggle.isChecked = false;
                 return;
             }
-            this.getTurnMiniThreeCardsRequest(1);
+            this.getTurnMiniThreeCardsRequest(this.calculateTurnType());
         }
     },
     handleRanking: function(emoticonId, message, response) {
@@ -332,7 +383,7 @@ cc.Class({
 
         //emoticonId = 54;
         if(emoticonId === 54) {
-            //showNoHu();
+            this.showNoHu();
             this.isRun = false;
             return ;
         }
@@ -406,39 +457,126 @@ cc.Class({
     },
     jarResponseHandler: function(response) {
         cc.log("jarResponseHandler = ", response);
-        // if (response.getResponsecode()) {
-        //     var jar_type_response = 0;
-        //     preJarValue = jarValue;
-        //     jarValue = response.getJarstatus();
-        //     auto common = Common::getInstance();
-        //     if (response->args_size() > 0) {
-        //         BINMapFieldEntry entry = response->args(0);
-        //         if (entry.key() == "jarType") {
-        //             jar_type_response = Common::getInstance()->convertStringToInt(entry.value());
-        //         }
-        //     }
-        //
-        //     if (jar_type_response == calculateTurnType()) {
-        //         if (jarType == jar_type_response) {
-        //             hu_text->runAction(ActionFloat::create(1.0f, preJarValue, jarValue, [&](float val){
-        //                 string number_cash = common->numberFormatWithCommas(val);
-        //                 hu_text->setString(number_cash);
-        //             }));
-        //         }else {
-        //             showJarValue(jarValue);
-        //         }
-        //         jarType = jar_type_response;
-        //     }
-        // }
-        //
-        // if (response->has_message() && !response->message().empty()) {
-        //     this->showToast(response->message().c_str(), 2);
-        // }
-        //
-        // isRequestJar = false;
+        if (response.getResponsecode()) {
+            var jar_type_response = 0;
+            var preJarValue = this.jarValue;
+            this.jarValue = response.getJarvalue();
+            if (response.getArgsList().length > 0) {
+                var entry = response.getArgsList()[0];
+                if (entry.getKey() === "jarType") {
+                    jar_type_response = parseInt(entry.getValue().toString());
+                }
+            }
+
+            if (jar_type_response === this.calculateTurnType()) {
+                if (this.jarType === jar_type_response) {
+                    // this.moneyJar.node.runAction(cc.actionInterval(1.0, preJarValue, this.jarValue, function(val){
+                    //     var number_cash = Common.numberFormatWithCommas(val);
+                        this.moneyJar.string = Common.numberFormatWithCommas(this.jarValue);
+                    // }));
+                }else {
+                    this.showJarValue(this.jarValue);
+                }
+                this.jarType = jar_type_response;
+            }
+        }
+
+        if (response.hasMessage() && !response.getMessage()) {
+            this.showToast(response.getMessage(), this);
+        }
+
+        this.isRequestJar = false;
     },
-    showToast: function (strMess, target) {
-        this._super(strMess, target);
+    showNoHu: function(){
+        cc.log("showNoHu");
+        var item = cc.instantiate(this.nohuPrefab).getComponent("Nohu");
+        item.playAnim();
+
+        var nodeChild = new cc.Node();
+        nodeChild.parent = this.bg.node;
+        nodeChild.addChild(item.node);
+
+        var callFunc2 = cc.callFunc(function (){
+            this.setOriginMoney();
+            this.isBreakJar = false;
+        });
+
+
+        item.node.runAction(cc.sequence(cc.delayTime(2),callFunc2, cc.removeSelf(), null));
+        // var animState = anim.getAnimationState('NoHu');
+        // animState.wrapMode = cc.WrapMode.Normal;
+        // anim.on('finished', function(event) {
+        //     if(event.currentTarget == animState) {
+        //         console.log('clipName has finished');
+        //     }
+        // });
+        // anim.play('NoHu');
+    },
+    initValue: function(json) {
+        var results = JSON.parse(json);
+        cc.log("results =", results);
+
+        this.lbl_moneys =  results.turnValueCash;
+        cc.log("lbl_moneys =", this.lbl_moneys);
+
+        var val = results.jarValue;
+        this.showJarValue(val);
+
+    },
+    showJarValue: function(val) {
+        this.jarValue = val;
+        //TODO: binding jarValue
+        var number_cash = Common.numberFormatWithCommas(this.jarValue);
+        cc.log("number_cash =", number_cash);
+        this.moneyJar.string = number_cash;
+    },
+    getBetMoney: function() {
+        var args = this.getEnterRoomResponse();
+        var argsList = args.getArgsList()[0];
+        var json = null;
+        if(argsList.getKey() === "initValue"){
+            json = argsList.getValue();
+        }
+        var bet = this.getKeyBet();
+        var results = JSON.parse(json);
+        var betStepValue = results.turnValueCash;
+        var betMoney = betStepValue[bet];
+
+        return betMoney;
+    },
+    calculateTurnType: function() {
+        return this.getKeyBet() + 1;
+    },
+    setKeyBet: function (bet) {
+        this.bet = bet;
+    },
+    getKeyBet: function () {
+        return this.bet;
+    },
+    betToggle1Event: function () {
+        this.setKeyBet(0);
+        this.moneyBet.string = this.getBetMoney();
+        this.requestJar();
+    },
+    betToggle2Event: function () {
+        this.setKeyBet(1);
+        this.moneyBet.string = this.getBetMoney();
+        this.requestJar();
+    },
+    betToggle3Event: function () {
+        this.setKeyBet(2);
+        this.moneyBet.string = this.getBetMoney();
+        this.requestJar();
+    },
+    showToast: function (strMess, target, delayTime) {
+        this._super(strMess, target, delayTime);
+    },
+    requestJar: function() {
+        if (!this.isRequestJar) {
+            this.isRequestJar = true;
+            NetworkManager.getJarRequest(
+                Common.getMiniGameZoneId(), this.calculateTurnType());
+        }
     }
 
 });

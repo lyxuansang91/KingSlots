@@ -301,5 +301,23 @@ var Common = {
     },
     getNoticeText: function(){
         return this.noticeText;
-    }
+    },
+    numberFormatWithCommas: function(value){
+        return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
+    enterZone: [],
+    setEnterZone: function(enterZone){
+        this.enterZone = enterZone;
+    },
+    getEnterZone: function(){
+        return this.enterZone;
+    },
+    _miniGameZoneId: -1,
+    getMiniGameZoneId: function() {
+        return this._miniGameZoneId;
+    },
+    setMiniGameZoneId: function(miniGameZoneId) {
+        this._miniGameZoneId = miniGameZoneId;
+    },
+
 };

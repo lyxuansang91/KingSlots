@@ -1,12 +1,16 @@
 const gameItems = require('GameItemData').gameItems;
 var NetworkManager = require('NetworkManager');
+var BacayScene = require('BaCayScripts');
 cc.Class({
     extends: cc.Component,
 
     properties: {
         scrollView: cc.ScrollView,
         prefabGameItem: cc.Prefab,
-        rankCount: 0
+        rankCount: 0,
+        roomIndex : 0,
+        lbl_moneys: [],
+        jarValue: 0,
     },
 
     // use this for initialization
@@ -14,9 +18,9 @@ cc.Class({
         this.content = this.scrollView.content;
         this.populateList();
 
-        cc.director.preloadScene('Table', function () {
-            cc.log('Next Login scene preloaded');
-        });
+        // cc.director.preloadScene('BaCay', function () {
+        //     cc.log('Next Login scene preloaded');
+        // });
         this.scheduleOnce(this.goSceneTable, 1);
     },
 
@@ -54,8 +58,10 @@ cc.Class({
         if(event.data!==null || event.data !== 'undefined') {
             var lstMessage = NetworkManager.parseFrom(event.data, event.data.byteLength);
             if(lstMessage.length > 0) {
-                var buffer = lstMessage.shift();
-                this.handleMessage(buffer);
+                for(var i = 0; i < lstMessage.length; i++) {
+                    var buffer = lstMessage[i];
+                    this.handleMessage(buffer);
+                }
             }
         }
     },
@@ -66,6 +72,14 @@ cc.Class({
                 var msg = buffer.response;
                 this.enterZoneMessageResponseHandler(msg);
                 break;
+            case NetworkManager.MESSAGE_ID.ENTER_ROOM:
+                var msg = buffer.response;
+                this.enterRoomResponseHandler(msg);
+                break;
+            // case NetworkManager.MESSAGE_ID.EXIT_ZONE:
+            //     var msg = buffer.response;
+            //     this.exitZoneResponseHandler(msg);
+            //     break;
         }
     },
 
@@ -73,7 +87,7 @@ cc.Class({
         if (enterZoneMessage != 0) {
             //common.initialize = initialMessage.responseCode;
             if (enterZoneMessage.getResponsecode()) {
-
+                Common.setEnterZone(enterZoneMessage);
                 var zoneId = enterZoneMessage.getZoneid();
                 Common.setZoneId(zoneId);
 
@@ -96,22 +110,30 @@ cc.Class({
                     // notify->onHideNotify();
                     // this->unscheduleUpdate();
 
-                    // auto miniGame = MiniGamePopUp::getInstance();
-                    // miniGame->hiddenInfoExtend(true);
-                    // miniGame->removeFromParentAndCleanup(true);
 
-                    //luu lai vi tri position của scrollview
-                    // pos_scrollview = scrollView->getInnerContainerPosition().x;
-
-                    // auto scene = SceneTable::createScene(enter_zone_response->enabledisplayroomlist(),
-                    //     enter_zone_response->defaultroomtypeload());
-                    // REPLACESCENE_NO_ACTION(scene);
-                    cc.director.loadScene('Table');
+                    //cc.director.loadScene('Table');
                 }
 
             }else {
                 // Common::getInstance()->setRequestRoomType(-1);
                 // Common::getInstance()->setZoneId(-1);  //reset zone id
+            }
+        }
+    },
+    enterRoomResponseHandler: function(response) {
+        cc.log("enter room response: ", response);
+        if (response.getResponsecode()) {
+            cc.log("enterZone = ", Common.getEnterZone());
+            if (Common.getZoneId() === Common.ZONE_ID.MINI_BACAY) {
+                cc.director.loadScene('BaCay',function(){
+                    BacayScene.instance.initDataFromLoading(Common.getEnterZone(), response);
+                });
+
+            }
+            else if (Common.getZoneId() === Common.ZONE_ID.MINI_POKER) {
+                cc.director.loadScene('BaCay',function(){
+                    BacayScene.instance.initDataFromLoading(Common.getEnterZone(), response);
+                });
             }
         }
     }
