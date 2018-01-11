@@ -100,11 +100,14 @@ cc.Class({
         var username = "anhtu3004";
         var password = "a123456a@";
         // if(this.edt_username.string === "" || this.edt_password.string === "") {
+        //     // cc.log("edt_username", this.node);
         //     // cc.alert("Tài khoản và mật khẩu không được để trống!");
-        //     var item = cc.instantiate(this.toastPrefab).getComponent("ToastScripts");
+        //     // var item = cc.instantiate(this.toastPrefab).getComponent("ToastScripts");
         //     var strMess = "Tài khoản và mật khẩu không được để trống!";
-        //     item.showToast(strMess);
-        //     this.node.addChild(item.node);
+        //     // item.showToast(strMess);
+        //     // this.node.addChild(item.node);
+        //
+        //     this.showToast(strMess, this, 2);
         //     return;
         // }
         NetworkManager.requestLoginMessage(username, password);
@@ -217,5 +220,8 @@ cc.Class({
             Common.setAutoDenyInvitation(userSetting.getAutodenyinvitation());
             cc.sys.localStorage.setItem("DENY_INVITES", userSetting.getAutodenyinvitation());
         }
+    },
+    showToast: function (strMess, target) {
+        this._super(strMess, target);
     }
 });

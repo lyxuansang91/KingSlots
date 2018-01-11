@@ -75,8 +75,8 @@ cc.Class({
             }
         }
     },
-    showToast: function (strMess, target) {
-        // target.node.addComponent(cc.Sprite).spriteFrame = 'resources/common/popup/setting/bg_popup_setting_text.png';
+    showToast: function (strMess, target, delayTime) {
+        delayTime = delayTime !== null ? delayTime : 2;
         var nodeChild = new cc.Node();
         nodeChild.parent = target.node;
         var mess_bg = nodeChild.addComponent(cc.Sprite);
@@ -86,11 +86,15 @@ cc.Class({
         var texture = cc.textureCache.addImage(image);
         mess_bg.node.getComponent(cc.Sprite).spriteFrame = new cc.SpriteFrame(texture);
 
-        var message = nodeChild.addComponent(cc.Label);
-        message.node.setPosition(cc.p(1334/2,750/2));
+        var nodeChildLabel = new cc.Node();
+        nodeChildLabel.parent = target.node;
+        var message = nodeChildLabel.addComponent(cc.Label);
+        message.node.setPosition(cc.p(cc.winSize.width/2,cc.winSize.height/2));
         message.string = strMess;
 
-        // mess_bg.node.addChild(message.node);
+        mess_bg.node.runAction(cc.sequence(cc.delayTime(delayTime), cc.removeSelf(), null));
+        message.node.runAction(cc.sequence(cc.delayTime(delayTime), cc.removeSelf(), null));
+
     },
 
 
