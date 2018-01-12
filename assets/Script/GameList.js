@@ -11,6 +11,8 @@ cc.Class({
         roomIndex : 0,
         lbl_moneys: [],
         jarValue: 0,
+        timeDelta: 0,
+        jarResponse: null,
     },
 
     // use this for initialization
@@ -26,10 +28,12 @@ cc.Class({
 
     populateList: function() {
         var listGame = [20,19,17,18];
+        this.requestJar();
         var contentWidth = listGame.length * 300;
         this.content.setContentSize(contentWidth, this.content.getContentSize().height);
         for (var i = 0; i < listGame.length; ++i) {
             var item = cc.instantiate(this.prefabGameItem);
+            item.setTag(listGame[i] + 1000);
             item.getComponent('GameItem').init(i, listGame[i]);
             item.setPositionY(this.content.getContentSize().height*0.06);
             this.content.addChild(item);
@@ -44,9 +48,16 @@ cc.Class({
         this.scrollView.jumpTo(0.25,100);
     },
 
+    requestJar: function() {
+        NetworkManager.getJarRequest(0, null);
+    },
     // called every frame
     update: function (dt) {
-
+        this.timeDelta = this.timeDelta + dt;
+        if(this.timeDelta >= 2.0) {
+            this.requestJar();
+            this.timeDelta = 0;
+        }
     },
 
     goSceneTable: function() {
@@ -66,6 +77,24 @@ cc.Class({
         }
     },
 
+    jarResponseHandler: function(resp) {
+        cc.log("jar response handler:", resp.toObject());
+
+        if(resp.getResponsecode()) {
+            if(resp.getJarinfoList().length > 0) {
+                for(var i = 0; i < resp.getJarinfoList().length; i++) {
+                    var jarItem = resp.getJarinfoList()[i];
+                    var gameid = jarItem.getGameid();
+                    var value = jarItem.getValue();
+                    var jarType = jarItem.getJartype();
+                    var item = this.content.getChildByTag(gameid + 1000);
+                    if(item !== null && item.getName() === 'GameItem')
+                        item.getComponent('GameItem').updateJarMoney(value, jarType);
+                }
+            }
+        }
+    },
+
     handleMessage: function(buffer) {
         switch (buffer.message_id) {
             case NetworkManager.MESSAGE_ID.ENTER_ZONE:
@@ -76,6 +105,9 @@ cc.Class({
                 var msg = buffer.response;
                 this.enterRoomResponseHandler(msg);
                 break;
+            case NetworkManager.MESSAGE_ID.JAR:
+                var msg = buffer.response;
+                this.jarResponseHandler(msg);
             // case NetworkManager.MESSAGE_ID.EXIT_ZONE:
             //     var msg = buffer.response;
             //     this.exitZoneResponseHandler(msg);

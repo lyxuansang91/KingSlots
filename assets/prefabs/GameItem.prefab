@@ -277,7 +277,7 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": -66,
+      "x": -66.00000000000011,
       "y": -178
     },
     "_skewX": 0,
@@ -321,7 +321,7 @@
     "asset": {
       "__uuid__": "fa07d8ee-7c5d-4a28-9b3e-33d1cc89b37c"
     },
-    "fileId": "63ZgBZJOJJ1ZAgaGmdOJx0",
+    "fileId": "85VmKL+IdEq66+2cNjVoVJ",
     "sync": false
   },
   {
@@ -359,7 +359,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 64.04,
+      "width": 30.01,
       "height": 18
     },
     "_rotationX": 0,
@@ -394,7 +394,7 @@
     "_N$file": null,
     "_isSystemFontUsed": true,
     "_spacingX": 0,
-    "_N$string": "money1",
+    "_N$string": "N/A",
     "_N$horizontalAlign": 1,
     "_N$verticalAlign": 1,
     "_N$fontFamily": "Arial",
@@ -446,7 +446,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 64.04,
+      "width": 30.01,
       "height": 18
     },
     "_rotationX": 0,
@@ -481,7 +481,7 @@
     "_N$file": null,
     "_isSystemFontUsed": true,
     "_spacingX": 0,
-    "_N$string": "money2",
+    "_N$string": "N/A",
     "_N$horizontalAlign": 1,
     "_N$verticalAlign": 1,
     "_N$fontFamily": "Arial",
@@ -533,7 +533,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 64.04,
+      "width": 30.01,
       "height": 18
     },
     "_rotationX": 0,
@@ -568,7 +568,7 @@
     "_N$file": null,
     "_isSystemFontUsed": true,
     "_spacingX": 0,
-    "_N$string": "money3",
+    "_N$string": "N/A",
     "_N$horizontalAlign": 1,
     "_N$verticalAlign": 1,
     "_N$fontFamily": "Arial",
@@ -604,6 +604,9 @@
     },
     "money3": {
       "__id__": 17
+    },
+    "box": {
+      "__id__": 8
     }
   },
   {

@@ -604,7 +604,9 @@ var NetworkManager = {
     initJarRequest: function(zone_id, jarType) {
         var request = new proto.BINJarRequest();
         request.setZoneid(zone_id);
-        request.setJartype(jarType);
+        if(jarType !== null) {
+            request.setJartype(jarType);
+        }
         return request;
     },
     connectNetwork: function() {

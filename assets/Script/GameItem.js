@@ -9,7 +9,8 @@ cc.Class({
         },
         money1: cc.Label,
         money2: cc.Label,
-        money3: cc.Label
+        money3: cc.Label,
+        box: cc.Sprite
     },
 
     // use this for initialization
@@ -27,6 +28,13 @@ cc.Class({
             url = "resources/common/scene/lobby/icon_pocker.png";
         }else if(playerInfo === Config.TAG_GAME_ITEM.MINI_BACAY){
             url =  "resources/common/scene/lobby/icon_bacay.png";
+        }
+
+        if(playerInfo === Config.TAG_GAME_ITEM.TAIXIU) {
+            this.box.node.active = false;
+            this.money1.node.active = false;
+            this.money2.node.active = false;
+            this.money3.node.active = false;
         }
 
         var image = cc.url.raw(url);
@@ -50,6 +58,25 @@ cc.Class({
         // this.money3.string = playerInfo.money3;
 
 
+    },
+
+    updateJarMoney: function(value, jarType) {
+
+        // var btn = this.background.getComponent(cc.Button);
+
+        switch (jarType) {
+            case 1:
+                this.money1.string = value;
+                break;
+            case 2:
+                this.money2.string = value;
+                break;
+            case 3:
+                this.money3.string = value;
+                break;
+            default:
+                break;
+        }
     },
 
     // called every frame

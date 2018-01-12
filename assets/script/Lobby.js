@@ -20,7 +20,6 @@ cc.Class({
     onLoad: function () {
     },
     onClickSetting: function() {
-
         cc.log("on click setting");
         var item = cc.instantiate(this.prefabPopupTaiXiu);
         this.node.setPosition(cc.p(0,0));
