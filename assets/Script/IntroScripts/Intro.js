@@ -59,10 +59,8 @@ cc.Class({
         cc.log("response text msg:" + event);
         if(event.data!==null || event.data !== 'undefined') {
             var lstMessage = NetworkManager.parseFrom(event.data, event.data.byteLength);
-            cc.log("list message size:" + lstMessage.length);
             if(lstMessage.length > 0) {
                 var buffer = lstMessage.shift();
-                cc.log("buffer:" , buffer);
                 this.handleMessage(buffer);
             }
         }

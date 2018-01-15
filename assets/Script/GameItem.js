@@ -1,4 +1,5 @@
 var NetworkManager = require('../Lib/NetworkManager.js');
+
 cc.Class({
     extends: cc.Component,
 
@@ -10,6 +11,9 @@ cc.Class({
         money1: cc.Label,
         money2: cc.Label,
         money3: cc.Label,
+        m1_value: 0,
+        m2_value: 0,
+        m3_value: 0,
         box: cc.Sprite
     },
 
@@ -52,27 +56,30 @@ cc.Class({
         }else if(playerInfo === Config.TAG_GAME_ITEM.MINI_BACAY){
             btn.node._tag = Config.TAG_GAME_ITEM.MINI_BACAY;
         }
-
-        // this.money1.string = playerInfo.money1;
-        // this.money2.string = playerInfo.money2;
-        // this.money3.string = playerInfo.money3;
-
-
     },
+
 
     updateJarMoney: function(value, jarType) {
 
         // var btn = this.background.getComponent(cc.Button);
-
         switch (jarType) {
             case 1:
-                this.money1.string = value;
+                if(this.m1_value < value) {
+                    Common.updateMoney(this.money1, this.m1_value, this.m1_value, value);
+                    this.m1_value = value;
+                }
                 break;
             case 2:
-                this.money2.string = value;
+                if(this.m2_value < value) {
+                    Common.updateMoney(this.money2, this.m2_value, this.m2_value, value);
+                    this.m2_value = value;
+                }
                 break;
             case 3:
-                this.money3.string = value;
+                if(this.m3_value < value) {
+                    Common.updateMoney(this.money3, this.m3_value, this.m3_value, value);
+                    this.m3_value = value;
+                }
                 break;
             default:
                 break;

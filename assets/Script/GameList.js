@@ -108,10 +108,7 @@ cc.Class({
             case NetworkManager.MESSAGE_ID.JAR:
                 var msg = buffer.response;
                 this.jarResponseHandler(msg);
-            // case NetworkManager.MESSAGE_ID.EXIT_ZONE:
-            //     var msg = buffer.response;
-            //     this.exitZoneResponseHandler(msg);
-            //     break;
+                break;
         }
     },
 
@@ -163,9 +160,10 @@ cc.Class({
 
             }
             else if (Common.getZoneId() === Common.ZONE_ID.MINI_POKER) {
-                cc.director.loadScene('BaCay',function(){
-                    BacayScene.instance.initDataFromLoading(Common.getEnterZone(), response);
-                });
+                // cc.director.loadScene('BaCay',function(){
+                //     BacayScene.instance.initDataFromLoading(Common.getEnterZone(), response);
+                // });
+                cc.director.loadScene('Table');
             }
         }
     }

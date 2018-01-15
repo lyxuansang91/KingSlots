@@ -341,9 +341,6 @@ var NetworkManager = {
             //read compress
             var is_compress = bb.readInt8(_offset);
 
-
-            cc.log("is_compress:", is_compress);
-
             _offset+= 1;
 
             var left_byte_size = bytes_size - 1;
@@ -457,7 +454,6 @@ var NetworkManager = {
             cc.log("NetworkManager: error packet length = 0");
         }
 
-        cc.log("lstMess =", lstMess);
         return lstMess;
 
     },
@@ -465,7 +461,7 @@ var NetworkManager = {
 
     },
 
-    requestLoginMessage: function() {
+    requestLogoutMessage: function() {
 
     },
     // init message

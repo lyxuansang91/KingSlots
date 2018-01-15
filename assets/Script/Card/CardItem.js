@@ -28,7 +28,9 @@ cc.Class({
 
     // use this for initialization
     onLoad: function () {
-        // this.node.getComponent(cc.Sprite).spriteFrame = null;
+        if(Common.getZoneId() !== Config.TAG_GAME_ITEM.MINI_BACAY) {
+            this.node.getComponent(cc.Sprite).spriteFrame = null;
+        }
     },
 
     init: function () {

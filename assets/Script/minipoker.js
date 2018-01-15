@@ -1,6 +1,6 @@
 var NetworkManager = require('NetworkManager');
 
-cc.Class({
+var MiniPoker = cc.Class({
     extends: cc.Component,
 
     properties: {
@@ -22,12 +22,30 @@ cc.Class({
         number : 5,
         time_move: 1,
         list_item: [],
-        list_recent_value: null
+        list_recent_value: null,
+        enterRoomResponse: null,
+        enterZoneResponse: null,
+        betType: 1,
+        moneyBet: cc.Label,
+        userMoney: cc.Label,
+        jarMoney: cc.Label
+    },
+    statics: {
+      instance: null,
     },
     exitRoom: function() {
         cc.director.loadScene("Table");
     },
 
+    setKeyBet: function(key) {
+      this.betType = key;
+    },
+    getKeyBet: function() {
+        return this.betType;
+    },
+    requestJar: function() {
+        NetworkManager.getJarRequest(Common.getZoneId(), this.betType);
+    },
     getTurnMiniPokerRequest: function(turnType) {
 
         var entries = [];
@@ -38,8 +56,43 @@ cc.Class({
         NetworkManager.getTurnMessageFromServer(0, entries);
     },
 
+    betToggleOneEvent: function(){
+        this.setKeyBet(0);
+        this.moneyBet.string = this.getBetMoney();
+        this.requestJar();
+    },
+    betToggleTwoEvent: function() {
+        this.setKeyBet(1);
+        this.moneyBet.string = this.getBetMoney();
+        this.requestJar();
+    },
+    betToggleThreeEvent: function() {
+        this.setKeyBet(2);
+        this.moneyBet.string = this.getBetMoney();
+        this.requestJar();
+    },
+
+    initDataFromLoading: function(enterZone, enterRoom){
+        this.setEnterZoneResponse(enterZone);
+        Common.setMiniGameZoneId(enterZone.getZoneid());
+        this.setEnterRoomResponse(enterRoom);
+        this.init(enterRoom);
+    },
+    setEnterZoneResponse: function(res) {
+        this.enterZoneResponse = res;
+    },
+    getEnterZoneResponse: function() {
+        return this.enterZoneResponse;
+    },
+    getEnterRoomResponse: function() {
+        return this.enterRoomResponse;
+    },
+    setEnterRoomResponse: function(resp) {
+        this.enterRoomResponse = resp;
+    },
+
     takeTurn: function() {
-        this.getTurnMiniPokerRequest(1);
+        this.getTurnMiniPokerRequest(this.betType);
     },
 
     initFirstCard: function() {
@@ -65,8 +118,9 @@ cc.Class({
 
     // use this for initialization
     onLoad: function () {
+        MiniPoker.instance = this;
         window.ws.onmessage = this.ongamestatus.bind(this);
-        this.initFirstCard()
+        this.initFirstCard();
     },
     ongamestatus: function(event) {
         if(event.data!==null || event.data !== 'undefined') {

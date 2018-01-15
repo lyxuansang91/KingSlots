@@ -36,6 +36,26 @@ var Common = {
         }
         return rs;
     },
+    updateMoney: function(_node, firstMoney, beginMoney, endMoney) {
+        if(_node instanceof cc.Label) {
+
+            if(beginMoney >= endMoney) {
+                _node.string = endMoney;
+            } else {
+                var value = Math.floor((endMoney - firstMoney) / 30);
+
+                setTimeout(function() {
+                    beginMoney = beginMoney + value;
+                    if(beginMoney >= endMoney) {
+                        beginMoney = endMoney;
+                    }
+                    _node.string = beginMoney;
+                    this.updateMoney(_node, firstMoney, beginMoney, endMoney);
+                }.bind(this), 30);
+            }
+        }
+    },
+
     getOS: function() {
         var os = -1;
         if(cc.sys.isNative) {
