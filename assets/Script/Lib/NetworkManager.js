@@ -605,9 +605,11 @@ var NetworkManager = {
         }
         return request;
     },
+
+
+
     connectNetwork: function() {
         if(window.ws === null || typeof(window.ws) === 'undefined' || window.ws.readyState === WebSocket.CLOSED) {
-
             window.ws = new WebSocket(NetworkManager.URL);
             window.listMessage = [];
             window.ws.binaryType = "arraybuffer";
@@ -615,15 +617,16 @@ var NetworkManager = {
             window.ws.onopen = function (event) {
                 console.log("on web socket");
                 NetworkManager.requestInitializeMessage("24", "15", Common.getFingerprint(), Common.getFingerprint(), "vn", "vi", "com.gamebai.tienlen", false, "");
-                setTimeout(function(){
-                    setInterval(function(){
+                setTimeout(function() {
+                    window.myInterval = setInterval(function() {
                         NetworkManager.requestPingMessage(0);
                     }, 15000);
-
                 }, 1);
+
             };
             window.ws.onclose = function (event) {
                 console.log("Websocket instance was closed");
+                clearInterval(window.myInterval);
             };
         }
     },
