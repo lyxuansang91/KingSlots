@@ -1,6 +1,6 @@
 const gameItems = require('GameItemData').gameItems;
 var NetworkManager = require('NetworkManager');
-var BacayScene = require('BaCayScripts');
+var BacayScene = require('Scene/ThreeCard/BaCayScripts');
 cc.Class({
     extends: cc.Component,
 
