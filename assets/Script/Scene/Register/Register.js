@@ -1,5 +1,5 @@
 var NetworkManager = require('NetworkManager');
-var BaseScene = require('BaseScene');
+var BaseScene = require('assets/Script/Scene/BaseScene');
 
 cc.Class({
     extends: BaseScene,
