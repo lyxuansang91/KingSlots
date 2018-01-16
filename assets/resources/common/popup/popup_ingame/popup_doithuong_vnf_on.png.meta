@@ -1,0 +1,30 @@
+{
+  "ver": "1.0.0",
+  "uuid": "26df8ebd-efb1-4e0f-ab8d-04e70a5d1875",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "subMetas": {
+    "popup_doithuong_vnf_on": {
+      "ver": "1.0.3",
+      "uuid": "fc4bde95-dcf0-4449-93bb-f7234b4fbdc2",
+      "rawTextureUuid": "26df8ebd-efb1-4e0f-ab8d-04e70a5d1875",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 169,
+      "height": 42,
+      "rawWidth": 169,
+      "rawHeight": 42,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

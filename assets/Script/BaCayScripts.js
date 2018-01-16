@@ -25,7 +25,8 @@ var BacaySence = cc.Class({
         isBreakJar: false,
         bet: 0,
         jarType: 1,
-        isRequestJar: false
+        isRequestJar: false,
+        popupPrefab: cc.Prefab
 
     },
     statics: {
@@ -94,7 +95,7 @@ var BacaySence = cc.Class({
 
     update: function (dt) {
         this.handleAutoSpin();
-        this.requestJar();
+        // this.requestJar();
     },
 
     quayEvent: function () {
@@ -577,6 +578,18 @@ var BacaySence = cc.Class({
             NetworkManager.getJarRequest(
                 Common.getMiniGameZoneId(), this.calculateTurnType());
         }
+    },
+    showPopup: function () {
+        var tabString = ["Lịch sử quay", "Top cao thủ", "Lịch sử nổ hũ"];
+        var nodeChild = new cc.Node();
+        nodeChild.parent = this.bg.node;
+        var item = cc.instantiate(this.popupPrefab);
+
+        item.getComponent('PopupIngameItem').init(tabString);
+        item.setPositionX(0);
+        item.setPositionY(0);
+        nodeChild.addChild(item);
+
     }
 
 });
