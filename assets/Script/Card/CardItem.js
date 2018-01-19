@@ -42,7 +42,7 @@ cc.Class({
 
     },
     replaceCard: function (cardValue) {
-        cc.log("cardValue =", cardValue);
+        // cc.log("cardValue =", cardValue);
         var pointValue = CardType.getPoint(cardValue);
         var suitValue = CardType.getSuit(cardValue);
 

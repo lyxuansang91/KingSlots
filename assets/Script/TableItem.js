@@ -1,4 +1,4 @@
-var NetworkManager = require('../Lib/NetworkManager.js');
+var NetworkManager = require('NetworkManager');
 cc.Class({
     extends: cc.Component,
 

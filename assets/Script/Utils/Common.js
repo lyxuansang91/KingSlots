@@ -40,7 +40,7 @@ var Common = {
         if(_node instanceof cc.Label) {
 
             if(beginMoney >= endMoney) {
-                _node.string = endMoney;
+                _node.string = Common.numberFormatWithCommas(endMoney);
             } else {
                 var value = Math.floor((endMoney - firstMoney) / 30);
 
@@ -49,7 +49,7 @@ var Common = {
                     if(beginMoney >= endMoney) {
                         beginMoney = endMoney;
                     }
-                    _node.string = beginMoney;
+                    _node.string = Common.numberFormatWithCommas(beginMoney);
                     this.updateMoney(_node, firstMoney, beginMoney, endMoney);
                 }.bind(this), 30);
             }

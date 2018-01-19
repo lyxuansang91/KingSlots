@@ -1,4 +1,4 @@
-var NetworkManager = require('../Lib/NetworkManager.js');
+var NetworkManager = require('NetworkManager');
 
 cc.Class({
     extends: cc.Component,
@@ -16,6 +16,7 @@ cc.Class({
         m3_value: 0,
         box: cc.Sprite
     },
+// I still can’t find a way to properly “pause” the game nor to make my message layer stop events from propagating, but I moved al
 
     // use this for initialization
     init: function (rank, playerInfo) {

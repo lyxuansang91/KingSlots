@@ -1,6 +1,8 @@
 const gameItems = require('GameItemData').gameItems;
 var NetworkManager = require('NetworkManager');
 var BacayScene = require('BaCayScripts');
+var minipoker = require('minipoker');
+
 cc.Class({
     extends: cc.Component,
 
@@ -12,7 +14,7 @@ cc.Class({
         lbl_moneys: [],
         jarValue: 0,
         timeDelta: 0,
-        jarResponse: null,
+        jarResponse: null
     },
 
     // use this for initialization
@@ -163,7 +165,9 @@ cc.Class({
                 // cc.director.loadScene('BaCay',function(){
                 //     BacayScene.instance.initDataFromLoading(Common.getEnterZone(), response);
                 // });
-                cc.director.loadScene('Table');
+                cc.director.loadScene('minipoker', function() {
+                    minipoker.instance.initDataFromLoading(Common.getEnterZone(), response);
+                });
             }
         }
     }

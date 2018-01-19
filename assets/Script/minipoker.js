@@ -25,13 +25,16 @@ var MiniPoker = cc.Class({
         list_recent_value: null,
         enterRoomResponse: null,
         enterZoneResponse: null,
-        betType: 1,
+        betType: 0,
         moneyBet: cc.Label,
         userMoney: cc.Label,
-        jarMoney: cc.Label
+        jarMoney: cc.Label,
+        isRequestJar: false,
+        jarValue: 0,
+        roomIndex: 0
     },
     statics: {
-      instance: null,
+      instance: null
     },
     exitRoom: function() {
         cc.director.loadScene("Table");
@@ -44,10 +47,14 @@ var MiniPoker = cc.Class({
         return this.betType;
     },
     requestJar: function() {
-        NetworkManager.getJarRequest(Common.getZoneId(), this.betType);
+        if(!this.isRequestJar) {
+            cc.log("request jar", this.betType + 1);
+            this.isRequestJar = false;
+            NetworkManager.getJarRequest(Common.getZoneId(), this.betType + 1);
+        }
     },
-    getTurnMiniPokerRequest: function(turnType) {
 
+    getTurnMiniPokerRequest: function(turnType) {
         var entries = [];
         var entry = new proto.BINMapFieldEntry();
         entry.setKey("turnSlotType");
@@ -56,17 +63,35 @@ var MiniPoker = cc.Class({
         NetworkManager.getTurnMessageFromServer(0, entries);
     },
 
+    getBetMoney: function() {
+        var args = this.getEnterRoomResponse();
+        var argsList = args.getArgsList()[0];
+        var json = null;
+        if(argsList.getKey() === "initValue"){
+            json = argsList.getValue();
+        }
+        var bet = this.getKeyBet();
+        var results = JSON.parse(json);
+        var betStepValue = results.turnValueCash;
+        var betMoney = betStepValue[bet];
+
+        return betMoney;
+    },
+
     betToggleOneEvent: function(){
+        cc.log("bet type 1:", this.betType);
         this.setKeyBet(0);
         this.moneyBet.string = this.getBetMoney();
         this.requestJar();
     },
     betToggleTwoEvent: function() {
+        cc.log("bet type 2:", this.betType);
         this.setKeyBet(1);
         this.moneyBet.string = this.getBetMoney();
         this.requestJar();
     },
     betToggleThreeEvent: function() {
+        cc.log("bet type 3:", this.betType);
         this.setKeyBet(2);
         this.moneyBet.string = this.getBetMoney();
         this.requestJar();
@@ -77,6 +102,27 @@ var MiniPoker = cc.Class({
         Common.setMiniGameZoneId(enterZone.getZoneid());
         this.setEnterRoomResponse(enterRoom);
         this.init(enterRoom);
+    },
+    init: function(response) {
+        var roomPlay = response.getRoomplay();
+        this.roomIndex = roomPlay.getRoomindex();
+
+        if (response.getArgsList().length > 0) {
+            var entry = response.getArgsList()[0];
+            if (entry.getKey() === "initValue") {
+                this.initValue(entry.getValue());
+            }
+        }
+    },
+    initValue: function(json) {
+        var results = JSON.parse(json);
+        cc.log("results =", results);
+
+        this.moneyBet.string =  Common.numberFormatWithCommas(results.turnValueCash[this.betType]);
+        // cc.log("lbl_moneys =", this.lbl_moneys);
+
+        var val = results.jarValue;
+        this.jarMoney.string = Common.numberFormatWithCommas(val);
     },
     setEnterZoneResponse: function(res) {
         this.enterZoneResponse = res;
@@ -92,7 +138,7 @@ var MiniPoker = cc.Class({
     },
 
     takeTurn: function() {
-        this.getTurnMiniPokerRequest(this.betType);
+        this.getTurnMiniPokerRequest(this.betType + 1);
     },
 
     initFirstCard: function() {
@@ -119,8 +165,13 @@ var MiniPoker = cc.Class({
     // use this for initialization
     onLoad: function () {
         MiniPoker.instance = this;
+        this.userMoney.string = Common.numberFormatWithCommas(Common.getCash());
         window.ws.onmessage = this.ongamestatus.bind(this);
+        this.betType = 0;
         this.initFirstCard();
+        setInterval(function() {
+            this.requestJar();
+        }.bind(this), 5000);
     },
     ongamestatus: function(event) {
         if(event.data!==null || event.data !== 'undefined') {
@@ -209,60 +260,8 @@ var MiniPoker = cc.Class({
                 card.runAction(cc.sequence(delay,move1,move3,move2));
             }
         }
-
-        /*for(var i = 0; i < items_value.length; i++){ //size = stepCard
-            for(var j = 0; j < items_value[i].length; j++){ //size = number
-                var cardValue = items_value[i][j];
-                var item = cc.instantiate(this.cardPrefab);
-                var posX = (j - 2) * item.getContentSize().width * 0.75;
-                var posY = (1 - i) * item.getContentSize().height;
-
-                item.getComponent('CardItem').replaceCard(cardValue);
-
-                item.setPositionY(posY);
-                item.setPositionX(posX);
-
-                this.cardView.node.addChild(item);
-
-                //
-                // if(j === 0){
-                //     moveAction = cc.moveBy(1.5 + j*0.25,
-                //         cc.p(0, - (test.length - 3)*paddingCard));
-                // }else{
-                //     moveAction = cc.moveBy((j-1) + 1.5 + (j-1)*0.25 + (test.length - test[i].length) / stepCard,
-                //         cc.p(0, - (test.length - 4)*paddingCard));
-                //     // moveAction = cc.moveBy(1.5 + j*0.25,
-                //     //     cc.p(0, - (test.length - 3)*paddingCard));
-                // }
-
-                if(j === items_value[i].length - 1){
-                //     var emoticon = response.getTextemoticonsList()[0];
-                //     var emotionId = emoticon.getEmoticonid();
-                //     var message = emoticon.getMessage();
-                //     var moneyResponse = this.getBINUpdateMoneyResponse();
-                //     var callFunc = cc.callFunc(this.handleRanking(emotionId, message, moneyResponse), this);
-                //
-                //     var callFuncAutoSpin = cc.callFunc(function () {
-                //         if(!isBreakJar)
-                //             this.isFinishSpin = true;
-                //     }, this);
-                //
-                //     item.runAction(cc.sequence(moveAction, cc.moveBy(1.5, cc.p(0, -paddingCard)), callFunc, cc.delayTime(2), callFuncAutoSpin, null));
-                //
-                // }else{
-                //     if(j === 0){
-                //         item.runAction(moveAction);
-                //     }else{
-                //         item.runAction(cc.sequence(moveAction, cc.moveBy(1.5, cc.p(0, -paddingCard))));
-                //     }
-
-                }
-
-                // item.runAction(moveAction);
-            }
-        }*/
-
     },
+
     matchEndResponseHandler: function(response) {
       cc.log("match end response handler:", response.toObject());
         if (response.getResponsecode()) {
@@ -291,7 +290,10 @@ var MiniPoker = cc.Class({
     updateMoneyMessageResponseHandler: function(resp) {
         cc.log("update money response: ", resp.toObject());
         if(resp.getResponsecode()) {
-
+            var moneyBox = resp.getMoneyboxesList()[0];
+            if(moneyBox.getUserid() === Common.getUserInfo().userid) {
+                this.userMoney.string = Common.numberFormatWithCommas(moneyBox.getCurrentmoney());
+            }
         }
 
         if(resp.hasMessage() && resp.getMessage() !== "") {
@@ -317,6 +319,32 @@ var MiniPoker = cc.Class({
             // show toast
         }
     },
+    jarResponseHandler: function(resp) {
+        cc.log("jar response handler:", resp.toObject());
+        if(resp.getResponsecode()) {
+            var jar_type_response = 0;
+            var preJarValue = this.jarValue;
+            this.jarValue = resp.getJarvalue();
+            if (resp.getArgsList().length > 0) {
+                var entry = resp.getArgsList()[0];
+                if (entry.getKey() === "jarType") {
+                    jar_type_response = parseInt(entry.getValue().toString());
+                }
+            }
+
+            if (jar_type_response === this.betType + 1) {
+                if (this.jarType === jar_type_response) {
+                    // this.moneyJar.node.runAction(cc.actionInterval(1.0, preJarValue, this.jarValue, function(val){
+                    //     var number_cash = Common.numberFormatWithCommas(val);
+                    Common.updateMoney(this.jarMoney, preJarValue, preJarValue, this.jarValue);
+                    // }));
+                } else {
+                    this.jarMoney.string = Common.numberFormatWithCommas(this.jarValue);
+                }
+                this.jarType = jar_type_response;
+            }
+        }
+    },
     handleMessage: function(buffer) {
       //  cc.log("buffer =", buffer.message_id);
         switch (buffer.message_id) {
@@ -339,7 +367,15 @@ var MiniPoker = cc.Class({
                 var msg = buffer.response;
                 this.exitZoneResponseHandler(msg);
                 break;
+            case NetworkManager.MESSAGE_ID.JAR:
+                var msg = buffer.response;
+                this.jarResponseHandler(msg);
+                break;
         }
+    },
+
+    calculateTurnType: function() {
+        return this.getKeyBet() + 1;
     }
 
     // called every frame, uncomment this function to activate update callback
