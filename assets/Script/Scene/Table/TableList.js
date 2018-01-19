@@ -1,5 +1,5 @@
 var NetworkManager = require('NetworkManager');
-var BacayScene = require('BaCayScripts');
+var BacayScene = require('Scene/ThreeCard/BaCayScripts');
 var TableScene = cc.Class({
     extends: cc.Component,
     properties: {

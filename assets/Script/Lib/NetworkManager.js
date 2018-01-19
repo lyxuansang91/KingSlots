@@ -322,6 +322,8 @@ var NetworkManager = {
                 break;
             case NetworkManager.MESSAGE_ID.LOGOUT:
                 msg = proto.BINLogoutResponse.deserializeBinary(bytes);
+            case NetworkManager.MESSAGE_ID.LOOK_UP_GAME_HISTORY:
+                msg = proto.BINLookUpGameHistoryResponse.deserializeBinary(bytes);
                 break;
         }
 
@@ -605,9 +607,18 @@ var NetworkManager = {
         }
         return request;
     },
-
-
-
+    getLookUpGameHistoryRequest: function(firstResult, maxResult, entries, orderByField, asc) {
+        cc.log("getLookUpGameHistoryRequest =", entries);
+        var request = new proto.BINLookUpGameHistoryRequest();
+        request.setFirstresult(firstResult);
+        request.setMaxresult(maxResult);
+        request.setArgsList(entries);
+        if (orderByField !== 0) {
+            request.setOrderbyfield(orderByField);
+            request.setAsc(asc);
+        }
+        this.callNetwork(this.initData(request.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.LOOK_UP_GAME_HISTORY, Common.getSessionId()));
+    },
     connectNetwork: function() {
         if(window.ws === null || typeof(window.ws) === 'undefined' || window.ws.readyState === WebSocket.CLOSED) {
             window.ws = new WebSocket(NetworkManager.URL);
