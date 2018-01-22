@@ -1,6 +1,5 @@
 var NetworkManager = require('NetworkManager');
 var BaseScene = require('BaseScene');
-var CommonPopup = require('CommonPopup');
 
 cc.Class({
     extends: BaseScene,
@@ -106,10 +105,6 @@ cc.Class({
         //     this.showToast(strMess, this, 2);
         //     return;
         // }
-
-        // var commonPopup = new CommonPopup();
-        // commonPopup.init();
-
         NetworkManager.requestLoginMessage(username, password);
     },
     register: function() {
