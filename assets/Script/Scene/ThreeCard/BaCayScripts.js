@@ -1,5 +1,5 @@
 var NetworkManager = require('NetworkManager');
-var BaseScene = require('assets/Script/Scene/BaseScene');
+var BaseScene = require('BaseScene');
 var BacaySence = cc.Class({
     extends: BaseScene,
 
@@ -39,6 +39,8 @@ var BacaySence = cc.Class({
     // use this for initialization
     onLoad: function () {
         BacaySence.instance = this;
+        Common.setMiniPokerSceneInstance(cc.director.getScene());
+
         window.ws.onmessage = this.ongamestatus.bind(this);
         this.userMoney.string = Common.getCash();
         for(var i = 0; i < 3; i++){

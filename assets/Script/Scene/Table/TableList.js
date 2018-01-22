@@ -1,5 +1,6 @@
 var NetworkManager = require('NetworkManager');
-var BacayScene = require('Scene/ThreeCard/BaCayScripts');
+var BacayScene = require('BaCayScripts');
+var minipoker = require('minipoker');
 var TableScene = cc.Class({
     extends: cc.Component,
     properties: {
@@ -11,7 +12,7 @@ var TableScene = cc.Class({
         prefabTableItem: cc.Prefab,
         rankCount: 0,
         userName: cc.Label ,
-        userAvatar: cc.Sprite ,
+        userAvatar: cc.Sprite,
         userGold: cc.Label
     },
 
@@ -78,7 +79,8 @@ var TableScene = cc.Class({
         cc.log("exit zone response handler: ", resp.toObject());
         if(resp.getResponsecode()) {
             Common.setZoneId(-1);
-            cc.director.loadScene("Lobby");
+            // cc.director.loadScene("Lobby");
+            cc.director.runScene(Common.getTableSceneInstance());
         }
 
         if(resp.hasMessage() && resp.getMessage() !== "") {
@@ -169,7 +171,9 @@ var TableScene = cc.Class({
                             }
                             else if (Common.getZoneId() === Common.ZONE_ID.MINI_POKER) {
                                 cc.log("poker");
-                                cc.director.loadScene('minipoker');
+                                cc.director.loadScene('minipoker', function() {
+                                   minipoker.instance.initDataFromLoading(null, response);
+                                });
                                 // auto poker = PokerScene::createScene(roomPlay, playerList, waitingPlayerList, is_create_room,
                                 //     this->getEnableDisplayRoomList(), enterroomresponse);
                                 // REPLACESCENE(TIME_REPLACE_SCENE, poker);

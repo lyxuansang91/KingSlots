@@ -172,6 +172,7 @@ var MiniPoker = cc.Class({
         setInterval(function() {
             this.requestJar();
         }.bind(this), 5000);
+        Common.setMiniPokerSceneInstance(cc.director.getScene());
     },
     ongamestatus: function(event) {
         if(event.data!==null || event.data !== 'undefined') {

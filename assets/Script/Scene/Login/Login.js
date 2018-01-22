@@ -15,6 +15,8 @@ cc.Class({
         Common.setFingerprint();
         NetworkManager.connectNetwork();
         window.ws.onmessage = this.ongamestatus.bind(this);
+        cc.log("scene:", cc.director.getScene());
+        Common.setLoginSceneInstance(cc.director.getScene());
     },
 
     ongamestatus: function(event) {
@@ -31,17 +33,10 @@ cc.Class({
         cc.log("response:", buffer);
         this._super(buffer);
         switch (buffer.message_id) {
-            // case NetworkManager.MESSAGE_ID.INITIALIZE:
-            //     var msg = buffer.response;
-            //     break;
             case NetworkManager.MESSAGE_ID.LOGIN:
                 var msg = buffer.response;
                 this.handleLoginResponseHandler(msg);
                 break;
-            // case NetworkManager.MESSAGE_ID.PING:
-            //     var msg = buffer.response;
-            //     this.handlePingResponseHandler(msg);
-            //     break;
         }
     },
     handleLoginResponseHandler: function(res) {
@@ -91,7 +86,7 @@ cc.Class({
         }
     },
     goIntroScene: function(e) {
-        cc.director.runScene('Intro');
+        cc.director.loadScene('Intro');
     },
 
     login: function() {

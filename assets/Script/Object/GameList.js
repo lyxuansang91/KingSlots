@@ -21,6 +21,7 @@ cc.Class({
     onLoad: function () {
         this.content = this.scrollView.content;
         this.populateList();
+        // var bacayScene = new BacayScene();
 
         // cc.director.preloadScene('BaCay', function () {
         //     cc.log('Next Login scene preloaded');
@@ -64,6 +65,7 @@ cc.Class({
 
     goSceneTable: function() {
         window.ws.onmessage = this.ongamestatus.bind(this);
+
         this.unschedule(this.goSceneTable);
     },
 

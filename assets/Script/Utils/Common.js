@@ -23,6 +23,41 @@ var Common = {
         XOCDIA2: 21,
         EGG: 22
     },
+    introScene: null,
+    getIntroSceneInstance: function () {
+        return this.introScene;
+    },
+    setIntroSceneInstance: function(e) {
+        return this.introScene;
+    },
+    loginScene: null,
+    getLoginSceneInstance: function () {
+        return this.loginScene;
+    },
+    setLoginSceneInstance: function(e) {
+        this.loginScene = e;
+    },
+    tableScene: null,
+    getTableSceneInstance: function() {
+        return this.tableScene;
+    },
+    setTableSceneInstance: function(e) {
+        this.tableScene = e;
+    },
+    miniPokerScene: null,
+    getMiniPokerSceneInstance: function() {
+        return this.miniPokerScene;
+    },
+    setMiniPokerSceneInstance: function(e) {
+        this.miniPokerScene = e;
+    },
+    miniThreeCardsScene: null,
+    setMiniThreeCardsSceneInstance: function(e) {
+        this.miniThreeCardsScene = e;
+    },
+    getMiniThreeCardsSceneInstance: function() {
+        return this.miniThreeCardsScene;
+    },
     getUserInfo: function () {
        return this.userInfo;
     },

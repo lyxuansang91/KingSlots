@@ -1,5 +1,5 @@
 var NetworkManager = require('NetworkManager');
-var BaseScene = require('assets/Script/Scene/BaseScene');
+var BaseScene = require('BaseScene');
 
 cc.Class({
     extends: BaseScene,
@@ -85,11 +85,11 @@ cc.Class({
         cc.director.loadScene('Login');
     },
     register: function() {
-        if(this.edt_username.string == "" || this.edt_pass.string == "" || this.edt_repass.string == "" || this.edt_displayname == "") {
+        if(this.edt_username.string === "" || this.edt_pass.string === "" || this.edt_repass.string === "" || this.edt_displayname === "") {
             this.showToast("Dữ liệu không được để trống", this.node);
             return;
         }
-        if(this.edt_pass.string != this.edt_repass.string) {
+        if(this.edt_pass.string !== this.edt_repass.string) {
             this.showToast("Mật khẩu phải giống nhau!", this.node);
             return;
         }
