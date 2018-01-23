@@ -16,11 +16,11 @@ cc.Class({
         btnCancel: cc.Button,
         btnClose: cc.Button,
         message: cc.Label,
-        type: 0
+        type: 0,
+        _callback: function() {}
     },
 
     closePopup: function() {
-        cc.log("this node:", this.node);
         this.node.removeFromParent(true);
     },
 
@@ -28,6 +28,11 @@ cc.Class({
     onLoad: function () {
 
     },
+    onCallBack: function() {
+        cc.log("on call back 1");
+        this._callback();
+    },
+
     init: function(msg, type, callback) {
         cc.log("message:", msg);
         this.message.string = msg;
@@ -41,7 +46,7 @@ cc.Class({
             default:
                 break;
         }
-        callback();
+        this._callback = callback;
     }
 
     // called every frame, uncomment this function to activate update callback
