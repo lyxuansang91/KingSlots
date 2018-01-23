@@ -482,6 +482,9 @@
     },
     "toastPrefab": {
       "__uuid__": "c19af3fa-7297-48f4-b2f0-c08d0184e7bf"
+    },
+    "messagePopup": {
+      "__uuid__": "73027cf2-04b1-44ce-b038-d5137d877af4"
     }
   },
   {
@@ -842,7 +845,8 @@
     "_enabled": true,
     "edt_username": null,
     "edt_password": null,
-    "toastPrefab": null
+    "toastPrefab": null,
+    "messagePopup": null
   },
   {
     "__type__": "766c2loLlJPba69AJmZx9M3",

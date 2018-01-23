@@ -1,5 +1,6 @@
 var NetworkManager = require('NetworkManager');
 var BaseScene = require('BaseScene');
+var CommonPopup = require('CommonPopup');
 
 cc.Class({
     extends: BaseScene,
@@ -7,7 +8,8 @@ cc.Class({
     properties: {
         edt_username: cc.EditBox,
         edt_password: cc.EditBox,
-        toastPrefab: cc.Prefab
+        toastPrefab: cc.Prefab,
+        messagePopup: cc.Prefab
     },
     // use this for initialization
     onLoad: function () {
@@ -38,6 +40,7 @@ cc.Class({
                 break;
         }
     },
+
     handleLoginResponseHandler: function(res) {
         cc.log("login response handler:", res);
         if(res.getResponsecode()) {
@@ -70,6 +73,17 @@ cc.Class({
             cc.director.loadScene('Lobby');
         }
 
+        if(res.hasMessage() && res.getMessage() !== "") {
+            var messagebox = cc.instantiate(this.messagePopup).getComponent("CommonPopup");
+            messagebox.init(res.getMessage(), 0, function() {
+                cc.log("on callback");
+            });
+            cc.log("message box:", messagebox);
+            // messagebox.setAnchorPoint(cc.p(0.5, 0.5));
+            messagebox.node.setPosition(cc.p(cc.winSize.width / 2, cc.winSize.height / 2));
+            this.node.addChild(messagebox.node);
+        }
+
     },
     handlePingResponseHandler: function(res) {
         cc.log("ping response handler:", res);
@@ -90,10 +104,10 @@ cc.Class({
 
     login: function() {
         cc.log("login normal");
-        // var username = this.edt_username.string;
-        // var password = this.edt_password.string;
-        var username = "lyxuansangzz";
-        var password = "12341234";
+        var username = this.edt_username.string;
+        var password = this.edt_password.string;
+        // var username = "lyxuansangzz";
+        // var password = "12341234";
         // if(this.edt_username.string === "" || this.edt_password.string === "") {
         //     // cc.log("edt_username", this.node);
         //     // cc.alert("Tài khoản và mật khẩu không được để trống!");
