@@ -587,7 +587,7 @@ var BacaySence = cc.Class({
         nodeChild.parent = this.bg.node;
         var item = cc.instantiate(this.popupPrefab);
 
-        item.getComponent('PopupIngameItem').init(tabString);
+        item.getComponent('PopupIngameItem').init(tabString, "history");
         item.setPositionX(0);
         item.setPositionY(0);
         nodeChild.addChild(item);

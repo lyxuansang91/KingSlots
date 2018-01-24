@@ -345,7 +345,6 @@ var tableView = cc.Class({
         return groupCellCount;
     },
     clear: function () {
-        cc.log("clear");
         for (var index = this.content.childrenCount - 1; index >= 0; --index) {
             this._cellPool.put(this.content.children[index]);
         }

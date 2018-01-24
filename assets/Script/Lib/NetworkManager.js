@@ -322,8 +322,12 @@ var NetworkManager = {
                 break;
             case NetworkManager.MESSAGE_ID.LOGOUT:
                 msg = proto.BINLogoutResponse.deserializeBinary(bytes);
+                break;
             case NetworkManager.MESSAGE_ID.LOOK_UP_GAME_HISTORY:
                 msg = proto.BINLookUpGameHistoryResponse.deserializeBinary(bytes);
+                break;
+            case NetworkManager.MESSAGE_ID.CARD_CONFIG:
+                msg = proto.BINCardConfigResponse.deserializeBinary(bytes);
                 break;
         }
 
@@ -618,6 +622,15 @@ var NetworkManager = {
             request.setAsc(asc);
         }
         this.callNetwork(this.initData(request.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.LOOK_UP_GAME_HISTORY, Common.getSessionId()));
+    },
+    getCardConfigRequest: function(type){
+        var request = this.initCardConfigRequest(type);
+        this.callNetwork(this.initData(request.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.CARD_CONFIG, Common.getSessionId()));
+    },
+    initCardConfigRequest: function(type){
+        var request = new proto.BINCardConfigRequest();
+        request.setType(type);
+        return request;
     },
     connectNetwork: function() {
         if(window.ws === null || typeof(window.ws) === 'undefined' || window.ws.readyState === WebSocket.CLOSED) {
