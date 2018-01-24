@@ -78,7 +78,7 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 63
+        "__id__": 64
       }
     ],
     "_prefab": null,
@@ -679,7 +679,7 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 62
+        "__id__": 63
       }
     ],
     "_prefab": null,
@@ -738,7 +738,7 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 61
+        "__id__": 62
       }
     ],
     "_prefab": null,
@@ -915,7 +915,7 @@
         "__id__": 53
       },
       {
-        "__id__": 56
+        "__id__": 57
       },
       {
         "__id__": 42
@@ -925,10 +925,10 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 59
+        "__id__": 60
       },
       {
-        "__id__": 60
+        "__id__": 61
       }
     ],
     "_prefab": null,
@@ -1530,7 +1530,12 @@
     "prefabGameItem": {
       "__uuid__": "fa07d8ee-7c5d-4a28-9b3e-33d1cc89b37c"
     },
-    "rankCount": 6
+    "rankCount": 0,
+    "roomIndex": 0,
+    "lbl_moneys": [],
+    "jarValue": 0,
+    "timeDelta": 0.2,
+    "jarResponse": null
   },
   {
     "__type__": "0b550vtbRBB/pAj+ZK8at0D",
@@ -1571,7 +1576,7 @@
     "_originalHeight": 750
   },
   {
-    "__type__": "ce483LXeMtAnrV6K+aMHBgG",
+    "__type__": "a8487WcWMxIQ5oTc7DMuas8",
     "_name": "",
     "_objFlags": 0,
     "node": {
@@ -1581,6 +1586,9 @@
     "popupSetting": {
       "__uuid__": "0063fc90-65c7-4134-b8b2-d8243ad51163"
     },
+    "popupIngame": {
+      "__uuid__": "d38b721a-7fbb-4655-abde-ac974f13346c"
+    },
     "userName": {
       "__id__": 29
     },
@@ -1589,7 +1597,8 @@
     },
     "userGold": {
       "__id__": 41
-    }
+    },
+    "timeTotal": 0
   },
   {
     "__type__": "cc.Label",
@@ -2102,7 +2111,11 @@
     "hoverSprite": {
       "__uuid__": "e9ec654c-97a2-4787-9325-e6a10375219a"
     },
-    "clickEvents": [],
+    "clickEvents": [
+      {
+        "__id__": 56
+      }
+    ],
     "_N$interactable": true,
     "_N$enableAutoGrayEffect": false,
     "_N$normalColor": {
@@ -2130,6 +2143,15 @@
     }
   },
   {
+    "__type__": "cc.ClickEvent",
+    "target": {
+      "__id__": 34
+    },
+    "component": "UILobby",
+    "handler": "openChargePopup",
+    "customEventData": ""
+  },
+  {
     "__type__": "cc.Node",
     "_name": "btn_tieuvang",
     "_objFlags": 0,
@@ -2141,10 +2163,10 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 57
+        "__id__": 58
       },
       {
-        "__id__": 58
+        "__id__": 59
       }
     ],
     "_prefab": null,
@@ -2189,7 +2211,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 56
+      "__id__": 57
     },
     "_enabled": true,
     "_spriteFrame": {
@@ -2215,7 +2237,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 56
+      "__id__": 57
     },
     "_enabled": true,
     "transition": 3,
@@ -2265,7 +2287,7 @@
       "__uuid__": "29158224-f8dd-4661-a796-1ffab537140e"
     },
     "_N$target": {
-      "__id__": 56
+      "__id__": 57
     }
   },
   {
