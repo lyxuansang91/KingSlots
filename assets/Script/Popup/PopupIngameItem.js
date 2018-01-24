@@ -1,4 +1,4 @@
-var NetworkManager = require('../Lib/NetworkManager.js');
+var NetworkManager = require('NetworkManager');
 var HISTORY_SPIN = 1;
 var HISTORY_BREAK_JAR = 2;
 var HISTORY_TOP_USER = 3;

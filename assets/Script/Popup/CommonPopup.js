@@ -29,12 +29,10 @@ cc.Class({
 
     },
     onCallBack: function() {
-        cc.log("on call back 1");
         this._callback();
     },
 
     init: function(msg, type, callback) {
-        cc.log("message:", msg);
         this.message.string = msg;
         switch (type) {
             case 0:
