@@ -105,8 +105,8 @@ cc.Class({
         cc.log("login normal");
         var username = this.edt_username.string;
         var password = this.edt_password.string;
-        // var username = "lyxuansangzz";
-        // var password = "12341234";
+        // var username = "tu_atula";
+        // var password = "123456789";
         // if(this.edt_username.string === "" || this.edt_password.string === "") {
         //     // cc.log("edt_username", this.node);
         //     // cc.alert("Tài khoản và mật khẩu không được để trống!");
