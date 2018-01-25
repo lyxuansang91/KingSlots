@@ -475,6 +475,9 @@
     },
     "edt_displayname": {
       "__id__": 24
+    },
+    "messagePopup": {
+      "__uuid__": "73027cf2-04b1-44ce-b038-d5137d877af4"
     }
   },
   {

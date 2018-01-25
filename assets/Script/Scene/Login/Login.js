@@ -17,7 +17,6 @@ cc.Class({
         NetworkManager.connectNetwork();
         window.ws.onmessage = this.ongamestatus.bind(this);
         cc.log("scene:", cc.director.getScene());
-        Common.setLoginSceneInstance(cc.director.getScene());
     },
 
     ongamestatus: function(event) {
@@ -122,7 +121,6 @@ cc.Class({
         NetworkManager.requestLoginMessage(username, password);
     },
     register: function() {
-        cc.log("register normal");
         cc.director.loadScene('Register');
     },
     loginFacebook: function() {

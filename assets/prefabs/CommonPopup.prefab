@@ -373,7 +373,7 @@
     "_scaleY": 0.75,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": -87,
+      "x": -83,
       "y": -40
     },
     "_skewX": 0,
@@ -624,7 +624,7 @@
     "_position": {
       "__type__": "cc.Vec2",
       "x": 86,
-      "y": -39
+      "y": -40
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -869,6 +869,8 @@
       "__id__": 8
     },
     "type": 0,
+    "CONFIRM_TYPE": 0,
+    "MESSAGEBOX_TYPE": 1,
     "_callback": null
   },
   {

@@ -1,5 +1,8 @@
+
+
 cc.Class({
     extends: cc.Component,
+
 
     properties: {
         // foo: {
@@ -17,6 +20,8 @@ cc.Class({
         btnClose: cc.Button,
         message: cc.Label,
         type: 0,
+        CONFIRM_TYPE: 0,
+        MESSAGEBOX_TYPE: 1,
         _callback: function() {}
     },
 
@@ -30,14 +35,21 @@ cc.Class({
     },
     onCallBack: function() {
         this._callback();
+        this.node.removeFromParent(true);
     },
 
     init: function(msg, type, callback) {
         this.message.string = msg;
         switch (type) {
             case 0:
+                this.btnCancel.node.active = false;
+                this.btnOK.node.active = true;
+                this.btnOK.node.setPositionX(0);
                 break;
             case 1:
+                this.btnCancel.node.active = true;
+                this.btnOK.node.active = true;
+                this.btnOK.node.setPositionX(-83.0);
                 break;
             case 2:
                 break;

@@ -227,7 +227,7 @@ var NetworkManager = {
 /** The Constant EXPIRED_SESSION. */
         EXPIRED_SESSION: 9999
     },
-    URL: "ws://150.95.105.1:1280/megajackpot",
+    URL: "ws://192.168.0.32:1280/megajackpot",
     sessionId: "",
     getSessionId: function() {
         return NetworkManager.sessionId;

@@ -8,8 +8,8 @@ cc.Class({
         edt_username: cc.EditBox,
         edt_pass: cc.EditBox,
         edt_repass: cc.EditBox,
-        edt_displayname: cc.EditBox
-
+        edt_displayname: cc.EditBox,
+        messagePopup: cc.Prefab
         // foo: {
         //    default: null,      // The default value will be used only when the component attaching
         //                           to a node for the first time
@@ -63,9 +63,14 @@ cc.Class({
         if(buffer.getResponsecode()) {
             NetworkManager.requestLoginMessage(this.edt_username.string, this.edt_pass.string);
         } else {
-            var nodeChild = cc.Node();
-            nodeChild.parent = this.node;
-            this.showToast(buffer.getMessage(), nodeChild);
+            var messagebox = cc.instantiate(this.messagePopup).getComponent("CommonPopup");
+            messagebox.init(buffer.getMessage(), 0, function() {
+                cc.log("on callback");
+            });
+            cc.log("message box:", messagebox);
+            // messagebox.setAnchorPoint(cc.p(0.5, 0.5));
+            messagebox.node.setPosition(cc.p(0, 0));
+            this.node.addChild(messagebox.node);
         }
     },
 

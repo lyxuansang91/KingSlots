@@ -57,7 +57,7 @@ cc.Class({
     },
     ongamestatus: function(event) {
         cc.log("response text msg:" + event);
-        if(event.data!==null || event.data !== 'undefined') {
+        if(event.data!==null || typeof(event.data) !== 'undefined') {
             var lstMessage = NetworkManager.parseFrom(event.data, event.data.byteLength);
             if(lstMessage.length > 0) {
                 var buffer = lstMessage.shift();

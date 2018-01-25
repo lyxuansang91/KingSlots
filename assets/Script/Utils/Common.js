@@ -121,17 +121,33 @@ var Common = {
     setDeviceId: function(e) {
         this.deviceId = e;
     },
+    guid: function() {
+        function s4() {
+            return Math.floor((1 + Math.random()) * 0x10000)
+                .toString(16)
+                .substring(1);
+        }
+        return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+            s4() + '-' + s4() + s4() + s4();
+    },
     fingerprint: "",
     setFingerprint: function() {
         var fp = cc.sys.localStorage.getItem("fingerprint");
         cc.log("fp:", fp);
         if(fp == null) {
-            new Fingerprint2().get(function(result, components){
+            if(cc.sys.isBrowser) {
+                new Fingerprint2().get(function (result, components) {
+                    console.log("result:", result); //a hash, representing your device fingerprint
+                    cc.sys.localStorage.setItem("fingerprint", result);
+                    this.fingerprint = result;
+                    console.log("component:", components); // an array of FP components
+                });
+            } else if(cc.sys.isNative) {
+                var result = this.guid();
                 console.log("result:", result); //a hash, representing your device fingerprint
                 cc.sys.localStorage.setItem("fingerprint", result);
                 this.fingerprint = result;
-                console.log("component:", components); // an array of FP components
-            });
+            }
         } else {
             this.fingerprint = fp;
         }
