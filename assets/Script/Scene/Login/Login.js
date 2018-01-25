@@ -144,6 +144,8 @@ cc.Class({
     },
     loginGoogle: function() {
         cc.log("login google");
+        var packageName = jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getPackageNameJNI", "(V)Ljava/lang/String;");
+        cc.log("package Name:", packageName);
     },
     close: function(){
         cc.log("close");
