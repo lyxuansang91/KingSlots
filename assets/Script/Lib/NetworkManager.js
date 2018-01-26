@@ -227,7 +227,7 @@ var NetworkManager = {
 /** The Constant EXPIRED_SESSION. */
         EXPIRED_SESSION: 9999
     },
-    URL: "ws://192.168.0.32:1280/megajackpot",
+    URL: "ws://150.95.105.1:1280/megajackpot",
     sessionId: "",
     getSessionId: function() {
         return NetworkManager.sessionId;
@@ -640,7 +640,7 @@ var NetworkManager = {
 
             window.ws.onopen = function (event) {
                 console.log("on web socket");
-                NetworkManager.requestInitializeMessage("24", "15", Common.getFingerprint(), Common.getFingerprint(), "vn", "vi", "com.gamebai.tienlen", false, "");
+                NetworkManager.requestInitializeMessage("24", "15", Common.getFingerprint(), Common.getDeviceInfo(), "vn", "vi", Common.getPackageName(), false, "");
                 setTimeout(function() {
                     window.myInterval = setInterval(function() {
                         NetworkManager.requestPingMessage(0);

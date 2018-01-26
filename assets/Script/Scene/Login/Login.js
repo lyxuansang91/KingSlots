@@ -144,11 +144,11 @@ cc.Class({
     },
     loginGoogle: function() {
         cc.log("login google");
-        var packageName = jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getPackageNameJNI", "(V)Ljava/lang/String;");
-        cc.log("package Name:", packageName);
+        // var packageName = jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getPackageNameJNI", "()Ljava/lang/String;");
+        // cc.log("package Name:", packageName);
     },
     close: function(){
-        cc.log("close");
+        // cc.log("close");
     },
     loginFb: function (permissions, callback) {
         var self = this;

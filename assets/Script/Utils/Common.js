@@ -143,10 +143,10 @@ var Common = {
                     console.log("component:", components); // an array of FP components
                 });
             } else if(cc.sys.isNative) {
-                var result = this.guid();
-                console.log("result:", result); //a hash, representing your device fingerprint
-                cc.sys.localStorage.setItem("fingerprint", result);
-                this.fingerprint = result;
+                var deviceId = jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getDeviceId", "()Ljava/lang/String;");
+                console.log("result:", deviceId); //a hash, representing your device fingerprint
+                cc.sys.localStorage.setItem("fingerprint", deviceId);
+                this.fingerprint = deviceId;
             }
         } else {
             this.fingerprint = fp;
@@ -158,6 +158,14 @@ var Common = {
             this.setFingerprint();
         }
         return this.fingerprint;
+    },
+
+    getDeviceInfo: function() {
+        if(cc.sys.isNative) {
+            return jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getDeviceInfo", "()Ljava/lang/String;");
+        } else {
+            return this.getFingerprint();
+        }
     },
     enableGameIds: [],
     setEnableGameIds: function(gameids) {
@@ -303,6 +311,15 @@ var Common = {
         }
         return this.avatarId;
     },
+    getPackageName: function() {
+        if(window.jsb) {
+            return jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getPackageNameJNI", "()Ljava/lang/String;");
+        }
+        // web
+        return "com.gamebai.tienlen";
+    },
+
+
     phoneNumber: "",
     setPhoneNunber: function(phoneNumber){
         this.phoneNumber = phoneNumber;
