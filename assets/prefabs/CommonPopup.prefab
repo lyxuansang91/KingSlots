@@ -869,6 +869,8 @@
       "__id__": 8
     },
     "type": 0,
+    "CONFIRM_TYPE": 0,
+    "MESSAGEBOX_TYPE": 1,
     "_callback": null
   },
   {

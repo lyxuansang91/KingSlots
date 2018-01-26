@@ -14,7 +14,6 @@ var BacaySence = cc.Class({
         roomName: cc.Sprite,
         fastSpinToggle: cc.Toggle,
         autoSpinToggle: cc.Toggle,
-        betToggle: cc.ToggleGroup,
         isFinishSpin: true,
         isRun: false,
         updateMoneyResponse: [],
@@ -556,18 +555,16 @@ var BacaySence = cc.Class({
     getKeyBet: function () {
         return this.bet;
     },
-    betToggle1Event: function () {
-        this.setKeyBet(0);
-        this.moneyBet.string = this.getBetMoney();
-        this.requestJar();
-    },
-    betToggle2Event: function () {
-        this.setKeyBet(1);
-        this.moneyBet.string = this.getBetMoney();
-        this.requestJar();
-    },
-    betToggle3Event: function () {
-        this.setKeyBet(2);
+    betEvent: function () {
+        var currentBet = this.getKeyBet();
+        if(currentBet === 0){
+            this.setKeyBet(1);
+        } else if(currentBet === 1){
+            this.setKeyBet(2);
+        } else if(currentBet === 2){
+            this.setKeyBet(0);
+        }
+
         this.moneyBet.string = this.getBetMoney();
         this.requestJar();
     },

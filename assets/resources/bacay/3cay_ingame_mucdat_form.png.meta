@@ -1,0 +1,30 @@
+{
+  "ver": "1.0.0",
+  "uuid": "3be7c675-c38a-4b0c-99a5-a2c7853bef15",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "subMetas": {
+    "3cay_ingame_mucdat_form": {
+      "ver": "1.0.3",
+      "uuid": "6a7bf189-9748-403d-8caf-d07f84c68174",
+      "rawTextureUuid": "3be7c675-c38a-4b0c-99a5-a2c7853bef15",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 221,
+      "height": 77,
+      "rawWidth": 221,
+      "rawHeight": 77,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}
