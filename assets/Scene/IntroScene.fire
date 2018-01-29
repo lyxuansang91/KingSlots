@@ -523,11 +523,12 @@
       "__id__": 13
     },
     "_enabled": true,
-    "matchProgress": null,
-    "isProgressing": false,
+    "matchProgress": {
+      "__id__": 9
+    },
+    "isProgressing": true,
     "toProgress": 0,
     "deltaTime": 0,
-    "timeSchedule": 0,
-    "setting": null
+    "timeSchedule": 3
   }
 ]
