@@ -18,10 +18,12 @@ cc.Class({
             this.stopAllActions();
             this.runAction(self.scaleDownAction);
         }
+
         function onTouchUp (event) {
             this.stopAllActions();
             this.runAction(self.scaleUpAction);
         }
+
         this.node.on('touchstart', onTouchDown, this.node);
         this.node.on('touchend', onTouchUp, this.node);
         this.node.on('touchcancel', onTouchUp, this.node);

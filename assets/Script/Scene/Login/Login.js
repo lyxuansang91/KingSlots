@@ -13,6 +13,7 @@ cc.Class({
     },
     // use this for initialization
     onLoad: function () {
+        cc.log("ONLOAD");
         Common.setFingerprint();
         if(this.edt_username != null && this.edt_password != null){
             var user_name_text = cc.sys.localStorage.getItem("user_name");

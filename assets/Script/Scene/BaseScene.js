@@ -10,6 +10,7 @@ cc.Class({
     onLoad: function () {
         cc.log("Base scene");
         cc.log("abc zxhyzzdas");
+
     },
     handleMessage: function(buffer) {
         cc.log("buffer:", buffer);

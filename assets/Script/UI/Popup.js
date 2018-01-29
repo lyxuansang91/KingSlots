@@ -2,11 +2,9 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        dark_sprite: cc.Sprite,
+        bg_dark: cc.Sprite,
         background: cc.Sprite,
-        close: cc.Sprite,
-        exit: cc.Sprite,
-        lblExit: cc.Label
+        exit: cc.Sprite
     },
 
     // use this for initialization
@@ -15,7 +13,7 @@ cc.Class({
             return true;
         }
 
-        this.node.on('touchstart', onTouchDown, this.dark_sprite);
+        this.node.on('touchstart', onTouchDown, this.bg_dark);
     },
 
     disappear:function () {
@@ -23,7 +21,7 @@ cc.Class({
             this.node.removeFromParent(true);
         },this);
 
-        this.dark_sprite.node.runAction(cc.fadeOut(0.1));
+        this.bg_dark.node.runAction(cc.fadeOut(0.1));
         var move = cc.scaleTo(0.15,0.5).easing(cc.easeBackIn());
         this.background.node.runAction(cc.sequence(move,callDisappear));
     },
@@ -49,7 +47,7 @@ cc.Class({
 
         this.node.on('touchstart', onTouchDown, background);
 
-        this.dark_sprite.node.runAction(cc.fadeTo(0.15,150));
+        this.bg_dark.node.runAction(cc.fadeTo(0.15,150));
 
         this.background.node.setScale(0.7);
 
