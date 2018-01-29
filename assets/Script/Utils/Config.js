@@ -24,5 +24,9 @@ var Config = {
         MIN_BET : 1,
         NUM_PLAYER : 2,
         INDEX : 3
+    },
+    POPUP_TYPE: {
+        SMALL : 1,
+        LARGE : 2
     }
 }

@@ -10,7 +10,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Popup",
+    "_name": "PopupSetting",
     "_objFlags": 0,
     "_parent": null,
     "_children": [
@@ -26,13 +26,10 @@
     "_components": [
       {
         "__id__": 84
-      },
-      {
-        "__id__": 85
       }
     ],
     "_prefab": {
-      "__id__": 86
+      "__id__": 85
     },
     "_id": "",
     "_opacity": 255,
@@ -72,7 +69,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "darkSprite",
+    "_name": "bg_dark",
     "_objFlags": 0,
     "_parent": {
       "__id__": 1
@@ -399,7 +396,7 @@
     "target": {
       "__id__": 1
     },
-    "component": "Popup",
+    "component": "PopupSetting",
     "handler": "disappear",
     "customEventData": ""
   },
@@ -561,7 +558,7 @@
     "target": {
       "__id__": 1
     },
-    "component": "Popup",
+    "component": "PopupSetting",
     "handler": "disappear",
     "customEventData": ""
   },
@@ -2722,41 +2719,21 @@
     "sync": false
   },
   {
-    "__type__": "cc.Mask",
+    "__type__": "18f89hksvpN5onLoJPevQ0+",
     "_name": "",
     "_objFlags": 0,
     "node": {
       "__id__": 1
     },
     "_enabled": true,
-    "_type": 0,
-    "_segements": 64,
-    "_N$spriteFrame": null,
-    "_N$alphaThreshold": 1,
-    "_N$inverted": false
-  },
-  {
-    "__type__": "e8fe19wVx5F+Jx1y4MY0W6J",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 1
-    },
-    "_enabled": true,
-    "dark_sprite": {
+    "bg_dark": {
       "__id__": 3
     },
     "background": {
       "__id__": 82
     },
-    "close": {
-      "__id__": 7
-    },
     "exit": {
-      "__id__": 12
-    },
-    "lblExit": {
-      "__id__": 18
+      "__id__": 7
     }
   },
   {
