@@ -1,0 +1,21 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "txt_badao",
+    "texture": "02M89TvJlAgbQ5LEMhbEkY",
+    "rect": [
+      0,
+      0,
+      134,
+      56
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      134,
+      56
+    ]
+  }
+}

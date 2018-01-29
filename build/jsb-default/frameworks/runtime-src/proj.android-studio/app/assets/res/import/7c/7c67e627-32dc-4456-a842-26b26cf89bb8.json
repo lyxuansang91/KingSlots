@@ -1,0 +1,21 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "lbl_title_poker",
+    "texture": "0apfBmWP1LSLt2S7AE4MZ9",
+    "rect": [
+      0,
+      0,
+      306,
+      105
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      306,
+      105
+    ]
+  }
+}

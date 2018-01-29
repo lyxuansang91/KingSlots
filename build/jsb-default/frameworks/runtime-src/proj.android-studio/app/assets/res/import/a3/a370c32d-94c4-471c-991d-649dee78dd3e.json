@@ -1,0 +1,21 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "tx_icon_user",
+    "texture": "3cn5WS2gdKcKQIbJC6lZux",
+    "rect": [
+      0,
+      0,
+      15,
+      16
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      15,
+      16
+    ]
+  }
+}

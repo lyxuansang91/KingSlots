@@ -1,0 +1,21 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "popup_doithuong_mbf_on",
+    "texture": "1fUUhnNwlPhYc9TsNL7Ksb",
+    "rect": [
+      0,
+      0,
+      167,
+      39
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      167,
+      39
+    ]
+  }
+}

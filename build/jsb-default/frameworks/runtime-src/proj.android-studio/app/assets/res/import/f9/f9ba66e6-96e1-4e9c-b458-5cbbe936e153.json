@@ -1,0 +1,21 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "choithu",
+    "texture": "7eHv7x9D9E1ZKVNMcFin5k",
+    "rect": [
+      0,
+      0,
+      119,
+      123
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      119,
+      123
+    ]
+  }
+}

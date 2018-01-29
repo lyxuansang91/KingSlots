@@ -1,0 +1,21 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "txt_tapsu",
+    "texture": "04NNdHz9BBq7r1bkEdGkOS",
+    "rect": [
+      0,
+      0,
+      136,
+      56
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      136,
+      56
+    ]
+  }
+}

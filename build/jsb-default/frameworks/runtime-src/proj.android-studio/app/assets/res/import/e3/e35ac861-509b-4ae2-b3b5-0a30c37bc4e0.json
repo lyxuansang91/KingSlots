@@ -1,0 +1,21 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "hu_badao",
+    "texture": "06ZbbV/J5EB7PskTkJtJ9v",
+    "rect": [
+      0,
+      0,
+      186,
+      162
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      186,
+      162
+    ]
+  }
+}

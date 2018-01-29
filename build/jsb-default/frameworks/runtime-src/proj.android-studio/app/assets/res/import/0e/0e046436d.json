@@ -1,0 +1,167 @@
+[
+  {
+    "__type__": "cc.SpriteFrame",
+    "content": {
+      "name": "bg_popup_login_form",
+      "texture": "d7egTcb+JJ4qFuCjV1Ajn5",
+      "rect": [
+        0,
+        0,
+        358,
+        49
+      ],
+      "offset": [
+        0,
+        0
+      ],
+      "originalSize": [
+        358,
+        49
+      ]
+    }
+  },
+  [
+    {
+      "__type__": "cc.Prefab",
+      "_name": "ToastPopup",
+      "data": {
+        "__id__": 1
+      },
+      "asyncLoadAssets": false
+    },
+    {
+      "__type__": "cc.Node",
+      "_name": "Toast",
+      "_children": [
+        {
+          "__id__": 2
+        },
+        {
+          "__id__": 4
+        }
+      ],
+      "_components": [
+        {
+          "__type__": "cc.Canvas",
+          "node": {
+            "__id__": 1
+          },
+          "_designResolution": {
+            "__type__": "cc.Size",
+            "width": 1334,
+            "height": 750
+          },
+          "_fitWidth": true,
+          "_fitHeight": false
+        },
+        {
+          "__type__": "f4ec39II21JW4LEMEHo+V9J",
+          "node": {
+            "__id__": 1
+          },
+          "bg_toast": {
+            "__id__": 3
+          },
+          "lbl_toast": {
+            "__id__": 5
+          }
+        }
+      ],
+      "_prefab": {
+        "__type__": "cc.PrefabInfo",
+        "root": {
+          "__id__": 1
+        },
+        "asset": {
+          "__uuid__": "c1mvP6cpdI9LLwwI0BhOe/"
+        },
+        "fileId": "c9GmCk8rRKT7XIFAfB8crR"
+      },
+      "_contentSize": {
+        "__type__": "cc.Size",
+        "width": 1334,
+        "height": 750
+      },
+      "_position": {
+        "__type__": "cc.Vec2",
+        "x": 667,
+        "y": 375
+      }
+    },
+    {
+      "__type__": "cc.Node",
+      "_name": "bg_toast",
+      "_parent": {
+        "__id__": 1
+      },
+      "_components": [
+        {
+          "__id__": 3
+        }
+      ],
+      "_prefab": {
+        "__type__": "cc.PrefabInfo",
+        "root": {
+          "__id__": 1
+        },
+        "asset": {
+          "__uuid__": "c1mvP6cpdI9LLwwI0BhOe/"
+        },
+        "fileId": "dedGx9f4lLPqJtwrJJgA9f"
+      },
+      "_contentSize": {
+        "__type__": "cc.Size",
+        "width": 358,
+        "height": 49
+      }
+    },
+    {
+      "__type__": "cc.Sprite",
+      "node": {
+        "__id__": 2
+      },
+      "_spriteFrame": {
+        "__uuid__": "07aD7liuZEOJep0+nJ6BNB"
+      }
+    },
+    {
+      "__type__": "cc.Node",
+      "_name": "lbl_toast",
+      "_parent": {
+        "__id__": 1
+      },
+      "_components": [
+        {
+          "__id__": 5
+        }
+      ],
+      "_prefab": {
+        "__type__": "cc.PrefabInfo",
+        "root": {
+          "__id__": 1
+        },
+        "asset": {
+          "__uuid__": "c1mvP6cpdI9LLwwI0BhOe/"
+        },
+        "fileId": "c8o6mmNQxPa7Lh8T5ly7Gh"
+      },
+      "_contentSize": {
+        "__type__": "cc.Size",
+        "width": 133.38,
+        "height": 40
+      }
+    },
+    {
+      "__type__": "cc.Label",
+      "node": {
+        "__id__": 4
+      },
+      "_useOriginalSize": false,
+      "_actualFontSize": 24,
+      "_fontSize": 24,
+      "_N$string": "Co loi xay ra",
+      "_N$horizontalAlign": 1,
+      "_N$verticalAlign": 1
+    }
+  ]
+]

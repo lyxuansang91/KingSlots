@@ -1,0 +1,21 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "popup_bxh_noidung",
+    "texture": "dffqayiPZJJ5RYd7YeRytd",
+    "rect": [
+      0,
+      0,
+      558,
+      58
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      558,
+      58
+    ]
+  }
+}

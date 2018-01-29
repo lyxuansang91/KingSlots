@@ -5,8 +5,20 @@
 library/
 temp/
 local/
-build/
-
+# build/
+build/jsb-default/simulator/android/*.apk
+build/web-desktop/*
+build/jsb-default/frameworks/cocos2d-x/build/
+build/jsb-default/res/import/
+build/jsb-default/res/
+build/jsb-default/publish/
+build/jsb-default/frameworks/cocos2d-x/tools/simulator/
+build/jsb-default/frameworks/runtime-src/proj.android-studio/app/build/
+build/jsb-default/frameworks/runtime-src/proj.android-studio/app/obj/
+build/jsb-default/frameworks/cocos2d-x/cocos/platform/android/libcocos2dx/build/
+build/jsb-default/frameworks/runtime-src/proj.android-studio/app/libs/
+build/jsb-default/frameworks/cocos2d-x/external/ios/libs/
+build/jsb-default/frameworks/cocos2d-x/external/win32/libs/
 #/////////////////////////////////////////////////////////////////////////////
 # Logs and databases
 #/////////////////////////////////////////////////////////////////////////////

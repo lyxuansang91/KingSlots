@@ -1,0 +1,21 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "popup_doithuong_vnf_off",
+    "texture": "d2U7yIivxCSpd3LWsr7qGK",
+    "rect": [
+      0,
+      0,
+      169,
+      42
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      169,
+      42
+    ]
+  }
+}

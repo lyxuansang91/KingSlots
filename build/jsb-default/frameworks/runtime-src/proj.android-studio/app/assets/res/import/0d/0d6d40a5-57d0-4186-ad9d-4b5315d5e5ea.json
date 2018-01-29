@@ -1,0 +1,21 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "icon_pocker",
+    "texture": "83BettON5K9aGnNSYd2Lo2",
+    "rect": [
+      0,
+      0,
+      279,
+      547
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      279,
+      547
+    ]
+  }
+}

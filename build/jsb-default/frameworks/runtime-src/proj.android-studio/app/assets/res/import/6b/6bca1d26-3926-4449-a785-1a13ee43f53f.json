@@ -1,0 +1,21 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "poker_caothu",
+    "texture": "33tJQnk4tJOLLGiCqk29Oh",
+    "rect": [
+      0,
+      0,
+      222,
+      213
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      222,
+      213
+    ]
+  }
+}

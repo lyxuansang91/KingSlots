@@ -1,0 +1,21 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "poker_ingame_text1",
+    "texture": "d8zrcfoeFHhotRRV7w5OU8",
+    "rect": [
+      0,
+      0,
+      103,
+      35
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      103,
+      35
+    ]
+  }
+}

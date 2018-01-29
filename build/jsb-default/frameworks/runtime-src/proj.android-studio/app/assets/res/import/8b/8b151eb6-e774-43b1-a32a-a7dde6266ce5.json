@@ -1,0 +1,21 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "popup_gold_sms2",
+    "texture": "7fvvHCkhxNlYJQmddBy/sM",
+    "rect": [
+      0,
+      0,
+      177,
+      211
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      177,
+      211
+    ]
+  }
+}

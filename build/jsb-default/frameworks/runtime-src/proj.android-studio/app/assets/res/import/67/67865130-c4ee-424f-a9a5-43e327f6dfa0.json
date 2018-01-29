@@ -1,0 +1,21 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "ingame_badao",
+    "texture": "3aeg11v89P7bbHvTgJlDHu",
+    "rect": [
+      0,
+      0,
+      122,
+      123
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      122,
+      123
+    ]
+  }
+}

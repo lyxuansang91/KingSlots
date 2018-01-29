@@ -1,0 +1,21 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "popup_gold_option_off1",
+    "texture": "4c1sg2R05Hb49kIAPmqeXD",
+    "rect": [
+      0,
+      0,
+      28,
+      21
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      28,
+      21
+    ]
+  }
+}

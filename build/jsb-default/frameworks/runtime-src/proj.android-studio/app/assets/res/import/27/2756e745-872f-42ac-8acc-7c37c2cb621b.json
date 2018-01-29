@@ -1,0 +1,21 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "tx_btn_nan_on",
+    "texture": "1b0IxMmadNa6FV5yPbFQh9",
+    "rect": [
+      0,
+      0,
+      96,
+      93
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      96,
+      93
+    ]
+  }
+}

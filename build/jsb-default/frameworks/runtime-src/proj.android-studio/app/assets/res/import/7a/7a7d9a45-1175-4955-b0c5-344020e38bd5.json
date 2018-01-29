@@ -1,0 +1,21 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "poker_badao",
+    "texture": "01bL+m4T9OhpkkUAFkLRbN",
+    "rect": [
+      0,
+      0,
+      218,
+      221
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      218,
+      221
+    ]
+  }
+}

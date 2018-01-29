@@ -1,0 +1,21 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "tx_tai2",
+    "texture": "0bP7kjqw1K8q5+BrvOhFMG",
+    "rect": [
+      0,
+      0,
+      117,
+      86
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      117,
+      86
+    ]
+  }
+}

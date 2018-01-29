@@ -1,0 +1,21 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "popup_text_dangky",
+    "texture": "7baiOycf1CRYZ1kYzi4N1r",
+    "rect": [
+      0,
+      0,
+      258,
+      59
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      258,
+      59
+    ]
+  }
+}
