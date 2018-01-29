@@ -17,9 +17,9 @@ cc.Class({
 
     openPopup: function () {
         var item = cc.instantiate(this.popupSetting);
-        cc.log("item", item);
-        item.setPosition(cc.p(0,0));
+        item.getComponent('Popup').appear();
         item.zIndex = 1000;
+
         this.node.addChild(item);
     },
     openChargePopup: function () {
