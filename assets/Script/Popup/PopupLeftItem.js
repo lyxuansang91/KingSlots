@@ -1,5 +1,5 @@
 var NetworkManager = require('NetworkManager');
-var PopupIngame = require('PopupIngameItem');
+var PopupFull = require('PopupFull');
 var HISTORY_SPIN = 1;
 var HISTORY_BREAK_JAR = 2;
 var HISTORY_TOP_USER = 3;
@@ -53,7 +53,7 @@ cc.Class({
             {
                 if (tag === 1){
                     this.historyType = HISTORY_SPIN;
-                    PopupIngame.instance.setHistoryType(HISTORY_SPIN);
+                    PopupFull.instance.setHistoryType(HISTORY_SPIN);
                     this.getLookupMiniPokerHistoryRequest(firstResult, MAX_RESULT,
                         this.historyType, true);
 
@@ -61,7 +61,7 @@ cc.Class({
 
                 }else if (tag === 2) {
                     this.historyType = HISTORY_TOP_USER;
-                    PopupIngame.instance.setHistoryType(HISTORY_TOP_USER);
+                    PopupFull.instance.setHistoryType(HISTORY_TOP_USER);
                     this.getLookupMiniPokerHistoryRequest(firstResult, MAX_RESULT,
                         this.historyType, true);
 
@@ -69,7 +69,7 @@ cc.Class({
 
                 }else if (tag === 3){
                     this.historyType = HISTORY_BREAK_JAR;
-                    PopupIngame.instance.setHistoryType(HISTORY_BREAK_JAR);
+                    PopupFull.instance.setHistoryType(HISTORY_BREAK_JAR);
                     this.getLookupMiniPokerHistoryRequest(firstResult, MAX_RESULT,
                         this.historyType, true);
 

@@ -1,5 +1,6 @@
 var NetworkManager = require('NetworkManager');
 var BaseScene = require('BaseScene');
+var PopupFull = require('PopupFull');
 var BacaySence = cc.Class({
     extends: BaseScene,
 
@@ -32,11 +33,12 @@ var BacaySence = cc.Class({
         instance: null
     },
     exitRoom: function() {
-        cc.director.loadScene("Table");
+        cc.director.loadScene("Lobby");
     },
 
     // use this for initialization
     onLoad: function () {
+        cc.log("zindex =", this.node.zIndex);
         BacaySence.instance = this;
         Common.setMiniPokerSceneInstance(cc.director.getScene());
 
@@ -198,6 +200,10 @@ var BacaySence = cc.Class({
             case NetworkManager.MESSAGE_ID.JAR:
                 var msg = buffer.response;
                 this.jarResponseHandler(msg);
+                break;
+            case NetworkManager.MESSAGE_ID.LOOK_UP_GAME_HISTORY:
+                var msg = buffer.response;
+                PopupFull.instance.lookupGameMiniPokerResponseHandler(msg);
                 break;
         }
     },
@@ -397,7 +403,7 @@ var BacaySence = cc.Class({
             var lbl_text = nodeChild.addComponent(cc.Label);
             lbl_text.string = message;
 
-            lbl_text.node.setPosition(cc.p(1334/2,750/2));
+            // lbl_text.node.setPosition(cc.p(1334/2,750/2));
             lbl_text.node.color = cc.color(248,213,82,255);
             var fadeout = cc.fadeOut(1.0);
             var callFunc = cc.callFunc(function () {
@@ -410,7 +416,7 @@ var BacaySence = cc.Class({
                         var label_money = nodeMoney.addComponent(cc.Label);
                         label_money.string = moneybox.getDisplaychangemoney().toString();
                         // MLabel::createUpdateMoney(moneybox.displaychangemoney());
-                        label_money.node.setPosition(cc.p(1334/2,750/2));
+                        // label_money.node.setPosition(cc.p(1334/2,750/2));
                         label_money.node.color = cc.color(248,213,82,255);
                         // this.cardView.node.addChild(this.label_money);
                         var fadeout = cc.fadeOut(1.5);
@@ -579,14 +585,14 @@ var BacaySence = cc.Class({
         }
     },
     showPopup: function () {
+
         var tabString = ["Lịch sử quay", "Top cao thủ", "Lịch sử nổ hũ"];
         var nodeChild = new cc.Node();
-        nodeChild.parent = this.bg.node;
+        nodeChild.parent = this.node;
         var item = cc.instantiate(this.popupPrefab);
 
-        item.getComponent('PopupIngameItem').init(tabString, "history");
-        item.setPositionX(0);
-        item.setPositionY(0);
+        item.getComponent('PopupFull').init(tabString, "history", this);
+        item.getComponent('Popup').appear();
         nodeChild.addChild(item);
 
     }

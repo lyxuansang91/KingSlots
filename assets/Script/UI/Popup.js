@@ -9,7 +9,6 @@ cc.Class({
 
     // use this for initialization
     onLoad: function () {
-
         function onTouchDown (event) {
             return true;
         }
@@ -18,6 +17,7 @@ cc.Class({
     },
 
     disappear:function () {
+        cc.log("disappear popup");
         var callDisappear = cc.callFunc(function(){
             this.node.removeFromParent(true);
         },this);
@@ -28,6 +28,7 @@ cc.Class({
     },
 
     appear:function () {
+        cc.log("appear popup");
         this.visible = true;
 
         var background = this.background;

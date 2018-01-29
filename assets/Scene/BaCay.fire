@@ -67,11 +67,7 @@
     ],
     "_tag": -1,
     "_active": true,
-    "_components": [
-      {
-        "__id__": 83
-      }
-    ],
+    "_components": [],
     "_prefab": null,
     "_id": "ceRuJaBb5MPr9iMiw9PrX7",
     "_opacity": 255,
@@ -307,7 +303,7 @@
         "__id__": 13
       },
       {
-        "__id__": 82
+        "__id__": 83
       }
     ],
     "_prefab": null,
@@ -532,8 +528,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 0,
-      "height": 0
+      "width": 1334,
+      "height": 750
     },
     "_rotationX": 0,
     "_rotationY": 0,
@@ -541,8 +537,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 0,
-      "y": 0
+      "x": 667,
+      "y": 375
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -603,7 +599,7 @@
     "jarType": 1,
     "isRequestJar": false,
     "popupPrefab": {
-      "__uuid__": "d38b721a-7fbb-4655-abde-ac974f13346c"
+      "__uuid__": "31c15c51-6222-49b7-9863-ad45766f1da7"
     }
   },
   {
@@ -3404,7 +3400,7 @@
       "__id__": 79
     },
     "_enabled": true,
-    "transition": 2,
+    "transition": 3,
     "pressedColor": {
       "__type__": "cc.Color",
       "r": 255,
@@ -3427,7 +3423,11 @@
     "hoverSprite": {
       "__uuid__": "e9ec654c-97a2-4787-9325-e6a10375219a"
     },
-    "clickEvents": [],
+    "clickEvents": [
+      {
+        "__id__": 82
+      }
+    ],
     "_N$interactable": true,
     "_N$enableAutoGrayEffect": false,
     "_N$normalColor": {
@@ -3455,6 +3455,15 @@
     }
   },
   {
+    "__type__": "cc.ClickEvent",
+    "target": {
+      "__id__": 11
+    },
+    "component": "BaCayScripts",
+    "handler": "showPopup",
+    "customEventData": ""
+  },
+  {
     "__type__": "cc.Widget",
     "_name": "",
     "_objFlags": 0,
@@ -3479,21 +3488,5 @@
     "_isAbsVerticalCenter": true,
     "_originalWidth": 1184,
     "_originalHeight": 718
-  },
-  {
-    "__type__": "cc.Canvas",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 2
-    },
-    "_enabled": true,
-    "_designResolution": {
-      "__type__": "cc.Size",
-      "width": 1334,
-      "height": 750
-    },
-    "_fitWidth": true,
-    "_fitHeight": false
   }
 ]

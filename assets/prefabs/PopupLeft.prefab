@@ -194,7 +194,7 @@
     "_actualFontSize": 20,
     "_fontSize": 20,
     "_lineHeight": 40,
-    "_enableWrapText": false,
+    "_enableWrapText": true,
     "_N$file": null,
     "_isSystemFontUsed": true,
     "_spacingX": 0,
@@ -212,7 +212,7 @@
     "asset": {
       "__uuid__": "d181fe4c-c22e-4e21-8770-1b10527f5e8d"
     },
-    "fileId": "89wQIxbDtDXaXMTfNiPuy0",
+    "fileId": "09oNHp7a5Pw6KhEz1kbj1k",
     "sync": false
   },
   {
@@ -332,7 +332,7 @@
     "asset": {
       "__uuid__": "d181fe4c-c22e-4e21-8770-1b10527f5e8d"
     },
-    "fileId": "f3CGywJCtCqpJB77emvAqZ",
+    "fileId": "c2ZDhpT8NEvKj7+caCOVLy",
     "sync": false
   },
   {
@@ -359,7 +359,7 @@
     "asset": {
       "__uuid__": "d181fe4c-c22e-4e21-8770-1b10527f5e8d"
     },
-    "fileId": "5fG0Z5xfFAGbQ3puR+K7eI",
+    "fileId": "a73VSqfYdAVLLeDnhmnh5J",
     "sync": false
   }
 ]
