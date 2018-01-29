@@ -22,6 +22,10 @@ cc.Class({
         //this.pList();
     },
 
+    appear: function(){
+        this._super();
+    },
+
     pList: function() {
         // if(this.isVisible == true){
             cc.log('aaaaaaaa', this.type.getContentSize().height*0.06);

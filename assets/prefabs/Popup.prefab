@@ -51,8 +51,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 800,
-      "height": 600
+      "width": 1334,
+      "height": 1000
     },
     "_rotationX": 0,
     "_rotationY": 0,
@@ -72,7 +72,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "singleColor",
+    "_name": "darkSprite",
     "_objFlags": 0,
     "_parent": {
       "__id__": 1
@@ -89,12 +89,12 @@
       "__id__": 4
     },
     "_id": "",
-    "_opacity": 255,
+    "_opacity": 160,
     "_color": {
       "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
-      "b": 255,
+      "r": 0,
+      "g": 0,
+      "b": 0,
       "a": 255
     },
     "_cascadeOpacityEnabled": true,
@@ -105,8 +105,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 2,
-      "height": 2
+      "width": 1334,
+      "height": 1000
     },
     "_rotationX": 0,
     "_rotationY": 0,
@@ -136,7 +136,7 @@
       "__uuid__": "410fb916-8721-4663-bab8-34397391ace7"
     },
     "_type": 0,
-    "_sizeMode": 1,
+    "_sizeMode": 0,
     "_fillType": 0,
     "_fillCenter": {
       "__type__": "cc.Vec2",
@@ -145,7 +145,7 @@
     },
     "_fillStart": 0,
     "_fillRange": 0,
-    "_isTrimmedMode": true,
+    "_isTrimmedMode": false,
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_atlas": null
@@ -245,8 +245,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 12,
-      "y": -1
+      "x": 0,
+      "y": 0
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -2743,6 +2743,9 @@
       "__id__": 1
     },
     "_enabled": true,
+    "dark_sprite": {
+      "__id__": 3
+    },
     "background": {
       "__id__": 82
     },

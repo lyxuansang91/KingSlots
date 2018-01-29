@@ -13,6 +13,7 @@ cc.Class({
         self.button = self.getComponent(cc.Button);
         self.scaleDownAction = cc.scaleTo(self.transDuration, self.pressedScale);
         self.scaleUpAction = cc.scaleTo(self.transDuration, self.initScale);
+
         function onTouchDown (event) {
             this.stopAllActions();
             this.runAction(self.scaleDownAction);

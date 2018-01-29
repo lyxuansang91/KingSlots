@@ -5,44 +5,31 @@ cc.Class({
     extends: BaseScene,
 
     properties: {
-        // foo: {
-        //    default: null,      // The default value will be used only when the component attaching
-        //                           to a node for the first time
-        //    url: cc.Texture2D,  // optional, default is typeof default
-        //    serializable: true, // optional, default is true
-        //    visible: true,      // optional, default is true
-        //    displayName: 'Foo', // optional
-        //    readonly: false,    // optional, default is false
-        // },
-        // ...
         matchProgress: {
             default: null,
             type: cc.ProgressBar
         },
-        isProgressing: false,
+        isProgressing: true,
         toProgress: 0,
         deltaTime : 0,
-        timeSchedule: 0,
-        setting: cc.Prefab
+        timeSchedule: 0
     },
 
     // use this for initialization
     onLoad: function () {
         this._super();
-        cc.director.preloadScene('Lobby', function () {
+        var self = this;
+        cc.director.preloadScene('Login', function () {
             cc.log('Next scene preloaded');
+            self.scheduleOnce(self.goGame, self.timeSchedule);
         });
-        this.scheduleOnce(this.goGame, this.timeSchedule);
     },
 
-    // called every frame, uncomment this function to activate update callback
-    // update: function (dt) {
-
-    // },
     update: function(dt) {
         if (this.isProgressing) {
             this.deltaTime += dt;
             this.matchProgress.progress = this.deltaTime/this.timeSchedule;
+            cc.log(this.deltaTime/this.timeSchedule);
             if (this.deltaTime > this.timeSchedule) {
                 this.deltaTime = 0;
                 this.isProgressing = false;

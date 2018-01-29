@@ -14,9 +14,20 @@ cc.Class({
     // use this for initialization
     onLoad: function () {
         Common.setFingerprint();
-        NetworkManager.connectNetwork();
+        if(this.edt_username != null && this.edt_password != null){
+            var user_name_text = cc.sys.localStorage.getItem("user_name");
+            var user_pass_text = cc.sys.localStorage.getItem("user_password");
+            if(user_name_text != null && user_pass_text != null){
+                this.edt_username.string = user_name_text;
+                this.edt_password.string = user_pass_text;
+            }
+        }
+
+        //NetworkManager.connectNetwork();
         window.ws.onmessage = this.ongamestatus.bind(this);
         cc.log("scene:", cc.director.getScene());
+
+
     },
 
     ongamestatus: function(event) {
@@ -49,6 +60,9 @@ cc.Class({
             Common.setUserInfo(res.getUserinfo().toObject());
             cc.log("get user info:", res.getUserinfo().toObject());
             cc.sys.localStorage.setItem("session_id", session_id);
+
+            cc.sys.localStorage.setItem("user_name",this.edt_username.string);
+            cc.sys.localStorage.setItem("user_password",this.edt_password.string);
 
             if (res.hasUserinfo()) {
                 this.saveUserInfo(res.getUserinfo());
