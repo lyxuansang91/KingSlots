@@ -9,6 +9,7 @@ cc.Class({
 
     // use this for initialization
     onLoad: function () {
+
         function onTouchDown (event) {
             return true;
         }
@@ -31,6 +32,7 @@ cc.Class({
 
         var background = this.background;
         var self = this;
+
 
         function onTouchDown (touch,event) {
 

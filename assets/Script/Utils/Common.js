@@ -59,7 +59,7 @@ var Common = {
         return this.miniThreeCardsScene;
     },
     getUserInfo: function () {
-       return this.userInfo;
+        return this.userInfo;
     },
     setUserInfo: function(e) {
         this.userInfo = e;
@@ -96,7 +96,8 @@ var Common = {
         if(cc.sys.isNative) {
             if(cc.sys.platform == cc.sys.ANDROID) {
                 os = Common.OS.ANDROID;
-            } else if(cc.sys.platform == cc.sys.IOS) {
+            } else if(cc.sys.platform == cc.sys.IPHONE ||
+                        cc.sys.platform == cc.sys.IPAD) {
                 os = Common.OS.IOS;
             }
         } else if(cc.sys.isBrowser) {
@@ -134,6 +135,8 @@ var Common = {
     setFingerprint: function() {
         var fp = cc.sys.localStorage.getItem("fingerprint");
         cc.log("fp:", fp);
+        cc.log("PLATFORM : ",cc.sys.platform," " ,cc.sys.IPHONE, " ", cc.sys.ANDROID);
+
         if(fp == null) {
             if(cc.sys.isBrowser) {
                 new Fingerprint2().get(function (result, components) {
@@ -143,10 +146,18 @@ var Common = {
                     console.log("component:", components); // an array of FP components
                 });
             } else if(cc.sys.isNative) {
-                var deviceId = jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getDeviceId", "()Ljava/lang/String;");
-                console.log("result:", deviceId); //a hash, representing your device fingerprint
-                cc.sys.localStorage.setItem("fingerprint", deviceId);
-                this.fingerprint = deviceId;
+                if(cc.sys.platform == cc.sys.ANDROID){
+                    var deviceId = jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getDeviceId", "()Ljava/lang/String;");
+                    console.log("result:", deviceId); //a hash, representing your device fingerprint
+                    cc.sys.localStorage.setItem("fingerprint", deviceId);
+                    this.fingerprint = deviceId;
+                }else if(cc.sys.platform == cc.sys.IPHONE || cc.sys.platform == cc.sys.IPAD){
+                    var deviceId = jsb.reflection.callStaticMethod("NativeUtility", "getDeviceID");
+                    console.log("result:", deviceId); //a hash, representing your device fingerprint
+                    cc.sys.localStorage.setItem("fingerprint", deviceId);
+                    this.fingerprint = deviceId;
+                }
+
             }
         } else {
             this.fingerprint = fp;
@@ -157,12 +168,18 @@ var Common = {
         if(this.fingerprint == "") {
             this.setFingerprint();
         }
+
         return this.fingerprint;
     },
 
     getDeviceInfo: function() {
         if(cc.sys.isNative) {
-            return jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getDeviceInfo", "()Ljava/lang/String;");
+            if(cc.sys.platform == cc.sys.ANDROID){
+                return jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getDeviceInfo", "()Ljava/lang/String;");
+            }else if(cc.sys.platform == cc.sys.IPHONE || cc.sys.platform == cc.sys.IPAD){
+                return jsb.reflection.callStaticMethod("NativeUtility", "getDeviceID");
+            }
+
         } else {
             return this.getFingerprint();
         }
@@ -312,11 +329,17 @@ var Common = {
         return this.avatarId;
     },
     getPackageName: function() {
-        if(window.jsb) {
-            return jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getPackageNameJNI", "()Ljava/lang/String;");
+        if(cc.sys.isNative) {
+            if(cc.sys.platform == cc.sys.ANDROID){
+                return jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getPackageNameJNI", "()Ljava/lang/String;");
+            }else if(cc.sys.platform == cc.sys.IPHONE || cc.sys.platform == cc.sys.IPAD){
+                console.log("PACKAGE : com.gamebai.tienlen");
+                return "com.gamebai.tienlen";//jsb.reflection.callStaticMethod("NativeUtility", "getPackage");
+            }
+        } else {
+            return "com.gamebai.tienlen";
         }
-        // web
-        return "com.gamebai.tienlen";
+
     },
 
 
