@@ -227,7 +227,7 @@ var NetworkManager = {
 /** The Constant EXPIRED_SESSION. */
         EXPIRED_SESSION: 9999
     },
-    URL: "ws://150.95.105.1:1280/megajackpot",
+    URL: "ws://192.168.0.32:1280/megajackpot",
     sessionId: "",
     getSessionId: function() {
         return NetworkManager.sessionId;
@@ -346,6 +346,7 @@ var NetworkManager = {
 
             //read compress
             var is_compress = bb.readInt8(_offset);
+            cc.log("is_compress =", is_compress);
 
             _offset+= 1;
 
@@ -489,7 +490,9 @@ var NetworkManager = {
                                        liteVersion, referenceCode) {
         var message = NetworkManager.initInitializeMessage(cp, appVersion, deviceId, deviceInfo, country, language,
             packageName, liteVersion, referenceCode);
+        console.log("MESSAGE :",message);
         var data = NetworkManager.initData(message.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.INITIALIZE, "");
+        console.log("DATA :",data);
         NetworkManager.callNetwork(data);
     }, initLoginMessage: function(userName, password) {
         var message = new proto.BINLoginRequest();

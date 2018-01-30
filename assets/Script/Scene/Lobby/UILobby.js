@@ -10,7 +10,6 @@ cc.Class({
         timeTotal: 0
     },
 
-    // use this for initialization
     onLoad: function () {
         this.setUserInfo();
     },
