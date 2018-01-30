@@ -70,4 +70,9 @@ cc.Class({
         this.suit.spriteFrame = this.texSuitSmall[card.suit];
 
     },
+    setBg: function (isBoolean) {
+        if(isBoolean === false){
+            this.node.getComponent(cc.Sprite).spriteFrame = null;
+        }
+    }
 });

@@ -221,7 +221,6 @@ var tableView = cc.Class({
     _initCell: function (cell, reload) {
         if ((this.ScrollModel === ScrollModel.Horizontal && this.Direction === Direction.TOP_TO_BOTTOM__LEFT_TO_RIGHT) || (this.ScrollModel === ScrollModel.Vertical && this.Direction === Direction.LEFT_TO_RIGHT__TOP_TO_BOTTOM)) {
             var tag = cell.tag * cell.childrenCount;
-            cc.log("cell.childrenCount =", cell.childrenCount);
             for (var index = 0; index < cell.childrenCount; ++index) {
                 var node = cell.children[index];
                 var viewCell = node.getComponent('viewCell');
