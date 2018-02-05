@@ -490,11 +490,6 @@ var NetworkManager = {
                                        liteVersion, referenceCode) {
         var message = NetworkManager.initInitializeMessage(cp, appVersion, deviceId, deviceInfo, country, language,
             packageName, liteVersion, referenceCode);
-        // console.log("MESSAGE :",message);
-        //
-        // var data = NetworkManager.initData(message.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.INITIALIZE, "");
-        // console.log("DATA :",data);
-        // NetworkManager.callNetwork(data);
         this.requestMessage(message.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.INITIALIZE, "");
     }, initLoginMessage: function(userName, password) {
         var message = new proto.BINLoginRequest();
@@ -504,7 +499,6 @@ var NetworkManager = {
     }, requestLoginMessage: function(userName, password){
         const message = NetworkManager.initInitializeMessage(userName, password);
         this.requestMessage(message.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.LOGIN, "");
-        // this.callNetwork(this.initData(message.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.LOGIN, ""));
     },
 
     initPingMessage: function(disconnectTime) {
@@ -515,7 +509,6 @@ var NetworkManager = {
     requestPingMessage: function(disconnectTime) {
         var message = NetworkManager.initPingMessage(disconnectTime);
         this.requestMessage(message.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.PING, "");
-        // this.callNetwork(this.initData(message.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.PING, ""), NetworkManager.MESSAGE_ID.PING);
     },
     initEnterZoneMessage: function(zoneId) {
         var message = new proto.BINEnterZoneRequest();
@@ -531,17 +524,17 @@ var NetworkManager = {
     requestExitRoomMessage: function(roomIndex) {
         var message = this.initExitRoomMessage(roomIndex);
         cc.log("message = ", message);
-        this.callNetwork(this.initData(message.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.EXIT_ROOM, Common.getSessionId()));
+        this.requestMessage(message.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.EXIT_ROOM, Common.getSessionId());
     },
     requestEnterZoneMessage: function(zoneId) {
         var message = NetworkManager.initEnterZoneMessage(zoneId);
         cc.log("message = ", message);
-        this.callNetwork(this.initData(message.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.ENTER_ZONE, Common.getSessionId()));
+        this.requestMessage(message.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.ENTER_ZONE, Common.getSessionId());
     },
     /* exit zone */
     requestExitZoneMessage: function(zoneId) {
         var message = this.initExitZoneMessage(zoneId);
-        this.callNetwork(this.initData(message.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.EXIT_ZONE, Common.getSessionId()));
+        this.requestMessage(message.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.EXIT_ZONE, Common.getSessionId());
     },
     initExitZoneMessage: function(zoneId) {
         var message = new proto.BINExitZoneRequest();
@@ -552,7 +545,7 @@ var NetworkManager = {
     /* Register */
     requestRegisterMessage: function(username, password, repass, displayname, mobile) {
         var message = NetworkManager.initRegisterMessage(username, password, repass, displayname, mobile);
-        this.callNetwork(this.initData(message.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.REGISTER, ""));
+        this.requestMessage(message.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.REGISTER, "");
     },
     initRegisterMessage: function(username, password, repass, displayname, mobile) {
         var message = new proto.BINRegisterRequest();
@@ -575,12 +568,12 @@ var NetworkManager = {
         return request;
     },
     getLookUpRoomRequest: function(zoneId, type, firstResult, maxResult, orderByField, asc, roomGroup){
-        var request = this.initLookUpRoomRequest(zoneId, type, firstResult, maxResult, orderByField, asc, roomGroup);
-        this.callNetwork(this.initData(request.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.LOOK_UP_ROOM, Common.getSessionId()));
+        var message = this.initLookUpRoomRequest(zoneId, type, firstResult, maxResult, orderByField, asc, roomGroup);
+        this.requestMessage(message.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.LOOK_UP_ROOM, Common.getSessionId());
     },
     getEnterRoomMessageFromServer: function(room_index, password) {
         var request = this.initEnterRoomMessage(room_index, password);
-        this.callNetwork(this.initData(request.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.ENTER_ROOM, Common.getSessionId()));
+        this.requestMessage(request.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.ENTER_ROOM, Common.getSessionId());
     },
     initEnterRoomMessage: function(room_index, password) {
         var request = new proto.BINEnterRoomRequest();
@@ -604,11 +597,11 @@ var NetworkManager = {
     },
     getTurnMessageFromServer: function(room_index, entries) {
         var request = this.initTurnMessage(room_index, entries);
-        this.callNetwork(this.initData(request.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.TURN, Common.getSessionId()));
+        this.requestMessage(request.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.TURN, Common.getSessionId());
     },
     getJarRequest: function(zone_id, jarType) {
         var request = this.initJarRequest(zone_id, jarType);
-        this.callNetwork(this.initData(request.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.JAR, Common.getSessionId()));
+        this.requestMessage(request.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.JAR, Common.getSessionId());
     },
     initJarRequest: function(zone_id, jarType) {
         var request = new proto.BINJarRequest();
@@ -628,11 +621,11 @@ var NetworkManager = {
             request.setOrderbyfield(orderByField);
             request.setAsc(asc);
         }
-        this.callNetwork(this.initData(request.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.LOOK_UP_GAME_HISTORY, Common.getSessionId()));
+        this.requestMessage(request.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.LOOK_UP_GAME_HISTORY, Common.getSessionId());
     },
     getCardConfigRequest: function(type){
         var request = this.initCardConfigRequest(type);
-        this.callNetwork(this.initData(request.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.CARD_CONFIG, Common.getSessionId()));
+        this.requestMessage(request.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.CARD_CONFIG, Common.getSessionId());
     },
     initCardConfigRequest: function(type){
         var request = new proto.BINCardConfigRequest();
