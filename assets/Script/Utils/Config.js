@@ -2,6 +2,10 @@
  * Created by Admin on 19-12-2017.
  */
 var Config = {
+    index : {
+        POPUP : 100,
+        LOADING: 101,
+    },
     TAG_GAME_ITEM: {
         BACAY: 1,
         XITO: 2,

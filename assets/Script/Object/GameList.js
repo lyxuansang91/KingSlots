@@ -69,9 +69,11 @@ cc.Class({
     },
 
     ongamestatus: function(event) {
+        cc.log("on game status");
+        NetworkManager.hideLoading();
         if(event.data!==null || event.data !== 'undefined') {
             var lstMessage = NetworkManager.parseFrom(event.data, event.data.byteLength);
-            if(lstMessage.length > 0) {
+                    if(lstMessage.length > 0) {
                 for(var i = 0; i < lstMessage.length; i++) {
                     var buffer = lstMessage[i];
                     this.handleMessage(buffer);
