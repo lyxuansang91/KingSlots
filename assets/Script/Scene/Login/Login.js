@@ -25,7 +25,7 @@ cc.Class({
 
         //NetworkManager.connectNetwork();
         window.ws.onmessage = this.ongamestatus.bind(this);
-        cc.log("scene:", cc.director.getScene());
+        //cc.log("scene:", cc.director.getScene());
 
 
     },
@@ -90,6 +90,7 @@ cc.Class({
             var messagebox = cc.instantiate(this.messagePopup).getComponent("CommonPopup");
             messagebox.init(res.getMessage(), 0, function() {
                 cc.log("on callback");
+                //
             });
             cc.log("message box:", messagebox);
             // messagebox.setAnchorPoint(cc.p(0.5, 0.5));

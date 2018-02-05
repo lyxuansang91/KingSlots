@@ -1,5 +1,7 @@
+var BaseScene = require('BaseScene');
+
 cc.Class({
-    extends: cc.Component,
+    extends: BaseScene,
 
     properties: {
         // foo: {
@@ -18,6 +20,7 @@ cc.Class({
 
     // use this for initialization
     onLoad: function () {
+        cc.log("LOBBY ONLOD");
     },
     onClickSetting: function() {
         cc.log("on click setting");

@@ -1,6 +1,7 @@
 {
   "appKey": "",
   "appSecret": "",
+  "encryptJs": true,
   "excludeScenes": [],
   "includeAnySDK": false,
   "includeSDKBox": false,
@@ -22,5 +23,11 @@
   "renderMode": "0",
   "startScene": "ecbfea9f-2853-4c6e-9f9e-f95d5fe180be",
   "title": "KingSlots",
-  "webOrientation": "auto"
+  "webOrientation": "auto",
+  "wechatgame": {
+    "appid": "",
+    "orientation": "portrait"
+  },
+  "xxteaKey": "2295a8ba-6bf2-4c",
+  "zipCompressJs": true
 }

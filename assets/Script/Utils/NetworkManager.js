@@ -4,6 +4,7 @@ var EnterZoneMessage = require('enter_zone_pb');
 var RegisterMessage = require('register_pb');
 var NotificationMessage = require('notification_pb');
 var LogoutMessage = require('logout_pb');
+var Loading = require('Loading');
 
 var NetworkManager = {
     MESSAGE_ID: {
@@ -227,7 +228,7 @@ var NetworkManager = {
 /** The Constant EXPIRED_SESSION. */
         EXPIRED_SESSION: 9999
     },
-    URL: "ws://192.168.0.32:1280/megajackpot",
+    URL: "ws://150.95.105.1:1280/megajackpot",
     sessionId: "",
     getSessionId: function() {
         return NetworkManager.sessionId;
@@ -237,7 +238,7 @@ var NetworkManager = {
     },
     requestMessage: function(request, os, message_id, session_id) {
         var ackBuf = NetworkManager.initData(request, os, message_id, session_id);
-        NetworkManager.callNetwork(ackBuf);
+        NetworkManager.callNetwork(ackBuf, message_id);
     }, 
     initData: function(request, os, messid, _session) {
         var lenSession = 0;
@@ -346,7 +347,6 @@ var NetworkManager = {
 
             //read compress
             var is_compress = bb.readInt8(_offset);
-            cc.log("is_compress =", is_compress);
 
             _offset+= 1;
 
@@ -490,10 +490,12 @@ var NetworkManager = {
                                        liteVersion, referenceCode) {
         var message = NetworkManager.initInitializeMessage(cp, appVersion, deviceId, deviceInfo, country, language,
             packageName, liteVersion, referenceCode);
-        console.log("MESSAGE :",message);
-        var data = NetworkManager.initData(message.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.INITIALIZE, "");
-        console.log("DATA :",data);
-        NetworkManager.callNetwork(data);
+        // console.log("MESSAGE :",message);
+        //
+        // var data = NetworkManager.initData(message.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.INITIALIZE, "");
+        // console.log("DATA :",data);
+        // NetworkManager.callNetwork(data);
+        this.requestMessage(message.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.INITIALIZE, "");
     }, initLoginMessage: function(userName, password) {
         var message = new proto.BINLoginRequest();
         message.setUsername(userName);
@@ -501,7 +503,8 @@ var NetworkManager = {
         return message;
     }, requestLoginMessage: function(userName, password){
         const message = NetworkManager.initInitializeMessage(userName, password);
-        this.callNetwork(this.initData(message.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.LOGIN, ""));
+        this.requestMessage(message.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.LOGIN, "");
+        // this.callNetwork(this.initData(message.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.LOGIN, ""));
     },
 
     initPingMessage: function(disconnectTime) {
@@ -511,7 +514,8 @@ var NetworkManager = {
     },
     requestPingMessage: function(disconnectTime) {
         var message = NetworkManager.initPingMessage(disconnectTime);
-        this.callNetwork(this.initData(message.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.PING, ""));
+        this.requestMessage(message.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.PING, "");
+        // this.callNetwork(this.initData(message.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.PING, ""), NetworkManager.MESSAGE_ID.PING);
     },
     initEnterZoneMessage: function(zoneId) {
         var message = new proto.BINEnterZoneRequest();
@@ -643,7 +647,8 @@ var NetworkManager = {
 
             window.ws.onopen = function (event) {
                 console.log("on web socket");
-                NetworkManager.requestInitializeMessage("24", "15", Common.getFingerprint(), Common.getDeviceInfo(), "vn", "vi", Common.getPackageName(), false, "");
+                NetworkManager.requestInitializeMessage("24", "15","xxxxx","xxxxx", "vn", "vi", "com.gamebai.tienlen", false, "" );
+                //Common.getFingerprint(), Common.getDeviceInfo(), "vn", "vi", Common.getPackageName(), false, "");
                 setTimeout(function() {
                     window.myInterval = setInterval(function() {
                         NetworkManager.requestPingMessage(0);
@@ -663,7 +668,9 @@ var NetworkManager = {
         }
     },
 
-    callNetwork: function(ackBuf) {
+    callNetwork: function(ackBuf, mid) {
+        var self = this;
+
         if(window.ws === null || typeof(window.ws) === 'undefined' || window.ws.readyState === WebSocket.CLOSED) {
 
             window.ws = new WebSocket(NetworkManager.URL);
@@ -679,12 +686,53 @@ var NetworkManager = {
             window.ws.onclose = function (event) {
                 console.log("Websocket instance was closed");
             };
-        } else {
+            window.ws.onmessage = function(e) {
+
+            }
+        }
+         else {
             if(window.ws.readyState == WebSocket.OPEN) {
+                //== show loading
+                if(typeof mid !== 'undefined' && mid !== NetworkManager.MESSAGE_ID.INITIALIZE &&
+                    mid !== NetworkManager.MESSAGE_ID.PING){
+                    cc.log("shot loading mid:", mid);
+                    self.showLoading();
+                }
+
                 window.ws.send(ackBuf);
             }
         }
+    },
+
+    showLoading: function () {
+        var scene = cc.director.getScene();
+        cc.log("SCENE : ",scene);
+        if(scene !== null){
+            cc.loader.loadRes("prefabs/Loading",function(error, prefab) {
+                if(!error){
+                    var loading = cc.instantiate(prefab);
+                    loading.setTag(1);
+                    if(loading !== null){
+                        loading.x = Common.width / 2;
+                        loading.y = Common.height / 2;
+
+                        scene.addChild(loading,Config.index.LOADING);
+                        //cc.log("XXX scene=", scene);
+                    }
+                }
+            })
+        }
+    },
+    
+    hideLoading: function () {
+        var scene = cc.director.getScene();
+        cc.log("SCENE HIDE : ",scene);
+        if(scene !== null && scene.getChildByTag(1) != null){
+            cc.log("xxxxxxxxxxxxxx");
+            scene.getChildByTag(1).destroy();
+        }
     }
+
 };
 
 module.exports = NetworkManager;
