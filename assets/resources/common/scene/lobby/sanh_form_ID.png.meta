@@ -1,14 +1,14 @@
 {
   "ver": "1.0.0",
-  "uuid": "4a7e6847-91c7-4d9a-a267-8ff19c33c847",
+  "uuid": "4c47ae88-f408-40f8-b056-a237832a5e61",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
   "subMetas": {
-    "popup_gold_noidung_big": {
+    "sanh_form_ID": {
       "ver": "1.0.3",
-      "uuid": "725d0858-e68d-497d-a157-f066f0739bdd",
-      "rawTextureUuid": "4a7e6847-91c7-4d9a-a267-8ff19c33c847",
+      "uuid": "4c83299b-f349-405c-b540-c04d7c86ca13",
+      "rawTextureUuid": "4c47ae88-f408-40f8-b056-a237832a5e61",
       "trimType": "auto",
       "trimThreshold": 1,
       "rotated": false,
@@ -16,10 +16,10 @@
       "offsetY": 0,
       "trimX": 0,
       "trimY": 0,
-      "width": 758,
-      "height": 78,
-      "rawWidth": 758,
-      "rawHeight": 78,
+      "width": 134,
+      "height": 33,
+      "rawWidth": 134,
+      "rawHeight": 33,
       "borderTop": 0,
       "borderBottom": 0,
       "borderLeft": 0,

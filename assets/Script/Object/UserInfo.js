@@ -18,7 +18,9 @@ cc.Class({
     onLoad: function () {
 
     },
+    init: function () {
 
+    }
     // called every frame, uncomment this function to activate update callback
     // update: function (dt) {
 
