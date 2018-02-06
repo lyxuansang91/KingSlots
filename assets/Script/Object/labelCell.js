@@ -58,6 +58,7 @@ cc.Class({
             message.node.setPositionX(posX);
             message.node.color = cc.color(112,48,22,255);
             message.fontSize = 20;
+            // message.string = Common.wordWrap(strTime, 40);
             message.string = strTime;
         }
 

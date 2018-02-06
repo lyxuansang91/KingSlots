@@ -14,7 +14,8 @@ var PopupFull = cc.Class({
         scrollView: cc.ScrollView,
         historyType: 1,
         tableView: cc.Node,
-        target: cc.Node
+        contentMask: cc.Node,
+        userinfoPrefab: cc.Prefab,
     },
 
     statics: {
@@ -135,6 +136,18 @@ var PopupFull = cc.Class({
             item.setPositionX(posX);
             item.setPositionY(posY);
             nodeChild.addChild(item);
+        }
+
+        if(name === "userinfo"){
+            this.tableView.active = false;
+            this.contentMask.active = true;
+            var posX = this.contentMask.getPositionX();
+            var posY = this.contentMask.getPositionY();
+            var item = cc.instantiate(this.userinfoPrefab);
+            // item.setPositionX(posX);
+            // item.setPositionY(posY);
+            item.getComponent('UserInfo').init();
+            this.contentMask.addChild(item);
         }
 
     },
