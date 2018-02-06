@@ -36,6 +36,7 @@ cc.Class({
             var posY = bgCellHeight * 0.2;
             message.node.setPositionX(posX);
             message.node.setPositionY(-posY);
+            message.node.color = cc.color(112,48,22,255);
             message.fontSize = 20;
             message.string = obj[Object.keys(obj)[i]].toString();
 

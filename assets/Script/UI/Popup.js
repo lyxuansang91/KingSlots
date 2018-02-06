@@ -17,7 +17,8 @@ cc.Class({
     },
 
     disappear:function () {
-        cc.log("disappear popup");
+        var currentScene = cc.director.getScene();
+        cc.log("disappear popup", currentScene);
         var callDisappear = cc.callFunc(function(){
             this.node.removeFromParent(true);
         },this);

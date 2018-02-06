@@ -48,7 +48,7 @@
     "_globalZOrder": 0,
     "_opacityModifyRGB": false,
     "groupIndex": 0,
-    "autoReleaseAssets": false
+    "autoReleaseAssets": null
   },
   {
     "__type__": "cc.Node",
@@ -1304,12 +1304,6 @@
     },
     "duration": 0.1,
     "zoomScale": 1.2,
-    "pressedSprite": {
-      "__uuid__": "0ea8a7a6-142e-4d67-aff5-59d242fe6f6b"
-    },
-    "hoverSprite": {
-      "__uuid__": "0ea8a7a6-142e-4d67-aff5-59d242fe6f6b"
-    },
     "clickEvents": [
       {
         "__id__": 33
@@ -1332,6 +1326,18 @@
       "a": 255
     },
     "_N$normalSprite": {
+      "__uuid__": "0ea8a7a6-142e-4d67-aff5-59d242fe6f6b"
+    },
+    "_N$pressedSprite": {
+      "__uuid__": "0ea8a7a6-142e-4d67-aff5-59d242fe6f6b"
+    },
+    "pressedSprite": {
+      "__uuid__": "0ea8a7a6-142e-4d67-aff5-59d242fe6f6b"
+    },
+    "_N$hoverSprite": {
+      "__uuid__": "0ea8a7a6-142e-4d67-aff5-59d242fe6f6b"
+    },
+    "hoverSprite": {
       "__uuid__": "0ea8a7a6-142e-4d67-aff5-59d242fe6f6b"
     },
     "_N$disabledSprite": {
@@ -1780,12 +1786,6 @@
     },
     "duration": 0.1,
     "zoomScale": 1.2,
-    "pressedSprite": {
-      "__uuid__": "e9ec654c-97a2-4787-9325-e6a10375219a"
-    },
-    "hoverSprite": {
-      "__uuid__": "e9ec654c-97a2-4787-9325-e6a10375219a"
-    },
     "clickEvents": [
       {
         "__id__": 46
@@ -1809,6 +1809,18 @@
     },
     "_N$normalSprite": {
       "__uuid__": "f87868f5-0e42-4a35-b85b-ceb2d1e05e72"
+    },
+    "_N$pressedSprite": {
+      "__uuid__": "e9ec654c-97a2-4787-9325-e6a10375219a"
+    },
+    "pressedSprite": {
+      "__uuid__": "e9ec654c-97a2-4787-9325-e6a10375219a"
+    },
+    "_N$hoverSprite": {
+      "__uuid__": "e9ec654c-97a2-4787-9325-e6a10375219a"
+    },
+    "hoverSprite": {
+      "__uuid__": "e9ec654c-97a2-4787-9325-e6a10375219a"
     },
     "_N$disabledSprite": {
       "__uuid__": "29158224-f8dd-4661-a796-1ffab537140e"
@@ -1936,8 +1948,6 @@
     },
     "duration": 0.1,
     "zoomScale": 1.2,
-    "pressedSprite": null,
-    "hoverSprite": null,
     "clickEvents": [
       {
         "__id__": 50
@@ -1962,6 +1972,10 @@
     "_N$normalSprite": {
       "__uuid__": "becba5e1-d32f-4297-bb80-2574ebb5022d"
     },
+    "_N$pressedSprite": null,
+    "pressedSprite": null,
+    "_N$hoverSprite": null,
+    "hoverSprite": null,
     "_N$disabledSprite": null,
     "_N$target": {
       "__id__": 47
@@ -2105,12 +2119,6 @@
     },
     "duration": 0.1,
     "zoomScale": 1.2,
-    "pressedSprite": {
-      "__uuid__": "e9ec654c-97a2-4787-9325-e6a10375219a"
-    },
-    "hoverSprite": {
-      "__uuid__": "e9ec654c-97a2-4787-9325-e6a10375219a"
-    },
     "clickEvents": [
       {
         "__id__": 56
@@ -2134,6 +2142,18 @@
     },
     "_N$normalSprite": {
       "__uuid__": "a0da9223-f180-4349-b974-b31b1b918e31"
+    },
+    "_N$pressedSprite": {
+      "__uuid__": "e9ec654c-97a2-4787-9325-e6a10375219a"
+    },
+    "pressedSprite": {
+      "__uuid__": "e9ec654c-97a2-4787-9325-e6a10375219a"
+    },
+    "_N$hoverSprite": {
+      "__uuid__": "e9ec654c-97a2-4787-9325-e6a10375219a"
+    },
+    "hoverSprite": {
+      "__uuid__": "e9ec654c-97a2-4787-9325-e6a10375219a"
     },
     "_N$disabledSprite": {
       "__uuid__": "29158224-f8dd-4661-a796-1ffab537140e"
@@ -2257,12 +2277,6 @@
     },
     "duration": 0.1,
     "zoomScale": 1.2,
-    "pressedSprite": {
-      "__uuid__": "e9ec654c-97a2-4787-9325-e6a10375219a"
-    },
-    "hoverSprite": {
-      "__uuid__": "e9ec654c-97a2-4787-9325-e6a10375219a"
-    },
     "clickEvents": [],
     "_N$interactable": true,
     "_N$enableAutoGrayEffect": false,
@@ -2282,6 +2296,18 @@
     },
     "_N$normalSprite": {
       "__uuid__": "c8d2cb92-67f8-404e-beeb-04b0e5255e5c"
+    },
+    "_N$pressedSprite": {
+      "__uuid__": "e9ec654c-97a2-4787-9325-e6a10375219a"
+    },
+    "pressedSprite": {
+      "__uuid__": "e9ec654c-97a2-4787-9325-e6a10375219a"
+    },
+    "_N$hoverSprite": {
+      "__uuid__": "e9ec654c-97a2-4787-9325-e6a10375219a"
+    },
+    "hoverSprite": {
+      "__uuid__": "e9ec654c-97a2-4787-9325-e6a10375219a"
     },
     "_N$disabledSprite": {
       "__uuid__": "29158224-f8dd-4661-a796-1ffab537140e"

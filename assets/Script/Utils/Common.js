@@ -435,7 +435,7 @@ var Common = {
     timestampToDate: function (timestamp){
 
         var a = new Date(Number(timestamp));
-        var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        var months = ['01','02','03','04','05','06','07','08','09','10','11','12'];
         var year = a.getFullYear();
         var month = months[a.getMonth()];
         var date = a.getDate();
@@ -445,5 +445,112 @@ var Common = {
         var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
         return time;
 
+    },
+    CountUp1: function(target, startValue, endValue, decimals, duration, chartoption) {
+        var options = {
+            useEasing: true,
+            useGrouping: true,
+            separator: ".",
+            decimal: ","
+        };
+        var startTime = null;
+        var lastTime = 0;
+        var rAF = null;
+        var vendors = ["webkit", "moz", "ms", "o"];
+        for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+            window.requestAnimationFrame =
+                window[vendors[x] + "RequestAnimationFrame"];
+            window.cancelAnimationFrame = window[vendors[x] + "CancelAnimationFrame"] || window[vendors[x] + "CancelRequestAnimationFrame"]
+        }
+        if (!window.requestAnimationFrame) window.requestAnimationFrame = function(callback, element) {
+            var currTime = (new Date).getTime();
+            var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+            var id = window.setTimeout(function() {
+                callback(currTime + timeToCall)
+            }, timeToCall);
+            lastTime = currTime + timeToCall;
+            return id
+        };
+        if (!window.cancelAnimationFrame) window.cancelAnimationFrame =
+            function(id) {
+                clearTimeout(id)
+
+            };
+        var callback = null;
+        var count = function(timestamp) {
+            if (!startTime) startTime = timestamp;
+            timestamp = timestamp;
+            var progress = timestamp - startTime;
+            var remaining =
+                duration - progress;
+            if (options.useEasing)
+                if (countDown) frameVal = startVal - easeOutExpo(progress, 0, startVal - endVal, duration);
+                else frameVal = easeOutExpo(progress, startVal, endVal - startVal, duration);
+            else if (countDown) frameVal = startVal - (startVal - endVal) * (progress / duration);
+            else frameVal = startVal + (endVal - startVal) * (progress / duration);
+            if (countDown) frameVal = frameVal < endVal ?
+                endVal : frameVal;
+            else frameVal = frameVal > endVal ? endVal : frameVal;
+            frameVal = Math.round(frameVal * dec) / dec;
+            printValue(frameVal);
+            if (progress < duration) rAF = requestAnimationFrame(count);
+            else if (callback) callback()
+        };
+
+        var start = function(callback) {
+            callback = callback;
+            rAF = requestAnimationFrame(count);
+            return false
+        };
+        var formatNumber = function(nStr) {
+            nStr = nStr.toFixed(decimals);
+            nStr += "";
+            var x1;
+            var x = nStr.split(".");
+            x1 = x[0];
+            var x2 = x.length > 1 ? options.decimal + x[1] : "";
+            var rgx = /(\d+)(\d{3})/;
+            if (options.useGrouping)
+                while (rgx.test(x1)) x1 = x1.replace(rgx, "$1" + options.separator + "$2");
+            return options.prefix + x1 + x2 + options.suffix
+        };
+        var FormatNumberNotFixed = function(pSStringNumber){
+            pSStringNumber+="";var x=pSStringNumber.split(",");
+            var x1=x[0];var x2=x.length>1?","+x[1]:"";
+            var rgx=/(\d+)(\d{3})/;while(rgx.test(x1))x1=x1.replace(rgx,"$1"+"."+"$2");
+            return x1+x2
+        }
+
+        //options = optionss;
+        for (var key in options)
+            if (options.hasOwnProperty(key)) options[key] = options[key];
+        if (options.separator === "") options.useGrouping = false;
+        if (!options.prefix) options.prefix = "";
+        if (!options.suffix) options.suffix = "";
+        var startVal = Number(startValue);
+        var endVal = Number(endValue);
+        var countDown = startVal > endVal;
+        var frameVal = startVal;
+        var decimals = Math.max(0, decimals || 0);
+        var dec = Math.pow(10, decimals);
+        var duration = Number(duration) * 1E3 || 2E3;
+        // var self = this;
+
+        var printValue = function(value) {
+            var result = !isNaN(value) ? formatNumber(value) : "0";
+            if (chartoption != null && chartoption != '') {
+                target.string = chartoption + FormatNumberNotFixed(result);
+            }else{
+                target.string = FormatNumberNotFixed(result);
+            }
+
+        };
+        var easeOutExpo = function(t, b, c, d) {
+            return c * (-Math.pow(2, -10 * t / d) + 1) * 1024 / 1023 + b
+        };
+
+        start();
+
+        printValue(startVal)
     }
 };

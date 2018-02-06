@@ -632,6 +632,19 @@ var NetworkManager = {
         request.setType(type);
         return request;
     },
+    getOpenIdLoginMessageFromServer: function(channelId, openId, firstname, lastname) {
+        var request = this.initOpenIdLoginMessage(channelId, openId, firstname, lastname);
+        this.callNetwork(this.initData(request.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.OPEN_ID_LOGIN, ""));
+    },
+    initOpenIdLoginMessage: function(channelId, openId, firstname, lastname) {
+        var request = new proto.BINOpenIdLoginRequest();
+        request.setChannel(channelId);
+        request.setOpenid(openId);
+        request.setFirstname(firstname);
+        request.setLastname(lastname);
+    
+        return request;
+    },
     connectNetwork: function() {
         if(window.ws === null || typeof(window.ws) === 'undefined' || window.ws.readyState === WebSocket.CLOSED) {
             window.ws = new WebSocket(NetworkManager.URL);
