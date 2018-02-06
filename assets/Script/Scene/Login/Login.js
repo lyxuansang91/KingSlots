@@ -120,19 +120,17 @@ cc.Class({
         cc.log("login normal");
         var username = this.edt_username.string;
         var password = this.edt_password.string;
-        // var username = "tu_atula";
-        // var password = "123456789";
-        // if(this.edt_username.string === "" || this.edt_password.string === "") {
-        //     // cc.log("edt_username", this.node);
-        //     // cc.alert("Tài khoản và mật khẩu không được để trống!");
-        //     // var item = cc.instantiate(this.toastPrefab).getComponent("ToastScripts");
-        //     var strMess = "Tài khoản và mật khẩu không được để trống!";
-        //     // item.showToast(strMess);
-        //     // this.node.addChild(item.node);
-        //
-        //     this.showToast(strMess, this, 2);
-        //     return;
-        // }
+
+        if(this.edt_username.string === "" || this.edt_password.string === "") {
+            // cc.alert("Tài khoản và mật khẩu không được để trống!");
+            // var item = cc.instantiate(this.toastPrefab).getComponent("ToastScripts");
+            var strMess = "Tài khoản và mật khẩu không được để trống! Tài khoản và mật khẩu không được để trống!";
+            // item.showToast(strMess);
+            // this.node.addChild(item.node);
+
+            this.showToast(strMess, this, 2);
+            return;
+        }
         NetworkManager.requestLoginMessage(username, password);
     },
     register: function() {

@@ -446,6 +446,7 @@ var Common = {
         return time;
 
     },
+
     CountUp1: function(target, startValue, endValue, decimals, duration, chartoption) {
         var options = {
             useEasing: true,
@@ -462,22 +463,22 @@ var Common = {
                 window[vendors[x] + "RequestAnimationFrame"];
             window.cancelAnimationFrame = window[vendors[x] + "CancelAnimationFrame"] || window[vendors[x] + "CancelRequestAnimationFrame"]
         }
-        if (!window.requestAnimationFrame) window.requestAnimationFrame = function(callback, element) {
+        if (!window.requestAnimationFrame) window.requestAnimationFrame = function (callback, element) {
             var currTime = (new Date).getTime();
             var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-            var id = window.setTimeout(function() {
+            var id = window.setTimeout(function () {
                 callback(currTime + timeToCall)
             }, timeToCall);
             lastTime = currTime + timeToCall;
             return id
         };
         if (!window.cancelAnimationFrame) window.cancelAnimationFrame =
-            function(id) {
+            function (id) {
                 clearTimeout(id)
 
             };
         var callback = null;
-        var count = function(timestamp) {
+        var count = function (timestamp) {
             if (!startTime) startTime = timestamp;
             timestamp = timestamp;
             var progress = timestamp - startTime;
@@ -497,12 +498,12 @@ var Common = {
             else if (callback) callback()
         };
 
-        var start = function(callback) {
+        var start = function (callback) {
             callback = callback;
             rAF = requestAnimationFrame(count);
             return false
         };
-        var formatNumber = function(nStr) {
+        var formatNumber = function (nStr) {
             nStr = nStr.toFixed(decimals);
             nStr += "";
             var x1;
@@ -514,11 +515,14 @@ var Common = {
                 while (rgx.test(x1)) x1 = x1.replace(rgx, "$1" + options.separator + "$2");
             return options.prefix + x1 + x2 + options.suffix
         };
-        var FormatNumberNotFixed = function(pSStringNumber){
-            pSStringNumber+="";var x=pSStringNumber.split(",");
-            var x1=x[0];var x2=x.length>1?","+x[1]:"";
-            var rgx=/(\d+)(\d{3})/;while(rgx.test(x1))x1=x1.replace(rgx,"$1"+"."+"$2");
-            return x1+x2
+        var FormatNumberNotFixed = function (pSStringNumber) {
+            pSStringNumber += "";
+            var x = pSStringNumber.split(",");
+            var x1 = x[0];
+            var x2 = x.length > 1 ? "," + x[1] : "";
+            var rgx = /(\d+)(\d{3})/;
+            while (rgx.test(x1)) x1 = x1.replace(rgx, "$1" + "." + "$2");
+            return x1 + x2
         }
 
         //options = optionss;
@@ -536,21 +540,52 @@ var Common = {
         var duration = Number(duration) * 1E3 || 2E3;
         // var self = this;
 
-        var printValue = function(value) {
+        var printValue = function (value) {
             var result = !isNaN(value) ? formatNumber(value) : "0";
             if (chartoption != null && chartoption != '') {
                 target.string = chartoption + FormatNumberNotFixed(result);
-            }else{
+            } else {
                 target.string = FormatNumberNotFixed(result);
             }
 
         };
-        var easeOutExpo = function(t, b, c, d) {
+        var easeOutExpo = function (t, b, c, d) {
             return c * (-Math.pow(2, -10 * t / d) + 1) * 1024 / 1023 + b
         };
 
         start();
+    },
 
-        printValue(startVal)
+    wordWrap: function(str, maxWidth) {
+    var newLineStr = "\n";
+    var done = false;
+    var res = '';
+    do {
+        var found = false;
+        // Inserts new line at first whitespace of the line
+        for (var i = maxWidth - 1; i >= 0; i--) {
+            if (this.testWhite(str.charAt(i))) {
+                res = res + [str.slice(0, i), newLineStr].join('');
+                str = str.slice(i + 1);
+                found = true;
+                break;
+            }
+        }
+        // Inserts new line at maxWidth position, the word is too long to wrap
+        if (!found) {
+            res += [str.slice(0, maxWidth), newLineStr].join('');
+            str = str.slice(maxWidth);
+        }
+
+        if (str.length < maxWidth)
+            done = true;
+    } while (!done);
+
+    return res + str;
+    },
+
+    testWhite: function(x) {
+        var white = new RegExp(/^\s$/);
+        return white.test(x.charAt(0));
     }
 };
