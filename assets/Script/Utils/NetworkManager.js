@@ -691,7 +691,6 @@ var NetworkManager = {
                     cc.log("shot loading mid:", mid);
                     self.showLoading();
                 }
-
                 window.ws.send(ackBuf);
             }
         }
@@ -699,18 +698,15 @@ var NetworkManager = {
 
     showLoading: function () {
         var scene = cc.director.getScene();
-        cc.log("SCENE : ",scene);
-        if(scene !== null){
+        if(cc.isValid(scene) && !cc.isValid(scene.getChildByName("Loading"))){
             cc.loader.loadRes("prefabs/Loading",function(error, prefab) {
                 if(!error){
                     var loading = cc.instantiate(prefab);
-                    loading.setTag(1);
-                    if(loading !== null){
+                    if(cc.isValid(loading)){
                         loading.x = Common.width / 2;
                         loading.y = Common.height / 2;
 
                         scene.addChild(loading,Config.index.LOADING);
-                        //cc.log("XXX scene=", scene);
                     }
                 }
             })
@@ -719,10 +715,9 @@ var NetworkManager = {
     
     hideLoading: function () {
         var scene = cc.director.getScene();
-        cc.log("SCENE HIDE : ",scene);
-        if(scene !== null && scene.getChildByTag(1) != null){
-            cc.log("xxxxxxxxxxxxxx");
-            scene.getChildByTag(1).destroy();
+
+        if(cc.isValid(scene) && cc.isValid(scene.getChildByName("Loading"))){
+            scene.getChildByName("Loading").destroy();
         }
     }
 

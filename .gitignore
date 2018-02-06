@@ -6,6 +6,10 @@ library/
 temp/
 local/
 # build/
+build/jsb-default/simulator/
+build/jsb-default/frameworks/runtime-src/proj.ios_mac/build/
+
+build/jsb-default/frameworks/runtime-src/proj.android-studio/app/.externalNativeBuild/ndkBuild/release/
 build/jsb-default/simulator/android/*.apk
 build/web-desktop/*
 build/jsb-default/frameworks/cocos2d-x/build/
