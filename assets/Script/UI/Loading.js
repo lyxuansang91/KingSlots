@@ -9,8 +9,24 @@ cc.Class({
     },
 
     onLoad: function () {
-        var self = this;
-        var action = cc.repeatForever(cc.rotateBy(this.duration,this.angel));
-        self.loading.node.runAction(action);
+        this.deltaTime = 0;
+        this.enable = false;
+    },
+    
+    update : function (dt) {
+        if(this.deltaTime > 2) {
+            if(!this.enable) {
+                this.enable = true;
+                var self = this;
+
+                self.darkSprite.node.setOpacity(150);
+                self.loading.node.setOpacity(255);
+
+                var action = cc.repeatForever(cc.rotateBy(this.duration,this.angel));
+                self.loading.node.runAction(action);
+            }
+        }else{
+            this.deltaTime += dt;
+        }
     }
 });
