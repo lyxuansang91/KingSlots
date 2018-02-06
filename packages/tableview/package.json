@@ -1,7 +1,7 @@
 {
   "name": "tableview",
   "version": "0.0.1",
-  "description": "一份简单的扩展包",
+  "description": "TableView",
   "author": "zp",
   "main": "main.js",
   "main-menu": {
