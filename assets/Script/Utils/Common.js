@@ -459,13 +459,14 @@ var Common = {
         if(cc.isValid(scene) && !cc.isValid(scene.getChildByName(name_popup))){
             cc.loader.loadRes("prefabs/" + name_popup,function(error, prefab) {
                 if(!error){
-                    var messagebox = cc.instantiate(prefab);
-                    if(cc.isValid(messagebox)){
-                        messagebox.x = Common.width / 2;
-                        messagebox.y = Common.height / 2;
-
+                    var popup = cc.instantiate(prefab);
+                    if(cc.isValid(popup)){
+                        popup.x = Common.width / 2;
+                        popup.y = Common.height / 2;
                         if(cb) {
-                            cb(messagebox);
+                            var component = popup.getComponent(name_popup);
+                            cb(component,name_popup);
+                            scene.addChild(popup,Config.index.POPUP);
                         }
 
                     }
