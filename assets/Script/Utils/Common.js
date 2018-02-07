@@ -470,7 +470,6 @@ var Common = {
                             cb(component);
                             scene.addChild(popup,Config.index.POPUP);
                         }
-
                     }
                 }
             })
