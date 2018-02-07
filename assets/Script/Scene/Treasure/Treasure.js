@@ -1,12 +1,3 @@
-// Learn cc.Class:
-//  - [Chinese] http://www.cocos.com/docs/creator/scripting/class.html
-//  - [English] http://www.cocos2d-x.org/docs/editors_and_tools/creator-chapters/scripting/class/index.html
-// Learn Attribute:
-//  - [Chinese] http://www.cocos.com/docs/creator/scripting/reference/attributes.html
-//  - [English] http://www.cocos2d-x.org/docs/editors_and_tools/creator-chapters/scripting/reference/attributes/index.html
-// Learn life-cycle callbacks:
-//  - [Chinese] http://www.cocos.com/docs/creator/scripting/life-cycle-callbacks.html
-//  - [English] http://www.cocos2d-x.org/docs/editors_and_tools/creator-chapters/scripting/life-cycle-callbacks/index.html
 
 var BaseScene = require('BaseScene');
 var NetworkManager = require('NetworkManager');
@@ -15,13 +6,6 @@ cc.Class({
     extends: BaseScene,
 
     properties: {
-        // foo: {
-        //     // ATTRIBUTES:
-        //     default: null,        // The default value will be used only when the component attaching
-        //                           // to a node for the first time
-        //     type: cc.SpriteFrame, // optional, default is typeof default
-        //     serializable: true,   // optional, default is true
-        // },
         // bar: {
         //     get () {
         //         return this._bar;
@@ -35,22 +19,49 @@ cc.Class({
         jarValue: 0,
         roomIndex: 0,
         betType: 0,
-        lst_lines_selected: []
+        btn_select_lines: cc.Prefab,
+
+        board_inside: cc.Sprite,
+        board_null_line: cc.Node,
+
+        lst_line_selected : []
     },
 
-    // LIFE-CYCLE CALLBACKS:
-
-    // onLoad () {},
-
     start: function() {
-        this.lst_lines_selected = [6,2,8,5,1,4,10,7,3,9,16,12,19,14,13,17,18,15,11,20];
+
         cc.log("on start");
         if(window.ws && window.ws.onmessage)
             window.ws.onmessage = this.onGameStatus.bind(this);
-        this.myInterval = setInterval(function() {
+        /*this.myInterval = setInterval(function() {
             this.requestJar();
-        }.bind(this), 5000);
+        }.bind(this), 5000);*/
+
+        this.initMenu();
     },
+
+    initMenu: function () {
+        this.lst_line_selected = [6, 2, 8, 5, 1, 4, 10, 7, 3, 9,
+            16, 12, 19, 14, 13, 17, 18, 15, 11, 20];
+
+        var pos_line_top = 0;
+        var size_board = this.board_null_line.getContentSize();
+        for (var i = 0; i < this.lst_line_selected.length; i++) {
+            var line_number = cc.instantiate(this.btn_select_lines);
+            line_number.getComponent("ButtonSelectLines").initNumber(this.lst_line_selected[i]);
+
+            var size_line = line_number.getContentSize();
+            if (i == 0){
+                pos_line_top = size_line.height * 5*0.93 + size_line.height/2;
+            }
+
+            line_number.setPosition(cc.p((parseInt(i / 10) == 0) ?
+                (-size_board.width/2 + size_line.width/2) :
+                (size_board.width/2 - size_line.width/2),
+                pos_line_top - size_line.height * ((i % 10) * 0.93 + 1)));
+            this.board_null_line.addChild(line_number);
+        }
+    },
+
     requestJar: function() {
         var self = this;
         if(!self.isRequestJar) {
@@ -76,12 +87,14 @@ cc.Class({
     calculateTurnType: function() {
         return this.getKeyBet() + 1;
     },
+
     onLoad: function() {
         cc.log("on load");
     },
     onDestroy: function() {
         clearInterval(this.myInterval);
     },
+
     onGameStatus: function() {
         if(event.data!==null || event.data !== 'undefined') {
             var lstMessage = NetworkManager.parseFrom(event.data, event.data.byteLength);
@@ -140,7 +153,5 @@ cc.Class({
                 break;
         }
     }
-
-
     // update (dt) {},
 });
