@@ -16,20 +16,25 @@ cc.Class({
         this.node.on('touchstart', onTouchDown, this.bg_dark);
     },
 
-    disappear:function (name) {
+    disappear:function () {
+        var name = this.name;
         var callDisappear = cc.callFunc(function(){
             Common.closePopup(name);
         },this);
 
         this.bg_dark.node.runAction(cc.fadeOut(0.1));
         var move = cc.scaleTo(0.15,0.5).easing(cc.easeBackIn());
-        this.background.node.runAction(cc.sequence(move,callDisappear));
+        var fade = cc.fadeOut(0.15);
+        var action = cc.spawn(move,fade);
+        this.background.node.runAction(cc.sequence(action,callDisappear));
     },
 
-    appear:function (name) {
-        cc.log("appear popup");
-        this.visible = true;
+    setNamePopup: function (name) {
+        this.name = name;
+    },
 
+    appear:function () {
+        cc.log("appear popup");
         var background = this.background;
         var self = this;
 
@@ -40,7 +45,7 @@ cc.Class({
             var rect = background.spriteFrame.getRect();
 
             if (!cc.rectContainsPoint(rect,locationInNode)){
-                self.disappear(name);
+                self.disappear();
                 return true;
             }
             return false;

@@ -17,13 +17,9 @@ cc.Class({
 
     },
 
-    closePopup : function () {
-        this.disappear(Config.name.COMMON_POPUP);
-    },
-
     onCallBack: function() {
         this._callback();
-        this.disappear(Config.name.COMMON_POPUP);
+        this.disappear();
     },
 
     init: function(msg, type, callback) {
