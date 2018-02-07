@@ -2075,6 +2075,12 @@
     "node": {
       "__id__": 50
     },
-    "_enabled": true
+    "_enabled": true,
+    "myInterVal": null,
+    "isRequestJar": false,
+    "jarValue": 0,
+    "roomIndex": 0,
+    "betType": 0,
+    "lst_lines_selected": []
   }
 ]

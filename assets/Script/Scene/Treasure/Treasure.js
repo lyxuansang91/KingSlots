@@ -35,7 +35,7 @@ cc.Class({
         jarValue: 0,
         roomIndex: 0,
         betType: 0,
-        lst_lines_selected: [6,2,8,5,1,4,10,7,3,9,16,12,19,14,13,17,18,15,11,20]
+        lst_lines_selected: []
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -43,6 +43,7 @@ cc.Class({
     // onLoad () {},
 
     start: function() {
+        this.lst_lines_selected = [6,2,8,5,1,4,10,7,3,9,16,12,19,14,13,17,18,15,11,20];
         cc.log("on start");
         if(window.ws && window.ws.onmessage)
             window.ws.onmessage = this.onGameStatus.bind(this);
