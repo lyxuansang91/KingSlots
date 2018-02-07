@@ -23,6 +23,7 @@ cc.Class({
     },
     onClose: function() {
         this.node.removeFromParent(true);
+
     },
     onGameStatus: function(event) {
         if(event.data!==null || typeof(event.data) !== 'undefined') {

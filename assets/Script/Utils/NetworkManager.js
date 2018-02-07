@@ -483,6 +483,8 @@ var NetworkManager = {
     requestLogoutMessage: function() {
 
     },
+    // exit room message
+
     // init message
     initInitializeMessage: function(cp, appVersion, deviceId, deviceInfo, country, language, packageName,
                                        liteVersion, referenceCode) {
@@ -535,7 +537,6 @@ var NetworkManager = {
     },
     requestExitRoomMessage: function(roomIndex) {
         var message = this.initExitRoomMessage(roomIndex);
-        cc.log("message = ", message);
         this.requestMessage(message.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.EXIT_ROOM, Common.getSessionId());
     },
     requestEnterZoneMessage: function(zoneId) {

@@ -38,7 +38,7 @@ var BacaySence = cc.Class({
         instance: null
     },
     exitRoom: function() {
-        cc.director.loadScene("Lobby");
+        NetworkManager.requestExitRoomMessage(0);
     },
 
     // use this for initialization
@@ -46,15 +46,13 @@ var BacaySence = cc.Class({
         cc.log("zindex =", this.node.zIndex);
         BacaySence.instance = this;
         this.userMoney.string = Common.numberFormatWithCommas(Common.getCash());
-        window.ws.onmessage = this.ongamestatus.bind(this);
+        window.ws.onmessage = this.onGameStatus.bind(this);
 
         this.initFirstCard();
         setInterval(function() {
             this.requestJar();
         }.bind(this), 5000);
-        Common.setMiniThreeCardsSceneInstance(cc.director.getScene());
-
-
+        // Common.setMiniThreeCardsSceneInstance(cc.director.getScene());
     },
 
     initFirstCard: function() {
@@ -140,7 +138,7 @@ var BacaySence = cc.Class({
         entries.push(entry);
         NetworkManager.getTurnMessageFromServer(0, entries);
     },
-    ongamestatus: function(event) {
+    onGameStatus: function(event) {
         if(event.data!==null || typeof(event.data) !== 'undefined') {
             var lstMessage = NetworkManager.parseFrom(event.data, event.data.byteLength);
             // cc.log("lstMessage =", lstMessage.shift());
@@ -167,11 +165,11 @@ var BacaySence = cc.Class({
     exitZoneResponseHandler: function(resp) {
         cc.log("exit zone response handler:", resp.toObject());
         if(resp.getResponsecode()) {
-            // Common.setZoneId(-1);
-            // cc.director.loadScene("Lobby");
+            Common.setZoneId(-1);
+            cc.director.loadScene("Lobby");
         }
 
-        if(resp.hasMessage()) {
+        if(resp.hasMessage() && resp.getMessage() !== "") {
             // TODO: display message
         }
     },

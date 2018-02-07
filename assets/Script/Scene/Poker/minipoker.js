@@ -37,7 +37,8 @@ var MiniPoker = cc.Class({
       instance: null
     },
     exitRoom: function() {
-        cc.director.loadScene("Table");
+        // cc.director.loadScene("Table");
+        NetworkManager.requestExitRoomMessage(0);
     },
 
     setKeyBet: function(key) {
@@ -313,7 +314,8 @@ var MiniPoker = cc.Class({
     exitZoneResponseHandler: function(resp) {
         cc.log("exit zone response handler:", resp.toObject());
         if(resp.getResponsecode()) {
-
+            cc.director.loadScene("Lobby");
+            Common.setZoneId(-1);
         }
 
         if(resp.hasMessage() && resp.getMessage() !== "") {
@@ -358,7 +360,7 @@ var MiniPoker = cc.Class({
                 break;
             case NetworkManager.MESSAGE_ID.EXIT_ROOM:
                 var msg = buffer.response;
-                this.exitRoomResponsehandler(msg);
+                this.exitRoomResponseHandler(msg);
                 break;
             // // case NetworkManager.MESSAGE_ID.ENTER_ROOM:
             // //     var msg = buffer.response;

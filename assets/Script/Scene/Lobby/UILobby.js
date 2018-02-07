@@ -27,7 +27,7 @@ cc.Class({
                         messagebox.y = Common.height / 2;
 
                         var component = messagebox.getComponent(Config.name.COMMON_POPUP);
-                        component.init(res.getMessage(), 1, function() {
+                        component.init(res.getMessage(), 0, function() {
                             cc.log("on callback");
                         });
                         component.appear(Config.name.COMMON_POPUP);
