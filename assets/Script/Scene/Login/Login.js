@@ -14,6 +14,11 @@ cc.Class({
     // use this for initialization
     onLoad: function () {
         Common.setFingerprint();
+
+        cc.log("ONLOAD LOGIN");
+    },
+
+    start : function () {
         if(this.edt_username != null && this.edt_password != null){
             var user_name_text = cc.sys.localStorage.getItem("user_name");
             var user_pass_text = cc.sys.localStorage.getItem("user_password");
@@ -23,11 +28,7 @@ cc.Class({
             }
         }
 
-        //NetworkManager.connectNetwork();
         window.ws.onmessage = this.ongamestatus.bind(this);
-        //cc.log("scene:", cc.director.getScene());
-
-
     },
 
     ongamestatus: function(event) {
