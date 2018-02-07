@@ -4,7 +4,7 @@ cc.Class({
     properties: {
         bg_dark: cc.Sprite,
         background: cc.Sprite,
-        exit: cc.Sprite
+        exit: cc.Button
     },
 
     // use this for initialization
@@ -16,11 +16,9 @@ cc.Class({
         this.node.on('touchstart', onTouchDown, this.bg_dark);
     },
 
-    disappear:function () {
-        var currentScene = cc.director.getScene();
-        cc.log("disappear popup", currentScene);
+    disappear:function (name) {
         var callDisappear = cc.callFunc(function(){
-            this.node.removeFromParent(true);
+            Common.closePopup(name);
         },this);
 
         this.bg_dark.node.runAction(cc.fadeOut(0.1));
@@ -28,13 +26,12 @@ cc.Class({
         this.background.node.runAction(cc.sequence(move,callDisappear));
     },
 
-    appear:function () {
+    appear:function (name) {
         cc.log("appear popup");
         this.visible = true;
 
         var background = this.background;
         var self = this;
-
 
         function onTouchDown (touch,event) {
 
@@ -43,7 +40,7 @@ cc.Class({
             var rect = background.spriteFrame.getRect();
 
             if (!cc.rectContainsPoint(rect,locationInNode)){
-                self.disappear();
+                self.disappear(name);
                 return true;
             }
             return false;

@@ -1,13 +1,11 @@
-
+var Popup = require("Popup");
 
 cc.Class({
-    extends: cc.Component,
-
+    extends: Popup,
 
     properties: {
         btnOK: cc.Button,
         btnCancel: cc.Button,
-        btnClose: cc.Button,
         message: cc.Label,
         type: 0,
         CONFIRM_TYPE: 0,
@@ -15,17 +13,17 @@ cc.Class({
         _callback: function() {}
     },
 
-    closePopup: function() {
-        this.node.removeFromParent(true);
-    },
-
-    // use this for initialization
     onLoad: function () {
 
     },
+
+    closePopup : function () {
+        this.disappear(Config.name.COMMON_POPUP);
+    },
+
     onCallBack: function() {
         this._callback();
-        this.node.removeFromParent(true);
+        this.disappear(Config.name.COMMON_POPUP);
     },
 
     init: function(msg, type, callback) {
@@ -48,9 +46,4 @@ cc.Class({
         }
         this._callback = callback;
     }
-
-    // called every frame, uncomment this function to activate update callback
-    // update: function (dt) {
-
-    // },
 });
