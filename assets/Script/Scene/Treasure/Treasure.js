@@ -8,8 +8,10 @@
 //  - [Chinese] http://www.cocos.com/docs/creator/scripting/life-cycle-callbacks.html
 //  - [English] http://www.cocos2d-x.org/docs/editors_and_tools/creator-chapters/scripting/life-cycle-callbacks/index.html
 
+var BaseScene = require('BaseScene');
+
 cc.Class({
-    extends: cc.Component,
+    extends: BaseScene,
 
     properties: {
         // foo: {
@@ -33,9 +35,20 @@ cc.Class({
 
     // onLoad () {},
 
-    start () {
-
+    start: function() {
+        cc.log("on start");
     },
+    onLoad: function() {
+        cc.log("on load");
+    },
+    onGameStatus: function() {
+        
+    },
+
+    handleMessage: function() {
+
+    }
+
 
     // update (dt) {},
 });

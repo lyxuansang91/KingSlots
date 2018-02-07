@@ -43,7 +43,6 @@ cc.Class({
     },
 
     scrollToLeft: function(){
-       //this.scrollView.jumpTo()
     },
 
     scrollToRight: function(){
