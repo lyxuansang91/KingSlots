@@ -228,7 +228,7 @@ var NetworkManager = {
 /** The Constant EXPIRED_SESSION. */
         EXPIRED_SESSION: 9999
     },
-    URL: "ws://150.95.105.1:1280/megajackpot",
+    URL: "ws://163.44.207.51:1280/megajackpot",
     sessionId: "",
     getSessionId: function() {
         return NetworkManager.sessionId;
@@ -329,6 +329,18 @@ var NetworkManager = {
                 break;
             case NetworkManager.MESSAGE_ID.CARD_CONFIG:
                 msg = proto.BINCardConfigResponse.deserializeBinary(bytes);
+                break;
+            case NetworkManager.MESSAGE_ID.START_MATCH:
+                msg = proto.BINStartMatchResponse.deserializeBinary(bytes);
+                break;
+            case NetworkManager.MESSAGE_ID.MATCH_BEGIN:
+                msg = proto.BINMatchEndResponse.deserializeBinary(bytes);
+                break;
+            case NetworkManager.MESSAGE_ID.BET:
+                msg = proto.BINBetResponse.deserializeBinary(bytes);
+                break;
+            case NetworkManager.MESSAGE_ID.INSTANT_MESSAGE:
+                msg = proto.BINInstantMessageResponse.deserializeBinary(bytes);
                 break;
         }
 
@@ -679,9 +691,6 @@ var NetworkManager = {
             window.ws.onclose = function (event) {
                 console.log("Websocket instance was closed");
             };
-            window.ws.onmessage = function(e) {
-
-            }
         }
          else {
             if(window.ws.readyState == WebSocket.OPEN) {

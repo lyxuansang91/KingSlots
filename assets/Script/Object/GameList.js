@@ -29,7 +29,7 @@ cc.Class({
     },
 
     populateList: function() {
-        var listGame = [20,19,17,18];
+        var listGame = [Common.ZONE_ID.MINI_BACAY,Common.ZONE_ID.MINI_POKER,Common.ZONE_ID.TAIXIU, Common.ZONE_ID.VQMM];
         this.requestJar();
         var contentWidth = listGame.length * 300;
         this.content.setContentSize(contentWidth, this.content.getContentSize().height);
@@ -56,7 +56,7 @@ cc.Class({
     // called every frame
     update: function (dt) {
         this.timeDelta = this.timeDelta + dt;
-        if(this.timeDelta >= 2.0) {
+        if(this.timeDelta >= 5.0) {
             this.requestJar();
             this.timeDelta = 0;
         }
@@ -73,18 +73,15 @@ cc.Class({
         NetworkManager.hideLoading();
         if(event.data!==null || event.data !== 'undefined') {
             var lstMessage = NetworkManager.parseFrom(event.data, event.data.byteLength);
-                    if(lstMessage.length > 0) {
-                for(var i = 0; i < lstMessage.length; i++) {
-                    var buffer = lstMessage[i];
-                    this.handleMessage(buffer);
-                }
+            for(var i = 0; i < lstMessage.length; i++) {
+                var buffer = lstMessage[i];
+                this.handleMessage(buffer);
             }
         }
     },
 
     jarResponseHandler: function(resp) {
         cc.log("jar response handler:", resp.toObject());
-
         if(resp.getResponsecode()) {
             if(resp.getJarinfoList().length > 0) {
                 for(var i = 0; i < resp.getJarinfoList().length; i++) {
@@ -120,6 +117,7 @@ cc.Class({
     enterZoneMessageResponseHandler: function(enterZoneMessage) {
         if (enterZoneMessage != 0) {
             //common.initialize = initialMessage.responseCode;
+            cc.log("enter zone response:", enterZoneMessage.toObject());
             if (enterZoneMessage.getResponsecode()) {
                 Common.setEnterZone(enterZoneMessage);
                 var zoneId = enterZoneMessage.getZoneid();
@@ -144,7 +142,9 @@ cc.Class({
                     // notify->onHideNotify();
                     // this->unscheduleUpdate();
 
-
+                    if(Common.getZoneId() === Common.ZONE_ID.TAIXIU) {
+                        NetworkManager.getEnterRoomMessageFromServer(0, "");
+                    }
                     //cc.director.loadScene('Table');
                 }
 
@@ -152,6 +152,21 @@ cc.Class({
                 // Common::getInstance()->setRequestRoomType(-1);
                 // Common::getInstance()->setZoneId(-1);  //reset zone id
             }
+        }
+    },
+    loadTaiXiu: function() {
+        var scene = cc.director.getScene();
+        if(cc.isValid(scene) && !cc.isValid(scene.getChildByName("PopupTaiXiu"))){
+            cc.loader.loadRes("prefabs/PopupTaiXiu",function(error, prefab) {
+                if(!error){
+                    var taiXiu = cc.instantiate(prefab);
+                    if(cc.isValid(taiXiu)){
+                        taiXiu.x = Common.width / 2;
+                        taiXiu.y = Common.height / 2;
+                        scene.addChild(taiXiu);
+                    }
+                }
+            });
         }
     },
     enterRoomResponseHandler: function(response) {
@@ -171,6 +186,9 @@ cc.Class({
                 cc.director.loadScene('minipoker', function() {
                     minipoker.instance.initDataFromLoading(Common.getEnterZone(), response);
                 });
+            } else if(Common.getZoneId() === Common.ZONE_ID.TAIXIU) {
+                var self = this;
+                self.loadTaiXiu();
             }
         }
     }
