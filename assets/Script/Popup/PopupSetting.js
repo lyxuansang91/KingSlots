@@ -8,9 +8,5 @@ cc.Class({
 
     onLoad : function () {
 
-    },
-
-    disappear: function () {
-        this._super();
     }
 });
