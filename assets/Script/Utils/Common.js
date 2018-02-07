@@ -465,7 +465,8 @@ var Common = {
                         popup.y = Common.height / 2;
                         if(cb) {
                             var component = popup.getComponent(name_popup);
-                            cb(component,name_popup);
+                            component.setNamePopup(name_popup);
+                            cb(component);
                             scene.addChild(popup,Config.index.POPUP);
                         }
 

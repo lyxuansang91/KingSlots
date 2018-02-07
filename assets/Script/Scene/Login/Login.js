@@ -91,11 +91,11 @@ cc.Class({
         }
 
         if(res.hasMessage() && res.getMessage() !== "") {
-            Common.showPopup(Config.name.COMMON_POPUP,function(message_box,name_popup) {
+            Common.showPopup(Config.name.COMMON_POPUP,function(message_box) {
                 message_box.init(res.getMessage(), 1, function() {
                     cc.log("on callback");
                 });
-                message_box.appear(name_popup);
+                message_box.appear();
             });
         }
     },
