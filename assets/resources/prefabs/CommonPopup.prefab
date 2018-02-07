@@ -816,7 +816,7 @@
       "__id__": 1
     },
     "component": "CommonPopup",
-    "handler": "closePopup",
+    "handler": "disappear",
     "customEventData": ""
   },
   {
