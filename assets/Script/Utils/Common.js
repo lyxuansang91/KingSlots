@@ -447,6 +447,33 @@ var Common = {
 
     },
 
+    closePopup: function (name_popup) {
+        var scene = cc.director.getScene();
+        if(cc.isValid(scene) && cc.isValid(scene.getChildByName(name_popup))){
+            scene.getChildByName(name_popup).destroy();
+        }
+    },
+
+    showPopup: function (name_popup, cb) {
+        var scene = cc.director.getScene();
+        if(cc.isValid(scene) && !cc.isValid(scene.getChildByName(name_popup))){
+            cc.loader.loadRes("prefabs/" + name_popup,function(error, prefab) {
+                if(!error){
+                    var messagebox = cc.instantiate(prefab);
+                    if(cc.isValid(messagebox)){
+                        messagebox.x = Common.width / 2;
+                        messagebox.y = Common.height / 2;
+
+                        if(cb) {
+                            cb(messagebox);
+                        }
+
+                    }
+                }
+            })
+        }
+    },
+
     CountUp1: function(target, startValue, endValue, decimals, duration, chartoption) {
         var options = {
             useEasing: true,
@@ -525,7 +552,6 @@ var Common = {
             return x1 + x2
         }
 
-        //options = optionss;
         for (var key in options)
             if (options.hasOwnProperty(key)) options[key] = options[key];
         if (options.separator === "") options.useGrouping = false;
@@ -538,7 +564,6 @@ var Common = {
         var decimals = Math.max(0, decimals || 0);
         var dec = Math.pow(10, decimals);
         var duration = Number(duration) * 1E3 || 2E3;
-        // var self = this;
 
         var printValue = function (value) {
             var result = !isNaN(value) ? formatNumber(value) : "0";
@@ -557,31 +582,31 @@ var Common = {
     },
 
     wordWrap: function(str, maxWidth) {
-    var newLineStr = "\n";
-    var done = false;
-    var res = '';
-    do {
-        var found = false;
-        // Inserts new line at first whitespace of the line
-        for (var i = maxWidth - 1; i >= 0; i--) {
-            if (this.testWhite(str.charAt(i))) {
-                res = res + [str.slice(0, i), newLineStr].join('');
-                str = str.slice(i + 1);
-                found = true;
-                break;
+        var newLineStr = "\n";
+        var done = false;
+        var res = '';
+        do {
+            var found = false;
+            // Inserts new line at first whitespace of the line
+            for (var i = maxWidth - 1; i >= 0; i--) {
+                if (this.testWhite(str.charAt(i))) {
+                    res = res + [str.slice(0, i), newLineStr].join('');
+                    str = str.slice(i + 1);
+                    found = true;
+                    break;
+                }
             }
-        }
-        // Inserts new line at maxWidth position, the word is too long to wrap
-        if (!found) {
-            res += [str.slice(0, maxWidth), newLineStr].join('');
-            str = str.slice(maxWidth);
-        }
+            // Inserts new line at maxWidth position, the word is too long to wrap
+            if (!found) {
+                res += [str.slice(0, maxWidth), newLineStr].join('');
+                str = str.slice(maxWidth);
+            }
 
-        if (str.length < maxWidth)
-            done = true;
-    } while (!done);
+            if (str.length < maxWidth)
+                done = true;
+        } while (!done);
 
-    return res + str;
+        return res + str;
     },
 
     testWhite: function(x) {

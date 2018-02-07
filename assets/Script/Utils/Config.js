@@ -32,5 +32,9 @@ var Config = {
     POPUP_TYPE: {
         SMALL : 1,
         LARGE : 2
+    },
+    name : {
+        COMMON_POPUP : "CommonPopup",
+        POPUP_SETTING : "PopupSetting"
     }
 }

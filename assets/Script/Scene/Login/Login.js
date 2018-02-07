@@ -70,15 +70,19 @@ cc.Class({
             if (res.hasUsersetting()) {
                 this.saveUserSetting(res.getUsersetting());
             }
+
             if (res.hasEnableevent()) {
                 Common.setEnableEvent(res.getEnableevent());
             }
+
             if (res.hasEnablenotification()) {
                 Common.setEnableNotification(res.getEnablenotification());
             }
+
             if(res.hasEnabletx()){
                 Common.setEnableTaixiu(res.getEnabletx());
             }
+
             if (res.hasNoticetext()){
                 Common.setNoticeText(res.getNoticetext());
             }
@@ -87,15 +91,16 @@ cc.Class({
         }
 
         if(res.hasMessage() && res.getMessage() !== "") {
-            var messagebox = cc.instantiate(this.messagePopup).getComponent("CommonPopup");
-            messagebox.init(res.getMessage(), 0, function() {
-                cc.log("on callback");
-                //
+            var scene = cc.director.getScene();
+
+            Common.showPopup("CommonPopup", function(messagebox) {
+                var component = messagebox.getComponent(Config.name.COMMON_POPUP);
+                component.init(res.getMessage(), 1, function() {
+                    cc.log("on callback");
+                });
+                component.appear(Config.name.COMMON_POPUP);
+                scene.addChild(messagebox,Config.index.POPUP);
             });
-            cc.log("message box:", messagebox);
-            // messagebox.setAnchorPoint(cc.p(0.5, 0.5));
-            messagebox.node.setPosition(cc.p(cc.winSize.width / 2, cc.winSize.height / 2));
-            this.node.addChild(messagebox.node);
         }
 
     },
@@ -163,9 +168,6 @@ cc.Class({
         cc.log("login google");
         // var packageName = jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getPackageNameJNI", "()Ljava/lang/String;");
         // cc.log("package Name:", packageName);
-    },
-    close: function(){
-        // cc.log("close");
     },
     saveUserInfo: function(userInfo) {
         Common.setUserName(userInfo.getUsername());
