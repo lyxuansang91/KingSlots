@@ -1,5 +1,7 @@
 var NetworkManager = require('NetworkManager');
-
+var HISTORY_SPIN = 1;
+var HISTORY_BREAK_JAR = 2;
+var HISTORY_TOP_USER = 3;
 var MiniPoker = cc.Class({
     extends: cc.Component,
 
@@ -21,7 +23,8 @@ var MiniPoker = cc.Class({
         jarMoney: cc.Label,
         isRequestJar: false,
         jarValue: 0,
-        roomIndex: 0
+        roomIndex: 0,
+        popupPrefab: cc.Prefab,
     },
     statics: {
       instance: null
@@ -369,10 +372,29 @@ var MiniPoker = cc.Class({
 
     calculateTurnType: function() {
         return this.getKeyBet() + 1;
+    },
+
+    showSpin: function () {
+
+        var tabString = ["Lịch sử quay", "Lịch sử nổ hũ", "Top cao thủ"];
+
+        Common.showPopup(Config.name.POPUP_FULL,function(message_box) {
+            message_box.init(tabString, "history", HISTORY_SPIN);
+            message_box.appear();
+        });
+
+
+    },
+
+    showTopUser: function () {
+
+        var tabString = ["Lịch sử quay", "Lịch sử nổ hũ", "Top cao thủ"];
+
+        Common.showPopup(Config.name.POPUP_FULL,function(message_box) {
+            message_box.init(tabString, "history", HISTORY_TOP_USER);
+            message_box.appear();
+        });
+
+
     }
-
-    // called every frame, uncomment this function to activate update callback
-    // update: function (dt) {
-
-    // },
 });

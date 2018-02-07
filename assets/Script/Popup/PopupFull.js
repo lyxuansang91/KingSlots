@@ -16,6 +16,7 @@ var PopupFull = cc.Class({
         tableView: cc.Node,
         contentMask: cc.Node,
         userinfoPrefab: cc.Prefab,
+        list_tab : []
     },
 
     statics: {
@@ -25,31 +26,10 @@ var PopupFull = cc.Class({
     // use this for initialization
     onLoad: function () {
         PopupFull.instance = this;
-        // window.ws.onmessage = this.ongamestatus.bind(this);
     },
     setHistoryType: function (historyType) {
         this.historyType = historyType;
     },
-    // ongamestatus: function(event) {
-    //     if(event.data!==null || event.data !== 'undefined') {
-    //         var lstMessage = NetworkManager.parseFrom(event.data, event.data.byteLength);
-    //         if(lstMessage.length > 0) {
-    //             cc.log("lstMessage =", lstMessage);
-    //             for(var i = 0; i < lstMessage.length; i++) {
-    //                 var buffer = lstMessage[i];
-    //                 this.handleMessage(buffer);
-    //             }
-    //         }
-    //     }
-    // },
-    // handleMessage: function(buffer) {
-    //     switch (buffer.message_id) {
-    //         case NetworkManager.MESSAGE_ID.LOOK_UP_GAME_HISTORY:
-    //             var msg = buffer.response;
-    //             this.lookupGameMiniPokerResponseHandler(msg);
-    //             break;
-    //     }
-    // },
     lookupGameMiniPokerResponseHandler: function(response) {
         if (response !== 0) {
             cc.log("look up game history response: ", response);
@@ -121,21 +101,23 @@ var PopupFull = cc.Class({
         cc.log("array =", array);
         return array;
     },
-    init: function (tab, name, target) {
-        // cc.log("target 1 =", target);
-        // this.setTarget(target);
-        var nodeChild = new cc.Node();
-        nodeChild.parent = this.scrollView.content;
+    init: function (tab, name, select) {
+        var self = this;
         for(var i = 0; i < tab.length; i++){
             var item = cc.instantiate(this.topPrefab);
-            item.getComponent('PopupLeftItem').init(i+1, tab[i], name);
+            var component = item.getComponent('PopupLeftItem');
+            component.init(i+1, tab[i], name, select, function (index) {
+                self.showTab(index);
+            });
             var posX =  0;
             var posY = 0;
 
             posX = (i - tab.length/2 + 0.5)* item.getContentSize().width ;
             item.setPositionX(posX);
             item.setPositionY(posY);
-            nodeChild.addChild(item);
+            this.scrollView.content.addChild(item);
+
+            this.list_tab.push(component);
         }
 
         if(name === "userinfo"){
@@ -144,23 +126,24 @@ var PopupFull = cc.Class({
             var posX = this.contentMask.getPositionX();
             var posY = this.contentMask.getPositionY();
             var item = cc.instantiate(this.userinfoPrefab);
-            // item.setPositionX(posX);
-            // item.setPositionY(posY);
             item.getComponent('UserInfo').init();
             this.contentMask.addChild(item);
         }
 
     },
-    // setTarget: function (target) {
-    //     cc.log("target =", target);
-    //     this.target = target.node;
-    // },
-    // getTarget: function () {
-    //     return this.target;
-    // },
+
+    showTab: function (index) {
+        cc.log("index =", index);
+        for(var i = 0; i < this.list_tab.length; i++){
+          if(i === index){
+              this.list_tab[i].setActive(true);
+          }else{
+              this.list_tab[i].setActive(false);
+          }
+        }
+    },
+
     disappear:function () {
-        // var nodeParent = this.getTarget();
-        // nodeParent.removeChild(this);
         this._super();
     }
 });

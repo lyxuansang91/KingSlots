@@ -264,19 +264,13 @@
     },
     "duration": 0.1,
     "zoomScale": 1.2,
-    "pressedSprite": {
-      "__uuid__": "6306b72a-bb3d-431c-a5cb-6a882ee097af"
-    },
-    "hoverSprite": {
-      "__uuid__": "6306b72a-bb3d-431c-a5cb-6a882ee097af"
-    },
     "clickEvents": [
       {
         "__id__": 8
       }
     ],
     "_N$interactable": true,
-    "_N$enableAutoGrayEffect": false,
+    "_N$enableAutoGrayEffect": true,
     "_N$normalColor": {
       "__type__": "cc.Color",
       "r": 255,
@@ -292,6 +286,10 @@
       "a": 255
     },
     "_N$normalSprite": null,
+    "_N$pressedSprite": null,
+    "pressedSprite": null,
+    "_N$hoverSprite": null,
+    "hoverSprite": null,
     "_N$disabledSprite": null,
     "_N$target": {
       "__id__": 2
@@ -304,7 +302,7 @@
     },
     "component": "PopupLeftItem",
     "handler": "btnEvent",
-    "customEventData": ""
+    "customEventData": "1"
   },
   {
     "__type__": "cbbf6CyWFhBe4lz4sLcAaul",
@@ -320,7 +318,9 @@
     "background": {
       "__id__": 7
     },
-    "historyType": 1
+    "historyType": 1,
+    "list_tab": [],
+    "callBack": null
   },
   {
     "__type__": "cc.PrefabInfo",
@@ -347,7 +347,14 @@
     "background": {
       "__id__": 7
     },
-    "historyType": 1
+    "historyType": 1,
+    "list_tab": [
+      {
+        "__uuid__": "a688fded-b5cb-4873-b2ac-a4c1cf6cfacb"
+      },
+      null
+    ],
+    "callBack": null
   },
   {
     "__type__": "cc.PrefabInfo",
