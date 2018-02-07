@@ -83,26 +83,25 @@ cc.Class({
             }
         }
     },
+
     showToast: function (strMess, target, delayTime) {
         delayTime = delayTime !== null ? delayTime : 2;
-        var nodeChild = new cc.Node();
-        nodeChild.parent = target.node;
-        var mess_bg = nodeChild.addComponent(cc.Sprite);
-        mess_bg.node.setPosition(cc.p(cc.winSize.width/2, cc.winSize.height/2));
-        var url = "resources/common/popup/setting/bg_popup_setting_text.png";
-        var image = cc.url.raw(url);
-        var texture = cc.textureCache.addImage(image);
-        mess_bg.node.getComponent(cc.Sprite).spriteFrame = new cc.SpriteFrame(texture);
 
-        var nodeChildLabel = new cc.Node();
-        nodeChildLabel.parent = target.node;
-        var message = nodeChildLabel.addComponent(cc.Label);
-        message.node.setPosition(cc.p(cc.winSize.width/2,cc.winSize.height/2));
-        message.string = strMess;
+        var scene = cc.director.getScene();
+        if(cc.isValid(scene) && !cc.isValid(scene.getChildByName("Toast"))){
+            cc.loader.loadRes("prefabs/Toast",function(error, prefab) {
+                if(!error){
+                    var loading = cc.instantiate(prefab);
+                    if(cc.isValid(loading)){
+                        loading.x = Common.width / 2;
+                        loading.y = Common.height / 2;
 
-        mess_bg.node.runAction(cc.sequence(cc.delayTime(delayTime), cc.removeSelf(), null));
-        message.node.runAction(cc.sequence(cc.delayTime(delayTime), cc.removeSelf(), null));
-
+                        loading.getComponent("Toast").loadMessage(strMess);
+                        scene.addChild(loading,Config.index.LOADING);
+                    }
+                }
+            })
+        }
     }
 });
 

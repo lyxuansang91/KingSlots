@@ -3,7 +3,7 @@
   "_name": "NoHu",
   "_objFlags": 0,
   "_rawFiles": null,
-  "_duration": 2,
+  "_duration": 4,
   "sample": 60,
   "speed": 1,
   "wrapMode": 0,
@@ -17,7 +17,7 @@
               "value": 0
             },
             {
-              "frame": 0.25,
+              "frame": 0.16666666666666666,
               "value": 255
             }
           ],
@@ -27,15 +27,11 @@
               "value": 0
             },
             {
-              "frame": 0.25,
+              "frame": 0.16666666666666666,
               "value": 360
             },
             {
-              "frame": 1,
-              "value": 540
-            },
-            {
-              "frame": 2,
+              "frame": 4,
               "value": 720
             }
           ],
@@ -45,7 +41,7 @@
               "value": 0
             },
             {
-              "frame": 0.25,
+              "frame": 0.16666666666666666,
               "value": 1
             }
           ],
@@ -55,22 +51,36 @@
               "value": 0
             },
             {
-              "frame": 0.25,
+              "frame": 0.16666666666666666,
               "value": 1
             }
           ]
         }
       },
-      "txt_nohu": {
+      "light_down": {
         "props": {
+          "rotation": [
+            {
+              "frame": 0,
+              "value": 0
+            },
+            {
+              "frame": 0.16666666666666666,
+              "value": 360
+            },
+            {
+              "frame": 4,
+              "value": -360
+            }
+          ],
           "opacity": [
             {
               "frame": 0,
               "value": 0
             },
             {
-              "frame": 0.25,
-              "value": 255
+              "frame": 0.16666666666666666,
+              "value": 50
             }
           ],
           "scaleX": [
@@ -79,15 +89,7 @@
               "value": 0
             },
             {
-              "frame": 0.25,
-              "value": 1
-            },
-            {
-              "frame": 0.5,
-              "value": 1.2
-            },
-            {
-              "frame": 1,
+              "frame": 0.16666666666666666,
               "value": 1
             }
           ],
@@ -97,15 +99,7 @@
               "value": 0
             },
             {
-              "frame": 0.25,
-              "value": 1
-            },
-            {
-              "frame": 0.5,
-              "value": 1.2
-            },
-            {
-              "frame": 1,
+              "frame": 0.16666666666666666,
               "value": 1
             }
           ]

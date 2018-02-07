@@ -26,7 +26,12 @@ var BacaySence = cc.Class({
         bet: 0,
         jarType: 1,
         isRequestJar: false,
-        popupPrefab: cc.Prefab
+        popupPrefab: cc.Prefab,
+        list_item: [],
+        stepCard : 9,
+        list_recent_value: null,
+        number : 3,
+        time_move: 1,
 
     },
     statics: {
@@ -40,41 +45,37 @@ var BacaySence = cc.Class({
     onLoad: function () {
         cc.log("zindex =", this.node.zIndex);
         BacaySence.instance = this;
-        Common.setMiniPokerSceneInstance(cc.director.getScene());
-
+        this.userMoney.string = Common.numberFormatWithCommas(Common.getCash());
         window.ws.onmessage = this.ongamestatus.bind(this);
-        this.userMoney.string = Common.getCash();
-        for(var i = 0; i < 3; i++){
-            for(var j = 0; j < 3; j++){
+
+        this.initFirstCard();
+        setInterval(function() {
+            this.requestJar();
+        }.bind(this), 5000);
+        Common.setMiniThreeCardsSceneInstance(cc.director.getScene());
+
+
+    },
+
+    initFirstCard: function() {
+        var random_number = Common.genRandomNumber(null, this.stepCard, this.number);
+        var items_value = Common.genArrayToMultiArray(random_number, this.stepCard, this.number);
+        this.list_recent_value = Common.create2DArray(this.stepCard);
+        for(var i = 0; i < this.stepCard; i++){
+            for(var j = 0; j < this.number; j++){
                 var item = cc.instantiate(this.cardPrefab);
-                var posX =  0;
-                if(j === 0){
-                    posX = - item.getContentSize().width ;
-                } else if(j === 2){
-                    posX = item.getContentSize().width ;
-                } else {
-                    posX = 0;
-                }
-
-                var posY = 0;
-                if(i === 0){
-                    posY = item.getContentSize().height;
-                } else if (i === 1){
-                    posY = 0;
-                } else {
-                    posY = - (i - 1)*item.getContentSize().height;
-                }
-
-                item.getComponent('CardItem').init();
+                var posX = (j - 1) * item.getContentSize().width;
+                var posY = (i - 1) * item.getContentSize().height;
+                item.getComponent('CardItem').replaceCard(items_value[i][j]);
                 item.setPositionY(posY);
                 item.setPositionX(posX);
 
+                this.list_item.push(item);
                 this.cardView.node.addChild(item);
             }
-
         }
 
-
+        this.list_recent_value = items_value;
     },
 
     initDataFromLoading: function(enterZone, enterRoom){
@@ -242,7 +243,7 @@ var BacaySence = cc.Class({
                     //set lai tien cho nguoi choi
 
                     Common.setCash(origin_money);
-                    this.userMoney.string = origin_money;
+                    this.userMoney.string = Common.numberFormatWithCommas(origin_money);
                     //this->moneyEvent->onEventMoneyMiniGame(true,origin_money);
 
                 }
@@ -274,92 +275,79 @@ var BacaySence = cc.Class({
     },
     implementSpinMiniThreeCards: function(carx,response) {
         cc.log("carx =", carx);
-        this.cardView.node.removeAllChildren(true);
+        // this.cardView.node.removeAllChildren(true);
         var text_emoticon = response.getTextemoticonsList()[0];
         this.isFinishSpin = false;
         this.isBreakJar = (text_emoticon.getEmoticonid() === 54); //54: nổ hũ
+        var random_number = Common.genRandomNumber(carx, this.stepCard, this.number);
+        var items_value = Common.genArrayToMultiArray(random_number, this.stepCard, this.number);
+        cc.log("item value =", items_value);
+        cc.log("stepCard =", this.stepCard);
+        items_value[this.stepCard-2] = carx;
 
-        var stepCard = 11;
-        var number = 3;
-        var rs = Common.genRandomNumber(carx, stepCard, number);
-        var test = Common.genArrayToMultiArray(rs, stepCard, number);
-        test[stepCard-2] = carx;
-        cc.log("test carx =", test.length);
-        for(var i = 0; i < test.length; i++){
-            for(var j = 0; j < test[i].length; j++){
-                var item = cc.instantiate(this.cardPrefab);
-                var cardValue = test[i][j];
-                var posX =  0;
-                if(j === 0){
-                    posX = - item.getContentSize().width ;
-                } else if(j === 2){
-                    posX = item.getContentSize().width ;
-                } else {
-                    posX = 0;
-                }
+        if(items_value.length * this.number != this.list_item.length){
+            return;
+        }
 
-                var posY = 0;
+        for(var i = 0; i < this.list_item.length; i++){
+            var x = parseInt(i/this.number);
+            var y = parseInt(i%this.number);
 
-                if(i === 0){
-                    posY = - item.getContentSize().height;
-                } else if (i === 1){
-                    posY = 0;
-                } else {
-                    posY = (i - 1)*item.getContentSize().height;
-                }
-
-
-                item.getComponent('CardItem').replaceCard(cardValue);
-
-                item.setPositionY(posY);
-                item.setPositionX(posX);
-
-                this.cardView.node.addChild(item);
-
-                var paddingCard = item.getContentSize().height;
-
-                var moveAction = cc.moveBy(1.5 + j*0.25,
-                    cc.p(0, - (test.length - 3)*paddingCard));
-
-                if(j === 0){
-                    moveAction = cc.moveBy(1.5 + j*0.25,
-                        cc.p(0, - (test.length - 3)*paddingCard));
-                }else{
-                    moveAction = cc.moveBy((j-1) + 1.5 + (j-1)*0.25 + (test.length - test[i].length) / stepCard,
-                        cc.p(0, - (test.length - 4)*paddingCard));
-                    // moveAction = cc.moveBy(1.5 + j*0.25,
-                    //     cc.p(0, - (test.length - 3)*paddingCard));
-                }
-
-                if(j === 2 && i === (test.length -1)){
-                    var emoticon = response.getTextemoticonsList()[0];
-                    var emotionId = emoticon.getEmoticonid();
-                    var message = emoticon.getMessage();
-                    var moneyResponse = this.getBINUpdateMoneyResponse();
-                    var callFunc = cc.callFunc(function () {
-                        this.handleRanking(emotionId, message, moneyResponse);
-                    },this);
-
-                    var callFuncAutoSpin = cc.callFunc(function () {
-                        if(!this.isBreakJar)
-                             this.isFinishSpin = true;
-                    }, this);
-
-                    item.runAction(cc.sequence(moveAction, cc.moveBy(1.5, cc.p(0, -paddingCard)), callFunc, cc.delayTime(2), callFuncAutoSpin, null));
-
-                }else{
-                    if(j === 0){
-                        item.runAction(moveAction);
-                    }else{
-                        item.runAction(cc.sequence(moveAction, cc.moveBy(1.5, cc.p(0, -paddingCard))));
-                    }
-
-                }
-
-                item.runAction(moveAction);
-
+            if(i < 3*this.number){
+                var i1 = this.stepCard - (3 - x);
+                var j1 = y;
+                this.list_item[i].getComponent('CardItem').replaceCard(this.list_recent_value[i1][j1]);
             }
 
+            var posX = (y - 1) * this.list_item[i].getContentSize().width;
+            var posY = (x - 1) * this.list_item[i].getContentSize().height;
+
+            this.list_item[i].setPositionX(posX);
+            this.list_item[i].setPositionY(posY);
+        }
+
+        this.list_recent_value = items_value;
+
+        for(var i = 0; i < this.list_item.length; i++){
+            var x = parseInt(i/this.number);
+            var y = parseInt(i%this.number);
+
+            var card = this.list_item[i];
+
+            var card_value = items_value[x][y];
+            if(i >= 3*this.number){
+                card.getComponent('CardItem').replaceCard(card_value);
+            }
+
+            var h = card.getContentSize().height;
+
+            var move1 = cc.moveBy(0.2, cc.p(0,h*0.25));
+            var move2 = cc.moveBy(0.15, cc.p(0,h*0.25));
+            var move3 = cc.moveBy(this.time_move,cc.p(0,-(this.stepCard - 3.0)*h - 0.5*h));
+            var delay = cc.delayTime(y*0.3);
+
+            if(i == this.list_item.length - 1){
+                var emoticon = response.getTextemoticonsList()[0];
+                var emotionId = emoticon.getEmoticonid();
+                var message = emoticon.getMessage();
+                var moneyResponse = this.getBINUpdateMoneyResponse();
+                var callFunc = cc.callFunc(function () {
+                    this.handleRanking(emotionId, message, moneyResponse);
+                },this);
+
+                var callFuncAutoSpin = cc.callFunc(function () {
+                    if(!this.isBreakJar)
+                        this.isFinishSpin = true;
+                }, this);
+
+                // // khi dừng hiệu ứng
+                // var call_func = cc.callFunc(function () {
+                //     cc.log("FINISH!!!!");
+                // });
+                card.runAction(cc.sequence(delay,move1,move3,move2,callFunc, cc.delayTime(2), callFuncAutoSpin, null));
+            }else{
+                card.runAction(cc.sequence(delay,move1,move3,move2));
+            }
         }
 
 
@@ -455,7 +443,7 @@ var BacaySence = cc.Class({
                         var origin_money = moneybox.getCurrentmoney();
                         //set lai tien cho nguoi choi
                         Common.setCash(origin_money);
-                        this.userMoney.string = origin_money;
+                        this.userMoney.string = Common.numberFormatWithCommas(origin_money);
                     }
                 }
             }
@@ -480,8 +468,10 @@ var BacaySence = cc.Class({
                 if (this.jarType === jar_type_response) {
                     // this.moneyJar.node.runAction(cc.actionInterval(1.0, preJarValue, this.jarValue, function(val){
                     //     var number_cash = Common.numberFormatWithCommas(val);
-                        this.moneyJar.string = Common.numberFormatWithCommas(this.jarValue);
+                    //     this.moneyJar.string = Common.numberFormatWithCommas(this.jarValue);
                     // }));
+                    // Common.CountUp1(this.moneyJar, preJarValue, this.jarValue, 0, 1);
+                    Common.updateMoney(this.moneyJar, preJarValue, preJarValue, this.jarValue);
                 }else {
                     this.showJarValue(this.jarValue);
                 }
@@ -507,10 +497,10 @@ var BacaySence = cc.Class({
         var callFunc2 = cc.callFunc(function (){
             this.setOriginMoney();
             this.isBreakJar = false;
-        });
+        },this);
 
 
-        item.node.runAction(cc.sequence(cc.delayTime(2),callFunc2, cc.removeSelf(), null));
+        item.node.runAction(cc.sequence(cc.delayTime(2),callFunc2, cc.delayTime(1), cc.fadeOut(1), cc.removeSelf(), null));
         // var animState = anim.getAnimationState('NoHu');
         // animState.wrapMode = cc.WrapMode.Normal;
         // anim.on('finished', function(event) {

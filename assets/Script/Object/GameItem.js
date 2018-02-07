@@ -66,20 +66,23 @@ cc.Class({
         switch (jarType) {
             case 1:
                 if(this.m1_value < value) {
-                    Common.updateMoney(this.money1, this.m1_value, this.m1_value, value);
-                    this.m1_value = value;
+                    // Common.updateMoney(this.money1, this.m1_value, this.m1_value, value);
+                    // this.m1_value = value;
+                    Common.CountUp1(this.money1, this.m1_value, value, 0, 1);
                 }
                 break;
             case 2:
                 if(this.m2_value < value) {
-                    Common.updateMoney(this.money2, this.m2_value, this.m2_value, value);
-                    this.m2_value = value;
+                    // Common.updateMoney(this.money2, this.m2_value, this.m2_value, value);
+                    // this.m2_value = value;
+                    Common.CountUp1(this.money2, this.m2_value, value, 0, 1);
                 }
                 break;
             case 3:
                 if(this.m3_value < value) {
-                    Common.updateMoney(this.money3, this.m3_value, this.m3_value, value);
-                    this.m3_value = value;
+                    // Common.updateMoney(this.money3, this.m3_value, this.m3_value, value);
+                    // this.m3_value = value;
+                    Common.CountUp1(this.money3, this.m3_value, value, 0, 1);
                 }
                 break;
             default:
