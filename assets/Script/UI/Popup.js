@@ -23,7 +23,9 @@ cc.Class({
 
         this.bg_dark.node.runAction(cc.fadeOut(0.1));
         var move = cc.scaleTo(0.15,0.5).easing(cc.easeBackIn());
-        this.background.node.runAction(cc.sequence(move,callDisappear));
+        var fade = cc.fadeOut(0.15);
+        var action = cc.spawn(move,fade);
+        this.background.node.runAction(cc.sequence(action,callDisappear));
     },
 
     appear:function (name) {

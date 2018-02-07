@@ -91,19 +91,15 @@ cc.Class({
         }
 
         if(res.hasMessage() && res.getMessage() !== "") {
-            var scene = cc.director.getScene();
-
-            Common.showPopup("CommonPopup", function(messagebox) {
-                var component = messagebox.getComponent(Config.name.COMMON_POPUP);
-                component.init(res.getMessage(), 1, function() {
+            Common.showPopup(Config.name.COMMON_POPUP,function(message_box,name_popup) {
+                message_box.init(res.getMessage(), 1, function() {
                     cc.log("on callback");
                 });
-                component.appear(Config.name.COMMON_POPUP);
-                scene.addChild(messagebox,Config.index.POPUP);
+                message_box.appear(name_popup);
             });
         }
-
     },
+
     handlePingResponseHandler: function(res) {
         cc.log("ping response handler:", res);
         if(res.getResponsecode()) {
@@ -117,6 +113,7 @@ cc.Class({
             }
         }
     },
+
     goIntroScene: function(e) {
         cc.director.loadScene('Intro');
     },
@@ -127,11 +124,7 @@ cc.Class({
         var password = this.edt_password.string;
 
         if(this.edt_username.string === "" || this.edt_password.string === "") {
-            // cc.alert("Tài khoản và mật khẩu không được để trống!");
-            // var item = cc.instantiate(this.toastPrefab).getComponent("ToastScripts");
-            var strMess = "Tài khoản và mật khẩu không được để trống! Tài khoản và mật khẩu không được để trống!";
-            // item.showToast(strMess);
-            // this.node.addChild(item.node);
+            var strMess = "Tài khoản và mật khẩu không được để trống!";
 
             this.showToast(strMess, this, 2);
             return;
