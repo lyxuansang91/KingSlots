@@ -2464,7 +2464,7 @@
     "board_null_line": {
       "__id__": 9
     },
-    "lst_line_selected": [],
+    "lst_number_selected": [],
     "lst_line_results": [
       {
         "__uuid__": "c86c22c7-3bc6-4293-b367-a54eba424a97"
@@ -2526,6 +2526,7 @@
       {
         "__uuid__": "21cdeab4-394e-4faf-ba3e-3712c512c16c"
       }
-    ]
+    ],
+    "lst_line_selected": []
   }
 ]
