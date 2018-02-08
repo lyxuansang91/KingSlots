@@ -7,17 +7,18 @@ cc.Class({
     },
 
     update : function(dt){
-
     },
 
     onLoad: function () {
         cc.log("Base scene");
     },
 
-    handleMessage: function(buffer) {
-        cc.log("HIDELOADING");
-        NetworkManager.hideLoading();
+    onDestroy: function() {
+        this.unscheduleAllCallbacks();
+    },
 
+    handleMessage: function(buffer) {
+        NetworkManager.hideLoading();
         cc.log("buffer:", buffer);
         switch (buffer.message_id) {
             case NetworkManager.MESSAGE_ID.INITIALIZE:
@@ -37,7 +38,7 @@ cc.Class({
     logOutMessageResponseHandler: function(resp) {
         cc.log("log out message:", resp.toObject());
         if(resp.getResponsecode()) {
-            cc.director.runScene('Intro');
+            cc.director.loadScene('Intro');
         }
     },
     initialMessageResponseHandler: function(initialMessage) {

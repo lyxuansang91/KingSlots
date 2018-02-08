@@ -13,7 +13,6 @@ cc.Class({
         //         this._bar = value;
         //     }
         // },
-        myInterVal: null,
         isRequestJar: false,
         jarValue: 0,
         roomIndex: 0,
@@ -24,26 +23,30 @@ cc.Class({
         board_inside: cc.Sprite,
         board_null_line: cc.Node,
 
-        lst_number : [],
+        lst_number : {
+            type: [cc.Integer]
+
+        },
         lst_line_results: [],
         lst_line_selected: []
     },
 
+    ctor: function() {
+        this.lst_number = [6,2,8,5,1,4,10,7,3,9,16,12,19,14,13,17,18,15,11,20];
+    },
     start: function() {
-
         cc.log("on start");
         if(window.ws && window.ws.onmessage)
             window.ws.onmessage = this.onGameStatus.bind(this);
-        /*this.myInterval = setInterval(function() {
-            this.requestJar();
-        }.bind(this), 5000);*/
-
+        this.requestJar();
+        this.schedule(this.requestJar, 5);
         this.initMenu();
     },
 
-    initMenu: function () {
-        this.lst_number = [6,2,8,5,1,4,10,7,3,9,16,12,19,14,13,17,18,15,11,20];
 
+
+
+    initMenu: function () {
         for (var i = 0; i < this.lst_number.length; i++){
 
             var line_result = cc.instantiate(this.line_result);
@@ -91,20 +94,22 @@ cc.Class({
         this.getTurnTreasureRequest(this.betType + 1);
     },
     getTurnTreasureRequest: function(turnType) {
-        var self = this;
         var entries = [];
+
         var entryTurn = new proto.BINMapFieldEntry();
         entryTurn.setKey("turnSlotType");
         entryTurn.setValue(turnType.toString());
         entries.push(entryTurn);
-        var result = self.lst_number.join(",");
+
+        var result = this.lst_number.join(",");
+
         var entryLine = new proto.BINMapFieldEntry();
-        cc.log("result:", result);
         entryLine.setKey("lineSelected");
         entryLine.setValue(result);
         entries.push(entryLine);
         NetworkManager.getTurnMessageFromServer(0, entries);
     },
+
     exitRoom: function() {
         NetworkManager.requestExitRoomMessage(this.roomIndex);
     },
@@ -119,7 +124,8 @@ cc.Class({
         cc.log("on load");
     },
     onDestroy: function() {
-        clearInterval(this.myInterval);
+        this._super();
+        cc.log("on destroy");
     },
 
     onGameStatus: function() {
@@ -153,23 +159,22 @@ cc.Class({
                 for(var i = 0; i < resp.getArgsList().length; i++) {
                     var entry = resp.getArgsList()[i];
                     if(entry.getKey() == "listItem") {
-                        listItem = entry.getValue().split(", ");
-                        cc.log("list item 1:", listItem);
+                        listItem = entry.getValue().split(", ").map(function(item) {
+                            item = parseInt(item);
+                            return item;
+                        });
+
                     } else {
                         if(entry.getValue() !== "")
-                            lineWin = entry.getValue().split(", ");
+                            lineWin = entry.getValue().split(", ").map(function(item) {
+                                item = parseInt(item);
+                                return item;
+                            });
                         else lineWin = [];
-                        cc.log("line win 1:", lineWin);
+
                     }
                 }
                 if(listItem !== null && lineWin !== null) {
-                    for(var i = 0; i < listItem.length; i++) {
-                        listItem[i] = parseInt(listItem[i]);
-                    }
-
-                    for(var i = 0; i < lineWin.length; i++) {
-                        lineWin[i]= parseInt(lineWin[i]);
-                    }
 
                     cc.log("list item:", listItem);
                     cc.log("line win:", lineWin);
@@ -185,13 +190,31 @@ cc.Class({
     },
 
     exitRoomResponseHandler: function(resp) {
+        cc.log("exit room response message: ", resp.toObject());
+        if(resp.getResponsecode()) {
 
+        }
     },
     exitZoneResponseHandler: function(resp) {
+        cc.log("exit zone response message:", resp.toObject());
+        if(resp.getResponsecode()) {
+            Common.setZoneId(-1);
+            cc.director.loadScene('Lobby');
+        }
 
+        if(resp.hasMessage() && resp.getMessage() !== "") {
+
+        }
     },
     jarResponseHandler: function(resp) {
+        cc.log("jar response message:", resp.toObject());
+        if(resp.getResponsecode()) {
 
+        }
+
+        if(resp.hasMessage() && resp.getMessage() !== "") {
+
+        }
     },
 
     handleMessage: function(buffer) {

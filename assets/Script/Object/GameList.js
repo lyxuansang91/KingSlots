@@ -13,11 +13,14 @@ cc.Class({
         lbl_moneys: [],
         jarValue: 0,
         timeDelta: 0,
-        jarResponse: null
+        jarResponse: null,
+        jarRequest: null,
+        isRequestJar: false
     },
 
     // use this for initialization
     onLoad: function () {
+        var self = this;
         this.content = this.scrollView.content;
         this.populateList();
         // var bacayScene = new BacayScene();
@@ -25,7 +28,14 @@ cc.Class({
         // cc.director.preloadScene('BaCay', function () {
         //     cc.log('Next Login scene preloaded');
         // });
+
+
+        this.schedule(self.requestJar, 5);
         this.scheduleOnce(this.goSceneTable, 1);
+    },
+    onDestroy: function() {
+        var self = this;
+        self.unscheduleAllCallbacks();
     },
 
     populateList: function() {
@@ -50,15 +60,13 @@ cc.Class({
     },
 
     requestJar: function() {
-        NetworkManager.getJarRequest(0, null);
+        if(!this.isRequestJar) {
+            this.isRequestJar = true;
+            NetworkManager.getJarRequest(0, null);
+        }
     },
     // called every frame
     update: function (dt) {
-        this.timeDelta = this.timeDelta + dt;
-        if(this.timeDelta >= 5.0) {
-            this.requestJar();
-            this.timeDelta = 0;
-        }
     },
 
     goSceneTable: function() {
@@ -83,6 +91,7 @@ cc.Class({
         cc.log("jar response handler:", resp.toObject());
         if(resp.getResponsecode()) {
             if(resp.getJarinfoList().length > 0) {
+                this.isRequestJar = false;
                 for(var i = 0; i < resp.getJarinfoList().length; i++) {
                     var jarItem = resp.getJarinfoList()[i];
                     var gameid = jarItem.getGameid();

@@ -81,7 +81,7 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 59
+        "__id__": 60
       }
     ],
     "_prefab": null,
@@ -1818,7 +1818,6 @@
       "__id__": 42
     },
     "_enabled": true,
-    "myInterVal": null,
     "isRequestJar": false,
     "jarValue": 0,
     "roomIndex": 0,
@@ -1835,7 +1834,7 @@
     "board_null_line": {
       "__id__": 9
     },
-    "lst_number_selected": [],
+    "lst_number": [],
     "lst_line_results": [
       {
         "__uuid__": "c86c22c7-3bc6-4293-b367-a54eba424a97"
@@ -2505,7 +2504,11 @@
     },
     "duration": 0.1,
     "zoomScale": 1.2,
-    "clickEvents": [],
+    "clickEvents": [
+      {
+        "__id__": 59
+      }
+    ],
     "_N$interactable": true,
     "_N$enableAutoGrayEffect": false,
     "_N$normalColor": {
@@ -2533,6 +2536,15 @@
     }
   },
   {
+    "__type__": "cc.ClickEvent",
+    "target": {
+      "__id__": 42
+    },
+    "component": "Treasure",
+    "handler": "exitRoom",
+    "customEventData": ""
+  },
+  {
     "__type__": "cc.Canvas",
     "_name": "",
     "_objFlags": 0,
@@ -2545,7 +2557,7 @@
       "width": 1334,
       "height": 750
     },
-    "_fitWidth": false,
-    "_fitHeight": true
+    "_fitWidth": true,
+    "_fitHeight": false
   }
 ]
