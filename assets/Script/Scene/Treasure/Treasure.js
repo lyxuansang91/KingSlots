@@ -20,11 +20,14 @@ cc.Class({
         roomIndex: 0,
         betType: 0,
         btn_select_lines: cc.Prefab,
+        line_result: cc.Prefab,
 
         board_inside: cc.Sprite,
         board_null_line: cc.Node,
 
-        lst_line_selected : []
+        lst_number_selected : [],
+        lst_line_results: [],
+        lst_line_selected: []
     },
 
     start: function() {
@@ -40,25 +43,47 @@ cc.Class({
     },
 
     initMenu: function () {
-        this.lst_line_selected = [6, 2, 8, 5, 1, 4, 10, 7, 3, 9,
+        this.lst_number_selected = [6, 2, 8, 5, 1, 4, 10, 7, 3, 9,
             16, 12, 19, 14, 13, 17, 18, 15, 11, 20];
+
+        for (var i = 0; i < this.lst_number_selected.length; i++){
+            /*var line_result = new cc.Node("LineResult");
+            var sprite = line_result.addComponent(cc.Sprite);
+            sprite.spriteFrame = this.lst_line_results[i];
+            sprite.SpriteType = cc.SIMPLE;
+            sprite.SizeMode = cc.RAW;
+            sprite.trim = true;*/
+
+            var line_result = cc.instantiate(this.line_result);
+            var component = line_result.getComponent("LineResult");
+            component.init(i);
+            this.board_null_line.addChild(line_result);
+
+            line_result.active = false;
+            this.lst_line_selected.push(line_result);
+        }
 
         var pos_line_top = 0;
         var size_board = this.board_null_line.getContentSize();
-        for (var i = 0; i < this.lst_line_selected.length; i++) {
+
+        for (var i = 0; i < this.lst_number_selected.length; i++) {
             var line_number = cc.instantiate(this.btn_select_lines);
-            line_number.getComponent("ButtonSelectLines").initNumber(this.lst_line_selected[i]);
+            var component = line_number.getComponent("ButtonSelectLines");
+            component.initNumber(this.lst_number_selected[i]);
+            //component.initHighLight(true);
 
             var size_line = line_number.getContentSize();
-            if (i == 0){
+            if (i == 0) {
                 pos_line_top = size_line.height * 5*0.93 + size_line.height/2;
             }
 
             line_number.setPosition(cc.p((parseInt(i / 10) == 0) ?
-                (-size_board.width/2 + size_line.width/2) :
-                (size_board.width/2 - size_line.width/2),
+                        (-size_board.width/2 + size_line.width/2) :
+                        (size_board.width/2 - size_line.width/2),
                 pos_line_top - size_line.height * ((i % 10) * 0.93 + 1)));
             this.board_null_line.addChild(line_number);
+
+            this.lst_line_results.push(line_number);
         }
     },
 
