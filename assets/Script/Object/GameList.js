@@ -188,6 +188,8 @@ cc.Class({
             } else if(Common.getZoneId() === Common.ZONE_ID.TAIXIU) {
                 var self = this;
                 self.loadTaiXiu();
+            } else if(Common.getZoneId() === Common.ZONE_ID.TREASURE) {
+                cc.director.loadScene('Treasure');
             }
         }
     }

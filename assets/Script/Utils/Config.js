@@ -22,7 +22,8 @@ var Config = {
         MINI_POKER: 19,
         MINI_BACAY: 20,
         XOCDIA2: 21,
-        EGG: 22
+        EGG: 22,
+        TREASURE: 23
     },
     TABLE_ORDERBY: {
         MIN_BET : 1,

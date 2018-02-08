@@ -97,6 +97,9 @@ cc.Class({
 
     buttonEvent: function (e) {
         var tag = e.target._tag;
+        if(tag === Config.TAG_GAME_ITEM.VQMM) {
+            tag = Config.TAG_GAME_ITEM.TREASURE;
+        }
         Common.setGameTag(tag);
         var zoneId = Common.getZoneId();
         Common.setCurrentZoneId(zoneId);

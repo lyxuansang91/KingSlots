@@ -1,4 +1,3 @@
-
 var BaseScene = require('BaseScene');
 var NetworkManager = require('NetworkManager');
 
@@ -25,7 +24,7 @@ cc.Class({
         board_inside: cc.Sprite,
         board_null_line: cc.Node,
 
-        lst_number_selected : [],
+        lst_number : [],
         lst_line_results: [],
         lst_line_selected: []
     },
@@ -43,16 +42,9 @@ cc.Class({
     },
 
     initMenu: function () {
-        this.lst_number_selected = [6, 2, 8, 5, 1, 4, 10, 7, 3, 9,
-            16, 12, 19, 14, 13, 17, 18, 15, 11, 20];
+        this.lst_number = [6,2,8,5,1,4,10,7,3,9,16,12,19,14,13,17,18,15,11,20];
 
-        for (var i = 0; i < this.lst_number_selected.length; i++){
-            /*var line_result = new cc.Node("LineResult");
-            var sprite = line_result.addComponent(cc.Sprite);
-            sprite.spriteFrame = this.lst_line_results[i];
-            sprite.SpriteType = cc.SIMPLE;
-            sprite.SizeMode = cc.RAW;
-            sprite.trim = true;*/
+        for (var i = 0; i < this.lst_number.length; i++){
 
             var line_result = cc.instantiate(this.line_result);
             var component = line_result.getComponent("LineResult");
@@ -60,17 +52,17 @@ cc.Class({
             this.board_null_line.addChild(line_result);
 
             line_result.active = false;
-            this.lst_line_selected.push(line_result);
+            this.lst_line_results.push(line_result);
         }
 
         var pos_line_top = 0;
         var size_board = this.board_null_line.getContentSize();
 
-        for (var i = 0; i < this.lst_number_selected.length; i++) {
+        for (var i = 0; i < this.lst_number.length; i++) {
             var line_number = cc.instantiate(this.btn_select_lines);
             var component = line_number.getComponent("ButtonSelectLines");
-            component.initNumber(this.lst_number_selected[i]);
-            //component.initHighLight(true);
+            component.initNumber(this.lst_number[i]);
+            // component.initHighLight(true);
 
             var size_line = line_number.getContentSize();
             if (i == 0) {
@@ -83,7 +75,7 @@ cc.Class({
                 pos_line_top - size_line.height * ((i % 10) * 0.93 + 1)));
             this.board_null_line.addChild(line_number);
 
-            this.lst_line_results.push(line_number);
+            this.lst_line_selected.push(line_number);
         }
     },
 
@@ -95,12 +87,22 @@ cc.Class({
             NetworkManager.getJarRequest(Common.getZoneId(), this.betType + 1);
         }
     },
-    getTurnMiniPokerRequest: function(turnType) {
+    getSpin: function() {
+        this.getTurnTreasureRequest(this.betType + 1);
+    },
+    getTurnTreasureRequest: function(turnType) {
+        var self = this;
         var entries = [];
-        var entry = new proto.BINMapFieldEntry();
-        entry.setKey("turnSlotType");
-        entry.setValue(turnType.toString());
-        entries.push(entry);
+        var entryTurn = new proto.BINMapFieldEntry();
+        entryTurn.setKey("turnSlotType");
+        entryTurn.setValue(turnType.toString());
+        entries.push(entryTurn);
+        var result = self.lst_number.join(",");
+        var entryLine = new proto.BINMapFieldEntry();
+        cc.log("result:", result);
+        entryLine.setKey("lineSelected");
+        entryLine.setValue(result);
+        entries.push(entryLine);
         NetworkManager.getTurnMessageFromServer(0, entries);
     },
     exitRoom: function() {
@@ -133,11 +135,53 @@ cc.Class({
         }
     },
     updateMoneyMessageResponseHandler: function(resp) {
+        cc.log("update money response:", resp.toObject());
+        if(resp.getResponsecode()) {
 
+        }
+        if(resp.hasMessage() && resp.getMessage() !== "") {
+
+        }
     },
 
     matchEndResponseHandler: function(resp) {
+        cc.log("match end response:", resp.toObject());
+        if(resp.getResponsecode()) {
+            if(resp.getArgsList().length > 0) {
+                var listItem = null;
+                var lineWin = null;
+                for(var i = 0; i < resp.getArgsList().length; i++) {
+                    var entry = resp.getArgsList()[i];
+                    if(entry.getKey() == "listItem") {
+                        listItem = entry.getValue().split(", ");
+                        cc.log("list item 1:", listItem);
+                    } else {
+                        if(entry.getValue() !== "")
+                            lineWin = entry.getValue().split(", ");
+                        else lineWin = [];
+                        cc.log("line win 1:", lineWin);
+                    }
+                }
+                if(listItem !== null && lineWin !== null) {
+                    for(var i = 0; i < listItem.length; i++) {
+                        listItem[i] = parseInt(listItem[i]);
+                    }
 
+                    for(var i = 0; i < lineWin.length; i++) {
+                        lineWin[i]= parseInt(lineWin[i]);
+                    }
+
+                    cc.log("list item:", listItem);
+                    cc.log("line win:", lineWin);
+
+                    // TODO:
+                }
+            }
+        }
+
+        if(resp.hasMessage() && resp.getMessage() !== "") {
+
+        }
     },
 
     exitRoomResponseHandler: function(resp) {
@@ -164,10 +208,6 @@ cc.Class({
                 var msg = buffer.response;
                 this.exitRoomResponseHandler(msg);
                 break;
-            // // case NetworkManager.MESSAGE_ID.ENTER_ROOM:
-            // //     var msg = buffer.response;
-            // //     this.enterRoomResponseHandler(msg);
-            // //     break;
             case NetworkManager.MESSAGE_ID.EXIT_ZONE:
                 var msg = buffer.response;
                 this.exitZoneResponseHandler(msg);

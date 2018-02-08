@@ -21,7 +21,8 @@ var Common = {
         MINI_POKER: 19,
         MINI_BACAY: 20,
         XOCDIA2: 21,
-        EGG: 22
+        EGG: 22,
+        TREASURE: 23
     },
     width : cc.director.getWinSize().width,
     height : cc.director.getWinSize().height,
@@ -207,6 +208,9 @@ var Common = {
                 break;
             case Config.TAG_GAME_ITEM.VQMM:
                 result = Common.ZONE_ID.VQMM;
+                break;
+            case Config.TAG_GAME_ITEM.TREASURE:
+                result = Common.ZONE_ID.TREASURE;
                 break;
             default:
                 result = Common.ZONE_ID.MINI_BACAY;
