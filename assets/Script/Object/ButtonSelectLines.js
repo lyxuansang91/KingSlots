@@ -3,19 +3,17 @@ cc.Class({
 
     properties: {
         list_frame: [cc.SpriteFrame],
-        number : cc.Label
+        number : cc.Label,
+        button_line: cc.Button
     },
 
     onLoad: function () {
 
     },
     
-    initHighLight: function () {
-        this.getComponent(cc.Sprite).spriteFrame = this.list_frame[1];
-    },
-
-    initNormal: function () {
-        this.getComponent(cc.Sprite).spriteFrame = this.list_frame[0];
+    initHighLight: function (isHighLight) {
+        this.button_line.getComponent(cc.Sprite).spriteFrame =
+            isHighLight ? this.list_frame[0] : this.list_frame[1];
     },
 
     initNumber: function (index) {
