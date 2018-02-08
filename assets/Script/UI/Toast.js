@@ -3,28 +3,34 @@ cc.Class({
 
     properties: {
         lbl_body: cc.RichText,
-        bg_toast: cc.Sprite
+        bg_toast: cc.Sprite,
+        maxWidth: 36
     },
 
-    onLoad: function () {
+    loadMessage: function (message,delay) {
         var self = this;
 
         var callFunc = cc.callFunc(function(){
-            var scene = cc.director.getScene();
+            /*var scene = cc.director.getScene();
             if(cc.isValid(scene.getChildByName("Toast"))){
                 scene.getChildByName("Toast").destroy();
-            }
+            }*/
         },this);
-        var action = cc.sequence(cc.fadeIn(0.1),
-            cc.delayTime(1.0),cc.FadeOut(1.0),callFunc);
+
+        self.node.stopAllActions();
+        self.node.setOpacity(0);
+        var action = cc.sequence(cc.fadeIn(0.1),cc.delayTime(delay),cc.fadeOut(0.5));
         self.node.runAction(action);
-    },
 
-    loadMessage: function (message) {
-        var self = this;
-
-        self.lbl_body.string = Common.wordWrap(message,36);
-        self.bg_toast.node.setContentSize(cc.size(self.bg_toast.spriteFrame.getRect().width,
-            self.lbl_body.node.getBoundingBox().height*1.35));
+        if(message.length > this.maxWidth){
+            self.lbl_body.string = Common.wordWrap(message,this.maxWidth);
+            self.bg_toast.node.setContentSize(cc.size(self.lbl_body.node.getContentSize().width*1.09,
+                self.lbl_body.node.getBoundingBox().height*1.35));
+        }else{
+            self.lbl_body.string = message;
+            self.bg_toast.node.setContentSize(cc.size(self.lbl_body.node.getContentSize().width*1.15 *
+                        message.length / this.maxWidth,
+                        self.lbl_body.node.getBoundingBox().height*1.8));
+        }
     }
 });

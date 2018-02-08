@@ -31,7 +31,7 @@ var BacaySence = cc.Class({
         stepCard : 9,
         list_recent_value: null,
         number : 3,
-        time_move: 1,
+        time_move: 1
 
     },
     statics: {
@@ -55,7 +55,7 @@ var BacaySence = cc.Class({
     },
 
     initFirstCard: function() {
-        var random_number = Common.genRandomNumber(null, this.stepCard, this.number);
+        var random_number = Common.genRandomCardNumber(null, this.stepCard, this.number);
         var items_value = Common.genArrayToMultiArray(random_number, this.stepCard, this.number);
         this.list_recent_value = Common.create2DArray(this.stepCard);
         for(var i = 0; i < this.stepCard; i++){
@@ -276,7 +276,7 @@ var BacaySence = cc.Class({
         var text_emoticon = response.getTextemoticonsList()[0];
         this.isFinishSpin = false;
         this.isBreakJar = (text_emoticon.getEmoticonid() === 54); //54: nổ hũ
-        var random_number = Common.genRandomNumber(carx, this.stepCard, this.number);
+        var random_number = Common.genRandomCardNumber(carx, this.stepCard, this.number);
         var items_value = Common.genArrayToMultiArray(random_number, this.stepCard, this.number);
         cc.log("item value =", items_value);
         cc.log("stepCard =", this.stepCard);
@@ -467,7 +467,6 @@ var BacaySence = cc.Class({
                     //     var number_cash = Common.numberFormatWithCommas(val);
                     //     this.moneyJar.string = Common.numberFormatWithCommas(this.jarValue);
                     // }));
-                    // Common.CountUp1(this.moneyJar, preJarValue, this.jarValue, 0, 1);
                     Common.updateMoney(this.moneyJar, preJarValue, preJarValue, this.jarValue);
                 }else {
                     this.showJarValue(this.jarValue);

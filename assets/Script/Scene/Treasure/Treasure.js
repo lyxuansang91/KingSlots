@@ -5,22 +5,23 @@ cc.Class({
     extends: BaseScene,
 
     properties: {
-        // bar: {
-        //     get () {
-        //         return this._bar;
-        //     },
-        //     set (value) {
-        //         this._bar = value;
-        //     }
-        // },
+        board_view: cc.Mask,
+        itemPrefab: cc.Prefab,
+        isFinishSpin: true,
+        isRun: false,
+        stepMove : 9,
+        number : 5,
+        time_move: 1,
+        list_item: [],
+        list_recent_value: null,
+
+        myInterVal: null,
         isRequestJar: false,
         jarValue: 0,
         roomIndex: 0,
         betType: 0,
         btn_select_lines: cc.Prefab,
         line_result: cc.Prefab,
-
-        board_inside: cc.Sprite,
         board_null_line: cc.Node,
         txt_jar_money: cc.Label,
         jarValue: 0,
@@ -41,6 +42,7 @@ cc.Class({
         this.requestJar();
         this.schedule(this.requestJar, 5);
         this.initMenu();
+        //this.initFirstItem();
     },
 
 
@@ -78,6 +80,27 @@ cc.Class({
 
             this.lst_line_selected.push(line_number);
         }
+    },
+
+    initFirstItem: function() {
+        var random_number = Common.genRandomNumber(null,98,105,this.stepMove*this.number);
+        var items_value = Common.genArrayToMultiArray(random_number, this.stepMove, this.number);
+        this.list_recent_value = Common.create2DArray(this.stepMove);
+        for(var i = 0; i < this.stepMove; i++){
+            for(var j = 0; j < this.number; j++){
+                var item = cc.instantiate(this.cardPrefab);
+                var posX = (j - 2) * item.getContentSize().width * 0.75;
+                var posY = (i - 1) * item.getContentSize().height;
+                item.getComponent("ItemPrefab").init(items_value[i][j] - 98);
+                item.setPositionY(posY);
+                item.setPositionX(posX);
+
+                this.list_item.push(item);
+                this.board_view.node.addChild(item);
+            }
+        }
+
+        this.list_recent_value = items_value;
     },
 
     requestJar: function() {
@@ -220,7 +243,7 @@ cc.Class({
                 if (this.jarType === jar_type_response) {
                     // this.moneyJar.node.runAction(cc.actionInterval(1.0, preJarValue, this.jarValue, function(val){
                     //     var number_cash = Common.numberFormatWithCommas(val);
-                    Common.CountUp1(this.txt_jar_money, preJarValue, this.jarValue, 0, 1);
+                    Common.countNumberAnim(this.txt_jar_money, preJarValue, this.jarValue, 0, 1);
                     // }));
                 } else {
                     this.txt_jar_money.string = Common.numberFormatWithCommas(this.jarValue);

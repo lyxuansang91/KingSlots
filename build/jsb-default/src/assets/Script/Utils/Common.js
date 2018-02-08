@@ -250,7 +250,25 @@ var Common = {
     getCash: function() {
         return this.cash;
     },
-    genRandomNumber: function (arrCard, stepCard, number) {
+    genRandomNumber: function (values,startValue,endValue,count) {
+        var results = [];
+        do {
+            var number = Math.floor(Math.random() * (endValue - startValue)) + startValue;
+            if(values !== null){
+                if(!results.includes(number)  && !values.includes(number)){
+                    results.push(number);
+                }
+            } else {
+                if(!results.includes(number)){
+                    results.push(number);
+                }
+            }
+        }
+        while (results.length < count);
+        return results;
+    },
+
+    genRandomCardNumber: function (arrCard, stepCard, number) {
         var results = [];
         do {
             var cardValue = number === 3 ? Math.floor(Math.random() * 36) + 1 : Math.floor(Math.random() * 52) + 1;
@@ -267,6 +285,7 @@ var Common = {
         while (results.length < stepCard * number);
         return results;
     },
+
     genArrayToMultiArray: function (arrNumber, stepCard, number) {
         var i, j, k = 0,results = [];
         for(i = 0; i < stepCard; i++){

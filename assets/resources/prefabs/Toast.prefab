@@ -26,10 +26,13 @@
     "_components": [
       {
         "__id__": 8
+      },
+      {
+        "__id__": 9
       }
     ],
     "_prefab": {
-      "__id__": 9
+      "__id__": 10
     },
     "_id": "",
     "_opacity": 255,
@@ -48,8 +51,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 490,
-      "height": 62
+      "width": 1334,
+      "height": 750
     },
     "_rotationX": 0,
     "_rotationY": 0,
@@ -57,8 +60,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 0,
-      "y": 0
+      "x": 667,
+      "y": 375
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -130,7 +133,7 @@
     },
     "_enabled": true,
     "_spriteFrame": {
-      "__uuid__": "0fdb7fc2-857e-4cdb-b21b-81d4b5261696"
+      "__uuid__": "ab1fd7c9-611b-42c7-a47c-25eee742d6d5"
     },
     "_type": 1,
     "_sizeMode": 0,
@@ -193,7 +196,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 460,
+      "width": 450,
       "height": 30
     },
     "_rotationX": 0,
@@ -220,11 +223,11 @@
       "__id__": 5
     },
     "_enabled": true,
-    "_N$string": "body",
+    "_N$string": "x",
     "_N$horizontalAlign": 1,
     "_N$fontSize": 25,
     "_N$font": null,
-    "_N$maxWidth": 460,
+    "_N$maxWidth": 450,
     "_N$lineHeight": 30,
     "_N$imageAtlas": null,
     "_N$handleTouchEvent": false
@@ -237,7 +240,7 @@
     "asset": {
       "__uuid__": "9a53a66a-57f3-4eff-9f1e-9a24d8476112"
     },
-    "fileId": "fd4fe1WoCpJK6rVCZ13Z14R",
+    "fileId": "4bbPIytg5I0pfijFOKee5f",
     "sync": false
   },
   {
@@ -253,7 +256,34 @@
     },
     "bg_toast": {
       "__id__": 3
-    }
+    },
+    "maxWidth": 36
+  },
+  {
+    "__type__": "cc.Widget",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "isAlignOnce": true,
+    "_target": null,
+    "_alignFlags": 45,
+    "_left": 0,
+    "_right": 0,
+    "_top": 0,
+    "_bottom": 0,
+    "_verticalCenter": 0,
+    "_horizontalCenter": 0,
+    "_isAbsLeft": true,
+    "_isAbsRight": true,
+    "_isAbsTop": true,
+    "_isAbsBottom": true,
+    "_isAbsHorizontalCenter": true,
+    "_isAbsVerticalCenter": true,
+    "_originalWidth": 490,
+    "_originalHeight": 62
   },
   {
     "__type__": "cc.PrefabInfo",

@@ -8,7 +8,6 @@ cc.Class({
     properties: {
         scrollView: cc.ScrollView,
         prefabGameItem: cc.Prefab,
-        rankCount: 0,
         roomIndex : 0,
         lbl_moneys: [],
         jarValue: 0,
@@ -24,15 +23,8 @@ cc.Class({
         this.content = this.scrollView.content;
         window.ws.onmessage = this.ongamestatus.bind(this);
         this.populateList();
-        // var bacayScene = new BacayScene();
-
-        // cc.director.preloadScene('BaCay', function () {
-        //     cc.log('Next Login scene preloaded');
-        // });
-
 
         this.schedule(self.requestJar, 5);
-
     },
     onDestroy: function() {
         var self = this;
@@ -40,17 +32,24 @@ cc.Class({
     },
 
     populateList: function() {
-        var listGame = [Common.ZONE_ID.MINI_BACAY,Common.ZONE_ID.MINI_POKER,Common.ZONE_ID.TAIXIU, Common.ZONE_ID.VQMM];
+        var listGame = [Common.ZONE_ID.MINI_BACAY,Common.ZONE_ID.MINI_POKER,
+            Common.ZONE_ID.TAIXIU, Common.ZONE_ID.VQMM, Common.ZONE_ID.TREASURE];
+
         this.requestJar();
-        var contentWidth = listGame.length * 300;
-        this.content.setContentSize(contentWidth, this.content.getContentSize().height);
+
+        var innerSize = cc.size(0,this.content.getContentSize().height);
+
         for (var i = 0; i < listGame.length; ++i) {
             var item = cc.instantiate(this.prefabGameItem);
             item.setTag(listGame[i] + 1000);
-            item.getComponent('GameItem').init(i, listGame[i]);
+            item.getComponent('LobbyGameItem').init(i, listGame[i]);
             item.setPositionY(this.content.getContentSize().height*0.06);
             this.content.addChild(item);
+
+            innerSize.width += item.getContentSize().width*1.1;
         }
+
+        this.content.setContentSize(innerSize);
     },
 
     scrollToLeft: function(){
@@ -66,12 +65,12 @@ cc.Class({
             NetworkManager.getJarRequest(0, null);
         }
     },
-    // called every frame
+
     update: function (dt) {
     },
 
     goSceneTable: function() {
-        window.ws.onmessage = this.ongamestatus.bind(this);
+
 
         this.unschedule(this.goSceneTable);
     },
@@ -99,8 +98,8 @@ cc.Class({
                     var value = jarItem.getValue();
                     var jarType = jarItem.getJartype();
                     var item = this.content.getChildByTag(gameid + 1000);
-                    if(item !== null && item.getName() === 'GameItem')
-                        item.getComponent('GameItem').updateJarMoney(value, jarType);
+                    if(item !== null && item.getName() === 'LobbyGameItem')
+                        item.getComponent('LobbyGameItem').updateJarMoney(value, jarType);
                 }
             }
         }
