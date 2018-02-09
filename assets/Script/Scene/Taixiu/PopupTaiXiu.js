@@ -14,16 +14,17 @@ cc.Class({
         //    readonly: false,    // optional, default is false
         // },
         // ...
+        roomIndex: 0,
         btnClose: cc.Button
     },
 
     // use this for initialization
     onLoad: function () {
-        window.ws.onmessage = this.onGameStatus.bind(this);
+        if(window.ws && window.ws.onmessage)
+            window.ws.onmessage = this.onGameStatus.bind(this);
     },
     onClose: function() {
-        this.node.removeFromParent(true);
-
+        NetworkManager.requestExitRoomMessage(this.roomIndex);
     },
     onGameStatus: function(event) {
         if(event.data!==null || typeof(event.data) !== 'undefined') {
@@ -36,9 +37,12 @@ cc.Class({
             }
         }
     },
+    onDestroy: function() {
+        cc.log("on destroy tai xiu");
+        this.onGameStatus.unbind();
+    },
     handleMessage: function(buffer) {
         this._super(buffer);
-        // cc.log("buffer:", buffer.response.toObject());
         switch (buffer.message_id) {
             case NetworkManager.MESSAGE_ID.START_MATCH:
                 var msg = buffer.response;
@@ -60,6 +64,9 @@ cc.Class({
                 var msg = buffer.response;
                 this.exitRoomResponseHandler(msg);
                 break;
+            case NetworkManager.MESSAGE_ID.EXIT_ZONE:
+                this.exitZoneResponseHandler(buffer.response);
+                break;
             case NetworkManager.MESSAGE_ID.BET:
                 var msg = buffer.response;
                 this.betResponseHandler(msg);
@@ -68,6 +75,13 @@ cc.Class({
                 var msg = buffer.response;
                 this.instantMessageResponseHandler(msg);
                 break;
+        }
+    },
+    exitZoneResponseHandler: function(resp) {
+        cc.log("exit zone response:", resp.toObject());
+        if(resp.getResponsecode()) {
+            Common.setZoneId(-1);
+            Common.closePopup("PopupTaiXiu");
         }
     },
     instantMessageResponseHandler: function(resp) {

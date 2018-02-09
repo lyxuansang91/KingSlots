@@ -17,9 +17,9 @@ cc.Class({
         jarRequest: null,
         isRequestJar: false
     },
-
     // use this for initialization
     onLoad: function () {
+        cc.log("on load game list");
         var self = this;
         this.content = this.scrollView.content;
         window.ws.onmessage = this.ongamestatus.bind(this);
@@ -35,10 +35,16 @@ cc.Class({
 
     },
     onDestroy: function() {
+        cc.log("on destroy");
         var self = this;
-        self.unscheduleAllCallbacks();
+        self.unschedule(self.requestJar);
     },
-
+    onEnable: function() {
+        cc.log("on enable");
+    },
+    onDisable: function() {
+        cc.log("on disabled");
+    },
     populateList: function() {
         var listGame = [Common.ZONE_ID.MINI_BACAY,Common.ZONE_ID.MINI_POKER,Common.ZONE_ID.TAIXIU, Common.ZONE_ID.VQMM];
         this.requestJar();
@@ -72,12 +78,10 @@ cc.Class({
 
     goSceneTable: function() {
         window.ws.onmessage = this.ongamestatus.bind(this);
-
-        this.unschedule(this.goSceneTable);
     },
 
     ongamestatus: function(event) {
-        cc.log("on game status");
+        cc.log("on game status game list");
         NetworkManager.hideLoading();
         if(event.data!==null || event.data !== 'undefined') {
             var lstMessage = NetworkManager.parseFrom(event.data, event.data.byteLength);

@@ -19,7 +19,7 @@ cc.Class({
 
     handleMessage: function(buffer) {
         NetworkManager.hideLoading();
-        cc.log("buffer:", buffer);
+        cc.log("buffer:", buffer,  " ", cc.director.getScene());
         switch (buffer.message_id) {
             case NetworkManager.MESSAGE_ID.INITIALIZE:
                 var msg = buffer.response;

@@ -2190,6 +2190,7 @@
       "__id__": 1
     },
     "_enabled": true,
+    "roomIndex": 0,
     "btnClose": {
       "__id__": 58
     }
