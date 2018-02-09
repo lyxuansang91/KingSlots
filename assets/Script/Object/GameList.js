@@ -22,6 +22,7 @@ cc.Class({
     onLoad: function () {
         var self = this;
         this.content = this.scrollView.content;
+        window.ws.onmessage = this.ongamestatus.bind(this);
         this.populateList();
         // var bacayScene = new BacayScene();
 
@@ -31,7 +32,7 @@ cc.Class({
 
 
         this.schedule(self.requestJar, 5);
-        this.scheduleOnce(this.goSceneTable, 1);
+
     },
     onDestroy: function() {
         var self = this;

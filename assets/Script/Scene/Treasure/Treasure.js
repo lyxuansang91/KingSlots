@@ -22,18 +22,18 @@ cc.Class({
 
         board_inside: cc.Sprite,
         board_null_line: cc.Node,
-
+        txt_jar_money: cc.Label,
+        jarValue: 0,
         lst_number : {
-            type: [cc.Integer]
-
+            type: [cc.Integer],
+            default: function() {
+                return [6,2,8,5,1,4,10,7,3,9,16,12,19,14,13,17,18,15,11,20];
+            }
         },
         lst_line_results: [],
         lst_line_selected: []
     },
 
-    ctor: function() {
-        this.lst_number = [6,2,8,5,1,4,10,7,3,9,16,12,19,14,13,17,18,15,11,20];
-    },
     start: function() {
         cc.log("on start");
         if(window.ws && window.ws.onmessage)
@@ -45,10 +45,8 @@ cc.Class({
 
 
 
-
     initMenu: function () {
         for (var i = 0; i < this.lst_number.length; i++){
-
             var line_result = cc.instantiate(this.line_result);
             var component = line_result.getComponent("LineResult");
             component.init(i);
@@ -85,7 +83,6 @@ cc.Class({
     requestJar: function() {
         var self = this;
         if(!self.isRequestJar) {
-            cc.log("request jar:", this.betType + 1);
             self.isRequestJar = false;
             NetworkManager.getJarRequest(Common.getZoneId(), this.betType + 1);
         }
@@ -209,7 +206,27 @@ cc.Class({
     jarResponseHandler: function(resp) {
         cc.log("jar response message:", resp.toObject());
         if(resp.getResponsecode()) {
+            var jar_type_response = 0;
+            var preJarValue = this.jarValue;
+            this.jarValue = resp.getJarvalue();
+            if (resp.getArgsList().length > 0) {
+                var entry = resp.getArgsList()[0];
+                if (entry.getKey() === "jarType") {
+                    jar_type_response = parseInt(entry.getValue().toString());
+                }
+            }
 
+            if (jar_type_response === this.betType + 1) {
+                if (this.jarType === jar_type_response) {
+                    // this.moneyJar.node.runAction(cc.actionInterval(1.0, preJarValue, this.jarValue, function(val){
+                    //     var number_cash = Common.numberFormatWithCommas(val);
+                    Common.CountUp1(this.txt_jar_money, preJarValue, this.jarValue, 0, 1);
+                    // }));
+                } else {
+                    this.txt_jar_money.string = Common.numberFormatWithCommas(this.jarValue);
+                }
+                this.jarType = jar_type_response;
+            }
         }
 
         if(resp.hasMessage() && resp.getMessage() !== "") {
