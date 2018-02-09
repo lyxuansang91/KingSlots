@@ -41,18 +41,20 @@ cc.Class({
         switch (jarType) {
             case 1:
                 if(this.m1_value < value) {
-                    cc.log("value 1:", value, " ", this.m1_value);
                     Common.countNumberAnim(this.money1, this.m1_value, value, 0, 1);
+                    this.m1_value = value;
                 }
                 break;
             case 2:
                 if(this.m2_value < value) {
                     Common.countNumberAnim(this.money2, this.m2_value, value, 0, 1);
+                    this.m2_value = value;
                 }
                 break;
             case 3:
                 if(this.m3_value < value) {
                     Common.countNumberAnim(this.money3, this.m3_value, value, 0, 1);
+                    this.m3_value = value;
                 }
                 break;
             default:
@@ -63,7 +65,6 @@ cc.Class({
     buttonEvent: function () {
         var tag = this.tag;
         Common.setGameTag(tag);
-        cc.log("xxxxx >>> : ",tag);
         var zoneId = Common.getZoneId();
         Common.setCurrentZoneId(zoneId);
         NetworkManager.requestEnterZoneMessage(Common.getZoneId());
