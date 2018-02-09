@@ -16,27 +16,8 @@ cc.Class({
     },
 
     openPopup: function () {
-
-        var scene = cc.director.getScene();
-        if(cc.isValid(scene) && !cc.isValid(scene.getChildByName(Config.name.COMMON_POPUP))){
-            cc.loader.loadRes("prefabs/" + Config.name.COMMON_POPUP,function(error, prefab) {
-                if(!error){
-                    var messagebox = cc.instantiate(prefab);
-                    if(cc.isValid(messagebox)){
-                        messagebox.x = Common.width / 2;
-                        messagebox.y = Common.height / 2;
-
-                        var component = messagebox.getComponent(Config.name.COMMON_POPUP);
-                        component.init(res.getMessage(), 0, function() {
-                            cc.log("on callback");
-                        });
-                        component.appear(Config.name.COMMON_POPUP);
-                        scene.addChild(messagebox,Config.index.POPUP);
-                    }
-                }
-            })
-        }
     },
+
     openChargePopup: function () {
         var tabString = ["Viettel", "Mobifone", "VinaPhone"];
         var nodeChild = new cc.Node();

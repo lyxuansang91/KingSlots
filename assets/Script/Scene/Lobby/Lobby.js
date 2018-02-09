@@ -19,7 +19,9 @@ cc.Class({
 
     // use this for initialization
     onLoad: function () {
+
     },
+
     onClickSetting: function() {
         cc.log("on click setting");
     }

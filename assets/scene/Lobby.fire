@@ -485,7 +485,7 @@
       "width": 1334,
       "height": 750
     },
-    "_resize": 2,
+    "_resize": 1,
     "_N$layoutType": 1,
     "_N$padding": 0,
     "_N$cellSize": {
@@ -498,7 +498,7 @@
     "_N$paddingRight": 0,
     "_N$paddingTop": 0,
     "_N$paddingBottom": 0,
-    "_N$spacingX": 2,
+    "_N$spacingX": 20,
     "_N$spacingY": 0,
     "_N$verticalDirection": 1,
     "_N$horizontalDirection": 0
@@ -1312,7 +1312,6 @@
     "prefabGameItem": {
       "__uuid__": "fa07d8ee-7c5d-4a28-9b3e-33d1cc89b37c"
     },
-    "rankCount": 0,
     "roomIndex": 0,
     "lbl_moneys": [],
     "jarValue": 0,
