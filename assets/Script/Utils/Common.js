@@ -27,6 +27,13 @@ var Common = {
     width : cc.director.getWinSize().width,
     height : cc.director.getWinSize().height,
     introScene: null,
+    _existTaiXiu: false,
+    isExistTaiXiu: function() {
+        return this._existTaiXiu;
+    },
+    setExistTaiXiu: function(e) {
+        this._existTaiXiu = e;
+    },
     getIntroSceneInstance: function () {
         return this.introScene;
     },
@@ -273,7 +280,24 @@ var Common = {
     getCash: function() {
         return this.cash;
     },
-    genRandomNumber: function (arrCard, stepCard, number) {
+    genRandomNumber: function (values,startValue,endValue,count) {
+        var results = [];
+        do {
+            var number = Math.floor(Math.random() * (endValue - startValue)) + startValue;
+            if(values !== null){
+                if(!results.includes(number)  && !values.includes(number)){
+                    results.push(number);
+                }
+            } else {
+                if(!results.includes(number)){
+                    results.push(number);
+                }
+            }
+        }
+        while (results.length < count);
+        return results;
+    },
+    genRandomCardNumber: function (arrCard, stepCard, number) {
         var results = [];
         do {
             var cardValue = number === 3 ? Math.floor(Math.random() * 36) + 1 : Math.floor(Math.random() * 52) + 1;
@@ -290,12 +314,12 @@ var Common = {
         while (results.length < stepCard * number);
         return results;
     },
-    genArrayToMultiArray: function (arrNumber, stepCard, number) {
+    genArrayToMultiArray: function (values, stepMove, number) {
         var i, j, k = 0,results = [];
-        for(i = 0; i < stepCard; i++){
+        for(i = 0; i < stepMove; i++){
             results[i]= new Array(number);
             for(j = 0; j < number;j++){
-                results[i][j] = arrNumber[k++];
+                results[i][j] = values[k++];
             }
         }
         return results;
@@ -480,7 +504,7 @@ var Common = {
         }
     },
 
-    CountUp1: function(target, startValue, endValue, decimals, duration, chartoption) {
+    countNumberAnim: function(target, startValue, endValue, decimals, duration, chartoption) {
         var options = {
             useEasing: true,
             useGrouping: true,
@@ -515,8 +539,6 @@ var Common = {
             if (!startTime) startTime = timestamp;
             timestamp = timestamp;
             var progress = timestamp - startTime;
-            var remaining =
-                duration - progress;
             if (options.useEasing)
                 if (countDown) frameVal = startVal - easeOutExpo(progress, 0, startVal - endVal, duration);
                 else frameVal = easeOutExpo(progress, startVal, endVal - startVal, duration);
@@ -531,8 +553,7 @@ var Common = {
             else if (callback) callback()
         };
 
-        var start = function (callback) {
-            callback = callback;
+        var start = function () {
             rAF = requestAnimationFrame(count);
             return false
         };

@@ -127,7 +127,7 @@ cc.Class({
         if(this.edt_username.string === "" || this.edt_password.string === "") {
             var strMess = "Tài khoản và mật khẩu không được để trống!";
 
-            this.showToast(strMess, this, 2);
+            this.showToast(strMess,1);
             return;
         }
         NetworkManager.requestLoginMessage(username, password);

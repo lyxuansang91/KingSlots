@@ -710,7 +710,7 @@ var NetworkManager = {
             if(window.ws.readyState == WebSocket.OPEN) {
                 //== show loading
                 if(typeof mid !== 'undefined' && mid !== NetworkManager.MESSAGE_ID.INITIALIZE &&
-                    mid !== NetworkManager.MESSAGE_ID.PING){
+                    mid !== NetworkManager.MESSAGE_ID.PING && mid !== NetworkManager.MESSAGE_ID.JAR){
                     cc.log("shot loading mid:", mid);
                     self.showLoading();
                 }
@@ -719,20 +719,25 @@ var NetworkManager = {
         }
     },
 
-    showLoading: function () {
+    showLoading: function (){
         var scene = cc.director.getScene();
-        if(cc.isValid(scene) && !cc.isValid(scene.getChildByName("Loading"))){
-            cc.loader.loadRes("prefabs/Loading",function(error, prefab) {
-                if(!error){
-                    var loading = cc.instantiate(prefab);
-                    if(cc.isValid(loading)){
-                        loading.x = Common.width / 2;
-                        loading.y = Common.height / 2;
+        if(cc.isValid(scene)){
+            if(!cc.isValid(scene.getChildByName("Loading"))){
+                cc.loader.loadRes("prefabs/Loading",function(error, prefab) {
+                    if(!error){
+                        var loading = cc.instantiate(prefab);
+                        if(cc.isValid(loading)){
+                            loading.x = Common.width / 2;
+                            loading.y = Common.height / 2;
 
-                        scene.addChild(loading,Config.index.LOADING);
+                            scene.addChild(loading,Config.index.LOADING);
+                        }
                     }
-                }
-            })
+                })
+            }else {
+                var loading = scene.getChildByName("Loading").getComponent("Loading");
+                loading.show();
+            }
         }
     },
     
@@ -740,7 +745,8 @@ var NetworkManager = {
         var scene = cc.director.getScene();
 
         if(cc.isValid(scene) && cc.isValid(scene.getChildByName("Loading"))){
-            scene.getChildByName("Loading").destroy();
+            var loading = scene.getChildByName("Loading").getComponent("Loading");
+            loading.stop();
         }
     }
 

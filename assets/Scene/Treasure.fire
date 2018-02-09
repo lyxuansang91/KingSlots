@@ -298,7 +298,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "board_inside",
+    "_name": "board_view",
     "_objFlags": 0,
     "_parent": {
       "__id__": 6
@@ -349,30 +349,18 @@
     "groupIndex": 0
   },
   {
-    "__type__": "cc.Sprite",
+    "__type__": "cc.Mask",
     "_name": "",
     "_objFlags": 0,
     "node": {
       "__id__": 7
     },
     "_enabled": true,
-    "_spriteFrame": {
-      "__uuid__": "875bdcc7-a8dd-4623-901b-7ef1a88b84af"
-    },
     "_type": 0,
-    "_sizeMode": 2,
-    "_fillType": 0,
-    "_fillCenter": {
-      "__type__": "cc.Vec2",
-      "x": 0,
-      "y": 0
-    },
-    "_fillStart": 0,
-    "_fillRange": 0,
-    "_isTrimmedMode": false,
-    "_srcBlendFactor": 770,
-    "_dstBlendFactor": 771,
-    "_atlas": null
+    "_segements": 64,
+    "_N$spriteFrame": null,
+    "_N$alphaThreshold": 1,
+    "_N$inverted": false
   },
   {
     "__type__": "cc.Node",
@@ -1896,6 +1884,18 @@
       "__id__": 44
     },
     "_enabled": true,
+    "board_view": {
+      "__id__": 8
+    },
+    "itemPrefab": null,
+    "isFinishSpin": true,
+    "isRun": false,
+    "stepMove": 9,
+    "number": 5,
+    "time_move": 1,
+    "list_item": [],
+    "list_recent_value": null,
+    "myInterVal": null,
     "isRequestJar": false,
     "jarValue": "0",
     "roomIndex": 0,
@@ -1905,9 +1905,6 @@
     },
     "line_result": {
       "__uuid__": "90c1e018-6543-43e6-b3c1-8f5a8164c108"
-    },
-    "board_inside": {
-      "__id__": 8
     },
     "board_null_line": {
       "__id__": 9

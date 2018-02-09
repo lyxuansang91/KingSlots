@@ -14,17 +14,21 @@ cc.Class({
         //    readonly: false,    // optional, default is false
         // },
         // ...
-        roomIndex: 0,
+        bg_dark: cc.Sprite,
         btnClose: cc.Button
     },
 
     // use this for initialization
-    onLoad: function () {
-        if(window.ws && window.ws.onmessage)
-            window.ws.onmessage = this.onGameStatus.bind(this);
+    onLoad: function() {
+        function onTouchDown (event) {
+            return true;
+        }
+        this.node.on('touchstart', onTouchDown, this.bg_dark);
+        window.ws.onmessage = this.onGameStatus.bind(this);
+        Common.setExistTaiXiu(true);
     },
     onClose: function() {
-        NetworkManager.requestExitRoomMessage(this.roomIndex);
+        NetworkManager.requestExitRoomMessage(0);
     },
     onGameStatus: function(event) {
         if(event.data!==null || typeof(event.data) !== 'undefined') {
@@ -39,7 +43,7 @@ cc.Class({
     },
     onDestroy: function() {
         cc.log("on destroy tai xiu");
-        this.onGameStatus.unbind();
+        Common.setExistTaiXiu(false);
     },
     handleMessage: function(buffer) {
         this._super(buffer);

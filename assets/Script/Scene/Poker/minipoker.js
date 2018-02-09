@@ -4,16 +4,6 @@ var MiniPoker = cc.Class({
     extends: cc.Component,
 
     properties: {
-        // foo: {
-        //    default: null,      // The default value will be used only when the component attaching
-        //                           to a node for the first time
-        //    url: cc.Texture2D,  // optional, default is typeof default
-        //    serializable: true, // optional, default is true
-        //    visible: true,      // optional, default is true
-        //    displayName: 'Foo', // optional
-        //    readonly: false,    // optional, default is false
-        // },
-        // ...
         cardView: cc.Mask,
         cardPrefab: cc.Prefab,
         isFinishSpin: true,
@@ -143,7 +133,7 @@ var MiniPoker = cc.Class({
     },
 
     initFirstCard: function() {
-        var random_number = Common.genRandomNumber(null, this.stepCard, this.number);
+        var random_number = Common.genRandomCardNumber(null, this.stepCard, this.number);
         var items_value = Common.genArrayToMultiArray(random_number, this.stepCard, this.number);
         this.list_recent_value = Common.create2DArray(this.stepCard);
         for(var i = 0; i < this.stepCard; i++){
@@ -195,7 +185,7 @@ var MiniPoker = cc.Class({
         this.isFinishSpin = false;
         var isBreakJar = (text_emoticon.getEmoticonid() === 54); //54: nổ hũ
 
-        var random_number = Common.genRandomNumber(carx, this.stepCard, this.number);
+        var random_number = Common.genRandomCardNumber(carx, this.stepCard, this.number);
         var items_value = Common.genArrayToMultiArray(random_number, this.stepCard, this.number);
         items_value[this.stepCard-2] = carx;
 

@@ -85,23 +85,34 @@ cc.Class({
         }
     },
 
-    showToast: function (strMess, target, delayTime) {
-        delayTime = delayTime !== null ? delayTime : 2;
+    showToast: function (strMess, delayTime) {
+        if(strMess == ""){
+
+            //return;
+        }
+
+        var delay = delayTime !== null ? delayTime : 2;
 
         var scene = cc.director.getScene();
-        if(cc.isValid(scene) && !cc.isValid(scene.getChildByName("Toast"))){
-            cc.loader.loadRes("prefabs/Toast",function(error, prefab) {
-                if(!error){
-                    var loading = cc.instantiate(prefab);
-                    if(cc.isValid(loading)){
-                        loading.x = Common.width / 2;
-                        loading.y = Common.height / 2;
+        if(cc.isValid(scene)){
+            if(!cc.isValid(scene.getChildByName("Toast"))){
+                cc.loader.loadRes("prefabs/Toast",function(error, prefab) {
+                    if(!error){
+                        var toast_prefab = cc.instantiate(prefab);
+                        if(cc.isValid(toast_prefab)){
+                            toast_prefab.x = Common.width / 2;
+                            toast_prefab.y = Common.height / 2;
 
-                        loading.getComponent("Toast").loadMessage(strMess);
-                        scene.addChild(loading,Config.index.LOADING);
+                            var toast = toast_prefab.getComponent("Toast");
+                            toast.loadMessage(strMess,delay);
+                            scene.addChild(toast_prefab,Config.index.LOADING);
+                        }
                     }
-                }
-            })
+                })
+            }else{
+                var toast = scene.getChildByName("Toast").getComponent("Toast");
+                toast.loadMessage(strMess,delayTime);
+            }
         }
     }
 });

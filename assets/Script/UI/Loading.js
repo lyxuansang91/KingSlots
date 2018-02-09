@@ -9,21 +9,36 @@ cc.Class({
     },
 
     onLoad: function () {
+        this.show();
+    },
+
+    show: function () {
         this.deltaTime = 0;
         this.enable = false;
+        this.darkSprite.node.setOpacity(0);
+        this.loading.node.setOpacity(0);
+
+        this.loading.node.stopAllActions();
+        var action = cc.repeatForever(cc.rotateBy(this.duration,this.angel));
+        this.loading.node.runAction(action);
+    },
+
+    stop: function () {
+        this.darkSprite.node.setOpacity(0);
+        this.loading.node.setOpacity(0);
+        this.loading.node.stopAllActions();
     },
     
     update : function (dt) {
-        if(this.deltaTime > 2) {
+        if(this.deltaTime > 3) {
             if(!this.enable) {
                 this.enable = true;
-                var self = this;
 
-                self.darkSprite.node.setOpacity(150);
-                self.loading.node.setOpacity(255);
+                this.darkSprite.node.setOpacity(150);
+                this.loading.node.setOpacity(255);
 
                 var action = cc.repeatForever(cc.rotateBy(this.duration,this.angel));
-                self.loading.node.runAction(action);
+                this.loading.node.runAction(action);
             }
         }else{
             this.deltaTime += dt;

@@ -31,7 +31,7 @@ var BacaySence = cc.Class({
         stepCard : 9,
         list_recent_value: null,
         number : 3,
-        time_move: 1,
+        time_move: 1
 
     },
     statics: {
@@ -55,7 +55,7 @@ var BacaySence = cc.Class({
     },
 
     initFirstCard: function() {
-        var random_number = Common.genRandomNumber(null, this.stepCard, this.number);
+        var random_number = Common.genRandomCardNumber(null, this.stepCard, this.number);
         var items_value = Common.genArrayToMultiArray(random_number, this.stepCard, this.number);
         this.list_recent_value = Common.create2DArray(this.stepCard);
         for(var i = 0; i < this.stepCard; i++){
@@ -107,9 +107,7 @@ var BacaySence = cc.Class({
         cc.log("betMoney =", betMoney);
         if(betMoney > money){
             var message = "Bạn không có đủ tiền!";
-            // item.showToast(message);
-            // this.node.addChild(item.node);
-            this.showToast(message, this, 2);
+            this.showToast(message);
             return;
         }
         if (this.autoSpinToggle.isChecked) {
@@ -120,7 +118,7 @@ var BacaySence = cc.Class({
             this.getTurnMiniThreeCardsRequest(this.calculateTurnType());
         }else{
             var message = "Xin vui lòng đợi!";
-            this.showToast(message, this, 2);
+            this.showToast(message);
             // item.showToast(message);
             // this.node.addChild(item.node);
         }
@@ -276,7 +274,7 @@ var BacaySence = cc.Class({
         var text_emoticon = response.getTextemoticonsList()[0];
         this.isFinishSpin = false;
         this.isBreakJar = (text_emoticon.getEmoticonid() === 54); //54: nổ hũ
-        var random_number = Common.genRandomNumber(carx, this.stepCard, this.number);
+        var random_number = Common.genRandomCardNumber(carx, this.stepCard, this.number);
         var items_value = Common.genArrayToMultiArray(random_number, this.stepCard, this.number);
         cc.log("item value =", items_value);
         cc.log("stepCard =", this.stepCard);
@@ -362,8 +360,7 @@ var BacaySence = cc.Class({
             cc.log("betMoney =", betMoney);
             if(betMoney > money){
                 var message = "Bạn không có đủ tiền!";
-                // item.showToast(message);
-                this.showToast(message, this, 2);
+                this.showToast(message);
                 this.autoSpinToggle.isChecked = false;
                 return;
             }
@@ -467,7 +464,6 @@ var BacaySence = cc.Class({
                     //     var number_cash = Common.numberFormatWithCommas(val);
                     //     this.moneyJar.string = Common.numberFormatWithCommas(this.jarValue);
                     // }));
-                    // Common.CountUp1(this.moneyJar, preJarValue, this.jarValue, 0, 1);
                     Common.updateMoney(this.moneyJar, preJarValue, preJarValue, this.jarValue);
                 }else {
                     this.showJarValue(this.jarValue);
@@ -477,7 +473,7 @@ var BacaySence = cc.Class({
         }
 
         if (response.hasMessage() && !response.getMessage()) {
-            this.showToast(response.getMessage(), this);
+            this.showToast(response.getMessage());
         }
 
         this.isRequestJar = false;
@@ -561,8 +557,8 @@ var BacaySence = cc.Class({
         this.moneyBet.string = this.getBetMoney();
         this.requestJar();
     },
-    showToast: function (strMess, target, delayTime) {
-        this._super(strMess, target, delayTime);
+    showToast: function (strMess,delayTime) {
+        this._super(strMess,delayTime);
     },
     requestJar: function() {
         if (!this.isRequestJar) {
