@@ -124,14 +124,10 @@ cc.Class({
         var username = this.edt_username.string;
         var password = this.edt_password.string;
 
-        var strMess = "Tài khoản và cccc xxxxdddd  thrttr";
-
-        this.showToast(strMess,4);
-
         if(this.edt_username.string === "" || this.edt_password.string === "") {
             var strMess = "Tài khoản và mật khẩu không được để trống!";
 
-            this.showToast(strMess, this, 1);
+            this.showToast(strMess,1);
             return;
         }
         //NetworkManager.requestLoginMessage(username, password);

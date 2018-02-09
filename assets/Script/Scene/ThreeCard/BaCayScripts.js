@@ -107,9 +107,7 @@ var BacaySence = cc.Class({
         cc.log("betMoney =", betMoney);
         if(betMoney > money){
             var message = "Bạn không có đủ tiền!";
-            // item.showToast(message);
-            // this.node.addChild(item.node);
-            this.showToast(message, this, 2);
+            this.showToast(message);
             return;
         }
         if (this.autoSpinToggle.isChecked) {
@@ -120,7 +118,7 @@ var BacaySence = cc.Class({
             this.getTurnMiniThreeCardsRequest(this.calculateTurnType());
         }else{
             var message = "Xin vui lòng đợi!";
-            this.showToast(message, this, 2);
+            this.showToast(message);
             // item.showToast(message);
             // this.node.addChild(item.node);
         }
@@ -362,8 +360,7 @@ var BacaySence = cc.Class({
             cc.log("betMoney =", betMoney);
             if(betMoney > money){
                 var message = "Bạn không có đủ tiền!";
-                // item.showToast(message);
-                this.showToast(message, this, 2);
+                this.showToast(message);
                 this.autoSpinToggle.isChecked = false;
                 return;
             }
@@ -476,7 +473,7 @@ var BacaySence = cc.Class({
         }
 
         if (response.hasMessage() && !response.getMessage()) {
-            this.showToast(response.getMessage(), this);
+            this.showToast(response.getMessage());
         }
 
         this.isRequestJar = false;
@@ -560,8 +557,8 @@ var BacaySence = cc.Class({
         this.moneyBet.string = this.getBetMoney();
         this.requestJar();
     },
-    showToast: function (strMess, target, delayTime) {
-        this._super(strMess, target, delayTime);
+    showToast: function (strMess,delayTime) {
+        this._super(strMess,delayTime);
     },
     requestJar: function() {
         if (!this.isRequestJar) {

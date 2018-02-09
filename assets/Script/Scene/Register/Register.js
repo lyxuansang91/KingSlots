@@ -91,16 +91,16 @@ cc.Class({
     },
     register: function() {
         if(this.edt_username.string === "" || this.edt_pass.string === "" || this.edt_repass.string === "" || this.edt_displayname === "") {
-            this.showToast("Dữ liệu không được để trống", this);
+            this.showToast("Dữ liệu không được để trống");
             return;
         }
         if(this.edt_pass.string !== this.edt_repass.string) {
-            this.showToast("Mật khẩu phải giống nhau!", this);
+            this.showToast("Mật khẩu phải giống nhau!");
             return;
         }
         NetworkManager.requestRegisterMessage(this.edt_username.string, this.edt_pass.string, this.edt_repass.string, this.edt_displayname.string, "");
     },
-    showToast: function (strMess, target) {
-        this._super(strMess, target);
+    showToast: function (strMess,delay) {
+        this._super(strMess,delay);
     }
 });
