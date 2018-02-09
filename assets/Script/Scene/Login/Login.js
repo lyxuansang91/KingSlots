@@ -130,7 +130,7 @@ cc.Class({
             this.showToast(strMess,1);
             return;
         }
-        //NetworkManager.requestLoginMessage(username, password);
+        NetworkManager.requestLoginMessage(username, password);
     },
     register: function() {
         cc.director.loadScene('Register');
