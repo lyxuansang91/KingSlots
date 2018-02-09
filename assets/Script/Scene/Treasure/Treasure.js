@@ -41,8 +41,9 @@ cc.Class({
             window.ws.onmessage = this.onGameStatus.bind(this);
         this.requestJar();
         this.schedule(this.requestJar, 5);
+
         this.initMenu();
-        //this.initFirstItem();
+        this.initFirstItem();
     },
 
 
@@ -96,7 +97,7 @@ cc.Class({
                 item.setPositionX(posX);
 
                 this.list_item.push(item);
-                this.board_view.node.addChild(item);
+                this.board_null_line.node.addChild(item);
             }
         }
 
