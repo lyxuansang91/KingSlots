@@ -277,22 +277,15 @@ var Common = {
     setCash: function(cash) {
         this.cash = cash;
     },
+
     getCash: function() {
         return this.cash;
     },
-    genRandomNumber: function (values,startValue,endValue,count) {
+    genRandomNumber: function (startValue,endValue,count) {
         var results = [];
         do {
-            var number = Math.floor(Math.random() * (endValue - startValue)) + startValue;
-            if(values !== null){
-                if(!results.includes(number)  && !values.includes(number)){
-                    results.push(number);
-                }
-            } else {
-                if(!results.includes(number)){
-                    results.push(number);
-                }
-            }
+            var number = Math.floor(Math.random() * 7) + 98;
+            results.push(number);
         }
         while (results.length < count);
         return results;

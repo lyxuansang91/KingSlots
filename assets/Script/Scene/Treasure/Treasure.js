@@ -35,7 +35,7 @@ cc.Class({
         lst_line_selected: []
     },
 
-    start: function() {
+    onLoad: function() {
         cc.log("on start");
         if(window.ws && window.ws.onmessage)
             window.ws.onmessage = this.onGameStatus.bind(this);
@@ -46,9 +46,9 @@ cc.Class({
         this.initFirstItem();
     },
 
-
-
     initMenu: function () {
+        this.lst_number = [6,2,8,5,1,4,10,7,3,9,16,12,19,14,13,17,18,15,11,20];
+
         for (var i = 0; i < this.lst_number.length; i++){
             var line_result = cc.instantiate(this.line_result);
             var component = line_result.getComponent("LineResult");
@@ -84,24 +84,92 @@ cc.Class({
     },
 
     initFirstItem: function() {
-        var random_number = Common.genRandomNumber(null,98,105,this.stepMove*this.number);
+        var random_number = Common.genRandomNumber(98,105,this.stepMove*this.number);
         var items_value = Common.genArrayToMultiArray(random_number, this.stepMove, this.number);
         this.list_recent_value = Common.create2DArray(this.stepMove);
+
         for(var i = 0; i < this.stepMove; i++){
             for(var j = 0; j < this.number; j++){
-                var item = cc.instantiate(this.cardPrefab);
-                var posX = (j - 2) * item.getContentSize().width * 0.75;
+                var item = cc.instantiate(this.itemPrefab);
+                var posX = (j - 2) * item.getContentSize().width;
                 var posY = (i - 1) * item.getContentSize().height;
                 item.getComponent("ItemPrefab").init(items_value[i][j] - 98);
                 item.setPositionY(posY);
                 item.setPositionX(posX);
 
                 this.list_item.push(item);
-                this.board_null_line.node.addChild(item);
+                this.board_null_line.addChild(item);
             }
         }
 
         this.list_recent_value = items_value;
+    },
+
+    implementSpinTreasure: function (listItem,listWin) {
+
+        var random_number = Common.genRandomNumber(this.stepMove, this.number);
+        var items_value = Common.genArrayToMultiArray(random_number, this.stepMove, this.number);
+
+        for(var i = 0; i < listItem.length; i++){
+            var x = parseInt(i/this.number);
+            var y = parseInt(i%this.number);
+
+            cc.log("x/y",x,y);
+            items_value[this.stepMove - 3 + x].push(listItem[i]);
+        }
+
+        if(items_value.length * this.number != this.list_item.length){
+            return;
+        }
+
+        for(var i = 0; i < this.list_item.length; i++){
+            var x = parseInt(i/this.number);
+            var y = parseInt(i%this.number);
+
+            if(i < 3*this.number){
+                var i1 = this.stepMove - (3 - x);
+                var j1 = y;
+                this.list_item[i].getComponent('ItemPrefab').init(this.list_recent_value[i1][j1] - 98);
+            }
+
+            var posX = (y - 2) * this.list_item[i].getContentSize().width * 0.75;
+            var posY = (x - 1) * this.list_item[i].getContentSize().height;
+
+            this.list_item[i].setPositionX(posX);
+            this.list_item[i].setPositionY(posY);
+        }
+
+        this.list_recent_value = items_value;
+
+        for(var i = 0; i < this.list_item.length; i++){
+            var x = parseInt(i/this.number);
+            var y = parseInt(i%this.number);
+
+            var item = this.list_item[i];
+
+            var item_value = items_value[x][y] - 98;
+            if(i >= 3*this.number){
+                item.getComponent('ItemPrefab').init(item_value);
+            }
+
+            var h = item.getContentSize().height;
+
+            var move1 = cc.moveBy(0.2, cc.p(0,h*0.25));
+            var move2 = cc.moveBy(0.15, cc.p(0,h*0.25));
+            var move3 = cc.moveBy(this.time_move,cc.p(0,-(this.stepMove - 3.0)*h - 0.5*h));
+            var delay = cc.delayTime(y*0.3);
+
+            if(i == this.list_item.length - 1){
+                // khi dừng hiệu ứng
+                var call_func = cc.callFunc(function () {
+                    cc.log("FINISH!!!!");
+                });
+                item.runAction(cc.sequence(delay,move1,move3,move2,call_func));
+            }else{
+                item.runAction(cc.sequence(delay,move1,move3,move2));
+            }
+        }
+
     },
 
     requestJar: function() {
@@ -124,6 +192,8 @@ cc.Class({
 
         var result = this.lst_number.join(",");
 
+        cc.log("lst_number",this.lst_number);
+
         var entryLine = new proto.BINMapFieldEntry();
         entryLine.setKey("lineSelected");
         entryLine.setValue(result);
@@ -141,9 +211,6 @@ cc.Class({
         return this.getKeyBet() + 1;
     },
 
-    onLoad: function() {
-        cc.log("on load");
-    },
     onDestroy: function() {
         this._super();
         cc.log("on destroy");
@@ -201,6 +268,8 @@ cc.Class({
                     cc.log("line win:", lineWin);
 
                     // TODO:
+
+                    this.implementSpinTreasure(listItem,lineWin);
                 }
             }
         }
