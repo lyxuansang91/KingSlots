@@ -11,9 +11,9 @@ cc.Class({
         isRun: false,
         stepMove : 9,
         number : 5,
-        time_move: 1,
+        time_move: 3,
         list_item: [],
-        list_recent_value: null,
+        list_recent_values: [],
 
         myInterVal: null,
         isRequestJar: false,
@@ -32,7 +32,7 @@ cc.Class({
             }
         },
         lst_line_results: [],
-        lst_line_selected: []
+        lst_line_selected: [],
     },
 
     onLoad: function() {
@@ -42,8 +42,29 @@ cc.Class({
         this.requestJar();
         this.schedule(this.requestJar, 5);
 
+        this.initItemPool();
         this.initMenu();
         this.initFirstItem();
+    },
+
+    initItemPool: function () {
+        this.itemPool = new cc.NodePool();
+        for (var i = 0; i < 20; ++i) {
+            var item = cc.instantiate(this.itemPrefab); // create node instance
+            this.itemPool.put(item); // populate your pool with putInPool method
+        }
+    },
+
+    getItem: function (index) {
+        var item = null;
+        if(this.itemPool.size() > 0){
+            item = this.itemPool.get();
+        }else{
+            item = cc.instantiate(this.itemPrefab);
+        }
+        item.getComponent("ItemPrefab").init(index);
+
+        return item;
     },
 
     initMenu: function () {
@@ -84,16 +105,17 @@ cc.Class({
     },
 
     initFirstItem: function() {
-        var random_number = Common.genRandomNumber(98,105,this.stepMove*this.number);
-        var items_value = Common.genArrayToMultiArray(random_number, this.stepMove, this.number);
-        this.list_recent_value = Common.create2DArray(this.stepMove);
+        //var random_number = Common.genRandomNumber(98,105,this.stepMove*this.number);
+        //var items_value = Common.genArrayToMultiArray(random_number, this.stepMove, this.number);
+        //this.list_recent_value = Common.create2DArray(this.stepMove);
 
         for(var i = 0; i < this.stepMove; i++){
             for(var j = 0; j < this.number; j++){
-                var item = cc.instantiate(this.itemPrefab);
-                var posX = (j - 2) * item.getContentSize().width;
-                var posY = (i - 1) * item.getContentSize().height;
-                item.getComponent("ItemPrefab").init(items_value[i][j] - 98);
+                var r = Math.floor(Math.random() * 7) + 98;
+                this.list_recent_values.push(r);
+                var item = this.getItem(r - 98);
+                var posX = (j - 2) * item.getContentSize().width*1.05;
+                var posY = (i - 1) * item.getContentSize().height*1.05;
                 item.setPositionY(posY);
                 item.setPositionX(posX);
 
@@ -101,45 +123,42 @@ cc.Class({
                 this.board_null_line.addChild(item);
             }
         }
-
-        this.list_recent_value = items_value;
     },
 
     implementSpinTreasure: function (listItem,listWin) {
-
-        var random_number = Common.genRandomNumber(this.stepMove, this.number);
-        var items_value = Common.genArrayToMultiArray(random_number, this.stepMove, this.number);
-
-        for(var i = 0; i < listItem.length; i++){
-            var x = parseInt(i/this.number);
-            var y = parseInt(i%this.number);
-
-            cc.log("x/y",x,y);
-            items_value[this.stepMove - 3 + x].push(listItem[i]);
-        }
-
-        if(items_value.length * this.number != this.list_item.length){
+        if(listItem.length == 0){
             return;
         }
+
+        var index_item = 4;
 
         for(var i = 0; i < this.list_item.length; i++){
             var x = parseInt(i/this.number);
             var y = parseInt(i%this.number);
 
+            var value = 0;
             if(i < 3*this.number){
-                var i1 = this.stepMove - (3 - x);
-                var j1 = y;
-                this.list_item[i].getComponent('ItemPrefab').init(this.list_recent_value[i1][j1] - 98);
+
+                value = this.list_recent_values[i] - 98;
+                this.list_recent_values[i] = listItem[i];
+
+            }else if(i >= this.list_item.length - index_item*this.number &&
+                i < this.list_item.length - 1){
+
+                value = this.list_recent_values[i - this.list_item.length + index_item*this.number] - 98;
+            }else{
+                value = Math.floor(Math.random() * 7);
             }
 
-            var posX = (y - 2) * this.list_item[i].getContentSize().width * 0.75;
-            var posY = (x - 1) * this.list_item[i].getContentSize().height;
+            this.list_item[i].getComponent('ItemPrefab').init(value);
 
+            var posX = (y - 2) * this.list_item[i].getContentSize().width*1.05;
+            var posY = (x - 1) * this.list_item[i].getContentSize().height*1.05;
+
+            this.list_item[i].stopAllActions();
             this.list_item[i].setPositionX(posX);
             this.list_item[i].setPositionY(posY);
         }
-
-        this.list_recent_value = items_value;
 
         for(var i = 0; i < this.list_item.length; i++){
             var x = parseInt(i/this.number);
@@ -147,16 +166,11 @@ cc.Class({
 
             var item = this.list_item[i];
 
-            var item_value = items_value[x][y] - 98;
-            if(i >= 3*this.number){
-                item.getComponent('ItemPrefab').init(item_value);
-            }
+            var h = item.getContentSize().height*1.05;
 
-            var h = item.getContentSize().height;
+            var move1 = cc.moveBy(1,cc.p(0,-this.stepMove*h*0.25)).easing(cc.easeExponentialIn());
+            var move2 = cc.moveBy(1,cc.p(0,-(this.stepMove*0.75 - index_item)*h)).easing(cc.easeBackOut());
 
-            var move1 = cc.moveBy(0.2, cc.p(0,h*0.25));
-            var move2 = cc.moveBy(0.15, cc.p(0,h*0.25));
-            var move3 = cc.moveBy(this.time_move,cc.p(0,-(this.stepMove - 3.0)*h - 0.5*h));
             var delay = cc.delayTime(y*0.3);
 
             if(i == this.list_item.length - 1){
@@ -164,9 +178,9 @@ cc.Class({
                 var call_func = cc.callFunc(function () {
                     cc.log("FINISH!!!!");
                 });
-                item.runAction(cc.sequence(delay,move1,move3,move2,call_func));
+                item.runAction(cc.sequence(delay,move1,move2,call_func));
             }else{
-                item.runAction(cc.sequence(delay,move1,move3,move2));
+                item.runAction(cc.sequence(delay,move1,move2));
             }
         }
 
@@ -180,6 +194,9 @@ cc.Class({
         }
     },
     getSpin: function() {
+        //var listItem = [98,99,100,98,101,101,99,103,98,101,100,99,102,105,104];
+        //var lineWin = [1,2,5,6];
+        //this.implementSpinTreasure(listItem,lineWin);
         this.getTurnTreasureRequest(this.betType + 1);
     },
     getTurnTreasureRequest: function(turnType) {
@@ -297,7 +314,7 @@ cc.Class({
         }
     },
     jarResponseHandler: function(resp) {
-        cc.log("jar response message:", resp.toObject());
+        //cc.log("jar response message:", resp.toObject());
         if(resp.getResponsecode()) {
             var jar_type_response = 0;
             var preJarValue = this.jarValue;
