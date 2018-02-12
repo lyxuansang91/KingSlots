@@ -341,6 +341,9 @@ var Common = {
         }
         return this.displayName;
     },
+    getUserId: function() {
+        return "ID:" + this.userInfo.userid;
+    },
     level: 0,
     setLevel: function(level) {
         this.level = level;

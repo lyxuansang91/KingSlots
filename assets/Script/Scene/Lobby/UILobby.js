@@ -8,7 +8,8 @@ cc.Class({
         userName: cc.Label ,
         userAvatar: cc.Button ,
         userGold: cc.Label,
-        timeTotal: 0
+        timeTotal: 0,
+        userId: cc.Label
     },
 
     onLoad: function () {
@@ -48,7 +49,8 @@ cc.Class({
     },
     setUserInfo: function() {
         this.userName.string = Common.getUserName();
-        this.userGold.string = Common.getCash();
+        this.userGold.string = Common.numberFormatWithCommas(Common.getCash());
+        this.userId.string = Common.getUserId();
     },
     update: function(dt) {
         this.timeTotal = this.timeTotal + dt;
