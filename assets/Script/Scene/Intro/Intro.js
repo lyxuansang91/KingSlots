@@ -1,6 +1,7 @@
 var MyMessage = require('initialize_pb');
 var NetworkManager = require('NetworkManager');
 var BaseScene = require('BaseScene');
+
 cc.Class({
     extends: BaseScene,
 
@@ -25,6 +26,7 @@ cc.Class({
             self.scheduleOnce(self.goGame, self.timeSchedule);
         });
 
+        Common.initLanguage();
     },
 
     update: function(dt) {

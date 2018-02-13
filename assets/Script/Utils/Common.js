@@ -28,6 +28,18 @@ var Common = {
     height : cc.director.getWinSize().height,
     introScene: null,
     _existTaiXiu: false,
+
+    initLanguage: function(){
+        var self = this;
+        var url = cc.url.raw( 'resources/vi2.json' )
+        cc.loader.load( url, function( err, res) {
+            if(err == null){
+                var json = JSON.stringify(res);
+                self.KEYTEXT = JSON.parse(json);
+            }
+        });
+    },
+
     isExistTaiXiu: function() {
         return this._existTaiXiu;
     },
@@ -287,6 +299,7 @@ var Common = {
             var number = Math.floor(Math.random() * 7) + 98;
             results.push(number);
         }
+
         while (results.length < count);
         return results;
     },
@@ -635,5 +648,15 @@ var Common = {
     testWhite: function(x) {
         var white = new RegExp(/^\s$/);
         return white.test(x.charAt(0));
+    },
+
+    isWhiteSpaceText: function(text) {
+        for(var i = 0; i < text.length; i++){
+            if(this.testWhite(text.charAt(i))){
+                return true;
+            }
+        }
+
+        return false
     }
 };

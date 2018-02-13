@@ -124,12 +124,26 @@ cc.Class({
         var username = this.edt_username.string;
         var password = this.edt_password.string;
 
-        if(this.edt_username.string === "" || this.edt_password.string === "") {
-            var strMess = "Tài khoản và mật khẩu không được để trống!";
-
-            this.showToast(strMess,1);
+        if(username === "" || password === "") {
+            this.showToast(Common.KEYTEXT.BLANK_USERNAME,1);
             return;
         }
+
+        if(Common.isWhiteSpaceText(username)) {
+            this.showToast(Common.KEYTEXT.TXT_REMIND2,1);
+            return;
+        }
+
+        if(username.length < 3 || username.length > 12){
+            this.showToast(Common.KEYTEXT.TXT_REMIND4,1);
+            return;
+        }
+
+        if(username.length < 6 || username.length > 12){
+            this.showToast(Common.KEYTEXT.TXT_REMIND5,1);
+            return;
+        }
+
         NetworkManager.requestLoginMessage(username, password);
     },
     register: function() {
