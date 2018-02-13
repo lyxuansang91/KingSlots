@@ -1931,7 +1931,7 @@
     "number": 5,
     "time_move": 1,
     "list_item": [],
-    "list_recent_value": null,
+    "list_recent_values": [],
     "myInterVal": null,
     "isRequestJar": false,
     "jarValue": "0",
