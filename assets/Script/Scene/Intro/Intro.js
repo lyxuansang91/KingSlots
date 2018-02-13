@@ -28,6 +28,7 @@ cc.Class({
     },
 
     update: function(dt) {
+        this.onGameEvent();
         if (this.isProgressing) {
             this.deltaTime += dt;
             this.matchProgress.progress = this.deltaTime/this.timeSchedule;
@@ -40,21 +41,19 @@ cc.Class({
     goGame: function() {
         Common.setFingerprint();
         NetworkManager.connectNetwork();
-        window.ws.onmessage = this.ongamestatus.bind(this);
         this.unschedule(this.goGame);
     },
-    ongamestatus: function(event) {
-        cc.log("response text msg:" + event);
-        if(event.data!==null || typeof(event.data) !== 'undefined') {
-            var lstMessage = NetworkManager.parseFrom(event.data, event.data.byteLength);
-            cc.log("length =", lstMessage.length);
-            if(lstMessage.length > 0) {
-                for(var i = 0; i < lstMessage.length; i++){
-                    var buffer = lstMessage[i];
-                    this.handleMessage(buffer);
-                }
+    onGameEvent: function() {
+
+        if(window.listMessage.length > 0) {
+            var buffer = window.listMessage[0];
+            var result = this.handleMessage(buffer);
+            if(result) {
+                window.listMessage.shift();
             }
+
         }
+
     },
     handleMessage: function(buffer) {
         this._super(buffer);

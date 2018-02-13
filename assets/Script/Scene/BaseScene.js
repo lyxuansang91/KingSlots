@@ -18,8 +18,8 @@ cc.Class({
     },
 
     handleMessage: function(buffer) {
+        var isDone = true;
         NetworkManager.hideLoading();
-        cc.log("buffer:", buffer,  " ", cc.director.getScene());
         switch (buffer.message_id) {
             case NetworkManager.MESSAGE_ID.INITIALIZE:
                 var msg = buffer.response;
@@ -33,7 +33,11 @@ cc.Class({
                 var msg = buffer.response;
                 this.logOutMessageResponseHandler(msg);
                 break;
+            default:
+                isDone = false;
+                break;
         }
+        return isDone;
     },
     logOutMessageResponseHandler: function(resp) {
         cc.log("log out message:", resp.toObject());
