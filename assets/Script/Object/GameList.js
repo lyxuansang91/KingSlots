@@ -1,9 +1,10 @@
 var NetworkManager = require('NetworkManager');
 var BacayScene = require('BaCayScripts');
 var minipoker = require('minipoker');
+var BaseScene = require('BaseScene');
 
 cc.Class({
-    extends: cc.Component,
+    extends: BaseScene,
 
     properties: {
         scrollView: cc.ScrollView,
@@ -39,8 +40,8 @@ cc.Class({
     populateList: function() {
         var listGame = [Common.ZONE_ID.MINI_BACAY,Common.ZONE_ID.MINI_POKER,
             Common.ZONE_ID.TAIXIU, Common.ZONE_ID.VQMM, Common.ZONE_ID.TREASURE];
-
-        this.requestJar();
+        var self = this;
+        this.schedule(self.requestJar, 5);
 
         var innerSize = cc.size(0,this.content.getContentSize().height);
 
@@ -65,40 +66,41 @@ cc.Class({
     },
 
     requestJar: function() {
+        cc.log("request jar");
         if(!this.isRequestJar) {
             this.isRequestJar = true;
             NetworkManager.getJarRequest(0, null);
         }
     },
     bindNetwork: function() {
-      if(window.ws && window.ws.onmessage) {
-          var self = this;
-          window.ws.onmessage = this.ongamestatus.bind(this);
-          this.schedule(self.requestJar, 5);
-      }
+        var self = this;
+        NetworkManager.checkEvent(function(buffer) {
+            return self.handleMessage(buffer);
+        });
+
     },
 
     update: function (dt) {
-        if(!Common.isExistTaiXiu() && !this.isBindNetwork) {
-            this.isBindNetwork = true;
-            this.bindNetwork();
-        }
+        // if(!Common.isExistTaiXiu() && !this.isBindNetwork) {
+        //     this.isBindNetwork = true;
+        //     this.bindNetwork();
+        // }
+        this.bindNetwork();
     },
 
     goSceneTable: function() {
-        window.ws.onmessage = this.ongamestatus.bind(this);
     },
 
     ongamestatus: function(event) {
-        cc.log("on game status game list");
-        NetworkManager.hideLoading();
-        if(event.data!==null || event.data !== 'undefined') {
-            var lstMessage = NetworkManager.parseFrom(event.data, event.data.byteLength);
-            for(var i = 0; i < lstMessage.length; i++) {
-                var buffer = lstMessage[i];
-                this.handleMessage(buffer);
-            }
-        }
+        // cc.log("on game status game list");
+        // NetworkManager.hideLoading();
+        // if(event.data!==null || event.data !== 'undefined') {
+        //     var lstMessage = NetworkManager.parseFrom(event.data, event.data.byteLength);
+        //     for(var i = 0; i < lstMessage.length; i++) {
+        //         var buffer = lstMessage[i];
+        //         this.handleMessage(buffer);
+        //     }
+        // }
     },
 
     jarResponseHandler: function(resp) {
@@ -120,6 +122,10 @@ cc.Class({
     },
 
     handleMessage: function(buffer) {
+        var isDone = this._super(buffer);
+        if(isDone) {
+            return true;
+        }
         switch (buffer.message_id) {
             case NetworkManager.MESSAGE_ID.ENTER_ZONE:
                 var msg = buffer.response;
@@ -133,7 +139,11 @@ cc.Class({
                 var msg = buffer.response;
                 this.jarResponseHandler(msg);
                 break;
+            default:
+                isDone = false;
+                break;
         }
+        return isDone;
     },
 
     enterZoneMessageResponseHandler: function(enterZoneMessage) {

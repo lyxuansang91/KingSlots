@@ -28,7 +28,7 @@ cc.Class({
             }
         }
 
-        window.ws.onmessage = this.ongamestatus.bind(this);
+        // window.ws.onmessage = this.ongamestatus.bind(this);
     },
 
     ongamestatus: function(event) {
@@ -42,14 +42,30 @@ cc.Class({
     },
     handleMessage: function(e) {
         const buffer = e;
-        cc.log("response:", buffer);
-        this._super(buffer);
+        var isDone = this._super(buffer);
+        if(isDone) {
+            return true;
+        }
         switch (buffer.message_id) {
             case NetworkManager.MESSAGE_ID.LOGIN:
                 var msg = buffer.response;
                 this.handleLoginResponseHandler(msg);
                 break;
+            default:
+                isDone = false;
+                break;
         }
+        return isDone;
+    },
+
+    onGameEvent: function() {
+        var self = this;
+        NetworkManager.checkEvent(function(buffer) {
+            return self.handleMessage(buffer);
+        })
+    },
+    update: function(dt) {
+        this.onGameEvent();
     },
 
     handleLoginResponseHandler: function(res) {
