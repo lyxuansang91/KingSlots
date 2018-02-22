@@ -1,9 +1,10 @@
 var NetworkManager = require('NetworkManager');
+var BaseScene = require('BaseScene');
 var HISTORY_SPIN = 1;
 var HISTORY_BREAK_JAR = 2;
 var HISTORY_TOP_USER = 3;
 var MiniPoker = cc.Class({
-    extends: cc.Component,
+    extends: BaseScene,
 
     properties: {
         cardView: cc.Mask,
@@ -33,6 +34,15 @@ var MiniPoker = cc.Class({
         // cc.director.loadScene("Table");
         NetworkManager.requestExitRoomMessage(0);
     },
+    update: function(dt) {
+        this.onGameEvent();
+    },
+    onGameEvent: function() {
+        var self = this;
+        NetworkManager.checkEvent(function(buffer) {
+            return self.handleMessage(buffer);
+        });
+    },
 
     setKeyBet: function(key) {
       this.betType = key;
@@ -42,7 +52,7 @@ var MiniPoker = cc.Class({
     },
     requestJar: function() {
         if(!this.isRequestJar) {
-            cc.log("request jar", this.betType + 1);
+            cc.log("request jar:", this.betType + 1);
             this.isRequestJar = false;
             NetworkManager.getJarRequest(Common.getZoneId(), this.betType + 1);
         }
@@ -155,17 +165,23 @@ var MiniPoker = cc.Class({
 
         this.list_recent_value = items_value;
     },
+    onDestroy: function() {
+      this.unscheduleAllCallbacks();
+    },
 
     // use this for initialization
     onLoad: function () {
         MiniPoker.instance = this;
         this.userMoney.string = Common.numberFormatWithCommas(Common.getCash());
-        window.ws.onmessage = this.ongamestatus.bind(this);
         this.betType = 0;
         this.initFirstCard();
-        setInterval(function() {
-            this.requestJar();
-        }.bind(this), 5000);
+        var self = this;
+        self.schedule(function() {
+            self.requestJar();
+        }, 5);
+        // setInterval(function() {
+        //     this.requestJar();
+        // }.bind(this), 5000);
         Common.setMiniPokerSceneInstance(cc.director.getScene());
     },
     ongamestatus: function(event) {
@@ -343,6 +359,11 @@ var MiniPoker = cc.Class({
     },
     handleMessage: function(buffer) {
       //  cc.log("buffer =", buffer.message_id);
+        var isDone = this._super(buffer);
+        if(isDone) {
+            return true;
+        }
+        isDone = true;
         switch (buffer.message_id) {
             case NetworkManager.MESSAGE_ID.UPDATE_MONEY:
                 var msg = buffer.response;
@@ -355,10 +376,6 @@ var MiniPoker = cc.Class({
                 var msg = buffer.response;
                 this.exitRoomResponseHandler(msg);
                 break;
-            // // case NetworkManager.MESSAGE_ID.ENTER_ROOM:
-            // //     var msg = buffer.response;
-            // //     this.enterRoomResponseHandler(msg);
-            // //     break;
             case NetworkManager.MESSAGE_ID.EXIT_ZONE:
                 var msg = buffer.response;
                 this.exitZoneResponseHandler(msg);
@@ -367,7 +384,11 @@ var MiniPoker = cc.Class({
                 var msg = buffer.response;
                 this.jarResponseHandler(msg);
                 break;
+            default:
+                isDone = false;
+                break;
         }
+        return isDone;
     },
 
     calculateTurnType: function() {

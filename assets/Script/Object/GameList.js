@@ -41,7 +41,9 @@ cc.Class({
         var listGame = [Common.ZONE_ID.MINI_BACAY,Common.ZONE_ID.MINI_POKER,
             Common.ZONE_ID.TAIXIU, Common.ZONE_ID.VQMM, Common.ZONE_ID.TREASURE];
         var self = this;
-        this.schedule(self.requestJar, 5);
+        self.schedule(function() {
+            self.requestJar();
+        }, 10);
 
         var innerSize = cc.size(0,this.content.getContentSize().height);
 
@@ -104,7 +106,6 @@ cc.Class({
     },
 
     jarResponseHandler: function(resp) {
-        cc.log("jar response handler:", resp.toObject());
         if(resp.getResponsecode()) {
             if(resp.getJarinfoList().length > 0) {
                 this.isRequestJar = false;
