@@ -386,13 +386,17 @@ var BacaySence = cc.Class({
         if (emoticonId !== 72) {
             this.isUpdateMoney = false;
             cc.log("mess =", message);
-            var nodeChild = new cc.Node();
+
+            var nodeChild = new cc.Node(message);
             nodeChild.parent = this.node;
             var lbl_text = nodeChild.addComponent(cc.Label);
             lbl_text.string = message;
-
-            // lbl_text.node.setPosition(cc.p(1334/2,750/2));
             lbl_text.node.color = cc.color(248,213,82,255);
+
+            var outline = nodeChild.addComponent(cc.LabelOutline);
+            outline.color = new cc.Color(0.5, 0.3, 0.7, 1.0);
+            outline.width = 3;
+
             var fadeout = cc.fadeOut(1.0);
             var callFunc = cc.callFunc(function () {
                 for (var i = 0; i < response.getMoneyboxesList().length; i++) {
@@ -406,6 +410,11 @@ var BacaySence = cc.Class({
                         // MLabel::createUpdateMoney(moneybox.displaychangemoney());
                         // label_money.node.setPosition(cc.p(1334/2,750/2));
                         label_money.node.color = cc.color(248,213,82,255);
+
+                        var outline = nodeMoney.addComponent(cc.LabelOutline);
+                        outline.color = new cc.Color(0.5, 0.3, 0.7, 1.0);
+                        outline.width = 3;
+
                         // this.cardView.node.addChild(this.label_money);
                         var fadeout = cc.fadeOut(1.5);
                         label_money.node.runAction(cc.sequence(cc.moveBy(0.5, cc.p(0,20)),cc.delayTime(0.25),
