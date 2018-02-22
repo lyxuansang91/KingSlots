@@ -754,9 +754,6 @@ var NetworkManager = {
             if(window.ws.readyState === WebSocket.OPEN) {
                 //== show loading
                 if(typeof mid !== 'undefined' && mid !== NetworkManager.MESSAGE_ID.INITIALIZE &&
-<<<<<<< HEAD
-                    mid !== NetworkManager.MESSAGE_ID.PING && mid !== NetworkManager.MESSAGE_ID.JAR){
-=======
                     mid !== NetworkManager.MESSAGE_ID.PING && mid !== NetworkManager.MESSAGE_ID.JAR
                     && mid !== NetworkManager.MESSAGE_ID.CHANGE_HOST && mid !== NetworkManager.MESSAGE_ID.TURN
                     && mid !== NetworkManager.MESSAGE_ID.INSTANT_MESSAGE
@@ -764,8 +761,7 @@ var NetworkManager = {
                     && mid !== NetworkManager.MESSAGE_ID.FILTER_FRIEND && mid !== NetworkManager.MESSAGE_ID.BET
                     && mid !== NetworkManager.MESSAGE_ID.EXTRA_BET && mid !== NetworkManager.MESSAGE_ID.ZONE_STATUS
                     && mid !== NetworkManager.MESSAGE_ID.FILTER_ROOM && mid !== NetworkManager.MESSAGE_ID.LOOK_UP_GAME_HISTORY){
-                    cc.log("shot loading mid:", mid);
->>>>>>> 5e7bc1a1065562a2eb309dfed87347b98fed73f1
+
                     self.showLoading();
                 }
                 window.ws.send(ackBuf);
