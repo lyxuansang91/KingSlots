@@ -16,7 +16,12 @@
   "excluded-modules": [
     "TiledMap",
     "VideoPlayer",
-    "Physics"
+    "MotionStreak",
+    "Collider",
+    "DragonBones",
+    "Physics",
+    "Camera",
+    "Intersection"
   ],
   "fit-height": false,
   "fit-width": true,
