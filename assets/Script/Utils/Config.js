@@ -36,6 +36,7 @@ var Config = {
     },
     name : {
         COMMON_POPUP : "CommonPopup",
-        POPUP_SETTING : "PopupSetting"
+        POPUP_SETTING : "PopupSetting",
+        POPUP_FULL : "PopupFull"
     }
 }
