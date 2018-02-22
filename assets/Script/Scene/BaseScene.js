@@ -6,6 +6,7 @@ cc.Class({
 
     },
 
+
     update : function(dt){
     },
 
@@ -47,7 +48,7 @@ cc.Class({
     },
     initialMessageResponseHandler: function(initialMessage) {
         cc.log("initialMessage", initialMessage);
-        if (initialMessage != 0) {
+        if (initialMessage !== 0) {
             //common.initialize = initialMessage.responseCode;
             if (initialMessage.getResponsecode()) {
                 var serverAppVersion = initialMessage.getCurrentappversion();

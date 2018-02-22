@@ -30,7 +30,6 @@ cc.Class({
     },
 
     update: function(dt) {
-        this.onGameEvent();
         if (this.isProgressing) {
             this.deltaTime += dt;
             this.matchProgress.progress = this.deltaTime/this.timeSchedule;
@@ -39,6 +38,7 @@ cc.Class({
                 this.isProgressing = false;
             }
         }
+        this.onGameEvent();
     },
     goGame: function() {
         Common.setFingerprint();
@@ -46,19 +46,16 @@ cc.Class({
         this.unschedule(this.goGame);
     },
     onGameEvent: function() {
+        var self = this;
 
-        if(window.listMessage.length > 0) {
-            var buffer = window.listMessage[0];
-            var result = this.handleMessage(buffer);
-            if(result) {
-                window.listMessage.shift();
-            }
-
-        }
-
+        NetworkManager.checkEvent(function(buffer) {
+            cc.log("buffer:", buffer);
+            return self.handleMessage(buffer);
+        });
     },
+
     handleMessage: function(buffer) {
-        this._super(buffer);
+        return this._super(buffer);
     },
     openPopup: function() {
         this.addChild(this.setting);

@@ -228,10 +228,35 @@ var NetworkManager = {
 /** The Constant EXPIRED_SESSION. */
         EXPIRED_SESSION: 9999
     },
-    URL: "ws://" + "163.44.207.51:1280" + "/megajackpot",
+    lagTime: 0,
+    isLagged: false,
+    MAX_KILL_MSG: 5000,
+    URL: "ws://" + "150.95.108.235:1280" + "/megajackpot",
     sessionId: "",
     getSessionId: function() {
         return NetworkManager.sessionId;
+    },
+    checkEvent: function (checkMessage) {
+        // cc.log("check message:", checkMessage);
+        // cc.log("list message:", window.listMessage);
+        if(window.listMessage !== null && typeof(window.listMessage) !== 'undefined'  && window.listMessage.length > 0) {
+            var buffer = window.listMessage[0];
+            var result = checkMessage(buffer);
+            if(result) {
+                NetworkManager.isLagged = false;
+                window.listMessage.shift();
+            } else {
+                if(!NetworkManager.isLagged) {
+                    NetworkManager.lagTime = Date.now();
+                    NetworkManager.isLagged = true;
+                }
+                if(Date.now() - NetworkManager.lagTime >= NetworkManager.MAX_KILL_MSG) {
+                    cc.log("kill message");
+                    window.listMessage.shift();
+                    NetworkManager.isLagged = false;
+                }
+            }
+        }
     },
     setSessionId: function(_sessionId) {
         NetworkManager.sessionId = _sessionId;
@@ -278,6 +303,7 @@ var NetworkManager = {
 
     getTypeMessage: function(msg, messageid, protoBufVar) {
         var bytes = new Uint8Array(protoBufVar.toArrayBuffer());
+        msg = null;
         switch (messageid) {
             case NetworkManager.MESSAGE_ID.INITIALIZE:
                 msg = proto.BINInitializeResponse.deserializeBinary(bytes);
@@ -345,6 +371,8 @@ var NetworkManager = {
             case NetworkManager.MESSAGE_ID.EMERGENCY_NOTIFICATION:
                 msg = proto.BINEmergencyNotificationResponse.deserializeBinary(bytes);
                 break;
+            default:
+                break;
         }
 
         return msg;
@@ -372,7 +400,7 @@ var NetworkManager = {
             bb = bb.copy(_offset);
 
             /*if is_compress = 1 */
-            if (is_compress == 1) {
+            if (is_compress === 1) {
                 // var left_block = bb.copy(_offset);
                 var byteArray = new Uint8Array(bb);
                 var bufArr = bb.view;
@@ -628,7 +656,6 @@ var NetworkManager = {
         return request;
     },
     getLookUpGameHistoryRequest: function(firstResult, maxResult, entries, orderByField, asc) {
-        cc.log("getLookUpGameHistoryRequest =", entries);
         var request = new proto.BINLookUpGameHistoryRequest();
         request.setFirstresult(firstResult);
         request.setMaxresult(maxResult);
@@ -669,8 +696,8 @@ var NetworkManager = {
 
             window.ws.onopen = function (event) {
                 console.log("on web socket");
-                NetworkManager.requestInitializeMessage("24", "15","xxxxx","xxxxx", "vn", "vi", "com.gamebai.tienlen", false, "" );
-                //Common.getFingerprint(), Common.getDeviceInfo(), "vn", "vi", Common.getPackageName(), false, "");
+                NetworkManager.requestInitializeMessage("24", "15","xxxxx","xxxxx", "vn", "vi", "com.gamebai.tienlen", false, "");
+                // Common.getFingerprint(), Common.getDeviceInfo(), "vn", "vi", Common.getPackageName(), false, "");
                 setTimeout(function() {
                     window.myInterval = setInterval(function() {
                         NetworkManager.requestPingMessage(0);
@@ -678,7 +705,7 @@ var NetworkManager = {
                 }, 1);
 
             };
-            window.ws.onclose = function (event) {
+            window.ws.onclose = function () {
                 console.log("Websocket instance was closed");
                 clearInterval(window.myInterval);
             };
@@ -687,7 +714,7 @@ var NetworkManager = {
         }
     },
     closeConnection: function() {
-        if(window.ws.readyState == WebSocket.OPEN) {
+        if(window.ws.readyState === WebSocket.OPEN) {
             window.ws.close();
         }
     },
@@ -695,7 +722,11 @@ var NetworkManager = {
         if(event.data!==null || typeof(event.data) !== 'undefined') {
             var lstMessage = NetworkManager.parseFrom(event.data, event.data.byteLength);
             cc.log("length =", lstMessage.length);
-            window.ws.listMessage.concat(lstMessage);
+            for(var i = 0; i < lstMessage.length; i++) {
+                window.listMessage.push(lstMessage[i]);
+            }
+            // window.listMessage.concat(lstMessage);
+            cc.log("length =", window.listMessage.length);
         }
     },
 
@@ -708,22 +739,21 @@ var NetworkManager = {
             window.listMessage = [];
             window.ws.binaryType = "arraybuffer";
 
-            window.ws.onopen = function (event) {
+            window.ws.onopen = function () {
                 console.log("on web socket");
                 setTimeout(function(){
                     window.ws.send(ackBuf);
                 }, 0.5);
             };
-            window.ws.onclose = function (event) {
+            window.ws.onclose = function () {
                 console.log("Websocket instance was closed");
             };
         }
          else {
-            if(window.ws.readyState == WebSocket.OPEN) {
+            if(window.ws.readyState === WebSocket.OPEN) {
                 //== show loading
                 if(typeof mid !== 'undefined' && mid !== NetworkManager.MESSAGE_ID.INITIALIZE &&
                     mid !== NetworkManager.MESSAGE_ID.PING && mid !== NetworkManager.MESSAGE_ID.JAR){
-                    cc.log("shot loading mid:", mid);
                     self.showLoading();
                 }
                 window.ws.send(ackBuf);
