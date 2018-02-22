@@ -612,6 +612,7 @@
       "__uuid__": "31c15c51-6222-49b7-9863-ad45766f1da7"
     },
     "list_item": [],
+    "list_recent_values": [],
     "stepCard": 9,
     "list_recent_value": null,
     "number": 3,
@@ -1083,7 +1084,7 @@
       }
     ],
     "_tag": -1,
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 24
@@ -3097,7 +3098,7 @@
     },
     "_children": [],
     "_tag": -1,
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 74
