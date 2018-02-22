@@ -1,6 +1,9 @@
 var NetworkManager = require('NetworkManager');
 var BaseScene = require('BaseScene');
 var PopupFull = require('PopupFull');
+var HISTORY_SPIN = 1;
+var HISTORY_BREAK_JAR = 2;
+var HISTORY_TOP_USER = 3;
 var BacaySence = cc.Class({
     extends: BaseScene,
 
@@ -28,6 +31,7 @@ var BacaySence = cc.Class({
         isRequestJar: false,
         popupPrefab: cc.Prefab,
         list_item: [],
+        list_recent_values: [],
         stepCard : 9,
         list_recent_value: null,
         number : 3,
@@ -52,6 +56,7 @@ var BacaySence = cc.Class({
         setInterval(function() {
             this.requestJar();
         }.bind(this), 5000);
+        Common.setMiniThreeCardsSceneInstance(cc.director.getScene());
     },
 
     initFirstCard: function() {
@@ -69,6 +74,7 @@ var BacaySence = cc.Class({
 
                 this.list_item.push(item);
                 this.cardView.node.addChild(item);
+                this.list_recent_values.push(items_value[i][j]);
             }
         }
 
@@ -472,9 +478,10 @@ var BacaySence = cc.Class({
             }
         }
 
-        if (response.hasMessage() && !response.getMessage()) {
-            this.showToast(response.getMessage());
-        }
+        // if (response.hasMessage() && !response.getMessage()) {
+        //     cc.log("mess =", response.getMessage());
+        //     this.showToast(response.getMessage(), this, 2);
+        // }
 
         this.isRequestJar = false;
     },
@@ -567,16 +574,24 @@ var BacaySence = cc.Class({
                 Common.getMiniGameZoneId(), this.calculateTurnType());
         }
     },
-    showPopup: function () {
+    showSpin: function () {
 
-        var tabString = ["Lịch sử quay", "Top cao thủ", "Lịch sử nổ hũ"];
-        var nodeChild = new cc.Node();
-        nodeChild.parent = this.node;
-        var item = cc.instantiate(this.popupPrefab);
+        var tabString = ["Lịch sử quay", "Lịch sử nổ hũ", "Top cao thủ"];
 
-        item.getComponent('PopupFull').init(tabString, "history", this);
-        item.getComponent('Popup').appear();
-        nodeChild.addChild(item);
+        Common.showPopup(Config.name.POPUP_FULL,function(message_box) {
+            message_box.init(tabString, "history", HISTORY_SPIN);
+            message_box.appear();
+        });
+
+    },
+    showTopUser: function () {
+
+        var tabString = ["Lịch sử quay", "Lịch sử nổ hũ", "Top cao thủ"];
+
+        Common.showPopup(Config.name.POPUP_FULL,function(message_box) {
+            message_box.init(tabString, "history", HISTORY_TOP_USER);
+            message_box.appear();
+        });
 
     }
 

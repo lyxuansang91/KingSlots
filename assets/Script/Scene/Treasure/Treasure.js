@@ -31,7 +31,7 @@ cc.Class({
                 return [6,2,8,5,1,4,10,7,3,9,16,12,19,14,13,17,18,15,11,20];
             }
         },
-        lst_line_results: [],
+        lst_line_result: [],
         lst_line_selected: [],
     },
 
@@ -74,11 +74,16 @@ cc.Class({
             var line_result = cc.instantiate(this.line_result);
             var component = line_result.getComponent("LineResult");
             component.init(i);
+
+            component.show(false);
+
             this.board_null_line.addChild(line_result);
 
-            line_result.active = false;
-            this.lst_line_results.push(line_result);
+            this.lst_line_result.push(line_result);
         }
+
+        cc.log("lst_line_results : xxx ",this.lst_line_result);
+        cc.log("lst_number : xxx ",this.lst_number);
 
         var pos_line_top = 0;
         var size_board = this.board_null_line.getContentSize();
@@ -126,6 +131,8 @@ cc.Class({
     },
 
     implementSpinTreasure: function (listItem,listWin) {
+        this.resetLineResult();
+        cc.log("lst_line_results : xxx ",this.lst_line_result);
         if(listItem.length == 0){
             return;
         }
@@ -146,6 +153,9 @@ cc.Class({
                 i < this.list_item.length - 1){
 
                 value = this.list_recent_values[i - this.list_item.length + index_item*this.number] - 98;
+
+                //this.list_item[i].getComponent('ItemPrefab').reset();
+                //this.list_item[i].getComponent('ItemPrefab').animate();
             }else{
                 value = Math.floor(Math.random() * 7);
             }
@@ -175,15 +185,33 @@ cc.Class({
 
             if(i == this.list_item.length - 1){
                 // khi dừng hiệu ứng
+                var self = this;
                 var call_func = cc.callFunc(function () {
                     cc.log("FINISH!!!!");
+                    { // update line_result
+                        cc.log("lst_line_results : xxx ",self.lst_line_result);
+                        for(var i = 0; i < listWin.length; i++){
+                            if(listWin[i] < 20){
+                                var line = self.lst_line_result[listWin[i] - 1];
+                                line.getComponent("LineResult").show(true);
+                                line.getComponent("LineResult").animate();
+                            }
+                        }
+                    }
+
                 });
                 item.runAction(cc.sequence(delay,move1,move2,call_func));
             }else{
                 item.runAction(cc.sequence(delay,move1,move2));
             }
         }
+    },
 
+    resetLineResult: function () {
+        for(var i = 0; i< this.lst_line_result.length; i++){
+            var line = this.lst_line_result[i].getComponent("LineResult");
+            line.reset();
+        }
     },
 
     requestJar: function() {

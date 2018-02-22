@@ -16,7 +16,6 @@
   "excluded-modules": [
     "TiledMap",
     "VideoPlayer",
-    "DragonBones",
     "Physics"
   ],
   "fit-height": false,

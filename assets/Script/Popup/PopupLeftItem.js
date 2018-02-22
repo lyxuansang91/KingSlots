@@ -11,26 +11,24 @@ cc.Class({
     properties: {
         titleBtn: cc.Label,
         background: cc.Button,
-        historyType: 1
-
+        historyType: 1,
+        list_tab : [cc.SpriteFrame],
+        callBack: function(){}
     },
 
-    // use this for initialization
-    onLoad: function () {
-
-    },
-
-    init: function (tag, titleStr, name) {
+    init: function (tag, titleStr, name, select, callback) {
+        this.callback = callback;
         this.titleBtn.string = titleStr;
         var btn = this.background.getComponent(cc.Button);
-        btn.node._tag = tag;
+        this.tag = tag;
         btn.node.name = name;
-
+        var self = this;
         switch (name) {
             case "history":
             {
                 this.getLookupMiniPokerHistoryRequest(firstResult, MAX_RESULT,
-                    this.historyType, true);
+                    select, true);
+                self.callback(select-1);
             }
                 break;
             case "charge":
@@ -44,36 +42,32 @@ cc.Class({
     },
     
     btnEvent: function (e) {
-        var tag = e.target._tag;
         var name = e.target.name;
         cc.log("e =", e.target);
 
         switch (name) {
             case "history":
             {
-                if (tag === 1){
+                if (this.tag === 1){
                     this.historyType = HISTORY_SPIN;
                     PopupFull.instance.setHistoryType(HISTORY_SPIN);
                     this.getLookupMiniPokerHistoryRequest(firstResult, MAX_RESULT,
                         this.historyType, true);
+                    this.callback(this.tag -1);
 
-                    //tab->setPositionY(heightInerScroll - heightTab - TAG_PADDING_TAB);
-
-                }else if (tag === 2) {
+                }else if (this.tag === 3) {
                     this.historyType = HISTORY_TOP_USER;
                     PopupFull.instance.setHistoryType(HISTORY_TOP_USER);
                     this.getLookupMiniPokerHistoryRequest(firstResult, MAX_RESULT,
                         this.historyType, true);
-
-                    //tab->setPositionY(heightInerScroll - 2 * (heightTab + TAG_PADDING_TAB));
-
-                }else if (tag === 3){
+                    this.callback(this.tag -1);
+                }else if (this.tag === 2){
                     this.historyType = HISTORY_BREAK_JAR;
                     PopupFull.instance.setHistoryType(HISTORY_BREAK_JAR);
                     this.getLookupMiniPokerHistoryRequest(firstResult, MAX_RESULT,
                         this.historyType, true);
 
-                    //tab->setPositionY(heightInerScroll - 3 * (heightTab + TAG_PADDING_TAB));
+                    this.callback(this.tag -1);
                 }
             }
                 break;
@@ -101,5 +95,13 @@ cc.Class({
         entries.push(entry1);
         NetworkManager.getLookUpGameHistoryRequest(firstResult,
             maxResult, entries, -1, false);
+    },
+
+    setActive: function (isActive) {
+        if(isActive){
+            this.background.getComponent(cc.Sprite).spriteFrame = this.list_tab[0];
+        } else {
+            this.background.getComponent(cc.Sprite).spriteFrame = this.list_tab[1];
+        }
     }
 });
