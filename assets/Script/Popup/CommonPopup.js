@@ -4,13 +4,9 @@ cc.Class({
     extends: Popup,
 
     properties: {
-        btnOK: cc.Button,
-        btnCancel: cc.Button,
-        message: cc.Label,
-        type: 0,
-        CONFIRM_TYPE: 0,
-        MESSAGEBOX_TYPE: 1,
-        _callback: function() {}
+        tabTop : cc.Node,
+        uiTab : cc.Prefab,
+        tableView : cc.Node,
     },
 
     onLoad: function () {
@@ -22,20 +18,31 @@ cc.Class({
         this.disappear();
     },
 
-    init: function(msg, type, callback) {
-        this.message.string = msg;
+    initTabs: function (tabs) {
+        var self = this;
+
+        var tab_view = cc.instantiate(this.uiTab);
+        var tab_component = tab_view.getComponent("UITab");
+        tab_component.setTab(tabs,function (index) {
+            self.onEvent(index);
+        });
+        this.tabTop.addChild(tab_view);
+    },
+
+    onEvent: function (index) {},
+
+    init: function(response, type, callback) {
+        this.response = response;
+
         switch (type) {
             case 0:
-                this.btnCancel.node.active = false;
-                this.btnOK.node.active = true;
-                this.btnOK.node.setPositionX(0);
+
                 break;
             case 1:
-                this.btnCancel.node.active = true;
-                this.btnOK.node.active = true;
-                this.btnOK.node.setPositionX(-83.0);
+
                 break;
             case 2:
+
                 break;
             default:
                 break;
