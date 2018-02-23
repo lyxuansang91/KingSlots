@@ -1845,7 +1845,7 @@
       "__id__": 28
     },
     "component": "UILobby",
-    "handler": "openPopup",
+    "handler": "openMailPopup",
     "customEventData": ""
   },
   {
