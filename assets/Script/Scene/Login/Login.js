@@ -1,6 +1,6 @@
 var NetworkManager = require('NetworkManager');
 var BaseScene = require('BaseScene');
-var CommonPopup = require('CommonPopup');
+var PopupMessageBox = require('PopupMessageBox');
 
 cc.Class({
     extends: BaseScene,
@@ -109,7 +109,7 @@ cc.Class({
         }
 
         if(res.hasMessage() && res.getMessage() !== "") {
-            Common.showPopup(Config.name.COMMON_POPUP,function(message_box) {
+            Common.showPopup(Config.name.POPUP_MESSAGE_BOX,function(message_box) {
                 message_box.init(res.getMessage(), 1, function() {
                     cc.log("on callback");
                 });
@@ -163,6 +163,7 @@ cc.Class({
 
         NetworkManager.requestLoginMessage(username, password);
     },
+
     register: function() {
         cc.director.loadScene('Register');
     },
@@ -190,9 +191,9 @@ cc.Class({
 
     },
     loginGoogle: function() {
-        cc.log("login google");
-        // var packageName = jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getPackageNameJNI", "()Ljava/lang/String;");
-        // cc.log("package Name:", packageName);
+        Common.showPopup(Config.name.POPUP_HISTORY,function(popup) {
+            popup.appear();
+        });
     },
     saveUserInfo: function(userInfo) {
         Common.setUserName(userInfo.getUsername());
