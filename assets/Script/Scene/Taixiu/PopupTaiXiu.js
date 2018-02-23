@@ -24,7 +24,7 @@ cc.Class({
             return true;
         }
         this.node.on('touchstart', onTouchDown, this.bg_dark);
-        window.ws.onmessage = this.onGameStatus.bind(this);
+        // window.ws.onmessage = this.onGameStatus.bind(this);
         Common.setExistTaiXiu(true);
     },
     onClose: function() {
@@ -46,7 +46,10 @@ cc.Class({
         Common.setExistTaiXiu(false);
     },
     handleMessage: function(buffer) {
-        this._super(buffer);
+        var isDone = this._super(buffer);
+        if(isDone)
+            return true;
+        isDone = true;
         switch (buffer.message_id) {
             case NetworkManager.MESSAGE_ID.START_MATCH:
                 var msg = buffer.response;
@@ -79,7 +82,11 @@ cc.Class({
                 var msg = buffer.response;
                 this.instantMessageResponseHandler(msg);
                 break;
+            default:
+                isDone = false;
+                break;
         }
+        return isDone;
     },
     exitZoneResponseHandler: function(resp) {
         cc.log("exit zone response:", resp.toObject());
@@ -129,10 +136,16 @@ cc.Class({
         if(resp.getResponsecode()) {
 
         }
-    }
+    },
+    onGameEvent: function() {
+        var self = this;
+        NetworkManager.checkEvent(function(buffer) {
+            return self.handleMessage(buffer);
+        });
+    },
 
     // called every frame, uncomment this function to activate update callback
-    // update: function (dt) {
-
-    // },
+    update: function (dt) {
+        this.onGameEvent();
+    },
 });

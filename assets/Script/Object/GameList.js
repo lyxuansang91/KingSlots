@@ -127,6 +127,7 @@ cc.Class({
         if(isDone) {
             return true;
         }
+        isDone = true;
         switch (buffer.message_id) {
             case NetworkManager.MESSAGE_ID.ENTER_ZONE:
                 var msg = buffer.response;
