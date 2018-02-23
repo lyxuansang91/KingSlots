@@ -52,7 +52,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 1334,
-      "height": 750
+      "height": 720
     },
     "_rotationX": 0,
     "_rotationY": 0,
@@ -61,7 +61,7 @@
     "_position": {
       "__type__": "cc.Vec2",
       "x": 667,
-      "y": 375
+      "y": 360
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -882,7 +882,7 @@
     "sync": false
   },
   {
-    "__type__": "2a6e8xQhhVDpZVo6NJrceha",
+    "__type__": "db8b01ntuZKW7iOO0K7+fHm",
     "_name": "",
     "_objFlags": 0,
     "node": {
@@ -898,10 +898,19 @@
     "exit": {
       "__id__": 23
     },
-    "title": null,
-    "tabTop": null,
-    "uiTab": null,
-    "tableView": null
+    "btnOK": {
+      "__id__": 14
+    },
+    "btnCancel": {
+      "__id__": 23
+    },
+    "message": {
+      "__id__": 7
+    },
+    "type": 0,
+    "CONFIRM_TYPE": 0,
+    "MESSAGEBOX_TYPE": 1,
+    "_callback": null
   },
   {
     "__type__": "cc.Widget",
