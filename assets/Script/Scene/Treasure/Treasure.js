@@ -34,11 +34,20 @@ cc.Class({
         lst_line_result: [],
         lst_line_selected: [],
     },
+    update: function(dt) {
+        this.onGameEvent();
+    },
+    onGameEvent: function() {
+        var self = this;
+        NetworkManager.checkEvent(function(buffer) {
+            return self.handleMessage(buffer);
+        });
+    },
 
     onLoad: function() {
         cc.log("on start");
-        if(window.ws && window.ws.onmessage)
-            window.ws.onmessage = this.onGameStatus.bind(this);
+        // if(window.ws && window.ws.onmessage)
+        //     window.ws.onmessage = this.onGameStatus.bind(this);
         this.requestJar();
         this.schedule(this.requestJar, 5);
 
@@ -372,7 +381,11 @@ cc.Class({
     },
 
     handleMessage: function(buffer) {
-        this._super(buffer);
+        var isDone = this._super(buffer);
+        if(isDone) {
+            return true;
+        }
+        isDone = true;
         switch (buffer.message_id) {
             case NetworkManager.MESSAGE_ID.UPDATE_MONEY:
                 var msg = buffer.response;
@@ -393,7 +406,11 @@ cc.Class({
                 var msg = buffer.response;
                 this.jarResponseHandler(msg);
                 break;
+            default:
+                isDone = false;
+                break;
         }
+        return isDone;
     }
     // update (dt) {},
 });

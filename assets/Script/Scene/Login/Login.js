@@ -168,6 +168,9 @@ cc.Class({
         cc.director.loadScene('Register');
     },
     loginFacebook: function() {
+        if(cc.sys.platform !== cc.platform.WEB) {
+            return ;
+        }
         window.loginFb(["public_profile"], function(code, response){
             if(code === 0){
                 cc.log("login succeeded", response);
