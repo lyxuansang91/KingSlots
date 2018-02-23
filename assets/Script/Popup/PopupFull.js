@@ -80,13 +80,13 @@ var PopupFull = cc.Class({
     _getdata: function (headCell, val, num) {
         cc.log("val =", val);
         var array = [];
-        // var headObj = {};
-        // headObj.date_time = headCell[0];
-        // headObj.displayName = headCell[1];
-        // headObj.bet = headCell[2];
-        // headObj.betWin = headCell[3];
-        // headObj.betCard = headCell[4];
-        // array.push(headObj);
+        var headObj = {};
+        headObj.date_time = headCell[0];
+        headObj.displayName = headCell[1];
+        headObj.bet = headCell[2];
+        headObj.betWin = headCell[3];
+        headObj.betCard = headCell[4];
+        array.push(headObj);
 
         for (var i = 0; i < num; ++i) {
             var obj = {};
@@ -112,7 +112,7 @@ var PopupFull = cc.Class({
             var posX =  0;
             var posY = 0;
 
-            posX = (i - tab.length/2 + 0.5)* item.getContentSize().width ;
+            posX = (i - tab.length/2 + 0.5)* item.getContentSize().width;
             item.setPositionX(posX);
             item.setPositionY(posY);
             this.scrollView.content.addChild(item);
@@ -129,7 +129,6 @@ var PopupFull = cc.Class({
             item.getComponent('UserInfo').init();
             this.contentMask.addChild(item);
         }
-
     },
 
     showTab: function (index) {

@@ -36,7 +36,16 @@ var Config = {
     },
     name : {
         COMMON_POPUP : "CommonPopup",
+        POPUP_MESSAGE_BOX : "PopupMessageBox",
         POPUP_SETTING : "PopupSetting",
-        POPUP_FULL : "PopupFull"
+        POPUP_FULL : "PopupFull",
+        POPUP_HISTORY : "PopupHistory"
+    },
+
+    COMMON_POPUP_TYPE: {
+        NORMAL : 1,
+        SCROLL_TAB_IN_TOP: 2,
+        SCROLL_TAB_IN_LEFT : 3,
+        SCROLL_TAB_IN_TOP_LEFT : 4
     }
 }

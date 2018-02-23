@@ -56,14 +56,13 @@ cc.Class({
         if(buffer.getResponsecode()) {
             NetworkManager.requestLoginMessage(this.edt_username.string, this.edt_pass.string);
         } else {
-            var messagebox = cc.instantiate(this.messagePopup).getComponent("CommonPopup");
-            messagebox.init(buffer.getMessage(), 0, function() {
-                cc.log("on callback");
+
+            Common.showPopup(Config.name.POPUP_MESSAGE_BOX,function(message_box) {
+                message_box.init(buffer.getMessage(), 0, function() {
+                    cc.log("on callback");
+                });
+                message_box.appear();
             });
-            cc.log("message box:", messagebox);
-            // messagebox.setAnchorPoint(cc.p(0.5, 0.5));
-            messagebox.node.setPosition(cc.p(0, 0));
-            this.node.addChild(messagebox.node);
         }
     },
 
@@ -107,8 +106,8 @@ cc.Class({
         }
 
         if(res.hasMessage() && res.getMessage() !== "") {
-            Common.showPopup(Config.name.COMMON_POPUP,function(message_box) {
-                message_box.init(res.getMessage(), 1, function() {
+            Common.showPopup(Config.name.POPUP_MESSAGE_BOX,function(message_box) {
+                message_box.init(res.getMessage(), 0, function() {
                     cc.log("on callback");
                 });
                 message_box.appear();

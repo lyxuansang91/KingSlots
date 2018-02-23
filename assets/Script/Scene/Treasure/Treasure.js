@@ -198,7 +198,6 @@ cc.Class({
                             }
                         }
                     }
-
                 });
                 item.runAction(cc.sequence(delay,move1,move2,call_func));
             }else{
