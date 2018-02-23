@@ -670,5 +670,19 @@ var Common = {
         }
 
         return false
+    },
+
+    getHeadHistory: function () {
+        var currZoneId = this.getZoneId();
+        switch(currZoneId){
+            case Config.TAG_GAME_ITEM.MINI_BACAY:
+                var headCell = ["Thời gian", "Tên", "Đặt", "Thắng", "Bộ bài"];
+                return headCell;
+                break;
+            case Config.TAG_GAME_ITEM.MINI_POKER:
+                var headCell = ["Thời gian", "Tên", "Đặt", "Thắng", "Bộ bài"];
+                return headCell;
+                break;
+        }
     }
 };

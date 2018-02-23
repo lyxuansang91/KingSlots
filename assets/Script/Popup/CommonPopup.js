@@ -27,6 +27,8 @@ cc.Class({
             self.onEvent(index);
         });
         this.tabTop.addChild(tab_view);
+
+
     },
 
     onEvent: function (index) {},

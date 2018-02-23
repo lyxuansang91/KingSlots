@@ -1,3 +1,6 @@
+var MAIL_RECEIVED = 1;
+var MAIL_SENT = 2;
+var MAIL_SENT_ADMIN = 3;
 cc.Class({
     extends: cc.Component,
 
@@ -16,7 +19,13 @@ cc.Class({
         this.setUserInfo();
     },
 
-    openPopup: function () {
+    openMailPopup: function () {
+        var tabString = ["Mail đến", "Mail đi", "Gửi BQT"];
+
+        Common.showPopup(Config.name.POPUP_FULL,function(message_box) {
+            message_box.init(tabString, "mail", MAIL_RECEIVED);
+            message_box.appear();
+        });
     },
 
     openChargePopup: function () {

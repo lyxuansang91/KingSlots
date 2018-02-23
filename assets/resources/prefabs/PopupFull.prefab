@@ -1174,6 +1174,9 @@
     "userinfoPrefab": {
       "__uuid__": "6ca98060-9f23-4b34-a633-04e4a0e0ddb3"
     },
+    "mailPrefab": {
+      "__uuid__": "e169aa0b-ddd2-4848-b369-1939fae06596"
+    },
     "list_tab": []
   },
   {

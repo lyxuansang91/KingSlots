@@ -689,6 +689,15 @@ var NetworkManager = {
     
         return request;
     },
+    getFilterMailFromServer: function(firstResult, maxResult, lastRequestTime, sent){
+        var request = new proto.BINFilterMailRequest();
+        request.setFirstresult(firstResult);
+        request.setMaxresult(maxResult);
+        request.setLastrequesttime(lastRequestTime);
+        request.setSentmail(sent);
+        this.callNetwork(this.initData(request.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.FILTER_MAIL, Common.getSessionId()));
+
+    },
     connectNetwork: function() {
         if(window.ws === null || typeof(window.ws) === 'undefined' || window.ws.readyState === WebSocket.CLOSED) {
             window.ws = new WebSocket(NetworkManager.URL);

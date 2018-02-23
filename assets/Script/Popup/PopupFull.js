@@ -16,6 +16,7 @@ var PopupFull = cc.Class({
         tableView: cc.Node,
         contentMask: cc.Node,
         userinfoPrefab: cc.Prefab,
+        mailPrefab: cc.Prefab,
         list_tab : []
     },
 
@@ -144,5 +145,22 @@ var PopupFull = cc.Class({
 
     disappear:function () {
         this._super();
-    }
+    },
+
+    // filterEmailResponse: function(response){
+    //     if (response != 0){
+    //         if (response.getResponsecode()){
+    //             var lstEmail;
+    //             var binMail;
+    //             for (var i = 0; i < response.getMailsList().length; i++) {
+    //                 binMail = parseFromBinMail(response.getMailsList()[i]);
+    //                 lstEmail.push(binMail);
+    //             }
+    //             loadEmail(lstEmail);
+    //         }
+    //         else {
+    //             showToast(response->message().c_str(), 2);
+    //         }
+    //     }
+    // }
 });
