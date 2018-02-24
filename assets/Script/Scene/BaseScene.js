@@ -3,7 +3,6 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-
     },
 
 
@@ -20,7 +19,6 @@ cc.Class({
 
     handleMessage: function(buffer) {
         var isDone = true;
-        NetworkManager.hideLoading();
         switch (buffer.message_id) {
             case NetworkManager.MESSAGE_ID.INITIALIZE:
                 var msg = buffer.response;

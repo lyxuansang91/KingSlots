@@ -56,6 +56,7 @@ cc.Class({
                 isDone = false;
                 break;
         }
+        cc.log("is done:", isDone, ", mesasge id:", buffer.message_id);
         return isDone;
     },
 
@@ -109,12 +110,12 @@ cc.Class({
         }
 
         if(res.hasMessage() && res.getMessage() !== "") {
-            Common.showPopup(Config.name.POPUP_MESSAGE_BOX,function(message_box) {
-                message_box.init(res.getMessage(), 1, function() {
-                    cc.log("on callback");
-                });
-                message_box.appear();
-            });
+            // Common.showPopup(Config.name.POPUP_MESSAGE_BOX,function(message_box) {
+            //     message_box.init(res.getMessage(), 1, function() {
+            //         cc.log("on callback");
+            //     });
+            //     message_box.appear();
+            // });
         }
     },
 

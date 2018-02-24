@@ -1319,7 +1319,8 @@
     "jarResponse": null,
     "jarRequest": null,
     "isRequestJar": false,
-    "isBindNetwork": false
+    "isBindNetwork": false,
+    "firstTimeRequestJar": true
   },
   {
     "__type__": "0b550vtbRBB/pAj+ZK8at0D",

@@ -30,7 +30,7 @@ cc.Class({
     },
     
     update : function (dt) {
-        if(this.deltaTime > 3) {
+        if(this.deltaTime > 0.1) {
             if(!this.enable) {
                 this.enable = true;
 

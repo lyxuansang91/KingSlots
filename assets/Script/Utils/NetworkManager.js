@@ -237,12 +237,11 @@ var NetworkManager = {
         return NetworkManager.sessionId;
     },
     checkEvent: function (checkMessage) {
-        // cc.log("check message:", checkMessage);
-        // cc.log("list message:", window.listMessage);
         if(window.listMessage !== null && typeof(window.listMessage) !== 'undefined'  && window.listMessage.length > 0) {
             var buffer = window.listMessage[0];
             var result = checkMessage(buffer);
             if(result) {
+                NetworkManager.hideLoading();
                 NetworkManager.isLagged = false;
                 window.listMessage.shift();
             } else {
@@ -253,6 +252,7 @@ var NetworkManager = {
                 if(Date.now() - NetworkManager.lagTime >= NetworkManager.MAX_KILL_MSG) {
                     cc.log("kill message");
                     window.listMessage.shift();
+                    NetworkManager.hideLoading();
                     NetworkManager.isLagged = false;
                 }
             }
@@ -261,9 +261,10 @@ var NetworkManager = {
     setSessionId: function(_sessionId) {
         NetworkManager.sessionId = _sessionId;
     },
-    requestMessage: function(request, os, message_id, session_id) {
+    requestMessage: function(request, os, message_id, session_id, isLoading) {
+        cc.log("request message loading:", isLoading);
         var ackBuf = NetworkManager.initData(request, os, message_id, session_id);
-        NetworkManager.callNetwork(ackBuf, message_id);
+        NetworkManager.callNetwork(ackBuf, message_id, isLoading);
     }, 
     initData: function(request, os, messid, _session) {
         var lenSession = 0;
@@ -376,6 +377,9 @@ var NetworkManager = {
                 break;
             default:
                 break;
+        }
+        if(msg === null) {
+            cc.log("message error");
         }
 
         return msg;
@@ -646,9 +650,10 @@ var NetworkManager = {
         var request = this.initTurnMessage(room_index, entries);
         this.requestMessage(request.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.TURN, Common.getSessionId());
     },
-    getJarRequest: function(zone_id, jarType) {
+    getJarRequest: function(zone_id, jarType, isLoading) {
+        cc.log("jar loading:", isLoading);
         var request = this.initJarRequest(zone_id, jarType);
-        this.requestMessage(request.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.JAR, Common.getSessionId());
+        this.requestMessage(request.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.JAR, Common.getSessionId(), isLoading);
     },
     initJarRequest: function(zone_id, jarType) {
         var request = new proto.BINJarRequest();
@@ -740,17 +745,17 @@ var NetworkManager = {
     onGameStatus: function(event) {
         if(event.data!==null || typeof(event.data) !== 'undefined') {
             var lstMessage = NetworkManager.parseFrom(event.data, event.data.byteLength);
-            cc.log("length =", lstMessage.length);
             for(var i = 0; i < lstMessage.length; i++) {
+                cc.log(" message id:", lstMessage[i].message_id);
                 window.listMessage.push(lstMessage[i]);
             }
-            // window.listMessage.concat(lstMessage);
-            cc.log("length =", window.listMessage.length);
         }
     },
 
-    callNetwork: function(ackBuf, mid) {
+    callNetwork: function(ackBuf, mid, isLoading) {
         var self = this;
+
+        if (typeof(isLoading) === 'undefined' && isLoading !== null) isLoading = false;
 
         if(window.ws === null || typeof(window.ws) === 'undefined' || window.ws.readyState === WebSocket.CLOSED) {
 
@@ -771,6 +776,7 @@ var NetworkManager = {
          else {
             if(window.ws.readyState === WebSocket.OPEN) {
                 //== show loading
+                cc.log("is loading:", isLoading);
                 if(typeof mid !== 'undefined' && mid !== NetworkManager.MESSAGE_ID.INITIALIZE &&
                     mid !== NetworkManager.MESSAGE_ID.PING && mid !== NetworkManager.MESSAGE_ID.JAR
                     && mid !== NetworkManager.MESSAGE_ID.CHANGE_HOST && mid !== NetworkManager.MESSAGE_ID.TURN
@@ -778,7 +784,7 @@ var NetworkManager = {
                     && mid !== NetworkManager.MESSAGE_ID.LOCK_UP_MONEY_HISTORY
                     && mid !== NetworkManager.MESSAGE_ID.FILTER_FRIEND && mid !== NetworkManager.MESSAGE_ID.BET
                     && mid !== NetworkManager.MESSAGE_ID.EXTRA_BET && mid !== NetworkManager.MESSAGE_ID.ZONE_STATUS
-                    && mid !== NetworkManager.MESSAGE_ID.FILTER_ROOM && mid !== NetworkManager.MESSAGE_ID.LOOK_UP_GAME_HISTORY){
+                    && mid !== NetworkManager.MESSAGE_ID.FILTER_ROOM && mid !== NetworkManager.MESSAGE_ID.LOOK_UP_GAME_HISTORY ){
 
                     self.showLoading();
                 }
