@@ -50,13 +50,17 @@ var BacaySence = cc.Class({
         cc.log("zindex =", this.node.zIndex);
         BacaySence.instance = this;
         this.userMoney.string = Common.numberFormatWithCommas(Common.getCash());
-        window.ws.onmessage = this.onGameStatus.bind(this);
+        // window.ws.onmessage = this.onGameStatus.bind(this);
 
         this.initFirstCard();
-        setInterval(function() {
-            this.requestJar();
-        }.bind(this), 5000);
+        this.schedule(this.requestJar, 5);
         Common.setMiniThreeCardsSceneInstance(cc.director.getScene());
+    },
+    onGameEvent: function() {
+        var self = this;
+        NetworkManager.checkEvent(function(buffer) {
+            return self.handleMessage(buffer);
+        });
     },
 
     initFirstCard: function() {
@@ -102,7 +106,11 @@ var BacaySence = cc.Class({
 
     update: function (dt) {
         this.handleAutoSpin();
-        // this.requestJar();
+        this.onGameEvent();
+    },
+    onDestroy: function() {
+        cc.log("on destroy");
+        this.unscheduleAllCallbacks();
     },
 
     quayEvent: function () {
@@ -178,7 +186,10 @@ var BacaySence = cc.Class({
     },
 
     handleMessage: function(buffer) {
-        cc.log("buffer =", buffer.message_id);
+        var isDone = this._super(buffer);
+        if(isDone)
+            return true;
+        isDone = true;
         switch (buffer.message_id) {
             case NetworkManager.MESSAGE_ID.UPDATE_MONEY:
                 var msg = buffer.response;
@@ -207,7 +218,11 @@ var BacaySence = cc.Class({
                 var msg = buffer.response;
                 PopupFull.instance.lookupGameMiniPokerResponseHandler(msg);
                 break;
+            default:
+                isDone = false;
+                break;
         }
+        return isDone;
     },
     updateMoneyMessageResponseHandler: function (response) {
         if (response.getResponsecode()){
