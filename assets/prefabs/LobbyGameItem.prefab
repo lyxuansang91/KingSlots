@@ -337,7 +337,7 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 36,
+      "x": 32,
       "y": 40
     },
     "_skewX": 0,
@@ -424,7 +424,7 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 36,
+      "x": 32,
       "y": 0
     },
     "_skewX": 0,
@@ -502,8 +502,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 40.01,
-      "height": 24
+      "width": 38.34,
+      "height": 23
     },
     "_rotationX": 0,
     "_rotationY": 0,
@@ -511,7 +511,7 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 36,
+      "x": 32,
       "y": -39
     },
     "_skewX": 0,
@@ -530,9 +530,9 @@
     },
     "_enabled": true,
     "_useOriginalSize": false,
-    "_actualFontSize": 24,
-    "_fontSize": 24,
-    "_lineHeight": 24,
+    "_actualFontSize": 23,
+    "_fontSize": 23,
+    "_lineHeight": 23,
     "_enableWrapText": true,
     "_N$file": null,
     "_isSystemFontUsed": true,

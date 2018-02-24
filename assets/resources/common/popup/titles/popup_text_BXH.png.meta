@@ -1,14 +1,14 @@
 {
   "ver": "1.0.0",
-  "uuid": "21ffa4a7-ef1d-4978-9bc6-2ee4d4e6e609",
+  "uuid": "84364acd-f043-4932-94dc-bbcf2b701205",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
   "subMetas": {
-    "poker_bg_ingame": {
+    "popup_text_BXH": {
       "ver": "1.0.3",
-      "uuid": "2ff09979-de43-4e8b-afd6-9a63b65194b8",
-      "rawTextureUuid": "21ffa4a7-ef1d-4978-9bc6-2ee4d4e6e609",
+      "uuid": "65579ad6-fbb8-4c2b-8e79-6110af665ca1",
+      "rawTextureUuid": "84364acd-f043-4932-94dc-bbcf2b701205",
       "trimType": "auto",
       "trimThreshold": 1,
       "rotated": false,
@@ -16,10 +16,10 @@
       "offsetY": 0,
       "trimX": 0,
       "trimY": 0,
-      "width": 1334,
-      "height": 750,
-      "rawWidth": 1334,
-      "rawHeight": 750,
+      "width": 169,
+      "height": 61,
+      "rawWidth": 169,
+      "rawHeight": 61,
       "borderTop": 0,
       "borderBottom": 0,
       "borderLeft": 0,
