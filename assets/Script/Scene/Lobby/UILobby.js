@@ -47,13 +47,11 @@ cc.Class({
     openUserInfoPopup: function () {
 
         var tabString = ["Hồ sơ", "Lịch sử", "Xác thực tài khoản"];
-        var nodeChild = new cc.Node();
-        nodeChild.parent = this.node;
-        var item = cc.instantiate(this.popupUserinfo);
 
-        item.getComponent('PopupFull').init(tabString, "userinfo", this);
-        item.getComponent('Popup').appear();
-        nodeChild.addChild(item);
+        Common.showPopup(Config.name.POPUP_USERINFO,function(popup) {
+            popup.addTabs(tabString);
+            popup.appear();
+        });
 
     },
     setUserInfo: function() {

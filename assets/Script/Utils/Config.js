@@ -40,7 +40,8 @@ var Config = {
         POPUP_SETTING : "PopupSetting",
         POPUP_FULL : "PopupFull",
         POPUP_HISTORY : "PopupHistory",
-        POPUP_THREECARD_HISTORY : "PopupThreeCardHistory"
+        POPUP_THREECARD_HISTORY : "PopupThreeCardHistory",
+        POPUP_USERINFO : "PopupUserInfo",
     },
 
     COMMON_POPUP_TYPE: {

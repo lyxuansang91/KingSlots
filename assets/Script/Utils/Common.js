@@ -348,7 +348,7 @@ var Common = {
         return this.displayName;
     },
     getUserId: function() {
-        return "ID:" + this.userInfo.userid;
+        return this.userInfo.userid;
     },
     level: 0,
     setLevel: function(level) {
@@ -683,6 +683,37 @@ var Common = {
                 var headCell = ["Thời gian", "Tên", "Đặt", "Thắng", "Bộ bài"];
                 return headCell;
                 break;
+        }
+    },
+
+    showToast: function (strMess, delayTime) {
+        if(strMess == ""){
+
+            //return;
+        }
+
+        var delay = delayTime !== null ? delayTime : 2;
+
+        var scene = cc.director.getScene();
+        if(cc.isValid(scene)){
+            if(!cc.isValid(scene.getChildByName("Toast"))){
+                cc.loader.loadRes("prefabs/Toast",function(error, prefab) {
+                    if(!error){
+                        var toast_prefab = cc.instantiate(prefab);
+                        if(cc.isValid(toast_prefab)){
+                            toast_prefab.x = Common.width / 2;
+                            toast_prefab.y = Common.height / 2;
+
+                            var toast = toast_prefab.getComponent("Toast");
+                            toast.loadMessage(strMess,delay);
+                            scene.addChild(toast_prefab,Config.index.LOADING);
+                        }
+                    }
+                })
+            }else{
+                var toast = scene.getChildByName("Toast").getComponent("Toast");
+                toast.loadMessage(strMess,delayTime);
+            }
         }
     }
 };
