@@ -1,3 +1,6 @@
+var MAIL_RECEIVED = 1;
+var MAIL_SENT = 2;
+var MAIL_SENT_ADMIN = 3;
 cc.Class({
     extends: cc.Component,
 
@@ -16,7 +19,13 @@ cc.Class({
         this.setUserInfo();
     },
 
-    openPopup: function () {
+    openMailPopup: function () {
+        var tabString = ["Mail đến", "Mail đi", "Gửi BQT"];
+
+        Common.showPopup(Config.name.POPUP_FULL,function(message_box) {
+            message_box.init(tabString, "mail", MAIL_RECEIVED);
+            message_box.appear();
+        });
     },
 
     openChargePopup: function () {
@@ -38,13 +47,11 @@ cc.Class({
     openUserInfoPopup: function () {
 
         var tabString = ["Hồ sơ", "Lịch sử", "Xác thực tài khoản"];
-        var nodeChild = new cc.Node();
-        nodeChild.parent = this.node;
-        var item = cc.instantiate(this.popupUserinfo);
 
-        item.getComponent('PopupFull').init(tabString, "userinfo", this);
-        item.getComponent('Popup').appear();
-        nodeChild.addChild(item);
+        Common.showPopup(Config.name.POPUP_USERINFO,function(popup) {
+            popup.addTabs(tabString);
+            popup.appear();
+        });
 
     },
     setUserInfo: function() {

@@ -399,9 +399,9 @@ var MiniPoker = cc.Class({
 
         var tabString = ["Lịch sử quay", "Lịch sử nổ hũ", "Top cao thủ"];
 
-        Common.showPopup(Config.name.POPUP_FULL,function(message_box) {
-            message_box.init(tabString, "history", HISTORY_SPIN);
-            message_box.appear();
+        Common.showPopup(Config.name.POPUP_HISTORY,function(popup) {
+            popup.addTabs(tabString);
+            popup.appear();
         });
 
 

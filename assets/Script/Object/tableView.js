@@ -49,7 +49,7 @@ function quickSort(arr, cb) {
 var tableView = cc.Class({
     extends: cc.ScrollView,
     editor: CC_EDITOR && {
-        menu: "添加 UI 组件/tableView(自定义)",
+        menu: "UI/tableView",
         help: "https://github.com/a1076559139/creator_tableView",
         inspector: 'packages://tableView/inspector.js',
     },
@@ -476,6 +476,7 @@ var tableView = cc.Class({
         this._initSuccess = true;
     },
     initTableView: function (paramCount, data) {
+
         this._paramCount = paramCount;
         this._data = data;
 

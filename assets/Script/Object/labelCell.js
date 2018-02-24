@@ -65,14 +65,14 @@ cc.Class({
                 var item = cc.instantiate(this.prefabData).getComponent('CardItem');
                 var cardValue = card[j];
                 item.node.setScale(0.25,0.25);
-                var posX =  0;
-                if(j === 0){
-                    posX = - item.node.getContentSize().width*0.1 ;
-                } else if(j === 2){
-                    posX = item.node.getContentSize().width*0.1 ;
-                } else {
-                    posX = 0;
-                }
+                var posX =  (j - card.length/2 )* item.node.getContentSize().width*0.1;
+                // if(j === 0){
+                //     posX = - item.node.getContentSize().width*0.1 ;
+                // } else if(j === 2){
+                //     posX = item.node.getContentSize().width*0.1 ;
+                // } else {
+                //     posX = 0;
+                // }
 
                 var posY = 0;
 

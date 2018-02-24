@@ -2,7 +2,7 @@ var NetworkManager = require('NetworkManager');
 var BacayScene = require('BaCayScripts');
 var minipoker = require('minipoker');
 var BaseScene = require('BaseScene');
-
+var PopupFull = require('PopupFull');
 cc.Class({
     extends: BaseScene,
 
@@ -140,6 +140,10 @@ cc.Class({
             case NetworkManager.MESSAGE_ID.JAR:
                 var msg = buffer.response;
                 this.jarResponseHandler(msg);
+                break;
+            case NetworkManager.MESSAGE_ID.FILTER_MAIL:
+                var msg = buffer.response;
+                PopupFull.instance.lookupGameMiniPokerResponseHandler(msg);
                 break;
             default:
                 isDone = false;

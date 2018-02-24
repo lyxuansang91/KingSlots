@@ -108,9 +108,17 @@ var BacaySence = cc.Class({
         this.handleAutoSpin();
         this.onGameEvent();
     },
+
     onDestroy: function() {
         cc.log("on destroy");
         this.unscheduleAllCallbacks();
+    },
+
+    onGameEvent: function() {
+        var self = this;
+        NetworkManager.checkEvent(function(buffer) {
+            return self.handleMessage(buffer);
+        })
     },
 
     quayEvent: function () {
@@ -149,18 +157,18 @@ var BacaySence = cc.Class({
         entries.push(entry);
         NetworkManager.getTurnMessageFromServer(0, entries);
     },
-    onGameStatus: function(event) {
-        if(event.data!==null || typeof(event.data) !== 'undefined') {
-            var lstMessage = NetworkManager.parseFrom(event.data, event.data.byteLength);
-            // cc.log("lstMessage =", lstMessage.shift());
-            if(lstMessage.length > 0) {
-                for(var i = 0; i < lstMessage.length; i++){
-                    var buffer = lstMessage[i];
-                    this.handleMessage(buffer);
-                }
-            }
-        }
-    },
+    // onGameStatus: function(event) {
+    //     if(event.data!==null || typeof(event.data) !== 'undefined') {
+    //         var lstMessage = NetworkManager.parseFrom(event.data, event.data.byteLength);
+    //         // cc.log("lstMessage =", lstMessage.shift());
+    //         if(lstMessage.length > 0) {
+    //             for(var i = 0; i < lstMessage.length; i++){
+    //                 var buffer = lstMessage[i];
+    //                 this.handleMessage(buffer);
+    //             }
+    //         }
+    //     }
+    // },
 
     exitRoomResponsehandler: function (resp) {
         cc.log("exit room response handler:", resp.toObject());
@@ -187,8 +195,9 @@ var BacaySence = cc.Class({
 
     handleMessage: function(buffer) {
         var isDone = this._super(buffer);
-        if(isDone)
+        if(isDone) {
             return true;
+        }
         isDone = true;
         switch (buffer.message_id) {
             case NetworkManager.MESSAGE_ID.UPDATE_MONEY:
@@ -202,10 +211,10 @@ var BacaySence = cc.Class({
                 var msg = buffer.response;
                 this.exitRoomResponsehandler(msg);
                 break;
-            case NetworkManager.MESSAGE_ID.ENTER_ROOM:
-                var msg = buffer.response;
-                this.enterRoomResponseHandler(msg);
-                break;
+            // case NetworkManager.MESSAGE_ID.ENTER_ROOM:
+            //     var msg = buffer.response;
+            //     this.enterRoomResponseHandler(msg);
+            //     break;
             case NetworkManager.MESSAGE_ID.EXIT_ZONE:
                 var msg = buffer.response;
                 this.exitZoneResponseHandler(msg);
@@ -213,10 +222,6 @@ var BacaySence = cc.Class({
             case NetworkManager.MESSAGE_ID.JAR:
                 var msg = buffer.response;
                 this.jarResponseHandler(msg);
-                break;
-            case NetworkManager.MESSAGE_ID.LOOK_UP_GAME_HISTORY:
-                var msg = buffer.response;
-                PopupFull.instance.lookupGameMiniPokerResponseHandler(msg);
                 break;
             default:
                 isDone = false;
@@ -367,6 +372,9 @@ var BacaySence = cc.Class({
         }
 
 
+    },
+    onDestroy: function() {
+        this.unscheduleAllCallbacks();
     },
     _onDealEnd: function() {
         cc.log("run action");
@@ -602,9 +610,9 @@ var BacaySence = cc.Class({
 
         var tabString = ["Lịch sử quay", "Lịch sử nổ hũ", "Top cao thủ"];
 
-        Common.showPopup(Config.name.POPUP_FULL,function(message_box) {
-            message_box.init(tabString, "history", HISTORY_SPIN);
-            message_box.appear();
+        Common.showPopup(Config.name.POPUP_HISTORY,function(popup) {
+            popup.addTabs(tabString);
+            popup.appear();
         });
 
     },

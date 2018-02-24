@@ -5,6 +5,9 @@ var HISTORY_BREAK_JAR = 2;
 var HISTORY_TOP_USER = 3;
 var MAX_RESULT = 20;
 var firstResult = -1;
+var MAIL_RECEIVED = 1;
+var MAIL_SENT = 2;
+var MAIL_SENT_ADMIN = 3;
 cc.Class({
     extends: cc.Component,
 
@@ -31,6 +34,13 @@ cc.Class({
                 self.callback(select-1);
             }
                 break;
+            case "mail":
+            {
+                NetworkManager.getFilterMailFromServer(firstResult, MAX_RESULT,
+                    -1, false);
+                self.callback(select-1);
+            }
+                break;
             case "charge":
             {
                 NetworkManager.getCardConfigRequest(1);
@@ -46,6 +56,31 @@ cc.Class({
         cc.log("e =", e.target);
 
         switch (name) {
+            case "mail":
+            {
+                if (this.tag === 1){
+                    this.historyType = MAIL_RECEIVED;
+                    PopupFull.instance.setHistoryType(MAIL_RECEIVED);
+                    NetworkManager.getFilterMailFromServer(firstResult, MAX_RESULT,
+                        -1, false);
+                    this.callback(this.tag -1);
+
+                }else if (this.tag === 2) {
+                    this.historyType = MAIL_SENT;
+                    PopupFull.instance.setHistoryType(MAIL_SENT);
+                    NetworkManager.getFilterMailFromServer(firstResult, MAX_RESULT,
+                        -1, true);
+                    this.callback(this.tag -1);
+                }else if (this.tag === 2){
+                    this.historyType = MAIL_SENT_ADMIN;
+                    PopupFull.instance.setHistoryType(MAIL_SENT_ADMIN);
+                    NetworkManager.getFilterMailFromServer(firstResult, MAX_RESULT,
+                        -1, true);
+
+                    this.callback(this.tag -1);
+                }
+            }
+                break;
             case "history":
             {
                 if (this.tag === 1){
