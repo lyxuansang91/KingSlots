@@ -8,8 +8,14 @@ cc.Class({
     properties: {
         edt_username: cc.EditBox,
         edt_password: cc.EditBox,
+        edt_username_register: cc.EditBox,
+        edt_pass_register: cc.EditBox,
+        edt_repass_register: cc.EditBox,
+        edt_displayname_register: cc.EditBox,
         toastPrefab: cc.Prefab,
-        messagePopup: cc.Prefab
+        messagePopup: cc.Prefab,
+        popup_login : cc.Sprite,
+        popup_register : cc.Sprite
     },
     // use this for initialization
     onLoad: function () {
@@ -52,6 +58,10 @@ cc.Class({
                 var msg = buffer.response;
                 this.handleLoginResponseHandler(msg);
                 break;
+            case NetworkManager.MESSAGE_ID.REGISTER:
+                var msg = buffer.response;
+                this.handleRegisterResponseHandler(msg);
+                break;
             default:
                 isDone = false;
                 break;
@@ -68,6 +78,35 @@ cc.Class({
     },
     update: function(dt) {
         this.onGameEvent();
+    },
+
+    switchLoginToRegister : function () {
+        var posXleft = -cc.director.getWinSize().width/2 - this.popup_login.node.getContentSize().width;
+
+        this.popup_login.node.runAction(cc.moveTo(0.5,cc.p(posXleft,0)).easing(cc.easeBackOut()));
+        this.popup_register.node.runAction(cc.moveTo(0.2,cc.p(0,0)).easing(cc.easeBackIn()));
+    },
+
+    switchRegisterToLogin : function () {
+        var posXright= cc.director.getWinSize().width/2 + this.popup_register.node.getContentSize().width;
+        this.popup_login.node.runAction(cc.moveTo(0.2,cc.p(0,0)).easing(cc.easeBackIn()));
+        this.popup_register.node.runAction(cc.moveTo(0.5,cc.p(posXright,0)).easing(cc.easeBackOut()));
+    },
+
+    handleRegisterResponseHandler: function(e) {
+        const buffer = e;
+        cc.log("buffer:", buffer);
+        if(buffer.getResponsecode()) {
+            NetworkManager.requestLoginMessage(this.edt_username_register.string, this.edt_pass_register.string);
+        } else {
+
+            Common.showPopup(Config.name.POPUP_MESSAGE_BOX,function(message_box) {
+                message_box.init(buffer.getMessage(), 0, function() {
+                    cc.log("on callback");
+                });
+                message_box.appear();
+            });
+        }
     },
 
     handleLoginResponseHandler: function(res) {
@@ -138,7 +177,7 @@ cc.Class({
     },
 
     login: function() {
-        cc.log("login normal");
+
         var username = this.edt_username.string;
         var password = this.edt_password.string;
 
@@ -166,6 +205,20 @@ cc.Class({
     },
 
     register: function() {
+        if(this.edt_username_register.string === "" || this.edt_pass_register.string === "" ||
+            this.edt_repass_register.string === "" || this.edt_displayname_register === "") {
+            this.showToast("Dữ liệu không được để trống");
+            return;
+        }
+        if(this.edt_pass_register.string !== this.edt_repass_register.string) {
+            this.showToast("Mật khẩu phải giống nhau!");
+            return;
+        }
+        NetworkManager.requestRegisterMessage(this.edt_username_register.string, this.edt_pass_register.string,
+            this.edt_repass_register.string, this.edt_displayname_register.string, "");
+    },
+
+    moveToRegister: function() {
         cc.director.loadScene('Register');
     },
     loginFacebook: function() {

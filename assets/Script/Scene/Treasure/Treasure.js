@@ -119,10 +119,6 @@ cc.Class({
     },
 
     initFirstItem: function() {
-        //var random_number = Common.genRandomNumber(98,105,this.stepMove*this.number);
-        //var items_value = Common.genArrayToMultiArray(random_number, this.stepMove, this.number);
-        //this.list_recent_value = Common.create2DArray(this.stepMove);
-
         for(var i = 0; i < this.stepMove; i++){
             for(var j = 0; j < this.number; j++){
                 var r = Math.floor(Math.random() * 7) + 98;
@@ -196,16 +192,19 @@ cc.Class({
                 // khi dừng hiệu ứng
                 var self = this;
                 var call_func = cc.callFunc(function () {
-                    cc.log("FINISH!!!!");
-                    { // update line_result
-                        cc.log("lst_line_results : xxx ",self.lst_line_result);
-                        for(var i = 0; i < listWin.length; i++){
-                            if(listWin[i] < 20){
-                                var line = self.lst_line_result[listWin[i] - 1];
-                                line.getComponent("LineResult").show(true);
-                                line.getComponent("LineResult").animate();
-                            }
+                    // update line_result
+                    for(var i = 0; i < listWin.length; i++){
+                        if(listWin[i] < 20){
+                            var line = self.lst_line_result[listWin[i] - 1];
+                            line.getComponent("LineResult").show(true);
+                            line.getComponent("LineResult").animate();
                         }
+                    }
+
+                    //====== cddd
+
+                    for(var i = 0; i < self.list_item.length; i++){
+                        self.list_item[i].getComponent("ItemPrefab").animate();
                     }
                 });
                 item.runAction(cc.sequence(delay,move1,move2,call_func));

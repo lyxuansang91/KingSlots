@@ -18,7 +18,6 @@ cc.Class({
         isRequestJar: false,
         isBindNetwork: false,
         firstTimeRequestJar: true,
-
     },
 
     // use this for initialization
