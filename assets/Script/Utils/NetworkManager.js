@@ -371,6 +371,9 @@ var NetworkManager = {
             case NetworkManager.MESSAGE_ID.EMERGENCY_NOTIFICATION:
                 msg = proto.BINEmergencyNotificationResponse.deserializeBinary(bytes);
                 break;
+            case NetworkManager.MESSAGE_ID.VIEW_USER_INFO:
+                msg = proto.BINViewUserInfoResponse.deserializeBinary(bytes);
+                break;
             default:
                 break;
         }
@@ -697,6 +700,13 @@ var NetworkManager = {
         request.setSentmail(sent);
         this.callNetwork(this.initData(request.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.FILTER_MAIL, Common.getSessionId()));
 
+    },
+    getViewUserInfoFromServer: function(targetUserId) {
+        cc.log("targetUserId =", targetUserId);
+        var request = new proto.BINViewUserInfoRequest();
+        cc.log("request =", request);
+        request.setTargetuserid(targetUserId);
+        this.callNetwork(this.initData(request.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.VIEW_USER_INFO, Common.getSessionId()));
     },
     connectNetwork: function() {
         if(window.ws === null || typeof(window.ws) === 'undefined' || window.ws.readyState === WebSocket.CLOSED) {
