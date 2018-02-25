@@ -192,10 +192,10 @@ cc.Class({
             }
         }
     },
-    loadTaiXiu: function() {
+    loadTaiXiu: function(response) {
         var scene = cc.director.getScene();
         if(cc.isValid(scene) && !cc.isValid(scene.getChildByName("PopupTaiXiu"))){
-            cc.loader.loadRes("prefabs/PopupTaiXiu",function(error, prefab) {
+            cc.loader.loadRes("prefabs/PopupTaiXiu",function(error, prefab, response) {
                 if(!error){
                     var taiXiu = cc.instantiate(prefab);
                     if(cc.isValid(taiXiu)){
@@ -226,7 +226,40 @@ cc.Class({
                 });
             } else if(Common.getZoneId() === Common.ZONE_ID.TAIXIU) {
                 var self = this;
-                self.loadTaiXiu();
+                self.loadTaiXiu(response);
+                for (var i = 0; i < response.getArgsList().length; i++) {
+                    var key = response.getArgsList()[i].getKey();
+                    var value = response.getArgsList()[i].getValue();
+                    if (key === "currentTableStage") {
+                        //value là trạng thái của bên tài xỉu
+                    } else if (key === "cdTimerRemaining") {
+                        //value thời gian đếm ngược còn lại của phiên đang chạy
+                    } else if (key === "sessionId") {
+                        //set giá trị label session với giá trị là value
+                    } else if (key === "resultHistorys") {
+                        //lich sử các phiên trước đó
+                        var listResult = value.split('|');
+                        for (var j = 0; j < listResult.length; j++) {
+                            var result = listResult[j].split('-').map(Number);
+                            //update giá trị cho các cửa, với mỗi mảng betGateInfo lần lượt là
+                            //[0] : số phiên, [1][2][3]: lật lượt là giá trị của từng con xúc sắc
+                        }
+                    } else if (key === "betGateInfo") {
+                        var listBetGateInfo = value.split(',');
+                        for (var j = 0; j < listBetGateInfo.length; j++) {
+                            var betGateInfo = listBetGateInfo[j].split('-').map(Number);
+                            cc.log("số phần tử của betGateInfo là:", betGateInfo.length);
+                            //update giá trị cho các cửa, với mỗi mảng betGateInfo lần lượt là
+                            //[0] : giá trị cửa, [1]: tổng tiền đặt vào cửa, [2]: tổng số người đặt vào cửa đó
+                        }
+                    } else if (key === "playerBetInfo") {
+                        //giá trị các cửa mà người chơi đang đặt
+                    } else if (key === "playerPreviousBetInfo") {
+                        //giá trị đặt của current user đối với các cửa trong ván trước, sử dụng để có thao tác bonus
+                        //như gấp đôi, ....
+
+                    }
+                }
                 self.isBindNetwork = false;
                 self.unscheduleAllCallbacks();
             } else if(Common.getZoneId() === Common.ZONE_ID.TREASURE) {

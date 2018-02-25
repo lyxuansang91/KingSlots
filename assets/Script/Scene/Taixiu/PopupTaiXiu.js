@@ -1,5 +1,20 @@
 var BaseScene = require('BaseScene');
 var NetworkManager = require('NetworkManager');
+var TABLE_STATE = {
+    BET: 1,
+    BALANCE: 2,
+    RESULT: 3,
+    MATCH_END: 4,
+    PREPARE_NEW_MATCH: 5,
+}
+class  Gate {
+    constructor(gateID, userCount, totalBet, userBet) {
+        this.gateID = gateID;
+        this.userCount = userCount;
+        this.totalBet = totalBet;
+        this.userBet = userBet;
+    }
+}
 cc.Class({
     extends: BaseScene,
 
@@ -14,6 +29,9 @@ cc.Class({
         //    readonly: false,    // optional, default is false
         // },
         // ...
+        // taiGate: new Gate(0, 0, 0, 0),
+        // xiuGate: new Gate(0, 0, 0, 0),
+        tableStage: 0,
         bg_dark: cc.Sprite,
         btnClose: cc.Button
     },
@@ -23,6 +41,8 @@ cc.Class({
         function onTouchDown (event) {
             return true;
         }
+        this.taiGate = new Gate(0, 0, 0, 0),
+        this.xiuGate = new Gate(0, 0, 0, 0),
         this.node.on('touchstart', onTouchDown, this.bg_dark);
         // window.ws.onmessage = this.onGameStatus.bind(this);
         Common.setExistTaiXiu(true);
@@ -44,6 +64,12 @@ cc.Class({
     onDestroy: function() {
         cc.log("on destroy tai xiu");
         Common.setExistTaiXiu(false);
+    },
+    setTableStage: function(stage) {
+        this.tableStage = stage;
+    },
+    getTableStage: function() {
+        return this.tableStage;
     },
     handleMessage: function(buffer) {
         var isDone = this._super(buffer);
@@ -104,7 +130,28 @@ cc.Class({
     betResponseHandler: function(resp) {
         cc.log("bet response:", resp.toObject());
         if(resp.getResponsecode()) {
-
+            var typeId = resp.getBettype();
+            var betMoney = resp.getBetMoney();
+            var sourceId = resp.getSourceuserid();
+            for (var i = 0; i < resp.getArgsList().length; i++) {
+                var key = resp.getArgsList()[i].getKey();
+                var value = resp.getArgsList()[i].getValue();
+                if (key === "betGateInfo") {
+                    var listBetGateInfo = value.split(',');
+                    for (var j = 0; j < listBetGateInfo.length; j++) {
+                        var betGateInfo = listBetGateInfo[j].split('-').map(Number);
+                        //update giá trị cho các cửa, với mỗi mảng betGateInfo lần lượt là
+                        //[0] : giá trị cửa, [1]: tổng tiền đặt vào cửa, [2]: tổng số người đặt vào cửa đó
+                    }
+                } else if (key === "totalPlayerBetGate") {
+                    var listBetGateInfo = value.split(',');
+                    for (var j = 0; j < listBetGateInfo.length; j++) {
+                        var betGateInfo = listBetGateInfo[j].split('-').map(Number);
+                        //update giá trị đặt của current user cho các cửa
+                        //[0] : giá trị cửa, [1]: tổng tiền đặt vào cửa
+                    }
+                }
+            }
         }
     },
     exitRoomResponseHandler: function(resp) {
@@ -116,13 +163,39 @@ cc.Class({
     handleTurnResponseHandler: function(resp) {
         cc.log("turn response:", resp.toObject());
         if(resp.getResponsecode()) {
+            for (var i = 0; i < resp.getArgsList().length; i++) {
+                var key = resp.getArgsList()[i].getKey();
+                var value = resp.getArgsList()[i].getValue();
+                if (key === "tableStage") {
+                    this.setTableStage(value);
+                } else if (key === "betGateInfo") {
 
+                } else if (key === "diceValues") {
+                    if (this.getTableStage() == TABLE_STATE.RESULT) {
+                        var dicesvalue = value.split('-').map(Number);
+                        //show animation con xuc sac quay
+                    }
+
+                } else if (key === "totalValue") {
+
+                }
+            }
         }
     },
     handleStartMatchResponseHandler: function(resp) {
         cc.log("start match response:", resp.toObject());
         if(resp.getResponsecode()) {
+            //countdown dem nguoc
+            var countdown = resp.getCountdowntimer() / 1000;
+            var argList = resp.getArgsList();
 
+            argList.forEach(function(element) {
+                if (element.getKey() === "sessionId") {
+                    var sessionId = element.getValue();
+                    //set giá trị label section
+                }
+            });
+            var message = resp.getMessage();
         }
     },
     handleMatchEndResponseHandler: function(resp) {
