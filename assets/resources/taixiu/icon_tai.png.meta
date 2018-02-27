@@ -1,14 +1,14 @@
 {
   "ver": "1.0.0",
-  "uuid": "e4da9e52-dddc-4f8c-bbb0-1043fc18dcae",
+  "uuid": "d4e07865-c45b-4821-82f9-fc19efc4bb58",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
   "subMetas": {
-    "tx_bg_tiencuoc": {
+    "icon_tai": {
       "ver": "1.0.3",
-      "uuid": "39a0815f-7ba9-4747-a4d7-12a0026c2e5b",
-      "rawTextureUuid": "e4da9e52-dddc-4f8c-bbb0-1043fc18dcae",
+      "uuid": "a32d549c-595f-4ded-ae4f-fd9df9bb0386",
+      "rawTextureUuid": "d4e07865-c45b-4821-82f9-fc19efc4bb58",
       "trimType": "auto",
       "trimThreshold": 1,
       "rotated": false,
@@ -16,10 +16,10 @@
       "offsetY": 0,
       "trimX": 0,
       "trimY": 0,
-      "width": 117,
-      "height": 63,
-      "rawWidth": 117,
-      "rawHeight": 63,
+      "width": 28,
+      "height": 28,
+      "rawWidth": 28,
+      "rawHeight": 28,
       "borderTop": 0,
       "borderBottom": 0,
       "borderLeft": 0,

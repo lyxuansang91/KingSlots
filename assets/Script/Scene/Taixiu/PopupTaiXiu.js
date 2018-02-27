@@ -6,7 +6,7 @@ var TABLE_STATE = {
     BALANCE: 2,
     RESULT: 3,
     MATCH_END: 4,
-    PREPARE_NEW_MATCH: 5,
+    PREPARE_NEW_MATCH: 5
 };
 
 var Gate = require('Gate');
@@ -14,23 +14,17 @@ cc.Class({
     extends: BaseScene,
 
     properties: {
-        // foo: {
-        //    default: null,      // The default value will be used only when the component attaching
-        //                           to a node for the first time
-        //    url: cc.Texture2D,  // optional, default is typeof default
-        //    serializable: true, // optional, default is true
-        //    visible: true,      // optional, default is true
-        //    displayName: 'Foo', // optional
-        //    readonly: false,    // optional, default is false
-        // },
-        // ...
-        // taiGate: new Gate(0, 0, 0, 0),
-        // xiuGate: new Gate(0, 0, 0, 0),
         tableStage: 0,
         bg_dark: cc.Sprite,
         btnClose: cc.Button,
         taiGate: Gate,
-        xiuGate: Gate
+        xiuGate: Gate,
+        bg_number_result : cc.Node,
+        bg_keyboard : cc.Node,
+        total_money_tai : cc.Label,
+        total_money_xiu : cc.Label,
+        bet_money_tai : cc.Label,
+        bet_money_xiu : cc.Label,
     },
 
     // use this for initialization
