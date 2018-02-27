@@ -4,7 +4,8 @@ cc.Class({
 
     properties: {
         prefabData: cc.Prefab,
-        card: cc.Mask
+        card: cc.Mask,
+        bg_cell: cc.SpriteFrame
     },
 
     // use this for initialization
@@ -33,12 +34,14 @@ cc.Class({
         var nodeBg = new cc.Node();
         nodeBg.parent = this.node;
         var bgCell = nodeBg.addComponent(cc.Sprite);
-        var url = "resources/common/popup/popup_ingame/popup_gold_noidung_big.png";
-        var image = cc.url.raw(url);
-        var texture = cc.textureCache.addImage(image);
-        bgCell.spriteFrame = new cc.SpriteFrame(texture);
-        bgCell.node.setContentSize(758, 78);
 
+        bgCell.spriteFrame = this.bg_cell;
+
+        var percentRow  = [0.1, 0.1, 0.1, 0.1];
+
+        cc.log("percent =", percentRow);
+
+        var messPosX = 0;
         for(var i = 0; i < lengthData; i++){
             var strTime = obj[Object.keys(obj)[i]].toString();
             // if(i === 0){
@@ -48,8 +51,14 @@ cc.Class({
             nodeChild.parent = this.node;
             var message = nodeChild.addComponent(cc.Label);
             var widthLbl = message.node.getContentSize().width;
-            console.log("widthLbl =", widthLbl);
-            var posX = (i - lengthData/2 + 0.3)* bgCellWidth / (lengthData + 1);
+
+            console.log("messPosX =", messPosX);
+            var posX = (i - lengthData/2 + 0.2)* bgCellWidth / (lengthData + 1);
+            if(index === 0){
+                posX = (i - lengthData/2 + 0.2)* bgCellWidth / (lengthData + 1) + widthLbl/2;
+            }
+            // var posX = (i - lengthData/2)* bgCellWidth / lengthData + bgCellWidth * (percentRow[i-1] + percentRow[i]);
+            // var posX = (i - lengthData/2 )* widthLbl*0.2;
             var posY = - 10;
             message.node.setPositionX(posX);
             message.node.setPositionY(posY);
@@ -57,7 +66,7 @@ cc.Class({
             message.fontSize = 20;
             message.string = strTime;
         }
-
+        // messPosX = message.node.getPositionX();
         if(card.length > 1){
             this.card.node.active = true;
             for(var j = 0; j < card.length; j++){
