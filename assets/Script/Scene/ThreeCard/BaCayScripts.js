@@ -1,10 +1,9 @@
 var NetworkManager = require('NetworkManager');
 var BaseScene = require('BaseScene');
-var PopupFull = require('PopupFull');
 var HISTORY_SPIN = 1;
 var HISTORY_BREAK_JAR = 2;
 var HISTORY_TOP_USER = 3;
-var BacaySence = cc.Class({
+cc.Class({
     extends: BaseScene,
 
     properties: {
@@ -48,7 +47,6 @@ var BacaySence = cc.Class({
     // use this for initialization
     onLoad: function () {
         cc.log("zindex =", this.node.zIndex);
-        BacaySence.instance = this;
         this.userMoney.string = Common.numberFormatWithCommas(Common.getCash());
         // window.ws.onmessage = this.onGameStatus.bind(this);
 
