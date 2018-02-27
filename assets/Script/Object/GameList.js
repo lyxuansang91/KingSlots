@@ -2,7 +2,7 @@ var NetworkManager = require('NetworkManager');
 var BacayScene = require('BaCayScripts');
 var minipoker = require('minipoker');
 var BaseScene = require('BaseScene');
-var PopupFull = require('PopupFull');
+
 cc.Class({
     extends: BaseScene,
 

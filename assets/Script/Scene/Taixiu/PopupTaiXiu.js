@@ -1,7 +1,8 @@
-var BaseScene = require('BaseScene');
-var NetworkManager = require('NetworkManager');
+let BaseScene = require('BaseScene');
+let NetworkManager = require('NetworkManager');
+let Gate = require('Gate');
 
-var TABLE_STATE = {
+let TABLE_STATE = {
     BET: 1,
     BALANCE: 2,
     RESULT: 3,
@@ -9,7 +10,13 @@ var TABLE_STATE = {
     PREPARE_NEW_MATCH: 5
 };
 
-var Gate = require('Gate');
+let BET_STATE = {
+    TAI: 1,
+    XIU: 0,
+    OTHER: -1
+};
+
+
 cc.Class({
     extends: BaseScene,
 
@@ -20,11 +27,47 @@ cc.Class({
         taiGate: Gate,
         xiuGate: Gate,
         bg_number_result : cc.Node,
-        bg_keyboard : cc.Node,
+        money_keyboard : cc.Node,
+        number_keyboard : cc.Node,
         total_money_tai : cc.Label,
         total_money_xiu : cc.Label,
         bet_money_tai : cc.Label,
         bet_money_xiu : cc.Label,
+        isNumber: false,
+        currentBet: 0,
+        betState: -1
+    },
+    cancel: function() {
+
+    },
+    accept: function() {
+
+    },
+    /* target: total_money_tai, total_money_xiu.
+    * val: float, so tien
+    * Example: this.setTotalMoneyTaiXiu(this.total_money_tai, 5000);
+    */
+    setTotalMoneyTaiXiu: function(target, val) {
+        if(target instanceof cc.Label) {
+            target.string = Common.numberFormatWithCommas(val);
+        }
+    },
+
+    datTai: function() {
+        cc.log("dat cua tai");
+        if(this.betState === BET_STATE.TAI) {
+
+        } else {
+
+        }
+    },
+    datXiu: function() {
+        cc.log("dat cua xiu");
+        if(this.betState === BET_STATE.XIU) {
+
+        } else {
+            this.betState = BET_STATE.XIU;
+        }
     },
 
     // use this for initialization
@@ -52,6 +95,11 @@ cc.Class({
             }
         }
     },
+    onChangeKeyBoard: function() {
+        this.number_keyboard.active = this.isNumber;
+        this.money_keyboard.active = !this.isNumber;
+        this.isNumber = !this.isNumber;
+     },
     onDestroy: function() {
         cc.log("on destroy tai xiu");
         Common.setExistTaiXiu(false);
