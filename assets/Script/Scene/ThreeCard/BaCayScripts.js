@@ -3,7 +3,8 @@ var BaseScene = require('BaseScene');
 var HISTORY_SPIN = 1;
 var HISTORY_BREAK_JAR = 2;
 var HISTORY_TOP_USER = 3;
-var BacayScene = cc.Class({
+
+var BacayScripts = cc.Class({
     extends: BaseScene,
 
     properties: {
@@ -28,7 +29,6 @@ var BacayScene = cc.Class({
         bet: 0,
         jarType: 1,
         isRequestJar: false,
-        popupPrefab: cc.Prefab,
         list_item: [],
         list_recent_values: [],
         stepCard : 9,
@@ -46,8 +46,8 @@ var BacayScene = cc.Class({
 
     // use this for initialization
     onLoad: function () {
-        cc.log("zindex =", this.node.zIndex);
-        BacayScene.instance = this;
+
+        BacayScripts.instance = this;
         this.userMoney.string = Common.numberFormatWithCommas(Common.getCash());
         // window.ws.onmessage = this.onGameStatus.bind(this);
 
