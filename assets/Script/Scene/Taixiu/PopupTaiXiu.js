@@ -35,6 +35,7 @@ cc.Class({
 
     // use this for initialization
     onLoad: function() {
+        cc.log("on load tai xiu");
         function onTouchDown (event) {
             return true;
         }
