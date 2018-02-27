@@ -52,7 +52,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 1334,
-      "height": 720
+      "height": 750
     },
     "_rotationX": 0,
     "_rotationY": 0,
@@ -61,7 +61,7 @@
     "_position": {
       "__type__": "cc.Vec2",
       "x": 667,
-      "y": 360
+      "y": 375
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -2353,12 +2353,15 @@
       "__id__": 1
     },
     "_enabled": true,
+    "tableStage": 0,
     "bg_dark": {
       "__id__": 3
     },
     "btnClose": {
       "__id__": 62
-    }
+    },
+    "taiGate": null,
+    "xiuGate": null
   },
   {
     "__type__": "cc.Widget",

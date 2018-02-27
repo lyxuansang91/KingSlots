@@ -1,20 +1,15 @@
 var BaseScene = require('BaseScene');
 var NetworkManager = require('NetworkManager');
+
 var TABLE_STATE = {
     BET: 1,
     BALANCE: 2,
     RESULT: 3,
     MATCH_END: 4,
     PREPARE_NEW_MATCH: 5,
-}
-class  Gate {
-    constructor(gateID, userCount, totalBet, userBet) {
-        this.gateID = gateID;
-        this.userCount = userCount;
-        this.totalBet = totalBet;
-        this.userBet = userBet;
-    }
-}
+};
+
+var Gate = require('Gate');
 cc.Class({
     extends: BaseScene,
 
@@ -33,7 +28,9 @@ cc.Class({
         // xiuGate: new Gate(0, 0, 0, 0),
         tableStage: 0,
         bg_dark: cc.Sprite,
-        btnClose: cc.Button
+        btnClose: cc.Button,
+        taiGate: Gate,
+        xiuGate: Gate
     },
 
     // use this for initialization
@@ -41,10 +38,9 @@ cc.Class({
         function onTouchDown (event) {
             return true;
         }
-        this.taiGate = new Gate(0, 0, 0, 0),
-        this.xiuGate = new Gate(0, 0, 0, 0),
+        this.taiGate = new Gate(0, 0, 0, 0);
+        this.xiuGate = new Gate(0, 0, 0, 0);
         this.node.on('touchstart', onTouchDown, this.bg_dark);
-        // window.ws.onmessage = this.onGameStatus.bind(this);
         Common.setExistTaiXiu(true);
     },
     onClose: function() {
@@ -68,6 +64,7 @@ cc.Class({
     setTableStage: function(stage) {
         this.tableStage = stage;
     },
+
     getTableStage: function() {
         return this.tableStage;
     },
@@ -220,5 +217,5 @@ cc.Class({
     // called every frame, uncomment this function to activate update callback
     update: function (dt) {
         this.onGameEvent();
-    },
+    }
 });
