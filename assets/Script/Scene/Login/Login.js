@@ -149,12 +149,12 @@ cc.Class({
         }
 
         if(res.hasMessage() && res.getMessage() !== "") {
-            // Common.showPopup(Config.name.POPUP_MESSAGE_BOX,function(message_box) {
-            //     message_box.init(res.getMessage(), 1, function() {
-            //         cc.log("on callback");
-            //     });
-            //     message_box.appear();
-            // });
+            Common.showPopup(Config.name.POPUP_MESSAGE_BOX,function(message_box) {
+                message_box.init(res.getMessage(), 1, function() {
+                    cc.log("on callback");
+                });
+                message_box.appear();
+            });
         }
     },
 
@@ -170,10 +170,6 @@ cc.Class({
                 this.scheduleOnce(this.goIntroScene, 2.0);
             }
         }
-    },
-
-    goIntroScene: function(e) {
-        cc.director.loadScene('Intro');
     },
 
     login: function() {
@@ -222,29 +218,31 @@ cc.Class({
         cc.director.loadScene('Register');
     },
     loginFacebook: function() {
-        if(cc.sys.platform !== cc.platform.WEB) {
-            return ;
-        }
-        window.loginFb(["public_profile"], function(code, response){
-            if(code === 0){
-                cc.log("login succeeded", response);
-                var userID = response.userID;
-                var accessToken = response.accessToken;
-                console.log(userID,accessToken);
-                cc.director.loadScene('Lobby');
+        if(cc.sys.platform === cc.sys.isNative) {
 
-                if (accessToken !== null) {
-                    NetworkManager.getOpenIdLoginMessageFromServer(
-                        1, userID + ";" + accessToken, "", "");
+        }else if(cc.sys.isBrowser){
+            window.loginFb(["public_profile"], function(code, response){
+                if(code === 0){
+                    cc.log("login succeeded", response);
+                    var userID = response.userID;
+                    var accessToken = response.accessToken;
+                    console.log(userID,accessToken);
+                    cc.director.loadScene('Lobby');
 
-                }else {
-                    this.loginFacebook();
+                    if (accessToken !== null) {
+                        NetworkManager.getOpenIdLoginMessageFromServer(
+                            1, userID + ";" + accessToken, "", "");
+
+                    }else {
+                        this.loginFacebook();
+                    }
+
+                } else {
+                    cc.log("Login failed, error #" + code + ": " + response);
                 }
+            });
+        }
 
-            } else {
-                cc.log("Login failed, error #" + code + ": " + response);
-            }
-        });
 
     },
     loginGoogle: function() {

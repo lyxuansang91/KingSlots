@@ -92,11 +92,9 @@ cc.Class({
                     if (avatar_id < 100000){
                         avatar_id = 0;
                     }
-                    //avatar->loadEnryptTexture(StringUtils::format(AVATAR_LINK_FORMAT, avatar_id));
                     var avatar = '';
                     var id = _user_info.getUserid();
                     var level = _user_info.getLevel().getLevel();
-                    var level = 1;
                     var displayName = _user_info.getDisplayname();
                     var cash = _user_info.getCash();
 
