@@ -56,10 +56,6 @@ cc.Class({
 
     handleMessage: function(e) {
         const buffer = e;
-        // var isDone = this._super(buffer);
-        // if(isDone) {
-        //     return true;
-        // }
         var isDone = true;
         switch (buffer.message_id) {
             case NetworkManager.MESSAGE_ID.VIEW_USER_INFO:

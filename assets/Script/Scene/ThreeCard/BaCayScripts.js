@@ -3,7 +3,7 @@ var BaseScene = require('BaseScene');
 var HISTORY_SPIN = 1;
 var HISTORY_BREAK_JAR = 2;
 var HISTORY_TOP_USER = 3;
-cc.Class({
+var BacayScene = cc.Class({
     extends: BaseScene,
 
     properties: {
@@ -47,6 +47,7 @@ cc.Class({
     // use this for initialization
     onLoad: function () {
         cc.log("zindex =", this.node.zIndex);
+        BacayScene.instance = this;
         this.userMoney.string = Common.numberFormatWithCommas(Common.getCash());
         // window.ws.onmessage = this.onGameStatus.bind(this);
 
@@ -609,7 +610,7 @@ cc.Class({
         var tabString = ["Lịch sử quay", "Lịch sử nổ hũ", "Top cao thủ"];
 
         Common.showPopup(Config.name.POPUP_HISTORY,function(popup) {
-            popup.addTabs(tabString);
+            popup.addTabs(tabString, HISTORY_SPIN);
             popup.appear();
         });
 
@@ -618,11 +619,17 @@ cc.Class({
 
         var tabString = ["Lịch sử quay", "Lịch sử nổ hũ", "Top cao thủ"];
 
-        Common.showPopup(Config.name.POPUP_FULL,function(message_box) {
-            message_box.init(tabString, "history", HISTORY_TOP_USER);
-            message_box.appear();
+        Common.showPopup(Config.name.POPUP_HISTORY,function(popup) {
+            popup.addTabs(tabString, HISTORY_TOP_USER);
+            popup.appear();
         });
 
-    }
+    },
+    openSettingPopup: function () {
+        Common.showPopup(Config.name.POPUP_SETTING,function(popup) {
+            popup.appear();
+        });
+
+    },
 
 });

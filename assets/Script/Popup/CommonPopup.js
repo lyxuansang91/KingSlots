@@ -18,17 +18,22 @@ cc.Class({
         this.disappear();
     },
 
-    initTabs: function (tabs) {
+    initTabs: function (tabs,tab_active) {
         var self = this;
 
         var tab_view = cc.instantiate(this.uiTab);
         var tab_component = tab_view.getComponent("UITab");
-        tab_component.setTab(tabs,function (index) {
-            self.onEvent(index);
-        });
+        if(tab_active){
+            tab_component.setTab(tabs,tab_active,function (index) {
+                self.onEvent(index);
+            });
+        }else{
+            tab_component.setTab(tabs,function (index) {
+                self.onEvent(index);
+            });
+        }
+
         this.tabTop.addChild(tab_view);
-
-
     },
 
     onEvent: function (index) {},

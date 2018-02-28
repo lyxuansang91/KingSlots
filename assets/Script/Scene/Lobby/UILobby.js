@@ -54,6 +54,12 @@ cc.Class({
         });
 
     },
+    openSettingPopup: function () {
+        Common.showPopup(Config.name.POPUP_SETTING,function(popup) {
+            popup.appear();
+        });
+
+    },
     setUserInfo: function() {
         this.userName.string = Common.getUserName();
         this.userGold.string = Common.numberFormatWithCommas(Common.getCash());

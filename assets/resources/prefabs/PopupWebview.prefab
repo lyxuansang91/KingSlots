@@ -10,7 +10,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "PopupHistory",
+    "_name": "PopupWebview",
     "_objFlags": 0,
     "_parent": null,
     "_children": [
@@ -156,9 +156,9 @@
       "__id__": 1
     },
     "asset": {
-      "__uuid__": "73027cf2-04b1-44ce-b038-d5137d877af4"
+      "__uuid__": "19d08a40-1620-4827-a612-9dc9a8284937"
     },
-    "fileId": "17/S1gdLlDoIfZg353dHMU",
+    "fileId": "f9JbBhI8FPUYxVg2q8aS7c",
     "sync": false
   },
   {
@@ -312,9 +312,9 @@
       "__id__": 1
     },
     "asset": {
-      "__uuid__": "73027cf2-04b1-44ce-b038-d5137d877af4"
+      "__uuid__": "19d08a40-1620-4827-a612-9dc9a8284937"
     },
-    "fileId": "14SuwEq9BN7JzUwg9awNV/",
+    "fileId": "5bTXW4hqVM3qwtxX7xeKHG",
     "sync": false
   },
   {
@@ -471,9 +471,9 @@
       "__id__": 1
     },
     "asset": {
-      "__uuid__": "73027cf2-04b1-44ce-b038-d5137d877af4"
+      "__uuid__": "19d08a40-1620-4827-a612-9dc9a8284937"
     },
-    "fileId": "1f2qM7RrVHvIsznILo57uD",
+    "fileId": "1aL3P6OyBAPYmINpwnc2QC",
     "sync": false
   },
   {
@@ -616,9 +616,9 @@
       "__id__": 1
     },
     "asset": {
-      "__uuid__": "73027cf2-04b1-44ce-b038-d5137d877af4"
+      "__uuid__": "19d08a40-1620-4827-a612-9dc9a8284937"
     },
-    "fileId": "9c1JT6I7hPMKNWOqc2/ySm",
+    "fileId": "04KMe8BhtJ+q/7XZ/hbTop",
     "sync": false
   },
   {
@@ -627,9 +627,9 @@
       "__id__": 1
     },
     "asset": {
-      "__uuid__": "73027cf2-04b1-44ce-b038-d5137d877af4"
+      "__uuid__": "19d08a40-1620-4827-a612-9dc9a8284937"
     },
-    "fileId": "3aWcFwVG1E+Yt91VgqQR/t",
+    "fileId": "c1UmZsp7VPYp6GT0JEs5mQ",
     "sync": false
   },
   {
@@ -804,9 +804,9 @@
       "__id__": 1
     },
     "asset": {
-      "__uuid__": "73027cf2-04b1-44ce-b038-d5137d877af4"
+      "__uuid__": "19d08a40-1620-4827-a612-9dc9a8284937"
     },
-    "fileId": "27WuIiO4ZP37QZsFdRPBm9",
+    "fileId": "3fflwzChdOaKSJPgLws3eb",
     "sync": false
   },
   {
@@ -829,9 +829,9 @@
       "__id__": 1
     },
     "asset": {
-      "__uuid__": "73027cf2-04b1-44ce-b038-d5137d877af4"
+      "__uuid__": "19d08a40-1620-4827-a612-9dc9a8284937"
     },
-    "fileId": "40fSdXuPlJhI18Lh4SEdC/",
+    "fileId": "ealrl/G5BMk5OcTPDYj7BB",
     "sync": false
   },
   {
@@ -886,9 +886,9 @@
       "__id__": 1
     },
     "asset": {
-      "__uuid__": "73027cf2-04b1-44ce-b038-d5137d877af4"
+      "__uuid__": "19d08a40-1620-4827-a612-9dc9a8284937"
     },
-    "fileId": "ec2lCcZVVMsY4XRtk9xR0W",
+    "fileId": "1eMEfy6x5Ip5if7whxuqZi",
     "sync": false
   },
   {
@@ -923,38 +923,10 @@
       "__id__": 1
     },
     "asset": {
-      "__uuid__": "73027cf2-04b1-44ce-b038-d5137d877af4"
+      "__uuid__": "19d08a40-1620-4827-a612-9dc9a8284937"
     },
-    "fileId": "18V8pJugxMqrByHbTVEOYc",
+    "fileId": "5dRkJ3bJtJ5rSEELqPVOiX",
     "sync": false
-  },
-  {
-    "__type__": "2131eIuoptG5ZxvymQeGivv",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 1
-    },
-    "_enabled": true,
-    "bg_dark": {
-      "__id__": 3
-    },
-    "background": {
-      "__id__": 27
-    },
-    "exit": {
-      "__id__": 11
-    },
-    "tabTop": {
-      "__id__": 14
-    },
-    "uiTab": {
-      "__uuid__": "e608953e-9f29-4f53-874b-86944f0284f7"
-    },
-    "tableView": {
-      "__id__": 19
-    },
-    "historyType": 1
   },
   {
     "__type__": "cc.Widget",
@@ -983,14 +955,64 @@
     "_originalHeight": 1000
   },
   {
+    "__type__": "5a20fa4Wb9OLIW0m1CtV3xJ",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "bg_dark": {
+      "__id__": 3
+    },
+    "background": {
+      "__id__": 27
+    },
+    "exit": {
+      "__id__": 11
+    },
+    "tabTop": {
+      "__id__": 14
+    },
+    "uiTab": {
+      "__uuid__": "e608953e-9f29-4f53-874b-86944f0284f7"
+    },
+    "tableView": {
+      "__id__": 19
+    },
+    "linkUrl": [
+      "http://kingviet.top/wap.php/huongdan/1",
+      "http://kingviet.top/wap.php/huongdan/2",
+      "http://kingviet.top/wap.php/huongdan/3",
+      "http://kingviet.top/wap.php/huongdan/4",
+      "http://kingviet.top/wap.php/huongdan/5",
+      "http://kingviet.top/wap.php/huongdan/6",
+      "http://kingviet.top/wap.php/huongdan/7",
+      "http://kingviet.top/wap.php/huongdan/8",
+      "http://kingviet.top/wap.php/huongdan/9",
+      "http://kingviet.top/wap.php/huongdan/10",
+      "http://kingviet.top/wap.php/huongdan/11",
+      "http://kingviet.top/wap.php/huongdan/12",
+      "http://kingviet.top/wap.php/huongdan/13",
+      "http://kingviet.top/wap.php/huongdan/14",
+      "http://kingviet.top/wap.php/huongdan/15",
+      "http://kingviet.top/wap.php/huongdan/16",
+      "http://kingviet.top/wap.php/huongdan/17",
+      "http://kingviet.top/wap.php/huongdan/18",
+      "http://kingviet.top/wap.php/huongdan/19",
+      "http://kingviet.top/wap.php/huongdan/20",
+      "http://kingviet.top/wap.php/huongdan/21"
+    ]
+  },
+  {
     "__type__": "cc.PrefabInfo",
     "root": {
       "__id__": 1
     },
     "asset": {
-      "__uuid__": "73027cf2-04b1-44ce-b038-d5137d877af4"
+      "__uuid__": "19d08a40-1620-4827-a612-9dc9a8284937"
     },
-    "fileId": "80iXaYLbpENaFq+Hm9lVMK",
+    "fileId": "aajDeMGYZF1qt7eJy20SCb",
     "sync": false
   }
 ]
