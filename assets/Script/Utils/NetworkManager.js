@@ -713,6 +713,13 @@ var NetworkManager = {
         request.setTargetuserid(targetUserId);
         this.callNetwork(this.initData(request.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.VIEW_USER_INFO, Common.getSessionId()));
     },
+    sendBet: function(roomIndex, betMoney, betType) {
+        var request = new proto.BINBetRequest();
+        request.setRoomindex(roomIndex);
+        request.setBetmoney(betMoney);
+        request.setBettype(betType);
+        this.callNetwork(this.initData(request.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.BET, Common.getSessionId()));
+    },
     connectNetwork: function() {
         if(window.ws === null || typeof(window.ws) === 'undefined' || window.ws.readyState === WebSocket.CLOSED) {
             window.ws = new WebSocket(NetworkManager.URL);

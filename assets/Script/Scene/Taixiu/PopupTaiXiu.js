@@ -37,16 +37,16 @@ cc.Class({
         currentBet: 0,
         betState: -1,
         enterRoomResponse: null,
+        roomIndex: -1
     },
     cancel: function() {
 
     },
     accept: function() {
-
+        NetworkManager.sendBet();
     },
     setEnterRoomResponse: function(resp) {
-        cc.log("set Enter room Response:", resp);
-        this.enterRoomResponse = resp;
+        this.roomIndex = resp.getRoomplay().getRoomindex();
     },
     /* target: total_money_tai, total_money_xiu.
     * val: float, so tien
@@ -61,9 +61,17 @@ cc.Class({
     setBetMoney: function(event, data) {
         cc.log("data:", data);
         if(data === "all") {
-            // tat tay
+            this.currentBet = Common.getCash();
         } else {
-            // cong tien
+            var addMoney = parseInt(data);
+            if (this.currentBet + addMoney <= Common.getCash) {
+                this.currentBet +=  addMoney;
+            }
+        }
+        if (this.betState === BET_STATE.TAI) {
+            this.setTotalMoneyTaiXiu(this.bet_money_tai, this.currentBet);
+        } else if (this.betState === BET_STATE.XIU) {
+            this.setTotalMoneyTaiXiu(this.bet_money_xiu, this.currentBet);
         }
     },
     setBetMoneyNumber: function(event, data) {
@@ -79,16 +87,20 @@ cc.Class({
 
     datTai: function() {
         cc.log("dat cua tai");
-        if(this.betState === BET_STATE.TAI) {
-
-        } else {
-
+        if(this.betState !== BET_STATE.TAI) {
+            this.betState = BET_STATE.TAI;
+            this.bet_money_xiu.string = "ĐẶT XỈU";
+            this.bet_money_tai.string = "0";
+            this.currentBet = 0;
         }
     },
     datXiu: function() {
         cc.log("dat cua xiu");
-        if(this.betState === BET_STATE.XIU) {
-        } else {
+        if(this.betState !== BET_STATE.XIU) {
+            this.bet_money_xiu.string = "0";
+            this.betState = BET_STATE.XIU;
+            this.bet_money_tai.string = "ĐẶT TÀI"
+            this.currentBet = 0;
         }
     },
 
@@ -98,8 +110,8 @@ cc.Class({
         function onTouchDown (event) {
             return true;
         }
-        this.taiGate = new Gate(0, 0, 0, 0);
-        this.xiuGate = new Gate(0, 0, 0, 0);
+        // this.taiGate = new Gate(0, 0, 0, 0);
+        // this.xiuGate = new Gate(0, 0, 0, 0);
         this.node.on('touchstart', onTouchDown, this.bg_dark);
         Common.setExistTaiXiu(true);
     },
@@ -193,7 +205,7 @@ cc.Class({
         cc.log("bet response:", resp.toObject());
         if(resp.getResponsecode()) {
             var typeId = resp.getBettype();
-            var betMoney = resp.getBetMoney();
+            var betMoney = resp.getBetmoney();
             var sourceId = resp.getSourceuserid();
             for (var i = 0; i < resp.getArgsList().length; i++) {
                 var key = resp.getArgsList()[i].getKey();
@@ -202,6 +214,20 @@ cc.Class({
                     var listBetGateInfo = value.split(',');
                     for (var j = 0; j < listBetGateInfo.length; j++) {
                         var betGateInfo = listBetGateInfo[j].split('-').map(Number);
+                        switch (betGateInfo[0]) {
+                            case 1: {
+                                this.total_money_tai.string = betGateInfo[1];
+                                //tổng số người đặt cửa tài
+                                break;
+                            }
+
+                            case 0: {
+                                this.total_money_tai.string = betGateInfo[1];
+                                break;
+                            }
+                            default:
+                                break;
+                        }
                         //update giá trị cho các cửa, với mỗi mảng betGateInfo lần lượt là
                         //[0] : giá trị cửa, [1]: tổng tiền đặt vào cửa, [2]: tổng số người đặt vào cửa đó
                     }
@@ -268,9 +294,7 @@ cc.Class({
     },
     handleMatchBeginResponseHandler: function(resp) {
         cc.log("match begin response:", resp.toObject());
-        if(resp.getResponsecode()) {
-
-        }
+        if(resp.getResponsecode()) {}
     },
     onGameEvent: function() {
         var self = this;
