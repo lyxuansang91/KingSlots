@@ -227,7 +227,6 @@ cc.Class({
                     var userID = response.userID;
                     var accessToken = response.accessToken;
                     console.log(userID,accessToken);
-                    cc.director.loadScene('Lobby');
 
                     if (accessToken !== null) {
                         NetworkManager.getOpenIdLoginMessageFromServer(

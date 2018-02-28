@@ -369,9 +369,8 @@ var BacayScene = cc.Class({
                 card.runAction(cc.sequence(delay,move1,move3,move2));
             }
         }
-
-
     },
+
     onDestroy: function() {
         this.unscheduleAllCallbacks();
     },
@@ -470,7 +469,7 @@ var BacayScene = cc.Class({
                 var moneybox = response.getMoneyboxesList()[i];
                 if (moneybox.getDisplaychangemoney() > 0) {
                     var userInfo = Common.getUserInfo();
-                    if (moneybox.getUserid() == userInfo.userid){
+                    if (moneybox.getUserid() === userInfo.userid){
                         var origin_money = moneybox.getCurrentmoney();
                         //set lai tien cho nguoi choi
                         Common.setCash(origin_money);

@@ -26,6 +26,9 @@ var MiniPoker = cc.Class({
         jarValue: 0,
         roomIndex: 0,
         popupPrefab: cc.Prefab,
+        autoSpinToggle: cc.Toggle,
+        fastSpinToggle: cc.Toggle,
+        updateMoneyResponse: null
     },
     statics: {
       instance: null
@@ -34,7 +37,37 @@ var MiniPoker = cc.Class({
         // cc.director.loadScene("Table");
         NetworkManager.requestExitRoomMessage(0);
     },
+    handleAutoSpin: function() {
+        if (this.autoSpinToggle.isChecked && !this.isRun && this.isFinishSpin) {
+            // var valMoney = (isCash ? turnCashValue[indexCash] : turnGoldValue[indexCash]);
+            this.time_move = (this.fastSpinToggle.isChecked ? 0.4 : 1);
+            this.isRun = true;
+            var money = Common.getCash();
+            var betMoney = this.getBetMoney();
+            cc.log("betMoney =", betMoney);
+            if(betMoney > money){
+                var message = "Bạn không có đủ tiền!";
+                Common.showToast(message, 2);
+                this.autoSpinToggle.isChecked = false;
+                return;
+            }
+            this.getTurnMiniPokerRequest(this.calculateTurnType());
+        }
+    },
+    updateMoneyMessageResponseHandler: function (response) {
+        if (response.getResponsecode()){
+            this.setBinUpdateMoney(response);
+            this.removeTurnUpdateMoney();
+        }
+    },
+    setBinUpdateMoney: function(response) {
+        this.updateMoneyResponse = response;
+    },
+    getBINUpdateMoneyResponse: function(){
+        return this.updateMoneyResponse;
+    },
     update: function(dt) {
+        this.handleAutoSpin();
         this.onGameEvent();
     },
     onGameEvent: function() {
@@ -42,6 +75,9 @@ var MiniPoker = cc.Class({
         NetworkManager.checkEvent(function(buffer) {
             return self.handleMessage(buffer);
         });
+    },
+    getFastSpin: function() {
+        this.fastSpinToggle.isChecked = !this.fastSpinToggle.isChecked;
     },
 
     setKeyBet: function(key) {
@@ -142,6 +178,7 @@ var MiniPoker = cc.Class({
     },
 
     takeTurn: function() {
+        this.time_move = (this.fastSpinToggle.isChecked ? 0.4 : 1);
         this.getTurnMiniPokerRequest(this.betType + 1);
     },
 
@@ -197,12 +234,118 @@ var MiniPoker = cc.Class({
         }
     },
 
+    handleRanking: function(emoticonId, message, response) {
+
+        //TODO: HungLe - Handle Ranking
+
+        //emoticonId = 54;
+        if(emoticonId === 54) {
+            this.showNoHu();
+            this.isRun = false;
+            return ;
+        }
+        if (emoticonId !== 72) {
+            this.isUpdateMoney = false;
+            cc.log("mess =", message);
+
+            var nodeChild = new cc.Node(message);
+            nodeChild.parent = this.node;
+            var lbl_text = nodeChild.addComponent(cc.Label);
+            lbl_text.string = message;
+            lbl_text.node.color = cc.color(248,213,82,255);
+
+            var outline = nodeChild.addComponent(cc.LabelOutline);
+            outline.color = new cc.Color(0.5, 0.3, 0.7, 1.0);
+            outline.width = 3;
+
+            var fadeout = cc.fadeOut(1.0);
+            var callFunc = cc.callFunc(function () {
+                for (var i = 0; i < response.getMoneyboxesList().length; i++) {
+                    var nodeMoney = new cc.Node();
+                    nodeMoney.parent = this.node;
+                    var moneybox = response.getMoneyboxesList()[i];
+                    if (moneybox.getDisplaychangemoney() > 0) {
+                        this.isUpdateMoney = true;
+                        var label_money = nodeMoney.addComponent(cc.Label);
+                        label_money.string = moneybox.getDisplaychangemoney().toString();
+                        // MLabel::createUpdateMoney(moneybox.displaychangemoney());
+                        // label_money.node.setPosition(cc.p(1334/2,750/2));
+                        label_money.node.color = cc.color(248,213,82,255);
+
+                        var outline = nodeMoney.addComponent(cc.LabelOutline);
+                        outline.color = new cc.Color(0.5, 0.3, 0.7, 1.0);
+                        outline.width = 3;
+
+                        // this.cardView.node.addChild(this.label_money);
+                        var fadeout = cc.fadeOut(1.5);
+                        label_money.node.runAction(cc.sequence(cc.moveBy(0.5, cc.p(0,20)),cc.delayTime(0.25),
+                            cc.spawn(cc.moveBy(1.0,cc.p(0,20)),fadeout,null), cc.removeSelf(),null));
+
+                    }
+                }
+            }, this);
+
+            var callFuncUpdateMoney = cc.callFunc(function () {
+                if (this.isUpdateMoney) {
+                    this.setOriginMoney();
+                }
+                this.isRun = false;
+            }, this);
+
+            lbl_text.node.runAction(cc.sequence(cc.moveBy(0.5, cc.p(0, 50)),
+                callFunc, cc.spawn(cc.moveBy(1.0, cc.p(0, 50)), fadeout, null),
+                callFuncUpdateMoney, cc.removeSelf(), null));
+            // this.cardView.node.addChild(this.label_text);
+        }
+        else {
+            this.setOriginMoney();
+            this.isRun = false;
+        }
+    },
+    removeTurnUpdateMoney: function(){
+        var updateMoneyResponse = this.getBINUpdateMoneyResponse();
+        cc.log("updateMoneyResponse =", updateMoneyResponse.getMoneyboxesList());
+        if(updateMoneyResponse.getResponsecode()) {
+            for(var i = 0; i < updateMoneyResponse.getMoneyboxesList().length; i++) {
+                var money_box = updateMoneyResponse.getMoneyboxesList()[i];
+                if(money_box.getReason() === "miniPokerSpin") {
+                    var origin_money = money_box.getCurrentmoney();
+                    //set lai tien cho nguoi choi
+
+                    Common.setCash(origin_money);
+                    this.userMoney.string = Common.numberFormatWithCommas(origin_money);
+                    //this->moneyEvent->onEventMoneyMiniGame(true,origin_money);
+
+                }
+            }
+        }
+    },
+    setOriginMoney: function() {
+        var response = this.getBINUpdateMoneyResponse();
+        if(response !== 0){
+            for (var i = 0; i < response.getMoneyboxesList().length; i++) {
+                var moneybox = response.getMoneyboxesList()[i];
+                if (moneybox.getDisplaychangemoney() > 0) {
+                    var userInfo = Common.getUserInfo();
+                    if (moneybox.getUserid() == userInfo.userid){
+                        var origin_money = moneybox.getCurrentmoney();
+                        //set lai tien cho nguoi choi
+                        Common.setCash(origin_money);
+                        this.userMoney.string = Common.numberFormatWithCommas(origin_money);
+                    }
+                }
+            }
+        }
+
+        this.isRun = false;
+    },
+
     implementSpinMiniPokerCards: function(carx, response) {
         cc.log("carx =", carx);
 
         var text_emoticon = response.getTextemoticonsList()[0];
         this.isFinishSpin = false;
-        var isBreakJar = (text_emoticon.getEmoticonid() === 54); //54: nổ hũ
+        this.isBreakJar = (text_emoticon.getEmoticonid() === 54); //54: nổ hũ
 
         var random_number = Common.genRandomCardNumber(carx, this.stepCard, this.number);
         var items_value = Common.genArrayToMultiArray(random_number, this.stepCard, this.number);
@@ -263,10 +406,23 @@ var MiniPoker = cc.Class({
 
             if(i == this.list_item.length - 1){
                 // khi dừng hiệu ứng
+                var emoticon = response.getTextemoticonsList()[0];
+                var emotionId = emoticon.getEmoticonid();
+                var message = emoticon.getMessage();
+                var moneyResponse = this.getBINUpdateMoneyResponse();
+                var self = this;
+
                 var call_func = cc.callFunc(function () {
                     cc.log("FINISH!!!!");
-                });
-                card.runAction(cc.sequence(delay,move1,move3,move2,call_func));
+                    self.handleRanking(emotionId, message, moneyResponse);
+                }, this);
+
+                var callFuncAutoSpin = cc.callFunc(function () {
+                    cc.log("auto spin");
+                    if(!this.isBreakJar)
+                        this.isFinishSpin = true;
+                }, this);
+                card.runAction(cc.sequence(delay,move1,move3,move2,call_func, cc.delayTime(2), callFuncAutoSpin, null));
             }else{
                 card.runAction(cc.sequence(delay,move1,move3,move2));
             }
@@ -295,21 +451,8 @@ var MiniPoker = cc.Class({
         }
 
       if(response.hasMessage() && response.getMessage() !== "") {
-
+        Common.showToast(response.getMessage(), 2);
       }
-    },
-    updateMoneyMessageResponseHandler: function(resp) {
-        cc.log("update money response: ", resp.toObject());
-        if(resp.getResponsecode()) {
-            var moneyBox = resp.getMoneyboxesList()[0];
-            if(moneyBox.getUserid() === Common.getUserInfo().userid) {
-                this.userMoney.string = Common.numberFormatWithCommas(moneyBox.getCurrentmoney());
-            }
-        }
-
-        if(resp.hasMessage() && resp.getMessage() !== "") {
-            // show dialog
-        }
     },
     exitRoomResponseHandler: function(resp) {
         cc.log("exit room response handler:", resp.toObject());
@@ -400,7 +543,7 @@ var MiniPoker = cc.Class({
         var tabString = ["Lịch sử quay", "Lịch sử nổ hũ", "Top cao thủ"];
 
         Common.showPopup(Config.name.POPUP_HISTORY,function(popup) {
-            popup.addTabs(tabString);
+            popup.addTabs(tabString, HISTORY_SPIN);
             popup.appear();
         });
 
@@ -411,9 +554,9 @@ var MiniPoker = cc.Class({
 
         var tabString = ["Lịch sử quay", "Lịch sử nổ hũ", "Top cao thủ"];
 
-        Common.showPopup(Config.name.POPUP_FULL,function(message_box) {
-            message_box.init(tabString, "history", HISTORY_TOP_USER);
-            message_box.appear();
+        Common.showPopup(Config.name.POPUP_HISTORY,function(popup) {
+            popup.addTabs(tabString, HISTORY_TOP_USER);
+            popup.appear();
         });
 
 
