@@ -9,7 +9,7 @@ cc.Class({
         tab_item : cc.Prefab,
     },
 
-    setTab: function (tabs,callBack) {
+    setTab: function (tabs,tab_active,callBack) {
         this.callBackTab = callBack;
 
         var self = this;
@@ -34,13 +34,17 @@ cc.Class({
 
             this.scroll_view.content.addChild(button);
         }
+        if(tab_active){
+            this.showTab(tab_active,true);
+        }else{
+            this.showTab(1);
+        }
 
-        this.showTab(1);
     },
 
-    showTab: function (index) {
-        var self = this;
+    showTab: function (index,disableAnimation) {
         var number = index - 1;
+        var time_move = 0.2;
 
         var posY = this.tab.node.getPositionY();
         var posX = this.tab.node.getContentSize().width * (number + 0.5);
@@ -49,7 +53,11 @@ cc.Class({
             this.callBackTab(index);
         },this);
 
-        this.tab.node.runAction(cc.sequence(cc.moveTo(0.2,cc.p(posX,posY)),callFunc));
+        if(disableAnimation){
+            time_move = 0;
+        }
+
+        this.tab.node.runAction(cc.sequence(cc.moveTo(time_move,cc.p(posX,posY)),callFunc));
 
         if(this.tab_size > 3){
             var posX_content = 0;
@@ -63,7 +71,7 @@ cc.Class({
                 posX_content = -this.scroll_view.node.getContentSize().width/2;
             }
 
-            this.scroll_view.content.runAction(cc.moveTo(0.2,cc.p(posX_content,0)));
+            this.scroll_view.content.runAction(cc.moveTo(time_move,cc.p(posX_content,0)));
         }
 
     },

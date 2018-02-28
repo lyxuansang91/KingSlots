@@ -2000,9 +2000,11 @@
   },
   {
     "__type__": "cc.ClickEvent",
-    "target": null,
-    "component": "",
-    "handler": "",
+    "target": {
+      "__id__": 28
+    },
+    "component": "UILobby",
+    "handler": "openSettingPopup",
     "customEventData": ""
   },
   {

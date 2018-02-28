@@ -13,21 +13,18 @@ cc.Class({
     },
 
     onLoad: function () {
-        // var tabs = ["xxx","yyy","zzz","iii"];
-        // this.initTabs(tabs);
-
     },
 
     start: function () {
         cc.log("tableview =", this.tableView);
     },
 
-    addTabs: function (tabs) {
-        this.initTabs(tabs);
+    addTabs: function (tabs, index) {
+        this.initTabs(tabs, index);
     },
 
-    initTabs: function (tabs) {
-        this._super(tabs);
+    initTabs: function (tabs, index) {
+        this._super(tabs, index);
     },
 
     onEvent: function (index) {
@@ -64,10 +61,6 @@ cc.Class({
 
     handleMessage: function(e) {
         const buffer = e;
-        // var isDone = this._super(buffer);
-        // if(isDone) {
-        //     return true;
-        // }
         var isDone = true;
         switch (buffer.message_id) {
             case NetworkManager.MESSAGE_ID.LOOK_UP_GAME_HISTORY:
