@@ -35,13 +35,18 @@ cc.Class({
         bet_money_xiu : cc.Label,
         isNumber: false,
         currentBet: 0,
-        betState: -1
+        betState: -1,
+        enterRoomResponse: null,
     },
     cancel: function() {
 
     },
     accept: function() {
 
+    },
+    setEnterRoomResponse: function(resp) {
+        cc.log("set Enter room Response:", resp);
+        this.enterRoomResponse = resp;
     },
     /* target: total_money_tai, total_money_xiu.
     * val: float, so tien
@@ -52,6 +57,25 @@ cc.Class({
             target.string = Common.numberFormatWithCommas(val);
         }
     },
+
+    setBetMoney: function(event, data) {
+        cc.log("data:", data);
+        if(data === "all") {
+            // tat tay
+        } else {
+            // cong tien
+        }
+    },
+    setBetMoneyNumber: function(event, data) {
+        cc.log("data:", data);
+        if(data === "delete") {
+            // xoa
+        } else {
+            // dien so
+        }
+    },
+
+
 
     datTai: function() {
         cc.log("dat cua tai");
@@ -64,9 +88,7 @@ cc.Class({
     datXiu: function() {
         cc.log("dat cua xiu");
         if(this.betState === BET_STATE.XIU) {
-
         } else {
-            this.betState = BET_STATE.XIU;
         }
     },
 

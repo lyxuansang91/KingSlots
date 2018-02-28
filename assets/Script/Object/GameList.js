@@ -205,13 +205,14 @@ cc.Class({
     loadTaiXiu: function(response) {
         var scene = cc.director.getScene();
         if(cc.isValid(scene) && !cc.isValid(scene.getChildByName("PopupTaiXiu"))){
-            cc.loader.loadRes("prefabs/PopupTaiXiu",function(error, prefab, response) {
+            cc.loader.loadRes("prefabs/PopupTaiXiu",function(error, prefab) {
                 if(!error){
                     var taiXiu = cc.instantiate(prefab);
                     if(cc.isValid(taiXiu)){
                         taiXiu.x = Common.width / 2;
                         taiXiu.y = Common.height / 2;
                         scene.addChild(taiXiu);
+                        taiXiu.getComponent("PopupTaiXiu").setEnterRoomResponse(response);
                     }
                 }
             });
