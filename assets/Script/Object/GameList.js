@@ -1,5 +1,5 @@
 var NetworkManager = require('NetworkManager');
-var BacayScene = require('BaCayScripts');
+var BaCay = require('BacayScripts');
 var minipoker = require('minipoker');
 var BaseScene = require('BaseScene');
 
@@ -153,7 +153,7 @@ cc.Class({
                 break;
             case NetworkManager.MESSAGE_ID.FILTER_MAIL:
                 var msg = buffer.response;
-                PopupFull.instance.lookupGameMiniPokerResponseHandler(msg);
+                //PopupFull.instance.lookupGameMiniPokerResponseHandler(msg);
                 break;
             default:
                 isDone = false;
@@ -224,7 +224,7 @@ cc.Class({
             cc.log("enterZone = ", Common.getEnterZone());
             if (Common.getZoneId() === Common.ZONE_ID.MINI_BACAY) {
                 cc.director.loadScene('BaCay',function(){
-                    BacayScene.instance.initDataFromLoading(Common.getEnterZone(), response);
+                    BaCay.instance.initDataFromLoading(Common.getEnterZone(), response);
                 });
 
             }

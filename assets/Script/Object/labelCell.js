@@ -4,22 +4,90 @@ cc.Class({
 
     properties: {
         prefabData: cc.Prefab,
-        card: cc.Mask,
-        bg_cell: cc.SpriteFrame
+        frame_title : cc.SpriteFrame,
+        frame_cell : cc.SpriteFrame
     },
 
     // use this for initialization
     onLoad: function () {
 
     },
+
+    resetCell: function (lengthData,index) {
+        const twoItem = this.node.getChildByName("twoItem");
+        var item1_2 = twoItem.getChildByName("item1").getComponent(cc.Label);
+        item1_2.string = "";
+
+        var item2_2 = twoItem.getChildByName("item2").getComponent(cc.Label);
+        item2_2.string = "";
+
+        //========
+
+        const threeItem = this.node.getChildByName("threeItem");
+        var item1_3 = threeItem.getChildByName("item1").getComponent(cc.Label);
+        item1_3.string = "";
+
+        var item2_3 = threeItem.getChildByName("item2").getComponent(cc.Label);
+        item2_3.string = "";
+
+        var item3_3 = threeItem.getChildByName("item3").getComponent(cc.Label);
+        item3_3.string = "";
+
+        //========
+
+        const fourItem = this.node.getChildByName("fourItem");
+        var item1_4 = fourItem.getChildByName("item1").getComponent(cc.Label);
+        item1_4.string = "";
+
+        var item2_4 = fourItem.getChildByName("item2").getComponent(cc.Label);
+        item2_4.string = "";
+
+        var item3_4 = fourItem.getChildByName("item3").getComponent(cc.Label);
+        item3_4.string = "";
+
+        var item4_4 = fourItem.getChildByName("item4").getComponent(cc.Label);
+        item4_4.string = "";
+
+        this.node_card = fourItem.getChildByName("item4").getChildByName("card");
+        this.node_card.removeAllChildren();
+
+        this.list_text = [];
+
+        if(lengthData == 4){
+            this.list_text.push(item1_4);
+            this.list_text.push(item2_4);
+            this.list_text.push(item3_4);
+            this.list_text.push(item4_4);
+
+        }else if(lengthData == 3){
+            this.list_text.push(item1_3);
+            this.list_text.push(item2_3);
+            this.list_text.push(item3_3);
+
+        }else if(lengthData == 2){
+            this.list_text.push(item1_2);
+            this.list_text.push(item2_2);
+
+        }
+
+        var background = this.node.getChildByName("background").getComponent(cc.Sprite);
+
+        if(index == 0){
+            background.spriteFrame = this.frame_title;
+        }else{
+            background.spriteFrame = this.frame_cell;
+        }
+    },
+
     init: function (index, data, reload, group) {
 
-        this.node.removeAllChildren(true);
         var obj = data.array[index];
 
-        var bgCellWidth = this.node.getContentSize().width;
-
         var lengthData = Object.keys(obj).length;
+
+        this.resetCell(lengthData - 1,index);
+
+        cc.log("list_text : ",this.list_text.length);
 
         var lastItem = obj[Object.keys(obj)[lengthData-1]];
 
@@ -27,78 +95,40 @@ cc.Class({
         var findComma = lastItem.toString().search(re2);
         var card = findComma !== -1 ? obj[Object.keys(obj)[lengthData-1]].split(',') : [];
 
-        if(card.length > 1){
-            lengthData = lengthData-1;
-        }
+        for(var i = 1; i < lengthData; i++){
+            var text = obj[Object.keys(obj)[i]].toString();
+            if(i == 1 && index != 0){
 
-        var nodeBg = new cc.Node();
-        nodeBg.parent = this.node;
-        var bgCell = nodeBg.addComponent(cc.Sprite);
-
-        bgCell.spriteFrame = this.bg_cell;
-
-        var percentRow  = [0.1, 0.1, 0.1, 0.1];
-
-        cc.log("percent =", percentRow);
-
-        var messPosX = 0;
-        for(var i = 0; i < lengthData; i++){
-            var strTime = obj[Object.keys(obj)[i]].toString();
-            // if(i === 0){
-            //     strTime = Common.wordWrap(strTime, 40);
-            // }
-            var nodeChild = new cc.Node();
-            nodeChild.parent = this.node;
-            var message = nodeChild.addComponent(cc.Label);
-            var widthLbl = message.node.getContentSize().width;
-
-            console.log("messPosX =", messPosX);
-            var posX = (i - lengthData/2 + 0.2)* bgCellWidth / (lengthData + 1);
-            if(index === 0){
-                posX = (i - lengthData/2 + 0.2)* bgCellWidth / (lengthData + 1) + widthLbl/2;
-            }
-            // var posX = (i - lengthData/2)* bgCellWidth / lengthData + bgCellWidth * (percentRow[i-1] + percentRow[i]);
-            // var posX = (i - lengthData/2 )* widthLbl*0.2;
-            var posY = - 10;
-            message.node.setPositionX(posX);
-            message.node.setPositionY(posY);
-            message.node.color = cc.color(112,48,22,255);
-            message.fontSize = 20;
-            message.string = strTime;
-        }
-        // messPosX = message.node.getPositionX();
-        if(card.length > 1){
-            this.card.node.active = true;
-            for(var j = 0; j < card.length; j++){
-
-                var item = cc.instantiate(this.prefabData).getComponent('CardItem');
-                var cardValue = card[j];
-                item.node.setScale(0.25,0.25);
-                var posX =  (j - card.length/2 )* item.node.getContentSize().width*0.1;
-                // if(j === 0){
-                //     posX = - item.node.getContentSize().width*0.1 ;
-                // } else if(j === 2){
-                //     posX = item.node.getContentSize().width*0.1 ;
-                // } else {
-                //     posX = 0;
-                // }
-
-                var posY = 0;
-
-                item.replaceCard(cardValue);
-                item.setBg(false);
-                item.node.setPositionY(posY);
-                item.node.setPositionX(posX);
-
-                this.card.node.addChild(item.node);
+                text = "#" + text;
 
             }
 
-            this.node.addChild(this.card.node);
-        } else {
-            this.card.node.active = false;
+            if(i == lengthData - 1 && i == 4 && index != 0){
+                if(card.length > 1){
+                    for(var j = 0; j < card.length; j++){
+
+                        var item = cc.instantiate(this.prefabData).getComponent('CardItem');
+                        var cardValue = card[j];
+                        item.node.setScale(0.225,0.225);
+                        var posX =  (j - card.length/2.0 + 0.5)* item.node.getContentSize().width*0.1;
+                        var posY = 0;
+
+                        item.replaceCard(cardValue);
+                        item.setBg(false);
+                        item.node.setPositionY(posY);
+                        item.node.setPositionX(posX);
+
+                        this.node_card.addChild(item.node);
+                    }
+                }
+            }else{
+                this.list_text[i - 1].string = text;
+                if(index == 0){
+                    this.list_text[i - 1].node.color = cc.color(255,248,198,255);
+                }else{
+                    this.list_text[i - 1].node.color = cc.color(94,60,17,255);
+                }
+            }
         }
-
-
     }
 });

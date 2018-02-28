@@ -608,9 +608,6 @@
     "bet": 0,
     "jarType": 1,
     "isRequestJar": false,
-    "popupPrefab": {
-      "__uuid__": "31c15c51-6222-49b7-9863-ad45766f1da7"
-    },
     "list_item": [],
     "list_recent_values": [],
     "stepCard": 9,

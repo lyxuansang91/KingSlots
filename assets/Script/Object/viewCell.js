@@ -56,18 +56,15 @@ cc.Class({
         this.node.emit(cc.Node.EventType.TOUCH_CANCEL);
         this.longClicked();
     },
-    //可以重写的方法
 
-    //需要重写的方法
     longClicked: function () {
 
     },
-    //被点击时相应的方法
+
     clicked: function () {
 
     },
 
-    //加载需要初始化数据时调用
     init: function (index, data, reload, group) {
         cc.log("data =", data);
     },

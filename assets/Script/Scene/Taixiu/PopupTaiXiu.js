@@ -237,7 +237,6 @@ cc.Class({
                         var dicesvalue = value.split('-').map(Number);
                         //show animation con xuc sac quay
                     }
-
                 } else if (key === "totalValue") {
 
                 }
@@ -260,6 +259,7 @@ cc.Class({
             var message = resp.getMessage();
         }
     },
+
     handleMatchEndResponseHandler: function(resp) {
         cc.log("match end response:", resp.toObject());
         if(resp.getResponsecode()) {

@@ -2,10 +2,8 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        bg_tab : cc.Sprite,
         scroll_view : cc.ScrollView,
         tab : cc.Sprite,
-        btn_tabs : [cc.Button],
         tab_item : cc.Prefab,
     },
 
