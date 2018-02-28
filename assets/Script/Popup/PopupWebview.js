@@ -4,7 +4,7 @@ cc.Class({
     extends: CommonPopup,
 
     properties: {
-        linkUrl: [cc.String]
+        webviewUrl: cc.String
     },
 
     onLoad: function () {
@@ -22,9 +22,15 @@ cc.Class({
     },
 
     onEvent: function (index) {
-        // this.getLookupHistoryRequest(firstResult, MAX_RESULT,
-        //     index, true);
-        // this.setHistoryType(index);
+        var tabZoneId = [Config.TAG_GAME_ITEM.MINI_POKER, Config.TAG_GAME_ITEM.MINI_BACAY, Config.TAG_GAME_ITEM.TAIXIU];
+
+        var webview = this.tableView.getComponent(cc.WebView);
+        if(!webview){
+            webview = this.tableView.addComponent(cc.WebView);
+        }
+        webview.node.color = cc.color(0,0,0,255);
+        webview.url = this.webviewUrl + tabZoneId[index - 1];
+
     },
 
 });
