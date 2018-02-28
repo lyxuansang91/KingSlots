@@ -5,9 +5,6 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        popupSetting: cc.Prefab,
-        popupIngame: cc.Prefab,
-        popupUserinfo: cc.Prefab,
         userName: cc.Label ,
         userAvatar: cc.Button ,
         userGold: cc.Label,

@@ -1,6 +1,5 @@
 var NetworkManager = require('NetworkManager');
 var BaseScene = require('BaseScene');
-var PopupMessageBox = require('PopupMessageBox');
 
 cc.Class({
     extends: BaseScene,
@@ -34,7 +33,6 @@ cc.Class({
             }
         }
 
-        // window.ws.onmessage = this.ongamestatus.bind(this);
     },
 
     ongamestatus: function(event) {
@@ -66,7 +64,6 @@ cc.Class({
                 isDone = false;
                 break;
         }
-        cc.log("is done:", isDone, ", mesasge id:", buffer.message_id);
         return isDone;
     },
 
@@ -95,7 +92,6 @@ cc.Class({
 
     handleRegisterResponseHandler: function(e) {
         const buffer = e;
-        cc.log("buffer:", buffer);
         if(buffer.getResponsecode()) {
             NetworkManager.requestLoginMessage(this.edt_username_register.string, this.edt_pass_register.string);
         } else {

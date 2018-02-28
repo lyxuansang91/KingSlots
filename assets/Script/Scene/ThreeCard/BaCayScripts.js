@@ -414,6 +414,7 @@ var BacayScene = cc.Class({
             lbl_text.string = message;
             lbl_text.node.color = cc.color(248,213,82,255);
 
+
             var outline = nodeChild.addComponent(cc.LabelOutline);
             outline.color = new cc.Color(0.5, 0.3, 0.7, 1.0);
             outline.width = 3;
@@ -428,8 +429,6 @@ var BacayScene = cc.Class({
                         this.isUpdateMoney = true;
                         var label_money = nodeMoney.addComponent(cc.Label);
                         label_money.string = moneybox.getDisplaychangemoney().toString();
-                        // MLabel::createUpdateMoney(moneybox.displaychangemoney());
-                        // label_money.node.setPosition(cc.p(1334/2,750/2));
                         label_money.node.color = cc.color(248,213,82,255);
 
                         var outline = nodeMoney.addComponent(cc.LabelOutline);
@@ -630,5 +629,12 @@ var BacayScene = cc.Class({
         });
 
     },
+    openRulesPopup: function () {
+        var tabString = ["Mini Poker", "Mini Ba Cây", "Tài xỉu"];
+        Common.showPopup(Config.name.POPUP_WEBVIEW,function(popup) {
+            popup.addTabs(tabString, 1);
+            popup.appear();
+        });
 
+    },
 });
