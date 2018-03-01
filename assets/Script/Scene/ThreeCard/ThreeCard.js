@@ -527,14 +527,6 @@ var ThreeCard = cc.Class({
 
 
         item.node.runAction(cc.sequence(cc.delayTime(2),callFunc2, cc.delayTime(1), cc.fadeOut(1), cc.removeSelf(), null));
-        // var animState = anim.getAnimationState('NoHu');
-        // animState.wrapMode = cc.WrapMode.Normal;
-        // anim.on('finished', function(event) {
-        //     if(event.currentTarget == animState) {
-        //         console.log('clipName has finished');
-        //     }
-        // });
-        // anim.play('NoHu');
     },
     initValue: function(json) {
         var results = JSON.parse(json);
