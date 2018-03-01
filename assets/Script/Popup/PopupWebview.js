@@ -4,7 +4,7 @@ cc.Class({
     extends: CommonPopup,
 
     properties: {
-        webviewUrl: cc.String
+        webViewUrl: cc.String
     },
 
     onLoad: function () {
@@ -24,12 +24,12 @@ cc.Class({
     onEvent: function (index) {
         var tabZoneId = [Config.TAG_GAME_ITEM.MINI_POKER, Config.TAG_GAME_ITEM.MINI_BACAY, Config.TAG_GAME_ITEM.TAIXIU];
 
-        var webview = this.tableView.getComponent(cc.WebView);
-        if(!webview){
-            webview = this.tableView.addComponent(cc.WebView);
+        var webView = this.tableView.getComponent(cc.WebView);
+        if(!webView){
+            webView = this.tableView.addComponent(cc.WebView);
         }
-        webview.node.color = cc.color(0,0,0,255);
-        webview.url = this.webviewUrl + tabZoneId[index - 1];
+        webView.node.color = cc.color(0,0,0,255);
+        webView.url = this.webViewUrl + tabZoneId[index - 1];
 
     },
 
