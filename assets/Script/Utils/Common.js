@@ -692,15 +692,19 @@ var Common = {
         return false
     },
 
-    getHeadHistory: function () {
+    getHeadHistory: function (historyType) {
         var currZoneId = this.getZoneId();
         switch(currZoneId){
             case Config.TAG_GAME_ITEM.MINI_BACAY:
-                var headCell = ["Thời gian", "Tên", "Đặt", "Thắng", "Bộ bài"];
-                return headCell;
+                if(historyType == 1){
+                    return ["Thời gian","Phiên", "Đặt", "Thắng", "Chi tiết"];
+                }else{
+                    return ["Thời gian","Tên", "Đặt", "Thắng", "Chi tiết"];
+                }
+
                 break;
             case Config.TAG_GAME_ITEM.MINI_POKER:
-                var headCell = ["Thời gian", "Tên", "Đặt", "Thắng", "Bộ bài"];
+                var headCell = ["Thời gian", "Tên", "Đặt", "Thắng", "Chi tiết"];
                 return headCell;
                 break;
         }
