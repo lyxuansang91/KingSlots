@@ -501,13 +501,13 @@
     "target": {
       "__id__": 11
     },
-    "component": "BaCayScripts",
+    "component": "ThreeCard",
     "handler": "betEvent",
     "customEventData": ""
   },
   {
     "__type__": "cc.Node",
-    "_name": "BaCayScripts",
+    "_name": "ThreeCard",
     "_objFlags": 0,
     "_parent": {
       "__id__": 1
@@ -521,7 +521,7 @@
       }
     ],
     "_prefab": null,
-    "_id": "889MQkd5JFzpzmut62Zdac",
+    "_id": "ccyqmhpn1I6rqgKoI6U4eg",
     "_opacity": 255,
     "_color": {
       "__type__": "cc.Color",
@@ -538,8 +538,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 1334,
-      "height": 750
+      "width": 0,
+      "height": 0
     },
     "_rotationX": 0,
     "_rotationY": 0,
@@ -547,8 +547,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 667,
-      "y": 375
+      "x": 0,
+      "y": 0
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -1941,7 +1941,7 @@
     "target": {
       "__id__": 11
     },
-    "component": "BaCayScripts",
+    "component": "ThreeCard",
     "handler": "exitRoom",
     "customEventData": ""
   },
@@ -2634,7 +2634,7 @@
     "target": {
       "__id__": 11
     },
-    "component": "BaCayScripts",
+    "component": "ThreeCard",
     "handler": "openSettingPopup",
     "customEventData": ""
   },
@@ -2792,7 +2792,7 @@
     "target": {
       "__id__": 11
     },
-    "component": "BaCayScripts",
+    "component": "ThreeCard",
     "handler": "openRulesPopup",
     "customEventData": ""
   },
@@ -2950,7 +2950,7 @@
     "target": {
       "__id__": 11
     },
-    "component": "BaCayScripts",
+    "component": "ThreeCard",
     "handler": "showTopUser",
     "customEventData": ""
   },
@@ -3108,7 +3108,7 @@
     "target": {
       "__id__": 11
     },
-    "component": "BaCayScripts",
+    "component": "ThreeCard",
     "handler": "quayEvent",
     "customEventData": ""
   },
@@ -3556,7 +3556,7 @@
     "target": {
       "__id__": 11
     },
-    "component": "BaCayScripts",
+    "component": "ThreeCard",
     "handler": "showSpin",
     "customEventData": ""
   },

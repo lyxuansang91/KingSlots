@@ -38,11 +38,11 @@ var Config = {
         COMMON_POPUP : "CommonPopup",
         POPUP_MESSAGE_BOX : "PopupMessageBox",
         POPUP_SETTING : "PopupSetting",
-        POPUP_FULL : "PopupFull",
         POPUP_HISTORY : "PopupHistory",
         POPUP_THREECARD_HISTORY : "PopupThreeCardHistory",
         POPUP_USERINFO : "PopupUserInfo",
         POPUP_WEBVIEW : "PopupWebview",
+        POPUP_MAIL : "PopupMail",
     },
 
     COMMON_POPUP_TYPE: {
@@ -50,5 +50,11 @@ var Config = {
         SCROLL_TAB_IN_TOP: 2,
         SCROLL_TAB_IN_LEFT : 3,
         SCROLL_TAB_IN_TOP_LEFT : 4
-    }
+    },
+
+    USER_VERIFY_CONFIG_TYPE: {
+        SMS : 1,
+        EMAIL : 2,
+        PHONE : 3
+    },
 }

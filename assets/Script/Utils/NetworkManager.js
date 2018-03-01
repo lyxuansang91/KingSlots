@@ -90,8 +90,8 @@ var NetworkManager = {
         VIEW_USER_INFO: 1212,
 /** The Constant REMOVE_FRIEND. */
         REMOVE_FRIEND: 1213,
-/** The Constant LOCK_UP_MONEY_HISTORY. */
-        LOCK_UP_MONEY_HISTORY: 1214,
+/** The Constant LOOK_UP_MONEY_HISTORY. */
+        LOOK_UP_MONEY_HISTORY: 1214,
 /** The Constant INSTANT_MESSAGE. */
         INSTANT_MESSAGE: 1215,
 /** The Constant UPDATE_USER_SETTING. */
@@ -719,6 +719,28 @@ var NetworkManager = {
         request.setBetmoney(betMoney);
         request.setBettype(betType);
         this.callNetwork(this.initData(request.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.BET, Common.getSessionId()));
+    },
+    getLookupMoneyHistoryMessage: function(firstResult, maxResult, filterType) {
+        var request = this.initLookupMoneyHistoryMessage(firstResult, maxResult, filterType);
+        this.callNetwork(this.initData(request.serializeBinary(), Common.getOS(),
+            NetworkManager.MESSAGE_ID.LOOK_UP_MONEY_HISTORY, Common.getSessionId()));
+    },
+    initLookupMoneyHistoryMessage: function(firstResult, maxResult, filterType) {
+        var request = new proto.BINLookUpMoneyHistoryRequest();
+        request.setFirstresult(firstResult);
+        request.setMaxresult(maxResult);
+        request.setFiltertype(filterType);
+        return request;
+    },
+    getUserVerifyConfigRequest: function(type){
+        var request = this.initUserVerifyConfigRequest(type);
+        this.callNetwork(this.initData(request.serializeBinary(), Common.getOS(),
+            NetworkManager.MESSAGE_ID.USER_VERIFY_CONFIG, Common.getSessionId()));
+    },
+    initUserVerifyConfigRequest: function(type){
+        var request = new proto.BINUserVerifyConfigRequest();
+        request.setType(type);
+        return request;
     },
     connectNetwork: function() {
         if(window.ws === null || typeof(window.ws) === 'undefined' || window.ws.readyState === WebSocket.CLOSED) {

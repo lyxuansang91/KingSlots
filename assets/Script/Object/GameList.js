@@ -1,5 +1,5 @@
 var NetworkManager = require('NetworkManager');
-var BaCay = require('BacayScripts');
+var threecard = require('ThreeCard');
 var minipoker = require('minipoker');
 var BaseScene = require('BaseScene');
 
@@ -224,7 +224,7 @@ cc.Class({
             cc.log("enterZone = ", Common.getEnterZone());
             if (Common.getZoneId() === Common.ZONE_ID.MINI_BACAY) {
                 cc.director.loadScene('BaCay',function(){
-                    BaCay.instance.initDataFromLoading(Common.getEnterZone(), response);
+                    threecard.instance.initDataFromLoading(Common.getEnterZone(), response);
                 });
 
             }
