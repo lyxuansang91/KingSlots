@@ -1938,8 +1938,10 @@
   },
   {
     "__type__": "cc.ClickEvent",
-    "target": null,
-    "component": "BaCayScripts",
+    "target": {
+      "__id__": 11
+    },
+    "component": "ThreeCard",
     "handler": "exitRoom",
     "customEventData": ""
   },
@@ -2629,8 +2631,10 @@
   },
   {
     "__type__": "cc.ClickEvent",
-    "target": null,
-    "component": "BaCayScripts",
+    "target": {
+      "__id__": 11
+    },
+    "component": "ThreeCard",
     "handler": "openSettingPopup",
     "customEventData": ""
   },
@@ -2785,8 +2789,10 @@
   },
   {
     "__type__": "cc.ClickEvent",
-    "target": null,
-    "component": "BaCayScripts",
+    "target": {
+      "__id__": 11
+    },
+    "component": "ThreeCard",
     "handler": "openRulesPopup",
     "customEventData": ""
   },
@@ -2941,8 +2947,10 @@
   },
   {
     "__type__": "cc.ClickEvent",
-    "target": null,
-    "component": "BaCayScripts",
+    "target": {
+      "__id__": 11
+    },
+    "component": "ThreeCard",
     "handler": "showTopUser",
     "customEventData": ""
   },
@@ -3097,8 +3105,10 @@
   },
   {
     "__type__": "cc.ClickEvent",
-    "target": null,
-    "component": "BaCayScripts",
+    "target": {
+      "__id__": 11
+    },
+    "component": "ThreeCard",
     "handler": "quayEvent",
     "customEventData": ""
   },
@@ -3543,8 +3553,10 @@
   },
   {
     "__type__": "cc.ClickEvent",
-    "target": null,
-    "component": "BaCayScripts",
+    "target": {
+      "__id__": 11
+    },
+    "component": "ThreeCard",
     "handler": "showSpin",
     "customEventData": ""
   },
