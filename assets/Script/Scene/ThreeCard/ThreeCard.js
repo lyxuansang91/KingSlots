@@ -4,7 +4,7 @@ var HISTORY_SPIN = 1;
 var HISTORY_BREAK_JAR = 2;
 var HISTORY_TOP_USER = 3;
 
-var BacayScripts = cc.Class({
+var ThreeCard = cc.Class({
     extends: BaseScene,
 
     properties: {
@@ -46,11 +46,8 @@ var BacayScripts = cc.Class({
 
     // use this for initialization
     onLoad: function () {
-
-        BacayScripts.instance = this;
         this.userMoney.string = Common.numberFormatWithCommas(Common.getCash());
-        // window.ws.onmessage = this.onGameStatus.bind(this);
-
+        ThreeCard.instance = this;
         this.initFirstCard();
         this.schedule(this.requestJar, 5);
         Common.setMiniThreeCardsSceneInstance(cc.director.getScene());

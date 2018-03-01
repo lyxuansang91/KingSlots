@@ -19,34 +19,31 @@ cc.Class({
     openMailPopup: function () {
         var tabString = ["Mail đến", "Mail đi", "Gửi BQT"];
 
-        Common.showPopup(Config.name.POPUP_FULL,function(message_box) {
-            message_box.addTabs(tabString,MAIL_RECEIVED);
+        Common.showPopup(Config.name.POPUP_MAIL,function(message_box) {
+            message_box.addTabs(tabString, MAIL_RECEIVED);
             message_box.appear();
         });
     },
 
     openChargePopup: function () {
-        var tabString = ["Viettel", "Mobifone", "VinaPhone"];
-        var nodeChild = new cc.Node();
-        nodeChild.parent = this.node;
-        var item = cc.instantiate(this.popupIngame);
-
-        item.getComponent('PopupIngameItem').init(tabString, "charge");
-        item.setPositionX(0);
-        item.setPositionY(0);
-        nodeChild.addChild(item);
-
+        // var tabString = ["Viettel", "Mobifone", "VinaPhone"];
+        // var nodeChild = new cc.Node();
+        // nodeChild.parent = this.node;
         // var item = cc.instantiate(this.popupIngame);
-        // item.setPosition(cc.p(0,0));
-        // item.zIndex = 1000;
-        // this.node.addChild(item);
+        //
+        // item.getComponent('PopupIngameItem').init(tabString, "charge");
+        // item.setPositionX(0);
+        // item.setPositionY(0);
+        // nodeChild.addChild(item);
+
     },
     openUserInfoPopup: function () {
 
         var tabString = ["Hồ sơ", "Lịch sử", "Xác thực tài khoản"];
 
         Common.showPopup(Config.name.POPUP_USERINFO,function(popup) {
-            popup.addTabs(tabString,1);
+
+            popup.addTabs(tabString, 1);
             popup.appear();
         });
 

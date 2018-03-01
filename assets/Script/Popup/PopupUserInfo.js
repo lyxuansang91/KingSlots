@@ -18,17 +18,17 @@ cc.Class({
     },
 
     start: function () {
-        var targetUserId = Common.getUserId();
-        NetworkManager.getViewUserInfoFromServer(targetUserId);
-        this.setTab(USERINFO);
+        // var targetUserId = Common.getUserId();
+        // NetworkManager.getViewUserInfoFromServer(targetUserId);
+        // this.setTab(USERINFO);
     },
 
-    addTabs: function (tabs) {
-        this.initTabs(tabs);
+    addTabs: function (tabs, index) {
+        this.initTabs(tabs, index);
     },
 
-    initTabs: function (tabs) {
-        this._super(tabs);
+    initTabs: function (tabs, index) {
+        this._super(tabs, index);
     },
 
     onEvent: function (index) {
@@ -37,8 +37,10 @@ cc.Class({
             NetworkManager.getViewUserInfoFromServer(targetUserId);
             this.setTab(USERINFO);
         } else if(index === USERINFO_HISTORY){
+            NetworkManager.getLookupMoneyHistoryMessage(firstResult, MAX_RESULT, 1);
             this.setTab(USERINFO_HISTORY);
         } else if(index === USERINFO_VERIFY){
+            NetworkManager.getUserVerifyConfigRequest(Config.USER_VERIFY_CONFIG_TYPE.EMAIL);
             this.setTab(USERINFO_VERIFY);
         }
     },
@@ -66,10 +68,10 @@ cc.Class({
                 var msg = buffer.response;
                 // this.pingMessageResponseHandler(msg);
                 break;
-            // case NetworkManager.MESSAGE_ID.LOOKUP_MONEY_HISTORY:
-            //     var msg = buffer.response;
-            //     this.pingMessageResponseHandler(msg);
-            //     break;
+            case NetworkManager.MESSAGE_ID.LOOK_UP_MONEY_HISTORY:
+                var msg = buffer.response;
+                this.lookupMoneyHistoryResponse(msg);
+                break;
             default:
                 isDone = false;
                 break;
@@ -126,12 +128,30 @@ cc.Class({
                 for (var i = 0; i < response.getMoneyboxesList().length; i++) {
                     lstMoneyLogs.push(response.getMoneyboxesList()[i]);
                 }
-                // loadMoneyLogHistory(lstMoneyLogs);
+                this.loadMoneyLogsHistory(lstMoneyLogs);
             }
             if (response.hasMessage()){
                 Common.showToast(response.getMessage(), 2);
             }
         }
+    },
+
+    loadMoneyLogsHistory: function(lstMoneyLogs){
+        // if (!lstMoneyLogs.empty()){
+        //     this->lstMoneyLogs.insert(this->lstMoneyLogs.end(), lstMoneyLogs.begin(), lstMoneyLogs.end());
+        //
+        //     tableView->reloadData();
+        //
+        //     if (this->lstMoneyLogs.size() > NUM_LOAD_MORE_ITEM){ //set lai selection
+        //         int mod = (this->lstMoneyLogs.size() % NUM_LOAD_MORE_ITEM);
+        //         int numPos = mod == 0 ? NUM_LOAD_MORE_ITEM : mod;
+        //         tableView->setContentOffset(Vec2(0, -numPos * heightTable / 5), false);
+        //         //tableView->getContainer()->setPosition(Vec2(0, -numPos * heightTable / 6));
+        //     }
+        // }
+        // else if(this->lstMoneyLogs.empty()){
+        //     tableView->reloadData();
+        // }
     },
 
     setTab: function (tab) {
