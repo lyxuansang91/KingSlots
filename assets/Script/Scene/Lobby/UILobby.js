@@ -20,7 +20,7 @@ cc.Class({
         var tabString = ["Mail đến", "Mail đi", "Gửi BQT"];
 
         Common.showPopup(Config.name.POPUP_FULL,function(message_box) {
-            message_box.init(tabString, "mail", MAIL_RECEIVED);
+            message_box.addTabs(tabString,MAIL_RECEIVED);
             message_box.appear();
         });
     },
@@ -46,7 +46,7 @@ cc.Class({
         var tabString = ["Hồ sơ", "Lịch sử", "Xác thực tài khoản"];
 
         Common.showPopup(Config.name.POPUP_USERINFO,function(popup) {
-            popup.addTabs(tabString);
+            popup.addTabs(tabString,1);
             popup.appear();
         });
 

@@ -92,7 +92,7 @@ cc.Class({
 
             if (response.getResponsecode()) {
                 var number = response.getHistoriesList().length;
-                var headCell = Common.getHeadHistory();
+                var headCell = Common.getHeadHistory(this.historyType);
                 var data = this._getdata(headCell,response.getHistoriesList(), number);
 
                 self.tableView.getComponent(cc.tableView).initTableView(data.length, { array: data, target: this });

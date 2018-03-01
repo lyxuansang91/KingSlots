@@ -83,11 +83,17 @@ cc.Class({
 
         var obj = data.array[index];
 
+        delete obj.date_time;
+
+        cc.log("data : ",obj);
+
         var lengthData = Object.keys(obj).length;
 
-        this.resetCell(lengthData - 1,index);
+        this.resetCell(lengthData,index);
 
-        cc.log("list_text : ",this.list_text.length);
+        if(this.list_text.length != lengthData){
+            return;
+        }
 
         var lastItem = obj[Object.keys(obj)[lengthData-1]];
 
@@ -95,16 +101,14 @@ cc.Class({
         var findComma = lastItem.toString().search(re2);
         var card = findComma !== -1 ? obj[Object.keys(obj)[lengthData-1]].split(',') : [];
 
-        for(var i = 1; i < lengthData; i++){
+        for(var i = 0; i < lengthData; i++){
             var text = obj[Object.keys(obj)[i]].toString();
-            if(i == 1 && index != 0){
-
+            if(lengthData == 4 && i == 0 && index != 0){
                 text = "#" + text;
-
             }
 
-            if(i == lengthData - 1 && i == 4 && index != 0){
-                if(card.length > 1){
+            if(i == lengthData - 1 && index != 0){
+                if(card.length > 1){ // chuỗi trả về là 1 phần tử khi rỗng
                     for(var j = 0; j < card.length; j++){
 
                         var item = cc.instantiate(this.prefabData).getComponent('CardItem');
@@ -120,13 +124,16 @@ cc.Class({
 
                         this.node_card.addChild(item.node);
                     }
+                }else{
+                    this.list_text[i].string = text;
+                    this.list_text[i].node.color = cc.color(94,60,17,255);
                 }
             }else{
-                this.list_text[i - 1].string = text;
+                this.list_text[i].string = text;
                 if(index == 0){
-                    this.list_text[i - 1].node.color = cc.color(255,248,198,255);
+                    this.list_text[i].node.color = cc.color(255,248,198,255);
                 }else{
-                    this.list_text[i - 1].node.color = cc.color(94,60,17,255);
+                    this.list_text[i].node.color = cc.color(94,60,17,255);
                 }
             }
         }
