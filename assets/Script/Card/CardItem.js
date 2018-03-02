@@ -23,6 +23,14 @@ cc.Class({
         texSuitSmall: {
             default: [],
             type: cc.SpriteFrame
+        },
+        texSuitBigPoker: {
+            default: [],
+            type: cc.SpriteFrame
+        },
+        texSuitSmallPoker: {
+            default: [],
+            type: cc.SpriteFrame
         }
     },
 
@@ -41,20 +49,38 @@ cc.Class({
         this.suit.node.active = null;
 
     },
-    replaceCard: function (cardValue) {
-        // cc.log("cardValue =", cardValue);
+    replaceCard: function (cardValue, type) {
         var pointValue = CardType.getPoint(cardValue);
         var suitValue = CardType.getSuit(cardValue);
 
-        var card = new Types.Card(pointValue, suitValue);
+        var card = new Types.Card(pointValue, suitValue, type);
 
-        var isFaceCard = card.point > 10;
+        var isFaceCard = false;
+
+        if(type === 1){
+            if(card.point > 9 && card.point <= 12){
+                isFaceCard = true;
+            }
+        } else {
+            if(card.point > 10){
+                isFaceCard = true;
+            }
+        }
 
         if (isFaceCard) {
-            this.mainPic.spriteFrame = this.texFaces[card.point - 10 - 1];
+            if(type === 1){
+                this.mainPic.spriteFrame = this.texFaces[card.point - 10];
+            } else {
+                this.mainPic.spriteFrame = this.texFaces[card.point - 10 - 1];
+            }
+            // this.mainPic.spriteFrame = this.texFaces[card.point - 10 - 1];
         }
         else {
-            this.mainPic.spriteFrame = this.texSuitBig[card.suit];
+            if(type === 1){
+                this.mainPic.spriteFrame = this.texSuitBigPoker[card.suit];
+            } else {
+                this.mainPic.spriteFrame = this.texSuitBig[card.suit];
+            }
         }
 
         // for jsb
@@ -66,8 +92,12 @@ cc.Class({
         else {
             this.point.node.color = this.blackTextColor;
         }
+        if(type === 1){
+            this.suit.spriteFrame = this.texSuitSmallPoker[card.suit];
+        } else {
+            this.suit.spriteFrame = this.texSuitSmall[card.suit];
+        }
 
-        this.suit.spriteFrame = this.texSuitSmall[card.suit];
 
     },
     setBg: function (isBoolean) {

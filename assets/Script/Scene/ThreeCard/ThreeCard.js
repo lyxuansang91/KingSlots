@@ -68,7 +68,7 @@ var ThreeCard = cc.Class({
                 var item = cc.instantiate(this.cardPrefab);
                 var posX = (j - 1) * item.getContentSize().width;
                 var posY = (i - 1) * item.getContentSize().height;
-                item.getComponent('CardItem').replaceCard(items_value[i][j]);
+                item.getComponent('CardItem').replaceCard(items_value[i][j], 0);
                 item.setPositionY(posY);
                 item.setPositionX(posX);
 
@@ -125,7 +125,7 @@ var ThreeCard = cc.Class({
         cc.log("betMoney =", betMoney);
         if(betMoney > money){
             var message = "Bạn không có đủ tiền!";
-            this.showToast(message);
+            Common.showToast(message);
             return;
         }
         if (this.autoSpinToggle.isChecked) {
@@ -136,9 +136,7 @@ var ThreeCard = cc.Class({
             this.getTurnMiniThreeCardsRequest(this.calculateTurnType());
         }else{
             var message = "Xin vui lòng đợi!";
-            this.showToast(message);
-            // item.showToast(message);
-            // this.node.addChild(item.node);
+            Common.showToast(message);
         }
     },
     getTurnMiniThreeCardsRequest: function(turnType) {
@@ -153,18 +151,7 @@ var ThreeCard = cc.Class({
         entries.push(entry);
         NetworkManager.getTurnMessageFromServer(0, entries);
     },
-    // onGameStatus: function(event) {
-    //     if(event.data!==null || typeof(event.data) !== 'undefined') {
-    //         var lstMessage = NetworkManager.parseFrom(event.data, event.data.byteLength);
-    //         // cc.log("lstMessage =", lstMessage.shift());
-    //         if(lstMessage.length > 0) {
-    //             for(var i = 0; i < lstMessage.length; i++){
-    //                 var buffer = lstMessage[i];
-    //                 this.handleMessage(buffer);
-    //             }
-    //         }
-    //     }
-    // },
+
 
     exitRoomResponsehandler: function (resp) {
         cc.log("exit room response handler:", resp.toObject());
@@ -313,7 +300,7 @@ var ThreeCard = cc.Class({
             if(i < 3*this.number){
                 var i1 = this.stepCard - (3 - x);
                 var j1 = y;
-                this.list_item[i].getComponent('CardItem').replaceCard(this.list_recent_value[i1][j1]);
+                this.list_item[i].getComponent('CardItem').replaceCard(this.list_recent_value[i1][j1], 0);
             }
 
             var posX = (y - 1) * this.list_item[i].getContentSize().width;
@@ -333,7 +320,7 @@ var ThreeCard = cc.Class({
 
             var card_value = items_value[x][y];
             if(i >= 3*this.number){
-                card.getComponent('CardItem').replaceCard(card_value);
+                card.getComponent('CardItem').replaceCard(card_value, 0);
             }
 
             var h = card.getContentSize().height;
@@ -384,7 +371,7 @@ var ThreeCard = cc.Class({
             cc.log("betMoney =", betMoney);
             if(betMoney > money){
                 var message = "Bạn không có đủ tiền!";
-                this.showToast(message);
+                Common.showToast(message);
                 this.autoSpinToggle.isChecked = false;
                 return;
             }
@@ -504,10 +491,9 @@ var ThreeCard = cc.Class({
             }
         }
 
-        // if (response.hasMessage() && !response.getMessage()) {
-        //     cc.log("mess =", response.getMessage());
-        //     this.showToast(response.getMessage(), this, 2);
-        // }
+        if (response.hasMessage() && !response.getMessage()) {
+            Common.showToast(response.getMessage());
+        }
 
         this.isRequestJar = false;
     },
@@ -581,9 +567,6 @@ var ThreeCard = cc.Class({
 
         this.moneyBet.string = this.getBetMoney();
         this.requestJar();
-    },
-    showToast: function (strMess,delayTime) {
-        this._super(strMess,delayTime);
     },
     requestJar: function() {
         if (!this.isRequestJar) {
