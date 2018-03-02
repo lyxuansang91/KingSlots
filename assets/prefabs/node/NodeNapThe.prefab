@@ -324,7 +324,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "view_info_provider",
+    "_name": "table_view",
     "_objFlags": 0,
     "_parent": {
       "__id__": 8
