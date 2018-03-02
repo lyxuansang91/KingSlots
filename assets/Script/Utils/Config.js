@@ -6,6 +6,7 @@ var Config = {
         POPUP : 100,
         LOADING: 101,
     },
+
     TAG_GAME_ITEM: {
         BACAY: 1,
         XITO: 2,
@@ -49,8 +50,13 @@ var Config = {
         NORMAL : 1,
         SCROLL_TAB_IN_TOP: 2,
         SCROLL_TAB_IN_LEFT : 3,
-        SCROLL_TAB_IN_TOP_LEFT : 4
+        SCROLL_TAB_IN_TOP_LEFT : 4,
+        MESSAGE_BOX : {
+            CONFIRM_TYPE: 0,
+            MESSAGEBOX_TYPE: 1
+        }
     },
+
 
     USER_VERIFY_CONFIG_TYPE: {
         SMS : 1,

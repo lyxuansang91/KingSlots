@@ -8,8 +8,6 @@ cc.Class({
         btnCancel: cc.Button,
         message: cc.Label,
         type: 0,
-        CONFIRM_TYPE: 0,
-        MESSAGEBOX_TYPE: 1,
         _callback: function() {}
     },
 

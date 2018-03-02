@@ -380,8 +380,12 @@ var Common = {
         }
 
     },
-
-
+    getCp: function() {
+        return "24";
+    },
+    getVersionCode: function() {
+        return "15";
+    },
     phoneNumber: "",
     setPhoneNunber: function(phoneNumber){
         this.phoneNumber = phoneNumber;

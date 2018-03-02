@@ -1,5 +1,6 @@
 var NetworkManager = require('NetworkManager');
 var BaseScene = require('BaseScene');
+var Config = require('Config');
 
 cc.Class({
     extends: BaseScene,
@@ -97,7 +98,7 @@ cc.Class({
         } else {
 
             Common.showPopup(Config.name.POPUP_MESSAGE_BOX,function(message_box) {
-                message_box.init(buffer.getMessage(), 0, function() {
+                message_box.init(buffer.getMessage(), Config.COMMON_POPUP_TYPE.MESSAGE_BOX.CONFIRM_TYPE, function() {
                     cc.log("on callback");
                 });
                 message_box.appear();
@@ -146,7 +147,7 @@ cc.Class({
 
         if(res.hasMessage() && res.getMessage() !== "") {
             Common.showPopup(Config.name.POPUP_MESSAGE_BOX,function(message_box) {
-                message_box.init(res.getMessage(), 1, function() {
+                message_box.init(res.getMessage(), Config.COMMON_POPUP_TYPE.MESSAGE_BOX.MESSAGEBOX_TYPE, function() {
                     cc.log("on callback");
                 });
                 message_box.appear();

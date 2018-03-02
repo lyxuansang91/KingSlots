@@ -750,8 +750,9 @@ var NetworkManager = {
 
             window.ws.onopen = function (event) {
                 console.log("on web socket");
-                NetworkManager.requestInitializeMessage("24", "15","xxxxx","xxxxx", "vn", "vi", "com.gamebai.tienlen", false, "");
-                // Common.getFingerprint(), Common.getDeviceInfo(), "vn", "vi", Common.getPackageName(), false, "");
+                // NetworkManager.requestInitializeMessage("24", "15","xxxxx","xxxxx", "vn", "vi", "com.gamebai.tienlen", false, "");
+                NetworkManager.requestInitializeMessage(Common.getCp(), Common.getVersionCode(), Common.getFingerprint(),
+                    Common.getDeviceInfo(), "vn", "vi", Common.getPackageName(), false, "");
                 setTimeout(function() {
                     window.myInterval = setInterval(function() {
                         NetworkManager.requestPingMessage(0);
