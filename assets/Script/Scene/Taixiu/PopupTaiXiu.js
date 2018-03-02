@@ -1,6 +1,7 @@
 let BaseScene = require('BaseScene');
 let NetworkManager = require('NetworkManager');
 let Gate = require('Gate');
+let ItemChat = require('ItemChat');
 
 let TABLE_STATE = {
     BET: 1,
@@ -33,8 +34,8 @@ cc.Class({
         total_money_xiu : cc.Label,
         bet_money_tai : cc.Label,
         bet_money_xiu : cc.Label,
-        total_bet_money_tai : cc.Label,
-        total_bet_money_xiu : cc.Label,
+        total_bet_tai : cc.Label,
+        total_bet_xiu : cc.Label,
         tai_number_user : cc.Label,
         xiu_number_user : cc.Label,
         isNumber: false,
@@ -42,6 +43,7 @@ cc.Class({
         betState: -1,
         enterRoomResponse: null,
         roomIndex: -1,
+        lstMessageChat: [ItemChat]
     },
 
     cancel: function() {
@@ -203,8 +205,23 @@ cc.Class({
     instantMessageResponseHandler: function(resp) {
         cc.log("instant message response:", resp.toObject());
         if(resp.getResponsecode()) {
-
+            var message = resp.hasInstantmessage() ? resp.getInstantmessage() : "";
+            var itemChat = new ItemChat();
+            itemChat.emoticonId = resp.getTextemoticonid();
+            itemChat.messageChat = message;
+            itemChat.senderUserId = resp.getSenderuserid();
+            itemChat.senderUserName = resp.getSendername();
+            itemChat.colorCode = resp.getColorcode();
+            this.lstMessageChat.push(itemChat);
+            this.appendMesasgeChat();
         }
+
+        if(resp.hasMessage() && resp.getMessage() !== "") {
+            Common.showToast(resp.getMessage(), 2.0);
+        }
+    },
+    appendMesasgeChat: function() {
+        // TODO: Append message chat
     },
     betResponseHandler: function(resp) {
         cc.log("bet response:", resp.toObject());

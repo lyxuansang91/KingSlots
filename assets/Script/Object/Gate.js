@@ -1,4 +1,4 @@
-cc.Class({
+var Gate = cc.Class({
     properties: {
         gateID: 0,
         userCount: 0,

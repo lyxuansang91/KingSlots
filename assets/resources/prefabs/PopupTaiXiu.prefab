@@ -51,8 +51,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 1334,
-      "height": 750
+      "width": 0,
+      "height": 0
     },
     "_rotationX": 0,
     "_rotationY": 0,
@@ -60,8 +60,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 667,
-      "y": 375
+      "x": 0,
+      "y": 0
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -9091,10 +9091,10 @@
     "bet_money_xiu": {
       "__id__": 57
     },
-    "total_bet_money_tai": {
+    "total_bet_tai": {
       "__id__": 105
     },
-    "total_bet_money_xiu": {
+    "total_bet_xiu": {
       "__id__": 77
     },
     "tai_number_user": {
@@ -9107,7 +9107,8 @@
     "currentBet": 0,
     "betState": -1,
     "enterRoomResponse": null,
-    "roomIndex": -1
+    "roomIndex": -1,
+    "lstMessageChat": []
   },
   {
     "__type__": "cc.Widget",
