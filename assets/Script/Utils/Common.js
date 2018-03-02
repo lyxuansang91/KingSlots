@@ -716,11 +716,10 @@ var Common = {
 
     showToast: function (strMess, delayTime) {
         if(strMess == ""){
-
-            //return;
+            return;
         }
 
-        var delay = delayTime !== null ? delayTime : 2;
+        var delay = (delayTime !== undefined) ? delayTime : 2;
 
         var scene = cc.director.getScene();
         if(cc.isValid(scene)){
@@ -740,7 +739,7 @@ var Common = {
                 })
             }else{
                 var toast = scene.getChildByName("Toast").getComponent("Toast");
-                toast.loadMessage(strMess,delayTime);
+                toast.loadMessage(strMess,delay);
             }
         }
     }

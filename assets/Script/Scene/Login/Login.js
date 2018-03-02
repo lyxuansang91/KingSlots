@@ -174,22 +174,22 @@ cc.Class({
         var password = this.edt_password.string;
 
         if(username === "" || password === "") {
-            this.showToast(Common.KEYTEXT.BLANK_USERNAME,1);
+            Common.showToast(Common.KEYTEXT.BLANK_USERNAME,1);
             return;
         }
 
         if(Common.isWhiteSpaceText(username)) {
-            this.showToast(Common.KEYTEXT.TXT_REMIND2,1);
+            Common.showToast(Common.KEYTEXT.TXT_REMIND2,1);
             return;
         }
 
         if(username.length < 3 || username.length > 12){
-            this.showToast(Common.KEYTEXT.TXT_REMIND4,1);
+            Common.showToast(Common.KEYTEXT.TXT_REMIND4,1);
             return;
         }
 
         if(username.length < 6 || username.length > 12){
-            this.showToast(Common.KEYTEXT.TXT_REMIND5,1);
+            Common.showToast(Common.KEYTEXT.TXT_REMIND5,1);
             return;
         }
 
@@ -199,11 +199,11 @@ cc.Class({
     register: function() {
         if(this.edt_username_register.string === "" || this.edt_pass_register.string === "" ||
             this.edt_repass_register.string === "" || this.edt_displayname_register === "") {
-            this.showToast("Dữ liệu không được để trống");
+            Common.showToast("Dữ liệu không được để trống");
             return;
         }
         if(this.edt_pass_register.string !== this.edt_repass_register.string) {
-            this.showToast("Mật khẩu phải giống nhau!");
+            Common.showToast("Mật khẩu phải giống nhau!");
             return;
         }
         NetworkManager.requestRegisterMessage(this.edt_username_register.string, this.edt_pass_register.string,
@@ -289,8 +289,5 @@ cc.Class({
             Common.setAutoDenyInvitation(userSetting.getAutodenyinvitation());
             cc.sys.localStorage.setItem("DENY_INVITES", userSetting.getAutodenyinvitation());
         }
-    },
-    showToast: function (strMess, target) {
-        this._super(strMess, target);
     }
 });

@@ -92,37 +92,6 @@ cc.Class({
         Common.showPopup(Config.name.POPUP_SETTING,function(popup) {
             popup.appear();
         });
-    },
-
-    showToast: function (strMess, delayTime) {
-        if(strMess == ""){
-
-            //return;
-        }
-
-        var delay = delayTime !== null ? delayTime : 2;
-
-        var scene = cc.director.getScene();
-        if(cc.isValid(scene)){
-            if(!cc.isValid(scene.getChildByName("Toast"))){
-                cc.loader.loadRes("prefabs/Toast",function(error, prefab) {
-                    if(!error){
-                        var toast_prefab = cc.instantiate(prefab);
-                        if(cc.isValid(toast_prefab)){
-                            toast_prefab.x = Common.width / 2;
-                            toast_prefab.y = Common.height / 2;
-
-                            var toast = toast_prefab.getComponent("Toast");
-                            toast.loadMessage(strMess,delay);
-                            scene.addChild(toast_prefab,Config.index.LOADING);
-                        }
-                    }
-                })
-            }else{
-                var toast = scene.getChildByName("Toast").getComponent("Toast");
-                toast.loadMessage(strMess,delayTime);
-            }
-        }
     }
 });
 

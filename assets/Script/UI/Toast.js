@@ -10,6 +10,8 @@ cc.Class({
     loadMessage: function (message,delay) {
         var self = this;
 
+        cc.log("DELAY : ",delay);
+
         var callFunc = cc.callFunc(function(){
             /*var scene = cc.director.getScene();
             if(cc.isValid(scene.getChildByName("Toast"))){
