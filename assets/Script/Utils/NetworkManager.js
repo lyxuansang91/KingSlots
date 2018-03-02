@@ -239,6 +239,9 @@ var NetworkManager = {
     checkEvent: function (checkMessage) {
         if(window.listMessage !== null && typeof(window.listMessage) !== 'undefined'  && window.listMessage.length > 0) {
             var buffer = window.listMessage[0];
+            if(buffer.message_id === NetworkManager.MESSAGE_ID.FILTER_MAIL) {
+                cc.log("filter mail:", window.listMessage.length)
+            }
             var result = checkMessage(buffer);
             if(result) {
                 NetworkManager.hideLoading();
@@ -374,6 +377,12 @@ var NetworkManager = {
                 break;
             case NetworkManager.MESSAGE_ID.VIEW_USER_INFO:
                 msg = proto.BINViewUserInfoResponse.deserializeBinary(bytes);
+                break;
+            case NetworkManager.MESSAGE_ID.FILTER_MAIL:
+                msg = proto.BINFilterMailResponse.deserializeBinary(bytes);
+                break;
+            case NetworkManager.MESSAGE_ID.SEND_MAIL:
+                msg = proto.BINSendMailResponse.deserializeBinary(bytes);
                 break;
             default:
                 break;
@@ -673,6 +682,7 @@ var NetworkManager = {
             request.setAsc(asc);
         }
         cc.log("zone =", Common.getZoneId());
+        cc.log("request history =", request);
         this.requestMessage(request.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.LOOK_UP_GAME_HISTORY, Common.getSessionId());
     },
     getCardConfigRequest: function(type){
@@ -707,9 +717,7 @@ var NetworkManager = {
 
     },
     getViewUserInfoFromServer: function(targetUserId) {
-        cc.log("targetUserId =", targetUserId);
         var request = new proto.BINViewUserInfoRequest();
-        cc.log("request =", request);
         request.setTargetuserid(targetUserId);
         this.callNetwork(this.initData(request.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.VIEW_USER_INFO, Common.getSessionId()));
     },
@@ -741,6 +749,16 @@ var NetworkManager = {
         var request = new proto.BINUserVerifyConfigRequest();
         request.setType(type);
         return request;
+    },
+    sendMail: function(recipientuserId, title, body, parent_id){
+        var request = new proto.BINSendMailRequest();
+
+        request.setRecipientuserid(recipientuserId);
+        request.setTitle(title);
+        request.setBody(body);
+        request.setParentid(parent_id);
+        this.callNetwork(this.initData(request.serializeBinary(), Common.getOS(),
+            NetworkManager.MESSAGE_ID.SEND_MAIL, Common.getSessionId()));
     },
     connectNetwork: function() {
         if(window.ws === null || typeof(window.ws) === 'undefined' || window.ws.readyState === WebSocket.CLOSED) {
@@ -778,6 +796,9 @@ var NetworkManager = {
             var lstMessage = NetworkManager.parseFrom(event.data, event.data.byteLength);
             for(var i = 0; i < lstMessage.length; i++) {
                 cc.log(" message id:", lstMessage[i].message_id);
+                if(lstMessage[i].message_id === 1202) {
+                    cc.log("done");
+                }
                 window.listMessage.push(lstMessage[i]);
             }
         }
@@ -795,7 +816,7 @@ var NetworkManager = {
             window.ws.binaryType = "arraybuffer";
 
             window.ws.onopen = function () {
-                console.log("on web socket");
+                cc.log("on web socket");
                 setTimeout(function(){
                     window.ws.send(ackBuf);
                 }, 0.5);

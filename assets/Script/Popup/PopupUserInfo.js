@@ -37,10 +37,10 @@ cc.Class({
             NetworkManager.getViewUserInfoFromServer(targetUserId);
             this.setTab(USERINFO);
         } else if(index === USERINFO_HISTORY){
-            NetworkManager.getLookupMoneyHistoryMessage(firstResult, MAX_RESULT, 1);
+            // NetworkManager.getLookupMoneyHistoryMessage(firstResult, MAX_RESULT, 1);
             this.setTab(USERINFO_HISTORY);
         } else if(index === USERINFO_VERIFY){
-            NetworkManager.getUserVerifyConfigRequest(Config.USER_VERIFY_CONFIG_TYPE.EMAIL);
+            // NetworkManager.getUserVerifyConfigRequest(Config.USER_VERIFY_CONFIG_TYPE.EMAIL);
             this.setTab(USERINFO_VERIFY);
         }
     },

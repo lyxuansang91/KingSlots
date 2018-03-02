@@ -1,34 +1,22 @@
 cc.Class({
-    extends: cc.Component,
+    extends: require('viewCell'),
 
     properties: {
-        // foo: {
-        //     // ATTRIBUTES:
-        //     default: null,        // The default value will be used only when the component attaching
-        //                           // to a node for the first time
-        //     type: cc.SpriteFrame, // optional, default is typeof default
-        //     serializable: true,   // optional, default is true
-        // },
-        // bar: {
-        //     get () {
-        //         return this._bar;
-        //     },
-        //     set (value) {
-        //         this._bar = value;
-        //     }
-        // },
+
         lbl_title: cc.RichText,
         lbl_sender: cc.Label,
         btn_delete: cc.Button
     },
 
-    // LIFE-CYCLE CALLBACKS:
 
-    // onLoad () {},
+    init: function (index, data, reload, group) {
 
-    start: function () {
+        var obj = data.array[index];
 
-    },
+        this.lbl_title.string = obj[Object.keys(obj)[0]].toString();
+        this.lbl_sender.string = obj[Object.keys(obj)[1]].toString();
+
+    }
 
 
 });

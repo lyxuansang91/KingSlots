@@ -609,7 +609,7 @@
       "__id__": 14
     },
     "_enabled": true,
-    "transition": 2,
+    "transition": 3,
     "pressedColor": {
       "__type__": "cc.Color",
       "r": 255,
@@ -684,6 +684,9 @@
       "__id__": 1
     },
     "_enabled": true,
+    "tableView": null,
+    "_isCellInit_": false,
+    "_longClicked_": false,
     "lbl_title": {
       "__id__": 9
     },
