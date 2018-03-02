@@ -138,6 +138,7 @@ cc.Class({
             return true;
         }
         isDone = true;
+
         switch (buffer.message_id) {
             case NetworkManager.MESSAGE_ID.ENTER_ZONE:
                 var msg = buffer.response;
@@ -150,10 +151,6 @@ cc.Class({
             case NetworkManager.MESSAGE_ID.JAR:
                 var msg = buffer.response;
                 this.jarResponseHandler(msg);
-                break;
-            case NetworkManager.MESSAGE_ID.FILTER_MAIL:
-                var msg = buffer.response;
-                //PopupFull.instance.lookupGameMiniPokerResponseHandler(msg);
                 break;
             default:
                 isDone = false;
