@@ -63,4 +63,4 @@ var Config = {
         EMAIL : 2,
         PHONE : 3
     },
-}
+};

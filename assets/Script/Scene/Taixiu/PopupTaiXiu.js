@@ -41,8 +41,9 @@ cc.Class({
         currentBet: 0,
         betState: -1,
         enterRoomResponse: null,
-        roomIndex: -1
+        roomIndex: -1,
     },
+
     cancel: function() {
 
     },
@@ -103,7 +104,7 @@ cc.Class({
         if(this.betState !== BET_STATE.XIU) {
             this.bet_money_xiu.string = "0";
             this.betState = BET_STATE.XIU;
-            this.bet_money_tai.string = "ĐẶT TÀI"
+            this.bet_money_tai.string = "ĐẶT TÀI";
             this.currentBet = 0;
         }
     },
