@@ -1,10 +1,10 @@
 var CardType = {
     getSuitName: function (cardValue) {
         var Suit = cc.Enum({
-            Spade: 1, //bich
-            Heart: 3, //co
-            Club: 2, //tep
             Diamond: 0, //ro
+            Spade: 1, //bich
+            Club: 2, //tep
+            Heart: 3, //co
         });
 
         var suit = cardValue % 4;

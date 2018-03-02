@@ -1,21 +1,24 @@
 var Suit = cc.Enum({
-    Spade: 1,   // 黑桃
-    Heart: 3,   // 红桃
-    Club: 2,    // 梅花(黑)
-    Diamond: 0, // 方块(红)
+    Spade: 1,
+    Heart: 3,
+    Club: 2,
+    Diamond: 0,
 });
 
 var A2_10JQK = 'NAN,A,2,3,4,5,6,7,8,9,10,J,Q,K'.split(',');
 
-/**
- * 扑克牌类，只用来表示牌的基本属性，不包含游戏逻辑，所有属性只读，
- * 因此全局只需要有 52 个实例（去掉大小王），不论有多少副牌
- * @class Card
- * @constructor
- * @param {Number} point - 可能的值为 1 到 13
- * @param {Suit} suit
- */
-function Card (point, suit) {
+function Card (point, suit, type) {
+    cc.log("suit =", suit);
+    if(type === 1){
+        Suit = cc.Enum({
+            Spade: 1,
+            Heart: 0,
+            Club: 2,
+            Diamond: 3,
+        });
+
+        A2_10JQK = 'NAN,2,3,4,5,6,7,8,9,10,J,Q,K,A'.split(',');
+    }
     Object.defineProperties(this, {
         point: {
             value: point,
@@ -25,9 +28,6 @@ function Card (point, suit) {
             value: suit,
             writable: false
         },
-        /**
-         * @property {Number} id - 可能的值为 0 到 51
-         */
         id: {
             value: (suit - 1) * 13 + (point - 1),
             writable: false
@@ -60,18 +60,12 @@ Card.prototype.toString = function () {
     return this.suitName + ' ' + this.pointName;
 };
 
-// 存放 52 张扑克的实例
 var cards = new Array(52);
 
-/**
- * 返回指定 id 的实例
- * @param {Number} id - 0 到 51
- */
 Card.fromId = function (id) {
     return cards[id];
 };
 
-// 初始化所有扑克牌
 (function createCards () {
     for (var s = 1; s <= 4; s++) {
         for (var p = 1; p <= 13; p++) {
@@ -81,26 +75,23 @@ Card.fromId = function (id) {
     }
 })();
 
-// 手中牌的状态
 var ActorPlayingState = cc.Enum({
     Normal: -1,
-    Stand: -1,  // 停牌
-    Report: -1, // 报到
-    Bust: -1,   // 爆了
+    Stand: -1,
+    Report: -1,
+    Bust: -1,
 });
 
-// 输赢
 var Outcome = cc.Enum({
     Win: -1,
     Lose: -1,
     Tie: -1,
 });
 
-// 牌型，值越大越厉害
 var Hand = cc.Enum({
-    Normal: -1,     // 无
-    BlackJack: -1,  // 黑杰克
-    FiveCard: -1,   // 五小龙
+    Normal: -1,
+    BlackJack: -1,
+    FiveCard: -1,
 });
 
 module.exports = {

@@ -578,6 +578,34 @@
       {
         "__uuid__": "aaef784e-73c2-4faa-8579-0352efe9a7e7"
       }
+    ],
+    "texSuitBigPoker": [
+      {
+        "__uuid__": "0cf7ea34-c187-4478-94de-97013e4fe56b"
+      },
+      {
+        "__uuid__": "b3d57405-6597-42f1-a07f-16bd03a4f3a7"
+      },
+      {
+        "__uuid__": "9f7a8f96-e902-43c4-970f-b75046720528"
+      },
+      {
+        "__uuid__": "02753665-1d3d-4cad-9d6f-891bf283aaf0"
+      }
+    ],
+    "texSuitSmallPoker": [
+      {
+        "__uuid__": "aaef784e-73c2-4faa-8579-0352efe9a7e7"
+      },
+      {
+        "__uuid__": "eefc568c-52a7-4369-9e12-402b34ab2230"
+      },
+      {
+        "__uuid__": "9336dba9-3e62-4c8f-b131-e4ecc673f3a3"
+      },
+      {
+        "__uuid__": "d8e17c7c-8c12-4ad5-99af-16f039b20fcd"
+      }
     ]
   },
   {

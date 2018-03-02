@@ -191,7 +191,7 @@ var MiniPoker = cc.Class({
                 var item = cc.instantiate(this.cardPrefab);
                 var posX = (j - 2) * item.getContentSize().width * 0.75;
                 var posY = (i - 1) * item.getContentSize().height;
-                item.getComponent('CardItem').replaceCard(items_value[i][j]);
+                item.getComponent('CardItem').replaceCard(items_value[i][j], 1);
                 item.setPositionY(posY);
                 item.setPositionX(posX);
 
@@ -374,7 +374,7 @@ var MiniPoker = cc.Class({
             if(i < 3*this.number){
                 var i1 = this.stepCard - (3 - x);
                 var j1 = y;
-                this.list_item[i].getComponent('CardItem').replaceCard(this.list_recent_value[i1][j1]);
+                this.list_item[i].getComponent('CardItem').replaceCard(this.list_recent_value[i1][j1], 1);
             }
 
             var posX = (y - 2) * this.list_item[i].getContentSize().width * 0.75;
@@ -394,7 +394,7 @@ var MiniPoker = cc.Class({
 
             var card_value = items_value[x][y];
             if(i >= 3*this.number){
-                card.getComponent('CardItem').replaceCard(card_value);
+                card.getComponent('CardItem').replaceCard(card_value, 1);
             }
 
             var h = card.getContentSize().height;
