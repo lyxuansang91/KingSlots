@@ -752,13 +752,34 @@ var NetworkManager = {
     },
     sendMail: function(recipientuserId, title, body, parent_id){
         var request = new proto.BINSendMailRequest();
-
         request.setRecipientuserid(recipientuserId);
         request.setTitle(title);
         request.setBody(body);
         request.setParentid(parent_id);
         this.callNetwork(this.initData(request.serializeBinary(), Common.getOS(),
             NetworkManager.MESSAGE_ID.SEND_MAIL, Common.getSessionId()));
+    },
+    getInstantMessage: function(scope, instantMessage, receiverUsername, receiverUserId, textEmotionId) {
+        var request = this.initInstantMessage(scope, instantMessage, receiverUsername, receiverUserId, textEmotionId);
+        this.callNetwork(this.initData(request.serializeBinary(), Common.getOS(),
+            NetworkManager.MESSAGE_ID.INSTANT_MESSAGE, Common.getSessionId()));
+    },
+    initInstantMessage: function(scope, instantMessage, receiverUsername, receiverUserId, textEmotionId) {
+        if (scope > 0 && scope < 4) {
+            var request = new proto.BINInstantMessageRequest();
+            request.setScope(scope);
+            request.setTextemoticonid(textEmotionId);
+            request.setInstantmessage(instantMessage);
+            if (scope === 3) {
+                request.setReceiverusername(receiverUsername);
+                request.setReceiveruserid(receiverUserId);
+            }
+            return request;
+
+        }
+        
+        cc.log("check lai scope di em");
+        return null;
     },
     connectNetwork: function() {
         if(window.ws === null || typeof(window.ws) === 'undefined' || window.ws.readyState === WebSocket.CLOSED) {
