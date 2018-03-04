@@ -50,7 +50,11 @@ cc.Class({
 
     },
     accept: function() {
-        NetworkManager.sendBet();
+        if (this.getTableStage() === TABLE_STATE.BET) {
+            NetworkManager.sendBet(this.roomIndex, this.currentBet, this.betState);
+        } else {
+            Common.showToast("Cho ván sau đi nhé");
+        }
     },
     setEnterRoomResponse: function(resp) {
         this.roomIndex = resp.getRoomplay().getRoomindex();
@@ -66,12 +70,13 @@ cc.Class({
     },
 
     setBetMoney: function(event, data) {
-        cc.log("data:", data);
+        cc.log("data:", Common.getCash());
+        this.currentBet = 0;
         if(data === "all") {
             this.currentBet = Common.getCash();
         } else {
             var addMoney = parseInt(data);
-            if (this.currentBet + addMoney <= Common.getCash) {
+            if (this.currentBet + addMoney <= Common.getCash()) {
                 this.currentBet +=  addMoney;
             }
         }
@@ -83,17 +88,31 @@ cc.Class({
     },
     setBetMoneyNumber: function(event, data) {
         cc.log("data:", data);
+        this.currentBet = 0;
         if(data === "delete") {
-            // xoa
+            this.currentBet = 0;
+        } else if (data === "000") {
+            if (this.currentBet * 1000 <= Common.getCash()) {
+                this.currentBet = this.currentBet * 1000;
+            }
+            
         } else {
-            // dien so
+            var addMoney = parseInt(data);
+            if (this.currentBet * 10 + addMoney <= Common.getCash()) {
+                this.currentBet = this.currentBet * 10 + addMoney;
+            }
+        }
+        if (this.betState === BET_STATE.TAI) {
+            this.setTotalMoneyTaiXiu(this.bet_money_tai, this.currentBet);
+        } else if (this.betState === BET_STATE.XIU) {
+            this.setTotalMoneyTaiXiu(this.bet_money_xiu, this.currentBet);
         }
     },
 
 
 
     datTai: function() {
-        cc.log("dat cua tai");
+        cc.log("dat cua tai", Common.getCash());
         if(this.betState !== BET_STATE.TAI) {
             this.betState = BET_STATE.TAI;
             this.bet_money_xiu.string = "ĐẶT XỈU";
@@ -102,7 +121,7 @@ cc.Class({
         }
     },
     datXiu: function() {
-        cc.log("dat cua xiu");
+        cc.log("dat cua xiu", Common.getCash());
         if(this.betState !== BET_STATE.XIU) {
             this.bet_money_xiu.string = "0";
             this.betState = BET_STATE.XIU;
@@ -228,40 +247,39 @@ cc.Class({
         if(resp.getResponsecode()) {
             var typeId = resp.getBettype();
             var betMoney = resp.getBetmoney();
-            var sourceId = resp.getSourceuserid();
+            if (resp.getSourceuserid() === Common.getUserId()) {
+                this.currentBet = 0;
+                if (this.betState === BET_STATE.TAI) {
+                    this.setTotalMoneyTaiXiu(this.bet_money_tai, 0);
+                } else if (this.betState === BET_STATE.XIU) {
+                    this.setTotalMoneyTaiXiu(this.bet_money_xiu, 0);
+                }
+            }
+
             for (var i = 0; i < resp.getArgsList().length; i++) {
                 var key = resp.getArgsList()[i].getKey();
                 var value = resp.getArgsList()[i].getValue();
                 if (key === "betGateInfo") {
-                    var listBetGateInfo = value.split(',');
-                    for (var j = 0; j < listBetGateInfo.length; j++) {
-                        var betGateInfo = listBetGateInfo[j].split('-').map(Number);
-                        switch (betGateInfo[0]) {
-                            case 1: {
-                                this.total_money_tai.string = betGateInfo[1];
-                                //tổng số người đặt cửa tài
-                                break;
-                            }
-
-                            case 0: {
-                                this.total_money_tai.string = betGateInfo[1];
-                                break;
-                            }
-                            default:
-                                break;
-                        }
-                        //update giá trị cho các cửa, với mỗi mảng betGateInfo lần lượt là
-                        //[0] : giá trị cửa, [1]: tổng tiền đặt vào cửa, [2]: tổng số người đặt vào cửa đó
-                    }
+                    this.updateBetGateInfo(value);
                 } else if (key === "totalPlayerBetGate") {
-                    var listBetGateInfo = value.split(',');
-                    for (var j = 0; j < listBetGateInfo.length; j++) {
-                        var betGateInfo = listBetGateInfo[j].split('-').map(Number);
-                        //update giá trị đặt của current user cho các cửa
-                        //[0] : giá trị cửa, [1]: tổng tiền đặt vào cửa
+                    switch (typeId) {
+                        case 1: {
+                            this.total_bet_tai.string = value;
+                            break;
+                        }
+
+                        case 0: {
+                            this.total_bet_xiu.string = value;
+                            break;
+                        }
+
+                        default:
+                        break;
                     }
                 }
             }
+        } else {
+            Common.showToast(resp.getMessage());
         }
     },
     exitRoomResponseHandler: function(resp) {
@@ -277,9 +295,15 @@ cc.Class({
                 var key = resp.getArgsList()[i].getKey();
                 var value = resp.getArgsList()[i].getValue();
                 if (key === "tableStage") {
-                    this.setTableStage(value);
+                    var intValue = parseInt(value);
+                    this.setTableStage(intValue);
+                    if (intValue === TABLE_STATE.BALANCE) {
+                        Common.showToast("Cân cửa");
+                    } else if (intValue === TABLE_STATE.RESULT) {
+                        //Show animation tung con xúc sắc
+                    }
                 } else if (key === "betGateInfo") {
-
+                    this.updateBetGateInfo(value);
                 } else if (key === "diceValues") {
                     if (this.getTableStage() == TABLE_STATE.RESULT) {
                         var dicesvalue = value.split('-').map(Number);
@@ -287,6 +311,8 @@ cc.Class({
                     }
                 } else if (key === "totalValue") {
 
+                } else if (key === "playerBetInfo") {
+                    this.updateUserBetLabel(value);
                 }
             }
         }
@@ -304,19 +330,29 @@ cc.Class({
                     //set giá trị label section
                 }
             });
-            var message = resp.getMessage();
+            Common.showToast(resp.getMessage());
         }
     },
 
     handleMatchEndResponseHandler: function(resp) {
         cc.log("match end response:", resp.toObject());
         if(resp.getResponsecode()) {
-
+            Common.showToast("");
+            this.setTotalMoneyTaiXiu(this.total_money_tai, 0);
+            this.setTotalMoneyTaiXiu(this.total_money_xiu, 0);
+            this.setTotalMoneyTaiXiu(this.total_bet_tai, 0);
+            this.setTotalMoneyTaiXiu(this.total_bet_xiu, 0);
+            this.setTotalMoneyTaiXiu(this.tai_number_user, 0);
+            this.setTotalMoneyTaiXiu(this.xiu_number_user, 0);
         }
     },
     handleMatchBeginResponseHandler: function(resp) {
         cc.log("match begin response:", resp.toObject());
-        if(resp.getResponsecode()) {}
+        if(resp.getResponsecode()) {
+            this.setTableStage(TABLE_STATE.BET);
+            Common.showToast("Bat đầu đặt cược");
+            //TODO: bắt đầu chạy thời gian đặt cửa trên đĩa với thời gian là countdown
+        }
     },
     onGameEvent: function() {
         var self = this;
@@ -328,5 +364,49 @@ cc.Class({
     // called every frame, uncomment this function to activate update callback
     update: function (dt) {
         this.onGameEvent();
+    },
+
+    updateBetGateInfo: function(bet_gate_info) {
+        var listBetGateInfo = bet_gate_info.split(',');
+        for (var j = 0; j < listBetGateInfo.length; j++) {
+            var betGateInfo = listBetGateInfo[j].split('-').map(Number);
+            switch (betGateInfo[0]) {
+                case 1: {
+                    this.setTotalMoneyTaiXiu(this.total_money_tai, betGateInfo[1]);
+                    this.setTotalMoneyTaiXiu(this.tai_number_user, betGateInfo[2]);
+                    break;
+                }
+
+                case 0: {
+                    this.setTotalMoneyTaiXiu(this.total_money_xiu, betGateInfo[1]);
+                    this.setTotalMoneyTaiXiu(this.xiu_number_user, betGateInfo[2]);
+                    break;
+                }
+
+                default:
+                break;
+            }
+        }
+    },
+
+    updateUserBetLabel: function(user_bet_gate) {
+        var listBetGateInfo = user_bet_gate.split(',');
+        for (var j = 0; j < listBetGateInfo.length; j++) {
+            var betGateInfo = listBetGateInfo[j].split('-').map(Number);
+            switch (betGateInfo[0]) {
+                case 1: {
+                    this.total_bet_tai.string = betGateInfo[1];
+                    break;
+                }
+
+                case 0: {
+                    this.total_bet_xiu.string = betGateInfo[1];
+                    break;
+                }
+
+                default:
+                break;
+            }
+        }
     }
 });
