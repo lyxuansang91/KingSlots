@@ -8,7 +8,7 @@ var Suit = cc.Enum({
 var A2_10JQK = 'NAN,A,2,3,4,5,6,7,8,9,10,J,Q,K'.split(',');
 
 function Card (point, suit, type) {
-    cc.log("suit =", suit);
+    // cc.log("suit =", suit);
     if(type === 1){
         Suit = cc.Enum({
             Spade: 1,

@@ -56,6 +56,7 @@ var MiniPoker = cc.Class({
         }
     },
     updateMoneyMessageResponseHandler: function (response) {
+        cc.log("update money response:", response.toObject());
         if (response.getResponsecode()){
             this.setBinUpdateMoney(response);
             this.removeTurnUpdateMoney();
@@ -275,6 +276,8 @@ var MiniPoker = cc.Class({
             var lbl_text = nodeChild.addComponent(cc.Label);
             lbl_text.string = message;
             lbl_text.node.color = cc.color(248,213,82,255);
+            lbl_text.fontSize = 60;
+            lbl_text.lineHeight = 70;
 
             var outline = nodeChild.addComponent(cc.LabelOutline);
             outline.color = new cc.Color(0.5, 0.3, 0.7, 1.0);
@@ -289,10 +292,12 @@ var MiniPoker = cc.Class({
                     if (moneybox.getDisplaychangemoney() > 0) {
                         this.isUpdateMoney = true;
                         var label_money = nodeMoney.addComponent(cc.Label);
-                        label_money.string = moneybox.getDisplaychangemoney().toString();
+                        label_money.string = "+" + moneybox.getDisplaychangemoney().toString();
                         // MLabel::createUpdateMoney(moneybox.displaychangemoney());
                         // label_money.node.setPosition(cc.p(1334/2,750/2));
                         label_money.node.color = cc.color(248,213,82,255);
+                        label_money.fontSize = 60;
+                        label_money.lineHeight = 70;
 
                         var outline = nodeMoney.addComponent(cc.LabelOutline);
                         outline.color = new cc.Color(0.5, 0.3, 0.7, 1.0);
@@ -349,7 +354,7 @@ var MiniPoker = cc.Class({
                 var moneybox = response.getMoneyboxesList()[i];
                 if (moneybox.getDisplaychangemoney() > 0) {
                     var userInfo = Common.getUserInfo();
-                    if (moneybox.getUserid() == userInfo.userid){
+                    if (moneybox.getUserid() === userInfo.userid){
                         var origin_money = moneybox.getCurrentmoney();
                         //set lai tien cho nguoi choi
                         Common.setCash(origin_money);

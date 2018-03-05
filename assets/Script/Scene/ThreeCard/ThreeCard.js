@@ -397,6 +397,8 @@ var ThreeCard = cc.Class({
             var lbl_text = nodeChild.addComponent(cc.Label);
             lbl_text.string = message;
             lbl_text.node.color = cc.color(248,213,82,255);
+            lbl_text.fontSize = 60;
+            lbl_text.lineHeight = 70;
 
 
             var outline = nodeChild.addComponent(cc.LabelOutline);
@@ -412,8 +414,10 @@ var ThreeCard = cc.Class({
                     if (moneybox.getDisplaychangemoney() > 0) {
                         this.isUpdateMoney = true;
                         var label_money = nodeMoney.addComponent(cc.Label);
-                        label_money.string = moneybox.getDisplaychangemoney().toString();
+                        label_money.string = "+" + moneybox.getDisplaychangemoney().toString();
                         label_money.node.color = cc.color(248,213,82,255);
+                        label_money.fontSize = 60;
+                        label_money.lineHeight = 70;
 
                         var outline = nodeMoney.addComponent(cc.LabelOutline);
                         outline.color = new cc.Color(0.5, 0.3, 0.7, 1.0);

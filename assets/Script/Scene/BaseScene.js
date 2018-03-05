@@ -79,8 +79,8 @@ cc.Class({
         if(res.getResponsecode()) {
             if(res.getDisconnect()) {
                 Common.setSessionId("-1");
-                if(res.hasMessage() && res.getMessage() != "") {
-                    cc.alert(res.getMessage());
+                if(res.hasMessage() && res.getMessage() !== "") {
+                    Common.showToast(res.getMessage(), 2.0);
                 }
                 NetworkManager.closeConnection();
                 this.scheduleOnce(this.goIntroScene, 2.0);
