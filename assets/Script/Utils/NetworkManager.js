@@ -384,6 +384,9 @@ var NetworkManager = {
             case NetworkManager.MESSAGE_ID.SEND_MAIL:
                 msg = proto.BINSendMailResponse.deserializeBinary(bytes);
                 break;
+            case NetworkManager.MESSAGE_ID.DELETE_MAIL:
+                msg = proto.BINDeleteMailResponse.deserializeBinary(bytes);
+                break;
             default:
                 break;
         }
@@ -757,6 +760,17 @@ var NetworkManager = {
         request.setParentid(parent_id);
         this.callNetwork(this.initData(request.serializeBinary(), Common.getOS(),
             NetworkManager.MESSAGE_ID.SEND_MAIL, Common.getSessionId()));
+    },
+    deleteMail: function(selectedMailIds){
+        cc.log("ids =", selectedMailIds);
+        if (selectedMailIds.length > 0){
+            var request = new proto.BINDeleteMailRequest();
+            for (var i = 0; i < selectedMailIds.length; i++){
+                request.addSelectedmailids(selectedMailIds[i]);
+            }
+            this.callNetwork(this.initData(request.serializeBinary(), Common.getOS(),
+                NetworkManager.MESSAGE_ID.DELETE_MAIL, Common.getSessionId()));
+        }
     },
     getInstantMessage: function(scope, instantMessage, receiverUsername, receiverUserId, textEmotionId) {
         var request = this.initInstantMessage(scope, instantMessage, receiverUsername, receiverUserId, textEmotionId);

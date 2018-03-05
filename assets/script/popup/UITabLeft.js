@@ -3,7 +3,6 @@ cc.Class({
 
     properties: {
         scroll_view : cc.ScrollView,
-        tab : cc.Sprite,
         tab_item_left : cc.Prefab,
         tab_selected : cc.SpriteFrame,
         tab_unselect : cc.SpriteFrame
@@ -18,6 +17,7 @@ cc.Class({
         this.list_buttons = [];
 
         for(var i = 0; i < this.tab_size; i++){
+            cc.log("tabs =", tabs[i]);
             var button = cc.instantiate(this.tab_item_left);
             var button_component = button.getComponent("TabItem");
             var tag = i + 1;
@@ -25,7 +25,7 @@ cc.Class({
                 self.showTab(index);
             });
 
-            var posY = (i - 0.5) * button.getContentSize().height;
+            var posY = (this.tab_size/2 - i) * button.getContentSize().height;
             button.setPosition(cc.p(0,posY));
 
             this.scroll_view.content.addChild(button);
