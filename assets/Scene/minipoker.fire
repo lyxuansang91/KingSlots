@@ -771,6 +771,9 @@
     "popupPrefab": {
       "__uuid__": "31c15c51-6222-49b7-9863-ad45766f1da7"
     },
+    "nohuPrefab": {
+      "__uuid__": "e807da95-5186-469e-ad70-f55f1532652e"
+    },
     "autoSpinToggle": {
       "__id__": 38
     },

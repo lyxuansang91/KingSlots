@@ -768,16 +768,16 @@ var NetworkManager = {
         if (scope > 0 && scope < 4) {
             var request = new proto.BINInstantMessageRequest();
             request.setScope(scope);
-            request.setTextemoticonid(textEmotionId);
-            request.setInstantmessage(instantMessage);
+            if(textEmotionId !== null)
+                request.setTextemoticonid(textEmotionId);
+            if(instantMessage !== null)
+                request.setInstantmessage(instantMessage);
             if (scope === 3) {
                 request.setReceiverusername(receiverUsername);
                 request.setReceiveruserid(receiverUserId);
             }
             return request;
-
         }
-
         cc.log("check lai scope di em");
         return null;
     },

@@ -68,7 +68,10 @@ cc.Class({
             target.string = Common.numberFormatWithCommas(val);
         }
     },
-
+    //
+    sendMessageTaiXiu: function(message) {
+        NetworkManager.getInstantMessage(Config.SCOPE_CHAT.CHAT_ROOM, message, null, null, null);
+    },
     setBetMoney: function(event, data) {
         cc.log("data:", Common.getCash());
         this.currentBet = 0;

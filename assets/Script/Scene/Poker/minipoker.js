@@ -26,6 +26,7 @@ var MiniPoker = cc.Class({
         jarValue: 0,
         roomIndex: 0,
         popupPrefab: cc.Prefab,
+        nohuPrefab: cc.Prefab,
         autoSpinToggle: cc.Toggle,
         fastSpinToggle: cc.Toggle,
         updateMoneyResponse: null
@@ -234,6 +235,24 @@ var MiniPoker = cc.Class({
         }
     },
 
+    showNoHu: function() {
+        cc.log("showNoHu");
+        var item = cc.instantiate(this.nohuPrefab).getComponent("Nohu");
+        item.playAnim();
+
+        var nodeChild = new cc.Node();
+        nodeChild.parent = this.node;
+        nodeChild.addChild(item.node);
+
+        var callFunc2 = cc.callFunc(function (){
+            this.setOriginMoney();
+            this.isBreakJar = false;
+        },this);
+
+
+        item.node.runAction(cc.sequence(cc.delayTime(2),callFunc2, cc.delayTime(1), cc.fadeOut(1), cc.removeSelf(), null));
+    },
+
     handleRanking: function(emoticonId, message, response) {
 
         //TODO: HungLe - Handle Ranking
@@ -404,7 +423,7 @@ var MiniPoker = cc.Class({
             var move3 = cc.moveBy(this.time_move,cc.p(0,-(this.stepCard - 3.0)*h - 0.5*h));
             var delay = cc.delayTime(y*0.3);
 
-            if(i == this.list_item.length - 1){
+            if(i === this.list_item.length - 1){
                 // khi dừng hiệu ứng
                 var emoticon = response.getTextemoticonsList()[0];
                 var emotionId = emoticon.getEmoticonid();
