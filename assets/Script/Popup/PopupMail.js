@@ -5,17 +5,20 @@ var MAIL_SENT = 2;
 var MAIL_SENT_ADMIN = 3;
 var MAX_RESULT = 20;
 var firstResult = -1;
-cc.Class({
+var PopupMail = cc.Class({
     extends: CommonPopup,
 
     properties: {
         mailType: 1,
         nodeSendAdmin: cc.Node,
         title: cc.EditBox,
-        content: cc.EditBox
+        content: cc.EditBox,
     },
-
+    statics: {
+        instance: null
+    },
     onLoad: function () {
+        PopupMail.instance = this;
     },
 
     start: function () {
@@ -52,6 +55,10 @@ cc.Class({
                 var msg = buffer.response;
                 this.sendMailResponse(msg);
                 break;
+            case NetworkManager.MESSAGE_ID.DELETE_MAIL:
+                var msg = buffer.response;
+                this.deleteMailResponse(msg);
+                break;
                 isDone = false;
                 break;
         }
@@ -84,19 +91,21 @@ cc.Class({
         if (response !== 0){
             if (response.getResponsecode()){
                 // self.tableView.removeAllChildren();
-                var lstEmail = [];
+                var lstMail = [];
                 var binMail;
                 for (var i = 0; i < response.getMailsList().length; i++) {
                     binMail = this.parseFromBinMail(response.getMailsList()[i]);
-                    lstEmail.push(binMail);
+                    lstMail.push(binMail);
                 }
                 // loadEmail(lstEmail);
 
-                cc.log("lstEmail =", lstEmail);
-
                 var number = response.getMailsList().length;
-                var data = this._getdata(lstEmail, number);
-                self.tableView.getComponent(cc.tableView).initTableView(data.length, { array: data, target: this });
+                var data = this._getdata(lstMail, number);
+
+                this.setListMail(data);
+
+                this.reloadEmail(data);
+                // self.tableView.getComponent(cc.tableView).initTableView(data.length, { array: data, target: this });
 
             }
             else {
@@ -107,13 +116,17 @@ cc.Class({
 
     _getdata: function (val, num) {
         var array = [];
-
-        for (var i = 0; i < num; ++i) {
-            var obj = {};
-            obj.mail_title = val[i].getTitle();
-            obj.mail_sender = val[i].getSenderusername();
-            obj.mail_senttime = val[i].getSenttime();
-            array.push(obj);
+        cc.log("val =", val);
+        cc.log("num =", num);
+        if(val !== null){
+            for (var i = 0; i < num; ++i) {
+                var obj = {};
+                obj.mail_title = val[i].getTitle();
+                obj.mail_sender = val[i].getSenderusername();
+                obj.mail_senttime = val[i].getSenttime();
+                obj.mail_id = val[i].getMailid();
+                array.push(obj);
+            }
         }
 
         return array;
@@ -168,5 +181,41 @@ cc.Class({
                 this.content.string = '';
             }
         }
+    },
+
+    deleteMailResponse: function(response){
+        if (response.hasMessage()){
+            Common.showToast(response.getMessage(), 3);
+        }
+    },
+
+    reloadEmail: function (data) {
+        var self = this;
+        self.tableView.getComponent(cc.tableView).initTableView(data.length, { array: data, target: this });
+    },
+
+    convertDataToObject: function () {
+
+    },
+
+    setListMail: function (data) {
+        this.lstEmail = data;
+    },
+    
+    deleteMail: function (index) {
+
+        var data = this.lstEmail;
+
+        var mailIdDelete = data[index].mail_id;
+        var lstEmailIdDelete = [];
+        lstEmailIdDelete.push(mailIdDelete);
+        NetworkManager.deleteMail(lstEmailIdDelete);
+
+        // delete data[index];
+        data.splice(index, 1);
+
+        this.setListMail(data);
+
+        this.reloadEmail(data);
     }
 });

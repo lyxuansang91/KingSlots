@@ -39,7 +39,7 @@ cc.Class({
     },
     openUserInfoPopup: function () {
 
-        var tabString = ["Hồ sơ", "Lịch sử", "Xác thực tài khoản"];
+        var tabString = ["Hồ sơ", "Lịch sử"];
 
         Common.showPopup(Config.name.POPUP_USERINFO,function(popup) {
 

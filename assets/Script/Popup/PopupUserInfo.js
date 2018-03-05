@@ -10,6 +10,9 @@ cc.Class({
 
     properties: {
         userInfoPrefab: cc.Prefab,
+        tabLeftPrefab: cc.Prefab,
+        contentRight: cc.Node,
+        tabLeftNode: cc.Node,
         _tab: 1
     },
 
@@ -33,16 +36,35 @@ cc.Class({
 
     onEvent: function (index) {
         if(index === USERINFO){
+            this.tableView.active = true;
+            this.tabLeftNode.active = false;
+            this.contentRight.active = false;
             var targetUserId = Common.getUserId();
             NetworkManager.getViewUserInfoFromServer(targetUserId);
             this.setTab(USERINFO);
         } else if(index === USERINFO_HISTORY){
-            // NetworkManager.getLookupMoneyHistoryMessage(firstResult, MAX_RESULT, 1);
+            this.tableView.active = false;
+            this.tabLeftNode.active = true;
+            this.contentRight.active = true;
+
+            var tabString = ["Dòng Mon", "Nạp Mon", "Giao Dịch"];
+
+            var item = cc.instantiate(this.tabLeftPrefab);
+            item.getComponent("UITabLeft").setTab(tabString, 1, function(index){
+                // this.onLeftEvent(index);
+            });
+
+            this.tabLeftNode.addChild(item);
+
             this.setTab(USERINFO_HISTORY);
         } else if(index === USERINFO_VERIFY){
             // NetworkManager.getUserVerifyConfigRequest(Config.USER_VERIFY_CONFIG_TYPE.EMAIL);
             this.setTab(USERINFO_VERIFY);
         }
+    },
+
+    onLeftEvent: function (index) {
+        NetworkManager.getLookupMoneyHistoryMessage(firstResult, MAX_RESULT, index);
     },
 
     onGameEvent: function() {
@@ -122,9 +144,10 @@ cc.Class({
     },
 
     lookupMoneyHistoryResponse: function(response){
+        cc.log("response history =", response);
         if (response !== 0){
             if (response.getResponsecode()){
-                var lstMoneyLogs;
+                var lstMoneyLogs = [];
                 for (var i = 0; i < response.getMoneyboxesList().length; i++) {
                     lstMoneyLogs.push(response.getMoneyboxesList()[i]);
                 }
@@ -136,22 +159,8 @@ cc.Class({
         }
     },
 
-    loadMoneyLogsHistory: function(lstMoneyLogs){
-        // if (!lstMoneyLogs.empty()){
-        //     this->lstMoneyLogs.insert(this->lstMoneyLogs.end(), lstMoneyLogs.begin(), lstMoneyLogs.end());
-        //
-        //     tableView->reloadData();
-        //
-        //     if (this->lstMoneyLogs.size() > NUM_LOAD_MORE_ITEM){ //set lai selection
-        //         int mod = (this->lstMoneyLogs.size() % NUM_LOAD_MORE_ITEM);
-        //         int numPos = mod == 0 ? NUM_LOAD_MORE_ITEM : mod;
-        //         tableView->setContentOffset(Vec2(0, -numPos * heightTable / 5), false);
-        //         //tableView->getContainer()->setPosition(Vec2(0, -numPos * heightTable / 6));
-        //     }
-        // }
-        // else if(this->lstMoneyLogs.empty()){
-        //     tableView->reloadData();
-        // }
+    loadMoneyLogsHistory: function(data){
+        this.contentRight.getComponent(cc.tableView).initTableView(data.length, { array: data, target: this });
     },
 
     setTab: function (tab) {
