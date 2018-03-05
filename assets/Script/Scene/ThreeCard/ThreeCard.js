@@ -497,6 +497,9 @@ var ThreeCard = cc.Class({
 
         this.isRequestJar = false;
     },
+    getAutoSpin: function() {
+        this.autoSpinToggle.isChecked = !this.autoSpinToggle.isChecked;
+    },
     showNoHu: function(){
         cc.log("showNoHu");
         var item = cc.instantiate(this.nohuPrefab).getComponent("Nohu");

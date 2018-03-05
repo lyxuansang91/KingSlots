@@ -660,7 +660,6 @@ var NetworkManager = {
         this.requestMessage(request.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.TURN, Common.getSessionId());
     },
     getJarRequest: function(zone_id, jarType, isLoading) {
-        cc.log("jar loading:", isLoading);
         var request = this.initJarRequest(zone_id, jarType);
         this.requestMessage(request.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.JAR, Common.getSessionId(), isLoading);
     },

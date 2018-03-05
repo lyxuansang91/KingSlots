@@ -80,6 +80,9 @@ var MiniPoker = cc.Class({
     getFastSpin: function() {
         this.fastSpinToggle.isChecked = !this.fastSpinToggle.isChecked;
     },
+    getAutoSpin: function() {
+        this.autoSpinToggle.isChecked = !this.autoSpinToggle.isChecked;
+    },
 
     setKeyBet: function(key) {
       this.betType = key;
