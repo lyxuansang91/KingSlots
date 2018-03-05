@@ -1,10 +1,11 @@
-let BaseScene = require('BaseScene');
-let NetworkManager = require('NetworkManager');
-let Gate = require('Gate');
-let ItemChat = require('ItemChat');
-let TXMatch = require('TXMatch');
 
-let TABLE_STATE = {
+const BaseScene = require('BaseScene');
+const NetworkManager = require('NetworkManager');
+const Gate = require('Gate');
+const ItemChat = require('ItemChat');
+const TXMatch = require('TXMatch');
+
+var TABLE_STATE = {
     BET: 1,
     BALANCE: 2,
     RESULT: 3,
@@ -12,12 +13,11 @@ let TABLE_STATE = {
     PREPARE_NEW_MATCH: 5
 };
 
-let BET_STATE = {
+var BET_STATE = {
     TAI: 1,
     XIU: 0,
     OTHER: -1
 };
-
 
 cc.Class({
     extends: BaseScene,
@@ -46,8 +46,13 @@ cc.Class({
         roomIndex: -1,
         lstMatch: [TXMatch],
         currentMatch: TXMatch,
-        lstMessageChat: [ItemChat],
         taiXiuResult: cc.Prefab,
+        chat_view : cc.Node,
+        edit_chat : cc.EditBox,
+        item_chat : cc.Prefab,
+        item_emotion : cc.Prefab,
+        lstMessageChat: [ItemChat],
+        bg_emotions : cc.ScrollView,
     },
 
     cancel: function() {
@@ -101,9 +106,14 @@ cc.Class({
             target.string = Common.numberFormatWithCommas(val);
         }
     },
-    //
     sendMessageTaiXiu: function(message) {
-        NetworkManager.getInstantMessage(Config.SCOPE_CHAT.CHAT_ROOM, message, null, null, null);
+        cc.log("message",message.string);
+        NetworkManager.getInstantMessage(Config.SCOPE_CHAT.CHAT_ROOM, message.string, null, null, null);
+        message.string = "";
+    },
+    sendEmotionTaixiu: function(emotionId) {
+        cc.log("emotionId",emotionId);
+        NetworkManager.getInstantMessage(Config.SCOPE_CHAT.CHAT_ROOM, "", null, null, emotionId);
     },
     setBetMoney: function(event, data) {
         cc.log("data:", Common.getCash());
@@ -138,14 +148,13 @@ cc.Class({
                 this.currentBet = this.currentBet * 10 + addMoney;
             }
         }
+
         if (this.betState === BET_STATE.TAI) {
             this.setTotalMoneyTaiXiu(this.bet_money_tai, this.currentBet);
         } else if (this.betState === BET_STATE.XIU) {
             this.setTotalMoneyTaiXiu(this.bet_money_xiu, this.currentBet);
         }
     },
-
-
 
     datTai: function() {
         cc.log("dat cua tai", Common.getCash());
@@ -179,9 +188,18 @@ cc.Class({
         Common.setExistTaiXiu(true);
         this.lstTaiXiuResult = [];
     },
+
+    start: function () {
+        this.current_chat_height = this.chat_view.getContentSize().height;
+        this.isShowEmotion = false;
+
+        this.addChatEmotion();
+    },
+
     onClose: function() {
         NetworkManager.requestExitRoomMessage(0);
     },
+
     onGameStatus: function(event) {
         if(event.data!==null || typeof(event.data) !== 'undefined') {
             var lstMessage = NetworkManager.parseFrom(event.data, event.data.byteLength);
@@ -259,6 +277,7 @@ cc.Class({
             Common.closePopup("PopupTaiXiu");
         }
     },
+
     instantMessageResponseHandler: function(resp) {
         cc.log("instant message response:", resp.toObject());
         if(resp.getResponsecode()) {
@@ -267,19 +286,94 @@ cc.Class({
             itemChat.emoticonId = resp.getTextemoticonid();
             itemChat.messageChat = message;
             itemChat.senderUserId = resp.getSenderuserid();
-            itemChat.senderUserName = resp.getSendername();
+            itemChat.senderUserName = resp.getSenderusername();
             itemChat.colorCode = resp.getColorcode();
-            this.lstMessageChat.push(itemChat);
-            this.appendMesasgeChat();
+            //this.lstMessageChat.push(itemChat);
+            this.appendMesasgeChat(itemChat);
         }
 
         if(resp.hasMessage() && resp.getMessage() !== "") {
             Common.showToast(resp.getMessage(), 2.0);
         }
     },
-    appendMesasgeChat: function() {
+    appendMesasgeChat: function(itemChat) {
         // TODO: Append message chat
+
+        var item = cc.instantiate(this.item_chat);
+        var item_comp = item.getComponent("ItemChat");
+        item_comp.init(itemChat);
+
+        this.chat_view.addChild(item);
+
+        var childs = this.chat_view.children;
+
+        var size_inner_h = 0;
+        var posY = 0;
+
+        for(var i = 0; i < childs.length; i++){
+            var size_item = childs[i].getComponent("ItemChat").node.getContentSize().height;
+            size_inner_h += size_item + 10;
+        }
+
+        for(var i = 0; i < childs.length; i++){
+            var size_item = childs[i].getComponent("ItemChat").node.getContentSize().height;
+            childs[i].setPosition(cc.p(0,size_inner_h - posY));
+
+            posY += size_item + 10;
+        }
+
+        var size_inner = cc.size(this.chat_view.getContentSize().width,size_inner_h);
+
+        if(size_inner.height > this.current_chat_height*2){
+            this.chat_view.children[0].removeFromParent(true);
+        }
+
+        if(size_inner.height > this.current_chat_height){
+            this.chat_view.setContentSize(size_inner);
+        }
     },
+
+    showPopupEmotion: function () {
+        this.isShowEmotion = !this.isShowEmotion;
+        this.bg_emotions.node.active = this.isShowEmotion;
+    },
+
+    addChatEmotion: function () {
+        this.content = this.bg_emotions.content;
+        var innerSize = cc.size(this.content.getContentSize().width,
+            this.content.getContentSize().height);
+        var padding = 0;
+
+        for(var i = 0; i < 16; i++){
+            var icon_emotion = cc.instantiate(this.item_emotion);
+            var icon_comp = icon_emotion.getComponent("ItemEmotion");
+            icon_comp.init(i + 1);
+            icon_comp.addTouch(function (index) {
+                this.sendEmotionTaixiu(index);
+                this.showPopupEmotion();
+            }.bind(this));
+
+            var size = icon_comp.node.getContentSize();
+
+            if(i == 0){
+                padding = innerSize.width/3 - size.width;
+                innerSize = cc.size(innerSize.width,size.height*1.1*6);
+                this.content.setContentSize(innerSize);
+            }
+
+            var x = parseInt(i%3);
+            var y = parseInt(i/3);
+
+            var posX = (x - 1)*size.width*1.2 - 0.5* size.width;
+            var posY = (-.1 - y)*size.height*1.1;
+
+            icon_emotion.setPositionX(posX);
+            icon_emotion.setPositionY(posY);
+
+            this.bg_emotions.content.addChild(icon_emotion);
+        }
+    },
+
     betResponseHandler: function(resp) {
         cc.log("bet response:", resp.toObject());
         if(resp.getResponsecode()) {

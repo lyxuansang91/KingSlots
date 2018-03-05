@@ -75,7 +75,7 @@ cc.Class({
         }
     },
     pingMessageResponseHandler: function(res) {
-        cc.log("ping response handler:", res);
+        //cc.log("ping response handler:", res);
         if(res.getResponsecode()) {
             if(res.getDisconnect()) {
                 Common.setSessionId("-1");

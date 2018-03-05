@@ -26,6 +26,11 @@ var Config = {
         EGG: 22,
         TREASURE: 23
     },
+
+    TAG_EMOTION: {
+        TAG : 1
+    },
+
     TABLE_ORDERBY: {
         MIN_BET : 1,
         NUM_PLAYER : 2,
