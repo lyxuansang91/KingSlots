@@ -777,7 +777,7 @@ var NetworkManager = {
             return request;
 
         }
-        
+
         cc.log("check lai scope di em");
         return null;
     },
