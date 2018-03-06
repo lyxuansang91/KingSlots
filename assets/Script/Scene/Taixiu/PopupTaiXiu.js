@@ -2,6 +2,7 @@ let BaseScene = require('BaseScene');
 let NetworkManager = require('NetworkManager');
 let Gate = require('Gate');
 let ItemChat = require('ItemChat');
+let TXMatch = require('TXMatch');
 
 let TABLE_STATE = {
     BET: 1,
@@ -27,6 +28,7 @@ cc.Class({
         btnClose: cc.Button,
         taiGate: Gate,
         xiuGate: Gate,
+        lstMatch_view : cc.Node,
         bg_number_result : cc.Node,
         money_keyboard : cc.Node,
         number_keyboard : cc.Node,
@@ -43,6 +45,8 @@ cc.Class({
         betState: -1,
         enterRoomResponse: null,
         roomIndex: -1,
+        lstMatch: [TXMatch],
+        currentMatch: TXMatch,
         lstMessageChat: [ItemChat]
     },
 
@@ -58,6 +62,35 @@ cc.Class({
     },
     setEnterRoomResponse: function(resp) {
         this.roomIndex = resp.getRoomplay().getRoomindex();
+        for (var i = 0; i < resp.getArgsList().length; i++) {
+            var key = resp.getArgsList()[i].getKey();
+            var value = resp.getArgsList()[i].getValue();
+            if (key === "currentTableStage") {
+                this.setTableStage(parseInt(value));
+            } else if (key === "cdTimerRemaining") {
+                //thoi gian con lai
+            } else if (key === "sessionId") {
+                //set current session
+                this.currentMatch = new TXMatch(value, 1, 1, 1);
+            } else if (key === "resultHistorys") {
+                //xu ly cau
+                var listMatch = value.split('|');
+                for (var j = 0; j < listMatch.length; j++) {
+                    var matchInfo = listMatch[j].split('-');
+                    var match = new TXMatch(matchInfo[0], parseInt(matchInfo[1]),
+                        parseInt(matchInfo[2]), parseInt(matchInfo[3]));
+                    this.lstMatch.push(match);
+                }
+                this.updateLstMatchView();
+
+            } else if (key === "betGateInfo") {
+                this.updateBetGateInfo(value);
+            } else if (key === "playerBetInfo") {
+                this.updateUserBetLabel(value);
+            } else if (key === "playerPreviousBetInfo") {
+                //lich su dat van truoc
+            }
+        }
     },
     /* target: total_money_tai, total_money_xiu.
     * val: float, so tien
@@ -310,6 +343,8 @@ cc.Class({
                 } else if (key === "diceValues") {
                     if (this.getTableStage() == TABLE_STATE.RESULT) {
                         var dicesvalue = value.split('-').map(Number);
+                        this.currentMatch.setResult(dicesvalue[0], dicesvalue[1], dicesvalue[2]);
+                        cc.log("OK");
                         //show animation con xuc sac quay
                     }
                 } else if (key === "totalValue") {
@@ -326,13 +361,13 @@ cc.Class({
             //countdown dem nguoc
             var countdown = resp.getCountdowntimer() / 1000;
             var argList = resp.getArgsList();
-
-            argList.forEach(function(element) {
-                if (element.getKey() === "sessionId") {
-                    var sessionId = element.getValue();
-                    //set giá trị label section
+            for (var i = 0; i < resp.getArgsList().length; i++) {
+                var key = resp.getArgsList()[i].getKey();
+                var value = resp.getArgsList()[i].getValue();
+                if (key === "sessionId") {
+                    this.currentMatch.setSestionID(value);
                 }
-            });
+            }
             Common.showToast(resp.getMessage());
         }
     },
@@ -347,6 +382,11 @@ cc.Class({
             this.setTotalMoneyTaiXiu(this.total_bet_xiu, 0);
             this.setTotalMoneyTaiXiu(this.tai_number_user, 0);
             this.setTotalMoneyTaiXiu(this.xiu_number_user, 0);
+            this.lstMatch.push(this.currentMatch.duplicate());
+            if (this.lstMatch.length > 16) {
+                this.lstMatch.shift();
+            }
+            this.updateLstMatchView();
         }
     },
     handleMatchBeginResponseHandler: function(resp) {
@@ -409,6 +449,25 @@ cc.Class({
 
                 default:
                 break;
+            }
+        }
+    },
+
+    updateLstMatchView: function() {
+        cc.log("OK");
+        for (var j = 0; j < 16; j++) {
+            var sprite = this.lstMatch_view.getChildByName(String(j));
+            if (j < this.lstMatch.length) {
+                sprite.setVisible(true);
+                if (this.lstMatch[j].sum() < 11) {
+                    cc.log("xiu");
+                    //set texture xiu cho sprite
+                } else {
+                    cc.log("tai");
+                    //set texture tai cho sprite
+                }
+            } else {
+                sprite.setVisible(false);
             }
         }
     },
