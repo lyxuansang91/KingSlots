@@ -387,6 +387,9 @@ var NetworkManager = {
             case NetworkManager.MESSAGE_ID.DELETE_MAIL:
                 msg = proto.BINDeleteMailResponse.deserializeBinary(bytes);
                 break;
+            case NetworkManager.MESSAGE_ID.LOOK_UP_MONEY_HISTORY:
+                msg = proto.BINLookUpMoneyHistoryResponse.deserializeBinary(bytes);
+                break;
             default:
                 break;
         }
