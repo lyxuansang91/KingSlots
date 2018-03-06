@@ -80,7 +80,7 @@ cc.Class({
     },
 
     init: function (index, data, reload, group) {
-
+        cc.log("index =", index);
         var obj = data.array[index];
 
         delete obj.date_time;

@@ -3,6 +3,9 @@ var CommonPopup = require('CommonPopup');
 var USERINFO = 1;
 var USERINFO_HISTORY = 2;
 var USERINFO_VERIFY = 3;
+var USERINFO_HISTORY_PLAY = 1;
+var USERINFO_HISTORY_CHARGE = 2;
+var USERINFO_HISTORY_EXCHANGE = 1;
 var MAX_RESULT = 20;
 var firstResult = -1;
 cc.Class({
@@ -13,7 +16,8 @@ cc.Class({
         tabLeftPrefab: cc.Prefab,
         contentRight: cc.Node,
         tabLeftNode: cc.Node,
-        _tab: 1
+        _tab: 1,
+        subHistory: 1
     },
 
     onLoad: function () {
@@ -35,6 +39,7 @@ cc.Class({
     },
 
     onEvent: function (index) {
+        var self = this;
         if(index === USERINFO){
             this.tableView.active = true;
             this.tabLeftNode.active = false;
@@ -51,7 +56,7 @@ cc.Class({
 
             var item = cc.instantiate(this.tabLeftPrefab);
             item.getComponent("UITabLeft").setTab(tabString, 1, function(index){
-                // this.onLeftEvent(index);
+                self.onLeftEvent(index);
             });
 
             this.tabLeftNode.addChild(item);
@@ -65,6 +70,8 @@ cc.Class({
 
     onLeftEvent: function (index) {
         NetworkManager.getLookupMoneyHistoryMessage(firstResult, MAX_RESULT, index);
+        this.setSubHistory(index);
+
     },
 
     onGameEvent: function() {
@@ -144,12 +151,11 @@ cc.Class({
     },
 
     lookupMoneyHistoryResponse: function(response){
-        cc.log("response history =", response);
         if (response !== 0){
             if (response.getResponsecode()){
                 var lstMoneyLogs = [];
-                for (var i = 0; i < response.getMoneyboxesList().length; i++) {
-                    lstMoneyLogs.push(response.getMoneyboxesList()[i]);
+                for (var i = 0; i < response.getMoneylogsList().length; i++) {
+                    lstMoneyLogs.push(response.getMoneylogsList()[i]);
                 }
                 this.loadMoneyLogsHistory(lstMoneyLogs);
             }
@@ -159,12 +165,74 @@ cc.Class({
         }
     },
 
-    loadMoneyLogsHistory: function(data){
-        this.contentRight.getComponent(cc.tableView).initTableView(data.length, { array: data, target: this });
+    loadMoneyLogsHistory: function(lstMoneyLogs){
+        var self = this;
+        var num = lstMoneyLogs.length;
+        var headCell = ["Thời gian", "Phát sinh", "Số dư", "Mô tả"];
+        if(this.subHistory === USERINFO_HISTORY_PLAY){
+            headCell = ["Thời gian", "Phát sinh", "Số dư", "Mô tả"];
+        } else if(this.subHistory === USERINFO_HISTORY_CHARGE){
+            headCell = ["Thời gian", "Mon nạp", "Số dư"];
+        } else if(this.subHistory === USERINFO_HISTORY_EXCHANGE){
+            headCell = ["Thời gian", "Loại thẻ", "Thông tin", "Trạng thái"];
+        }
+        var data = this._getdata(lstMoneyLogs, headCell, num);
+        self.contentRight.getComponent(cc.tableView).initTableView(data.length, { array: data, target: this });
     },
 
     setTab: function (tab) {
         this._tab = tab;
+    },
+
+    _getdata: function (val, headCell, num) {
+        var array = [];
+        var headObj = {};
+        if(this.subHistory === USERINFO_HISTORY_PLAY){
+            headObj.date_time = headCell[0];
+            headObj.change_money = headCell[1];
+            headObj.current_money = headCell[2];
+            headObj.description = headCell[3];
+        } else if(this.subHistory === USERINFO_HISTORY_CHARGE){
+            headObj.date_time = headCell[0];
+            headObj.mon_charge = headCell[1];
+            headObj.current_money = headCell[2];
+        } else if(this.subHistory === USERINFO_HISTORY_EXCHANGE){
+            headObj.date_time = headCell[0];
+            headObj.type_card = headCell[1];
+            headObj.info = headCell[2];
+            headObj.status = headCell[3];
+        }
+
+        array.push(headObj);
+
+        if(val !== null){
+            for (var i = 0; i < num; ++i) {
+                var obj = {};
+                if(this.subHistory === USERINFO_HISTORY_PLAY){
+                    obj.date_time = Common.timestampToDate(val[i].getInsertedtime());
+                    obj.change_money = val[i].getChangemoney();
+                    obj.current_money = val[i].getCurrentmoney();
+                    obj.description = val[i].getDescription();
+                } else if(this.subHistory === USERINFO_HISTORY_CHARGE){
+                    obj.date_time = Common.timestampToDate(val[i].getInsertedtime());
+                    obj.mon_charge = val[i].getChangemoney();
+                    obj.current_money = val[i].getCurrentmoney();
+                } else if(this.subHistory === USERINFO_HISTORY_EXCHANGE){
+                    obj.date_time = Common.timestampToDate(val[i].getInsertedtime());
+                    obj.type_card = val[i].getTransactiontype();
+                    obj.info = val[i].getLogstamp();
+                    obj.status = val[i].getDescription();
+                }
+
+                array.push(obj);
+            }
+        }
+
+        return array;
+    },
+
+    setSubHistory: function (subHistory) {
+        this.subHistory = subHistory;
     },
 
 });
