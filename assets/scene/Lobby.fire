@@ -2146,10 +2146,10 @@
   {
     "__type__": "cc.ClickEvent",
     "target": {
-      "__id__": 29
+      "__id__": 28
     },
-    "component": "Lobby",
-    "handler": "onClickSetting",
+    "component": "UILobby",
+    "handler": "openGiftPopup",
     "customEventData": ""
   },
   {

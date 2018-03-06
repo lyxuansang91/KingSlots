@@ -410,6 +410,10 @@ cc.Class({
                 break;
         }
         return isDone;
-    }
+    },
+
+    openRulesPopup: function () {
+        Common.openRules();
+    },
     // update (dt) {},
 });

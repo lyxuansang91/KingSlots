@@ -54,6 +54,16 @@ cc.Class({
         });
 
     },
+    openGiftPopup: function () {
+
+        var tabString = ["Nhập giftcode", "Giftcode đã nhận"];
+
+        Common.showPopup(Config.name.POPUP_GIFT,function(popup) {
+            popup.addTabs(tabString, 1);
+            popup.appear();
+        });
+
+    },
     setUserInfo: function() {
         this.userName.string = Common.getUserName();
         this.userGold.string = Common.numberFormatWithCommas(Common.getCash());

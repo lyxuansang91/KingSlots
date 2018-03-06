@@ -609,11 +609,6 @@ var ThreeCard = cc.Class({
 
     },
     openRulesPopup: function () {
-        var tabString = ["Mini Poker", "Mini Ba Cây", "Tài xỉu"];
-        Common.showPopup(Config.name.POPUP_WEBVIEW,function(popup) {
-            popup.addTabs(tabString, 1);
-            popup.appear();
-        });
-
+        Common.openRules();
     },
 });
