@@ -411,5 +411,18 @@ cc.Class({
                 break;
             }
         }
-    }
+    },
+
+    openRulesPopup: function () {
+        Common.openRules();
+    },
+
+    openTopUserPopup: function () {
+        var tabString = ["Theo ngày", "Theo tuần"];
+
+        Common.showPopup(Config.name.POPUP_TAIXIU_TOP,function(popup) {
+            popup.addTabs(tabString, 1);
+            popup.appear();
+        });
+    },
 });

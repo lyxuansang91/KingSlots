@@ -44,6 +44,8 @@ var Config = {
         POPUP_USERINFO : "PopupUserInfo",
         POPUP_WEBVIEW : "PopupWebview",
         POPUP_MAIL : "PopupMail",
+        POPUP_GIFT : "PopupGift",
+        POPUP_TAIXIU_TOP : "PopupTaiXiuTop",
     },
 
     COMMON_POPUP_TYPE: {
@@ -69,5 +71,13 @@ var Config = {
         CHAT_ROOM: 2,
         CHAT_PRIVATE: 3,
         CHAT_WORLD: 4
+    },
+
+    LookupTypeRequest : {
+        sessionHist : 3,
+        userBetHist : 2,
+        sessionAllUserBet : 1,
+        topUserDayly : 4,
+        topUserWeekly : 5
     }
 };

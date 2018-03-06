@@ -742,5 +742,14 @@ var Common = {
                 toast.loadMessage(strMess,delay);
             }
         }
-    }
+    },
+
+    openRules: function () {
+        var tabString = ["Mini Poker", "Mini Ba Cây", "Tài xỉu", "Treasure"];
+        Common.showPopup(Config.name.POPUP_WEBVIEW,function(popup) {
+            popup.addTabs(tabString, 1);
+            popup.appear();
+        });
+
+    },
 };

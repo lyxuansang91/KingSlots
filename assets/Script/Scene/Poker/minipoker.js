@@ -587,5 +587,9 @@ var MiniPoker = cc.Class({
         });
 
 
-    }
+    },
+
+    openRulesPopup: function () {
+        Common.openRules();
+    },
 });

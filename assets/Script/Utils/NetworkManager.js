@@ -390,6 +390,12 @@ var NetworkManager = {
             case NetworkManager.MESSAGE_ID.LOOK_UP_MONEY_HISTORY:
                 msg = proto.BINLookUpMoneyHistoryResponse.deserializeBinary(bytes);
                 break;
+            case NetworkManager.MESSAGE_ID.REDEEM_GIFT_CODE_HISTORY:
+                msg = proto.BINRedeemGiftCodeHistoryResponse.deserializeBinary(bytes);
+                break;
+            case NetworkManager.MESSAGE_ID.REDEEM_GIFT_CODE:
+                msg = proto.BINRedeemGiftCodeResponse.deserializeBinary(bytes);
+                break;
             default:
                 break;
         }
@@ -774,6 +780,27 @@ var NetworkManager = {
             this.callNetwork(this.initData(request.serializeBinary(), Common.getOS(),
                 NetworkManager.MESSAGE_ID.DELETE_MAIL, Common.getSessionId()));
         }
+    },
+    getRedeemGiftCodeHistoryFromServer: function(firstResult, maxResult){
+        var request = this.initRedeemGiftCodeHistoryMessage(firstResult, maxResult);
+        this.callNetwork(this.initData(request.serializeBinary(), Common.getOS(),
+            NetworkManager.MESSAGE_ID.REDEEM_GIFT_CODE_HISTORY, Common.getSessionId()));
+    },
+    initRedeemGiftCodeHistoryMessage: function(firstResult, maxResult){
+        var request = new proto.BINRedeemGiftCodeHistoryRequest();
+        request.setFirstresult(firstResult);
+        request.setMaxresult(maxResult);
+        return request;
+    },
+    getRedeemGiftCodeFromServer: function(giftcode){
+        var request = this.initRedeemGiftCodeMessage(giftcode);
+        this.callNetwork(this.initData(request.serializeBinary(), Common.getOS(),
+            NetworkManager.MESSAGE_ID.REDEEM_GIFT_CODE, Common.getSessionId()));
+    },
+    initRedeemGiftCodeMessage: function(giftcode){
+        var request = new proto.BINRedeemGiftCodeRequest();
+        request.setGiftcode(giftcode);
+        return request;
     },
     getInstantMessage: function(scope, instantMessage, receiverUsername, receiverUserId, textEmotionId) {
         var request = this.initInstantMessage(scope, instantMessage, receiverUsername, receiverUserId, textEmotionId);
