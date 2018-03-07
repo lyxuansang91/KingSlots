@@ -46,6 +46,9 @@ var Config = {
         POPUP_MAIL : "PopupMail",
         POPUP_GIFT : "PopupGift",
         POPUP_TAIXIU_TOP : "PopupTaiXiuTop",
+        POPUP_CHANGE_PASS : "PopupChangePass",
+        POPUP_CHANGE_AVATAR : "PopupChangeAvatar",
+        POPUP_CHANGE_INFO : "PopupChangeInfo",
     },
 
     COMMON_POPUP_TYPE: {
@@ -79,5 +82,26 @@ var Config = {
         sessionAllUserBet : 1,
         topUserDayly : 4,
         topUserWeekly : 5
+    },
+
+    Valid: {
+        MAX_LENGTH_USERNAME: 12,
+        MIN_LENGTH_USERNAME: 3,
+        MAX_LENGTH_PASSWORD: 12,
+        MIN_LENGTH_PASSWORD: 6,
+        MIN_LENGTH_SERIA: 5,
+        MAX_LENGTH_SERIA: 20,
+        MAX_LENGTH_SDT: 15
+    },
+
+    Update: {
+        UPDATE_DISPLAY_NAME : 1,
+        UPDATE_EMAIL : 2,
+        UPDATE_PHONE : 3,
+        UPDATE_IDENTIFY : 4,
+        UPDATE_AVATAR : 5,
+        UPDATE_PASSWORD : 6,
     }
+
+
 };

@@ -28,6 +28,24 @@ cc.Class({
         this.txt_sovanthua.string = sovanthua;
 
 
+    },
+
+    openChangePass: function () {
+        Common.showPopup(Config.name.POPUP_CHANGE_PASS,function(popup) {
+            popup.appear();
+        });
+    },
+
+    openChangeAvatar: function () {
+        Common.showPopup(Config.name.POPUP_CHANGE_AVATAR,function(popup) {
+            popup.appear();
+        });
+    },
+
+    openChangeInfo: function () {
+        Common.showPopup(Config.name.POPUP_CHANGE_INFO,function(popup) {
+            popup.appear();
+        });
     }
 
 });
