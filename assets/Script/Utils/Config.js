@@ -42,6 +42,7 @@ var Config = {
         POPUP_HISTORY : "PopupHistory",
         POPUP_THREECARD_HISTORY : "PopupThreeCardHistory",
         POPUP_USERINFO : "PopupUserInfo",
+        POPUP_CHARGING : "PopupCharging",
         POPUP_WEBVIEW : "PopupWebview",
         POPUP_MAIL : "PopupMail",
     },
@@ -69,5 +70,9 @@ var Config = {
         CHAT_ROOM: 2,
         CHAT_PRIVATE: 3,
         CHAT_WORLD: 4
+    },
+    CARD_CONFIG_TYPE:  {
+        TYPE_GOLD: 0,
+        TYPE_CASH: 1
     }
 };

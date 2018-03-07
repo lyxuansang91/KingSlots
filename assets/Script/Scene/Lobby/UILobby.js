@@ -35,6 +35,12 @@ cc.Class({
         // item.setPositionX(0);
         // item.setPositionY(0);
         // nodeChild.addChild(item);
+        var tabString = ["Thẻ cào", "SMS"];
+
+        Common.showPopup(Config.name.POPUP_CHARGING,function(popup) {
+            popup.addTabs(tabString, 1);
+            popup.appear();
+        });
 
     },
     openUserInfoPopup: function () {
