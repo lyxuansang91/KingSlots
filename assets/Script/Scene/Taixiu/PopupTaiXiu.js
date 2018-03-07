@@ -377,7 +377,7 @@ cc.Class({
     handleMatchEndResponseHandler: function(resp) {
         cc.log("match end response:", resp.toObject());
         if(resp.getResponsecode()) {
-            Common.showToast("");
+
             this.setTotalMoneyTaiXiu(this.total_money_tai, 0);
             this.setTotalMoneyTaiXiu(this.total_money_xiu, 0);
             this.setTotalMoneyTaiXiu(this.total_bet_tai, 0);
@@ -390,6 +390,8 @@ cc.Class({
             }
             this.updateLstMatchView();
         }
+        if(resp.hasMessage() && resp.getMessage() !== "")
+            Common.showToast(resp.getMessage());
     },
     handleMatchBeginResponseHandler: function(resp) {
         cc.log("match begin response:", resp.toObject());
