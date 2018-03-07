@@ -28,12 +28,13 @@ var Common = {
     height : cc.director.getWinSize().height,
     introScene: null,
     _existTaiXiu: false,
+    providerLists: [],
 
     initLanguage: function(){
         var self = this;
         var url = cc.url.raw( 'resources/vi2.json' )
         cc.loader.load( url, function( err, res) {
-            if(err == null){
+            if(err === null){
                 var json = JSON.stringify(res);
                 self.KEYTEXT = JSON.parse(json);
             }

@@ -42,6 +42,7 @@ var Config = {
         POPUP_HISTORY : "PopupHistory",
         POPUP_THREECARD_HISTORY : "PopupThreeCardHistory",
         POPUP_USERINFO : "PopupUserInfo",
+        POPUP_CHARGING : "PopupCharging",
         POPUP_WEBVIEW : "PopupWebview",
         POPUP_MAIL : "PopupMail",
         POPUP_GIFT : "PopupGift",
@@ -73,11 +74,16 @@ var Config = {
         CHAT_WORLD: 4
     },
 
+
     LookupTypeRequest : {
-        sessionHist : 3,
-        userBetHist : 2,
-        sessionAllUserBet : 1,
-        topUserDayly : 4,
-        topUserWeekly : 5
+        sessionHist: 3,
+        userBetHist: 2,
+        sessionAllUserBet: 1,
+        topUserDayly: 4,
+        topUserWeekly: 5
+    },
+    CARD_CONFIG_TYPE:  {
+        TYPE_GOLD: 0,
+        TYPE_CASH: 1
     }
 };

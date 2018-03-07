@@ -3299,7 +3299,9 @@
   },
   {
     "__type__": "cc.Node",
+
     "_name": "TaiXiuResult",
+
     "_objFlags": 0,
     "_parent": {
       "__id__": 1
@@ -3313,6 +3315,7 @@
     "_active": true,
     "_components": [
       {
+
         "__id__": 106
       }
     ],
@@ -3413,6 +3416,7 @@
       "__id__": 104
     },
     "_enabled": true,
+
     "_useOriginalSize": false,
     "_actualFontSize": 22,
     "_fontSize": 22,

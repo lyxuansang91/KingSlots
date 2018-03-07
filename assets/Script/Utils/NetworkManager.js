@@ -230,7 +230,7 @@ var NetworkManager = {
     },
     lagTime: 0,
     isLagged: false,
-    MAX_KILL_MSG: 5000,
+    MAX_KILL_MSG: 10000,
     URL: "ws://" + "150.95.108.235:1280" + "/megajackpot",
     sessionId: "",
     getSessionId: function() {
@@ -239,9 +239,6 @@ var NetworkManager = {
     checkEvent: function (checkMessage) {
         if(window.listMessage !== null && typeof(window.listMessage) !== 'undefined'  && window.listMessage.length > 0) {
             var buffer = window.listMessage[0];
-            if(buffer.message_id === NetworkManager.MESSAGE_ID.FILTER_MAIL) {
-                cc.log("filter mail:", window.listMessage.length)
-            }
             var result = checkMessage(buffer);
             if(result) {
                 NetworkManager.hideLoading();
@@ -253,7 +250,7 @@ var NetworkManager = {
                     NetworkManager.isLagged = true;
                 }
                 if(Date.now() - NetworkManager.lagTime >= NetworkManager.MAX_KILL_MSG) {
-                    cc.log("kill message");
+                    cc.log("kill message:", buffer.message_id);
                     window.listMessage.shift();
                     NetworkManager.hideLoading();
                     NetworkManager.isLagged = false;
@@ -265,7 +262,6 @@ var NetworkManager = {
         NetworkManager.sessionId = _sessionId;
     },
     requestMessage: function(request, os, message_id, session_id, isLoading) {
-        cc.log("request message loading:", isLoading);
         var ackBuf = NetworkManager.initData(request, os, message_id, session_id);
         NetworkManager.callNetwork(ackBuf, message_id, isLoading);
     }, 
