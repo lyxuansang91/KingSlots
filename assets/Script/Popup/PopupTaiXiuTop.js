@@ -83,50 +83,41 @@ cc.Class({
         var self = this;
         if (rs !== 0) {
             if (rs.getResponsecode()) {
+                cc.log("getHistoriesList =", rs.getHistoriesList());
+                var historiesList = rs.getHistoriesList()[0];
+                cc.log("rank =", historiesList.getFirst());
                 var topUsers = [];
                 for (var i = 0; i < rs.getHistoriesList().length - 2; i++) {
-                    // if (rs.getHistoriesList()[i].getSecond() !== Common.getUserId()) {
-                        // UserRankTXN * user = new UserRankTXN();
-                        // user->setRank(cmInst->convertStringToInt(rs->histories(i).first()));
-                        // user->setUserId(cmInst->convertStringToInt(rs->histories(i).second()));
-                        // user->setAvatarID(cmInst->convertStringToInt(rs->histories(i).third()));
-                        // user->setUserName(rs->histories(i).fourth());
-                        // user->setBonus(cmInst->convertStringToInt(rs->histories(i).fifth()));
                         topUsers.push(rs.getHistoriesList()[i]);
-                    // }
                 }
-                // var number = rs.getHistoriesList().length;
-                // var currentUserRank = rs.getHistoriesList()[number - 2].getFirst();
-                // var previousUserRank = rs.getHistoriesList()[number - 1].getFirst();
-                // var currentuserBonus = rs.getHistoriesList()[number - 2].getFifth();
-                // var currentUserAvatar = rs.getHistoriesList()[number - 2].getThird();
-                // var currentDisplayName = rs.getHistoriesList()[number - 2].getFourth();
-                //
-                // currentUser->setRank(cmInst->convertStringToInt(currentUserRank));
-                // currentUser->setBonus(cmInst->convertStringToInt(currentuserBonus));
-                // currentUser->setAvatarID(cmInst->convertStringToInt(currentUserAvatar));
-                // currentUser->setUserName(currentDisplayName);
-                // currentUser->setPreviousRank(cmInst->convertStringToInt(previousUserRank));
-                // contentPopupRight->removeChild(userRank, true);
-                // userRank = getItemRow(currentUser, 0);
-                // userRank->setPosition(userPos);
-                // //  userRank->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-                // contentPopupRight->addChild(userRank);
-                // tableView->reloadData();
+                var number = rs.getHistoriesList().length;
+                var currentUserRank = rs.getHistoriesList()[number - 2].getFirst() != -1 ? rs.getHistoriesList()[number - 2].getFirst() : "";
+                var previousUserRank = rs.getHistoriesList()[number - 1].getFirst();
+                var currentuserBonus = rs.getHistoriesList()[number - 2].getFifth();
+                var currentUserAvatar = rs.getHistoriesList()[number - 2].getThird();
+                var currentDisplayName = rs.getHistoriesList()[number - 2].getFourth();
 
-                cc.log("topUsers =", topUsers);
+                if(currentUserRank !== 1){
+                    var userObj = {};
+                    userObj.rank = currentUserRank;
+                    userObj.displayName = currentDisplayName;
+                    userObj.betWin = currentuserBonus;
+                }
+
 
                 var number = topUsers.length;
                 var headCell = ["Hạng", "Tài khoản", "Tiền thắng"];
-                // var data = this._getdata(topUsers, headCell, number);
+                var data = this._getdata(topUsers, userObj, headCell, number);
 
-                // self.tableView.getComponent(cc.tableView).initTableView(data.length, { array: data, target: this });
+                cc.log("data =", data);
+
+                self.tableView.getComponent(cc.tableView).initTableView(data.length, { array: data, target: this });
             }
         }
     },
 
 
-    _getdata: function (val, headCell, num) {
+    _getdata: function (val, userObj, headCell, num) {
         var array = [];
         var headObj = {};
         headObj.rank = headCell[0];
@@ -134,11 +125,15 @@ cc.Class({
         headObj.betWin = headCell[2];
         array.push(headObj);
 
+        if (userObj) {
+            array.push(userObj);
+        }
+
         for (var i = 0; i < num; ++i) {
             var obj = {};
-            obj.rank = Common.timestampToDate(val[i].getSixth());
-            obj.displayName = val[i].getFirst();
-            obj.betWin = val[i].getThird();
+            obj.rank = val[i].getFirst();
+            obj.displayName = val[i].getFourth();
+            obj.betWin = val[i].getFifth();
             array.push(obj);
         }
 
