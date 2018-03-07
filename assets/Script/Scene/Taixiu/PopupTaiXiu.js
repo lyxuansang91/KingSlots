@@ -151,7 +151,7 @@ cc.Class({
         cc.log("dat cua tai", Common.getCash());
         if(this.betState !== BET_STATE.TAI) {
             this.betState = BET_STATE.TAI;
-            this.bet_money_xiu.string = "ĐẶT XỈU";
+            this.bet_money_xiu.string = "Đặt xỉu";
             this.bet_money_tai.string = "0";
             this.currentBet = 0;
         }
@@ -159,9 +159,9 @@ cc.Class({
     datXiu: function() {
         cc.log("dat cua xiu", Common.getCash());
         if(this.betState !== BET_STATE.XIU) {
-            this.bet_money_xiu.string = "0";
             this.betState = BET_STATE.XIU;
-            this.bet_money_tai.string = "ĐẶT TÀI";
+            this.bet_money_tai.string = "Đặt tài";
+            this.bet_money_xiu.string = "0";
             this.currentBet = 0;
         }
     },
@@ -175,6 +175,7 @@ cc.Class({
         // this.taiGate = new Gate(0, 0, 0, 0);
         // this.xiuGate = new Gate(0, 0, 0, 0);
         this.node.on('touchstart', onTouchDown, this.bg_dark);
+        this.betState = -1;
         Common.setExistTaiXiu(true);
         this.lstTaiXiuResult = [];
     },
@@ -458,7 +459,6 @@ cc.Class({
         cc.log("OK");
         for (var j = 0; j < this.lstMatch.length; j++) {
             // if (j < this.lstMatch.length) {
-            //     sprite.active = true;
             if( this.lstTaiXiuResult.length < 16) {
                 var taixiu_result = cc.instantiate(this.taiXiuResult);
                 var taixiu_result_component = taixiu_result.getComponent("TaiXiuResult");
