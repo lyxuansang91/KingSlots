@@ -392,6 +392,9 @@ var NetworkManager = {
             case NetworkManager.MESSAGE_ID.REDEEM_GIFT_CODE:
                 msg = proto.BINRedeemGiftCodeResponse.deserializeBinary(bytes);
                 break;
+            case NetworkManager.MESSAGE_ID.UPDATE_USER_INFO:
+                msg = proto.BINUpdateUserInfoResponse.deserializeBinary(bytes);
+                break;
             default:
                 break;
         }
@@ -802,6 +805,25 @@ var NetworkManager = {
         var request = this.initInstantMessage(scope, instantMessage, receiverUsername, receiverUserId, textEmotionId);
         this.callNetwork(this.initData(request.serializeBinary(), Common.getOS(),
             NetworkManager.MESSAGE_ID.INSTANT_MESSAGE, Common.getSessionId()));
+    },
+    getUpdateUserInfoMessageFromServer: function(user_infos, n) {
+        var request = this.initUpdateUserInfoMessage(user_infos, n);
+        this.callNetwork(this.initData(request.serializeBinary(), Common.getOS(),
+            NetworkManager.MESSAGE_ID.UPDATE_USER_INFO, Common.getSessionId()));
+    },
+    initUpdateUserInfoMessage: function(user_infos, n) {
+        cc.log("user_infos =", user_infos);
+        var request = new proto.BINUpdateUserInfoRequest();
+        // for (var i = 0; i < n; i++) {
+            var edit_info = request.addUserinfos();
+            edit_info.setInfofield(user_infos.getInfofield());
+            edit_info.setOldvalue(user_infos.getOldvalue());
+            edit_info.setNewvalue(user_infos.getNewvalue());
+            edit_info.setConfirmvalue(user_infos.getConfirmvalue());
+        // }
+
+        return request;
+
     },
     initInstantMessage: function(scope, instantMessage, receiverUsername, receiverUserId, textEmotionId) {
         if (scope > 0 && scope < 4) {

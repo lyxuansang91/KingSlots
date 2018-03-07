@@ -753,4 +753,11 @@ var Common = {
         });
 
     },
+    new_phone: "",
+    getNewPhone: function(){
+        return this.new_phone;
+    },
+    setNewPhone: function(new_phone){
+        this.new_phone = new_phone;
+    }
 };
