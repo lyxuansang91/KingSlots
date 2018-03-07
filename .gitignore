@@ -24,6 +24,7 @@ build/jsb-default/frameworks/runtime-src/proj.android-studio/app/libs/
 build/jsb-default/frameworks/cocos2d-x/external/ios/libs/
 build/jsb-default/frameworks/cocos2d-x/external/win32/libs/
 build/jsb-default/frameworks/runtime-src/proj.android/
+build/*.tar.gz
 #/////////////////////////////////////////////////////////////////////////////
 # Logs and databases
 #/////////////////////////////////////////////////////////////////////////////

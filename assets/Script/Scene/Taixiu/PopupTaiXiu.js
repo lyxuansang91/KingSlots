@@ -29,7 +29,6 @@ cc.Class({
         taiGate: Gate,
         xiuGate: Gate,
         lstMatch_view : cc.Node,
-        bg_number_result : cc.Node,
         money_keyboard : cc.Node,
         number_keyboard : cc.Node,
         total_money_tai : cc.Label,
@@ -47,7 +46,8 @@ cc.Class({
         roomIndex: -1,
         lstMatch: [TXMatch],
         currentMatch: TXMatch,
-        lstMessageChat: [ItemChat]
+        lstMessageChat: [ItemChat],
+        taiXiuResult: cc.Prefab,
     },
 
     cancel: function() {
@@ -176,6 +176,7 @@ cc.Class({
         // this.xiuGate = new Gate(0, 0, 0, 0);
         this.node.on('touchstart', onTouchDown, this.bg_dark);
         Common.setExistTaiXiu(true);
+        this.lstTaiXiuResult = [];
     },
     onClose: function() {
         NetworkManager.requestExitRoomMessage(0);
@@ -455,20 +456,35 @@ cc.Class({
 
     updateLstMatchView: function() {
         cc.log("OK");
-        for (var j = 0; j < 16; j++) {
-            var sprite = this.lstMatch_view.getChildByName(String(j));
-            if (j < this.lstMatch.length) {
-                sprite.setVisible(true);
-                if (this.lstMatch[j].sum() < 11) {
-                    cc.log("xiu");
-                    //set texture xiu cho sprite
-                } else {
-                    cc.log("tai");
-                    //set texture tai cho sprite
-                }
+        for (var j = 0; j < this.lstMatch.length; j++) {
+            // if (j < this.lstMatch.length) {
+            //     sprite.active = true;
+            if( this.lstTaiXiuResult.length < 16) {
+                var taixiu_result = cc.instantiate(this.taiXiuResult);
+                var taixiu_result_component = taixiu_result.getComponent("TaiXiuResult");
+                taixiu_result_component.initNumber(this.lstMatch[j].sum());
+                taixiu_result_component.initResult(this.lstMatch[j].sum() >= 11);
+                taixiu_result.setPosition((j-this.lstMatch.length / 2) * taixiu_result_component.node.getContentSize().width * 1.2, 0);
+                this.lstMatch_view.addChild(taixiu_result);
+                this.lstTaiXiuResult.push(taixiu_result_component);
             } else {
-                sprite.setVisible(false);
+                var taixiu_result_component = this.lstTaiXiuResult[j];
+                taixiu_result_component.initNumber(this.lstMatch[j].sum());
+                taixiu_result_component.initResult(this.lstMatch[j].sum() >= 11);
             }
+
+                // if (this.lstMatch[j].sum() < 11) {
+                //     cc.log("xiu");
+                //     //set texture xiu cho sprite
+                //     taixiu_result_component.initResult(false);
+                // } else {
+                //     cc.log("tai");
+                //     taixiu_result_component.initResult(true);
+                //     //set texture tai cho sprite
+                // }
+            // } else {
+            //     sprite.active = false;
+            // }
         }
     },
 
