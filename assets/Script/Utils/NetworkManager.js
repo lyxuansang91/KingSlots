@@ -395,6 +395,9 @@ var NetworkManager = {
             case NetworkManager.MESSAGE_ID.UPDATE_USER_INFO:
                 msg = proto.BINUpdateUserInfoResponse.deserializeBinary(bytes);
                 break;
+            case NetworkManager.MESSAGE_ID.SMS_CONFIG:
+                msg = proto.BINSmsConfigResponse.deserializeBinary(bytes);
+                break;
             default:
                 break;
         }
@@ -533,6 +536,15 @@ var NetworkManager = {
 
         return lstMess;
 
+    },
+
+    // sms config
+    initSmsConfigMessage: function(type) {
+        return new proto.BINSmsConfigRequest().setType(type);
+    },
+    requestSmsConfigMessage: function(type) {
+        var message = NetworkManager.initSmsConfigMessage(type);
+        this.requestMessage(message.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.SMS_CONFIG, Common.getSessionId());
     },
     initLogoutMessage: function() {
 

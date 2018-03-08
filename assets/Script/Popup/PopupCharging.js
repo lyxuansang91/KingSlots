@@ -1,6 +1,4 @@
-
 const CommonPopup = require('CommonPopup');
-const NetworkManager = require('NetworkManager');
 
 cc.Class({
     extends: CommonPopup,
