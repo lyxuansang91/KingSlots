@@ -8,13 +8,18 @@ cc.Class({
             default: null,
             type: cc.Button
         },
-        list_frame: [cc.SpriteFrame]
+        avatarSprite: cc.Prefab
     },
 
     init: function (index, callback) {
         this.callback = callback;
         this.tag = index;
-        this.background.getComponent(cc.Sprite).spriteFrame = this.list_frame[index];
+        var avatarId = index;
+
+        var item = cc.instantiate(this.avatarSprite);
+        var avaSprite = item.getComponent("AvatarSprite").init(avatarId);
+
+        this.background.getComponent(cc.Sprite).spriteFrame = avaSprite;
     },
 
 
