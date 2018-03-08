@@ -11,7 +11,8 @@ cc.Class({
         userAvatar: cc.Button ,
         userGold: cc.Label,
         timeTotal: 0,
-        userId: cc.Label
+        userId: cc.Label,
+        avatarSprite: cc.Prefab
     },
 
     onLoad: function () {
@@ -50,7 +51,6 @@ cc.Class({
         var tabString = ["Hồ sơ", "Lịch sử"];
 
         Common.showPopup(Config.name.POPUP_USERINFO,function(popup) {
-
             popup.addTabs(tabString, 1);
             popup.appear();
         });
@@ -76,6 +76,14 @@ cc.Class({
         this.userName.string = Common.getUserName();
         this.userGold.string = Common.numberFormatWithCommas(Common.getCash());
         this.userId.string = Common.getUserId();
+
+        var avatarId = Common.getAvatarId() - 100000;
+
+        var item = cc.instantiate(this.avatarSprite);
+        var avaSprite = item.getComponent("AvatarSprite").init(avatarId);
+
+        this.userAvatar.getComponent(cc.Sprite).spriteFrame = avaSprite;
+
     },
     update: function(dt) {
         this.timeTotal = this.timeTotal + dt;

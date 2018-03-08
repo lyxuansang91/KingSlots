@@ -11,6 +11,7 @@ cc.Class({
         txt_sovanchoi: cc.Label,
         txt_sovanthang: cc.Label,
         txt_sovanthua: cc.Label,
+        avatarSprite: cc.Prefab
     },
 
     // use this for initialization
@@ -27,6 +28,12 @@ cc.Class({
         this.txt_sovanthang.string = sovanthang;
         this.txt_sovanthua.string = sovanthua;
 
+        var avatarId = Common.getAvatarId() - 100000;
+
+        var item = cc.instantiate(this.avatarSprite);
+        var avaSprite = item.getComponent("AvatarSprite").init(avatarId);
+
+        this.avatar.getComponent(cc.Sprite).spriteFrame = avaSprite;
 
     },
 
