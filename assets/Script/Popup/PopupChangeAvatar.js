@@ -26,7 +26,7 @@ cc.Class({
             var size = item.getComponent('AvatarItem').node.getContentSize();
             if(i == 0){
                 padding = innerSize.width/3 - size.width;
-                innerSize = cc.size(innerSize.width,size.height*1.1*7);
+                innerSize = cc.size(innerSize.width,size.height*1.1*8);
                 this.content.setContentSize(innerSize);
             }
 
@@ -55,6 +55,6 @@ cc.Class({
         edit_info.setInfofield(Config.Update.UPDATE_AVATAR);
         edit_info.setNewvalue(this.avatarId.toString());
         NetworkManager.getUpdateUserInfoMessageFromServer(edit_info, 1);
-
+        this.disappear();
     }
 });

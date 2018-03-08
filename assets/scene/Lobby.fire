@@ -1380,6 +1380,9 @@
     "timeTotal": 0,
     "userId": {
       "__id__": 39
+    },
+    "avatarSprite": {
+      "__uuid__": "017f1137-80ae-4a7f-b0e1-0eaf597af0c9"
     }
   },
   {
