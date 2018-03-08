@@ -16,6 +16,7 @@ cc.Class({
 
     onLoad: function () {
         this.setUserInfo();
+        NetworkManager.getCardConfigRequest(Config.CARD_CONFIG_TYPE.TYPE_CASH);
     },
 
     openMailPopup: function () {
@@ -38,7 +39,7 @@ cc.Class({
         // item.setPositionY(0);
         // nodeChild.addChild(item);
         var tabString = ["Thẻ cào", "SMS"];
-        NetworkManager.getCardConfigRequest(Config.CARD_CONFIG_TYPE.TYPE_CASH);
+
         Common.showPopup(Config.name.POPUP_CHARGING,function(popup) {
             popup.addTabs(tabString, 1);
             popup.appear();
@@ -118,7 +119,6 @@ cc.Class({
         var resp = buffer.response;
         switch (buffer.message_id) {
             case NetworkManager.MESSAGE_ID.CARD_CONFIG:
-                cc.log("card config ui lobby");
                 this.cardConfigResponseHandler(resp);
                 break;
             default:

@@ -914,7 +914,7 @@ var NetworkManager = {
                 if(typeof mid !== 'undefined' && mid !== NetworkManager.MESSAGE_ID.INITIALIZE &&
                     mid !== NetworkManager.MESSAGE_ID.PING && mid !== NetworkManager.MESSAGE_ID.JAR
                     && mid !== NetworkManager.MESSAGE_ID.CHANGE_HOST && mid !== NetworkManager.MESSAGE_ID.TURN
-                    && mid !== NetworkManager.MESSAGE_ID.INSTANT_MESSAGE
+                    && mid !== NetworkManager.MESSAGE_ID.INSTANT_MESSAGE && mid !== NetworkManager.MESSAGE_ID.CARD_CONFIG
                     && mid !== NetworkManager.MESSAGE_ID.LOCK_UP_MONEY_HISTORY
                     && mid !== NetworkManager.MESSAGE_ID.FILTER_FRIEND && mid !== NetworkManager.MESSAGE_ID.BET
                     && mid !== NetworkManager.MESSAGE_ID.EXTRA_BET && mid !== NetworkManager.MESSAGE_ID.ZONE_STATUS

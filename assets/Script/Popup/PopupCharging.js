@@ -19,7 +19,7 @@ cc.Class({
     },
 
     onLoad: function () {
-        NetworkManager.getCardConfigRequest(Config.CARD_CONFIG_TYPE.TYPE_CASH);
+        // NetworkManager.getCardConfigRequest(Config.CARD_CONFIG_TYPE.TYPE_CASH);
     },
 
     addTabs: function (tabs, index) {
@@ -81,7 +81,7 @@ cc.Class({
     },
 
     update: function(dt) {
-        this.onGameEvent();
+        // this.onGameEvent();
     },
     handleMessage: function(buffer) {
         var isDone = true;
