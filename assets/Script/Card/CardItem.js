@@ -49,15 +49,14 @@ cc.Class({
         this.suit.node.active = null;
 
     },
-    replaceCard: function (cardValue, type) {
-        var pointValue = CardType.getPoint(cardValue);
-        var suitValue = CardType.getSuit(cardValue);
+    replaceCard: function (cardValue) {
+        var pointValue = this.getPoint(cardValue);
+        var suitValue = this.getSuit(cardValue);
 
-        var card = new Types.Card(pointValue, suitValue, type);
+        var card = new Types.Card(pointValue, suitValue, Common.getZoneId());
 
         var isFaceCard = false;
-
-        if(type === 1){
+        if(Common.getZoneId() === Config.TAG_GAME_ITEM.MINI_POKER){
             if(card.point > 9 && card.point <= 12){
                 isFaceCard = true;
             }
@@ -68,15 +67,14 @@ cc.Class({
         }
 
         if (isFaceCard) {
-            if(type === 1){
+            if(Common.getZoneId() === Config.TAG_GAME_ITEM.MINI_POKER){
                 this.mainPic.spriteFrame = this.texFaces[card.point - 10];
             } else {
                 this.mainPic.spriteFrame = this.texFaces[card.point - 10 - 1];
             }
-            // this.mainPic.spriteFrame = this.texFaces[card.point - 10 - 1];
         }
         else {
-            if(type === 1){
+            if(Common.getZoneId() === Config.TAG_GAME_ITEM.MINI_POKER){
                 this.mainPic.spriteFrame = this.texSuitBigPoker[card.suit];
             } else {
                 this.mainPic.spriteFrame = this.texSuitBig[card.suit];
@@ -92,17 +90,26 @@ cc.Class({
         else {
             this.point.node.color = this.blackTextColor;
         }
-        if(type === 1){
+        if(Common.getZoneId() === Config.TAG_GAME_ITEM.MINI_POKER){
             this.suit.spriteFrame = this.texSuitSmallPoker[card.suit];
         } else {
             this.suit.spriteFrame = this.texSuitSmall[card.suit];
         }
-
 
     },
     setBg: function (isBoolean) {
         if(isBoolean === false){
             this.node.getComponent(cc.Sprite).spriteFrame = null;
         }
+    },
+    getPoint: function (cardValue) {
+        var point = Math.ceil(cardValue / 4);
+
+        return point;
+    },
+    getSuit: function (cardValue) {
+        var suit = cardValue % 4;
+
+        return suit;
     }
 });

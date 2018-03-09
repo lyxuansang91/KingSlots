@@ -1,4 +1,3 @@
-
 var Suit = cc.Enum({
     Spade: 1,
     Heart: 3,
@@ -8,9 +7,9 @@ var Suit = cc.Enum({
 
 var A2_10JQK = 'NAN,A,2,3,4,5,6,7,8,9,10,J,Q,K'.split(',');
 
-function Card (point, suit, type) {
-    // cc.log("suit =", suit);
-    if(type === 1){
+function Card (point, suit, zoneId) {
+    cc.log("zoneId =", zoneId);
+    if(zoneId === 19){
         Suit = cc.Enum({
             Spade: 1,
             Heart: 0,
@@ -19,6 +18,15 @@ function Card (point, suit, type) {
         });
 
         A2_10JQK = 'NAN,2,3,4,5,6,7,8,9,10,J,Q,K,A'.split(',');
+    } else {
+        Suit = cc.Enum({
+            Spade: 1,
+            Heart: 3,
+            Club: 2,
+            Diamond: 0,
+        });
+
+        A2_10JQK = 'NAN,A,2,3,4,5,6,7,8,9,10,J,Q,K'.split(',');
     }
     Object.defineProperties(this, {
         point: {
