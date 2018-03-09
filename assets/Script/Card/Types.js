@@ -1,3 +1,4 @@
+
 var Suit = cc.Enum({
     Spade: 1,
     Heart: 3,
