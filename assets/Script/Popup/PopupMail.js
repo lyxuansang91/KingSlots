@@ -13,6 +13,8 @@ var PopupMail = cc.Class({
         nodeSendAdmin: cc.Node,
         title: cc.EditBox,
         content: cc.EditBox,
+        nodeMail: cc.Prefab,
+        nodeMailContent: cc.Node
     },
     statics: {
         instance: null
@@ -58,6 +60,9 @@ var PopupMail = cc.Class({
             case NetworkManager.MESSAGE_ID.DELETE_MAIL:
                 var msg = buffer.response;
                 this.deleteMailResponse(msg);
+            case NetworkManager.MESSAGE_ID.READED_MAIL:
+                var msg = buffer.response;
+                this.readMailResponse(msg);
                 break;
                 isDone = false;
                 break;
@@ -77,8 +82,7 @@ var PopupMail = cc.Class({
         } else if(index === MAIL_SENT_ADMIN){
             self.tableView.active = false;
             self.nodeSendAdmin.active = true;
-            // var item = cc.instantiate(this.sendAdminPrefab);
-            // self.nodeSendAdmin.addChild(item);
+            self.nodeMailContent.active = false;
         }
 
     },
@@ -88,6 +92,7 @@ var PopupMail = cc.Class({
         var self = this;
         self.tableView.active = true;
         self.nodeSendAdmin.active = false;
+        self.nodeMailContent.active = false;
         if (response !== 0){
             if (response.getResponsecode()){
                 // self.tableView.removeAllChildren();
@@ -217,5 +222,39 @@ var PopupMail = cc.Class({
         this.setListMail(data);
 
         this.reloadEmail(data);
+    },
+    
+    readMail: function (mailId) {
+        cc.log("mailID =", mailId);
+        NetworkManager.readMail(mailId, true);
+    },
+
+    readMailResponse: function(response){
+        if (response !== 0){
+            if (response.getResponsecode()){
+                if (response.hasMail()){
+                    var binMail = this.parseFromBinMail(response.getMail());
+                    cc.log("binMail =", binMail);
+                    //hien thi mail len giao dien
+                    this.showReadMail(binMail);
+                }
+            }
+
+            if (response.hasMessage()){
+                Common.showToast(response.getMessage());
+            }
+        }
+    },
+
+    showReadMail: function (binMail) {
+        this.tableView.active = false;
+        this.nodeMailContent.active = true;
+        this.nodeSendAdmin.active = false;
+        var title = binMail.getTitle();
+        var sender = binMail.getSenderusername();
+        var content = binMail.getBody();
+        var item = cc.instantiate(this.nodeMail);
+        item.getComponent('NodeMail').init(title, sender, content);
+        this.nodeMailContent.addChild(item);
     }
 });

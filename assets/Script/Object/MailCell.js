@@ -6,7 +6,8 @@ cc.Class({
 
         lbl_title: cc.RichText,
         lbl_sender: cc.Label,
-        btn_delete: cc.Button
+        btn_delete: cc.Button,
+        mailId: -1
     },
 
 
@@ -14,8 +15,10 @@ cc.Class({
         if(data !== null){
             var obj = data.array[index];
 
-            this.lbl_title.string = obj[Object.keys(obj)[0]].toString();
-            this.lbl_sender.string = obj[Object.keys(obj)[1]].toString();
+            this.lbl_title.string = obj.mail_title;
+            this.lbl_sender.string = obj.mail_sender;
+
+            this.mailId = obj.mail_id;
 
             this.btn_delete.node.tag = index;
 
@@ -27,17 +30,17 @@ cc.Class({
 
     deleteEvent: function (e) {
 
-
-        // // self.tableView.getComponent(cc.tableView).initTableView(data.length, { array: data, target: this });
-        // var tableView = this.node.getComponent(cc.tableView);
-        //
-        // cc.log("tableview =", this.node);
-
         var tag = e.target._tag;
 
-        cc.log("tag =", tag);
-
         PopupMail.instance.deleteMail(tag);
+
+    },
+
+    clicked: function () {
+        cc.log("test");
+        var mailId = this.mailId;
+        cc.log("mailId =", mailId);
+        PopupMail.instance.readMail(mailId);
 
     }
 

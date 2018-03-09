@@ -214,7 +214,6 @@ var Common = {
     _zoneId: -1,
     getZoneId: function() {
         var result = -1;
-        cc.log("game tag =", this.gameTag);
         switch (this.gameTag)
         {
             case Config.TAG_GAME_ITEM.MINI_BACAY:
@@ -245,7 +244,6 @@ var Common = {
         return this.enableGameIds;
     },
     setGameTag: function(gameTag) {
-        cc.log("gameTag", gameTag);
         this.gameTag = gameTag;
     },
     getGameTag: function() {
