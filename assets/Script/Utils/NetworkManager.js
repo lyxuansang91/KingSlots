@@ -395,6 +395,9 @@ var NetworkManager = {
             case NetworkManager.MESSAGE_ID.UPDATE_USER_INFO:
                 msg = proto.BINUpdateUserInfoResponse.deserializeBinary(bytes);
                 break;
+            case NetworkManager.MESSAGE_ID.SMS_CONFIG:
+                msg = proto.BINSmsConfigResponse.deserializeBinary(bytes);
+                break;
             default:
                 break;
         }
@@ -532,7 +535,18 @@ var NetworkManager = {
         }
 
         return lstMess;
+    },
 
+    // sms config
+    initSmsConfigMessage: function(type) {
+        var message = new proto.BINSmsConfigRequest();
+        message.setType(type);
+        return message;
+    },
+    requestSmsConfigMessage: function(type) {
+        var message = NetworkManager.initSmsConfigMessage(type);
+        cc.log("message sms:", message);
+        this.requestMessage(message.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.SMS_CONFIG, Common.getSessionId());
     },
     initLogoutMessage: function() {
 
@@ -915,7 +929,7 @@ var NetworkManager = {
                     mid !== NetworkManager.MESSAGE_ID.PING && mid !== NetworkManager.MESSAGE_ID.JAR
                     && mid !== NetworkManager.MESSAGE_ID.CHANGE_HOST && mid !== NetworkManager.MESSAGE_ID.TURN
                     && mid !== NetworkManager.MESSAGE_ID.INSTANT_MESSAGE && mid !== NetworkManager.MESSAGE_ID.CARD_CONFIG
-                    && mid !== NetworkManager.MESSAGE_ID.LOCK_UP_MONEY_HISTORY
+                    && mid !== NetworkManager.MESSAGE_ID.LOCK_UP_MONEY_HISTORY && mid !== NetworkManager.MESSAGE_ID.SMS_CONFIG
                     && mid !== NetworkManager.MESSAGE_ID.FILTER_FRIEND && mid !== NetworkManager.MESSAGE_ID.BET
                     && mid !== NetworkManager.MESSAGE_ID.EXTRA_BET && mid !== NetworkManager.MESSAGE_ID.ZONE_STATUS
                     && mid !== NetworkManager.MESSAGE_ID.FILTER_ROOM && mid !== NetworkManager.MESSAGE_ID.LOOK_UP_GAME_HISTORY ){

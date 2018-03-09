@@ -17,8 +17,10 @@ cc.Class({
 
     onLoad: function () {
         this.setUserInfo();
-        NetworkManager.getCardConfigRequest(Config.CARD_CONFIG_TYPE.TYPE_CASH);
-        NetworkManager.req
+        if(Common.providerLists.length === 0)
+            NetworkManager.getCardConfigRequest(Config.CARD_CONFIG_TYPE.TYPE_CASH);
+        if(Common.smsConfigLists.length === 0)
+            NetworkManager.requestSmsConfigMessage(1);
     },
 
     openMailPopup: function () {
@@ -123,12 +125,54 @@ cc.Class({
             Common.showToast(resp.getMessage());
         }
     },
+    smsConfigResponseHandler: function(resp) {
+        cc.log("sms config response handler:", resp.toObject());
+        Common.smsConfigLists = [];
+        if(resp.getResponsecode()) {
+            for(var i = 0; i < resp.getNumbersList().length; i++) {
+                var obj = {};
+                var smsNumber = resp.getNumbersList()[i];
+                obj.number = smsNumber.getNumber();
+                obj.samesyntax = smsNumber.getSamesyntax();
+                obj.dayquota = smsNumber.getDayquota();
+                obj.providersList = [];
+                for(var j = 0; j < smsNumber.getProvidersList().length; j++) {
+                    var obj_provider = {};
+                    var provider = smsNumber.getProvidersList()[j];
+                    obj_provider.providerid = provider.getProviderid();
+                    obj_provider.providercode = provider.getProvidercode();
+                    obj_provider.providername = provider.getProvidername();
+                    obj_provider.syntaxesList = [];
+                    for(var k = 0; k < provider.getSyntaxesList().length; k++) {
+                        var obj_syntax = {};
+                        var syntax = provider.getSyntaxesList()[k];
+                        obj_syntax.syntaxid = syntax.getSyntaxid();
+                        obj_syntax.syntax = syntax.getSyntax();
+                        obj_syntax.parvalue = syntax.getParvalue();
+                        obj_syntax.promotion = syntax.getPromotion();
+                        obj_syntax.targetnumber = syntax.getTargetnumber();
+                        obj_syntax.cashvalue = syntax.getCashvalue();
+                        obj_provider.syntaxesList.push(obj_syntax);
+                    }
+                    obj.providersList.push(obj_provider);
+                }
+            }
+            Common.smsConfigLists.push(obj);
+        }
+
+        if(resp.hasMessage() && resp.getMessage() !== "") {
+            Common.showToast(resp.getMessage());
+        }
+    },
     handleMessage: function(buffer) {
         var isDone = true;
         var resp = buffer.response;
         switch (buffer.message_id) {
             case NetworkManager.MESSAGE_ID.CARD_CONFIG:
                 this.cardConfigResponseHandler(resp);
+                break;
+            case NetworkManager.MESSAGE_ID.SMS_CONFIG:
+                this.smsConfigResponseHandler(resp);
                 break;
             default:
                 isDone = false;

@@ -1,13 +1,10 @@
-
 const CommonPopup = require('CommonPopup');
-const NetworkManager = require('NetworkManager');
 
 cc.Class({
     extends: CommonPopup,
 
     properties: {
         tabLeftPrefab: cc.Prefab,
-        nodeNapThe: cc.Prefab,
         body: cc.Node,
         _tab: 1,
         subHistory: 1
@@ -33,15 +30,18 @@ cc.Class({
     onEvent: function(index) {
         cc.log("index : ",index);
         var nodeNapThe = this.body.getChildByName("NodeNapThe");
+        var nodeNapSms = this.body.getChildByName("NodeNapSMS");
 
         switch(index) {
             case 1:
                 nodeNapThe.active = true;
+                nodeNapSms.active = false;
                 nodeNapThe.getComponent("NodeNapThe").initTabLeft();
                 break;
             case 2:
                 nodeNapThe.active = false;
-                nodeNapThe.getComponent("NodeNapThe").demo(2);
+                nodeNapSms.active = true;
+                // nodeNapThe.getComponent("NodeNapThe").demo(2);
                 break;
             case 3:
                 break;

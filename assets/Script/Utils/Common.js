@@ -29,6 +29,7 @@ var Common = {
     introScene: null,
     _existTaiXiu: false,
     providerLists: [],
+    smsConfigLists: [],
 
     initLanguage: function(){
         var self = this;
