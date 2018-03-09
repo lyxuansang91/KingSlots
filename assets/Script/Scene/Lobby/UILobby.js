@@ -18,6 +18,7 @@ cc.Class({
     onLoad: function () {
         this.setUserInfo();
         NetworkManager.getCardConfigRequest(Config.CARD_CONFIG_TYPE.TYPE_CASH);
+        NetworkManager.req
     },
 
     openMailPopup: function () {
