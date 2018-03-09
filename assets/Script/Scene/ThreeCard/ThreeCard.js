@@ -68,7 +68,7 @@ var ThreeCard = cc.Class({
                 var item = cc.instantiate(this.cardPrefab);
                 var posX = (j - 1) * item.getContentSize().width;
                 var posY = (i - 1) * item.getContentSize().height;
-                item.getComponent('CardItem').replaceCard(items_value[i][j], 0);
+                item.getComponent('CardItem').replaceCard(items_value[i][j]);
                 item.setPositionY(posY);
                 item.setPositionX(posX);
 
@@ -300,7 +300,7 @@ var ThreeCard = cc.Class({
             if(i < 3*this.number){
                 var i1 = this.stepCard - (3 - x);
                 var j1 = y;
-                this.list_item[i].getComponent('CardItem').replaceCard(this.list_recent_value[i1][j1], 0);
+                this.list_item[i].getComponent('CardItem').replaceCard(this.list_recent_value[i1][j1]);
             }
 
             var posX = (y - 1) * this.list_item[i].getContentSize().width;
@@ -320,7 +320,7 @@ var ThreeCard = cc.Class({
 
             var card_value = items_value[x][y];
             if(i >= 3*this.number){
-                card.getComponent('CardItem').replaceCard(card_value, 0);
+                card.getComponent('CardItem').replaceCard(card_value);
             }
 
             var h = card.getContentSize().height;
