@@ -117,16 +117,16 @@ var Common = {
 
     getOS: function() {
         var os = -1;
-        if(cc.sys.isNative) {
-            if(cc.sys.platform == cc.sys.ANDROID) {
+        // if(cc.sys.isNative) {
+        //     if(cc.sys.platform == cc.sys.ANDROID) {
                 os = Common.OS.ANDROID;
-            } else if(cc.sys.platform == cc.sys.IPHONE ||
-                        cc.sys.platform == cc.sys.IPAD) {
-                os = Common.OS.IOS;
-            }
-        } else if(cc.sys.isBrowser) {
-            os = Common.OS.WEB;
-        }
+        //     } else if(cc.sys.platform == cc.sys.IPHONE ||
+        //                 cc.sys.platform == cc.sys.IPAD) {
+        //         os = Common.OS.IOS;
+        //     }
+        // } else if(cc.sys.isBrowser) {
+        //     os = Common.OS.WEB;
+        // }
         return os;
     },
     sessionId: "-1",
@@ -370,21 +370,21 @@ var Common = {
     getPackageName: function() {
         if(cc.sys.isNative) {
             if(cc.sys.platform == cc.sys.ANDROID){
-                return "com.gamebai.tienlen";//jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getPackageNameJNI", "()Ljava/lang/String;");
+                return "com.bom.club.gamevui2018";//jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getPackageNameJNI", "()Ljava/lang/String;");
             }else if(cc.sys.platform == cc.sys.IPHONE || cc.sys.platform == cc.sys.IPAD){
                 console.log("PACKAGE : com.gamebai.tienlen");
-                return "com.gamebai.tienlen";//jsb.reflection.callStaticMethod("NativeUtility", "getPackage");
+                return "com.bom.club.gamevui2018";//jsb.reflection.callStaticMethod("NativeUtility", "getPackage");
             }
         } else {
-            return "com.gamebai.tienlen";
+            return "com.bom.club.gamevui2018";
         }
 
     },
     getCp: function() {
-        return "24";
+        return "17";
     },
     getVersionCode: function() {
-        return "15";
+        return "19";
     },
     phoneNumber: "",
     setPhoneNunber: function(phoneNumber){

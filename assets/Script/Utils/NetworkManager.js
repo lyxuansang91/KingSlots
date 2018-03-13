@@ -231,7 +231,7 @@ var NetworkManager = {
     lagTime: 0,
     isLagged: false,
     MAX_KILL_MSG: 10000,
-    URL: "ws://" + "150.95.108.235:1280" + "/megajackpot",
+    URL: "ws://" + "14.225.2.111:1280" + "/megajackpot",
     sessionId: "",
     getSessionId: function() {
         return NetworkManager.sessionId;
@@ -400,6 +400,9 @@ var NetworkManager = {
                 break;
             case NetworkManager.MESSAGE_ID.READED_MAIL:
                 msg = proto.BINReadedMailResponse.deserializeBinary(bytes);
+                break;
+            case NetworkManager.MESSAGE_ID.CLAIM_ATTACH_ITEM:
+                msg = proto.BINClaimAttachItemResponse.deserializeBinary(bytes);
                 break;
             default:
                 break;
@@ -803,6 +806,14 @@ var NetworkManager = {
         request.setGetcontent(getContent);
         this.callNetwork(this.initData(request.serializeBinary(), Common.getOS(),
             NetworkManager.MESSAGE_ID.READED_MAIL, Common.getSessionId()));
+    },
+    claimAttachMail: function(mailId,captchaAnswers){
+        var request = new proto.BINClaimAttachItemRequest();
+        request.setMailid(mailId);
+        request.setCaptchaanswers(captchaAnswers);
+        cc.log("request =", request);
+        this.callNetwork(this.initData(request.serializeBinary(), Common.getOS(),
+            NetworkManager.MESSAGE_ID.CLAIM_ATTACH_ITEM, Common.getSessionId()));
     },
     getRedeemGiftCodeHistoryFromServer: function(firstResult, maxResult){
         var request = this.initRedeemGiftCodeHistoryMessage(firstResult, maxResult);
