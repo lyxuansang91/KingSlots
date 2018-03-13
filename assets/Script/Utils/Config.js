@@ -55,6 +55,7 @@ var Config = {
         POPUP_CHANGE_PASS : "PopupChangePass",
         POPUP_CHANGE_AVATAR : "PopupChangeAvatar",
         POPUP_CHANGE_INFO : "PopupChangeInfo",
+        POPUP_CAPTCHA : "PopupCaptcha",
     },
 
     COMMON_POPUP_TYPE: {
