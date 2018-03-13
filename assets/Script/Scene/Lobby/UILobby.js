@@ -33,15 +33,6 @@ cc.Class({
     },
 
     openChargePopup: function () {
-        // var tabString = ["Viettel", "Mobifone", "VinaPhone"];
-        // var nodeChild = new cc.Node();
-        // nodeChild.parent = this.node;
-        // var item = cc.instantiate(this.popupIngame);
-        //
-        // item.getComponent('PopupIngameItem').init(tabString, "charge");
-        // item.setPositionX(0);
-        // item.setPositionY(0);
-        // nodeChild.addChild(item);
         var tabString = ["Thẻ cào", "SMS"];
 
         Common.showPopup(Config.name.POPUP_CHARGING,function(popup) {

@@ -19,22 +19,15 @@ cc.Class({
         this.tabInfo = Common.smsConfigLists.map(function(provider) {
             return provider.providerLists;
         });
-        // cc.log("tabString:", this.tabInfo);
 
         var item = cc.instantiate(this.tabLeftPrefab);
         item.getComponent("UITabLeft").setTab(this.tabString, 1, function(index){
             this.onLeftEvent(index-1);
         }.bind(this));
         this.ui_left.addChild(item);
-
-
-
-
-
     },
 
     onLoad: function () {
-        // this.initTabLeft();
     },
 
     onLeftEvent: function(index) {

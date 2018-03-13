@@ -401,6 +401,9 @@ var NetworkManager = {
             case NetworkManager.MESSAGE_ID.READED_MAIL:
                 msg = proto.BINReadedMailResponse.deserializeBinary(bytes);
                 break;
+            case NetworkManager.MESSAGE_ID.PURCHASE_MONEY:
+                msg = proto.BINPurchaseMoneyResponse.deserializeBinary(bytes);
+                break;
             default:
                 break;
         }
@@ -548,15 +551,31 @@ var NetworkManager = {
     },
     requestSmsConfigMessage: function(type) {
         var message = NetworkManager.initSmsConfigMessage(type);
-        cc.log("message sms:", message);
         this.requestMessage(message.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.SMS_CONFIG, Common.getSessionId());
     },
+
     initLogoutMessage: function() {
 
     },
 
     requestLogoutMessage: function() {
 
+    },
+
+    /* purchase money */
+    initPurchaseMoneyMessage: function(provider, cardSerial, cardPin, securityKey, captcha) {
+        var message = proto.BINPurchaseMoneyRequest();
+        message.setProvider(provider);
+        message.setCardserial(cardSerial);
+        message.setCardpin(cardPin);
+        message.setSecuritykey(securityKey);
+        message.setCaptcha(captcha);
+        return message;
+    },
+
+    requestPurchaseMoneyMessage: function(provider, cardSerial, cardPin, securityKey, captcha) {
+        var message = NetworkManager.initPurchaseMoneyMessage(provider, cardSerial, cardPin, securityKey, captcha);
+        this.requestMessage(message.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.PURCHASE_MONEY, Common.getSessionId());
     },
     // exit room message
 
