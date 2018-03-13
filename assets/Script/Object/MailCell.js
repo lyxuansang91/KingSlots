@@ -7,7 +7,8 @@ cc.Class({
         lbl_title: cc.RichText,
         lbl_sender: cc.Label,
         btn_delete: cc.Button,
-        mailId: -1
+        mailId: -1,
+        index: 0
     },
 
 
@@ -19,6 +20,8 @@ cc.Class({
             this.lbl_sender.string = obj.mail_sender;
 
             this.mailId = obj.mail_id;
+
+            this.index = index;
 
             this.btn_delete.node.tag = index;
 
@@ -36,11 +39,10 @@ cc.Class({
 
     },
 
-    clicked: function () {
-        cc.log("test");
+    clicked: function (index) {
         var mailId = this.mailId;
-        cc.log("mailId =", mailId);
-        PopupMail.instance.readMail(mailId);
+        var index = this.index;
+        PopupMail.instance.readMail(mailId, index);
 
     }
 

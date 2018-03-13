@@ -64,6 +64,10 @@ var PopupMail = cc.Class({
                 var msg = buffer.response;
                 this.readMailResponse(msg);
                 break;
+            case NetworkManager.MESSAGE_ID.CLAIM_ATTACH_ITEM:
+                var msg = buffer.response;
+                this.claimMailResponse(msg);
+                break;
                 isDone = false;
                 break;
         }
@@ -93,6 +97,7 @@ var PopupMail = cc.Class({
         self.tableView.active = true;
         self.nodeSendAdmin.active = false;
         self.nodeMailContent.active = false;
+        self.nodeMailContent.removeAllChildren(true);
         if (response !== 0){
             if (response.getResponsecode()){
                 // self.tableView.removeAllChildren();
@@ -114,7 +119,7 @@ var PopupMail = cc.Class({
 
             }
             else {
-                // showToast(response->message().c_str(), 2);
+                Common.showToast(response.getMessage(), 2);
             }
         }
     },
@@ -206,6 +211,14 @@ var PopupMail = cc.Class({
     setListMail: function (data) {
         this.lstEmail = data;
     },
+
+    setReadMailIndex: function (index) {
+        this.index = index;
+    },
+
+    setReadMailComponent: function (mail) {
+        this.readMailComponent = mail;
+    },
     
     deleteMail: function (index) {
 
@@ -224,8 +237,8 @@ var PopupMail = cc.Class({
         this.reloadEmail(data);
     },
     
-    readMail: function (mailId) {
-        cc.log("mailID =", mailId);
+    readMail: function (mailId, index) {
+        this.setReadMailIndex(index);
         NetworkManager.readMail(mailId, true);
     },
 
@@ -234,6 +247,7 @@ var PopupMail = cc.Class({
             if (response.getResponsecode()){
                 if (response.hasMail()){
                     var binMail = this.parseFromBinMail(response.getMail());
+                    this.setReadMailComponent(binMail);
                     cc.log("binMail =", binMail);
                     //hien thi mail len giao dien
                     this.showReadMail(binMail);
@@ -250,11 +264,44 @@ var PopupMail = cc.Class({
         this.tableView.active = false;
         this.nodeMailContent.active = true;
         this.nodeSendAdmin.active = false;
-        var title = binMail.getTitle();
-        var sender = binMail.getSenderusername();
-        var content = binMail.getBody();
+        // var title = binMail.getTitle();
+        // var sender = binMail.getSenderusername();
+        // var content = binMail.getBody();
+        // var attachitemid = binMail.getAttachitemid();
+        // cc.log("mail =", binMail);
         var item = cc.instantiate(this.nodeMail);
-        item.getComponent('NodeMail').init(title, sender, content);
+        item.getComponent('NodeMail').init(binMail);
         this.nodeMailContent.addChild(item);
+    },
+
+    claimMailResponse: function(response){
+        cc.log("response claim =", response);
+        if (response !== 0){
+            if (response.getResponsecode()){
+                // vector<long> lstMail;
+                this.deleteMail(this.index); //xoa mail
+                var readMail = this.readMailComponent;
+                if (response.hasMessage() && readMail.getMailid() > 0 && readMail.getAttachitemid() > 0){
+                    if (readMail.getAttachitemid() === 3){
+                        // NodeDailyGift* gift = new NodeDailyGift(mail_clicked.getTitle(), response->message());
+                        // this->addChild(gift, INDEX_POPUP);
+                        Common.showToast(response.getMessage(), 3);
+                    }
+                    else {
+
+                        // auto scene = cocos2d::Director::getInstance()->getRunningScene()->getChildByTag(TAG_CURRENT_SCENE);
+                        // if (scene != nullptr && scene->getChildByTag(TAG_POPUP_CAPTCHA) != nullptr) {
+                        //     scene->removeChildByTag(TAG_POPUP_CAPTCHA);
+                        // }
+                        this.disappear();
+
+                        Common.showToast(response.getMessage(), 3);
+                    }
+                }
+            }
+            else if (response.hasMessage()){
+                Common.showToast(response.getMessage(), 3);
+            }
+        }
     }
 });
