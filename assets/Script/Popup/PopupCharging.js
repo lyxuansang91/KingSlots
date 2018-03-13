@@ -41,6 +41,7 @@ cc.Class({
             case 2:
                 nodeNapThe.active = false;
                 nodeNapSms.active = true;
+                nodeNapSms.getComponent("NodeNapSMS").initTabLeft();
                 // nodeNapThe.getComponent("NodeNapThe").demo(2);
                 break;
             case 3:

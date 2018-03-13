@@ -33,7 +33,7 @@ var Common = {
 
     initLanguage: function(){
         var self = this;
-        var url = cc.url.raw( 'resources/vi2.json' )
+        var url = cc.url.raw( 'resources/vi2.json' );
         cc.loader.load( url, function( err, res) {
             if(err === null){
                 var json = JSON.stringify(res);

@@ -156,9 +156,11 @@ cc.Class({
                     }
                     obj.providersList.push(obj_provider);
                 }
+                Common.smsConfigLists.push(obj);
             }
-            Common.smsConfigLists.push(obj);
         }
+
+        cc.log("sms config lists size:", Common.smsConfigLists.length);
 
         if(resp.hasMessage() && resp.getMessage() !== "") {
             Common.showToast(resp.getMessage());

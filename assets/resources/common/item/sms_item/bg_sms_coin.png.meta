@@ -1,0 +1,30 @@
+{
+  "ver": "1.0.0",
+  "uuid": "83ad24f1-86cc-4a3e-bf59-a274309de33b",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "subMetas": {
+    "bg_sms_coin": {
+      "ver": "1.0.3",
+      "uuid": "7d14cd77-d660-4e50-8a0d-df1a68664208",
+      "rawTextureUuid": "83ad24f1-86cc-4a3e-bf59-a274309de33b",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 146,
+      "height": 40,
+      "rawWidth": 146,
+      "rawHeight": 40,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

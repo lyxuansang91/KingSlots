@@ -10,7 +10,6 @@ cc.Class({
         _longClicked_: false,
     },
 
-    //不可以重写
     _cellAddMethodToNode_: function () {
         this.node.clicked = this.clicked.bind(this);
     },
@@ -66,6 +65,8 @@ cc.Class({
     },
 
     init: function (index, data, reload, group) {
+        this.index = index;
+        this.data = data;
         cc.log("data =", data);
     },
 });
