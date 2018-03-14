@@ -57,6 +57,7 @@ var Config = {
         POPUP_CHANGE_AVATAR : "PopupChangeAvatar",
         POPUP_CHANGE_INFO : "PopupChangeInfo",
         POPUP_CAPTCHA : "PopupCaptcha",
+        POPUP_TAIXIU_BET_HISTORY : "PopupTaixiuBetHistory",
     },
 
     COMMON_POPUP_TYPE: {
@@ -114,5 +115,11 @@ var Config = {
         UPDATE_IDENTIFY : 4,
         UPDATE_AVATAR : 5,
         UPDATE_PASSWORD : 6,
+    },
+    NUM_LOAD: {
+        MORE_ITEM: 10,
+        MORE_FRIEND: 10,
+        ITEM_PAGE: 10
     }
+
 };

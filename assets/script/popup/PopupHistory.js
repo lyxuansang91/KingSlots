@@ -67,9 +67,6 @@ cc.Class({
                 var msg = buffer.response;
                 this.lookupGameResponseHandler(msg);
                 break;
-            case NetworkManager.MESSAGE_ID.PING:
-                var msg = buffer.response;
-                this.pingMessageResponseHandler(msg);
             default:
                 isDone = false;
                 break;
