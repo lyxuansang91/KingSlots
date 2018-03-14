@@ -44,7 +44,7 @@ cc.Class({
 
     onEvent: function (index) {},
 
-    init: function(response, type, callback) {
+    init: function() {
         this.response = response;
 
         switch (type) {

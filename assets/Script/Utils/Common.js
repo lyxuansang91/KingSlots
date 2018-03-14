@@ -726,7 +726,7 @@ var Common = {
         var currZoneId = this.getZoneId();
         switch(currZoneId){
             case Config.TAG_GAME_ITEM.MINI_BACAY:
-                if(historyType == 1){
+                if(historyType === 1){
                     return ["Thời gian","Phiên", "Đặt", "Thắng", "Chi tiết"];
                 }else{
                     return ["Thời gian","Tên", "Đặt", "Thắng", "Chi tiết"];
@@ -735,6 +735,10 @@ var Common = {
                 break;
             case Config.TAG_GAME_ITEM.MINI_POKER:
                 var headCell = ["Thời gian", "Tên", "Đặt", "Thắng", "Chi tiết"];
+                return headCell;
+                break;
+            case Config.TAG_GAME_ITEM.TAIXIU:
+                var headCell = ["Phiên", "Thời gian", "Đặt tài", "Đặt xỉu", "Hoàn tài", "Hoàn xỉu", "Kết quả", "Tiền thắng"];
                 return headCell;
                 break;
         }

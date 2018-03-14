@@ -596,4 +596,11 @@ cc.Class({
             popup.appear();
         });
     },
+
+    openBetHistoryPopup: function () {
+        Common.showPopup(Config.name.POPUP_TAIXIU_BET_HISTORY,function(popup) {
+            popup.appear();
+        });
+    },
+
 });
