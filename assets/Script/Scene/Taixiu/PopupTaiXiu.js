@@ -39,6 +39,7 @@ cc.Class({
         total_bet_xiu : cc.Label,
         tai_number_user : cc.Label,
         xiu_number_user : cc.Label,
+        session: cc.Label,
         isNumber: false,
         currentBet: 0,
         betState: -1,
@@ -52,7 +53,7 @@ cc.Class({
         item_chat : cc.Prefab,
         item_emotion : cc.Prefab,
         lstMessageChat: [ItemChat],
-        bg_emotions : cc.ScrollView,
+        bg_emotions : cc.ScrollView
     },
 
     cancel: function() {
@@ -62,7 +63,7 @@ cc.Class({
         if (this.getTableStage() === TABLE_STATE.BET) {
             NetworkManager.sendBet(this.roomIndex, this.currentBet, this.betState);
         } else {
-            Common.showToast("Cho ván sau đi nhé");
+            Common.showToast("Chờ ván sau đi nhé");
         }
     },
     setEnterRoomResponse: function(resp) {
@@ -77,6 +78,7 @@ cc.Class({
             } else if (key === "sessionId") {
                 //set current session
                 this.currentMatch = new TXMatch(value, 1, 1, 1);
+                this.session.string = value;
             } else if (key === "resultHistorys") {
                 //xu ly cau
                 var listMatch = value.split('|');
@@ -462,6 +464,7 @@ cc.Class({
                 var value = resp.getArgsList()[i].getValue();
                 if (key === "sessionId") {
                     this.currentMatch.setSestionID(value);
+                    this.session.string = value;
                 }
             }
             Common.showToast(resp.getMessage());
@@ -603,4 +606,7 @@ cc.Class({
         });
     },
 
+    openResultList: function() {
+        Common.showPopup(Config.name.POPUP_TAIXIU_RESULT_LIST, function(popup){});
+    }
 });
