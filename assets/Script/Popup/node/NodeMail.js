@@ -8,21 +8,20 @@ cc.Class({
         btnReceived: cc.Button,
         spriteGift: cc.Sprite,
         operation: cc.String,
-        mailId: -1
+        mailId: -1,
+        messContent: cc.RichText,
     },
 
     init: function (binMail) {
         this.mailTitle.string = binMail.getTitle();
         this.mailSender.string = binMail.getSenderusername();
 
-        var nodeChild = new cc.Node();
-        nodeChild.parent = this.mailContent.content;
+        this.messContent.string = Common.wordWrap(binMail.getBody(), 66);
 
-        var content = nodeChild.addComponent(cc.Label);
-        content.string = Common.wordWrap(binMail.getBody(), 100);
-        content.fontSize = 20;
-        content.node.setAnchorPoint(0, 1);
-
+        if(this.messContent.node.getContentSize().height > this.mailContent.content.getContentSize().height){
+            this.mailContent.content.setContentSize(this.mailContent.content.getContentSize().width,
+                this.messContent.node.getContentSize().height);
+        }
 
         var attachitemid = binMail.getAttachitemid();
 
