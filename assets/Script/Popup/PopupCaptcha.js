@@ -7,12 +7,11 @@ cc.Class({
     properties: {
         btnOK: cc.Button,
         edbAns: cc.EditBox,
-        opeNode: cc.Node,
+        operation: cc.Label,
         mailId: -1
     },
     init: function(operation, mailId) {
-        var operationLabel = this.opeNode.addComponent(cc.Label);
-        operationLabel.string = operation;
+        this.operation.string = operation;
         this.mailId = mailId;
     },
 
