@@ -4,7 +4,6 @@ cc.Class({
     extends: CommonPopup,
 
     properties: {
-        tabLeftPrefab: cc.Prefab,
         body: cc.Node,
         _tab: 1,
         subHistory: 1

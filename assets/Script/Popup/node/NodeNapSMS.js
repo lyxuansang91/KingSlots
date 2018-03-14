@@ -65,12 +65,6 @@ cc.Class({
             item.setPositionY(posY);
             this.content.addChild(item);
         }
-
-        // var productList = this.tabInfo[index];
-        // var num = productList.length;
-        // var headerCell = ["Mệnh giá thẻ", "KM", "Số BIT"];
-        // var data = this._getdata(productList, headerCell, num);
-        // this.table_view.getComponent(cc.tableView).initTableView(data.length, { array: data, target: this });
     },
 
     _getdata: function (val, headCell, num) {

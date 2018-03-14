@@ -1,8 +1,6 @@
 cc.Class({
     extends: cc.Component,
 
-
-
     properties: {
         lblParValue: cc.Label,
         lblCashValue: cc.Label
@@ -17,7 +15,6 @@ cc.Class({
         this.number = number;
     },
     smsEvent: function() {
-        cc.log("sms event:");
         var self = this;
         Common.showPopup(Config.name.POPUP_MESSAGE_BOX, function(popup) {
             popup.init("Soạn " + self.syntax + " đến " + self.number + " để nhận được " + self.cashValue + " BIT", Config.COMMON_POPUP_TYPE.MESSAGE_BOX.CONFIRM_TYPE, function() {
