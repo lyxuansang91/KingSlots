@@ -26,6 +26,7 @@ var Common = {
     },
     width : cc.director.getWinSize().width,
     height : cc.director.getWinSize().height,
+    origin : cc.director.getVisibleOrigin(),
     introScene: null,
     _existTaiXiu: false,
     providerLists: [],
@@ -33,7 +34,7 @@ var Common = {
 
     initLanguage: function(){
         var self = this;
-        var url = cc.url.raw( 'resources/vi2.json' );
+        var url = cc.url.raw( 'resources/vi2.json' )
         cc.loader.load( url, function( err, res) {
             if(err === null){
                 var json = JSON.stringify(res);
@@ -117,16 +118,16 @@ var Common = {
 
     getOS: function() {
         var os = -1;
-        // if(cc.sys.isNative) {
-        //     if(cc.sys.platform == cc.sys.ANDROID) {
+        if(cc.sys.isNative) {
+            if(cc.sys.platform == cc.sys.ANDROID) {
                 os = Common.OS.ANDROID;
-        //     } else if(cc.sys.platform == cc.sys.IPHONE ||
-        //                 cc.sys.platform == cc.sys.IPAD) {
-        //         os = Common.OS.IOS;
-        //     }
-        // } else if(cc.sys.isBrowser) {
-        //     os = Common.OS.WEB;
-        // }
+            } else if(cc.sys.platform == cc.sys.IPHONE ||
+                        cc.sys.platform == cc.sys.IPAD) {
+                os = Common.OS.IOS;
+            }
+        } else if(cc.sys.isBrowser) {
+            os = Common.OS.WEB;
+        }
         return os;
     },
     sessionId: "-1",
@@ -473,6 +474,23 @@ var Common = {
     setMiniGameZoneId: function(miniGameZoneId) {
         this._miniGameZoneId = miniGameZoneId;
     },
+
+    setHeadLineEmergency: function (message) {
+        this.headLineEmergency = message;
+    },
+
+    getHeadLineEmergency: function () {
+        return this.headLineEmergency;
+    },
+
+    setNotificationEmergency: function (message) {
+        this.notifycationEmergency = message;
+    },
+
+    getNotificationEmergency: function () {
+        return this.notifycationEmergency;
+    },
+
     timestampToDate: function (timestamp){
 
         var a = new Date(Number(timestamp));
@@ -698,6 +716,10 @@ var Common = {
 
     rgbToHex: function (r, g, b) {
         return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+    },
+
+    textColor : function (message,color) {
+        return "<color=" + this.rgbToHex(color.r,color.g,color.b) + ">" + message + "</color> ";
     },
 
     getHeadHistory: function (historyType) {

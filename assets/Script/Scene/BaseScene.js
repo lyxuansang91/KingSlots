@@ -32,6 +32,14 @@ cc.Class({
                 var msg = buffer.response;
                 this.logOutMessageResponseHandler(msg);
                 break;
+            case NetworkManager.MESSAGE_ID.EMERGENCY_NOTIFICATION:
+                var msg = buffer.response;
+                this.getEmergencyNotificationResponse(msg);
+                break;
+            case NetworkManager.MESSAGE_ID.HEAD_LINE:
+                var msg = buffer.response;
+                this.getHeadLineResponse(msg);
+                break;
             default:
                 isDone = false;
                 break;
@@ -85,6 +93,65 @@ cc.Class({
                 NetworkManager.closeConnection();
                 this.scheduleOnce(this.goIntroScene, 2.0);
             }
+        }
+    },
+
+    getHeadLineResponse: function (response) {
+        if (response != 0 && response.getResponsecode() && response.getHeadlinesList().length > 0){
+            cc.log("getHeadLineResponse : ",response.toObject());
+            var notify = [];
+            for (var i = 0; i < response.getHeadlinesList().length; i++){
+                notify.push(response.getHeadlinesList()[i]);
+            }
+
+            Common.setHeadLineEmergency(notify);
+        }
+    },
+
+    getEmergencyNotificationResponse: function(response){
+        if (response !== 0 && response.getResponsecode()){
+
+            var notifications = "";
+            var notification_list = response.getNotificationsList();
+            if (response.getNotificationsList().length > 0){
+                for (var i = 0; i < notification_list.length; i++){
+                    notifications += notification_list[i] + " ";
+                }
+            }
+
+            Common.setNotificationEmergency(notifications);
+
+            cc.log("setNotificationEmergency : ",notifications);
+
+            if (response.getHeadlinesList().length > 0){
+                Common.setHeadLineEmergency(response.getHeadlinesList());
+
+                var scene = cc.director.getScene();
+                if(cc.isValid(scene)){
+                    if(!cc.isValid(scene.getChildByName("NodeHeadLine"))){
+                        cc.loader.loadRes("prefabs/NodeHeadLine",function(error, prefab) {
+                            if(!error){
+                                var headLine_prefab = cc.instantiate(prefab);
+                                if(cc.isValid(headLine_prefab)){
+
+
+                                    var headLine = headLine_prefab.getComponent("NodeHeadLine");
+                                    //headLine_prefab.x = Common.origin.x + Common.width / 2;
+                                    //headLine_prefab.y = Common.origin.y + Common.height/2;
+
+                                    headLine.showHeadLine();
+                                    scene.addChild(headLine_prefab,Config.index.HEADLINE);
+                                }
+                            }
+                        });
+                    }else{
+                        var headLine = scene.getChildByName("NodeHeadLine").getComponent("NodeHeadLine");
+                        headLine.showHeadLine();
+                    }
+                }
+            }
+
+
         }
     },
 
