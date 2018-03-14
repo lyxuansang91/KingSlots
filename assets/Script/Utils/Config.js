@@ -4,7 +4,8 @@
 var Config = {
     index : {
         POPUP : 100,
-        LOADING: 101,
+        HEADLINE: 102,
+        LOADING: 103,
     },
 
     TAG_GAME_ITEM: {
