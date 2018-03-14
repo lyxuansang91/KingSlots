@@ -370,21 +370,21 @@ var Common = {
     getPackageName: function() {
         if(cc.sys.isNative) {
             if(cc.sys.platform == cc.sys.ANDROID){
-                return "com.bom.club.gamevui2018";//jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getPackageNameJNI", "()Ljava/lang/String;");
+                return "com.gamebai.tienlen";//jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getPackageNameJNI", "()Ljava/lang/String;");
             }else if(cc.sys.platform == cc.sys.IPHONE || cc.sys.platform == cc.sys.IPAD){
                 console.log("PACKAGE : com.gamebai.tienlen");
-                return "com.bom.club.gamevui2018";//jsb.reflection.callStaticMethod("NativeUtility", "getPackage");
+                return "com.gamebai.tienlen";//jsb.reflection.callStaticMethod("NativeUtility", "getPackage");
             }
         } else {
-            return "com.bom.club.gamevui2018";
+            return "com.gamebai.tienlen";
         }
 
     },
     getCp: function() {
-        return "17";
+        return "24";
     },
     getVersionCode: function() {
-        return "19";
+        return "15";
     },
     phoneNumber: "",
     setPhoneNunber: function(phoneNumber){

@@ -111,7 +111,7 @@ cc.Class({
         }.bind(this));
     },
     update: function(dt) {
-
+        this.onGameEvent();
     },
 
     start: function () {

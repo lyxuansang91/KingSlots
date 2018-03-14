@@ -625,7 +625,7 @@
       }
     ],
     "_tag": -1,
-    "_active": false,
+    "_active": true,
     "_components": [
       {
         "__id__": 58
@@ -1449,7 +1449,7 @@
       "b": 127,
       "a": 255
     },
-    "_N$maxLength": 8,
+    "_N$maxLength": 20,
     "_N$stayOnTop": false
   },
   {
@@ -1649,7 +1649,7 @@
       "b": 127,
       "a": 255
     },
-    "_N$maxLength": 8,
+    "_N$maxLength": 20,
     "_N$stayOnTop": false
   },
   {
@@ -1926,7 +1926,9 @@
     "_N$hoverSprite": null,
     "hoverSprite": null,
     "_N$disabledSprite": null,
-    "_N$target": null
+    "_N$target": {
+      "__id__": 50
+    }
   },
   {
     "__type__": "cc.ClickEvent",
@@ -2002,7 +2004,7 @@
       }
     ],
     "_tag": -1,
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 76

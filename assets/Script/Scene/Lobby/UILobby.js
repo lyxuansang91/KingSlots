@@ -157,6 +157,16 @@ cc.Class({
             Common.showToast(resp.getMessage());
         }
     },
+    updateMoneyResponseHandler: function(resp) {
+        cc.log("update money response handler: ", resp.toObject());
+        if(resp.getResponsecode()) {
+
+        }
+
+        if(resp.hasMessage() && resp.getMessage() !== "") {
+            Common.showToast(resp.getMessage());
+        }
+    },
     handleMessage: function(buffer) {
         var isDone = true;
         var resp = buffer.response;
@@ -166,6 +176,9 @@ cc.Class({
                 break;
             case NetworkManager.MESSAGE_ID.SMS_CONFIG:
                 this.smsConfigResponseHandler(resp);
+                break;
+            case NetworkManager.MESSAGE_ID.UPDATE_MONEY:
+                this.updateMoneyResponseHandler(resp);
                 break;
             default:
                 isDone = false;

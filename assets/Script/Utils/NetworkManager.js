@@ -231,7 +231,7 @@ var NetworkManager = {
     lagTime: 0,
     isLagged: false,
     MAX_KILL_MSG: 10000,
-    URL: "ws://" + "14.225.2.111:1280" + "/megajackpot",
+    URL: "ws://" + "150.95.108.235:1280" + "/megajackpot",
     sessionId: "",
     getSessionId: function() {
         return NetworkManager.sessionId;
@@ -567,7 +567,7 @@ var NetworkManager = {
 
     /* purchase money */
     initPurchaseMoneyMessage: function(provider, cardSerial, cardPin, securityKey, captcha) {
-        var message = proto.BINPurchaseMoneyRequest();
+        var message = new proto.BINPurchaseMoneyRequest();
         message.setProvider(provider);
         message.setCardserial(cardSerial);
         message.setCardpin(cardPin);
