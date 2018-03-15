@@ -1,4 +1,3 @@
-var Types = require('Types');
 cc.Class({
     extends: cc.Component,
 
@@ -53,47 +52,45 @@ cc.Class({
         var pointValue = this.getPoint(cardValue);
         var suitValue = this.getSuit(cardValue);
 
-        var card = new Types.Card(pointValue, suitValue, Common.getZoneId());
-
         var isFaceCard = false;
         if(Common.getZoneId() === Config.TAG_GAME_ITEM.MINI_POKER){
-            if(card.point > 9 && card.point <= 12){
+            if(pointValue > 9 && pointValue <= 12){
                 isFaceCard = true;
             }
         } else {
-            if(card.point > 10){
+            if(pointValue > 10){
                 isFaceCard = true;
             }
         }
 
         if (isFaceCard) {
             if(Common.getZoneId() === Config.TAG_GAME_ITEM.MINI_POKER){
-                this.mainPic.spriteFrame = this.texFaces[card.point - 10];
+                this.mainPic.spriteFrame = this.texFaces[pointValue - 10];
             } else {
-                this.mainPic.spriteFrame = this.texFaces[card.point - 10 - 1];
+                this.mainPic.spriteFrame = this.texFaces[pointValue - 10 - 1];
             }
         }
         else {
             if(Common.getZoneId() === Config.TAG_GAME_ITEM.MINI_POKER){
-                this.mainPic.spriteFrame = this.texSuitBigPoker[card.suit];
+                this.mainPic.spriteFrame = this.texSuitBigPoker[suitValue];
             } else {
-                this.mainPic.spriteFrame = this.texSuitBig[card.suit];
+                this.mainPic.spriteFrame = this.texSuitBig[suitValue];
             }
         }
 
         // for jsb
-        this.point.string = card.pointName;
+        this.point.string = Common.getPointName(pointValue, Common.getZoneId());
 
-        if (card.isRedSuit) {
+        if (Common.isRedSuit(suitValue, Common.getZoneId())) {
             this.point.node.color = this.redTextColor;
         }
         else {
             this.point.node.color = this.blackTextColor;
         }
         if(Common.getZoneId() === Config.TAG_GAME_ITEM.MINI_POKER){
-            this.suit.spriteFrame = this.texSuitSmallPoker[card.suit];
+            this.suit.spriteFrame = this.texSuitSmallPoker[suitValue];
         } else {
-            this.suit.spriteFrame = this.texSuitSmall[card.suit];
+            this.suit.spriteFrame = this.texSuitSmall[suitValue];
         }
 
     },

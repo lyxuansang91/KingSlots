@@ -734,8 +734,18 @@ var Common = {
 
                 break;
             case Config.TAG_GAME_ITEM.MINI_POKER:
-                var headCell = ["Thời gian", "Tên", "Đặt", "Thắng", "Chi tiết"];
-                return headCell;
+                if(historyType === 1){
+                    return ["Thời gian","Phiên", "Đặt", "Thắng", "Chi tiết"];
+                }else{
+                    return ["Thời gian","Tên", "Đặt", "Thắng", "Chi tiết"];
+                }
+                break;
+            case Config.TAG_GAME_ITEM.TREASURE:
+                if(historyType === 1){
+                    return ["Thời gian","Phiên", "Đặt", "Thắng", "Chi tiết"];
+                }else{
+                    return ["Thời gian","Tên", "Đặt", "Thắng", "Chi tiết"];
+                }
                 break;
             case Config.TAG_GAME_ITEM.TAIXIU:
                 var headCell = ["Phiên", "Thời gian", "Đặt tài", "Đặt xỉu", "Hoàn tài", "Hoàn xỉu", "Kết quả", "Tiền thắng"];
@@ -788,5 +798,67 @@ var Common = {
     },
     setNewPhone: function(new_phone){
         this.new_phone = new_phone;
-    }
+    },
+    getPointName: function (point, zoneId) {
+        var A2_10JQK = 'NAN,A,2,3,4,5,6,7,8,9,10,J,Q,K'.split(',');
+        if(zoneId === Config.TAG_GAME_ITEM.MINI_POKER){
+            A2_10JQK = 'NAN,2,3,4,5,6,7,8,9,10,J,Q,K,A'.split(',');
+        }
+        return A2_10JQK[point];
+    },
+    getSuitName: function (suit, zoneId) {
+        var Suit = cc.Enum({
+            Spade: 1,
+            Heart: 3,
+            Club: 2,
+            Diamond: 0,
+        });
+        if(zoneId === Config.TAG_GAME_ITEM.MINI_POKER){
+            Suit = cc.Enum({
+                Spade: 1,
+                Heart: 0,
+                Club: 2,
+                Diamond: 3,
+            });
+
+        }
+
+        return Suit[suit];
+    },
+    isBlackSuit: function (suit, zoneId) {
+        var Suit = cc.Enum({
+            Spade: 1,
+            Heart: 3,
+            Club: 2,
+            Diamond: 0,
+        });
+        if(zoneId === Config.TAG_GAME_ITEM.MINI_POKER){
+            Suit = cc.Enum({
+                Spade: 1,
+                Heart: 0,
+                Club: 2,
+                Diamond: 3,
+            });
+
+        }
+        return suit === Suit.Spade || suit === Suit.Club;
+    },
+    isRedSuit: function (suit, zoneId) {
+        var Suit = cc.Enum({
+            Spade: 1,
+            Heart: 3,
+            Club: 2,
+            Diamond: 0,
+        });
+        if(zoneId === Config.TAG_GAME_ITEM.MINI_POKER){
+            Suit = cc.Enum({
+                Spade: 1,
+                Heart: 0,
+                Club: 2,
+                Diamond: 3,
+            });
+
+        }
+        return suit === Suit.Heart || suit === Suit.Diamond;
+    },
 };
