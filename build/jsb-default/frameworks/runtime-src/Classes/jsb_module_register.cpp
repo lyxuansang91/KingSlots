@@ -10,11 +10,11 @@
 #define USE_WEBVIEW 1
 #define USE_EDIT_BOX 1
 //#define USE_CREATOR_PHYSICS 1
-#define USE_CREATOR_CAMERA 1
+//#define USE_CREATOR_CAMERA 1
 #define USE_CREATOR_GRAPHICS 1
 #define USE_AUDIO 1
 #define USE_SPINE 1
-#define USE_DRAGON_BONES 1
+//#define USE_DRAGON_BONES 1
 #define USE_NET_WORK 1
 
 

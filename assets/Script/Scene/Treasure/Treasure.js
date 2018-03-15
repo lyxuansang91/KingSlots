@@ -1,6 +1,8 @@
 var BaseScene = require('BaseScene');
 var NetworkManager = require('NetworkManager');
-
+var HISTORY_SPIN = 1;
+var HISTORY_BREAK_JAR = 2;
+var HISTORY_TOP_USER = 3;
 cc.Class({
     extends: BaseScene,
 
@@ -510,4 +512,24 @@ cc.Class({
         Common.openRules();
     },
     // update (dt) {},
+    showSpin: function () {
+
+        var tabString = ["Lịch sử quay", "Lịch sử nổ hũ", "Top cao thủ"];
+
+        Common.showPopup(Config.name.POPUP_HISTORY,function(popup) {
+            popup.addTabs(tabString, HISTORY_SPIN);
+            popup.appear();
+        });
+
+    },
+    showTopUser: function () {
+
+        var tabString = ["Lịch sử quay", "Lịch sử nổ hũ", "Top cao thủ"];
+
+        Common.showPopup(Config.name.POPUP_HISTORY,function(popup) {
+            popup.addTabs(tabString, HISTORY_TOP_USER);
+            popup.appear();
+        });
+
+    },
 });
