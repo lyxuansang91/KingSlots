@@ -21,6 +21,15 @@ cc.Class({
             NetworkManager.getCardConfigRequest(Config.CARD_CONFIG_TYPE.TYPE_CASH);
         if(Common.smsConfigLists.length === 0)
             NetworkManager.requestSmsConfigMessage(1);
+        if(Common.assetsConfigList.length === 0) {
+            NetworkManager.requestAssetsConfigMessage(1);
+        }
+    },
+
+    openExchange: function() {
+        Common.showPopup(Config.name.POPUP_EXCHANGE, function(popup) {
+            popup.appear();
+        });
     },
 
     openMailPopup: function () {
@@ -167,6 +176,30 @@ cc.Class({
             Common.showToast(resp.getMessage());
         }
     },
+    assetConfigResponseHandler: function(resp) {
+        cc.log("asset config response handler:", resp.toObject());
+        Common.assetsConfigList = [];
+        if(resp.getResponsecode()) {
+            resp.getAssetsList().forEach(function(asset) {
+                var obj = {};
+                obj.assetid = asset.getAssetid();
+                obj.type = asset.getType();
+                obj.provider = asset.getProvider();
+                obj.parvalue = asset.getParvalue();
+                obj.cashvalue = asset.getCashvalue();
+                obj.assetname = asset.getAssetname();
+                obj.active = asset.getActive();
+                obj.minaccountbalance = asset.getMinaccountbalance();
+                obj.trustedindex = asset.getTrustedindex();
+                Common.assetsConfigList.push(obj);
+            });
+
+        }
+
+        if(resp.hasMessage() && resp.getMessage() !== "") {
+            Common.showToast(resp.getMessage());
+        }
+    },
     handleMessage: function(buffer) {
         var isDone = true;
         var resp = buffer.response;
@@ -179,6 +212,9 @@ cc.Class({
                 break;
             case NetworkManager.MESSAGE_ID.UPDATE_MONEY:
                 this.updateMoneyResponseHandler(resp);
+                break;
+            case NetworkManager.MESSAGE_ID.ASSET_CONFIG:
+                this.assetConfigResponseHandler(resp);
                 break;
             default:
                 isDone = false;
