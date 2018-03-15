@@ -461,6 +461,15 @@ var Common = {
     numberFormatWithCommas: function(value){
         return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
+    convertIntToMoneyView: function (value) {
+        var i = 0;
+        var end = [ "", "K", "M", "B" ];
+        while (value >= 1000){
+            value = value/1000;
+            i++;
+        }
+        return value + end[i];
+    },
     enterZone: [],
     setEnterZone: function(enterZone){
         this.enterZone = enterZone;

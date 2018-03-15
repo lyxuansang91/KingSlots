@@ -1,9 +1,10 @@
 var BaseScene = require('BaseScene');
 var NetworkManager = require('NetworkManager');
+
 var HISTORY_SPIN = 1;
 var HISTORY_BREAK_JAR = 2;
 var HISTORY_TOP_USER = 3;
-cc.Class({
+var Treasure = cc.Class({
     extends: BaseScene,
 
     properties: {
@@ -29,7 +30,9 @@ cc.Class({
         jarValue: 0,
         roomIndex: 0,
         betType: 0,
-
+    },
+    statics: {
+        instance: null
     },
     update: function(dt) {
         this.onGameEvent();
@@ -40,9 +43,44 @@ cc.Class({
             return self.handleMessage(buffer);
         });
     },
+    initDataFromLoading: function(zoneId, enterRoomResponse) {
+        this.enterRoomResponse = enterRoomResponse;
+        this.zoneId = zoneId;
+
+        var roomPlay = this.enterRoomResponse.getRoomplay();
+        this.roomIndex = roomPlay.getRoomindex();
+
+        if (this.enterRoomResponse.getArgsList().length > 0) {
+            var entry = this.enterRoomResponse.getArgsList()[0];
+            if (entry.getKey() == "initValue") {
+                this.initValue(entry.getValue());
+            }
+        }
+        cc.log("enter room response:", this.enterRoomResponse.toObject());
+    },
+
+    initValue: function (json) {
+        var value = JSON.parse(json);
+
+        var valueCash = value.turnValueCash;
+        for(var i = 0; i < valueCash.length; i++){
+            this.turnCashValue.push(valueCash[i]);
+            if(i < this.bets_select.length){
+                var money = Common.convertIntToMoneyView(valueCash[i]);
+                if(i == 0){
+                    this.txt_bet_money.string = money;
+                    this.txt_total_bet_money.string = Common.numberFormatWithCommas(valueCash[i] * this.lst_number.length);
+                }
+                this.bets_select[i].string = money;
+            }
+        }
+
+        this.jarValue = value.jarValue;
+        this.txt_jar_money.string = Common.numberFormatWithCommas(this.jarValue);
+    },
 
     onLoad: function() {
-        this.requestJar();
+        Treasure.instance = this;
         this.schedule(this.requestJar, 5);
 
         this.init();
@@ -58,6 +96,11 @@ cc.Class({
         this.lst_line_result = [];
         this.lst_line_selected = [];
         this.lst_line_selected_sprite = [];
+
+        this.turnCashValue = [];
+        this.indexCash = 0;
+
+        cc.log("init");
     },
 
     initItemPool: function () {
@@ -367,10 +410,7 @@ cc.Class({
 
             if (jar_type_response === this.betType + 1) {
                 if (this.jarType === jar_type_response) {
-                    // this.moneyJar.node.runAction(cc.actionInterval(1.0, preJarValue, this.jarValue, function(val){
-                    //     var number_cash = Common.numberFormatWithCommas(val);
                     Common.countNumberAnim(this.txt_jar_money, preJarValue, this.jarValue, 0, 1);
-                    // }));
                 } else {
                     this.txt_jar_money.string = Common.numberFormatWithCommas(this.jarValue);
                 }
@@ -397,6 +437,22 @@ cc.Class({
     chonCuocTouchEvent: function () {
         this.is_bet_select = !this.is_bet_select;
         this.popup_bet_select.active = this.is_bet_select;
+    },
+
+    chonMucCuocEvent: function (event,data) {
+        if(data < this.bets_select.length && data > -1){
+            this.indexCash = data;
+
+            this.txt_bet_money.string = Common.convertIntToMoneyView(this.turnCashValue[this.indexCash]);
+            this.is_bet_select = false;
+            this.popup_bet_select.active = this.is_bet_select;
+
+            var money_bet = this.turnCashValue[this.indexCash]*this.lst_line_selected.length;
+            if(money_bet >= 0){
+                this.txt_total_bet_money.string = Common.numberFormatWithCommas(money_bet);
+            }
+
+        }
     },
 
     onEventLineSelected : function (eventType,data) {
@@ -468,6 +524,12 @@ cc.Class({
         }
 
         this.txt_total_line.string = count;
+
+        var money_bet = this.turnCashValue[this.indexCash]*this.lst_line_selected.length;
+        if(money_bet >= 0){
+            this.txt_total_bet_money.string = Common.numberFormatWithCommas(money_bet);
+        }
+
     },
 
     resetLineSelected: function () {
