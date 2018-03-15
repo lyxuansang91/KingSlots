@@ -2,6 +2,7 @@ var NetworkManager = require('NetworkManager');
 var threecard = require('ThreeCard');
 var minipoker = require('minipoker');
 var BaseScene = require('BaseScene');
+var Treasure = require('Treasure');
 
 cc.Class({
     extends: BaseScene,
@@ -226,9 +227,6 @@ cc.Class({
 
             }
             else if (Common.getZoneId() === Common.ZONE_ID.MINI_POKER) {
-                // cc.director.loadScene('BaCay',function(){
-                //     BacayScene.instance.initDataFromLoading(Common.getEnterZone(), response);
-                // });
                 cc.director.loadScene('minipoker', function() {
                     minipoker.instance.initDataFromLoading(Common.getEnterZone(), response);
                 });
@@ -271,7 +269,9 @@ cc.Class({
                 self.isBindNetwork = false;
                 self.unscheduleAllCallbacks();
             } else if(Common.getZoneId() === Common.ZONE_ID.TREASURE) {
-                cc.director.loadScene('Treasure');
+                cc.director.loadScene('Treasure', function() {
+                    Treasure.instance.initDataFromLoading(Common.getEnterZone(), response);
+                });
             }
         }
     }
