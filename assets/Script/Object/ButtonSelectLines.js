@@ -17,7 +17,7 @@ cc.Class({
     },
 
     initNumber: function (index) {
-        cc.log("number : ",index);
         this.number.string = index;
+        this.name = index;
     }
 });
