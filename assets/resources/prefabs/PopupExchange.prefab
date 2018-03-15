@@ -1051,7 +1051,12 @@
     "tabLeftPrefab": {
       "__uuid__": "987bf0f0-38b8-4b3e-a027-9e2112881c17"
     },
-    "table_view": null
+    "scroll_view": {
+      "__id__": 29
+    },
+    "doithuong_itemPrefab": {
+      "__uuid__": "c9060620-9f02-47bb-80bf-8ed9206fa9a6"
+    }
   },
   {
     "__type__": "cc.PrefabInfo",

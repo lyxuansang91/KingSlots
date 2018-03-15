@@ -41,8 +41,40 @@ cc.Class({
         cc.log("index:", index);
         this.itemsList = Common.assetsConfigList.filter(function(asset) {
             return asset.provider === this.tabString[index];
-        });
-        cc.log("item list:", this.itemsList);
+        }.bind(this));
+        this.content = this.scroll_view.content;
+        var innerSize = cc.size(this.content.getContentSize().width,
+            this.content.getContentSize().height);
+        var padding = 0;
+
+        var length = this.itemsList.length;
+        this.content.removeAllChildren(false);
+        for(var i = 0; i < length; i++) {
+            var assetItem = this.itemsList[i];
+            var item = cc.instantiate(this.doithuong_itemPrefab);
+            item.getComponent("ExchangeItem").init(assetItem);
+            var size = item.getComponent('ExchangeItem').node.getContentSize();
+            cc.log("item size:", size, ", i:", parseInt(i% 3));
+            if(i == 0){
+                padding = innerSize.width/3 - size.width;
+                var ind = parseInt(length % 3);
+                if(ind > 0) {
+                    ind++;
+                }
+                innerSize = cc.size(innerSize.width,size.height*1.1*ind);
+                this.content.setContentSize(innerSize);
+            }
+
+            var x = parseInt(i%3);
+            var y = parseInt(i/3);
+
+            var posX = (x - 1)*size.width * 1.25;
+            var posY = (-0.7 - y)*size.height*1.15;
+
+            item.setPositionX(posX);
+            item.setPositionY(posY);
+            this.content.addChild(item);
+        }
     },
     onGameEvent: function() {
         NetworkManager.checkEvent(function(buffer) {
