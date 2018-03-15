@@ -8,8 +8,7 @@ var Suit = cc.Enum({
 var A2_10JQK = 'NAN,A,2,3,4,5,6,7,8,9,10,J,Q,K'.split(',');
 
 function Card (point, suit, zoneId) {
-    cc.log("zoneId =", zoneId);
-    if(zoneId === 19){
+    if(zoneId === Config.TAG_GAME_ITEM.MINI_POKER){
         Suit = cc.Enum({
             Spade: 1,
             Heart: 0,
