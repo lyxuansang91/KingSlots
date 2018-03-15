@@ -59,6 +59,12 @@ var Config = {
         POPUP_CHANGE_INFO : "PopupChangeInfo",
         POPUP_CAPTCHA : "PopupCaptcha",
         POPUP_TAIXIU_BET_HISTORY : "PopupTaixiuBetHistory",
+        POPUP_SELECT_LINE : "PopupSelectLine",
+    },
+
+    ON_EVENT: {
+        EVENT_SELECT_LINE_BY_TYPE: 1,
+        EVENT_SELECT_LINE: 2
     },
 
     COMMON_POPUP_TYPE: {
@@ -117,10 +123,18 @@ var Config = {
         UPDATE_AVATAR : 5,
         UPDATE_PASSWORD : 6,
     },
+
     NUM_LOAD: {
         MORE_ITEM: 10,
         MORE_FRIEND: 10,
         ITEM_PAGE: 10
+    },
+
+    SELECT_LINE_TYPE: {
+        DONG_CHAN : 1,
+        DONG_LE: 2,
+        DONG_ALL: 3,
+        CHON_LAI: 4
     }
 
 };

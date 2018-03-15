@@ -711,7 +711,7 @@ var Common = {
             }
         }
 
-        return false
+        return false;
     },
 
     rgbToHex: function (r, g, b) {

@@ -9,6 +9,11 @@ cc.Class({
     },
 
     onLoad: function () {
+        /*function onTouchDown (event) {
+            return true;
+        }
+
+        this.node.on('touchstart', onTouchDown, this.darkSprite);*/
         this.show();
     },
 

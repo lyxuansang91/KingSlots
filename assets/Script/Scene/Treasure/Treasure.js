@@ -7,32 +7,27 @@ cc.Class({
     properties: {
         board_view: cc.Mask,
         itemPrefab: cc.Prefab,
-        isFinishSpin: true,
-        isRun: false,
-        stepMove : 9,
-        number : 5,
-        time_move: 3,
-        list_item: [],
-        list_recent_values: [],
-
-        myInterVal: null,
-        isRequestJar: false,
-        jarValue: 0,
-        roomIndex: 0,
-        betType: 0,
         btn_select_lines: cc.Prefab,
         line_result: cc.Prefab,
         board_null_line: cc.Node,
         txt_jar_money: cc.Label,
+        txt_bet_money: cc.Label,
+        txt_total_line: cc.Label,
+        txt_win_money: cc.Label,
+        txt_total_bet_money: cc.Label,
+        bets_select : [cc.Label],
+        popup_bet_select : cc.Node,
+        is_bet_select: false,
+        isFinishSpin: true,
+        isRun: false,
+        isRequestJar: false,
+        stepMove : 9,
+        number : 5,
+        time_move: 3,
         jarValue: 0,
-        lst_number : {
-            type: [cc.Integer],
-            default: function() {
-                return [6,2,8,5,1,4,10,7,3,9,16,12,19,14,13,17,18,15,11,20];
-            }
-        },
-        lst_line_result: [],
-        lst_line_selected: [],
+        roomIndex: 0,
+        betType: 0,
+
     },
     update: function(dt) {
         this.onGameEvent();
@@ -45,15 +40,22 @@ cc.Class({
     },
 
     onLoad: function() {
-        cc.log("on start");
-        // if(window.ws && window.ws.onmessage)
-        //     window.ws.onmessage = this.onGameStatus.bind(this);
         this.requestJar();
         this.schedule(this.requestJar, 5);
 
+        this.init();
         this.initItemPool();
         this.initMenu();
         this.initFirstItem();
+    },
+
+    init: function () {
+        this.list_item = [];
+        this.list_recent_values = [];
+        this.lst_number = [6,2,8,5,1,4,10,7,3,9,16,12,19,14,13,17,18,15,11,20];
+        this.lst_line_result = [];
+        this.lst_line_selected = [];
+        this.lst_line_selected_sprite = [];
     },
 
     initItemPool: function () {
@@ -78,8 +80,9 @@ cc.Class({
 
     initMenu: function () {
         this.lst_number = [6,2,8,5,1,4,10,7,3,9,16,12,19,14,13,17,18,15,11,20];
+        this.lst_line_selected = this.lst_number;
 
-        for (var i = 0; i < this.lst_number.length; i++){
+        for (var i = 0; i < 20; i++){
             var line_result = cc.instantiate(this.line_result);
             var component = line_result.getComponent("LineResult");
             component.init(i);
@@ -91,13 +94,10 @@ cc.Class({
             this.lst_line_result.push(line_result);
         }
 
-        cc.log("lst_line_results : xxx ",this.lst_line_result);
-        cc.log("lst_number : xxx ",this.lst_number);
-
         var pos_line_top = 0;
         var size_board = this.board_null_line.getContentSize();
 
-        for (var i = 0; i < this.lst_number.length; i++) {
+        for (var i = 0; i < 20; i++) {
             var line_number = cc.instantiate(this.btn_select_lines);
             var component = line_number.getComponent("ButtonSelectLines");
             component.initNumber(this.lst_number[i]);
@@ -114,8 +114,10 @@ cc.Class({
                 pos_line_top - size_line.height * ((i % 10) * 0.93 + 1)));
             this.board_null_line.addChild(line_number);
 
-            this.lst_line_selected.push(line_number);
+            this.lst_line_selected_sprite.push(component);
         }
+
+        this.setLineSelected();
     },
 
     initFirstItem: function() {
@@ -242,9 +244,9 @@ cc.Class({
         entryTurn.setValue(turnType.toString());
         entries.push(entryTurn);
 
-        var result = this.lst_number.join(",");
+        var result = this.lst_line_selected.join(",");
 
-        cc.log("lst_number",this.lst_number);
+        cc.log("lst_line_selected",this.lst_line_selected);
 
         var entryLine = new proto.BINMapFieldEntry();
         entryLine.setKey("lineSelected");
@@ -377,6 +379,98 @@ cc.Class({
         if(resp.hasMessage() && resp.getMessage() !== "") {
 
         }
+    },
+
+    chonDongTouchEvent: function () {
+        var self = this;
+        Common.showPopup(Config.name.POPUP_SELECT_LINE,function (popup) {
+            popup.init(function (eventType,index) {
+
+                self.onEventLineSelected(eventType,index);
+            });
+            popup.appear();
+        });
+    },
+
+    chonCuocTouchEvent: function () {
+        this.is_bet_select = !this.is_bet_select;
+        this.popup_bet_select.active = this.is_bet_select;
+    },
+
+    onEventLineSelected : function (eventType,data) {
+        if (eventType == Config.ON_EVENT.EVENT_SELECT_LINE){
+            cc.log("eventType : ",eventType);
+
+            cc.log("this.lst_line_selected :",this.lst_line_selected);
+
+            var contain = false;
+            for (var i = 0; i < this.lst_line_selected.length; i++){
+                if (this.lst_line_selected[i] == data){
+                    contain = true;
+
+                    this.lst_line_selected.splice(i,1);
+                    break;
+                }
+            }
+
+            cc.log("contain :",contain);
+
+            if (!contain){
+                this.lst_line_selected.push(data);
+            }
+
+            this.setLineSelected();
+
+            //lb_dong_value->setString(StringUtils::toString(lst_line_selected.size()));
+        }
+        else if (eventType == Config.ON_EVENT.EVENT_SELECT_LINE_BY_TYPE){
+            cc.log("eventType : ",eventType);
+
+            if (data == Config.SELECT_LINE_TYPE.DONG_CHAN){
+                this.lst_line_selected = [2, 4, 6, 8, 10, 12, 14, 16, 18, 20];
+            }
+            else if (data == Config.SELECT_LINE_TYPE.DONG_LE){
+                this.lst_line_selected = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19];
+            }
+            else if (data == Config.SELECT_LINE_TYPE.DONG_ALL){
+                this.lst_line_selected = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
+            }
+            else if (data == Config.SELECT_LINE_TYPE.CHON_LAI){
+                this.lst_line_selected = [];
+            }
+
+            this.setLineSelected();
+
+            //lb_dong_value->setString(StringUtils::toString(lst_line_selected.size()));
+        }
+    },
+
+    setLineSelected: function () {
+        var count = 0;
+        for(var i = 0; i < this.lst_line_selected_sprite.length; i++){
+            var contain = false;
+            for(var j = 0; j < this.lst_line_selected.length; j++){
+                if(this.lst_line_selected[j] == this.lst_line_selected_sprite[i].name){
+                    contain = true;
+                    break;
+                }
+            }
+
+            var line = this.lst_line_selected_sprite[i];
+            if(contain){
+                line.initHighLight(true);
+                count ++;
+            }else{
+                line.initHighLight(false);
+            }
+        }
+
+        this.txt_total_line.string = count;
+    },
+
+    resetLineSelected: function () {
+
+        this.lst_line_selected.clear();
     },
 
     handleMessage: function(buffer) {
