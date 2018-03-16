@@ -12,6 +12,7 @@ var Treasure = cc.Class({
         itemPrefab: cc.Prefab,
         btn_select_lines: cc.Prefab,
         line_result: cc.Prefab,
+        nohuPrefab: cc.Prefab,
         board_null_line: cc.Node,
         txt_jar_money: cc.Label,
         txt_bet_money: cc.Label,
@@ -105,6 +106,9 @@ var Treasure = cc.Class({
 
         cc.log("init");
     },
+    getAutoSpin: function() {
+        Common.showToast("Chức năng này đang được cập nhật");
+    },
 
     initItemPool: function () {
         this.itemPool = new cc.NodePool();
@@ -184,8 +188,29 @@ var Treasure = cc.Class({
             }
         }
     },
+    showNoHu: function() {
+        cc.log("showNoHu");
+        var item = cc.instantiate(this.nohuPrefab).getComponent("Nohu");
+        item.playAnim();
 
-    implementSpinTreasure: function (listItem,listWin) {
+        var nodeChild = new cc.Node();
+        nodeChild.parent = this.node;
+        nodeChild.addChild(item.node);
+        var self = this;
+
+        var callFunc2 = cc.callFunc(function (){
+            cc.log("call func 2");
+            Common.countNumberAnim(self.txt_jar_money, self.jarValue, 0, 0, 1);
+            self.txt_jar_money.string = 0;
+            self.isRequestJar = false;
+            self.requestJar();
+        },this);
+
+
+        item.node.runAction(cc.sequence(cc.delayTime(2), callFunc2, cc.delayTime(1), cc.fadeOut(1), cc.removeSelf(), null));
+    },
+
+    implementSpinTreasure: function (textEmotionId, listItem,listWin) {
         this.resetLineResult();
         cc.log("lst_line_results : xxx ",this.lst_line_result);
         if(listItem.length == 0){
@@ -261,6 +286,12 @@ var Treasure = cc.Class({
                 });
                 var call_func_display_money = cc.callFunc(function() {
                     self.txt_user_money.string = Common.numberFormatWithCommas(self.lastMoney);
+                    if(textEmotionId === 54) {
+                        // no hu
+                        self.showNoHu();
+                        return;
+                    }
+
                     self.implementDisplayChangeMoney(self.displayChangeMoney);
                 });
                 item.runAction(cc.sequence(delay,move1,move2,call_func, call_func_display_money));
@@ -283,7 +314,7 @@ var Treasure = cc.Class({
     requestJar: function() {
         var self = this;
         if(!self.isRequestJar) {
-            self.isRequestJar = false;
+            self.isRequestJar = true;
             NetworkManager.getJarRequest(Common.getZoneId(), this.betType + 1);
         }
     },
@@ -363,6 +394,10 @@ var Treasure = cc.Class({
     matchEndResponseHandler: function(resp) {
         cc.log("match end response:", resp.toObject());
         if(resp.getResponsecode()) {
+            var textEmotionId = null;
+            if(resp.getTextemoticonsList().length > 0) {
+                textEmotionId = resp.getTextemoticonsList()[0].getEmoticonid();
+            }
             if(resp.getArgsList().length > 0) {
                 var listItem = null;
                 var lineWin = null;
@@ -391,7 +426,7 @@ var Treasure = cc.Class({
 
                     // TODO:
 
-                    this.implementSpinTreasure(listItem,lineWin);
+                    this.implementSpinTreasure(textEmotionId, listItem,lineWin);
                 }
             }
         }
@@ -419,8 +454,9 @@ var Treasure = cc.Class({
         }
     },
     jarResponseHandler: function(resp) {
-        //cc.log("jar response message:", resp.toObject());
+        cc.log("jar response message:", resp.toObject());
         if(resp.getResponsecode()) {
+            this.isRequestJar = false;
             var jar_type_response = 0;
             var preJarValue = this.jarValue;
             this.jarValue = resp.getJarvalue();
