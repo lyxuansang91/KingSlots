@@ -70,18 +70,7 @@ cc.Class({
         edit_info.setNewvalue(newPass);
         edit_info.setConfirmvalue(renewPass);
         NetworkManager.getUpdateUserInfoMessageFromServer(edit_info, 1);
-
+        this.disappear();
     },
 
-
-    changePassHander: function (response) {
-        cc.log("response changepass =", response);
-        if(response.getResponsecode()){
-            Common.showToast(response.getMessage());
-            this.disappear();
-        } else {
-            Common.showToast(response.getMessage());
-        }
-
-    }
 });
