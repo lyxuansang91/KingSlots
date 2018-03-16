@@ -30,6 +30,8 @@ var Treasure = cc.Class({
         jarValue: 0,
         roomIndex: 0,
         betType: 0,
+        txt_user_money: cc.Label
+
     },
     statics: {
         instance: null
@@ -99,6 +101,7 @@ var Treasure = cc.Class({
 
         this.turnCashValue = [];
         this.indexCash = 0;
+        this.txt_user_money.string = Common.numberFormatWithCommas(Common.getCash());
 
         cc.log("init");
     },
@@ -190,6 +193,7 @@ var Treasure = cc.Class({
         }
 
         var index_item = 4;
+        this.txt_user_money.string = Common.numberFormatWithCommas(this.prevMoney);
 
         for(var i = 0; i < this.list_item.length; i++){
             var x = parseInt(i/this.number);
@@ -253,12 +257,20 @@ var Treasure = cc.Class({
                     for(var i = 0; i < self.list_item.length; i++){
                         self.list_item[i].getComponent("ItemPrefab").animate();
                     }
+
                 });
-                item.runAction(cc.sequence(delay,move1,move2,call_func));
+                var call_func_display_money = cc.callFunc(function() {
+                    self.txt_user_money.string = Common.numberFormatWithCommas(self.lastMoney);
+                    self.implementDisplayChangeMoney(self.displayChangeMoney);
+                });
+                item.runAction(cc.sequence(delay,move1,move2,call_func, call_func_display_money));
             }else{
                 item.runAction(cc.sequence(delay,move1,move2));
             }
         }
+    },
+    implementDisplayChangeMoney: function(displayChangeMoney) {
+        //TODO: hieu ung cong tien su dung bien displayChangeMoney
     },
 
     resetLineResult: function () {
@@ -330,6 +342,17 @@ var Treasure = cc.Class({
     updateMoneyMessageResponseHandler: function(resp) {
         cc.log("update money response:", resp.toObject());
         if(resp.getResponsecode()) {
+            var money_box_treasureSpin = resp.getMoneyboxesList()[0];
+            if(resp.getMoneyboxesList().length === 1) {
+                Common.setCash(money_box_treasureSpin.getCurrentmoney());
+                this.txt_user_money.string = Common.numberFormatWithCommas(money_box_treasureSpin.getCurrentmoney());
+            } else {
+                this.prevMoney = money_box_treasureSpin.getCurrentmoney();
+                this.lastMoney = resp.getMoneyboxesList()[1].getCurrentmoney();
+                this.displayChangeMoney = resp.getMoneyboxesList()[1].getDisplaychangemoney();
+                this.txt_win_money.string = Common.numberFormatWithCommas(this.displayChangeMoney);
+                Common.setCash(resp.getMoneyboxesList()[1].getCurrentmoney());
+            }
 
         }
         if(resp.hasMessage() && resp.getMessage() !== "") {
