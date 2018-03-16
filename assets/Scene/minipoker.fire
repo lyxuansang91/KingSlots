@@ -48,7 +48,7 @@
     "_globalZOrder": 0,
     "_opacityModifyRGB": false,
     "groupIndex": 0,
-    "autoReleaseAssets": null
+    "autoReleaseAssets": false
   },
   {
     "__type__": "cc.Node",
@@ -768,9 +768,7 @@
     "isRequestJar": false,
     "jarValue": 0,
     "roomIndex": 0,
-    "popupPrefab": {
-      "__uuid__": "31c15c51-6222-49b7-9863-ad45766f1da7"
-    },
+    "popupPrefab": null,
     "nohuPrefab": {
       "__uuid__": "e807da95-5186-469e-ad70-f55f1532652e"
     },
@@ -905,7 +903,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 67.85,
+      "width": 68,
       "height": 30
     },
     "_rotationX": 0,
@@ -1144,7 +1142,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 100.5,
+      "width": 101,
       "height": 30
     },
     "_rotationX": 0,
@@ -1454,7 +1452,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 126.36,
+      "width": 126,
       "height": 30
     },
     "_rotationX": 0,

@@ -37,6 +37,23 @@ cc.Class({
 
     },
 
+    updateInfo: function (avatar, phone) {
+
+        if(avatar !== null){
+            var avatarId = avatar - 100000;
+
+            var item = cc.instantiate(this.avatarSprite);
+            var avaSprite = item.getComponent("AvatarSprite").init(avatarId);
+
+            this.node.getChildByName('sanh_avatar_demo').getComponent(cc.Sprite).spriteFrame = avaSprite;
+        }
+
+        if(phone !== null){
+            this.node.getChildByName('txt_phone').getComponent(cc.Label).string = phone;
+        }
+
+    },
+
     openChangePass: function () {
         Common.showPopup(Config.name.POPUP_CHANGE_PASS,function(popup) {
             popup.appear();

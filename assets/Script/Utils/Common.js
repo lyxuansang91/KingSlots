@@ -681,6 +681,8 @@ var Common = {
         return str;
     },
 
+
+
     wordWrap: function(str, maxWidth) {
         var newLineStr = "\n";
         var done = false;

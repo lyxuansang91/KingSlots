@@ -48,7 +48,7 @@
     "_globalZOrder": 0,
     "_opacityModifyRGB": false,
     "groupIndex": 0,
-    "autoReleaseAssets": null
+    "autoReleaseAssets": false
   },
   {
     "__type__": "cc.Node",
@@ -762,7 +762,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 120.13,
+      "width": 120,
       "height": 40
     },
     "_rotationX": 0,
@@ -836,7 +836,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 88.98,
+      "width": 89,
       "height": 40
     },
     "_rotationX": 0,
@@ -910,7 +910,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 120.13,
+      "width": 120,
       "height": 40
     },
     "_rotationX": 0,

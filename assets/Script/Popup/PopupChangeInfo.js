@@ -8,7 +8,7 @@ cc.Class({
     },
 
     onLoad : function () {
-
+        this.text = "";
     },
 
     onGameEvent: function() {
@@ -56,18 +56,12 @@ cc.Class({
         edit_info.setNewvalue(phone);
         Common.setNewPhone(phone);
         NetworkManager.getUpdateUserInfoMessageFromServer(edit_info, 1);
+        this.disappear();
 
     },
 
+    changeKeyboard : function (alias) {
+        this.phone.string = alias.replace(/[^0-9]/g, '');
+    },
 
-    changeInfoHander: function (response) {
-        cc.log("response changepass =", response);
-        if(response.getResponsecode()){
-            Common.showToast(response.getMessage());
-            this.disappear();
-        } else {
-            Common.showToast(response.getMessage());
-        }
-
-    }
 });

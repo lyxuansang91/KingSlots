@@ -3,7 +3,6 @@ cc.Class({
     extends: require('viewCell'),
 
     properties: {
-        prefabData: cc.Prefab,
         frame_title : cc.SpriteFrame,
         frame_cell : cc.SpriteFrame
     },
@@ -14,6 +13,16 @@ cc.Class({
     },
 
     resetCell: function (lengthData,index) {
+
+        const threeItem = this.node.getChildByName("threeItem");
+        var item1_3 = threeItem.getChildByName("item1").getComponent(cc.Label);
+        item1_3.string = "";
+
+        var item2_3 = threeItem.getChildByName("item2").getComponent(cc.Label);
+        item2_3.string = "";
+
+        var item3_3 = threeItem.getChildByName("item3").getComponent(cc.Label);
+        item3_3.string = "";
 
         const fourItem = this.node.getChildByName("fourItem");
         var item1_4 = fourItem.getChildByName("item1").getComponent(cc.Label);
@@ -30,10 +39,18 @@ cc.Class({
 
         this.list_text = [];
 
-        this.list_text.push(item1_4);
-        this.list_text.push(item2_4);
-        this.list_text.push(item3_4);
-        this.list_text.push(item4_4);
+        if(lengthData == 4){
+            this.list_text.push(item1_4);
+            this.list_text.push(item2_4);
+            this.list_text.push(item3_4);
+            this.list_text.push(item4_4);
+
+        }else if(lengthData == 3){
+            this.list_text.push(item1_3);
+            this.list_text.push(item2_3);
+            this.list_text.push(item3_3);
+
+        }
 
 
         var background = this.node.getChildByName("background").getComponent(cc.Sprite);
