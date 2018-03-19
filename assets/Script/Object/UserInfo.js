@@ -11,7 +11,8 @@ cc.Class({
         txt_sovanchoi: cc.Label,
         txt_sovanthang: cc.Label,
         txt_sovanthua: cc.Label,
-        avatarSprite: cc.Prefab
+        avatarSprite: cc.Prefab,
+        txt_money: cc.Label
     },
 
     // use this for initialization
@@ -27,6 +28,7 @@ cc.Class({
         this.txt_sovanchoi.string = sovanchoi;
         this.txt_sovanthang.string = sovanthang;
         this.txt_sovanthua.string = sovanthua;
+        this.txt_money.string = cash;
 
         var avatarId = Common.getAvatarId() - 100000;
 

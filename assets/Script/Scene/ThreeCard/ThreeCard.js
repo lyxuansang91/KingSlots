@@ -176,6 +176,11 @@ var ThreeCard = cc.Class({
         }
     },
 
+    takeTurn: function() {
+        this.time_move = (this.fastSpinToggle.isChecked ? 0.4 : 1);
+        this.getTurnMiniThreeCardsRequest(this.calculateTurnType());
+    },
+
     handleMessage: function(buffer) {
         var isDone = this._super(buffer);
         if(isDone) {
@@ -503,6 +508,9 @@ var ThreeCard = cc.Class({
     },
     getAutoSpin: function() {
         this.autoSpinToggle.isChecked = !this.autoSpinToggle.isChecked;
+    },
+    getFastSpin: function() {
+        this.fastSpinToggle.isChecked = !this.fastSpinToggle.isChecked;
     },
     showNoHu: function(){
         cc.log("showNoHu");
