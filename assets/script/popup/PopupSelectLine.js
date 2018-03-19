@@ -12,13 +12,13 @@ cc.Class({
 
     },
 
-    init: function (callBack) {
+    init: function (line_selected,callBack) {
         this.callBack = callBack;
 
-        this.initLine();
+        this.initLine(line_selected);
     },
 
-    initLine: function () {
+    initLine: function (line_selected) {
         const num_item_row = 5;
         const size = this.content.getContentSize();
         const width_row_size = size.width / num_item_row;
@@ -41,6 +41,8 @@ cc.Class({
 
             this.content.addChild(item);
         }
+
+        this.showLine(line_selected);
     },
     
     onLineSelected: function () {
