@@ -231,7 +231,7 @@ var NetworkManager = {
     lagTime: 0,
     isLagged: false,
     MAX_KILL_MSG: 10000,
-    URL: "ws://" + "150.95.108.235:1280" + "/megajackpot",
+    URL: "ws://" + "139.162.63.66:1280" + "/megajackpot",
     sessionId: "",
     getSessionId: function() {
         return NetworkManager.sessionId;

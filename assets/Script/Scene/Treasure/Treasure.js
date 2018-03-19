@@ -31,7 +31,8 @@ var Treasure = cc.Class({
         jarValue: 0,
         roomIndex: 0,
         betType: 0,
-        txt_user_money: cc.Label
+        txt_user_money: cc.Label,
+        money_display : cc.Label
 
     },
     statics: {
@@ -102,6 +103,9 @@ var Treasure = cc.Class({
 
         this.turnCashValue = [];
         this.indexCash = 0;
+        this.prevMoney = 0;
+        this.lastMoney = 0;
+        this.displayChangeMoney = 0;
         this.txt_user_money.string = Common.numberFormatWithCommas(Common.getCash());
 
         cc.log("init");
@@ -141,7 +145,7 @@ var Treasure = cc.Class({
 
             component.show(false);
 
-            this.board_null_line.addChild(line_result);
+            this.board_null_line.addChild(line_result,2);
 
             this.lst_line_result.push(line_result);
         }
@@ -164,7 +168,7 @@ var Treasure = cc.Class({
                         (-size_board.width/2 + size_line.width/2) :
                         (size_board.width/2 - size_line.width/2),
                 pos_line_top - size_line.height * ((i % 10) * 0.93 + 1)));
-            this.board_null_line.addChild(line_number);
+            this.board_null_line.addChild(line_number,2);
 
             this.lst_line_selected_sprite.push(component);
         }
@@ -193,9 +197,7 @@ var Treasure = cc.Class({
         var item = cc.instantiate(this.nohuPrefab).getComponent("Nohu");
         item.playAnim();
 
-        var nodeChild = new cc.Node();
-        nodeChild.parent = this.node;
-        nodeChild.addChild(item.node);
+        this.node.addChild(item.node);
         var self = this;
 
         var callFunc2 = cc.callFunc(function (){
@@ -292,6 +294,7 @@ var Treasure = cc.Class({
                         return;
                     }
 
+                    self.txt_win_money.string = Common.numberFormatWithCommas(self.displayChangeMoney);
                     self.implementDisplayChangeMoney(self.displayChangeMoney);
                 });
                 item.runAction(cc.sequence(delay,move1,move2,call_func, call_func_display_money));
@@ -302,6 +305,13 @@ var Treasure = cc.Class({
     },
     implementDisplayChangeMoney: function(displayChangeMoney) {
         //TODO: hieu ung cong tien su dung bien displayChangeMoney
+
+        this.money_display.node.setPositionY(0);
+        this.money_display.string = "+" + displayChangeMoney;
+        this.money_display.node.runAction(cc.sequence(
+            cc.fadeIn(0.1),
+            cc.moveBy(1,cc.p(0,50)),
+            cc.fadeOut(0.5)));
     },
 
     resetLineResult: function () {
@@ -381,7 +391,7 @@ var Treasure = cc.Class({
                 this.prevMoney = money_box_treasureSpin.getCurrentmoney();
                 this.lastMoney = resp.getMoneyboxesList()[1].getCurrentmoney();
                 this.displayChangeMoney = resp.getMoneyboxesList()[1].getDisplaychangemoney();
-                this.txt_win_money.string = Common.numberFormatWithCommas(this.displayChangeMoney);
+
                 Common.setCash(resp.getMoneyboxesList()[1].getCurrentmoney());
             }
 
@@ -485,7 +495,7 @@ var Treasure = cc.Class({
     chonDongTouchEvent: function () {
         var self = this;
         Common.showPopup(Config.name.POPUP_SELECT_LINE,function (popup) {
-            popup.init(function (eventType,index) {
+            popup.init(self.lst_line_selected,function (eventType,index) {
 
                 self.onEventLineSelected(eventType,index);
             });
