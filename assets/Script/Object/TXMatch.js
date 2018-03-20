@@ -20,6 +20,11 @@ var TXMatch = cc.Class({
         this.second = second;
         this.third = third;
     },
+
+    getResult: function () {
+        return [this.first,this.second,this.third];
+    },
+
     sum: function() {
         return this.first + this.second + this.third;
     },
