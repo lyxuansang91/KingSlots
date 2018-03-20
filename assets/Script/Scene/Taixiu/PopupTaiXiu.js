@@ -40,6 +40,7 @@ cc.Class({
         tai_number_user : cc.Label,
         xiu_number_user : cc.Label,
         session: cc.Label,
+        currentSession: 0,
         isNumber: false,
         currentBet: 0,
         betState: -1,
@@ -79,6 +80,7 @@ cc.Class({
                 //set current session
                 this.currentMatch = new TXMatch(value, 1, 1, 1);
                 this.session.string = value;
+                this.currentSession = value;
             } else if (key === "resultHistorys") {
                 //xu ly cau
                 var listMatch = value.split('|');
@@ -454,7 +456,7 @@ cc.Class({
         }
     },
     handleStartMatchResponseHandler: function(resp) {
-        cc.log("start match response:", resp.toObject());
+        cc.log("start match response:", resp);
         if(resp.getResponsecode()) {
             //countdown dem nguoc
             var countdown = resp.getCountdowntimer() / 1000;
@@ -465,6 +467,7 @@ cc.Class({
                 if (key === "sessionId") {
                     this.currentMatch.setSestionID(value);
                     this.session.string = value;
+                    this.currentSession = value;
                 }
             }
             Common.showToast(resp.getMessage());
@@ -608,5 +611,15 @@ cc.Class({
 
     openResultList: function() {
         Common.showPopup(Config.name.POPUP_TAIXIU_RESULT_LIST, function(popup){});
-    }
+    },
+
+    openSessionHistoryPopup: function () {
+        var self = this;
+        cc.log("crrSession =", this.currentSession);
+        Common.showPopup(Config.name.POPUP_TAIXIU_SESSION_HISTORY,function(popup) {
+            var crrSession = self.currentSession;
+            popup.init(crrSession);
+            popup.appear();
+        });
+    },
 });

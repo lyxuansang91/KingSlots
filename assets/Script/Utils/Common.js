@@ -516,6 +516,19 @@ var Common = {
         return hour + ':' + min + ' ' + dateString;
     },
 
+    timeToDate: function (timestamp){
+
+        var a = new Date(Number(timestamp));
+
+        var d = a.getDate();
+        var m = a.getMonth() + 1;
+        var y = a.getFullYear();
+
+        var dateString = (d <= 9 ? '0' + d : d) + '/' + (m <= 9 ? '0' + m : m) + '/' + y;
+
+        return dateString;
+    },
+
     closePopup: function (name_popup) {
         var scene = cc.director.getScene();
         if(cc.isValid(scene) && cc.isValid(scene.getChildByName(name_popup))){
@@ -760,8 +773,11 @@ var Common = {
                 }
                 break;
             case Config.TAG_GAME_ITEM.TAIXIU:
-                var headCell = ["Phiên", "Thời gian", "Đặt tài", "Đặt xỉu", "Hoàn tài", "Hoàn xỉu", "Kết quả", "Tiền thắng"];
-                return headCell;
+                if(historyType === 1){
+                    return ["Phiên", "Thời gian", "Đặt tài", "Đặt xỉu", "Hoàn tài", "Hoàn xỉu", "Kết quả", "Tiền thắng"];
+                }else{
+                    return ["Thời gian", "Tên", "Đặt tài", "Đặt xỉu", "Hoàn tài", "Hoàn xỉu", "Tiền thắng"];
+                }
                 break;
         }
     },
