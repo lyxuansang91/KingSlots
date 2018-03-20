@@ -17,19 +17,16 @@ cc.Class({
 
     onLoad: function () {
         this.setUserInfo();
-        if(Common.providerLists.length === 0)
-            NetworkManager.getCardConfigRequest(Config.CARD_CONFIG_TYPE.TYPE_CASH);
-        if(Common.smsConfigLists.length === 0)
-            NetworkManager.requestSmsConfigMessage(1);
-        if(Common.assetsConfigList.length === 0) {
-            NetworkManager.requestAssetsConfigMessage(1);
-        }
     },
 
     openExchange: function() {
-        Common.showPopup(Config.name.POPUP_EXCHANGE, function(popup) {
-            popup.appear();
-        });
+        if(Common.assetsConfigList.length > 0) {
+            Common.showPopup(Config.name.POPUP_EXCHANGE, function (popup) {
+                popup.appear();
+            });
+        } else {
+            Common.showToast("Kênh đổi thưởng đang bảo trì, vui lòng thử lại sau!");
+        }
     },
 
     openMailPopup: function () {
@@ -160,8 +157,6 @@ cc.Class({
             }
         }
 
-        cc.log("sms config lists size:", Common.smsConfigLists.length);
-
         if(resp.hasMessage() && resp.getMessage() !== "") {
             Common.showToast(resp.getMessage());
         }
@@ -169,7 +164,13 @@ cc.Class({
     updateMoneyResponseHandler: function(resp) {
         cc.log("update money response handler: ", resp.toObject());
         if(resp.getResponsecode()) {
-
+            if(resp.getMoneyboxesList().length > 0) {
+                var money_box = resp.getMoneyboxesList()[0];
+                if(money_box.getUserid() === Common.getUserId()) {
+                    Common.setCash(money_box.getCurrentmoney());
+                    this.setUserInfo();
+                }
+            }
         }
 
         if(resp.hasMessage() && resp.getMessage() !== "") {
@@ -200,6 +201,7 @@ cc.Class({
             Common.showToast(resp.getMessage());
         }
     },
+
     handleMessage: function(buffer) {
         var isDone = true;
         var resp = buffer.response;

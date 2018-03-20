@@ -25,6 +25,7 @@ cc.Class({
             this.onLeftEvent(index-1);
         }.bind(this));
         this.ui_left.addChild(item);
+
     },
 
     onLoad: function () {

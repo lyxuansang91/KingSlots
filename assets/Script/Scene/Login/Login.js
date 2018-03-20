@@ -18,9 +18,10 @@ cc.Class({
     },
     // use this for initialization
     onLoad: function () {
+        window.jarInfoList = null;
+        window.loginSuccess = false;
         Common.setFingerprint();
-
-        cc.log("ONLOAD LOGIN");
+        this.isLoadScene = false;
     },
 
     start : function () {
@@ -32,7 +33,6 @@ cc.Class({
                 this.edt_password.string = user_pass_text;
             }
         }
-
     },
 
     ongamestatus: function(event) {
@@ -44,6 +44,110 @@ cc.Class({
             }
         }
     },
+
+    assetConfigResponseHandler: function(resp) {
+        cc.log("asset config response handler:", resp.toObject());
+        if(resp.getResponsecode()) {
+            Common.assetsConfigList = [];
+            resp.getAssetsList().forEach(function(asset) {
+                var obj = {};
+                obj.assetid = asset.getAssetid();
+                obj.type = asset.getType();
+                obj.provider = asset.getProvider();
+                obj.parvalue = asset.getParvalue();
+                obj.cashvalue = asset.getCashvalue();
+                obj.assetname = asset.getAssetname();
+                obj.active = asset.getActive();
+                obj.minaccountbalance = asset.getMinaccountbalance();
+                obj.trustedindex = asset.getTrustedindex();
+                Common.assetsConfigList.push(obj);
+            });
+
+        }
+
+        if(resp.hasMessage() && resp.getMessage() !== "") {
+            Common.showToast(resp.getMessage());
+        }
+    },
+
+    cardConfigResponseHandler: function(resp) {
+        cc.log("card config response handler:", resp.toObject());
+        if(resp.getResponsecode()) {
+            Common.providerLists = [];
+            for(var i = 0; i < resp.getProvidersList().length; i++) {
+                var obj = {};
+                var provider = resp.getProvidersList()[i];
+                obj.providerid = provider.getProviderid();
+                obj.providercode = provider.getProvidercode();
+                obj.providername = provider.getProvidername();
+                obj.productsList = [];
+                for(var j = 0; j < provider.getProductsList().length; j++) {
+                    var product = provider.getProductsList()[j];
+                    var obj_product = {};
+                    obj_product.productid = product.getProductid();
+                    obj_product.parvalue = product.getParvalue();
+                    obj_product.cashvalue = product.getCashvalue();
+                    obj_product.description = product.getDescription();
+                    obj_product.promotion = product.getPromotion();
+                    obj.productsList.push(obj_product);
+                }
+                Common.providerLists.push(obj);
+            }
+        }
+        if(resp.hasMessage() && resp.getMessage() !== "") {
+            Common.showToast(resp.getMessage());
+        }
+    },
+    smsConfigResponseHandler: function(resp) {
+        cc.log("sms config response handler:", resp.toObject());
+
+        if(resp.getResponsecode()) {
+            Common.smsConfigLists = [];
+            for(var i = 0; i < resp.getNumbersList().length; i++) {
+                var obj = {};
+                var smsNumber = resp.getNumbersList()[i];
+                obj.number = smsNumber.getNumber();
+                obj.samesyntax = smsNumber.getSamesyntax();
+                obj.dayquota = smsNumber.getDayquota();
+                obj.providersList = [];
+                for(var j = 0; j < smsNumber.getProvidersList().length; j++) {
+                    var obj_provider = {};
+                    var provider = smsNumber.getProvidersList()[j];
+                    obj_provider.providerid = provider.getProviderid();
+                    obj_provider.providercode = provider.getProvidercode();
+                    obj_provider.providername = provider.getProvidername();
+                    obj_provider.syntaxesList = [];
+                    for(var k = 0; k < provider.getSyntaxesList().length; k++) {
+                        var obj_syntax = {};
+                        var syntax = provider.getSyntaxesList()[k];
+                        obj_syntax.syntaxid = syntax.getSyntaxid();
+                        obj_syntax.syntax = syntax.getSyntax();
+                        obj_syntax.parvalue = syntax.getParvalue();
+                        obj_syntax.promotion = syntax.getPromotion();
+                        obj_syntax.targetnumber = syntax.getTargetnumber();
+                        obj_syntax.cashvalue = syntax.getCashvalue();
+                        obj_provider.syntaxesList.push(obj_syntax);
+                    }
+                    obj.providersList.push(obj_provider);
+                }
+                Common.smsConfigLists.push(obj);
+            }
+        }
+
+        if(resp.hasMessage() && resp.getMessage() !== "") {
+            Common.showToast(resp.getMessage());
+        }
+    },
+    jarResponseHandler: function(resp) {
+        cc.log("jar response handler:", resp.toObject());
+
+        if(resp.getResponsecode()) {
+            if(resp.getJarinfoList().length > 0) {
+                // first time request
+                window.jarInfoList = resp.getJarinfoList();
+            }
+        }
+    },
     handleMessage: function(e) {
         const buffer = e;
         var isDone = this._super(buffer);
@@ -51,14 +155,25 @@ cc.Class({
             return true;
         }
         isDone = true;
+        var msg = buffer.response;
         switch (buffer.message_id) {
             case NetworkManager.MESSAGE_ID.LOGIN:
-                var msg = buffer.response;
                 this.handleLoginResponseHandler(msg);
                 break;
             case NetworkManager.MESSAGE_ID.REGISTER:
-                var msg = buffer.response;
                 this.handleRegisterResponseHandler(msg);
+                break;
+            case NetworkManager.MESSAGE_ID.ASSET_CONFIG:
+                this.assetConfigResponseHandler(msg);
+                break;
+            case NetworkManager.MESSAGE_ID.CARD_CONFIG:
+                this.cardConfigResponseHandler(msg);
+                break;
+            case NetworkManager.MESSAGE_ID.SMS_CONFIG:
+                this.smsConfigResponseHandler(msg);
+                break;
+            case NetworkManager.MESSAGE_ID.JAR:
+                this.jarResponseHandler(msg);
                 break;
             default:
                 isDone = false;
@@ -66,12 +181,21 @@ cc.Class({
         }
         return isDone;
     },
+    checkPurchaseList: function() {
+        return (Common.assetsConfigList !== null && Common.smsConfigLists !== null
+            && Common.providerLists !== null && window.jarInfoList !== null && window.loginSuccess === true);
+    },
 
     onGameEvent: function() {
         var self = this;
         NetworkManager.checkEvent(function(buffer) {
             return self.handleMessage(buffer);
-        })
+        });
+        if(this.checkPurchaseList() && !this.isLoadScene) {
+            this.isLoadScene = true;
+            cc.director.loadScene('Lobby');
+        }
+
     },
     update: function(dt) {
         this.onGameEvent();
@@ -106,17 +230,17 @@ cc.Class({
     },
 
     handleLoginResponseHandler: function(res) {
-        cc.log("login response handler:", res);
+        cc.log("login response handler:", res.toObject());
+        window.loginMessage = null;
         if(res.getResponsecode()) {
             var session_id = res.getSessionid();
-            cc.log("session id:", session_id);
             Common.setSessionId(session_id);
             Common.setUserInfo(res.getUserinfo().toObject());
-            cc.log("get user info:", res.getUserinfo().toObject());
             cc.sys.localStorage.setItem("session_id", session_id);
 
             cc.sys.localStorage.setItem("user_name",this.edt_username.string);
             cc.sys.localStorage.setItem("user_password",this.edt_password.string);
+            window.loginSuccess = true;
 
             if (res.hasUserinfo()) {
                 this.saveUserInfo(res.getUserinfo());
@@ -141,13 +265,25 @@ cc.Class({
                 Common.setNoticeText(res.getNoticetext());
             }
 
-            cc.director.loadScene('Lobby');
+            if(res.hasMessage() && res.getMessage() !== "") {
+                window.loginMessage = res.getMessage();
+            }
+            // cc.director.loadScene('Lobby');
+            if(Common.providerLists === null)
+                NetworkManager.getCardConfigRequest(Config.CARD_CONFIG_TYPE.TYPE_CASH);
+            if(Common.smsConfigLists === null)
+                NetworkManager.requestSmsConfigMessage(1);
+            if(Common.assetsConfigList === null) {
+                NetworkManager.requestAssetsConfigMessage(1);
+            }
+            NetworkManager.getJarRequest(0, null);
+            return;
         }
 
         if(res.hasMessage() && res.getMessage() !== "") {
             Common.showPopup(Config.name.POPUP_MESSAGE_BOX,function(message_box) {
-                message_box.init(res.getMessage(), Config.COMMON_POPUP_TYPE.MESSAGE_BOX.MESSAGEBOX_TYPE, function() {
-                    cc.log("on callback");
+                message_box.init(res.getMessage(), Config.COMMON_POPUP_TYPE.MESSAGE_BOX.CONFIRM_TYPE, function() {
+                    cc.log("call back");
                 });
                 message_box.appear();
             });
@@ -159,13 +295,16 @@ cc.Class({
         if(res.getResponsecode()) {
             if(res.getDisconnect()) {
                 Common.setSessionId("-1");
-                if(res.hasMessage() && res.getMessage() != "") {
-                    cc.alert(res.getMessage());
+                if(res.hasMessage() && res.getMessage() !== "") {
+                    Common.showToast(res.getMessage());
                 }
                 NetworkManager.closeConnection();
                 this.scheduleOnce(this.goIntroScene, 2.0);
             }
         }
+    },
+    goIntroScene: function(e) {
+        cc.director.loadScene("Intro");
     },
 
     login: function() {
@@ -237,8 +376,6 @@ cc.Class({
                 }
             });
         }
-
-
     },
     loginGoogle: function() {
         Common.showPopup(Config.name.POPUP_HISTORY,function(popup) {

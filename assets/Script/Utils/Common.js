@@ -29,9 +29,9 @@ var Common = {
     origin : cc.director.getVisibleOrigin(),
     introScene: null,
     _existTaiXiu: false,
-    providerLists: [],
-    smsConfigLists: [],
-    assetsConfigList: [],
+    providerLists: null,
+    smsConfigLists: null,
+    assetsConfigList: null,
 
     initLanguage: function(){
         var self = this;

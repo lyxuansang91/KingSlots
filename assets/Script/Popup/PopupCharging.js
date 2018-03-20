@@ -27,21 +27,26 @@ cc.Class({
     },
 
     onEvent: function(index) {
-        cc.log("index : ",index);
         var nodeNapThe = this.body.getChildByName("NodeNapThe");
         var nodeNapSms = this.body.getChildByName("NodeNapSMS");
-
         switch(index) {
             case 1:
-                nodeNapThe.active = true;
-                nodeNapSms.active = false;
-                nodeNapThe.getComponent("NodeNapThe").initTabLeft();
+                if(Common.providerLists.length > 0) {
+                    nodeNapThe.active = true;
+                    nodeNapSms.active = false;
+                    nodeNapThe.getComponent("NodeNapThe").initTabLeft();
+                } else {
+                    Common.showToast("Kênh nạp thẻ đang bảo trì, vui lòng thử lại!");
+                }
                 break;
             case 2:
-                nodeNapThe.active = false;
-                nodeNapSms.active = true;
-                nodeNapSms.getComponent("NodeNapSMS").initTabLeft();
-                // nodeNapThe.getComponent("NodeNapThe").demo(2);
+                if(Common.smsConfigLists.length > 0) {
+                    nodeNapThe.active = false;
+                    nodeNapSms.active = true;
+                    nodeNapSms.getComponent("NodeNapSMS").initTabLeft();
+                } else {
+                    Common.showToast("Kênh nạp SMS đang bảo trì, vui lòng thử lại!");
+                }
                 break;
             case 3:
                 break;
@@ -81,27 +86,5 @@ cc.Class({
     },
 
     update: function(dt) {
-        // this.onGameEvent();
-    },
-    handleMessage: function(buffer) {
-        var isDone = true;
-        var resp = buffer.response;
-        switch(buffer.message_id) {
-            // case NetworkManager.MESSAGE_ID.CARD_CONFIG:
-            //     this.cardConfigResponseHandler(resp);
-            //     break;
-            default:
-                isDone = false;
-                break;
-        }
-        return isDone;
-    },
-    onGameEvent: function (){
-        // NetworkManager.checkEvent(function(buffer) {
-        //     return this.handleMessage(buffer);
-        // }.bind(this));
     }
-
-
-    // update (dt) {},
 });

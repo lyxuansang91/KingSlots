@@ -18,7 +18,7 @@ cc.Class({
         jarRequest: null,
         isRequestJar: false,
         isBindNetwork: false,
-        firstTimeRequestJar: true,
+        firstTimeRequestJar: false,
     },
 
     // use this for initialization
@@ -42,7 +42,35 @@ cc.Class({
 
         var self = this;
 
-        self.requestJar(true);
+        var listGame = [Common.ZONE_ID.MINI_BACAY,Common.ZONE_ID.MINI_POKER,
+            Common.ZONE_ID.TAIXIU, Common.ZONE_ID.VQMM, Common.ZONE_ID.TREASURE];
+
+        var innerSize = cc.size(0,this.content.getContentSize().height);
+        for (var i = 0; i < listGame.length; ++i) {
+            var item = cc.instantiate(this.prefabGameItem);
+            item.setTag(listGame[i] + 1000);
+            item.getComponent('LobbyGameItem').init(i, listGame[i]);
+            item.setPositionY(this.content.getContentSize().height*0.06);
+            this.content.addChild(item);
+            innerSize.width += item.getContentSize().width*1.1;
+        }
+
+        this.content.setContentSize(innerSize);
+        var resp = window.jarInfoList;
+
+        if(resp != null) {
+
+            for (var i = 0; i < resp.length; i++) {
+                var jarItem = resp[i];
+                var gameid = jarItem.getGameid();
+                var value = jarItem.getValue();
+                var jarType = jarItem.getJartype();
+                var item = this.content.getChildByTag(gameid + 1000);
+                if (item !== null && item.getName() === 'LobbyGameItem')
+                    item.getComponent('LobbyGameItem').updateJarMoney(value, jarType);
+            }
+        }
+
         self.schedule(function() {
             self.requestJar(false);
         }, 5);

@@ -21,19 +21,17 @@ cc.Class({
     onLoad: function() {
         this.tabString = [];
         if(Common.assetsConfigList.length > 0) {
-            cc.log("asset config list:", Common.assetsConfigList);
             Common.assetsConfigList.forEach(function(asset) {
                 if(!this.tabString.includes(asset.provider))
                     this.tabString.push(asset.provider);
             }.bind(this));
-            cc.log("tab string:", this.tabString);
             var item = cc.instantiate(this.tabLeftPrefab);
             item.getComponent("UITabLeft").setTab(this.tabString, 1, function(index){
                 this.onLeftEvent(index-1);
             }.bind(this));
             this.ui_left.addChild(item);
         } else {
-            NetworkManager.requestAssetsConfigMessage(1);
+            Common.showToast("Kênh đổi thưởng đang bảo trì, vui lòng thử lại sau!");
         }
     },
 
