@@ -17,7 +17,8 @@ cc.Class({
         contentRight: cc.Node,
         tabLeftNode: cc.Node,
         _tab: 1,
-        subHistory: 1
+        subHistory: 1,
+        list_item: []
     },
 
     onLoad: function () {
@@ -101,6 +102,10 @@ cc.Class({
                 var msg = buffer.response;
                 this.lookupMoneyHistoryResponse(msg);
                 break;
+            case NetworkManager.MESSAGE_ID.UPDATE_USER_INFO:
+                var msg = buffer.response;
+                this.updateUserInfoFromServer(msg);
+                break;
             default:
                 isDone = false;
                 break;
@@ -119,26 +124,37 @@ cc.Class({
                     if (avatar_id < 100000){
                         avatar_id = 0;
                     }
+                    this.avatarId = avatar_id;
                     var avatar = '';
                     var id = _user_info.getUserid();
+                    this.userId = _user_info.getUserid();
                     var level = _user_info.getLevel().getLevel();
+                    this.level = _user_info.getLevel().getLevel();
                     var displayName = _user_info.getDisplayname();
+                    this.displayName = _user_info.getDisplayname();
                     var cash = _user_info.getCash();
+                    this.cash = _user_info.getCash();
 
                     var phone = null;
                     if (_user_info.getUserid() === Common.getUserId()){
                         phone = Common.getPhoneNumber();
                     }
 
+                    this.phone = phone;
+
                     var chiso = _user_info.getTrustedindex();
+                    this.chiso = _user_info.getTrustedindex();
                     var sovanchoi = _user_info.getTotalmatch();
+                    this.sovanchoi = _user_info.getTotalmatch();
                     var sovanthang = _user_info.getTotalwin();
+                    this.sovanthang = _user_info.getTotalwin();
                     var sovanthua = _user_info.getTotalmatch() - _user_info.getTotalwin();
+                    this.sovanthua = sovanthua;
 
                     var item = cc.instantiate(this.userInfoPrefab);
                     item.getComponent('UserInfo').init(avatar, displayName, level, id, phone, chiso, sovanchoi,
                         sovanthang, sovanthua, cash);
-
+                    self.list_item.push(item);
                     self.tableView.addChild(item);
 
                 }
@@ -147,6 +163,33 @@ cc.Class({
                 var mess = response.getMessage();
                 Common.showToast(mess);
             }
+        }
+    },
+
+    updateUserInfoFromServer: function(updateUserInfoResponse){
+        cc.log("updateUserInfoResponse =", updateUserInfoResponse);
+        if (updateUserInfoResponse !== 0) {
+            if (updateUserInfoResponse.getResponsecode()) {
+                var avatarId = Common.getAvatarId() ? Common.getAvatarId() : this.avatarId;
+                var phone = Common.getNewPhone() ? Common.getNewPhone() : this.phone;
+                var displayName = this.displayName;
+                var level = this.level;
+                var id = this.userId;
+                var chiso = this.chiso;
+                var sovanchoi = this.sovanchoi;
+                var sovanthang = this.sovanthang;
+                var sovanthua = this.sovanthua;
+                var cash = this.cash;
+
+                this.list_item[0].getComponent('UserInfo').updateInfo(avatarId, phone);
+
+
+            }
+
+            if (updateUserInfoResponse.hasMessage() && updateUserInfoResponse.getMessage()){
+                Common.showToast(updateUserInfoResponse.getMessage());
+            }
+
         }
     },
 
@@ -234,5 +277,6 @@ cc.Class({
     setSubHistory: function (subHistory) {
         this.subHistory = subHistory;
     },
+
 
 });

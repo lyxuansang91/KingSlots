@@ -77,8 +77,7 @@ cc.Class({
                 cc.director.loadScene('Login');
 
             }else {
-                // PopupMessageBox* popupMessage = new PopupMessageBox();
-                // popupMessage.showPopup(init_response.message());
+                Common.showToast(initialMessage.getMessage());
             }
         }
     },

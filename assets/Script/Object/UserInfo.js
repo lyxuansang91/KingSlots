@@ -11,7 +11,8 @@ cc.Class({
         txt_sovanchoi: cc.Label,
         txt_sovanthang: cc.Label,
         txt_sovanthua: cc.Label,
-        avatarSprite: cc.Prefab
+        avatarSprite: cc.Prefab,
+        txt_money: cc.Label
     },
 
     // use this for initialization
@@ -27,6 +28,7 @@ cc.Class({
         this.txt_sovanchoi.string = sovanchoi;
         this.txt_sovanthang.string = sovanthang;
         this.txt_sovanthua.string = sovanthua;
+        this.txt_money.string = cash;
 
         var avatarId = Common.getAvatarId() - 100000;
 
@@ -34,6 +36,23 @@ cc.Class({
         var avaSprite = item.getComponent("AvatarSprite").init(avatarId);
 
         this.avatar.getComponent(cc.Sprite).spriteFrame = avaSprite;
+
+    },
+
+    updateInfo: function (avatar, phone) {
+
+        if(avatar !== null){
+            var avatarId = avatar - 100000;
+
+            var item = cc.instantiate(this.avatarSprite);
+            var avaSprite = item.getComponent("AvatarSprite").init(avatarId);
+
+            this.node.getChildByName('sanh_avatar_demo').getComponent(cc.Sprite).spriteFrame = avaSprite;
+        }
+
+        if(phone !== null){
+            this.node.getChildByName('txt_phone').getComponent(cc.Label).string = phone;
+        }
 
     },
 
