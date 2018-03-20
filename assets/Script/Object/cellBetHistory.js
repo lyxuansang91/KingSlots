@@ -15,6 +15,30 @@ cc.Class({
 
     resetCell: function (lengthData,index) {
 
+        const sevenItem = this.node.getChildByName("sevenItem");
+        var item1_7 = sevenItem.getChildByName("item1").getComponent(cc.Label);
+        item1_7.string = "";
+
+        var item2_7 = sevenItem.getChildByName("item2").getComponent(cc.Label);
+        item2_7.string = "";
+
+        var item3_7 = sevenItem.getChildByName("item3").getComponent(cc.Label);
+        item3_7.string = "";
+
+        var item4_7 = sevenItem.getChildByName("item4").getComponent(cc.Label);
+        item4_7.string = "";
+
+        var item5_7 = sevenItem.getChildByName("item5").getComponent(cc.Label);
+        item5_7.string = "";
+
+        var item6_7 = sevenItem.getChildByName("item6").getComponent(cc.Label);
+        item6_7.string = "";
+
+        var item7_7 = sevenItem.getChildByName("item7").getComponent(cc.Label);
+        item7_7.string = "";
+
+
+
         const eightItem = this.node.getChildByName("eightItem");
         var item1_8 = eightItem.getChildByName("item1").getComponent(cc.Label);
         item1_8.string = "";
@@ -42,14 +66,26 @@ cc.Class({
 
         this.list_text = [];
 
-        this.list_text.push(item1_8);
-        this.list_text.push(item2_8);
-        this.list_text.push(item3_8);
-        this.list_text.push(item4_8);
-        this.list_text.push(item5_8);
-        this.list_text.push(item6_8);
-        this.list_text.push(item7_8);
-        this.list_text.push(item8_8);
+        if(lengthData == 8){
+            this.list_text.push(item1_8);
+            this.list_text.push(item2_8);
+            this.list_text.push(item3_8);
+            this.list_text.push(item4_8);
+            this.list_text.push(item5_8);
+            this.list_text.push(item6_8);
+            this.list_text.push(item7_8);
+            this.list_text.push(item8_8);
+
+        }else if(lengthData == 7){
+            this.list_text.push(item1_7);
+            this.list_text.push(item2_7);
+            this.list_text.push(item3_7);
+            this.list_text.push(item4_7);
+            this.list_text.push(item5_7);
+            this.list_text.push(item6_7);
+            this.list_text.push(item7_7);
+
+        }
 
 
         var background = this.node.getChildByName("background").getComponent(cc.Sprite);
