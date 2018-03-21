@@ -13,7 +13,12 @@ cc.Class({
         titleSession: cc.Label,
         titleDate: cc.Label,
         tableView: cc.Node,
-        indexSession: 0
+        indexSession: 0,
+        diceOne: cc.Sprite,
+        diceTwo: cc.Sprite,
+        diceThree: cc.Sprite,
+        result: cc.Label,
+        list_frame: [cc.SpriteFrame]
     },
 
     init: function (session) {
@@ -128,24 +133,27 @@ cc.Class({
                         //     //session->setTotalSmallBet(cmInst->convertStringToInt(value));
                         //     totalLittleBet = Common::getInstance()->convertStringToLongLong(value);
                         // }
-                        // else if (key === "totalValue") {
-                        //     session->setTotalValue(cmInst->convertStringToInt(value));
-                        // }
-                        // else if (key === "diceValues") {
-                        //     vector<string> values = cmInst->split(value, ',');
-                        //     vector<int> dicevalue = cmInst->convertStringsToInt(values);
-                        //     //session->setDiceValue(dicevalue);
-                        //     if (dicevalue.size() >= 3){
-                        //         for(int j = 0 ;j < xucxacShow.size();j++){
-                        //             xucxacShow[j]->loadEnryptTexture(StringUtils::format(TXN_RESULT,dicevalue[j]));
-                        //         }
-                        //         int sumBet = dicevalue[0] + dicevalue[1] + dicevalue[2];
-                        //         title_kq->setString(sumBet > 10 ? getLanguageStringWithKey("TXT_TXN_TAI") :
-                        //             getLanguageStringWithKey("TXT_TXN_XIU"));
-                        //
-                        //         title_kq_sau->setString(StringUtils::format(" %d",sumBet));
-                        //     }
-                        // }
+                        else if (key === "totalValue") {
+                            this.result.string = value;
+                        }
+                        else if (key === "diceValues") {
+                            var values = value.split(',');
+                            cc.log("values =", values);
+                            this.diceOne.spriteFrame = this.list_frame[parseInt(values[0] - 1)];
+                            this.diceTwo.spriteFrame = this.list_frame[parseInt(values[1] - 1)];
+                            this.diceThree.spriteFrame = this.list_frame[parseInt(values[2] - 1)];
+                            // var dicevalue = cmInst->convertStringsToInt(values);
+                            // if (values.length >= 3){
+                            //     for(var j = 0 ;j < xucxacShow.size();j++){
+                            //         xucxacShow[j]->loadEnryptTexture(StringUtils::format(TXN_RESULT,dicevalue[j]));
+                            //     }
+                            //     int sumBet = dicevalue[0] + dicevalue[1] + dicevalue[2];
+                            //     title_kq->setString(sumBet > 10 ? getLanguageStringWithKey("TXT_TXN_TAI") :
+                            //         getLanguageStringWithKey("TXT_TXN_XIU"));
+                            //
+                            //     title_kq_sau->setString(StringUtils::format(" %d",sumBet));
+                            // }
+                        }
 
                     }
 
