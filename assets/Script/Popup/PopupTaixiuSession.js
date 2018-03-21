@@ -12,13 +12,14 @@ cc.Class({
         currentSess: 0,
         titleSession: cc.Label,
         titleDate: cc.Label,
-        tableView: cc.Node
+        tableView: cc.Node,
+        indexSession: 0
     },
 
     init: function (session) {
-        this.getLookUpGameHistory(session, 0,
+        this.getLookUpGameHistory(session - 1, 0,
             Config.NUM_LOAD.MORE_ITEM, isCash, orderByField, asc);
-        this.currentSess = session;
+        this.currentSess = session - 1;
     },
 
     getLookUpGameHistory: function(currentSession,
@@ -211,9 +212,10 @@ cc.Class({
     },
 
     btnNextEvent: function () {
-        this.getLookUpGameHistory(this.currentSess + 1, 0,
+        var crrSess = parseInt(this.currentSess) + 1;
+        this.getLookUpGameHistory(crrSess, 0,
             Config.NUM_LOAD.MORE_ITEM, isCash, orderByField, asc);
-        this.currentSess = this.currentSess + 1;
+        this.currentSess = crrSess;
     },
 
 });

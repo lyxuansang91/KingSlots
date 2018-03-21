@@ -635,7 +635,7 @@
       "__id__": 1
     },
     "component": "PopupTaiXiu",
-    "handler": "openResultList",
+    "handler": "openStatis",
     "customEventData": ""
   },
   {
