@@ -701,5 +701,9 @@ cc.Class({
     showXocAnimation: function () {
         this.taixiu_xoc_anim.node.active = true;
         this.animation.play();
-    }
+    },
+
+    openStatis: function() {
+        Common.showPopup(Config.name.POPUP_TAIXIU_STATIS, function(popup){});
+    },
 });

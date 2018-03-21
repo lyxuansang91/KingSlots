@@ -1,5 +1,3 @@
-var NetworkManager = require('NetworkManager');
-
 cc.Class({
     extends: cc.Component,
 
