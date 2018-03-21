@@ -61,6 +61,8 @@ var Config = {
         POPUP_CAPTCHA : "PopupCaptcha",
         POPUP_TAIXIU_BET_HISTORY : "PopupTaixiuBetHistory",
         POPUP_SELECT_LINE : "PopupSelectLine",
+        POPUP_TAIXIU_SESSION_HISTORY : "PopupTaixiuSession",
+        POPUP_TAIXIU_STATIS : "PopupTaixiuStatis",
     },
 
     ON_EVENT: {

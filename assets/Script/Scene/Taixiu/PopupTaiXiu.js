@@ -40,6 +40,8 @@ cc.Class({
         tai_number_user : cc.Label,
         xiu_number_user : cc.Label,
         session: cc.Label,
+
+        currentSession: 0,
         isNumber: false,
         currentBet: 0,
         betState: -1,
@@ -48,12 +50,76 @@ cc.Class({
         lstMatch: [TXMatch],
         currentMatch: TXMatch,
         taiXiuResult: cc.Prefab,
+
         chat_view : cc.Node,
         edit_chat : cc.EditBox,
         item_chat : cc.Prefab,
         item_emotion : cc.Prefab,
         lstMessageChat: [ItemChat],
-        bg_emotions : cc.ScrollView
+        bg_emotions : cc.ScrollView,
+        result_frames : [cc.SpriteFrame],
+        result_sprites : [cc.Sprite],
+        result_node : cc.Node,
+        taixiu_xoc_anim : cc.Sprite,
+
+        timer : cc.Label,
+        can_keo: cc.Sprite,
+        bat : cc.Sprite,
+
+    },
+
+    // use this for initialization
+    onLoad: function() {
+        cc.log("on load tai xiu");
+        function onTouchDown (event) {
+            return true;
+        }
+
+        this.node.on('touchstart', onTouchDown, this.bg_dark);
+        this.betState = -1;
+        Common.setExistTaiXiu(true);
+        this.lstTaiXiuResult = [];
+        this.countDownTimer = 0;
+    },
+
+    start: function () {
+        this.current_chat_height = this.chat_view.getContentSize().height;
+        this.isShowEmotion = false;
+
+        this.animation = this.taixiu_xoc_anim.getComponent(cc.Animation);
+        this.animation.on('finished',  this.onFinished,this);
+
+        this.addChatEmotion();
+    },
+
+    onFinished: function () {
+        cc.log('onFinished');
+        this.taixiu_xoc_anim.node.active = false;
+        if(this.currentMatch.getResult().length > 0){
+            this.result_node.active = true;
+            for(var i = 0; i < this.result_sprites.length; i ++){
+                var value = this.currentMatch.getResult()[i];
+                if(value > 0 && value <= 6){
+                    this.result_sprites[i].spriteFrame = this.result_frames[value - 1];
+                }
+            }
+        }
+    },
+
+    onClose: function() {
+        NetworkManager.requestExitRoomMessage(0);
+    },
+
+    onGameStatus: function(event) {
+        if(event.data!==null || typeof(event.data) !== 'undefined') {
+            var lstMessage = NetworkManager.parseFrom(event.data, event.data.byteLength);
+            if(lstMessage.length > 0) {
+                for(var i = 0; i < lstMessage.length; i++) {
+                    var buffer = lstMessage[i];
+                    this.handleMessage(buffer);
+                }
+            }
+        }
     },
 
     cancel: function() {
@@ -75,10 +141,21 @@ cc.Class({
                 this.setTableStage(parseInt(value));
             } else if (key === "cdTimerRemaining") {
                 //thoi gian con lai
+
+                this.bat.node.active = false;
+                var self = this;
+                var duration = parseInt(value/1000);
+                this.countDownTimer = duration;
+                this.timer.node.active = true;
+                this.schedule(function () {
+                    self.addCountDownTimer();
+                },1);
+
             } else if (key === "sessionId") {
                 //set current session
                 this.currentMatch = new TXMatch(value, 1, 1, 1);
                 this.session.string = value;
+                this.currentSession = value;
             } else if (key === "resultHistorys") {
                 //xu ly cau
                 var listMatch = value.split('|');
@@ -99,6 +176,26 @@ cc.Class({
             }
         }
     },
+
+    addCountDownTimer: function () {
+        if(this.countDownTimer < 0){
+            this.timer.node.active = false;
+            this.timer.string = "";
+            this.unscheduleAllCallbacks();
+
+            return;
+        }
+        var time = "";
+        if(this.countDownTimer < 10 && this.countDownTimer >= 0){
+            time = ("0" + this.countDownTimer);
+        }else if(this.countDownTimer >= 10 && this.countDownTimer < 100){
+            time = this.countDownTimer;
+        }
+
+        this.timer.string = "00:" + time;
+        this.countDownTimer-- ;
+    },
+
     /* target: total_money_tai, total_money_xiu.
     * val: float, so tien
     * Example: this.setTotalMoneyTaiXiu(this.total_money_tai, 5000);
@@ -177,42 +274,7 @@ cc.Class({
         }
     },
 
-    // use this for initialization
-    onLoad: function() {
-        cc.log("on load tai xiu");
-        function onTouchDown (event) {
-            return true;
-        }
-        // this.taiGate = new Gate(0, 0, 0, 0);
-        // this.xiuGate = new Gate(0, 0, 0, 0);
-        this.node.on('touchstart', onTouchDown, this.bg_dark);
-        this.betState = -1;
-        Common.setExistTaiXiu(true);
-        this.lstTaiXiuResult = [];
-    },
 
-    start: function () {
-        this.current_chat_height = this.chat_view.getContentSize().height;
-        this.isShowEmotion = false;
-
-        this.addChatEmotion();
-    },
-
-    onClose: function() {
-        NetworkManager.requestExitRoomMessage(0);
-    },
-
-    onGameStatus: function(event) {
-        if(event.data!==null || typeof(event.data) !== 'undefined') {
-            var lstMessage = NetworkManager.parseFrom(event.data, event.data.byteLength);
-            if(lstMessage.length > 0) {
-                for(var i = 0; i < lstMessage.length; i++) {
-                    var buffer = lstMessage[i];
-                    this.handleMessage(buffer);
-                }
-            }
-        }
-    },
     onChangeKeyBoard: function() {
         this.number_keyboard.active = this.isNumber;
         this.money_keyboard.active = !this.isNumber;
@@ -433,6 +495,8 @@ cc.Class({
                     this.setTableStage(intValue);
                     if (intValue === TABLE_STATE.BALANCE) {
                         Common.showToast("Cân cửa");
+                        this.can_keo.node.active = true;
+                        this.timer.node.active = false;
                     } else if (intValue === TABLE_STATE.RESULT) {
                         //Show animation tung con xúc sắc
                     }
@@ -444,6 +508,11 @@ cc.Class({
                         this.currentMatch.setResult(dicesvalue[0], dicesvalue[1], dicesvalue[2]);
                         cc.log("OK");
                         //show animation con xuc sac quay
+
+                        this.bat.node.active = false;
+                        this.can_keo.node.active = false;
+                        this.showXocAnimation();
+
                     }
                 } else if (key === "totalValue") {
 
@@ -454,7 +523,7 @@ cc.Class({
         }
     },
     handleStartMatchResponseHandler: function(resp) {
-        cc.log("start match response:", resp.toObject());
+        cc.log("start match response:", resp);
         if(resp.getResponsecode()) {
             //countdown dem nguoc
             var countdown = resp.getCountdowntimer() / 1000;
@@ -465,6 +534,7 @@ cc.Class({
                 if (key === "sessionId") {
                     this.currentMatch.setSestionID(value);
                     this.session.string = value;
+                    this.currentSession = value;
                 }
             }
             Common.showToast(resp.getMessage());
@@ -496,6 +566,16 @@ cc.Class({
             this.setTableStage(TABLE_STATE.BET);
             Common.showToast("Bat đầu đặt cược");
             //TODO: bắt đầu chạy thời gian đặt cửa trên đĩa với thời gian là countdown
+            var self = this;
+
+            this.bat.node.active = true;
+            this.countDownTimer = parseInt(resp.getCountdowntimer()/1000);
+            this.timer.node.active = true;
+            self.schedule(function () {
+                self.addCountDownTimer();
+            },1);
+
+            this.result_node.active = false;
         }
     },
     onGameEvent: function() {
@@ -593,7 +673,6 @@ cc.Class({
 
     openTopUserPopup: function () {
         var tabString = ["Theo ngày", "Theo tuần"];
-
         Common.showPopup(Config.name.POPUP_TAIXIU_TOP,function(popup) {
             popup.addTabs(tabString, 1);
             popup.appear();
@@ -608,5 +687,23 @@ cc.Class({
 
     openResultList: function() {
         Common.showPopup(Config.name.POPUP_TAIXIU_RESULT_LIST, function(popup){});
-    }
+    },
+
+    openSessionHistoryPopup: function () {
+        var self = this;
+        cc.log("crrSession =", this.currentSession);
+        Common.showPopup(Config.name.POPUP_TAIXIU_SESSION_HISTORY,function(popup) {
+            var crrSession = self.currentSession;
+            popup.init(crrSession);
+            popup.appear();
+        });
+    },
+    showXocAnimation: function () {
+        this.taixiu_xoc_anim.node.active = true;
+        this.animation.play();
+    },
+
+    openStatis: function() {
+        Common.showPopup(Config.name.POPUP_TAIXIU_STATIS, function(popup){});
+    },
 });
