@@ -40,6 +40,7 @@ cc.Class({
         tai_number_user : cc.Label,
         xiu_number_user : cc.Label,
         session: cc.Label,
+
         currentSession: 0,
         isNumber: false,
         currentBet: 0,
@@ -49,6 +50,7 @@ cc.Class({
         lstMatch: [TXMatch],
         currentMatch: TXMatch,
         taiXiuResult: cc.Prefab,
+
         chat_view : cc.Node,
         edit_chat : cc.EditBox,
         item_chat : cc.Prefab,
@@ -61,6 +63,8 @@ cc.Class({
         taixiu_xoc_anim : cc.Sprite,
 
         timer : cc.Label,
+        can_keo: cc.Sprite,
+        bat : cc.Sprite,
 
     },
 
@@ -70,8 +74,7 @@ cc.Class({
         function onTouchDown (event) {
             return true;
         }
-        // this.taiGate = new Gate(0, 0, 0, 0);
-        // this.xiuGate = new Gate(0, 0, 0, 0);
+
         this.node.on('touchstart', onTouchDown, this.bg_dark);
         this.betState = -1;
         Common.setExistTaiXiu(true);
@@ -138,6 +141,8 @@ cc.Class({
                 this.setTableStage(parseInt(value));
             } else if (key === "cdTimerRemaining") {
                 //thoi gian con lai
+
+                this.bat.node.active = false;
                 var self = this;
                 var duration = parseInt(value/1000);
                 this.countDownTimer = duration;
@@ -490,6 +495,8 @@ cc.Class({
                     this.setTableStage(intValue);
                     if (intValue === TABLE_STATE.BALANCE) {
                         Common.showToast("Cân cửa");
+                        this.can_keo.node.active = true;
+                        this.timer.node.active = false;
                     } else if (intValue === TABLE_STATE.RESULT) {
                         //Show animation tung con xúc sắc
                     }
@@ -502,6 +509,8 @@ cc.Class({
                         cc.log("OK");
                         //show animation con xuc sac quay
 
+                        this.bat.node.active = false;
+                        this.can_keo.node.active = false;
                         this.showXocAnimation();
 
                     }
@@ -559,6 +568,7 @@ cc.Class({
             //TODO: bắt đầu chạy thời gian đặt cửa trên đĩa với thời gian là countdown
             var self = this;
 
+            this.bat.node.active = true;
             this.countDownTimer = parseInt(resp.getCountdowntimer()/1000);
             this.timer.node.active = true;
             self.schedule(function () {
