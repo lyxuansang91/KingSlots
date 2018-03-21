@@ -59,7 +59,6 @@ cc.Class({
         var resp = window.jarInfoList;
 
         if(resp != null) {
-
             for (var i = 0; i < resp.length; i++) {
                 var jarItem = resp[i];
                 var gameid = jarItem.getGameid();
@@ -127,25 +126,6 @@ cc.Class({
         cc.log("jar response handler:", resp.toObject());
         if(resp.getResponsecode()) {
             if(resp.getJarinfoList().length > 0) {
-                // first time request
-                if(this.firstTimeRequestJar) {
-                    this.firstTimeRequestJar = false;
-                    var listGame = [Common.ZONE_ID.MINI_BACAY,Common.ZONE_ID.MINI_POKER,
-                        Common.ZONE_ID.TAIXIU, Common.ZONE_ID.VQMM, Common.ZONE_ID.TREASURE];
-
-                    var innerSize = cc.size(0,this.content.getContentSize().height);
-                    for (var i = 0; i < listGame.length; ++i) {
-                        var item = cc.instantiate(this.prefabGameItem);
-                        item.setTag(listGame[i] + 1000);
-                        item.getComponent('LobbyGameItem').init(i, listGame[i]);
-                        item.setPositionY(this.content.getContentSize().height*0.06);
-                        this.content.addChild(item);
-
-                        innerSize.width += item.getContentSize().width*1.1;
-                    }
-
-                    this.content.setContentSize(innerSize);
-                }
                 // bind data
                 this.isRequestJar = false;
                 for(var i = 0; i < resp.getJarinfoList().length; i++) {
