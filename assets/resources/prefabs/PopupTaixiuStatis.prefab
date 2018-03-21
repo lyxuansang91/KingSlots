@@ -25,14 +25,14 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 24
+        "__id__": 23
       },
       {
-        "__id__": 25
+        "__id__": 24
       }
     ],
     "_prefab": {
-      "__id__": 26
+      "__id__": 25
     },
     "_id": "",
     "_opacity": 255,
@@ -183,11 +183,11 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 22
+        "__id__": 21
       }
     ],
     "_prefab": {
-      "__id__": 23
+      "__id__": 22
     },
     "_id": "",
     "_opacity": 255,
@@ -460,7 +460,7 @@
     "target": {
       "__id__": 1
     },
-    "component": "PopupTaixiuBetHistory",
+    "component": "PopupTaixiuStatis",
     "handler": "disappear",
     "customEventData": ""
   },
@@ -489,13 +489,9 @@
     ],
     "_tag": -1,
     "_active": true,
-    "_components": [
-      {
-        "__id__": 20
-      }
-    ],
+    "_components": [],
     "_prefab": {
-      "__id__": 21
+      "__id__": 20
     },
     "_id": "",
     "_opacity": 255,
@@ -515,7 +511,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 800,
-      "height": 440
+      "height": 220
     },
     "_rotationX": 0,
     "_rotationY": 0,
@@ -524,7 +520,7 @@
     "_position": {
       "__type__": "cc.Vec2",
       "x": -5,
-      "y": -31
+      "y": -137
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -573,7 +569,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 800,
-      "height": 440
+      "height": 220
     },
     "_rotationX": 0,
     "_rotationY": 0,
@@ -623,7 +619,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 800,
-      "height": 440
+      "height": 220
     },
     "_rotationX": 0,
     "_rotationY": 0,
@@ -632,7 +628,7 @@
     "_position": {
       "__type__": "cc.Vec2",
       "x": 0,
-      "y": 220
+      "y": 110
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -676,52 +672,6 @@
     },
     "fileId": "4fjuNUwDpDqbdQRfVO9p00",
     "sync": false
-  },
-  {
-    "__type__": "1d15atdx51ExJ6u0pe1cxvK",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 14
-    },
-    "_enabled": true,
-    "content": {
-      "__id__": 16
-    },
-    "horizontal": false,
-    "vertical": true,
-    "inertia": true,
-    "brake": 0.5,
-    "elastic": true,
-    "bounceDuration": 1,
-    "scrollEvents": [],
-    "cancelInnerEvents": true,
-    "_N$horizontalScrollBar": null,
-    "_data": null,
-    "_minCellIndex": 0,
-    "_maxCellIndex": 0,
-    "_paramCount": 0,
-    "_count": 0,
-    "_cellCount": 0,
-    "_showCellCount": 0,
-    "_groupCellCount": null,
-    "_scrollDirection": 0,
-    "_cellPool": null,
-    "_view": null,
-    "_page": 0,
-    "_pageTotal": 0,
-    "_touchLayer": null,
-    "_loadSuccess": false,
-    "_initSuccess": false,
-    "_scheduleInit": false,
-    "isFill": false,
-    "Direction": 0,
-    "pageChangeEvents": [],
-    "_N$cell": {
-      "__uuid__": "93663bc1-390c-485a-b416-aaee9859bf13"
-    },
-    "_N$ScrollModel": 1,
-    "_N$ViewType": 0
   },
   {
     "__type__": "cc.PrefabInfo",
@@ -798,7 +748,7 @@
     "_originalHeight": 1000
   },
   {
-    "__type__": "dda77pVyK1IoLf+6xOVMSXM",
+    "__type__": "67679Oau7tAGYNLXAnWMe3r",
     "_name": "",
     "_objFlags": 0,
     "node": {
@@ -809,12 +759,12 @@
       "__id__": 3
     },
     "background": {
-      "__id__": 22
+      "__id__": 21
     },
     "exit": {
       "__id__": 11
     },
-    "tableView": {
+    "contentBottom": {
       "__id__": 14
     }
   },
