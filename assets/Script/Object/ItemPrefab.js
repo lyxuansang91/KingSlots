@@ -7,6 +7,7 @@ cc.Class({
     },
     
     init: function (index) {
+        this.index = index;
         this.item.spriteFrame = this.list_frame[index];
     },
 

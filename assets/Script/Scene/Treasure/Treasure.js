@@ -135,6 +135,62 @@ var Treasure = cc.Class({
     },
 
     initMenu: function () {
+        this.line_active = [];
+        {
+            var LINE_ONE = [ 5, 6, 7, 8, 9 ];
+            var LINE_TWO = [ 0, 1, 2, 3, 4 ];
+            var LINE_THREE = [ 10, 11, 12, 13, 14 ];
+            var LINE_FOUR = [ 5, 6, 2, 8, 9 ];
+            var LINE_FIVE = [ 5, 6, 12, 8, 9 ];
+            var LINE_SIX = [ 0, 1, 7, 3, 4 ];
+            var LINE_SEVEN = [ 10, 11, 7, 13, 14 ];
+            var LINE_EIGHT = [ 0, 11, 2, 13, 4 ];
+            var LINE_NINE = [ 10, 1, 12, 3, 14 ];
+            var LINE_TEN = [ 5, 1, 12, 3, 9 ];
+            var LINE_ELEVEN = [ 10, 6, 2, 8, 14 ];
+            var LINE_TWELVE = [ 0, 6, 12, 8, 4 ];
+            var LINE_THIRTEEN = [ 5, 11, 7, 3, 9 ];
+            var LINE_FOURTEEN = [ 5, 1, 7, 13, 9 ];
+            var LINE_FIFTEEN = [ 10, 6, 7, 8, 14 ];
+            var LINE_SIXTEEN = [ 0, 6, 7, 8, 4 ];
+            var LINE_SEVENTEEN = [ 5, 11, 12, 13, 9];
+            var LINE_EIGHTEEEN = [ 5, 1, 2, 3, 9 ];
+            var LINE_NINETEEN = [ 10, 11, 7, 3, 4 ];
+            var LINE_TWENTY = [ 0, 1, 7, 13, 14 ];
+
+            this.line_active.push(LINE_ONE);
+            this.line_active.push(LINE_TWO);
+            this.line_active.push(LINE_THREE);
+            this.line_active.push(LINE_FOUR);
+            this.line_active.push(LINE_FIVE);
+            this.line_active.push(LINE_SIX);
+            this.line_active.push(LINE_SEVEN);
+            this.line_active.push(LINE_EIGHT);
+            this.line_active.push(LINE_NINE);
+            this.line_active.push(LINE_TEN);
+            this.line_active.push(LINE_ELEVEN);
+            this.line_active.push(LINE_TWELVE);
+            this.line_active.push(LINE_THIRTEEN);
+            this.line_active.push(LINE_FOURTEEN);
+            this.line_active.push(LINE_FIFTEEN);
+            this.line_active.push(LINE_SIXTEEN);
+            this.line_active.push(LINE_SEVENTEEN);
+            this.line_active.push(LINE_EIGHTEEEN);
+            this.line_active.push(LINE_NINETEEN);
+            this.line_active.push(LINE_TWENTY);
+        }
+
+        for(var i = 0; i < this.line_active.length; i ++){
+            for(var j = 0; j < this.line_active[i].length; j ++){
+                var value = this.line_active[i][j];
+                if(value >= 0 && value < 5) {
+                    this.line_active[i][j] += 10;
+                }else if(value >= 10 && value < 15){
+                    this.line_active[i][j] -= 10;
+                }
+            }
+        }
+
         this.lst_number = [6,2,8,5,1,4,10,7,3,9,16,12,19,14,13,17,18,15,11,20];
         this.lst_line_selected = this.lst_number;
 
@@ -272,19 +328,15 @@ var Treasure = cc.Class({
                 var call_func = cc.callFunc(function () {
                     // update line_result
                     for(var i = 0; i < listWin.length; i++){
-                        if(listWin[i] < 20){
-                            var line = self.lst_line_result[listWin[i] - 1];
-                            line.getComponent("LineResult").show(true);
-                            line.getComponent("LineResult").animate();
-                        }
+                        var line = self.lst_line_result[listWin[i] - 1];
+                        line.getComponent("LineResult").show(true);
+                        line.getComponent("LineResult").animate();
+
+                        /*for(var j = 0; j < self.line_active[listWin[i] - 1].length; j++){
+                            var index = self.line_active[listWin[i] - 1][j];
+                            self.list_item[self.list_item.length - 15 + index].getComponent("ItemPrefab").animate();
+                        }*/
                     }
-
-                    //====== cddd
-
-                    for(var i = 0; i < self.list_item.length; i++){
-                        self.list_item[i].getComponent("ItemPrefab").animate();
-                    }
-
                 });
                 var call_func_display_money = cc.callFunc(function() {
                     self.txt_user_money.string = Common.numberFormatWithCommas(self.lastMoney);

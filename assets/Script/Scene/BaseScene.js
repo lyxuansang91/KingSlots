@@ -74,7 +74,7 @@ cc.Class({
                 cc.log("game id = ", _gameIds);
                 Common.setEnableGameIds(_gameIds);
                 // NetworkManager.hideLoading();
-                cc.director.loadScene('Login');
+                cc.director.loadScene('Lobby');
 
             }else {
                 Common.showToast(initialMessage.getMessage());

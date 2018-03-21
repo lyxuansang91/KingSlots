@@ -11,10 +11,12 @@ cc.Class({
         edt_pass_register: cc.EditBox,
         edt_repass_register: cc.EditBox,
         edt_displayname_register: cc.EditBox,
-        toastPrefab: cc.Prefab,
-        messagePopup: cc.Prefab,
         popup_login : cc.Sprite,
-        popup_register : cc.Sprite
+        popup_register : cc.Sprite,
+        MenuUI : cc.Node,
+        ListGameUI : cc.Node,
+        LoginUI: cc.Node,
+        RegisterUI : cc.Node,
     },
     // use this for initialization
     onLoad: function () {
@@ -193,7 +195,13 @@ cc.Class({
         });
         if(this.checkPurchaseList() && !this.isLoadScene) {
             this.isLoadScene = true;
-            cc.director.loadScene('Lobby');
+            //cc.director.loadScene('Lobby');
+
+            this.LoginUI.active = false;
+            this.RegisterUI.active = false;
+            this.ListGameUI.active = true;
+            this.MenuUI.active = true;
+
         }
 
     },
