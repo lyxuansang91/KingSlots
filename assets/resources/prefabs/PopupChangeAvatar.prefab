@@ -19,9 +19,6 @@
       },
       {
         "__id__": 5
-      },
-      {
-        "__id__": 25
       }
     ],
     "_tag": -1,
@@ -180,17 +177,20 @@
       },
       {
         "__id__": 14
+      },
+      {
+        "__id__": 23
       }
     ],
     "_tag": -1,
     "_active": true,
     "_components": [
       {
-        "__id__": 23
+        "__id__": 31
       }
     ],
     "_prefab": {
-      "__id__": 24
+      "__id__": 32
     },
     "_id": "",
     "_opacity": 255,
@@ -741,66 +741,29 @@
     "sync": false
   },
   {
-    "__type__": "cc.Sprite",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 5
-    },
-    "_enabled": true,
-    "_spriteFrame": {
-      "__uuid__": "f232d443-87ee-4f3f-9693-76fc2829e508"
-    },
-    "_type": 0,
-    "_sizeMode": 1,
-    "_fillType": 0,
-    "_fillCenter": {
-      "__type__": "cc.Vec2",
-      "x": 0,
-      "y": 0
-    },
-    "_fillStart": 0,
-    "_fillRange": 0,
-    "_isTrimmedMode": true,
-    "_srcBlendFactor": 770,
-    "_dstBlendFactor": 771,
-    "_atlas": null
-  },
-  {
-    "__type__": "cc.PrefabInfo",
-    "root": {
-      "__id__": 1
-    },
-    "asset": {
-      "__uuid__": "c5e4ace3-4925-4586-ac19-9d5ceade47e9"
-    },
-    "fileId": "8dKgXK/A5InI98WDCU5Hzt",
-    "sync": false
-  },
-  {
     "__type__": "cc.Node",
     "_name": "button",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 1
+      "__id__": 5
     },
     "_children": [
       {
-        "__id__": 26
+        "__id__": 24
       }
     ],
     "_tag": -1,
     "_active": true,
     "_components": [
       {
-        "__id__": 29
+        "__id__": 27
       },
       {
-        "__id__": 30
+        "__id__": 28
       }
     ],
     "_prefab": {
-      "__id__": 32
+      "__id__": 30
     },
     "_id": "",
     "_opacity": 255,
@@ -843,18 +806,18 @@
     "_name": "Label",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 25
+      "__id__": 23
     },
     "_children": [],
     "_tag": -1,
     "_active": true,
     "_components": [
       {
-        "__id__": 27
+        "__id__": 25
       }
     ],
     "_prefab": {
-      "__id__": 28
+      "__id__": 26
     },
     "_id": "",
     "_opacity": 255,
@@ -897,7 +860,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 26
+      "__id__": 24
     },
     "_enabled": true,
     "_useOriginalSize": false,
@@ -930,7 +893,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 25
+      "__id__": 23
     },
     "_enabled": true,
     "_spriteFrame": {
@@ -956,7 +919,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 25
+      "__id__": 23
     },
     "_enabled": true,
     "transition": 3,
@@ -978,7 +941,7 @@
     "zoomScale": 1.2,
     "clickEvents": [
       {
-        "__id__": 31
+        "__id__": 29
       }
     ],
     "_N$interactable": true,
@@ -1016,7 +979,7 @@
       "__uuid__": "29158224-f8dd-4661-a796-1ffab537140e"
     },
     "_N$target": {
-      "__id__": 25
+      "__id__": 23
     }
   },
   {
@@ -1037,6 +1000,43 @@
       "__uuid__": "c5e4ace3-4925-4586-ac19-9d5ceade47e9"
     },
     "fileId": "ebDGiUa2JAuaAvuPIlh0kO",
+    "sync": false
+  },
+  {
+    "__type__": "cc.Sprite",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 5
+    },
+    "_enabled": true,
+    "_spriteFrame": {
+      "__uuid__": "f232d443-87ee-4f3f-9693-76fc2829e508"
+    },
+    "_type": 0,
+    "_sizeMode": 1,
+    "_fillType": 0,
+    "_fillCenter": {
+      "__type__": "cc.Vec2",
+      "x": 0,
+      "y": 0
+    },
+    "_fillStart": 0,
+    "_fillRange": 0,
+    "_isTrimmedMode": true,
+    "_srcBlendFactor": 770,
+    "_dstBlendFactor": 771,
+    "_atlas": null
+  },
+  {
+    "__type__": "cc.PrefabInfo",
+    "root": {
+      "__id__": 1
+    },
+    "asset": {
+      "__uuid__": "c5e4ace3-4925-4586-ac19-9d5ceade47e9"
+    },
+    "fileId": "8dKgXK/A5InI98WDCU5Hzt",
     "sync": false
   },
   {
@@ -1077,7 +1077,7 @@
       "__id__": 3
     },
     "background": {
-      "__id__": 23
+      "__id__": 31
     },
     "exit": {
       "__id__": 8
