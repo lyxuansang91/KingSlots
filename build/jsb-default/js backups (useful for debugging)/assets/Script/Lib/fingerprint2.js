@@ -1,65 +1,64 @@
-!function(e, t, i) {
+(function(e, t, i) {
 "use strict";
 "function" == typeof define && define.amd ? define(i) : "undefined" != typeof module && module.exports ? module.exports = i() : t.exports ? t.exports = i() : t.Fingerprint2 = i();
-}(0, this, function() {
+})(0, this, function() {
 "use strict";
-var e = function(t) {
-if (!(this instanceof e)) return new e(t);
-var i = {
+var t = function(e) {
+if (!(this instanceof t)) return new t(e);
+this.options = this.extend(e, {
 swfContainerId: "fingerprintjs2",
 swfPath: "flash/compiled/FontList.swf",
 detectScreenOrientation: !0,
 sortPluginsFor: [ /palemoon/i ],
 userDefinedFonts: []
-};
-this.options = this.extend(t, i);
+});
 this.nativeForEach = Array.prototype.forEach;
 this.nativeMap = Array.prototype.map;
 };
-e.prototype = {
+t.prototype = {
 extend: function(e, t) {
 if (null == e) return t;
 for (var i in e) null != e[i] && t[i] !== e[i] && (t[i] = e[i]);
 return t;
 },
-get: function(e) {
-var t = [];
-t = this.userAgentKey(t);
-t = this.languageKey(t);
-t = this.colorDepthKey(t);
-t = this.pixelRatioKey(t);
-t = this.hardwareConcurrencyKey(t);
-t = this.screenResolutionKey(t);
-t = this.availableScreenResolutionKey(t);
-t = this.timezoneOffsetKey(t);
-t = this.sessionStorageKey(t);
-t = this.localStorageKey(t);
-t = this.indexedDbKey(t);
-t = this.addBehaviorKey(t);
-t = this.openDatabaseKey(t);
-t = this.cpuClassKey(t);
-t = this.platformKey(t);
-t = this.doNotTrackKey(t);
-t = this.pluginsKey(t);
-t = this.canvasKey(t);
-t = this.webglKey(t);
-t = this.adBlockKey(t);
-t = this.hasLiedLanguagesKey(t);
-t = this.hasLiedResolutionKey(t);
-t = this.hasLiedOsKey(t);
-t = this.hasLiedBrowserKey(t);
-t = this.touchSupportKey(t);
-t = this.customEntropyFunction(t);
-var i = this;
-this.fontsKey(t, function(t) {
-var a = [];
-i.each(t, function(e) {
+get: function(a) {
+var e = [];
+e = this.userAgentKey(e);
+e = this.languageKey(e);
+e = this.colorDepthKey(e);
+e = this.pixelRatioKey(e);
+e = this.hardwareConcurrencyKey(e);
+e = this.screenResolutionKey(e);
+e = this.availableScreenResolutionKey(e);
+e = this.timezoneOffsetKey(e);
+e = this.sessionStorageKey(e);
+e = this.localStorageKey(e);
+e = this.indexedDbKey(e);
+e = this.addBehaviorKey(e);
+e = this.openDatabaseKey(e);
+e = this.cpuClassKey(e);
+e = this.platformKey(e);
+e = this.doNotTrackKey(e);
+e = this.pluginsKey(e);
+e = this.canvasKey(e);
+e = this.webglKey(e);
+e = this.adBlockKey(e);
+e = this.hasLiedLanguagesKey(e);
+e = this.hasLiedResolutionKey(e);
+e = this.hasLiedOsKey(e);
+e = this.hasLiedBrowserKey(e);
+e = this.touchSupportKey(e);
+e = this.customEntropyFunction(e);
+var r = this;
+this.fontsKey(e, function(e) {
+var i = [];
+r.each(e, function(e) {
 var t = e.value;
 "undefined" != typeof e.value.join && (t = e.value.join(";"));
-a.push(t);
+i.push(t);
 });
-var r = i.x64hash128(a.join("~~~"), 31);
-return e(r, t);
+var t = r.x64hash128(i.join("~~~"), 31);
+return a(t, e);
 });
 },
 customEntropyFunction: function(e) {
@@ -243,26 +242,26 @@ return e;
 fontsKey: function(e, t) {
 return this.options.excludeJsFonts ? this.flashFontsKey(e, t) : this.jsFontsKey(e, t);
 },
-flashFontsKey: function(e, t) {
-if (this.options.excludeFlashFonts) return t(e);
-if (!this.hasSwfObjectLoaded()) return t(e);
-if (!this.hasMinFlashInstalled()) return t(e);
-if ("undefined" == typeof this.options.swfPath) return t(e);
-this.loadSwfAndDetectFonts(function(i) {
-e.push({
+flashFontsKey: function(t, i) {
+if (this.options.excludeFlashFonts) return i(t);
+if (!this.hasSwfObjectLoaded()) return i(t);
+if (!this.hasMinFlashInstalled()) return i(t);
+if ("undefined" == typeof this.options.swfPath) return i(t);
+this.loadSwfAndDetectFonts(function(e) {
+t.push({
 key: "swf_fonts",
-value: i.join(";")
+value: e.join(";")
 });
-t(e);
+i(t);
 });
 },
-jsFontsKey: function(e, t) {
-var i = this;
+jsFontsKey: function(T, S) {
+var x = this;
 return setTimeout(function() {
-var a = [ "monospace", "sans-serif", "serif" ], r = [ "Andale Mono", "Arial", "Arial Black", "Arial Hebrew", "Arial MT", "Arial Narrow", "Arial Rounded MT Bold", "Arial Unicode MS", "Bitstream Vera Sans Mono", "Book Antiqua", "Bookman Old Style", "Calibri", "Cambria", "Cambria Math", "Century", "Century Gothic", "Century Schoolbook", "Comic Sans", "Comic Sans MS", "Consolas", "Courier", "Courier New", "Garamond", "Geneva", "Georgia", "Helvetica", "Helvetica Neue", "Impact", "Lucida Bright", "Lucida Calligraphy", "Lucida Console", "Lucida Fax", "LUCIDA GRANDE", "Lucida Handwriting", "Lucida Sans", "Lucida Sans Typewriter", "Lucida Sans Unicode", "Microsoft Sans Serif", "Monaco", "Monotype Corsiva", "MS Gothic", "MS Outlook", "MS PGothic", "MS Reference Sans Serif", "MS Sans Serif", "MS Serif", "MYRIAD", "MYRIAD PRO", "Palatino", "Palatino Linotype", "Segoe Print", "Segoe Script", "Segoe UI", "Segoe UI Light", "Segoe UI Semibold", "Segoe UI Symbol", "Tahoma", "Times", "Times New Roman", "Times New Roman PS", "Trebuchet MS", "Verdana", "Wingdings", "Wingdings 2", "Wingdings 3" ], n = [ "Abadi MT Condensed Light", "Academy Engraved LET", "ADOBE CASLON PRO", "Adobe Garamond", "ADOBE GARAMOND PRO", "Agency FB", "Aharoni", "Albertus Extra Bold", "Albertus Medium", "Algerian", "Amazone BT", "American Typewriter", "American Typewriter Condensed", "AmerType Md BT", "Andalus", "Angsana New", "AngsanaUPC", "Antique Olive", "Aparajita", "Apple Chancery", "Apple Color Emoji", "Apple SD Gothic Neo", "Arabic Typesetting", "ARCHER", "ARNO PRO", "Arrus BT", "Aurora Cn BT", "AvantGarde Bk BT", "AvantGarde Md BT", "AVENIR", "Ayuthaya", "Bandy", "Bangla Sangam MN", "Bank Gothic", "BankGothic Md BT", "Baskerville", "Baskerville Old Face", "Batang", "BatangChe", "Bauer Bodoni", "Bauhaus 93", "Bazooka", "Bell MT", "Bembo", "Benguiat Bk BT", "Berlin Sans FB", "Berlin Sans FB Demi", "Bernard MT Condensed", "BernhardFashion BT", "BernhardMod BT", "Big Caslon", "BinnerD", "Blackadder ITC", "BlairMdITC TT", "Bodoni 72", "Bodoni 72 Oldstyle", "Bodoni 72 Smallcaps", "Bodoni MT", "Bodoni MT Black", "Bodoni MT Condensed", "Bodoni MT Poster Compressed", "Bookshelf Symbol 7", "Boulder", "Bradley Hand", "Bradley Hand ITC", "Bremen Bd BT", "Britannic Bold", "Broadway", "Browallia New", "BrowalliaUPC", "Brush Script MT", "Californian FB", "Calisto MT", "Calligrapher", "Candara", "CaslonOpnface BT", "Castellar", "Centaur", "Cezanne", "CG Omega", "CG Times", "Chalkboard", "Chalkboard SE", "Chalkduster", "Charlesworth", "Charter Bd BT", "Charter BT", "Chaucer", "ChelthmITC Bk BT", "Chiller", "Clarendon", "Clarendon Condensed", "CloisterBlack BT", "Cochin", "Colonna MT", "Constantia", "Cooper Black", "Copperplate", "Copperplate Gothic", "Copperplate Gothic Bold", "Copperplate Gothic Light", "CopperplGoth Bd BT", "Corbel", "Cordia New", "CordiaUPC", "Cornerstone", "Coronet", "Cuckoo", "Curlz MT", "DaunPenh", "Dauphin", "David", "DB LCD Temp", "DELICIOUS", "Denmark", "DFKai-SB", "Didot", "DilleniaUPC", "DIN", "DokChampa", "Dotum", "DotumChe", "Ebrima", "Edwardian Script ITC", "Elephant", "English 111 Vivace BT", "Engravers MT", "EngraversGothic BT", "Eras Bold ITC", "Eras Demi ITC", "Eras Light ITC", "Eras Medium ITC", "EucrosiaUPC", "Euphemia", "Euphemia UCAS", "EUROSTILE", "Exotc350 Bd BT", "FangSong", "Felix Titling", "Fixedsys", "FONTIN", "Footlight MT Light", "Forte", "FrankRuehl", "Fransiscan", "Freefrm721 Blk BT", "FreesiaUPC", "Freestyle Script", "French Script MT", "FrnkGothITC Bk BT", "Fruitger", "FRUTIGER", "Futura", "Futura Bk BT", "Futura Lt BT", "Futura Md BT", "Futura ZBlk BT", "FuturaBlack BT", "Gabriola", "Galliard BT", "Gautami", "Geeza Pro", "Geometr231 BT", "Geometr231 Hv BT", "Geometr231 Lt BT", "GeoSlab 703 Lt BT", "GeoSlab 703 XBd BT", "Gigi", "Gill Sans", "Gill Sans MT", "Gill Sans MT Condensed", "Gill Sans MT Ext Condensed Bold", "Gill Sans Ultra Bold", "Gill Sans Ultra Bold Condensed", "Gisha", "Gloucester MT Extra Condensed", "GOTHAM", "GOTHAM BOLD", "Goudy Old Style", "Goudy Stout", "GoudyHandtooled BT", "GoudyOLSt BT", "Gujarati Sangam MN", "Gulim", "GulimChe", "Gungsuh", "GungsuhChe", "Gurmukhi MN", "Haettenschweiler", "Harlow Solid Italic", "Harrington", "Heather", "Heiti SC", "Heiti TC", "HELV", "Herald", "High Tower Text", "Hiragino Kaku Gothic ProN", "Hiragino Mincho ProN", "Hoefler Text", "Humanst 521 Cn BT", "Humanst521 BT", "Humanst521 Lt BT", "Imprint MT Shadow", "Incised901 Bd BT", "Incised901 BT", "Incised901 Lt BT", "INCONSOLATA", "Informal Roman", "Informal011 BT", "INTERSTATE", "IrisUPC", "Iskoola Pota", "JasmineUPC", "Jazz LET", "Jenson", "Jester", "Jokerman", "Juice ITC", "Kabel Bk BT", "Kabel Ult BT", "Kailasa", "KaiTi", "Kalinga", "Kannada Sangam MN", "Kartika", "Kaufmann Bd BT", "Kaufmann BT", "Khmer UI", "KodchiangUPC", "Kokila", "Korinna BT", "Kristen ITC", "Krungthep", "Kunstler Script", "Lao UI", "Latha", "Leelawadee", "Letter Gothic", "Levenim MT", "LilyUPC", "Lithograph", "Lithograph Light", "Long Island", "Lydian BT", "Magneto", "Maiandra GD", "Malayalam Sangam MN", "Malgun Gothic", "Mangal", "Marigold", "Marion", "Marker Felt", "Market", "Marlett", "Matisse ITC", "Matura MT Script Capitals", "Meiryo", "Meiryo UI", "Microsoft Himalaya", "Microsoft JhengHei", "Microsoft New Tai Lue", "Microsoft PhagsPa", "Microsoft Tai Le", "Microsoft Uighur", "Microsoft YaHei", "Microsoft Yi Baiti", "MingLiU", "MingLiU_HKSCS", "MingLiU_HKSCS-ExtB", "MingLiU-ExtB", "Minion", "Minion Pro", "Miriam", "Miriam Fixed", "Mistral", "Modern", "Modern No. 20", "Mona Lisa Solid ITC TT", "Mongolian Baiti", "MONO", "MoolBoran", "Mrs Eaves", "MS LineDraw", "MS Mincho", "MS PMincho", "MS Reference Specialty", "MS UI Gothic", "MT Extra", "MUSEO", "MV Boli", "Nadeem", "Narkisim", "NEVIS", "News Gothic", "News GothicMT", "NewsGoth BT", "Niagara Engraved", "Niagara Solid", "Noteworthy", "NSimSun", "Nyala", "OCR A Extended", "Old Century", "Old English Text MT", "Onyx", "Onyx BT", "OPTIMA", "Oriya Sangam MN", "OSAKA", "OzHandicraft BT", "Palace Script MT", "Papyrus", "Parchment", "Party LET", "Pegasus", "Perpetua", "Perpetua Titling MT", "PetitaBold", "Pickwick", "Plantagenet Cherokee", "Playbill", "PMingLiU", "PMingLiU-ExtB", "Poor Richard", "Poster", "PosterBodoni BT", "PRINCETOWN LET", "Pristina", "PTBarnum BT", "Pythagoras", "Raavi", "Rage Italic", "Ravie", "Ribbon131 Bd BT", "Rockwell", "Rockwell Condensed", "Rockwell Extra Bold", "Rod", "Roman", "Sakkal Majalla", "Santa Fe LET", "Savoye LET", "Sceptre", "Script", "Script MT Bold", "SCRIPTINA", "Serifa", "Serifa BT", "Serifa Th BT", "ShelleyVolante BT", "Sherwood", "Shonar Bangla", "Showcard Gothic", "Shruti", "Signboard", "SILKSCREEN", "SimHei", "Simplified Arabic", "Simplified Arabic Fixed", "SimSun", "SimSun-ExtB", "Sinhala Sangam MN", "Sketch Rockwell", "Skia", "Small Fonts", "Snap ITC", "Snell Roundhand", "Socket", "Souvenir Lt BT", "Staccato222 BT", "Steamer", "Stencil", "Storybook", "Styllo", "Subway", "Swis721 BlkEx BT", "Swiss911 XCm BT", "Sylfaen", "Synchro LET", "System", "Tamil Sangam MN", "Technical", "Teletype", "Telugu Sangam MN", "Tempus Sans ITC", "Terminal", "Thonburi", "Traditional Arabic", "Trajan", "TRAJAN PRO", "Tristan", "Tubular", "Tunga", "Tw Cen MT", "Tw Cen MT Condensed", "Tw Cen MT Condensed Extra Bold", "TypoUpright BT", "Unicorn", "Univers", "Univers CE 55 Medium", "Univers Condensed", "Utsaah", "Vagabond", "Vani", "Vijaya", "Viner Hand ITC", "VisualUI", "Vivaldi", "Vladimir Script", "Vrinda", "Westminster", "WHITNEY", "Wide Latin", "ZapfEllipt BT", "ZapfHumnst BT", "ZapfHumnst Dm BT", "Zapfino", "Zurich BlkEx BT", "Zurich Ex BT", "ZWAdobeF" ];
-i.options.extendedJsFonts && (r = r.concat(n));
-r = r.concat(i.options.userDefinedFonts);
-var o = document.getElementsByTagName("body")[0], s = document.createElement("div"), l = document.createElement("div"), h = {}, u = {}, c = function() {
+var s = [ "monospace", "sans-serif", "serif" ], l = [ "Andale Mono", "Arial", "Arial Black", "Arial Hebrew", "Arial MT", "Arial Narrow", "Arial Rounded MT Bold", "Arial Unicode MS", "Bitstream Vera Sans Mono", "Book Antiqua", "Bookman Old Style", "Calibri", "Cambria", "Cambria Math", "Century", "Century Gothic", "Century Schoolbook", "Comic Sans", "Comic Sans MS", "Consolas", "Courier", "Courier New", "Garamond", "Geneva", "Georgia", "Helvetica", "Helvetica Neue", "Impact", "Lucida Bright", "Lucida Calligraphy", "Lucida Console", "Lucida Fax", "LUCIDA GRANDE", "Lucida Handwriting", "Lucida Sans", "Lucida Sans Typewriter", "Lucida Sans Unicode", "Microsoft Sans Serif", "Monaco", "Monotype Corsiva", "MS Gothic", "MS Outlook", "MS PGothic", "MS Reference Sans Serif", "MS Sans Serif", "MS Serif", "MYRIAD", "MYRIAD PRO", "Palatino", "Palatino Linotype", "Segoe Print", "Segoe Script", "Segoe UI", "Segoe UI Light", "Segoe UI Semibold", "Segoe UI Symbol", "Tahoma", "Times", "Times New Roman", "Times New Roman PS", "Trebuchet MS", "Verdana", "Wingdings", "Wingdings 2", "Wingdings 3" ];
+x.options.extendedJsFonts && (l = l.concat([ "Abadi MT Condensed Light", "Academy Engraved LET", "ADOBE CASLON PRO", "Adobe Garamond", "ADOBE GARAMOND PRO", "Agency FB", "Aharoni", "Albertus Extra Bold", "Albertus Medium", "Algerian", "Amazone BT", "American Typewriter", "American Typewriter Condensed", "AmerType Md BT", "Andalus", "Angsana New", "AngsanaUPC", "Antique Olive", "Aparajita", "Apple Chancery", "Apple Color Emoji", "Apple SD Gothic Neo", "Arabic Typesetting", "ARCHER", "ARNO PRO", "Arrus BT", "Aurora Cn BT", "AvantGarde Bk BT", "AvantGarde Md BT", "AVENIR", "Ayuthaya", "Bandy", "Bangla Sangam MN", "Bank Gothic", "BankGothic Md BT", "Baskerville", "Baskerville Old Face", "Batang", "BatangChe", "Bauer Bodoni", "Bauhaus 93", "Bazooka", "Bell MT", "Bembo", "Benguiat Bk BT", "Berlin Sans FB", "Berlin Sans FB Demi", "Bernard MT Condensed", "BernhardFashion BT", "BernhardMod BT", "Big Caslon", "BinnerD", "Blackadder ITC", "BlairMdITC TT", "Bodoni 72", "Bodoni 72 Oldstyle", "Bodoni 72 Smallcaps", "Bodoni MT", "Bodoni MT Black", "Bodoni MT Condensed", "Bodoni MT Poster Compressed", "Bookshelf Symbol 7", "Boulder", "Bradley Hand", "Bradley Hand ITC", "Bremen Bd BT", "Britannic Bold", "Broadway", "Browallia New", "BrowalliaUPC", "Brush Script MT", "Californian FB", "Calisto MT", "Calligrapher", "Candara", "CaslonOpnface BT", "Castellar", "Centaur", "Cezanne", "CG Omega", "CG Times", "Chalkboard", "Chalkboard SE", "Chalkduster", "Charlesworth", "Charter Bd BT", "Charter BT", "Chaucer", "ChelthmITC Bk BT", "Chiller", "Clarendon", "Clarendon Condensed", "CloisterBlack BT", "Cochin", "Colonna MT", "Constantia", "Cooper Black", "Copperplate", "Copperplate Gothic", "Copperplate Gothic Bold", "Copperplate Gothic Light", "CopperplGoth Bd BT", "Corbel", "Cordia New", "CordiaUPC", "Cornerstone", "Coronet", "Cuckoo", "Curlz MT", "DaunPenh", "Dauphin", "David", "DB LCD Temp", "DELICIOUS", "Denmark", "DFKai-SB", "Didot", "DilleniaUPC", "DIN", "DokChampa", "Dotum", "DotumChe", "Ebrima", "Edwardian Script ITC", "Elephant", "English 111 Vivace BT", "Engravers MT", "EngraversGothic BT", "Eras Bold ITC", "Eras Demi ITC", "Eras Light ITC", "Eras Medium ITC", "EucrosiaUPC", "Euphemia", "Euphemia UCAS", "EUROSTILE", "Exotc350 Bd BT", "FangSong", "Felix Titling", "Fixedsys", "FONTIN", "Footlight MT Light", "Forte", "FrankRuehl", "Fransiscan", "Freefrm721 Blk BT", "FreesiaUPC", "Freestyle Script", "French Script MT", "FrnkGothITC Bk BT", "Fruitger", "FRUTIGER", "Futura", "Futura Bk BT", "Futura Lt BT", "Futura Md BT", "Futura ZBlk BT", "FuturaBlack BT", "Gabriola", "Galliard BT", "Gautami", "Geeza Pro", "Geometr231 BT", "Geometr231 Hv BT", "Geometr231 Lt BT", "GeoSlab 703 Lt BT", "GeoSlab 703 XBd BT", "Gigi", "Gill Sans", "Gill Sans MT", "Gill Sans MT Condensed", "Gill Sans MT Ext Condensed Bold", "Gill Sans Ultra Bold", "Gill Sans Ultra Bold Condensed", "Gisha", "Gloucester MT Extra Condensed", "GOTHAM", "GOTHAM BOLD", "Goudy Old Style", "Goudy Stout", "GoudyHandtooled BT", "GoudyOLSt BT", "Gujarati Sangam MN", "Gulim", "GulimChe", "Gungsuh", "GungsuhChe", "Gurmukhi MN", "Haettenschweiler", "Harlow Solid Italic", "Harrington", "Heather", "Heiti SC", "Heiti TC", "HELV", "Herald", "High Tower Text", "Hiragino Kaku Gothic ProN", "Hiragino Mincho ProN", "Hoefler Text", "Humanst 521 Cn BT", "Humanst521 BT", "Humanst521 Lt BT", "Imprint MT Shadow", "Incised901 Bd BT", "Incised901 BT", "Incised901 Lt BT", "INCONSOLATA", "Informal Roman", "Informal011 BT", "INTERSTATE", "IrisUPC", "Iskoola Pota", "JasmineUPC", "Jazz LET", "Jenson", "Jester", "Jokerman", "Juice ITC", "Kabel Bk BT", "Kabel Ult BT", "Kailasa", "KaiTi", "Kalinga", "Kannada Sangam MN", "Kartika", "Kaufmann Bd BT", "Kaufmann BT", "Khmer UI", "KodchiangUPC", "Kokila", "Korinna BT", "Kristen ITC", "Krungthep", "Kunstler Script", "Lao UI", "Latha", "Leelawadee", "Letter Gothic", "Levenim MT", "LilyUPC", "Lithograph", "Lithograph Light", "Long Island", "Lydian BT", "Magneto", "Maiandra GD", "Malayalam Sangam MN", "Malgun Gothic", "Mangal", "Marigold", "Marion", "Marker Felt", "Market", "Marlett", "Matisse ITC", "Matura MT Script Capitals", "Meiryo", "Meiryo UI", "Microsoft Himalaya", "Microsoft JhengHei", "Microsoft New Tai Lue", "Microsoft PhagsPa", "Microsoft Tai Le", "Microsoft Uighur", "Microsoft YaHei", "Microsoft Yi Baiti", "MingLiU", "MingLiU_HKSCS", "MingLiU_HKSCS-ExtB", "MingLiU-ExtB", "Minion", "Minion Pro", "Miriam", "Miriam Fixed", "Mistral", "Modern", "Modern No. 20", "Mona Lisa Solid ITC TT", "Mongolian Baiti", "MONO", "MoolBoran", "Mrs Eaves", "MS LineDraw", "MS Mincho", "MS PMincho", "MS Reference Specialty", "MS UI Gothic", "MT Extra", "MUSEO", "MV Boli", "Nadeem", "Narkisim", "NEVIS", "News Gothic", "News GothicMT", "NewsGoth BT", "Niagara Engraved", "Niagara Solid", "Noteworthy", "NSimSun", "Nyala", "OCR A Extended", "Old Century", "Old English Text MT", "Onyx", "Onyx BT", "OPTIMA", "Oriya Sangam MN", "OSAKA", "OzHandicraft BT", "Palace Script MT", "Papyrus", "Parchment", "Party LET", "Pegasus", "Perpetua", "Perpetua Titling MT", "PetitaBold", "Pickwick", "Plantagenet Cherokee", "Playbill", "PMingLiU", "PMingLiU-ExtB", "Poor Richard", "Poster", "PosterBodoni BT", "PRINCETOWN LET", "Pristina", "PTBarnum BT", "Pythagoras", "Raavi", "Rage Italic", "Ravie", "Ribbon131 Bd BT", "Rockwell", "Rockwell Condensed", "Rockwell Extra Bold", "Rod", "Roman", "Sakkal Majalla", "Santa Fe LET", "Savoye LET", "Sceptre", "Script", "Script MT Bold", "SCRIPTINA", "Serifa", "Serifa BT", "Serifa Th BT", "ShelleyVolante BT", "Sherwood", "Shonar Bangla", "Showcard Gothic", "Shruti", "Signboard", "SILKSCREEN", "SimHei", "Simplified Arabic", "Simplified Arabic Fixed", "SimSun", "SimSun-ExtB", "Sinhala Sangam MN", "Sketch Rockwell", "Skia", "Small Fonts", "Snap ITC", "Snell Roundhand", "Socket", "Souvenir Lt BT", "Staccato222 BT", "Steamer", "Stencil", "Storybook", "Styllo", "Subway", "Swis721 BlkEx BT", "Swiss911 XCm BT", "Sylfaen", "Synchro LET", "System", "Tamil Sangam MN", "Technical", "Teletype", "Telugu Sangam MN", "Tempus Sans ITC", "Terminal", "Thonburi", "Traditional Arabic", "Trajan", "TRAJAN PRO", "Tristan", "Tubular", "Tunga", "Tw Cen MT", "Tw Cen MT Condensed", "Tw Cen MT Condensed Extra Bold", "TypoUpright BT", "Unicorn", "Univers", "Univers CE 55 Medium", "Univers Condensed", "Utsaah", "Vagabond", "Vani", "Vijaya", "Viner Hand ITC", "VisualUI", "Vivaldi", "Vladimir Script", "Vrinda", "Westminster", "WHITNEY", "Wide Latin", "ZapfEllipt BT", "ZapfHumnst BT", "ZapfHumnst Dm BT", "Zapfino", "Zurich BlkEx BT", "Zurich Ex BT", "ZWAdobeF" ]));
+l = l.concat(x.options.userDefinedFonts);
+var e = document.getElementsByTagName("body")[0], r = document.createElement("div"), h = document.createElement("div"), a = {}, n = {}, o = function() {
 var e = document.createElement("span");
 e.style.position = "absolute";
 e.style.left = "-9999px";
@@ -270,47 +269,47 @@ e.style.fontSize = "72px";
 e.style.lineHeight = "normal";
 e.innerHTML = "mmmmmmmmmmlli";
 return e;
-}, d = function(e, t) {
-var i = c();
+}, u = function(e, t) {
+var i = o();
 i.style.fontFamily = "'" + e + "'," + t;
 return i;
-}, g = function() {
-for (var e = [], t = 0, i = a.length; t < i; t++) {
-var r = c();
-r.style.fontFamily = a[t];
-s.appendChild(r);
-e.push(r);
-}
-return e;
-}();
-o.appendChild(s);
-for (var p = 0, f = a.length; p < f; p++) {
-h[a[p]] = g[p].offsetWidth;
-u[a[p]] = g[p].offsetHeight;
-}
-var m = function() {
-for (var e = {}, t = 0, i = r.length; t < i; t++) {
-for (var n = [], o = 0, s = a.length; o < s; o++) {
-var h = d(r[t], a[o]);
-l.appendChild(h);
-n.push(h);
-}
-e[r[t]] = n;
-}
-return e;
-}();
-o.appendChild(l);
-for (var T = [], S = 0, x = r.length; S < x; S++) (function(e) {
-for (var t = !1, i = 0; i < a.length; i++) if (t = e[i].offsetWidth !== h[a[i]] || e[i].offsetHeight !== u[a[i]]) return t;
+}, t = function(e) {
+for (var t = !1, i = 0; i < s.length; i++) if (t = e[i].offsetWidth !== a[s[i]] || e[i].offsetHeight !== n[s[i]]) return t;
 return t;
-})(m[r[S]]) && T.push(r[S]);
-o.removeChild(l);
-o.removeChild(s);
-e.push({
+}, i = function() {
+for (var e = [], t = 0, i = s.length; t < i; t++) {
+var a = o();
+a.style.fontFamily = s[t];
+r.appendChild(a);
+e.push(a);
+}
+return e;
+}();
+e.appendChild(r);
+for (var c = 0, d = s.length; c < d; c++) {
+a[s[c]] = i[c].offsetWidth;
+n[s[c]] = i[c].offsetHeight;
+}
+var g = function() {
+for (var e = {}, t = 0, i = l.length; t < i; t++) {
+for (var a = [], r = 0, n = s.length; r < n; r++) {
+var o = u(l[t], s[r]);
+h.appendChild(o);
+a.push(o);
+}
+e[l[t]] = a;
+}
+return e;
+}();
+e.appendChild(h);
+for (var p = [], f = 0, m = l.length; f < m; f++) t(g[l[f]]) && p.push(l[f]);
+e.removeChild(h);
+e.removeChild(r);
+T.push({
 key: "js_fonts",
-value: T
+value: p
 });
-t(e);
+S(T);
 }, 1);
 },
 pluginsKey: function(e) {
@@ -338,8 +337,7 @@ return [ e.name, e.description, t ].join("::");
 getIEPlugins: function() {
 var e = [];
 if (Object.getOwnPropertyDescriptor && Object.getOwnPropertyDescriptor(window, "ActiveXObject") || "ActiveXObject" in window) {
-var t = [ "AcroPDF.PDF", "Adodb.Stream", "AgControl.AgControl", "DevalVRXCtrl.DevalVRXCtrl.1", "MacromediaFlashPaper.MacromediaFlashPaper", "Msxml2.DOMDocument", "Msxml2.XMLHTTP", "PDF.PdfCtrl", "QuickTime.QuickTime", "QuickTimeCheckObject.QuickTimeCheck.1", "RealPlayer", "RealPlayer.RealPlayer(tm) ActiveX Control (32-bit)", "RealVideo.RealVideo(tm) ActiveX Control (32-bit)", "Scripting.Dictionary", "SWCtl.SWCtl", "Shell.UIHelper", "ShockwaveFlash.ShockwaveFlash", "Skype.Detection", "TDCCtl.TDCCtl", "WMPlayer.OCX", "rmocx.RealPlayer G2 Control", "rmocx.RealPlayer G2 Control.1" ];
-e = this.map(t, function(e) {
+e = this.map([ "AcroPDF.PDF", "Adodb.Stream", "AgControl.AgControl", "DevalVRXCtrl.DevalVRXCtrl.1", "MacromediaFlashPaper.MacromediaFlashPaper", "Msxml2.DOMDocument", "Msxml2.XMLHTTP", "PDF.PdfCtrl", "QuickTime.QuickTime", "QuickTimeCheckObject.QuickTimeCheck.1", "RealPlayer", "RealPlayer.RealPlayer(tm) ActiveX Control (32-bit)", "RealVideo.RealVideo(tm) ActiveX Control (32-bit)", "Scripting.Dictionary", "SWCtl.SWCtl", "Shell.UIHelper", "ShockwaveFlash.ShockwaveFlash", "Skype.Detection", "TDCCtl.TDCCtl", "WMPlayer.OCX", "rmocx.RealPlayer G2 Control", "rmocx.RealPlayer G2 Control.1" ], function(e) {
 try {
 new ActiveXObject(e);
 return e;
@@ -459,111 +457,108 @@ e.push("canvas fp:" + t.toDataURL());
 return e.join("~");
 },
 getWebglFp: function() {
-var e, t = function(t) {
-e.clearColor(0, 0, 0, 1);
-e.enable(e.DEPTH_TEST);
-e.depthFunc(e.LEQUAL);
-e.clear(e.COLOR_BUFFER_BIT | e.DEPTH_BUFFER_BIT);
-return "[" + t[0] + ", " + t[1] + "]";
+var t, e = function(e) {
+t.clearColor(0, 0, 0, 1);
+t.enable(t.DEPTH_TEST);
+t.depthFunc(t.LEQUAL);
+t.clear(t.COLOR_BUFFER_BIT | t.DEPTH_BUFFER_BIT);
+return "[" + e[0] + ", " + e[1] + "]";
 };
-if (!(e = this.getWebglCanvas())) return null;
-var i = [], a = e.createBuffer();
-e.bindBuffer(e.ARRAY_BUFFER, a);
+if (!(t = this.getWebglCanvas())) return null;
+var i = [], a = t.createBuffer();
+t.bindBuffer(t.ARRAY_BUFFER, a);
 var r = new Float32Array([ -.2, -.9, 0, .4, -.26, 0, 0, .732134444, 0 ]);
-e.bufferData(e.ARRAY_BUFFER, r, e.STATIC_DRAW);
+t.bufferData(t.ARRAY_BUFFER, r, t.STATIC_DRAW);
 a.itemSize = 3;
 a.numItems = 3;
-var n = e.createProgram(), o = e.createShader(e.VERTEX_SHADER);
-e.shaderSource(o, "attribute vec2 attrVertex;varying vec2 varyinTexCoordinate;uniform vec2 uniformOffset;void main(){varyinTexCoordinate=attrVertex+uniformOffset;gl_Position=vec4(attrVertex,0,1);}");
-e.compileShader(o);
-var s = e.createShader(e.FRAGMENT_SHADER);
-e.shaderSource(s, "precision mediump float;varying vec2 varyinTexCoordinate;void main() {gl_FragColor=vec4(varyinTexCoordinate,0,1);}");
-e.compileShader(s);
-e.attachShader(n, o);
-e.attachShader(n, s);
-e.linkProgram(n);
-e.useProgram(n);
-n.vertexPosAttrib = e.getAttribLocation(n, "attrVertex");
-n.offsetUniform = e.getUniformLocation(n, "uniformOffset");
-e.enableVertexAttribArray(n.vertexPosArray);
-e.vertexAttribPointer(n.vertexPosAttrib, a.itemSize, e.FLOAT, !1, 0, 0);
-e.uniform2f(n.offsetUniform, 1, 1);
-e.drawArrays(e.TRIANGLE_STRIP, 0, a.numItems);
-null != e.canvas && i.push(e.canvas.toDataURL());
-i.push("extensions:" + e.getSupportedExtensions().join(";"));
-i.push("webgl aliased line width range:" + t(e.getParameter(e.ALIASED_LINE_WIDTH_RANGE)));
-i.push("webgl aliased point size range:" + t(e.getParameter(e.ALIASED_POINT_SIZE_RANGE)));
-i.push("webgl alpha bits:" + e.getParameter(e.ALPHA_BITS));
-i.push("webgl antialiasing:" + (e.getContextAttributes().antialias ? "yes" : "no"));
-i.push("webgl blue bits:" + e.getParameter(e.BLUE_BITS));
-i.push("webgl depth bits:" + e.getParameter(e.DEPTH_BITS));
-i.push("webgl green bits:" + e.getParameter(e.GREEN_BITS));
-i.push("webgl max anisotropy:" + function(e) {
-var t, i = e.getExtension("EXT_texture_filter_anisotropic") || e.getExtension("WEBKIT_EXT_texture_filter_anisotropic") || e.getExtension("MOZ_EXT_texture_filter_anisotropic");
-return i ? (0 === (t = e.getParameter(i.MAX_TEXTURE_MAX_ANISOTROPY_EXT)) && (t = 2), 
-t) : null;
-}(e));
-i.push("webgl max combined texture image units:" + e.getParameter(e.MAX_COMBINED_TEXTURE_IMAGE_UNITS));
-i.push("webgl max cube map texture size:" + e.getParameter(e.MAX_CUBE_MAP_TEXTURE_SIZE));
-i.push("webgl max fragment uniform vectors:" + e.getParameter(e.MAX_FRAGMENT_UNIFORM_VECTORS));
-i.push("webgl max render buffer size:" + e.getParameter(e.MAX_RENDERBUFFER_SIZE));
-i.push("webgl max texture image units:" + e.getParameter(e.MAX_TEXTURE_IMAGE_UNITS));
-i.push("webgl max texture size:" + e.getParameter(e.MAX_TEXTURE_SIZE));
-i.push("webgl max varying vectors:" + e.getParameter(e.MAX_VARYING_VECTORS));
-i.push("webgl max vertex attribs:" + e.getParameter(e.MAX_VERTEX_ATTRIBS));
-i.push("webgl max vertex texture image units:" + e.getParameter(e.MAX_VERTEX_TEXTURE_IMAGE_UNITS));
-i.push("webgl max vertex uniform vectors:" + e.getParameter(e.MAX_VERTEX_UNIFORM_VECTORS));
-i.push("webgl max viewport dims:" + t(e.getParameter(e.MAX_VIEWPORT_DIMS)));
-i.push("webgl red bits:" + e.getParameter(e.RED_BITS));
-i.push("webgl renderer:" + e.getParameter(e.RENDERER));
-i.push("webgl shading language version:" + e.getParameter(e.SHADING_LANGUAGE_VERSION));
-i.push("webgl stencil bits:" + e.getParameter(e.STENCIL_BITS));
-i.push("webgl vendor:" + e.getParameter(e.VENDOR));
-i.push("webgl version:" + e.getParameter(e.VERSION));
+var n = t.createProgram(), o = t.createShader(t.VERTEX_SHADER);
+t.shaderSource(o, "attribute vec2 attrVertex;varying vec2 varyinTexCoordinate;uniform vec2 uniformOffset;void main(){varyinTexCoordinate=attrVertex+uniformOffset;gl_Position=vec4(attrVertex,0,1);}");
+t.compileShader(o);
+var s, l, h, u = t.createShader(t.FRAGMENT_SHADER);
+t.shaderSource(u, "precision mediump float;varying vec2 varyinTexCoordinate;void main() {gl_FragColor=vec4(varyinTexCoordinate,0,1);}");
+t.compileShader(u);
+t.attachShader(n, o);
+t.attachShader(n, u);
+t.linkProgram(n);
+t.useProgram(n);
+n.vertexPosAttrib = t.getAttribLocation(n, "attrVertex");
+n.offsetUniform = t.getUniformLocation(n, "uniformOffset");
+t.enableVertexAttribArray(n.vertexPosArray);
+t.vertexAttribPointer(n.vertexPosAttrib, a.itemSize, t.FLOAT, !1, 0, 0);
+t.uniform2f(n.offsetUniform, 1, 1);
+t.drawArrays(t.TRIANGLE_STRIP, 0, a.numItems);
+null != t.canvas && i.push(t.canvas.toDataURL());
+i.push("extensions:" + t.getSupportedExtensions().join(";"));
+i.push("webgl aliased line width range:" + e(t.getParameter(t.ALIASED_LINE_WIDTH_RANGE)));
+i.push("webgl aliased point size range:" + e(t.getParameter(t.ALIASED_POINT_SIZE_RANGE)));
+i.push("webgl alpha bits:" + t.getParameter(t.ALPHA_BITS));
+i.push("webgl antialiasing:" + (t.getContextAttributes().antialias ? "yes" : "no"));
+i.push("webgl blue bits:" + t.getParameter(t.BLUE_BITS));
+i.push("webgl depth bits:" + t.getParameter(t.DEPTH_BITS));
+i.push("webgl green bits:" + t.getParameter(t.GREEN_BITS));
+i.push("webgl max anisotropy:" + ((h = (s = t).getExtension("EXT_texture_filter_anisotropic") || s.getExtension("WEBKIT_EXT_texture_filter_anisotropic") || s.getExtension("MOZ_EXT_texture_filter_anisotropic")) ? (0 === (l = s.getParameter(h.MAX_TEXTURE_MAX_ANISOTROPY_EXT)) && (l = 2), 
+l) : null));
+i.push("webgl max combined texture image units:" + t.getParameter(t.MAX_COMBINED_TEXTURE_IMAGE_UNITS));
+i.push("webgl max cube map texture size:" + t.getParameter(t.MAX_CUBE_MAP_TEXTURE_SIZE));
+i.push("webgl max fragment uniform vectors:" + t.getParameter(t.MAX_FRAGMENT_UNIFORM_VECTORS));
+i.push("webgl max render buffer size:" + t.getParameter(t.MAX_RENDERBUFFER_SIZE));
+i.push("webgl max texture image units:" + t.getParameter(t.MAX_TEXTURE_IMAGE_UNITS));
+i.push("webgl max texture size:" + t.getParameter(t.MAX_TEXTURE_SIZE));
+i.push("webgl max varying vectors:" + t.getParameter(t.MAX_VARYING_VECTORS));
+i.push("webgl max vertex attribs:" + t.getParameter(t.MAX_VERTEX_ATTRIBS));
+i.push("webgl max vertex texture image units:" + t.getParameter(t.MAX_VERTEX_TEXTURE_IMAGE_UNITS));
+i.push("webgl max vertex uniform vectors:" + t.getParameter(t.MAX_VERTEX_UNIFORM_VECTORS));
+i.push("webgl max viewport dims:" + e(t.getParameter(t.MAX_VIEWPORT_DIMS)));
+i.push("webgl red bits:" + t.getParameter(t.RED_BITS));
+i.push("webgl renderer:" + t.getParameter(t.RENDERER));
+i.push("webgl shading language version:" + t.getParameter(t.SHADING_LANGUAGE_VERSION));
+i.push("webgl stencil bits:" + t.getParameter(t.STENCIL_BITS));
+i.push("webgl vendor:" + t.getParameter(t.VENDOR));
+i.push("webgl version:" + t.getParameter(t.VERSION));
 try {
-var l = e.getExtension("WEBGL_debug_renderer_info");
-if (l) {
-i.push("webgl unmasked vendor:" + e.getParameter(l.UNMASKED_VENDOR_WEBGL));
-i.push("webgl unmasked renderer:" + e.getParameter(l.UNMASKED_RENDERER_WEBGL));
+var c = t.getExtension("WEBGL_debug_renderer_info");
+if (c) {
+i.push("webgl unmasked vendor:" + t.getParameter(c.UNMASKED_VENDOR_WEBGL));
+i.push("webgl unmasked renderer:" + t.getParameter(c.UNMASKED_RENDERER_WEBGL));
 }
 } catch (e) {}
-if (!e.getShaderPrecisionFormat) return i.join("~");
-i.push("webgl vertex shader high float precision:" + e.getShaderPrecisionFormat(e.VERTEX_SHADER, e.HIGH_FLOAT).precision);
-i.push("webgl vertex shader high float precision rangeMin:" + e.getShaderPrecisionFormat(e.VERTEX_SHADER, e.HIGH_FLOAT).rangeMin);
-i.push("webgl vertex shader high float precision rangeMax:" + e.getShaderPrecisionFormat(e.VERTEX_SHADER, e.HIGH_FLOAT).rangeMax);
-i.push("webgl vertex shader medium float precision:" + e.getShaderPrecisionFormat(e.VERTEX_SHADER, e.MEDIUM_FLOAT).precision);
-i.push("webgl vertex shader medium float precision rangeMin:" + e.getShaderPrecisionFormat(e.VERTEX_SHADER, e.MEDIUM_FLOAT).rangeMin);
-i.push("webgl vertex shader medium float precision rangeMax:" + e.getShaderPrecisionFormat(e.VERTEX_SHADER, e.MEDIUM_FLOAT).rangeMax);
-i.push("webgl vertex shader low float precision:" + e.getShaderPrecisionFormat(e.VERTEX_SHADER, e.LOW_FLOAT).precision);
-i.push("webgl vertex shader low float precision rangeMin:" + e.getShaderPrecisionFormat(e.VERTEX_SHADER, e.LOW_FLOAT).rangeMin);
-i.push("webgl vertex shader low float precision rangeMax:" + e.getShaderPrecisionFormat(e.VERTEX_SHADER, e.LOW_FLOAT).rangeMax);
-i.push("webgl fragment shader high float precision:" + e.getShaderPrecisionFormat(e.FRAGMENT_SHADER, e.HIGH_FLOAT).precision);
-i.push("webgl fragment shader high float precision rangeMin:" + e.getShaderPrecisionFormat(e.FRAGMENT_SHADER, e.HIGH_FLOAT).rangeMin);
-i.push("webgl fragment shader high float precision rangeMax:" + e.getShaderPrecisionFormat(e.FRAGMENT_SHADER, e.HIGH_FLOAT).rangeMax);
-i.push("webgl fragment shader medium float precision:" + e.getShaderPrecisionFormat(e.FRAGMENT_SHADER, e.MEDIUM_FLOAT).precision);
-i.push("webgl fragment shader medium float precision rangeMin:" + e.getShaderPrecisionFormat(e.FRAGMENT_SHADER, e.MEDIUM_FLOAT).rangeMin);
-i.push("webgl fragment shader medium float precision rangeMax:" + e.getShaderPrecisionFormat(e.FRAGMENT_SHADER, e.MEDIUM_FLOAT).rangeMax);
-i.push("webgl fragment shader low float precision:" + e.getShaderPrecisionFormat(e.FRAGMENT_SHADER, e.LOW_FLOAT).precision);
-i.push("webgl fragment shader low float precision rangeMin:" + e.getShaderPrecisionFormat(e.FRAGMENT_SHADER, e.LOW_FLOAT).rangeMin);
-i.push("webgl fragment shader low float precision rangeMax:" + e.getShaderPrecisionFormat(e.FRAGMENT_SHADER, e.LOW_FLOAT).rangeMax);
-i.push("webgl vertex shader high int precision:" + e.getShaderPrecisionFormat(e.VERTEX_SHADER, e.HIGH_INT).precision);
-i.push("webgl vertex shader high int precision rangeMin:" + e.getShaderPrecisionFormat(e.VERTEX_SHADER, e.HIGH_INT).rangeMin);
-i.push("webgl vertex shader high int precision rangeMax:" + e.getShaderPrecisionFormat(e.VERTEX_SHADER, e.HIGH_INT).rangeMax);
-i.push("webgl vertex shader medium int precision:" + e.getShaderPrecisionFormat(e.VERTEX_SHADER, e.MEDIUM_INT).precision);
-i.push("webgl vertex shader medium int precision rangeMin:" + e.getShaderPrecisionFormat(e.VERTEX_SHADER, e.MEDIUM_INT).rangeMin);
-i.push("webgl vertex shader medium int precision rangeMax:" + e.getShaderPrecisionFormat(e.VERTEX_SHADER, e.MEDIUM_INT).rangeMax);
-i.push("webgl vertex shader low int precision:" + e.getShaderPrecisionFormat(e.VERTEX_SHADER, e.LOW_INT).precision);
-i.push("webgl vertex shader low int precision rangeMin:" + e.getShaderPrecisionFormat(e.VERTEX_SHADER, e.LOW_INT).rangeMin);
-i.push("webgl vertex shader low int precision rangeMax:" + e.getShaderPrecisionFormat(e.VERTEX_SHADER, e.LOW_INT).rangeMax);
-i.push("webgl fragment shader high int precision:" + e.getShaderPrecisionFormat(e.FRAGMENT_SHADER, e.HIGH_INT).precision);
-i.push("webgl fragment shader high int precision rangeMin:" + e.getShaderPrecisionFormat(e.FRAGMENT_SHADER, e.HIGH_INT).rangeMin);
-i.push("webgl fragment shader high int precision rangeMax:" + e.getShaderPrecisionFormat(e.FRAGMENT_SHADER, e.HIGH_INT).rangeMax);
-i.push("webgl fragment shader medium int precision:" + e.getShaderPrecisionFormat(e.FRAGMENT_SHADER, e.MEDIUM_INT).precision);
-i.push("webgl fragment shader medium int precision rangeMin:" + e.getShaderPrecisionFormat(e.FRAGMENT_SHADER, e.MEDIUM_INT).rangeMin);
-i.push("webgl fragment shader medium int precision rangeMax:" + e.getShaderPrecisionFormat(e.FRAGMENT_SHADER, e.MEDIUM_INT).rangeMax);
-i.push("webgl fragment shader low int precision:" + e.getShaderPrecisionFormat(e.FRAGMENT_SHADER, e.LOW_INT).precision);
-i.push("webgl fragment shader low int precision rangeMin:" + e.getShaderPrecisionFormat(e.FRAGMENT_SHADER, e.LOW_INT).rangeMin);
-i.push("webgl fragment shader low int precision rangeMax:" + e.getShaderPrecisionFormat(e.FRAGMENT_SHADER, e.LOW_INT).rangeMax);
+if (!t.getShaderPrecisionFormat) return i.join("~");
+i.push("webgl vertex shader high float precision:" + t.getShaderPrecisionFormat(t.VERTEX_SHADER, t.HIGH_FLOAT).precision);
+i.push("webgl vertex shader high float precision rangeMin:" + t.getShaderPrecisionFormat(t.VERTEX_SHADER, t.HIGH_FLOAT).rangeMin);
+i.push("webgl vertex shader high float precision rangeMax:" + t.getShaderPrecisionFormat(t.VERTEX_SHADER, t.HIGH_FLOAT).rangeMax);
+i.push("webgl vertex shader medium float precision:" + t.getShaderPrecisionFormat(t.VERTEX_SHADER, t.MEDIUM_FLOAT).precision);
+i.push("webgl vertex shader medium float precision rangeMin:" + t.getShaderPrecisionFormat(t.VERTEX_SHADER, t.MEDIUM_FLOAT).rangeMin);
+i.push("webgl vertex shader medium float precision rangeMax:" + t.getShaderPrecisionFormat(t.VERTEX_SHADER, t.MEDIUM_FLOAT).rangeMax);
+i.push("webgl vertex shader low float precision:" + t.getShaderPrecisionFormat(t.VERTEX_SHADER, t.LOW_FLOAT).precision);
+i.push("webgl vertex shader low float precision rangeMin:" + t.getShaderPrecisionFormat(t.VERTEX_SHADER, t.LOW_FLOAT).rangeMin);
+i.push("webgl vertex shader low float precision rangeMax:" + t.getShaderPrecisionFormat(t.VERTEX_SHADER, t.LOW_FLOAT).rangeMax);
+i.push("webgl fragment shader high float precision:" + t.getShaderPrecisionFormat(t.FRAGMENT_SHADER, t.HIGH_FLOAT).precision);
+i.push("webgl fragment shader high float precision rangeMin:" + t.getShaderPrecisionFormat(t.FRAGMENT_SHADER, t.HIGH_FLOAT).rangeMin);
+i.push("webgl fragment shader high float precision rangeMax:" + t.getShaderPrecisionFormat(t.FRAGMENT_SHADER, t.HIGH_FLOAT).rangeMax);
+i.push("webgl fragment shader medium float precision:" + t.getShaderPrecisionFormat(t.FRAGMENT_SHADER, t.MEDIUM_FLOAT).precision);
+i.push("webgl fragment shader medium float precision rangeMin:" + t.getShaderPrecisionFormat(t.FRAGMENT_SHADER, t.MEDIUM_FLOAT).rangeMin);
+i.push("webgl fragment shader medium float precision rangeMax:" + t.getShaderPrecisionFormat(t.FRAGMENT_SHADER, t.MEDIUM_FLOAT).rangeMax);
+i.push("webgl fragment shader low float precision:" + t.getShaderPrecisionFormat(t.FRAGMENT_SHADER, t.LOW_FLOAT).precision);
+i.push("webgl fragment shader low float precision rangeMin:" + t.getShaderPrecisionFormat(t.FRAGMENT_SHADER, t.LOW_FLOAT).rangeMin);
+i.push("webgl fragment shader low float precision rangeMax:" + t.getShaderPrecisionFormat(t.FRAGMENT_SHADER, t.LOW_FLOAT).rangeMax);
+i.push("webgl vertex shader high int precision:" + t.getShaderPrecisionFormat(t.VERTEX_SHADER, t.HIGH_INT).precision);
+i.push("webgl vertex shader high int precision rangeMin:" + t.getShaderPrecisionFormat(t.VERTEX_SHADER, t.HIGH_INT).rangeMin);
+i.push("webgl vertex shader high int precision rangeMax:" + t.getShaderPrecisionFormat(t.VERTEX_SHADER, t.HIGH_INT).rangeMax);
+i.push("webgl vertex shader medium int precision:" + t.getShaderPrecisionFormat(t.VERTEX_SHADER, t.MEDIUM_INT).precision);
+i.push("webgl vertex shader medium int precision rangeMin:" + t.getShaderPrecisionFormat(t.VERTEX_SHADER, t.MEDIUM_INT).rangeMin);
+i.push("webgl vertex shader medium int precision rangeMax:" + t.getShaderPrecisionFormat(t.VERTEX_SHADER, t.MEDIUM_INT).rangeMax);
+i.push("webgl vertex shader low int precision:" + t.getShaderPrecisionFormat(t.VERTEX_SHADER, t.LOW_INT).precision);
+i.push("webgl vertex shader low int precision rangeMin:" + t.getShaderPrecisionFormat(t.VERTEX_SHADER, t.LOW_INT).rangeMin);
+i.push("webgl vertex shader low int precision rangeMax:" + t.getShaderPrecisionFormat(t.VERTEX_SHADER, t.LOW_INT).rangeMax);
+i.push("webgl fragment shader high int precision:" + t.getShaderPrecisionFormat(t.FRAGMENT_SHADER, t.HIGH_INT).precision);
+i.push("webgl fragment shader high int precision rangeMin:" + t.getShaderPrecisionFormat(t.FRAGMENT_SHADER, t.HIGH_INT).rangeMin);
+i.push("webgl fragment shader high int precision rangeMax:" + t.getShaderPrecisionFormat(t.FRAGMENT_SHADER, t.HIGH_INT).rangeMax);
+i.push("webgl fragment shader medium int precision:" + t.getShaderPrecisionFormat(t.FRAGMENT_SHADER, t.MEDIUM_INT).precision);
+i.push("webgl fragment shader medium int precision rangeMin:" + t.getShaderPrecisionFormat(t.FRAGMENT_SHADER, t.MEDIUM_INT).rangeMin);
+i.push("webgl fragment shader medium int precision rangeMax:" + t.getShaderPrecisionFormat(t.FRAGMENT_SHADER, t.MEDIUM_INT).rangeMax);
+i.push("webgl fragment shader low int precision:" + t.getShaderPrecisionFormat(t.FRAGMENT_SHADER, t.LOW_INT).precision);
+i.push("webgl fragment shader low int precision rangeMin:" + t.getShaderPrecisionFormat(t.FRAGMENT_SHADER, t.LOW_INT).rangeMin);
+i.push("webgl fragment shader low int precision rangeMax:" + t.getShaderPrecisionFormat(t.FRAGMENT_SHADER, t.LOW_INT).rangeMax);
 return i.join("~");
 },
 getAdBlock: function() {
@@ -593,35 +588,34 @@ return screen.width < screen.availWidth || screen.height < screen.availHeight;
 },
 getHasLiedOs: function() {
 var e, t = navigator.userAgent.toLowerCase(), i = navigator.oscpu, a = navigator.platform.toLowerCase();
-e = t.indexOf("windows phone") >= 0 ? "Windows Phone" : t.indexOf("win") >= 0 ? "Windows" : t.indexOf("android") >= 0 ? "Android" : t.indexOf("linux") >= 0 ? "Linux" : t.indexOf("iphone") >= 0 || t.indexOf("ipad") >= 0 ? "iOS" : t.indexOf("mac") >= 0 ? "Mac" : "Other";
-if (("ontouchstart" in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0) && "Windows Phone" !== e && "Android" !== e && "iOS" !== e && "Other" !== e) return !0;
+e = 0 <= t.indexOf("windows phone") ? "Windows Phone" : 0 <= t.indexOf("win") ? "Windows" : 0 <= t.indexOf("android") ? "Android" : 0 <= t.indexOf("linux") ? "Linux" : 0 <= t.indexOf("iphone") || 0 <= t.indexOf("ipad") ? "iOS" : 0 <= t.indexOf("mac") ? "Mac" : "Other";
+if (("ontouchstart" in window || 0 < navigator.maxTouchPoints || 0 < navigator.msMaxTouchPoints) && "Windows Phone" !== e && "Android" !== e && "iOS" !== e && "Other" !== e) return !0;
 if ("undefined" != typeof i) {
-if ((i = i.toLowerCase()).indexOf("win") >= 0 && "Windows" !== e && "Windows Phone" !== e) return !0;
-if (i.indexOf("linux") >= 0 && "Linux" !== e && "Android" !== e) return !0;
-if (i.indexOf("mac") >= 0 && "Mac" !== e && "iOS" !== e) return !0;
-if (0 === i.indexOf("win") && 0 === i.indexOf("linux") && i.indexOf("mac") >= 0 && "other" !== e) return !0;
+if (0 <= (i = i.toLowerCase()).indexOf("win") && "Windows" !== e && "Windows Phone" !== e) return !0;
+if (0 <= i.indexOf("linux") && "Linux" !== e && "Android" !== e) return !0;
+if (0 <= i.indexOf("mac") && "Mac" !== e && "iOS" !== e) return !0;
+if (0 === i.indexOf("win") && 0 === i.indexOf("linux") && 0 <= i.indexOf("mac") && "other" !== e) return !0;
 }
-return a.indexOf("win") >= 0 && "Windows" !== e && "Windows Phone" !== e || ((a.indexOf("linux") >= 0 || a.indexOf("android") >= 0 || a.indexOf("pike") >= 0) && "Linux" !== e && "Android" !== e || ((a.indexOf("mac") >= 0 || a.indexOf("ipad") >= 0 || a.indexOf("ipod") >= 0 || a.indexOf("iphone") >= 0) && "Mac" !== e && "iOS" !== e || (0 === a.indexOf("win") && 0 === a.indexOf("linux") && a.indexOf("mac") >= 0 && "other" !== e || "undefined" == typeof navigator.plugins && "Windows" !== e && "Windows Phone" !== e)));
+return 0 <= a.indexOf("win") && "Windows" !== e && "Windows Phone" !== e || ((0 <= a.indexOf("linux") || 0 <= a.indexOf("android") || 0 <= a.indexOf("pike")) && "Linux" !== e && "Android" !== e || ((0 <= a.indexOf("mac") || 0 <= a.indexOf("ipad") || 0 <= a.indexOf("ipod") || 0 <= a.indexOf("iphone")) && "Mac" !== e && "iOS" !== e || (0 === a.indexOf("win") && 0 === a.indexOf("linux") && 0 <= a.indexOf("mac") && "other" !== e || "undefined" == typeof navigator.plugins && "Windows" !== e && "Windows Phone" !== e)));
 },
 getHasLiedBrowser: function() {
 var e, t = navigator.userAgent.toLowerCase(), i = navigator.productSub;
-if (("Chrome" === (e = t.indexOf("firefox") >= 0 ? "Firefox" : t.indexOf("opera") >= 0 || t.indexOf("opr") >= 0 ? "Opera" : t.indexOf("chrome") >= 0 ? "Chrome" : t.indexOf("safari") >= 0 ? "Safari" : t.indexOf("trident") >= 0 ? "Internet Explorer" : "Other") || "Safari" === e || "Opera" === e) && "20030107" !== i) return !0;
-var a = eval.toString().length;
-if (37 === a && "Safari" !== e && "Firefox" !== e && "Other" !== e) return !0;
-if (39 === a && "Internet Explorer" !== e && "Other" !== e) return !0;
-if (33 === a && "Chrome" !== e && "Opera" !== e && "Other" !== e) return !0;
-var r;
+if (("Chrome" === (e = 0 <= t.indexOf("firefox") ? "Firefox" : 0 <= t.indexOf("opera") || 0 <= t.indexOf("opr") ? "Opera" : 0 <= t.indexOf("chrome") ? "Chrome" : 0 <= t.indexOf("safari") ? "Safari" : 0 <= t.indexOf("trident") ? "Internet Explorer" : "Other") || "Safari" === e || "Opera" === e) && "20030107" !== i) return !0;
+var a, r = eval.toString().length;
+if (37 === r && "Safari" !== e && "Firefox" !== e && "Other" !== e) return !0;
+if (39 === r && "Internet Explorer" !== e && "Other" !== e) return !0;
+if (33 === r && "Chrome" !== e && "Opera" !== e && "Other" !== e) return !0;
 try {
 throw "a";
 } catch (e) {
 try {
 e.toSource();
-r = !0;
+a = !0;
 } catch (e) {
-r = !1;
+a = !1;
 }
 }
-return !(!r || "Firefox" === e || "Other" === e);
+return !(!a || "Firefox" === e || "Other" === e);
 },
 isCanvasSupported: function() {
 var e = document.createElement("canvas");
@@ -629,13 +623,13 @@ return !(!e.getContext || !e.getContext("2d"));
 },
 isWebGlSupported: function() {
 if (!this.isCanvasSupported()) return !1;
-var e, t = document.createElement("canvas");
+var t, e = document.createElement("canvas");
 try {
-e = t.getContext && (t.getContext("webgl") || t.getContext("experimental-webgl"));
-} catch (t) {
-e = !1;
+t = e.getContext && (e.getContext("webgl") || e.getContext("experimental-webgl"));
+} catch (e) {
+t = !1;
 }
-return !!window.WebGLRenderingContext && !!e;
+return !!window.WebGLRenderingContext && !!t;
 },
 isIE: function() {
 return "Microsoft Internet Explorer" === navigator.appName || !("Netscape" !== navigator.appName || !/Trident/.test(navigator.userAgent));
@@ -651,19 +645,20 @@ var e = document.createElement("div");
 e.setAttribute("id", this.options.swfContainerId);
 document.body.appendChild(e);
 },
-loadSwfAndDetectFonts: function(e) {
-window.___fp_swf_loaded = function(t) {
-e(t);
+loadSwfAndDetectFonts: function(t) {
+var e = "___fp_swf_loaded";
+window[e] = function(e) {
+t(e);
 };
-var t = this.options.swfContainerId;
+var i = this.options.swfContainerId;
 this.addFlashDivNode();
-var i = {
-onReady: "___fp_swf_loaded"
-}, a = {
+var a = {
+onReady: e
+};
+swfobject.embedSWF(this.options.swfPath, i, "1", "1", "9.0.0", !1, a, {
 allowScriptAccess: "always",
 menu: "false"
-};
-swfobject.embedSWF(this.options.swfPath, t, "1", "1", "9.0.0", !1, i, a, {});
+}, {});
 },
 getWebglCanvas: function() {
 var e = document.createElement("canvas"), t = null;
@@ -678,14 +673,14 @@ if (null !== e) if (this.nativeForEach && e.forEach === this.nativeForEach) e.fo
 for (var a = 0, r = e.length; a < r; a++) if (t.call(i, e[a], a, e) === {}) return;
 } else for (var n in e) if (e.hasOwnProperty(n) && t.call(i, e[n], n, e) === {}) return;
 },
-map: function(e, t, i) {
-var a = [];
-if (null == e) return a;
-if (this.nativeMap && e.map === this.nativeMap) return e.map(t, i);
-this.each(e, function(e, r, n) {
-a[a.length] = t.call(i, e, r, n);
+map: function(e, a, r) {
+var n = [];
+if (null == e) return n;
+if (this.nativeMap && e.map === this.nativeMap) return e.map(a, r);
+this.each(e, function(e, t, i) {
+n[n.length] = a.call(r, e, t, i);
 });
-return a;
+return n;
 },
 x64Add: function(e, t) {
 e = [ e[0] >>> 16, 65535 & e[0], e[1] >>> 16, 65535 & e[1] ];
@@ -750,9 +745,8 @@ e = this.x64Multiply(e, [ 3301882366, 444984403 ]);
 return e = this.x64Xor(e, [ 0, e[0] >>> 1 ]);
 },
 x64hash128: function(e, t) {
-e = e || "";
 t = t || 0;
-for (var i = e.length % 16, a = e.length - i, r = [ 0, t ], n = [ 0, t ], o = [ 0, 0 ], s = [ 0, 0 ], l = [ 2277735313, 289559509 ], h = [ 1291169091, 658871167 ], u = 0; u < a; u += 16) {
+for (var i = (e = e || "").length % 16, a = e.length - i, r = [ 0, t ], n = [ 0, t ], o = [ 0, 0 ], s = [ 0, 0 ], l = [ 2277735313, 289559509 ], h = [ 1291169091, 658871167 ], u = 0; u < a; u += 16) {
 o = [ 255 & e.charCodeAt(u + 4) | (255 & e.charCodeAt(u + 5)) << 8 | (255 & e.charCodeAt(u + 6)) << 16 | (255 & e.charCodeAt(u + 7)) << 24, 255 & e.charCodeAt(u) | (255 & e.charCodeAt(u + 1)) << 8 | (255 & e.charCodeAt(u + 2)) << 16 | (255 & e.charCodeAt(u + 3)) << 24 ];
 s = [ 255 & e.charCodeAt(u + 12) | (255 & e.charCodeAt(u + 13)) << 8 | (255 & e.charCodeAt(u + 14)) << 16 | (255 & e.charCodeAt(u + 15)) << 24, 255 & e.charCodeAt(u + 8) | (255 & e.charCodeAt(u + 9)) << 8 | (255 & e.charCodeAt(u + 10)) << 16 | (255 & e.charCodeAt(u + 11)) << 24 ];
 o = this.x64Multiply(o, l);
@@ -837,6 +831,6 @@ n = this.x64Add(n, r);
 return ("00000000" + (r[0] >>> 0).toString(16)).slice(-8) + ("00000000" + (r[1] >>> 0).toString(16)).slice(-8) + ("00000000" + (n[0] >>> 0).toString(16)).slice(-8) + ("00000000" + (n[1] >>> 0).toString(16)).slice(-8);
 }
 };
-e.VERSION = "1.5.1";
-return e;
+t.VERSION = "1.5.1";
+return t;
 });

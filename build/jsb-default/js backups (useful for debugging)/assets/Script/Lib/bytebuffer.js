@@ -4,9 +4,21 @@ this.high = 0 | e;
 this.unsigned = !!r;
 }
 
+Long.prototype.__isLong__;
+
+Object.defineProperty(Long.prototype, "__isLong__", {
+value: !0,
+enumerable: !1,
+configurable: !1
+});
+
 function isLong(t) {
 return !0 === (t && t.__isLong__);
 }
+
+Long.isLong = isLong;
+
+var INT_CACHE = {}, UINT_CACHE = {};
 
 function fromInt(t, e) {
 var r, i, f;
@@ -22,21 +34,29 @@ f && (INT_CACHE[t] = r);
 return r;
 }
 
+Long.fromInt = fromInt;
+
 function fromNumber(t, e) {
 if (isNaN(t) || !isFinite(t)) return e ? UZERO : ZERO;
 if (e) {
 if (t < 0) return UZERO;
-if (t >= TWO_PWR_64_DBL) return MAX_UNSIGNED_VALUE;
+if (TWO_PWR_64_DBL <= t) return MAX_UNSIGNED_VALUE;
 } else {
 if (t <= -TWO_PWR_63_DBL) return MIN_VALUE;
-if (t + 1 >= TWO_PWR_63_DBL) return MAX_VALUE;
+if (TWO_PWR_63_DBL <= t + 1) return MAX_VALUE;
 }
 return t < 0 ? fromNumber(-t, e).neg() : fromBits(t % TWO_PWR_32_DBL | 0, t / TWO_PWR_32_DBL | 0, e);
 }
 
+Long.fromNumber = fromNumber;
+
 function fromBits(t, e, r) {
 return new Long(t, e, r);
 }
+
+Long.fromBits = fromBits;
+
+var pow_dbl = Math.pow;
 
 function fromString(t, e, r) {
 if (0 === t.length) throw Error("empty string");
@@ -44,7 +64,7 @@ if ("NaN" === t || "Infinity" === t || "+Infinity" === t || "-Infinity" === t) r
 "number" == typeof e ? (r = e, e = !1) : e = !!e;
 if ((r = r || 10) < 2 || 36 < r) throw RangeError("radix");
 var i;
-if ((i = t.indexOf("-")) > 0) throw Error("interior hyphen");
+if (0 < (i = t.indexOf("-"))) throw Error("interior hyphen");
 if (0 === i) return fromString(t.substring(1), e, r).neg();
 for (var f = fromNumber(pow_dbl(r, 8)), n = ZERO, o = 0; o < t.length; o += 8) {
 var s = Math.min(8, t.length - o), h = parseInt(t.substring(o, o + s), r);
@@ -57,101 +77,11 @@ n.unsigned = e;
 return n;
 }
 
+Long.fromString = fromString;
+
 function fromValue(t) {
 return t instanceof Long ? t : "number" == typeof t ? fromNumber(t) : "string" == typeof t ? fromString(t) : fromBits(t.low, t.high, t.unsigned);
 }
-
-function stringSource(t) {
-var e = 0;
-return function() {
-return e < t.length ? t.charCodeAt(e++) : null;
-};
-}
-
-function stringDestination() {
-var t = [], e = [];
-return function() {
-if (0 === arguments.length) return e.join("") + stringFromCharCode.apply(String, t);
-t.length + arguments.length > 1024 && (e.push(stringFromCharCode.apply(String, t)), 
-t.length = 0);
-Array.prototype.push.apply(t, arguments);
-};
-}
-
-function ieee754_read(t, e, r, i, f) {
-var n, o, s = 8 * f - i - 1, h = (1 << s) - 1, u = h >> 1, a = -7, g = r ? f - 1 : 0, l = r ? -1 : 1, y = t[e + g];
-g += l;
-n = y & (1 << -a) - 1;
-y >>= -a;
-a += s;
-for (;a > 0; n = 256 * n + t[e + g], g += l, a -= 8) ;
-o = n & (1 << -a) - 1;
-n >>= -a;
-a += i;
-for (;a > 0; o = 256 * o + t[e + g], g += l, a -= 8) ;
-if (0 === n) n = 1 - u; else {
-if (n === h) return o ? NaN : Infinity * (y ? -1 : 1);
-o += Math.pow(2, i);
-n -= u;
-}
-return (y ? -1 : 1) * o * Math.pow(2, n - i);
-}
-
-function ieee754_write(t, e, r, i, f, n) {
-var o, s, h, u = 8 * n - f - 1, a = (1 << u) - 1, g = a >> 1, l = 23 === f ? Math.pow(2, -24) - Math.pow(2, -77) : 0, y = i ? 0 : n - 1, p = i ? 1 : -1, B = e < 0 || 0 === e && 1 / e < 0 ? 1 : 0;
-e = Math.abs(e);
-if (isNaN(e) || Infinity === e) {
-s = isNaN(e) ? 1 : 0;
-o = a;
-} else {
-o = Math.floor(Math.log(e) / Math.LN2);
-if (e * (h = Math.pow(2, -o)) < 1) {
-o--;
-h *= 2;
-}
-if ((e += o + g >= 1 ? l / h : l * Math.pow(2, 1 - g)) * h >= 2) {
-o++;
-h /= 2;
-}
-if (o + g >= a) {
-s = 0;
-o = a;
-} else if (o + g >= 1) {
-s = (e * h - 1) * Math.pow(2, f);
-o += g;
-} else {
-s = e * Math.pow(2, g - 1) * Math.pow(2, f);
-o = 0;
-}
-}
-for (;f >= 8; t[r + y] = 255 & s, y += p, s /= 256, f -= 8) ;
-o = o << f | s;
-u += f;
-for (;u > 0; t[r + y] = 255 & o, y += p, o /= 256, u -= 8) ;
-t[r + y - p] |= 128 * B;
-}
-
-Long.prototype.__isLong__;
-
-Object.defineProperty(Long.prototype, "__isLong__", {
-value: !0,
-enumerable: !1,
-configurable: !1
-});
-
-Long.isLong = isLong;
-
-var INT_CACHE = {}, UINT_CACHE = {};
-
-Long.fromInt = fromInt;
-
-Long.fromNumber = fromNumber;
-
-Long.fromBits = fromBits;
-
-var pow_dbl = Math.pow;
-
-Long.fromString = fromString;
 
 Long.fromValue = fromValue;
 
@@ -233,7 +163,7 @@ return this.low >>> 0;
 
 LongPrototype.getNumBitsAbs = function() {
 if (this.isNegative()) return this.eq(MIN_VALUE) ? 64 : this.neg().getNumBitsAbs();
-for (var t = 0 != this.high ? this.high : this.low, e = 31; e > 0 && 0 == (t & 1 << e); e--) ;
+for (var t = 0 != this.high ? this.high : this.low, e = 31; 0 < e && 0 == (t & 1 << e); e--) ;
 return 0 != this.high ? e + 33 : e + 1;
 };
 
@@ -246,7 +176,7 @@ return !this.unsigned && this.high < 0;
 };
 
 LongPrototype.isPositive = function() {
-return this.unsigned || this.high >= 0;
+return this.unsigned || 0 <= this.high;
 };
 
 LongPrototype.isOdd = function() {
@@ -283,13 +213,13 @@ return this.comp(t) <= 0;
 LongPrototype.lte = LongPrototype.lessThanOrEqual;
 
 LongPrototype.greaterThan = function(t) {
-return this.comp(t) > 0;
+return 0 < this.comp(t);
 };
 
 LongPrototype.gt = LongPrototype.greaterThan;
 
 LongPrototype.greaterThanOrEqual = function(t) {
-return this.comp(t) >= 0;
+return 0 <= this.comp(t);
 };
 
 LongPrototype.gte = LongPrototype.greaterThanOrEqual;
@@ -422,7 +352,7 @@ LongPrototype.shl = LongPrototype.shiftLeft;
 
 LongPrototype.shiftRight = function(t) {
 isLong(t) && (t = t.toInt());
-return 0 == (t &= 63) ? this : t < 32 ? fromBits(this.low >>> t | this.high << 32 - t, this.high >> t, this.unsigned) : fromBits(this.high >> t - 32, this.high >= 0 ? 0 : -1, this.unsigned);
+return 0 == (t &= 63) ? this : t < 32 ? fromBits(this.low >>> t | this.high << 32 - t, this.high >> t, this.unsigned) : fromBits(this.high >> t - 32, 0 <= this.high ? 0 : -1, this.unsigned);
 };
 
 LongPrototype.shr = LongPrototype.shiftRight;
@@ -431,7 +361,10 @@ LongPrototype.shiftRightUnsigned = function(t) {
 isLong(t) && (t = t.toInt());
 if (0 === (t &= 63)) return this;
 var e = this.high;
-return t < 32 ? fromBits(this.low >>> t | e << 32 - t, e >>> t, this.unsigned) : 32 === t ? fromBits(e, 0, this.unsigned) : fromBits(e >>> t - 32, 0, this.unsigned);
+if (t < 32) {
+return fromBits(this.low >>> t | e << 32 - t, e >>> t, this.unsigned);
+}
+return fromBits(32 === t ? e : e >>> t - 32, 0, this.unsigned);
 };
 
 LongPrototype.shru = LongPrototype.shiftRightUnsigned;
@@ -502,6 +435,23 @@ configurable: !1
 
 var EMPTY_BUFFER = new ArrayBuffer(0), stringFromCharCode = String.fromCharCode;
 
+function stringSource(t) {
+var e = 0;
+return function() {
+return e < t.length ? t.charCodeAt(e++) : null;
+};
+}
+
+function stringDestination() {
+var t = [], e = [];
+return function() {
+if (0 === arguments.length) return e.join("") + stringFromCharCode.apply(String, t);
+1024 < t.length + arguments.length && (e.push(stringFromCharCode.apply(String, t)), 
+t.length = 0);
+Array.prototype.push.apply(t, arguments);
+};
+}
+
 ByteBuffer.accessor = function() {
 return Uint8Array;
 };
@@ -518,7 +468,7 @@ e = void 0;
 }
 for (var f, n = 0, o = 0, s = t.length; o < s; ++o) {
 ByteBuffer.isByteBuffer(t[o]) || (t[o] = ByteBuffer.wrap(t[o], e));
-(f = t[o].limit - t[o].offset) > 0 && (n += f);
+0 < (f = t[o].limit - t[o].offset) && (n += f);
 }
 if (0 === n) return new ByteBuffer(0, r, i);
 var h, u = new ByteBuffer(n, r, i);
@@ -576,7 +526,7 @@ return f;
 }
 if (t instanceof Uint8Array) {
 f = new ByteBuffer(0, r, i);
-if (t.length > 0) {
+if (0 < t.length) {
 f.buffer = t.buffer;
 f.offset = t.byteOffset;
 f.limit = t.byteOffset + t.byteLength;
@@ -584,11 +534,11 @@ f.view = new Uint8Array(t.buffer);
 }
 } else if (t instanceof ArrayBuffer) {
 f = new ByteBuffer(0, r, i);
-if (t.byteLength > 0) {
+if (0 < t.byteLength) {
 f.buffer = t;
 f.offset = 0;
 f.limit = t.byteLength;
-f.view = t.byteLength > 0 ? new Uint8Array(t) : null;
+f.view = 0 < t.byteLength ? new Uint8Array(t) : null;
 }
 } else {
 if ("[object Array]" !== Object.prototype.toString.call(t)) throw TypeError("Illegal buffer");
@@ -673,7 +623,7 @@ if ((e >>>= 0) < 0 || e + 0 > this.buffer.byteLength) throw RangeError("Illegal 
 }
 e += 1;
 var i = this.buffer.byteLength;
-e > i && this.resize((i *= 2) > e ? i : e);
+i < e && this.resize((i *= 2) > e ? i : e);
 e -= 1;
 this.view[e] = t;
 r && (this.offset += 1);
@@ -708,7 +658,7 @@ if ((e >>>= 0) < 0 || e + 0 > this.buffer.byteLength) throw RangeError("Illegal 
 }
 e += 1;
 var i = this.buffer.byteLength;
-e > i && this.resize((i *= 2) > e ? i : e);
+i < e && this.resize((i *= 2) > e ? i : e);
 e -= 1;
 this.view[e] = t;
 r && (this.offset += 1);
@@ -742,7 +692,7 @@ if ((e >>>= 0) < 0 || e + 0 > this.buffer.byteLength) throw RangeError("Illegal 
 }
 e += 2;
 var i = this.buffer.byteLength;
-e > i && this.resize((i *= 2) > e ? i : e);
+i < e && this.resize((i *= 2) > e ? i : e);
 e -= 2;
 if (this.littleEndian) {
 this.view[e + 1] = (65280 & t) >>> 8;
@@ -790,7 +740,7 @@ if ((e >>>= 0) < 0 || e + 0 > this.buffer.byteLength) throw RangeError("Illegal 
 }
 e += 2;
 var i = this.buffer.byteLength;
-e > i && this.resize((i *= 2) > e ? i : e);
+i < e && this.resize((i *= 2) > e ? i : e);
 e -= 2;
 if (this.littleEndian) {
 this.view[e + 1] = (65280 & t) >>> 8;
@@ -837,7 +787,7 @@ if ((e >>>= 0) < 0 || e + 0 > this.buffer.byteLength) throw RangeError("Illegal 
 }
 e += 4;
 var i = this.buffer.byteLength;
-e > i && this.resize((i *= 2) > e ? i : e);
+i < e && this.resize((i *= 2) > e ? i : e);
 e -= 4;
 if (this.littleEndian) {
 this.view[e + 3] = t >>> 24 & 255;
@@ -893,7 +843,7 @@ if ((e >>>= 0) < 0 || e + 0 > this.buffer.byteLength) throw RangeError("Illegal 
 }
 e += 4;
 var i = this.buffer.byteLength;
-e > i && this.resize((i *= 2) > e ? i : e);
+i < e && this.resize((i *= 2) > e ? i : e);
 e -= 4;
 if (this.littleEndian) {
 this.view[e + 3] = t >>> 24 & 255;
@@ -949,7 +899,7 @@ if ((e >>>= 0) < 0 || e + 0 > this.buffer.byteLength) throw RangeError("Illegal 
 "number" == typeof t ? t = Long.fromNumber(t) : "string" == typeof t && (t = Long.fromString(t));
 e += 8;
 var i = this.buffer.byteLength;
-e > i && this.resize((i *= 2) > e ? i : e);
+i < e && this.resize((i *= 2) > e ? i : e);
 e -= 8;
 var f = t.low, n = t.high;
 if (this.littleEndian) {
@@ -1022,7 +972,7 @@ if ((e >>>= 0) < 0 || e + 0 > this.buffer.byteLength) throw RangeError("Illegal 
 "number" == typeof t ? t = Long.fromNumber(t) : "string" == typeof t && (t = Long.fromString(t));
 e += 8;
 var i = this.buffer.byteLength;
-e > i && this.resize((i *= 2) > e ? i : e);
+i < e && this.resize((i *= 2) > e ? i : e);
 e -= 8;
 var f = t.low, n = t.high;
 if (this.littleEndian) {
@@ -1086,6 +1036,59 @@ return f;
 ByteBufferPrototype.readUInt64 = ByteBufferPrototype.readUint64;
 }
 
+function ieee754_read(t, e, r, i, f) {
+var n, o, s = 8 * f - i - 1, h = (1 << s) - 1, u = h >> 1, a = -7, g = r ? f - 1 : 0, l = r ? -1 : 1, y = t[e + g];
+g += l;
+n = y & (1 << -a) - 1;
+y >>= -a;
+a += s;
+for (;0 < a; n = 256 * n + t[e + g], g += l, a -= 8) ;
+o = n & (1 << -a) - 1;
+n >>= -a;
+a += i;
+for (;0 < a; o = 256 * o + t[e + g], g += l, a -= 8) ;
+if (0 === n) n = 1 - u; else {
+if (n === h) return o ? NaN : Infinity * (y ? -1 : 1);
+o += Math.pow(2, i);
+n -= u;
+}
+return (y ? -1 : 1) * o * Math.pow(2, n - i);
+}
+
+function ieee754_write(t, e, r, i, f, n) {
+var o, s, h, u = 8 * n - f - 1, a = (1 << u) - 1, g = a >> 1, l = 23 === f ? Math.pow(2, -24) - Math.pow(2, -77) : 0, y = i ? 0 : n - 1, p = i ? 1 : -1, B = e < 0 || 0 === e && 1 / e < 0 ? 1 : 0;
+e = Math.abs(e);
+if (isNaN(e) || Infinity === e) {
+s = isNaN(e) ? 1 : 0;
+o = a;
+} else {
+o = Math.floor(Math.log(e) / Math.LN2);
+if (e * (h = Math.pow(2, -o)) < 1) {
+o--;
+h *= 2;
+}
+if (2 <= (e += 1 <= o + g ? l / h : l * Math.pow(2, 1 - g)) * h) {
+o++;
+h /= 2;
+}
+if (a <= o + g) {
+s = 0;
+o = a;
+} else if (1 <= o + g) {
+s = (e * h - 1) * Math.pow(2, f);
+o += g;
+} else {
+s = e * Math.pow(2, g - 1) * Math.pow(2, f);
+o = 0;
+}
+}
+for (;8 <= f; t[r + y] = 255 & s, y += p, s /= 256, f -= 8) ;
+o = o << f | s;
+u += f;
+for (;0 < u; t[r + y] = 255 & o, y += p, o /= 256, u -= 8) ;
+t[r + y - p] |= 128 * B;
+}
+
 ByteBufferPrototype.writeFloat32 = function(t, e) {
 var r = "undefined" == typeof e;
 r && (e = this.offset);
@@ -1096,7 +1099,7 @@ if ((e >>>= 0) < 0 || e + 0 > this.buffer.byteLength) throw RangeError("Illegal 
 }
 e += 4;
 var i = this.buffer.byteLength;
-e > i && this.resize((i *= 2) > e ? i : e);
+i < e && this.resize((i *= 2) > e ? i : e);
 e -= 4;
 ieee754_write(this.view, t, e, this.littleEndian, 23, 4);
 r && (this.offset += 4);
@@ -1129,7 +1132,7 @@ if ((e >>>= 0) < 0 || e + 0 > this.buffer.byteLength) throw RangeError("Illegal 
 }
 e += 8;
 var i = this.buffer.byteLength;
-e > i && this.resize((i *= 2) > e ? i : e);
+i < e && this.resize((i *= 2) > e ? i : e);
 e -= 8;
 ieee754_write(this.view, t, e, this.littleEndian, 52, 8);
 r && (this.offset += 8);
@@ -1178,10 +1181,10 @@ if ((e >>>= 0) < 0 || e + 0 > this.buffer.byteLength) throw RangeError("Illegal 
 var i, f = ByteBuffer.calculateVarint32(t);
 e += f;
 var n = this.buffer.byteLength;
-e > n && this.resize((n *= 2) > e ? n : e);
+n < e && this.resize((n *= 2) > e ? n : e);
 e -= f;
 t >>>= 0;
-for (;t >= 128; ) {
+for (;128 <= t; ) {
 i = 127 & t | 128;
 this.view[e++] = i;
 t >>>= 7;
@@ -1260,7 +1263,7 @@ if ((e >>>= 0) < 0 || e + 0 > this.buffer.byteLength) throw RangeError("Illegal 
 var i = ByteBuffer.calculateVarint64(t), f = t.toInt() >>> 0, n = t.shiftRightUnsigned(28).toInt() >>> 0, o = t.shiftRightUnsigned(56).toInt() >>> 0;
 e += i;
 var s = this.buffer.byteLength;
-e > s && this.resize((s *= 2) > e ? s : e);
+s < e && this.resize((s *= 2) > e ? s : e);
 e -= i;
 switch (i) {
 case 10:
@@ -1369,7 +1372,7 @@ if ((e >>>= 0) < 0 || e + 0 > this.buffer.byteLength) throw RangeError("Illegal 
 f = utfx.calculateUTF16asUTF8(stringSource(t))[1];
 e += f + 1;
 var n = this.buffer.byteLength;
-e > n && this.resize((n *= 2) > e ? n : e);
+n < e && this.resize((n *= 2) > e ? n : e);
 e -= f + 1;
 utfx.encodeUTF16toUTF8(stringSource(t), function(t) {
 this.view[e++] = t;
@@ -1417,7 +1420,7 @@ var i, f = e;
 i = utfx.calculateUTF16asUTF8(stringSource(t), this.noAssert)[1];
 e += 4 + i;
 var n = this.buffer.byteLength;
-e > n && this.resize((n *= 2) > e ? n : e);
+n < e && this.resize((n *= 2) > e ? n : e);
 e -= 4 + i;
 if (this.littleEndian) {
 this.view[e + 3] = i >>> 24 & 255;
@@ -1466,22 +1469,22 @@ ByteBuffer.METRICS_CHARS = "c";
 ByteBuffer.METRICS_BYTES = "b";
 
 ByteBufferPrototype.writeUTF8String = function(t, e) {
-var r = "undefined" == typeof e;
-r && (e = this.offset);
+var r, i = "undefined" == typeof e;
+i && (e = this.offset);
 if (!this.noAssert) {
 if ("number" != typeof e || e % 1 != 0) throw TypeError("Illegal offset: " + e + " (not an integer)");
 if ((e >>>= 0) < 0 || e + 0 > this.buffer.byteLength) throw RangeError("Illegal offset: 0 <= " + e + " (+0) <= " + this.buffer.byteLength);
 }
-var i, f = e;
-i = utfx.calculateUTF16asUTF8(stringSource(t))[1];
-e += i;
+var f = e;
+r = utfx.calculateUTF16asUTF8(stringSource(t))[1];
+e += r;
 var n = this.buffer.byteLength;
-e > n && this.resize((n *= 2) > e ? n : e);
-e -= i;
+n < e && this.resize((n *= 2) > e ? n : e);
+e -= r;
 utfx.encodeUTF16toUTF8(stringSource(t), function(t) {
 this.view[e++] = t;
 }.bind(this));
-if (r) {
+if (i) {
 this.offset = e;
 return this;
 }
@@ -1570,7 +1573,7 @@ i = utfx.calculateUTF16asUTF8(stringSource(t), this.noAssert)[1];
 f = ByteBuffer.calculateVarint32(i);
 e += f + i;
 var o = this.buffer.byteLength;
-e > o && this.resize((o *= 2) > e ? o : e);
+o < e && this.resize((o *= 2) > e ? o : e);
 e -= f + i;
 e += this.writeVarint32(i, e);
 utfx.encodeUTF16toUTF8(stringSource(t), function(t) {
@@ -1619,7 +1622,7 @@ var f = t.limit - t.offset;
 if (f <= 0) return this;
 r += f;
 var n = this.buffer.byteLength;
-r > n && this.resize((n *= 2) > r ? n : r);
+n < r && this.resize((n *= 2) > r ? n : r);
 r -= f;
 this.view.set(t.view.subarray(t.offset, t.limit), r);
 t.offset += f;
@@ -1673,14 +1676,14 @@ if ("number" != typeof t || t % 1 != 0) throw TypeError("Illegal begin: Not an i
 t >>>= 0;
 if ("number" != typeof e || e % 1 != 0) throw TypeError("Illegal end: Not an integer");
 e >>>= 0;
-if (t < 0 || t > e || e > this.buffer.byteLength) throw RangeError("Illegal range: 0 <= " + t + " <= " + e + " <= " + this.buffer.byteLength);
+if (t < 0 || e < t || e > this.buffer.byteLength) throw RangeError("Illegal range: 0 <= " + t + " <= " + e + " <= " + this.buffer.byteLength);
 }
 if (0 === t && e === this.buffer.byteLength) return this;
 var r = e - t;
 if (0 === r) {
 this.buffer = EMPTY_BUFFER;
 this.view = null;
-this.markedOffset >= 0 && (this.markedOffset -= t);
+0 <= this.markedOffset && (this.markedOffset -= t);
 this.offset = 0;
 this.limit = 0;
 return this;
@@ -1689,7 +1692,7 @@ var i = new ArrayBuffer(r), f = new Uint8Array(i);
 f.set(this.view.subarray(t, e));
 this.buffer = i;
 this.view = f;
-this.markedOffset >= 0 && (this.markedOffset -= t);
+0 <= this.markedOffset && (this.markedOffset -= t);
 this.offset = 0;
 this.limit = r;
 return this;
@@ -1703,13 +1706,13 @@ if ("number" != typeof t || t % 1 != 0) throw TypeError("Illegal begin: Not an i
 t >>>= 0;
 if ("number" != typeof e || e % 1 != 0) throw TypeError("Illegal end: Not an integer");
 e >>>= 0;
-if (t < 0 || t > e || e > this.buffer.byteLength) throw RangeError("Illegal range: 0 <= " + t + " <= " + e + " <= " + this.buffer.byteLength);
+if (t < 0 || e < t || e > this.buffer.byteLength) throw RangeError("Illegal range: 0 <= " + t + " <= " + e + " <= " + this.buffer.byteLength);
 }
 if (t === e) return new ByteBuffer(0, this.littleEndian, this.noAssert);
 var r = e - t, i = new ByteBuffer(r, this.littleEndian, this.noAssert);
 i.offset = 0;
 i.limit = r;
-i.markedOffset >= 0 && (i.markedOffset -= t);
+0 <= i.markedOffset && (i.markedOffset -= t);
 this.copyTo(i, 0, t, e);
 return i;
 };
@@ -1739,7 +1742,7 @@ return e < t ? this.resize((e *= 2) > t ? e : t) : this;
 ByteBufferPrototype.fill = function(t, e, r) {
 var i = "undefined" == typeof e;
 i && (e = this.offset);
-"string" == typeof t && t.length > 0 && (t = t.charCodeAt(0));
+"string" == typeof t && 0 < t.length && (t = t.charCodeAt(0));
 "undefined" == typeof e && (e = this.offset);
 "undefined" == typeof r && (r = this.limit);
 if (!this.noAssert) {
@@ -1749,9 +1752,9 @@ if ("number" != typeof e || e % 1 != 0) throw TypeError("Illegal begin: Not an i
 e >>>= 0;
 if ("number" != typeof r || r % 1 != 0) throw TypeError("Illegal end: Not an integer");
 r >>>= 0;
-if (e < 0 || e > r || r > this.buffer.byteLength) throw RangeError("Illegal range: 0 <= " + e + " <= " + r + " <= " + this.buffer.byteLength);
+if (e < 0 || r < e || r > this.buffer.byteLength) throw RangeError("Illegal range: 0 <= " + e + " <= " + r + " <= " + this.buffer.byteLength);
 }
-if (e >= r) return this;
+if (r <= e) return this;
 for (;e < r; ) this.view[e++] = t;
 i && (this.offset = e);
 return this;
@@ -1804,13 +1807,13 @@ t instanceof ByteBuffer || (t = ByteBuffer.wrap(t, e));
 var f = t.limit - t.offset;
 if (f <= 0) return this;
 var n = f - r;
-if (n > 0) {
+if (0 < n) {
 var o = new ArrayBuffer(this.buffer.byteLength + n), s = new Uint8Array(o);
 s.set(this.view.subarray(r, this.buffer.byteLength), f);
 this.buffer = o;
 this.view = s;
 this.offset += n;
-this.markedOffset >= 0 && (this.markedOffset += n);
+0 <= this.markedOffset && (this.markedOffset += n);
 this.limit += n;
 r += n;
 } else new Uint8Array(this.buffer);
@@ -1835,7 +1838,7 @@ return this.limit - this.offset;
 };
 
 ByteBufferPrototype.reset = function() {
-if (this.markedOffset >= 0) {
+if (0 <= this.markedOffset) {
 this.offset = this.markedOffset;
 this.markedOffset = -1;
 } else this.offset = 0;
@@ -1864,7 +1867,7 @@ if ("number" != typeof t || t % 1 != 0) throw TypeError("Illegal begin: Not an i
 t >>>= 0;
 if ("number" != typeof e || e % 1 != 0) throw TypeError("Illegal end: Not an integer");
 e >>>= 0;
-if (t < 0 || t > e || e > this.buffer.byteLength) throw RangeError("Illegal range: 0 <= " + t + " <= " + e + " <= " + this.buffer.byteLength);
+if (t < 0 || e < t || e > this.buffer.byteLength) throw RangeError("Illegal range: 0 <= " + t + " <= " + e + " <= " + this.buffer.byteLength);
 }
 if (t === e) return this;
 Array.prototype.reverse.call(this.view.subarray(t, e));
@@ -1890,7 +1893,7 @@ if ("number" != typeof t || t % 1 != 0) throw TypeError("Illegal begin: Not an i
 t >>>= 0;
 if ("number" != typeof e || e % 1 != 0) throw TypeError("Illegal end: Not an integer");
 e >>>= 0;
-if (t < 0 || t > e || e > this.buffer.byteLength) throw RangeError("Illegal range: 0 <= " + t + " <= " + e + " <= " + this.buffer.byteLength);
+if (t < 0 || e < t || e > this.buffer.byteLength) throw RangeError("Illegal range: 0 <= " + t + " <= " + e + " <= " + this.buffer.byteLength);
 }
 var r = this.clone();
 r.offset = t;
@@ -1905,7 +1908,7 @@ if ("number" != typeof e || e % 1 != 0) throw TypeError("Illegal offset: Not an 
 e >>>= 0;
 if ("number" != typeof r || r % 1 != 0) throw TypeError("Illegal limit: Not an integer");
 r >>>= 0;
-if (e < 0 || e > r || r > this.buffer.byteLength) throw RangeError("Illegal range: 0 <= " + e + " <= " + r + " <= " + this.buffer.byteLength);
+if (e < 0 || r < e || r > this.buffer.byteLength) throw RangeError("Illegal range: 0 <= " + e + " <= " + r + " <= " + this.buffer.byteLength);
 }
 if (!t && 0 === e && r === this.buffer.byteLength) return this.buffer;
 if (e === r) return EMPTY_BUFFER;
@@ -1918,7 +1921,7 @@ ByteBufferPrototype.toArrayBuffer = ByteBufferPrototype.toBuffer;
 
 ByteBufferPrototype.toString = function(t, e, r) {
 if ("undefined" == typeof t) return "ByteBufferAB(offset=" + this.offset + ",markedOffset=" + this.markedOffset + ",limit=" + this.limit + ",capacity=" + this.capacity() + ")";
-"number" == typeof t && (t = "utf8", e = t, r = e);
+"number" == typeof t && (r = e = t = "utf8");
 switch (t) {
 case "utf8":
 return this.toUTF8(e, r);
@@ -1945,40 +1948,41 @@ throw Error("Unsupported encoding: " + t);
 
 var lxiv = function() {
 "use strict";
-for (var t = {}, e = [ 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 43, 47 ], r = [], i = 0, f = e.length; i < f; ++i) r[e[i]] = i;
-t.encode = function(t, r) {
-for (var i, f; null !== (i = t()); ) {
-r(e[i >> 2 & 63]);
-f = (3 & i) << 4;
-if (null !== (i = t())) {
-r(e[63 & ((f |= i >> 4 & 15) | i >> 4 & 15)]);
-f = (15 & i) << 2;
-null !== (i = t()) ? (r(e[63 & (f | i >> 6 & 3)]), r(e[63 & i])) : (r(e[63 & f]), 
-r(61));
-} else r(e[63 & f]), r(61), r(61);
+for (var t = {}, f = [ 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 43, 47 ], o = [], e = 0, r = f.length; e < r; ++e) o[f[e]] = e;
+t.encode = function(t, e) {
+for (var r, i; null !== (r = t()); ) {
+e(f[r >> 2 & 63]);
+i = (3 & r) << 4;
+if (null !== (r = t())) {
+e(f[63 & ((i |= r >> 4 & 15) | r >> 4 & 15)]);
+i = (15 & r) << 2;
+null !== (r = t()) ? (e(f[63 & (i | r >> 6 & 3)]), e(f[63 & r])) : (e(f[63 & i]), 
+e(61));
+} else e(f[63 & i]), e(61), e(61);
 }
 };
 t.decode = function(t, e) {
-function i(t) {
+var r, i, f;
+function n(t) {
 throw Error("Illegal character code: " + t);
 }
-for (var f, n, o; null !== (f = t()); ) {
-"undefined" == typeof (n = r[f]) && i(f);
-if (null !== (f = t())) {
-"undefined" == typeof (o = r[f]) && i(f);
-e(n << 2 >>> 0 | (48 & o) >> 4);
-if (null !== (f = t())) {
-if ("undefined" == typeof (n = r[f])) {
-if (61 === f) break;
-i(f);
+for (;null !== (r = t()); ) {
+"undefined" == typeof (i = o[r]) && n(r);
+if (null !== (r = t())) {
+"undefined" == typeof (f = o[r]) && n(r);
+e(i << 2 >>> 0 | (48 & f) >> 4);
+if (null !== (r = t())) {
+if ("undefined" == typeof (i = o[r])) {
+if (61 === r) break;
+n(r);
 }
-e((15 & o) << 4 >>> 0 | (60 & n) >> 2);
-if (null !== (f = t())) {
-if ("undefined" == typeof (o = r[f])) {
-if (61 === f) break;
-i(f);
+e((15 & f) << 4 >>> 0 | (60 & i) >> 2);
+if (null !== (r = t())) {
+if ("undefined" == typeof (f = o[r])) {
+if (61 === r) break;
+n(r);
 }
-e((3 & n) << 6 >>> 0 | o);
+e((3 & i) << 6 >>> 0 | f);
 }
 }
 }
@@ -1994,7 +1998,7 @@ ByteBufferPrototype.toBase64 = function(t, e) {
 "undefined" == typeof t && (t = this.offset);
 "undefined" == typeof e && (e = this.limit);
 e |= 0;
-if ((t |= 0) < 0 || e > this.capacity || t > e) throw RangeError("begin, end");
+if ((t |= 0) < 0 || e > this.capacity || e < t) throw RangeError("begin, end");
 var r;
 lxiv.encode(function() {
 return t < e ? this.view[t++] : null;
@@ -2024,11 +2028,11 @@ ByteBufferPrototype.toBinary = function(t, e) {
 "undefined" == typeof t && (t = this.offset);
 "undefined" == typeof e && (e = this.limit);
 e |= 0;
-if ((t |= 0) < 0 || e > this.capacity() || t > e) throw RangeError("begin, end");
+if ((t |= 0) < 0 || e > this.capacity() || e < t) throw RangeError("begin, end");
 if (t === e) return "";
 for (var r = [], i = []; t < e; ) {
 r.push(this.view[t++]);
-r.length >= 1024 && (i.push(String.fromCharCode.apply(String, r)), r = []);
+1024 <= r.length && (i.push(String.fromCharCode.apply(String, r)), r = []);
 }
 return i.join("") + String.fromCharCode.apply(String, r);
 };
@@ -2036,7 +2040,7 @@ return i.join("") + String.fromCharCode.apply(String, r);
 ByteBuffer.fromBinary = function(t, e) {
 if ("string" != typeof t) throw TypeError("str");
 for (var r, i = 0, f = t.length, n = new ByteBuffer(f, e); i < f; ) {
-if ((r = t.charCodeAt(i)) > 255) throw RangeError("illegal char code: " + r);
+if (255 < (r = t.charCodeAt(i))) throw RangeError("illegal char code: " + r);
 n.view[i++] = r;
 }
 n.limit = f;
@@ -2047,10 +2051,10 @@ ByteBufferPrototype.toDebug = function(t) {
 for (var e, r = -1, i = this.buffer.byteLength, f = "", n = "", o = ""; r < i; ) {
 if (-1 !== r) {
 f += (e = this.view[r]) < 16 ? "0" + e.toString(16).toUpperCase() : e.toString(16).toUpperCase();
-t && (n += e > 32 && e < 127 ? String.fromCharCode(e) : ".");
+t && (n += 32 < e && e < 127 ? String.fromCharCode(e) : ".");
 }
 ++r;
-if (t && r > 0 && r % 16 == 0 && r !== i) {
+if (t && 0 < r && r % 16 == 0 && r !== i) {
 for (;f.length < 51; ) f += " ";
 o += f + n + "\n";
 f = n = "";
@@ -2161,7 +2165,7 @@ y = !0;
 break;
 }
 f = parseInt(i + t.charAt(s++), 16);
-if (!r && (isNaN(f) || f < 0 || f > 255)) throw TypeError("Illegal str: Not a debug encoded string");
+if (!r && (isNaN(f) || f < 0 || 255 < f)) throw TypeError("Illegal str: Not a debug encoded string");
 o.view[h++] = f;
 u = !0;
 }
@@ -2182,7 +2186,7 @@ if ("number" != typeof t || t % 1 != 0) throw TypeError("Illegal begin: Not an i
 t >>>= 0;
 if ("number" != typeof e || e % 1 != 0) throw TypeError("Illegal end: Not an integer");
 e >>>= 0;
-if (t < 0 || t > e || e > this.buffer.byteLength) throw RangeError("Illegal range: 0 <= " + t + " <= " + e + " <= " + this.buffer.byteLength);
+if (t < 0 || e < t || e > this.buffer.byteLength) throw RangeError("Illegal range: 0 <= " + t + " <= " + e + " <= " + this.buffer.byteLength);
 }
 for (var r, i = new Array(e - t); t < e; ) (r = this.view[t++]) < 16 ? i.push("0", r.toString(16)) : i.push(r.toString(16));
 return i.join("");
@@ -2195,7 +2199,7 @@ if (t.length % 2 != 0) throw TypeError("Illegal str: Length not a multiple of 2"
 }
 for (var i, f = t.length, n = new ByteBuffer(f / 2 | 0, e), o = 0, s = 0; o < f; o += 2) {
 i = parseInt(t.substring(o, o + 2), 16);
-if (!r && (!isFinite(i) || i < 0 || i > 255)) throw TypeError("Illegal str: Contains non-hex characters");
+if (!r && (!isFinite(i) || i < 0 || 255 < i)) throw TypeError("Illegal str: Contains non-hex characters");
 n.view[s++] = i;
 }
 n.limit = s;
@@ -2204,21 +2208,20 @@ return n;
 
 var utfx = function() {
 "use strict";
-var t = {};
-t.MAX_CODEPOINT = 1114111;
-t.encodeUTF8 = function(t, e) {
+var i = {
+MAX_CODEPOINT: 1114111,
+encodeUTF8: function(t, e) {
 var r = null;
 "number" == typeof t && (r = t, t = function() {
 return null;
 });
 for (;null !== r || null !== (r = t()); ) {
-r < 128 ? e(127 & r) : r < 2048 ? (e(r >> 6 & 31 | 192), e(63 & r | 128)) : r < 65536 ? (e(r >> 12 & 15 | 224), 
-e(r >> 6 & 63 | 128), e(63 & r | 128)) : (e(r >> 18 & 7 | 240), e(r >> 12 & 63 | 128), 
-e(r >> 6 & 63 | 128), e(63 & r | 128));
+r < 128 ? e(127 & r) : (r < 2048 ? e(r >> 6 & 31 | 192) : (r < 65536 ? e(r >> 12 & 15 | 224) : (e(r >> 18 & 7 | 240), 
+e(r >> 12 & 63 | 128)), e(r >> 6 & 63 | 128)), e(63 & r | 128));
 r = null;
 }
-};
-t.decodeUTF8 = function(t, e) {
+},
+decodeUTF8: function(t, e) {
 for (var r, i, f, n, o = function(t) {
 t = t.slice(0, t.indexOf(null));
 var e = Error(t.toString());
@@ -2232,74 +2235,72 @@ if (240 != (248 & r)) throw RangeError("Illegal starting byte: " + r);
 (null === (i = t()) || null === (f = t()) || null === (n = t())) && o([ r, i, f, n ]), 
 e((7 & r) << 18 | (63 & i) << 12 | (63 & f) << 6 | 63 & n);
 }
-};
-t.UTF16toUTF8 = function(t, e) {
-for (var r, i = null; ;) {
-if (null === (r = null !== i ? i : t())) break;
-if (r >= 55296 && r <= 57343 && null !== (i = t()) && i >= 56320 && i <= 57343) {
+},
+UTF16toUTF8: function(t, e) {
+for (var r, i = null; null !== (r = null !== i ? i : t()); ) if (55296 <= r && r <= 57343 && null !== (i = t()) && 56320 <= i && i <= 57343) {
 e(1024 * (r - 55296) + i - 56320 + 65536);
 i = null;
 } else e(r);
-}
 null !== i && e(i);
-};
-t.UTF8toUTF16 = function(t, e) {
+},
+UTF8toUTF16: function(t, e) {
 var r = null;
 "number" == typeof t && (r = t, t = function() {
 return null;
 });
 for (;null !== r || null !== (r = t()); ) {
-r <= 65535 ? e(r) : (r -= 65536, e(55296 + (r >> 10)), e(r % 1024 + 56320));
+r <= 65535 ? e(r) : (e(55296 + ((r -= 65536) >> 10)), e(r % 1024 + 56320));
 r = null;
 }
-};
-t.encodeUTF16toUTF8 = function(e, r) {
-t.UTF16toUTF8(e, function(e) {
-t.encodeUTF8(e, r);
+},
+encodeUTF16toUTF8: function(t, e) {
+i.UTF16toUTF8(t, function(t) {
+i.encodeUTF8(t, e);
 });
-};
-t.decodeUTF8toUTF16 = function(e, r) {
-t.decodeUTF8(e, function(e) {
-t.UTF8toUTF16(e, r);
+},
+decodeUTF8toUTF16: function(t, e) {
+i.decodeUTF8(t, function(t) {
+i.UTF8toUTF16(t, e);
 });
-};
-t.calculateCodePoint = function(t) {
+},
+calculateCodePoint: function(t) {
 return t < 128 ? 1 : t < 2048 ? 2 : t < 65536 ? 3 : 4;
-};
-t.calculateUTF8 = function(t) {
+},
+calculateUTF8: function(t) {
 for (var e, r = 0; null !== (e = t()); ) r += e < 128 ? 1 : e < 2048 ? 2 : e < 65536 ? 3 : 4;
 return r;
-};
-t.calculateUTF16asUTF8 = function(e) {
-var r = 0, i = 0;
-t.UTF16toUTF8(e, function(t) {
-++r;
-i += t < 128 ? 1 : t < 2048 ? 2 : t < 65536 ? 3 : 4;
+},
+calculateUTF16asUTF8: function(t) {
+var e = 0, r = 0;
+i.UTF16toUTF8(t, function(t) {
+++e;
+r += t < 128 ? 1 : t < 2048 ? 2 : t < 65536 ? 3 : 4;
 });
-return [ r, i ];
+return [ e, r ];
+}
 };
-return t;
+return i;
 }();
 
-ByteBufferPrototype.toUTF8 = function(t, e) {
-"undefined" == typeof t && (t = this.offset);
-"undefined" == typeof e && (e = this.limit);
+ByteBufferPrototype.toUTF8 = function(e, r) {
+"undefined" == typeof e && (e = this.offset);
+"undefined" == typeof r && (r = this.limit);
 if (!this.noAssert) {
-if ("number" != typeof t || t % 1 != 0) throw TypeError("Illegal begin: Not an integer");
-t >>>= 0;
-if ("number" != typeof e || e % 1 != 0) throw TypeError("Illegal end: Not an integer");
+if ("number" != typeof e || e % 1 != 0) throw TypeError("Illegal begin: Not an integer");
 e >>>= 0;
-if (t < 0 || t > e || e > this.buffer.byteLength) throw RangeError("Illegal range: 0 <= " + t + " <= " + e + " <= " + this.buffer.byteLength);
+if ("number" != typeof r || r % 1 != 0) throw TypeError("Illegal end: Not an integer");
+r >>>= 0;
+if (e < 0 || r < e || r > this.buffer.byteLength) throw RangeError("Illegal range: 0 <= " + e + " <= " + r + " <= " + this.buffer.byteLength);
 }
-var r;
+var t;
 try {
 utfx.decodeUTF8toUTF16(function() {
-return t < e ? this.view[t++] : null;
-}.bind(this), r = stringDestination());
-} catch (r) {
-if (t !== e) throw RangeError("Illegal range: Truncated data, " + t + " != " + e);
+return e < r ? this.view[e++] : null;
+}.bind(this), t = stringDestination());
+} catch (t) {
+if (e !== r) throw RangeError("Illegal range: Truncated data, " + e + " != " + r);
 }
-return r();
+return t();
 };
 
 ByteBuffer.fromUTF8 = function(t, e, r) {

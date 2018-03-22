@@ -1,25 +1,25 @@
-require = function e(t, o, s) {
-function r(n, a) {
-if (!o[n]) {
-if (!t[n]) {
-var p = "function" == typeof require && require;
-if (!a && p) return p(n, !0);
-if (i) return i(n, !0);
-var l = new Error("Cannot find module '" + n + "'");
-throw l.code = "MODULE_NOT_FOUND", l;
+require = function i(n, a, p) {
+function l(o, e) {
+if (!a[o]) {
+if (!n[o]) {
+var t = "function" == typeof require && require;
+if (!e && t) return t(o, !0);
+if (g) return g(o, !0);
+var s = new Error("Cannot find module '" + o + "'");
+throw s.code = "MODULE_NOT_FOUND", s;
 }
-var u = o[n] = {
+var r = a[o] = {
 exports: {}
 };
-t[n][0].call(u.exports, function(e) {
-var o = t[n][1][e];
-return r(o || e);
-}, u, u.exports, e, t, o, s);
+n[o][0].call(r.exports, function(e) {
+var t = n[o][1][e];
+return l(t || e);
+}, r, r.exports, i, n, a, p);
 }
-return o[n].exports;
+return a[o].exports;
 }
-for (var i = "function" == typeof require && require, n = 0; n < s.length; n++) r(s[n]);
-return r;
+for (var g = "function" == typeof require && require, e = 0; e < p.length; e++) l(p[e]);
+return l;
 }({
 AvatarItem: [ function(e, t, o) {
 "use strict";
@@ -36,8 +36,7 @@ avatarSprite: cc.Prefab
 },
 init: function(e, t) {
 this.callback = t;
-this.tag = e;
-var o = e, s = cc.instantiate(this.avatarSprite).getComponent("AvatarSprite").init(o);
+var o = this.tag = e, s = cc.instantiate(this.avatarSprite).getComponent("AvatarSprite").init(o);
 this.background.getComponent(cc.Sprite).spriteFrame = s;
 },
 buttonEvent: function(e) {
@@ -51,7 +50,6 @@ NetworkManager: "NetworkManager"
 AvatarSprite: [ function(e, t, o) {
 "use strict";
 cc._RF.push(t, "68fbak9oIFE8o2rM67aCSN5", "AvatarSprite");
-e("NetworkManager");
 cc.Class({
 extends: cc.Component,
 properties: {
@@ -62,9 +60,7 @@ return this.list_frame[e];
 }
 });
 cc._RF.pop();
-}, {
-NetworkManager: "NetworkManager"
-} ],
+}, {} ],
 BaseScene: [ function(e, t, o) {
 "use strict";
 cc._RF.push(t, "72cc1llU4NOWJ09JQrdRdeg", "BaseScene");
@@ -83,7 +79,7 @@ handleMessage: function(e) {
 var t = !0;
 switch (e.message_id) {
 case s.MESSAGE_ID.INITIALIZE:
-o = e.response;
+var o = e.response;
 this.initialMessageResponseHandler(o);
 break;
 
@@ -103,7 +99,7 @@ this.getEmergencyNotificationResponse(o);
 break;
 
 case s.MESSAGE_ID.HEAD_LINE:
-var o = e.response;
+o = e.response;
 this.getHeadLineResponse(o);
 break;
 
@@ -118,18 +114,19 @@ e.getResponsecode() && cc.director.loadScene("Intro");
 },
 initialMessageResponseHandler: function(e) {
 cc.log("initialMessage", e);
-if (0 !== e && e.getResponsecode()) {
+if (0 !== e) if (e.getResponsecode()) {
 var t = e.getCurrentappversion();
 cc.log("serverAppVersion = ", t);
 var o = [];
 cc.log("hot_line size", e.getHotlinesList().length);
-for (r = 0; r < e.getHotlinesList().length; r++) o.push(e.getHotlinesList()[r]);
+for (var s = 0; s < e.getHotlinesList().length; s++) o.push(e.getHotlinesList()[s]);
 cc.log("hot_lines = ", o);
-for (var s = [], r = 0; r < e.getEnablegameidsList().length; r++) s.push(e.getEnablegameidsList()[r]);
-cc.log("game id = ", s);
-Common.setEnableGameIds(s);
+var r = [];
+for (s = 0; s < e.getEnablegameidsList().length; s++) r.push(e.getEnablegameidsList()[s]);
+cc.log("game id = ", r);
+Common.setEnableGameIds(r);
 cc.director.loadScene("Login");
-}
+} else Common.showToast(e.getMessage());
 },
 pingMessageResponseHandler: function(e) {
 if (e.getResponsecode() && e.getDisconnect()) {
@@ -140,7 +137,7 @@ this.scheduleOnce(this.goIntroScene, 2);
 }
 },
 getHeadLineResponse: function(e) {
-if (0 != e && e.getResponsecode() && e.getHeadlinesList().length > 0) {
+if (0 != e && e.getResponsecode() && 0 < e.getHeadlinesList().length) {
 cc.log("getHeadLineResponse : ", e.toObject());
 for (var t = [], o = 0; o < e.getHeadlinesList().length; o++) t.push(e.getHeadlinesList()[o]);
 Common.setHeadLineEmergency(t);
@@ -149,13 +146,15 @@ Common.setHeadLineEmergency(t);
 getEmergencyNotificationResponse: function(e) {
 if (0 !== e && e.getResponsecode()) {
 var t = "", o = e.getNotificationsList();
-if (e.getNotificationsList().length > 0) for (var s = 0; s < o.length; s++) t += o[s] + " ";
+if (0 < e.getNotificationsList().length) for (var s = 0; s < o.length; s++) t += o[s] + " ";
 Common.setNotificationEmergency(t);
 cc.log("setNotificationEmergency : ", t);
-if (e.getHeadlinesList().length > 0) {
+if (0 < e.getHeadlinesList().length) {
 Common.setHeadLineEmergency(e.getHeadlinesList());
 var r = cc.director.getScene();
-cc.isValid(r) && (cc.isValid(r.getChildByName("NodeHeadLine")) ? r.getChildByName("NodeHeadLine").getComponent("NodeHeadLine").showHeadLine() : cc.loader.loadRes("prefabs/NodeHeadLine", function(e, t) {
+if (cc.isValid(r)) if (cc.isValid(r.getChildByName("NodeHeadLine"))) {
+r.getChildByName("NodeHeadLine").getComponent("NodeHeadLine").showHeadLine();
+} else cc.loader.loadRes("prefabs/NodeHeadLine", function(e, t) {
 if (!e) {
 var o = cc.instantiate(t);
 if (cc.isValid(o)) {
@@ -163,7 +162,7 @@ o.getComponent("NodeHeadLine").showHeadLine();
 r.addChild(o, Config.index.HEADLINE);
 }
 }
-}));
+});
 }
 }
 },
@@ -201,7 +200,6 @@ cc._RF.pop();
 CardItem: [ function(e, t, o) {
 "use strict";
 cc._RF.push(t, "f5d53nh7HRNxLAPWyMC3u8p", "CardItem");
-var s = e("Types");
 cc.Class({
 extends: cc.Component,
 properties: {
@@ -245,12 +243,12 @@ this.point.node.active = !1;
 this.suit.node.active = null;
 },
 replaceCard: function(e) {
-var t = this.getPoint(e), o = this.getSuit(e), r = new s.Card(t, o, Common.getZoneId()), i = !1;
-Common.getZoneId() === Config.TAG_GAME_ITEM.MINI_POKER ? r.point > 9 && r.point <= 12 && (i = !0) : r.point > 10 && (i = !0);
-i ? Common.getZoneId() === Config.TAG_GAME_ITEM.MINI_POKER ? this.mainPic.spriteFrame = this.texFaces[r.point - 10] : this.mainPic.spriteFrame = this.texFaces[r.point - 10 - 1] : Common.getZoneId() === Config.TAG_GAME_ITEM.MINI_POKER ? this.mainPic.spriteFrame = this.texSuitBigPoker[r.suit] : this.mainPic.spriteFrame = this.texSuitBig[r.suit];
-this.point.string = r.pointName;
-r.isRedSuit ? this.point.node.color = this.redTextColor : this.point.node.color = this.blackTextColor;
-Common.getZoneId() === Config.TAG_GAME_ITEM.MINI_POKER ? this.suit.spriteFrame = this.texSuitSmallPoker[r.suit] : this.suit.spriteFrame = this.texSuitSmall[r.suit];
+var t = this.getPoint(e), o = this.getSuit(e), s = !1;
+Common.getZoneId() === Config.TAG_GAME_ITEM.MINI_POKER ? 9 < t && t <= 12 && (s = !0) : 10 < t && (s = !0);
+s ? Common.getZoneId() === Config.TAG_GAME_ITEM.MINI_POKER ? this.mainPic.spriteFrame = this.texFaces[t - 10] : this.mainPic.spriteFrame = this.texFaces[t - 10 - 1] : Common.getZoneId() === Config.TAG_GAME_ITEM.MINI_POKER ? this.mainPic.spriteFrame = this.texSuitBigPoker[o] : this.mainPic.spriteFrame = this.texSuitBig[o];
+this.point.string = Common.getPointName(t, Common.getZoneId());
+Common.isRedSuit(o, Common.getZoneId()) ? this.point.node.color = this.redTextColor : this.point.node.color = this.blackTextColor;
+Common.getZoneId() === Config.TAG_GAME_ITEM.MINI_POKER ? this.suit.spriteFrame = this.texSuitSmallPoker[o] : this.suit.spriteFrame = this.texSuitSmall[o];
 },
 setBg: function(e) {
 !1 === e && (this.node.getComponent(cc.Sprite).spriteFrame = null);
@@ -262,54 +260,6 @@ getSuit: function(e) {
 return e % 4;
 }
 });
-cc._RF.pop();
-}, {
-Types: "Types"
-} ],
-Card: [ function(e, t, o) {
-"use strict";
-cc._RF.push(t, "063052X4uNDPK4UMk3seHhs", "Card");
-var s = cc.Enum({
-Spade: 1,
-Heart: 2,
-Club: 3,
-Diamond: 4
-}), r = "NAN,A,2,3,4,5,6,7,8,9,10,J,Q,K".split(",");
-t.exports = {
-Suit: s,
-Card: function(e) {
-Object.defineProperties(this, {
-point: {
-value: parseInt(e / 4) + 1,
-writable: !1
-},
-suit: {
-value: e % 4,
-writable: !1
-},
-pointName: {
-get: function() {
-return r[this.point];
-}
-},
-suitName: {
-get: function() {
-return s[this.suit];
-}
-},
-isBlackSuit: {
-get: function() {
-return this.suit === s.Spade || this.suit === s.Club;
-}
-},
-isRedSuit: {
-get: function() {
-return this.suit === s.Heart || this.suit === s.Diamond;
-}
-}
-});
-}
-};
 cc._RF.pop();
 }, {} ],
 ChargeItem: [ function(e, t, o) {
@@ -337,9 +287,9 @@ a.getComponent("ProviderItem").init(s, o);
 a.setPositionX(n);
 a.setPositionY(-a.getContentSize().height);
 i.addChild(a);
-var p = r.length, l = [ "Mệnh giá thẻ", "KM", "Mon" ], u = this._getdata(l, r, p);
-this.tableView.getComponent(cc.tableView).initTableView(u.length, {
-array: u,
+var p = r.length, l = this._getdata([ "Mệnh giá thẻ", "KM", "Mon" ], r, p);
+this.tableView.getComponent(cc.tableView).initTableView(l.length, {
+array: l,
 target: t.node
 });
 }
@@ -418,12 +368,66 @@ cc._RF.pop();
 }, {
 Popup: "Popup"
 } ],
+CommonSessionPopup: [ function(e, t, o) {
+"use strict";
+cc._RF.push(t, "b31c3hTcBlAnaylII0/Q3ox", "CommonSessionPopup");
+var s = e("Popup");
+cc.Class({
+extends: s,
+properties: {
+tabTop: cc.Node,
+uiTab: cc.Prefab,
+tableView: cc.Node
+},
+onLoad: function() {},
+onCallBack: function() {
+this._callback();
+this.disappear();
+},
+initTabs: function(e) {
+var t = this, o = cc.instantiate(this.uiTab);
+o.getComponent("UITabTaixiu").setTab(e, function(e) {
+t.onEvent(e);
+});
+this.tabTop.addChild(o);
+},
+onEvent: function(e) {
+cc.log("onEvent =", e);
+},
+init: function() {
+this.response = response;
+type;
+this._callback = callback;
+}
+});
+cc._RF.pop();
+}, {
+Popup: "Popup"
+} ],
+ExchangeItem: [ function(e, t, o) {
+"use strict";
+cc._RF.push(t, "22a8cjRpXpDQJ3xE+AhsIqx", "ExchangeItem");
+cc.Class({
+extends: cc.Component,
+properties: {
+lblParValue: cc.Label,
+lblCashValue: cc.Label
+},
+init: function(e) {
+this.cashValue = e.cashvalue;
+this.parValue = e.parvalue;
+this.lblParValue.string = Common.numberFormatWithCommas(this.parValue);
+this.lblCashValue.string = Common.numberFormatWithCommas(this.cashValue);
+}
+});
+cc._RF.pop();
+}, {} ],
 GameList: [ function(e, t, o) {
 "use strict";
 cc._RF.push(t, "42450IuWRRDnrv2TK+Vl9Li", "GameList");
-var s = e("NetworkManager"), r = e("ThreeCard"), i = e("minipoker"), n = e("BaseScene");
+var r = e("NetworkManager"), p = e("ThreeCard"), l = e("minipoker"), s = e("BaseScene"), g = e("Treasure");
 cc.Class({
-extends: n,
+extends: s,
 properties: {
 scrollView: cc.ScrollView,
 prefabGameItem: cc.Prefab,
@@ -435,7 +439,7 @@ jarResponse: null,
 jarRequest: null,
 isRequestJar: !1,
 isBindNetwork: !1,
-firstTimeRequestJar: !0
+firstTimeRequestJar: !1
 },
 onLoad: function() {
 cc.log("on load game list");
@@ -453,8 +457,19 @@ onDisable: function() {
 cc.log("on disabled");
 },
 populateList: function() {
-var e = this;
-e.requestJar(!0);
+for (var e = this, t = [ Common.ZONE_ID.MINI_BACAY, Common.ZONE_ID.MINI_POKER, Common.ZONE_ID.TAIXIU, Common.ZONE_ID.VQMM, Common.ZONE_ID.TREASURE ], o = cc.size(0, this.content.getContentSize().height), s = 0; s < t.length; ++s) {
+(i = cc.instantiate(this.prefabGameItem)).setTag(t[s] + 1e3);
+i.getComponent("LobbyGameItem").init(s, t[s]);
+i.setPositionY(.06 * this.content.getContentSize().height);
+this.content.addChild(i);
+o.width += 1.1 * i.getContentSize().width;
+}
+this.content.setContentSize(o);
+var r = window.jarInfoList;
+if (null != r) for (s = 0; s < r.length; s++) {
+var i, n = r[s], a = n.getGameid(), p = n.getValue(), l = n.getJartype();
+null !== (i = this.content.getChildByTag(a + 1e3)) && "LobbyGameItem" === i.getName() && i.getComponent("LobbyGameItem").updateJarMoney(p, l);
+}
 e.schedule(function() {
 e.requestJar(!1);
 }, 5);
@@ -466,15 +481,15 @@ this.scrollView.jumpTo(.25, 100);
 requestJar: function(e) {
 cc.log("request jar:", e);
 if (!this.isRequestJar) {
-e && s.showLoading();
+e && r.showLoading();
 this.isRequestJar = !0;
-s.getJarRequest(0, null, e);
+r.getJarRequest(0, null, e);
 }
 },
 bindNetwork: function() {
-var e = this;
-s.checkEvent(function(t) {
-return e.handleMessage(t);
+var t = this;
+r.checkEvent(function(e) {
+return t.handleMessage(e);
 });
 },
 update: function(e) {
@@ -484,22 +499,11 @@ goSceneTable: function() {},
 ongamestatus: function(e) {},
 jarResponseHandler: function(e) {
 cc.log("jar response handler:", e.toObject());
-if (e.getResponsecode() && e.getJarinfoList().length > 0) {
-if (this.firstTimeRequestJar) {
-this.firstTimeRequestJar = !1;
-for (var t = [ Common.ZONE_ID.MINI_BACAY, Common.ZONE_ID.MINI_POKER, Common.ZONE_ID.TAIXIU, Common.ZONE_ID.VQMM, Common.ZONE_ID.TREASURE ], o = cc.size(0, this.content.getContentSize().height), s = 0; s < t.length; ++s) {
-(p = cc.instantiate(this.prefabGameItem)).setTag(t[s] + 1e3);
-p.getComponent("LobbyGameItem").init(s, t[s]);
-p.setPositionY(.06 * this.content.getContentSize().height);
-this.content.addChild(p);
-o.width += 1.1 * p.getContentSize().width;
-}
-this.content.setContentSize(o);
-}
+if (e.getResponsecode() && 0 < e.getJarinfoList().length) {
 this.isRequestJar = !1;
-for (s = 0; s < e.getJarinfoList().length; s++) {
-var r = e.getJarinfoList()[s], i = r.getGameid(), n = r.getValue(), a = r.getJartype(), p = this.content.getChildByTag(i + 1e3);
-null !== p && "LobbyGameItem" === p.getName() && p.getComponent("LobbyGameItem").updateJarMoney(n, a);
+for (var t = 0; t < e.getJarinfoList().length; t++) {
+var o = e.getJarinfoList()[t], s = o.getGameid(), r = o.getValue(), i = o.getJartype(), n = this.content.getChildByTag(s + 1e3);
+null !== n && "LobbyGameItem" === n.getName() && n.getComponent("LobbyGameItem").updateJarMoney(r, i);
 }
 }
 },
@@ -508,18 +512,18 @@ var t = this._super(e);
 if (t) return !0;
 t = !0;
 switch (e.message_id) {
-case s.MESSAGE_ID.ENTER_ZONE:
-o = e.response;
+case r.MESSAGE_ID.ENTER_ZONE:
+var o = e.response;
 this.enterZoneMessageResponseHandler(o);
 break;
 
-case s.MESSAGE_ID.ENTER_ROOM:
+case r.MESSAGE_ID.ENTER_ROOM:
 o = e.response;
 this.enterRoomResponseHandler(o);
 break;
 
-case s.MESSAGE_ID.JAR:
-var o = e.response;
+case r.MESSAGE_ID.JAR:
+o = e.response;
 this.jarResponseHandler(o);
 break;
 
@@ -538,23 +542,23 @@ Common.setZoneId(t);
 Common.setRequestRoomType(e.getDefaultroomtypeload());
 if (e.hasEnabledisplayroomlist() && e.getEnabledisplayroomlist()) {
 var o = [];
-if (e.getCashroomconfigsList().length > 0) for (var r = 0; r < e.getCashroomconfigsList().length; r++) o.push(e.getCashroomconfigsList()[r]);
+if (0 < e.getCashroomconfigsList().length) for (var s = 0; s < e.getCashroomconfigsList().length; s++) o.push(e.getCashroomconfigsList()[s]);
 Common.setCashRoomList(o);
 }
--1 !== Common.getZoneId() && Common.getZoneId() === Common.ZONE_ID.TAIXIU && s.getEnterRoomMessageFromServer(0, "");
+-1 !== Common.getZoneId() && Common.getZoneId() === Common.ZONE_ID.TAIXIU && r.getEnterRoomMessageFromServer(0, "");
 }
 }
 },
-loadTaiXiu: function(e) {
-var t = cc.director.getScene();
-cc.isValid(t) && !cc.isValid(t.getChildByName("PopupTaiXiu")) && cc.loader.loadRes("prefabs/PopupTaiXiu", function(o, s) {
-if (!o) {
-var r = cc.instantiate(s);
-if (cc.isValid(r)) {
-r.x = Common.width / 2;
-r.y = Common.height / 2;
-t.addChild(r);
-r.getComponent("PopupTaiXiu").setEnterRoomResponse(e);
+loadTaiXiu: function(s) {
+var r = cc.director.getScene();
+cc.isValid(r) && !cc.isValid(r.getChildByName("PopupTaiXiu")) && cc.loader.loadRes("prefabs/PopupTaiXiu", function(e, t) {
+if (!e) {
+var o = cc.instantiate(t);
+if (cc.isValid(o)) {
+o.x = Common.width / 2;
+o.y = Common.height / 2;
+r.addChild(o);
+o.getComponent("PopupTaiXiu").setEnterRoomResponse(s);
 }
 }
 });
@@ -564,22 +568,26 @@ cc.log("enter room response: ", e);
 if (e.getResponsecode()) {
 cc.log("enterZone = ", Common.getEnterZone());
 if (Common.getZoneId() === Common.ZONE_ID.MINI_BACAY) cc.director.loadScene("BaCay", function() {
-r.instance.initDataFromLoading(Common.getEnterZone(), e);
+p.instance.initDataFromLoading(Common.getEnterZone(), e);
 }); else if (Common.getZoneId() === Common.ZONE_ID.MINI_POKER) cc.director.loadScene("minipoker", function() {
-i.instance.initDataFromLoading(Common.getEnterZone(), e);
+l.instance.initDataFromLoading(Common.getEnterZone(), e);
 }); else if (Common.getZoneId() === Common.ZONE_ID.TAIXIU) {
-var t = this;
-t.loadTaiXiu(e);
-for (var o = 0; o < e.getArgsList().length; o++) {
-var s = e.getArgsList()[o].getKey(), n = e.getArgsList()[o].getValue();
-if ("currentTableStage" === s) ; else if ("cdTimerRemaining" === s) ; else if ("sessionId" === s) ; else if ("resultHistorys" === s) for (var a = n.split("|"), p = 0; p < a.length; p++) a[p].split("-").map(Number); else if ("betGateInfo" === s) for (var l = n.split(","), p = 0; p < l.length; p++) {
-var u = l[p].split("-").map(Number);
-cc.log("số phần tử của betGateInfo là:", u.length);
+this.loadTaiXiu(e);
+for (var t = 0; t < e.getArgsList().length; t++) {
+var o = e.getArgsList()[t].getKey(), s = e.getArgsList()[t].getValue();
+if ("currentTableStage" === o) ; else if ("cdTimerRemaining" === o) ; else if ("sessionId" === o) ; else if ("resultHistorys" === o) for (var r = s.split("|"), i = 0; i < r.length; i++) r[i].split("-").map(Number); else if ("betGateInfo" === o) {
+var n = s.split(",");
+for (i = 0; i < n.length; i++) {
+var a = n[i].split("-").map(Number);
+cc.log("số phần tử của betGateInfo là:", a.length);
 }
 }
-t.isBindNetwork = !1;
-t.unscheduleAllCallbacks();
-} else Common.getZoneId() === Common.ZONE_ID.TREASURE && cc.director.loadScene("Treasure");
+}
+this.isBindNetwork = !1;
+this.unscheduleAllCallbacks();
+} else Common.getZoneId() === Common.ZONE_ID.TREASURE && cc.director.loadScene("Treasure", function() {
+g.instance.initDataFromLoading(Common.getEnterZone(), e);
+});
 }
 }
 });
@@ -588,6 +596,7 @@ cc._RF.pop();
 BaseScene: "BaseScene",
 NetworkManager: "NetworkManager",
 ThreeCard: "ThreeCard",
+Treasure: "Treasure",
 minipoker: "minipoker"
 } ],
 Gate: [ function(e, t, o) {
@@ -672,10 +681,10 @@ s.connectNetwork();
 this.unschedule(this.goGame);
 },
 onGameEvent: function() {
-var e = this;
-s.checkEvent(function(t) {
-cc.log("buffer:", t);
-return e.handleMessage(t);
+var t = this;
+s.checkEvent(function(e) {
+cc.log("buffer:", e);
+return t.handleMessage(e);
 });
 },
 handleMessage: function(e) {
@@ -872,7 +881,7 @@ this.loading.node.setOpacity(0);
 this.loading.node.stopAllActions();
 },
 update: function(e) {
-if (this.deltaTime > 3) {
+if (3 < this.deltaTime) {
 if (!this.enable) {
 this.enable = !0;
 this.darkSprite.node.setOpacity(150);
@@ -960,7 +969,12 @@ extends: s,
 properties: {
 prefabPopupTaiXiu: cc.Prefab
 },
-onLoad: function() {},
+onLoad: function() {
+null !== window.loginMessage && Common.showPopup(Config.name.POPUP_MESSAGE_BOX, function(e) {
+e.init(window.loginMessage, Config.COMMON_POPUP_TYPE.MESSAGE_BOX.CONFIRM_TYPE, function() {});
+e.appear();
+});
+},
 onClickSetting: function() {
 cc.log("on click setting");
 }
@@ -972,9 +986,9 @@ BaseScene: "BaseScene"
 Login: [ function(e, t, o) {
 "use strict";
 cc._RF.push(t, "f25c5yoIptMM4j8TxAUZf+1", "Login");
-var s = e("NetworkManager"), r = e("BaseScene");
+var r = e("NetworkManager"), s = e("BaseScene");
 cc.Class({
-extends: r,
+extends: s,
 properties: {
 edt_username: cc.EditBox,
 edt_password: cc.EditBox,
@@ -988,8 +1002,10 @@ popup_login: cc.Sprite,
 popup_register: cc.Sprite
 },
 onLoad: function() {
+window.jarInfoList = null;
+window.loginSuccess = !1;
 Common.setFingerprint();
-cc.log("ONLOAD LOGIN");
+this.isLoadScene = !1;
 },
 start: function() {
 if (null != this.edt_username && null != this.edt_password) {
@@ -1002,26 +1018,122 @@ this.edt_password.string = t;
 },
 ongamestatus: function(e) {
 if (null !== e.data || "undefined" != typeof e.data) {
-var t = s.parseFrom(e.data, e.data.byteLength);
-if (t.length > 0) {
+var t = r.parseFrom(e.data, e.data.byteLength);
+if (0 < t.length) {
 var o = t.shift();
 this.handleMessage(o);
 }
 }
 },
+assetConfigResponseHandler: function(e) {
+cc.log("asset config response handler:", e.toObject());
+if (e.getResponsecode()) {
+Common.assetsConfigList = [];
+e.getAssetsList().forEach(function(e) {
+var t = {};
+t.assetid = e.getAssetid();
+t.type = e.getType();
+t.provider = e.getProvider();
+t.parvalue = e.getParvalue();
+t.cashvalue = e.getCashvalue();
+t.assetname = e.getAssetname();
+t.active = e.getActive();
+t.minaccountbalance = e.getMinaccountbalance();
+t.trustedindex = e.getTrustedindex();
+Common.assetsConfigList.push(t);
+});
+}
+e.hasMessage() && "" !== e.getMessage() && Common.showToast(e.getMessage());
+},
+cardConfigResponseHandler: function(e) {
+cc.log("card config response handler:", e.toObject());
+if (e.getResponsecode()) {
+Common.providerLists = [];
+for (var t = 0; t < e.getProvidersList().length; t++) {
+var o = {}, s = e.getProvidersList()[t];
+o.providerid = s.getProviderid();
+o.providercode = s.getProvidercode();
+o.providername = s.getProvidername();
+o.productsList = [];
+for (var r = 0; r < s.getProductsList().length; r++) {
+var i = s.getProductsList()[r], n = {};
+n.productid = i.getProductid();
+n.parvalue = i.getParvalue();
+n.cashvalue = i.getCashvalue();
+n.description = i.getDescription();
+n.promotion = i.getPromotion();
+o.productsList.push(n);
+}
+Common.providerLists.push(o);
+}
+}
+e.hasMessage() && "" !== e.getMessage() && Common.showToast(e.getMessage());
+},
+smsConfigResponseHandler: function(e) {
+cc.log("sms config response handler:", e.toObject());
+if (e.getResponsecode()) {
+Common.smsConfigLists = [];
+for (var t = 0; t < e.getNumbersList().length; t++) {
+var o = {}, s = e.getNumbersList()[t];
+o.number = s.getNumber();
+o.samesyntax = s.getSamesyntax();
+o.dayquota = s.getDayquota();
+o.providersList = [];
+for (var r = 0; r < s.getProvidersList().length; r++) {
+var i = {}, n = s.getProvidersList()[r];
+i.providerid = n.getProviderid();
+i.providercode = n.getProvidercode();
+i.providername = n.getProvidername();
+i.syntaxesList = [];
+for (var a = 0; a < n.getSyntaxesList().length; a++) {
+var p = {}, l = n.getSyntaxesList()[a];
+p.syntaxid = l.getSyntaxid();
+p.syntax = l.getSyntax();
+p.parvalue = l.getParvalue();
+p.promotion = l.getPromotion();
+p.targetnumber = l.getTargetnumber();
+p.cashvalue = l.getCashvalue();
+i.syntaxesList.push(p);
+}
+o.providersList.push(i);
+}
+Common.smsConfigLists.push(o);
+}
+}
+e.hasMessage() && "" !== e.getMessage() && Common.showToast(e.getMessage());
+},
+jarResponseHandler: function(e) {
+cc.log("jar response handler:", e.toObject());
+e.getResponsecode() && 0 < e.getJarinfoList().length && (window.jarInfoList = e.getJarinfoList());
+},
 handleMessage: function(e) {
 var t = e, o = this._super(t);
 if (o) return !0;
 o = !0;
+var s = t.response;
 switch (t.message_id) {
-case s.MESSAGE_ID.LOGIN:
-r = t.response;
-this.handleLoginResponseHandler(r);
+case r.MESSAGE_ID.LOGIN:
+this.handleLoginResponseHandler(s);
 break;
 
-case s.MESSAGE_ID.REGISTER:
-var r = t.response;
-this.handleRegisterResponseHandler(r);
+case r.MESSAGE_ID.REGISTER:
+this.handleRegisterResponseHandler(s);
+break;
+
+case r.MESSAGE_ID.ASSET_CONFIG:
+this.assetConfigResponseHandler(s);
+break;
+
+case r.MESSAGE_ID.CARD_CONFIG:
+this.cardConfigResponseHandler(s);
+break;
+
+case r.MESSAGE_ID.SMS_CONFIG:
+this.smsConfigResponseHandler(s);
+break;
+
+case r.MESSAGE_ID.JAR:
+this.jarResponseHandler(s);
 break;
 
 default:
@@ -1029,11 +1141,18 @@ o = !1;
 }
 return o;
 },
+checkPurchaseList: function() {
+return null !== Common.assetsConfigList && null !== Common.smsConfigLists && null !== Common.providerLists && null !== window.jarInfoList && !0 === window.loginSuccess;
+},
 onGameEvent: function() {
-var e = this;
-s.checkEvent(function(t) {
-return e.handleMessage(t);
+var t = this;
+r.checkEvent(function(e) {
+return t.handleMessage(e);
 });
+if (this.checkPurchaseList() && !this.isLoadScene) {
+this.isLoadScene = !0;
+cc.director.loadScene("Lobby");
+}
 },
 update: function(e) {
 this.onGameEvent();
@@ -1050,54 +1169,60 @@ this.popup_register.node.runAction(cc.moveTo(.5, cc.p(e, 0)).easing(cc.easeBackO
 },
 handleRegisterResponseHandler: function(e) {
 var t = e;
-t.getResponsecode() ? s.requestLoginMessage(this.edt_username_register.string, this.edt_pass_register.string) : Common.showPopup(Config.name.POPUP_MESSAGE_BOX, function(e) {
+t.getResponsecode() ? r.requestLoginMessage(this.edt_username_register.string, this.edt_pass_register.string) : Common.showPopup(Config.name.POPUP_MESSAGE_BOX, function(e) {
 e.init(t.getMessage(), Config.COMMON_POPUP_TYPE.MESSAGE_BOX.CONFIRM_TYPE, function() {
 cc.log("on callback");
 });
 e.appear();
 });
 },
-handleLoginResponseHandler: function(e) {
-cc.log("login response handler:", e);
-if (e.getResponsecode()) {
-var t = e.getSessionid();
-cc.log("session id:", t);
-Common.setSessionId(t);
-Common.setUserInfo(e.getUserinfo().toObject());
-cc.log("get user info:", e.getUserinfo().toObject());
-cc.sys.localStorage.setItem("session_id", t);
+handleLoginResponseHandler: function(t) {
+cc.log("login response handler:", t.toObject());
+window.loginMessage = null;
+if (t.getResponsecode()) {
+var e = t.getSessionid();
+Common.setSessionId(e);
+Common.setUserInfo(t.getUserinfo().toObject());
+cc.sys.localStorage.setItem("session_id", e);
 cc.sys.localStorage.setItem("user_name", this.edt_username.string);
 cc.sys.localStorage.setItem("user_password", this.edt_password.string);
-e.hasUserinfo() && this.saveUserInfo(e.getUserinfo());
-e.hasUsersetting() && this.saveUserSetting(e.getUsersetting());
-e.hasEnableevent() && Common.setEnableEvent(e.getEnableevent());
-e.hasEnablenotification() && Common.setEnableNotification(e.getEnablenotification());
-e.hasEnabletx() && Common.setEnableTaixiu(e.getEnabletx());
-e.hasNoticetext() && Common.setNoticeText(e.getNoticetext());
-cc.director.loadScene("Lobby");
-}
-e.hasMessage() && "" !== e.getMessage() && Common.showPopup(Config.name.POPUP_MESSAGE_BOX, function(t) {
-t.init(e.getMessage(), Config.COMMON_POPUP_TYPE.MESSAGE_BOX.MESSAGEBOX_TYPE, function() {
-cc.log("on callback");
+window.loginSuccess = !0;
+t.hasUserinfo() && this.saveUserInfo(t.getUserinfo());
+t.hasUsersetting() && this.saveUserSetting(t.getUsersetting());
+t.hasEnableevent() && Common.setEnableEvent(t.getEnableevent());
+t.hasEnablenotification() && Common.setEnableNotification(t.getEnablenotification());
+t.hasEnabletx() && Common.setEnableTaixiu(t.getEnabletx());
+t.hasNoticetext() && Common.setNoticeText(t.getNoticetext());
+t.hasMessage() && "" !== t.getMessage() && (window.loginMessage = t.getMessage());
+null === Common.providerLists && r.getCardConfigRequest(Config.CARD_CONFIG_TYPE.TYPE_CASH);
+null === Common.smsConfigLists && r.requestSmsConfigMessage(1);
+null === Common.assetsConfigList && r.requestAssetsConfigMessage(1);
+r.getJarRequest(0, null);
+} else t.hasMessage() && "" !== t.getMessage() && Common.showPopup(Config.name.POPUP_MESSAGE_BOX, function(e) {
+e.init(t.getMessage(), Config.COMMON_POPUP_TYPE.MESSAGE_BOX.CONFIRM_TYPE, function() {
+cc.log("call back");
 });
-t.appear();
+e.appear();
 });
 },
 handlePingResponseHandler: function(e) {
 cc.log("ping response handler:", e);
 if (e.getResponsecode() && e.getDisconnect()) {
 Common.setSessionId("-1");
-e.hasMessage() && "" != e.getMessage() && cc.alert(e.getMessage());
-s.closeConnection();
+e.hasMessage() && "" !== e.getMessage() && Common.showToast(e.getMessage());
+r.closeConnection();
 this.scheduleOnce(this.goIntroScene, 2);
 }
 },
+goIntroScene: function(e) {
+cc.director.loadScene("Intro");
+},
 login: function() {
 var e = this.edt_username.string, t = this.edt_password.string;
-"" !== e && "" !== t ? Common.isWhiteSpaceText(e) ? Common.showToast(Common.KEYTEXT.TXT_REMIND2, 1) : e.length < 3 || e.length > 12 ? Common.showToast(Common.KEYTEXT.TXT_REMIND4, 1) : e.length < 6 || e.length > 12 ? Common.showToast(Common.KEYTEXT.TXT_REMIND5, 1) : s.requestLoginMessage(e, t) : Common.showToast(Common.KEYTEXT.BLANK_USERNAME, 1);
+"" !== e && "" !== t ? Common.isWhiteSpaceText(e) ? Common.showToast(Common.KEYTEXT.TXT_REMIND2, 1) : e.length < 3 || 12 < e.length ? Common.showToast(Common.KEYTEXT.TXT_REMIND4, 1) : e.length < 6 || 12 < e.length ? Common.showToast(Common.KEYTEXT.TXT_REMIND5, 1) : r.requestLoginMessage(e, t) : Common.showToast(Common.KEYTEXT.BLANK_USERNAME, 1);
 },
 register: function() {
-"" !== this.edt_username_register.string && "" !== this.edt_pass_register.string && "" !== this.edt_repass_register.string && "" !== this.edt_displayname_register ? this.edt_pass_register.string === this.edt_repass_register.string ? s.requestRegisterMessage(this.edt_username_register.string, this.edt_pass_register.string, this.edt_repass_register.string, this.edt_displayname_register.string, "") : Common.showToast("Mật khẩu phải giống nhau!") : Common.showToast("Dữ liệu không được để trống");
+"" !== this.edt_username_register.string && "" !== this.edt_pass_register.string && "" !== this.edt_repass_register.string && "" !== this.edt_displayname_register ? this.edt_pass_register.string === this.edt_repass_register.string ? r.requestRegisterMessage(this.edt_username_register.string, this.edt_pass_register.string, this.edt_repass_register.string, this.edt_displayname_register.string, "") : Common.showToast("Mật khẩu phải giống nhau!") : Common.showToast("Dữ liệu không được để trống");
 },
 moveToRegister: function() {
 cc.director.loadScene("Register");
@@ -1106,9 +1231,9 @@ loginFacebook: function() {
 cc.sys.platform === cc.sys.isNative || cc.sys.isBrowser && window.loginFb([ "public_profile" ], function(e, t) {
 if (0 === e) {
 cc.log("login succeeded", t);
-var o = t.userID, r = t.accessToken;
-console.log(o, r);
-null !== r ? s.getOpenIdLoginMessageFromServer(1, o + ";" + r, "", "") : this.loginFacebook();
+var o = t.userID, s = t.accessToken;
+console.log(o, s);
+null !== s ? r.getOpenIdLoginMessageFromServer(1, o + ";" + s, "", "") : this.loginFacebook();
 } else cc.log("Login failed, error #" + e + ": " + t);
 });
 },
@@ -1154,15 +1279,15 @@ pressedScale: .8,
 transDuration: .1
 },
 onLoad: function() {
-function e(e) {
-this.stopAllActions();
-this.runAction(t.scaleUpAction);
-}
 var t = this;
 t.initScale = this.node.scale;
 t.button = t.getComponent(cc.Button);
 t.scaleDownAction = cc.scaleTo(t.transDuration, t.pressedScale);
 t.scaleUpAction = cc.scaleTo(t.transDuration, t.initScale);
+function e(e) {
+this.stopAllActions();
+this.runAction(t.scaleUpAction);
+}
 this.node.on("touchstart", function(e) {
 this.stopAllActions();
 this.runAction(t.scaleDownAction);
@@ -1214,7 +1339,8 @@ var t = e.target._tag;
 s.instance.deleteMail(t);
 },
 clicked: function(e) {
-var t = this.mailId, e = this.index;
+var t = this.mailId;
+e = this.index;
 s.instance.readMail(t, e);
 }
 });
@@ -1228,7 +1354,7 @@ NetworkManager: [ function(e, t, o) {
 cc._RF.push(t, "7c7c5GfmLlNub33YLJVy9mt", "NetworkManager");
 e("initialize_pb"), e("login_pb"), e("enter_zone_pb"), e("register_pb"), e("notification_pb"), 
 e("logout_pb"), e("Loading");
-var s = {
+var b = {
 MESSAGE_ID: {
 REGISTER: 1e3,
 LOGIN: 1001,
@@ -1345,38 +1471,40 @@ EXPIRED_SESSION: 9999
 lagTime: 0,
 isLagged: !1,
 MAX_KILL_MSG: 1e4,
-URL: "ws://150.95.108.235:1280/megajackpot",
+SERVER_TEST: "139.162.63.66",
+SERVER_DEBUG: "192.168.0.200",
+URL: "ws://139.162.63.66:1280/megajackpot",
 sessionId: "",
 getSessionId: function() {
-return s.sessionId;
+return b.sessionId;
 },
 checkEvent: function(e) {
-if (null !== window.listMessage && "undefined" != typeof window.listMessage && window.listMessage.length > 0) {
+if (null !== window.listMessage && "undefined" != typeof window.listMessage && 0 < window.listMessage.length) {
 var t = window.listMessage[0];
 if (e(t)) {
-s.hideLoading();
-s.isLagged = !1;
+b.hideLoading();
+b.isLagged = !1;
 window.listMessage.shift();
 } else {
-if (!s.isLagged) {
-s.lagTime = Date.now();
-s.isLagged = !0;
+if (!b.isLagged) {
+b.lagTime = Date.now();
+b.isLagged = !0;
 }
-if (Date.now() - s.lagTime >= s.MAX_KILL_MSG) {
+if (Date.now() - b.lagTime >= b.MAX_KILL_MSG) {
 cc.log("kill message:", t.message_id);
 window.listMessage.shift();
-s.hideLoading();
-s.isLagged = !1;
+b.hideLoading();
+b.isLagged = !1;
 }
 }
 }
 },
 setSessionId: function(e) {
-s.sessionId = e;
+b.sessionId = e;
 },
-requestMessage: function(e, t, o, r, i) {
-var n = s.initData(e, t, o, r);
-s.callNetwork(n, o, i);
+requestMessage: function(e, t, o, s, r) {
+var i = b.initData(e, t, o, s);
+b.callNetwork(i, o, r);
 },
 initData: function(e, t, o, s) {
 var r = 0;
@@ -1397,204 +1525,210 @@ a.append(e, "", n);
 return a.toBuffer();
 },
 getTypeMessage: function(e, t, o) {
-var r = new Uint8Array(o.toArrayBuffer());
+var s = new Uint8Array(o.toArrayBuffer());
 e = null;
 switch (t) {
-case s.MESSAGE_ID.INITIALIZE:
-e = proto.BINInitializeResponse.deserializeBinary(r);
+case b.MESSAGE_ID.INITIALIZE:
+e = proto.BINInitializeResponse.deserializeBinary(s);
 break;
 
-case s.MESSAGE_ID.LOGIN:
-e = proto.BINLoginResponse.deserializeBinary(r);
+case b.MESSAGE_ID.LOGIN:
+e = proto.BINLoginResponse.deserializeBinary(s);
 break;
 
-case s.MESSAGE_ID.REGISTER:
-e = proto.BINRegisterResponse.deserializeBinary(r);
+case b.MESSAGE_ID.REGISTER:
+e = proto.BINRegisterResponse.deserializeBinary(s);
 break;
 
-case s.MESSAGE_ID.PING:
-e = proto.BINPingResponse.deserializeBinary(r);
+case b.MESSAGE_ID.PING:
+e = proto.BINPingResponse.deserializeBinary(s);
 break;
 
-case s.MESSAGE_ID.ENTER_ZONE:
-e = proto.BINEnterZoneResponse.deserializeBinary(r);
+case b.MESSAGE_ID.ENTER_ZONE:
+e = proto.BINEnterZoneResponse.deserializeBinary(s);
 break;
 
-case s.MESSAGE_ID.HEAD_LINE:
-e = proto.BINHeadlineResponse.deserializeBinary(r);
+case b.MESSAGE_ID.HEAD_LINE:
+e = proto.BINHeadlineResponse.deserializeBinary(s);
 break;
 
-case s.MESSAGE_ID.MATCH_END:
-e = proto.BINMatchEndResponse.deserializeBinary(r);
+case b.MESSAGE_ID.MATCH_END:
+e = proto.BINMatchEndResponse.deserializeBinary(s);
 break;
 
-case s.MESSAGE_ID.LOOK_UP_ROOM:
-e = proto.BINLookUpRoomResponse.deserializeBinary(r);
+case b.MESSAGE_ID.LOOK_UP_ROOM:
+e = proto.BINLookUpRoomResponse.deserializeBinary(s);
 break;
 
-case s.MESSAGE_ID.ENTER_ROOM:
-e = proto.BINEnterRoomResponse.deserializeBinary(r);
+case b.MESSAGE_ID.ENTER_ROOM:
+e = proto.BINEnterRoomResponse.deserializeBinary(s);
 break;
 
-case s.MESSAGE_ID.TURN:
-e = proto.BINTurnResponse.deserializeBinary(r);
+case b.MESSAGE_ID.TURN:
+e = proto.BINTurnResponse.deserializeBinary(s);
 break;
 
-case s.MESSAGE_ID.UPDATE_MONEY:
-e = proto.BINUpdateMoneyResponse.deserializeBinary(r);
+case b.MESSAGE_ID.UPDATE_MONEY:
+e = proto.BINUpdateMoneyResponse.deserializeBinary(s);
 break;
 
-case s.MESSAGE_ID.EXIT_ZONE:
-e = proto.BINExitZoneResponse.deserializeBinary(r);
+case b.MESSAGE_ID.EXIT_ZONE:
+e = proto.BINExitZoneResponse.deserializeBinary(s);
 break;
 
-case s.MESSAGE_ID.EXIT_ROOM:
-e = proto.BINExitRoomResponse.deserializeBinary(r);
+case b.MESSAGE_ID.EXIT_ROOM:
+e = proto.BINExitRoomResponse.deserializeBinary(s);
 break;
 
-case s.MESSAGE_ID.JAR:
-e = proto.BINJarResponse.deserializeBinary(r);
+case b.MESSAGE_ID.JAR:
+e = proto.BINJarResponse.deserializeBinary(s);
 break;
 
-case s.MESSAGE_ID.LOGOUT:
-e = proto.BINLogoutResponse.deserializeBinary(r);
+case b.MESSAGE_ID.LOGOUT:
+e = proto.BINLogoutResponse.deserializeBinary(s);
 break;
 
-case s.MESSAGE_ID.LOOK_UP_GAME_HISTORY:
-e = proto.BINLookUpGameHistoryResponse.deserializeBinary(r);
+case b.MESSAGE_ID.LOOK_UP_GAME_HISTORY:
+e = proto.BINLookUpGameHistoryResponse.deserializeBinary(s);
 break;
 
-case s.MESSAGE_ID.CARD_CONFIG:
-e = proto.BINCardConfigResponse.deserializeBinary(r);
+case b.MESSAGE_ID.CARD_CONFIG:
+e = proto.BINCardConfigResponse.deserializeBinary(s);
 break;
 
-case s.MESSAGE_ID.START_MATCH:
-e = proto.BINStartMatchResponse.deserializeBinary(r);
+case b.MESSAGE_ID.START_MATCH:
+e = proto.BINStartMatchResponse.deserializeBinary(s);
 break;
 
-case s.MESSAGE_ID.MATCH_BEGIN:
-e = proto.BINMatchEndResponse.deserializeBinary(r);
+case b.MESSAGE_ID.MATCH_BEGIN:
+e = proto.BINMatchBeginResponse.deserializeBinary(s);
 break;
 
-case s.MESSAGE_ID.BET:
-e = proto.BINBetResponse.deserializeBinary(r);
+case b.MESSAGE_ID.BET:
+e = proto.BINBetResponse.deserializeBinary(s);
 break;
 
-case s.MESSAGE_ID.INSTANT_MESSAGE:
-e = proto.BINInstantMessageResponse.deserializeBinary(r);
+case b.MESSAGE_ID.INSTANT_MESSAGE:
+e = proto.BINInstantMessageResponse.deserializeBinary(s);
 break;
 
-case s.MESSAGE_ID.EMERGENCY_NOTIFICATION:
-e = proto.BINEmergencyNotificationResponse.deserializeBinary(r);
+case b.MESSAGE_ID.EMERGENCY_NOTIFICATION:
+e = proto.BINEmergencyNotificationResponse.deserializeBinary(s);
 break;
 
-case s.MESSAGE_ID.VIEW_USER_INFO:
-e = proto.BINViewUserInfoResponse.deserializeBinary(r);
+case b.MESSAGE_ID.VIEW_USER_INFO:
+e = proto.BINViewUserInfoResponse.deserializeBinary(s);
 break;
 
-case s.MESSAGE_ID.FILTER_MAIL:
-e = proto.BINFilterMailResponse.deserializeBinary(r);
+case b.MESSAGE_ID.FILTER_MAIL:
+e = proto.BINFilterMailResponse.deserializeBinary(s);
 break;
 
-case s.MESSAGE_ID.SEND_MAIL:
-e = proto.BINSendMailResponse.deserializeBinary(r);
+case b.MESSAGE_ID.SEND_MAIL:
+e = proto.BINSendMailResponse.deserializeBinary(s);
 break;
 
-case s.MESSAGE_ID.DELETE_MAIL:
-e = proto.BINDeleteMailResponse.deserializeBinary(r);
+case b.MESSAGE_ID.DELETE_MAIL:
+e = proto.BINDeleteMailResponse.deserializeBinary(s);
 break;
 
-case s.MESSAGE_ID.LOOK_UP_MONEY_HISTORY:
-e = proto.BINLookUpMoneyHistoryResponse.deserializeBinary(r);
+case b.MESSAGE_ID.LOOK_UP_MONEY_HISTORY:
+e = proto.BINLookUpMoneyHistoryResponse.deserializeBinary(s);
 break;
 
-case s.MESSAGE_ID.REDEEM_GIFT_CODE_HISTORY:
-e = proto.BINRedeemGiftCodeHistoryResponse.deserializeBinary(r);
+case b.MESSAGE_ID.REDEEM_GIFT_CODE_HISTORY:
+e = proto.BINRedeemGiftCodeHistoryResponse.deserializeBinary(s);
 break;
 
-case s.MESSAGE_ID.REDEEM_GIFT_CODE:
-e = proto.BINRedeemGiftCodeResponse.deserializeBinary(r);
+case b.MESSAGE_ID.REDEEM_GIFT_CODE:
+e = proto.BINRedeemGiftCodeResponse.deserializeBinary(s);
 break;
 
-case s.MESSAGE_ID.UPDATE_USER_INFO:
-e = proto.BINUpdateUserInfoResponse.deserializeBinary(r);
+case b.MESSAGE_ID.UPDATE_USER_INFO:
+e = proto.BINUpdateUserInfoResponse.deserializeBinary(s);
 break;
 
-case s.MESSAGE_ID.SMS_CONFIG:
-e = proto.BINSmsConfigResponse.deserializeBinary(r);
+case b.MESSAGE_ID.SMS_CONFIG:
+e = proto.BINSmsConfigResponse.deserializeBinary(s);
 break;
 
-case s.MESSAGE_ID.READED_MAIL:
-e = proto.BINReadedMailResponse.deserializeBinary(r);
+case b.MESSAGE_ID.READED_MAIL:
+e = proto.BINReadedMailResponse.deserializeBinary(s);
 break;
 
-case s.MESSAGE_ID.PURCHASE_MONEY:
-e = proto.BINPurchaseMoneyResponse.deserializeBinary(r);
+case b.MESSAGE_ID.PURCHASE_MONEY:
+e = proto.BINPurchaseMoneyResponse.deserializeBinary(s);
 break;
 
-case s.MESSAGE_ID.CLAIM_ATTACH_ITEM:
-e = proto.BINClaimAttachItemResponse.deserializeBinary(r);
+case b.MESSAGE_ID.CLAIM_ATTACH_ITEM:
+e = proto.BINClaimAttachItemResponse.deserializeBinary(s);
+break;
+
+case b.MESSAGE_ID.ASSET_CONFIG:
+e = proto.BINAssetConfigResponse.deserializeBinary(s);
 }
 null === e && cc.log("message error");
 return e;
 },
 parseFrom: function(e, t) {
-var o = [], r = new ByteBuffer(t);
-r.append(e);
-for (var i = t; i > 0; ) {
-var n = [], a = 0, p = r.readInt32(a);
-a += 4;
-var l = r.readInt8(a);
-a += 1;
-var u = p - 1;
-i -= p + 4;
+var o = [], s = new ByteBuffer(t);
+s.append(e);
+for (var r = t; 0 < r; ) {
+var i = [], n = 0, a = s.readInt32(n);
+n += 4;
+var p = s.readInt8(n);
+n += 1;
+var l = a - 1;
+r -= a + 4;
 var g = 0;
-r = r.copy(a);
-if (1 === l) {
-new Uint8Array(r), r.view;
-var d = cc.unzipBase64AsArray(r.toString("base64")), c = 0, h = new ByteBuffer(d.length);
-h.append(d, "", 0);
-var f = h.readInt16(c);
+s = s.copy(n);
+if (1 === p) {
+new Uint8Array(s), s.view;
+var u = cc.unzipBase64AsArray(s.toString("base64")), c = 0, d = new ByteBuffer(u.length);
+d.append(u, "", 0);
+var h = d.readInt16(c);
 c += 2;
-var y = h.readInt16(c);
+var f = d.readInt16(c);
 c += 2;
-u -= f + 2;
-var B = h.copy(c, f + c - 2);
-if (0 !== (g = s.getTypeMessage(g, y, B))) {
-u -= f + 2;
-for (var I = {
-message_id: y,
+l -= h + 2;
+var y = d.copy(c, h + c - 2);
+if (0 !== (g = b.getTypeMessage(g, f, y))) {
+l -= h + 2;
+for (var B = {
+message_id: f,
 response: g
-}, M = 0; M < n.length; M++) (_ = n[M]).message_id === y && n.splice(M, 1);
-n.push(I);
-o.push(I);
-} else cc.error("unknown message with message id:", y);
-} else for (;u > 0; ) {
-var R = 0, N = r.readInt16(R);
-R += 2;
-var m = r.readInt16(R);
-R += 2;
-var F = r.copy(R, N + R - 2);
-if (0 != (g = s.getTypeMessage(g, m, F))) {
-u -= N + 2;
-r = r.copy(N + R - 2);
-for (var b = {
-message_id: m,
-response: g
-}, M = 0; M < n.length; M++) {
-var _ = n[M];
-_.message_id == m && n.splice(M, 1);
+}, I = 0; I < i.length; I++) {
+i[I].message_id === f && i.splice(I, 1);
 }
-n.push(b);
-o.push(b);
+i.push(B);
+o.push(B);
+} else cc.error("unknown message with message id:", f);
+} else for (;0 < l; ) {
+var M = 0, R = s.readInt16(M);
+M += 2;
+var N = s.readInt16(M);
+M += 2;
+var m = s.copy(M, R + M - 2);
+if (0 != (g = b.getTypeMessage(g, N, m))) {
+l -= R + 2;
+s = s.copy(R + M - 2);
+var F = {
+message_id: N,
+response: g
+};
+for (I = 0; I < i.length; I++) {
+i[I].message_id == N && i.splice(I, 1);
+}
+i.push(F);
+o.push(F);
 } else {
-cc.error("unknown message with message id:", m);
-u -= N + 2;
-r = r.copy(N + R - 2);
+cc.error("unknown message with message id:", N);
+l -= R + 2;
+s = s.copy(R + M - 2);
 }
 }
 }
-i > 0 && cc.log("NetworkManager: error packet length = 0");
+0 < r && cc.log("NetworkManager: error packet length = 0");
 return o;
 },
 initSmsConfigMessage: function(e) {
@@ -1603,11 +1737,20 @@ t.setType(e);
 return t;
 },
 requestSmsConfigMessage: function(e) {
-var t = s.initSmsConfigMessage(e);
-this.requestMessage(t.serializeBinary(), Common.getOS(), s.MESSAGE_ID.SMS_CONFIG, Common.getSessionId());
+var t = b.initSmsConfigMessage(e);
+this.requestMessage(t.serializeBinary(), Common.getOS(), b.MESSAGE_ID.SMS_CONFIG, Common.getSessionId());
 },
 initLogoutMessage: function() {},
 requestLogoutMessage: function() {},
+initAssetsConfigMessage: function(e) {
+var t = new proto.BINAssetConfigRequest();
+t.setType(e);
+return t;
+},
+requestAssetsConfigMessage: function(e) {
+var t = b.initAssetsConfigMessage(e);
+this.requestMessage(t.serializeBinary(), Common.getOS(), b.MESSAGE_ID.ASSET_CONFIG, Common.getSessionId());
+},
 initPurchaseMoneyMessage: function(e, t, o, s, r) {
 var i = new proto.BINPurchaseMoneyRequest();
 i.setProvider(e);
@@ -1617,9 +1760,9 @@ i.setSecuritykey(s);
 i.setCaptcha(r);
 return i;
 },
-requestPurchaseMoneyMessage: function(e, t, o, r, i) {
-var n = s.initPurchaseMoneyMessage(e, t, o, r, i);
-this.requestMessage(n.serializeBinary(), Common.getOS(), s.MESSAGE_ID.PURCHASE_MONEY, Common.getSessionId());
+requestPurchaseMoneyMessage: function(e, t, o, s, r) {
+var i = b.initPurchaseMoneyMessage(e, t, o, s, r);
+this.requestMessage(i.serializeBinary(), Common.getOS(), b.MESSAGE_ID.PURCHASE_MONEY, Common.getSessionId());
 },
 initInitializeMessage: function(e, t, o, s, r, i, n, a, p) {
 var l = new proto.BINInitializeRequest();
@@ -1634,9 +1777,9 @@ l.setLiteversion(a);
 l.setReferencecode(p);
 return l;
 },
-requestInitializeMessage: function(e, t, o, r, i, n, a, p, l) {
-var u = s.initInitializeMessage(e, t, o, r, i, n, a, p, l);
-this.requestMessage(u.serializeBinary(), Common.getOS(), s.MESSAGE_ID.INITIALIZE, "");
+requestInitializeMessage: function(e, t, o, s, r, i, n, a, p) {
+var l = b.initInitializeMessage(e, t, o, s, r, i, n, a, p);
+this.requestMessage(l.serializeBinary(), Common.getOS(), b.MESSAGE_ID.INITIALIZE, "");
 },
 initLoginMessage: function(e, t) {
 var o = new proto.BINLoginRequest();
@@ -1645,8 +1788,8 @@ o.setPassword(t);
 return o;
 },
 requestLoginMessage: function(e, t) {
-var o = s.initInitializeMessage(e, t);
-this.requestMessage(o.serializeBinary(), Common.getOS(), s.MESSAGE_ID.LOGIN, "");
+var o = b.initInitializeMessage(e, t);
+this.requestMessage(o.serializeBinary(), Common.getOS(), b.MESSAGE_ID.LOGIN, "");
 },
 initPingMessage: function(e) {
 var t = new proto.BINPingRequest();
@@ -1654,8 +1797,8 @@ t.setDisconecttime(e);
 return t;
 },
 requestPingMessage: function(e) {
-var t = s.initPingMessage(e);
-this.requestMessage(t.serializeBinary(), Common.getOS(), s.MESSAGE_ID.PING, "");
+var t = b.initPingMessage(e);
+this.requestMessage(t.serializeBinary(), Common.getOS(), b.MESSAGE_ID.PING, "");
 },
 initEnterZoneMessage: function(e) {
 var t = new proto.BINEnterZoneRequest();
@@ -1669,25 +1812,25 @@ return t;
 },
 requestExitRoomMessage: function(e) {
 var t = this.initExitRoomMessage(e);
-this.requestMessage(t.serializeBinary(), Common.getOS(), s.MESSAGE_ID.EXIT_ROOM, Common.getSessionId());
+this.requestMessage(t.serializeBinary(), Common.getOS(), b.MESSAGE_ID.EXIT_ROOM, Common.getSessionId());
 },
 requestEnterZoneMessage: function(e) {
-var t = s.initEnterZoneMessage(e);
+var t = b.initEnterZoneMessage(e);
 cc.log("message = ", t);
-this.requestMessage(t.serializeBinary(), Common.getOS(), s.MESSAGE_ID.ENTER_ZONE, Common.getSessionId());
+this.requestMessage(t.serializeBinary(), Common.getOS(), b.MESSAGE_ID.ENTER_ZONE, Common.getSessionId());
 },
 requestExitZoneMessage: function(e) {
 var t = this.initExitZoneMessage(e);
-this.requestMessage(t.serializeBinary(), Common.getOS(), s.MESSAGE_ID.EXIT_ZONE, Common.getSessionId());
+this.requestMessage(t.serializeBinary(), Common.getOS(), b.MESSAGE_ID.EXIT_ZONE, Common.getSessionId());
 },
 initExitZoneMessage: function(e) {
 var t = new proto.BINExitZoneRequest();
 t.setZoneid(e);
 return t;
 },
-requestRegisterMessage: function(e, t, o, r, i) {
-var n = s.initRegisterMessage(e, t, o, r, i);
-this.requestMessage(n.serializeBinary(), Common.getOS(), s.MESSAGE_ID.REGISTER, "");
+requestRegisterMessage: function(e, t, o, s, r) {
+var i = b.initRegisterMessage(e, t, o, s, r);
+this.requestMessage(i.serializeBinary(), Common.getOS(), b.MESSAGE_ID.REGISTER, "");
 },
 initRegisterMessage: function(e, t, o, s, r) {
 var i = new proto.BINRegisterRequest();
@@ -1709,13 +1852,13 @@ a.setAsc(i);
 a.setRoomgroup(n);
 return a;
 },
-getLookUpRoomRequest: function(e, t, o, r, i, n, a) {
-var p = this.initLookUpRoomRequest(e, t, o, r, i, n, a);
-this.requestMessage(p.serializeBinary(), Common.getOS(), s.MESSAGE_ID.LOOK_UP_ROOM, Common.getSessionId());
+getLookUpRoomRequest: function(e, t, o, s, r, i, n) {
+var a = this.initLookUpRoomRequest(e, t, o, s, r, i, n);
+this.requestMessage(a.serializeBinary(), Common.getOS(), b.MESSAGE_ID.LOOK_UP_ROOM, Common.getSessionId());
 },
 getEnterRoomMessageFromServer: function(e, t) {
 var o = this.initEnterRoomMessage(e, t);
-this.requestMessage(o.serializeBinary(), Common.getOS(), s.MESSAGE_ID.ENTER_ROOM, Common.getSessionId());
+this.requestMessage(o.serializeBinary(), Common.getOS(), b.MESSAGE_ID.ENTER_ROOM, Common.getSessionId());
 },
 initEnterRoomMessage: function(e, t) {
 var o = new proto.BINEnterRoomRequest();
@@ -1733,11 +1876,11 @@ return o;
 },
 getTurnMessageFromServer: function(e, t) {
 var o = this.initTurnMessage(e, t);
-this.requestMessage(o.serializeBinary(), Common.getOS(), s.MESSAGE_ID.TURN, Common.getSessionId());
+this.requestMessage(o.serializeBinary(), Common.getOS(), b.MESSAGE_ID.TURN, Common.getSessionId());
 },
 getJarRequest: function(e, t, o) {
-var r = this.initJarRequest(e, t);
-this.requestMessage(r.serializeBinary(), Common.getOS(), s.MESSAGE_ID.JAR, Common.getSessionId(), o);
+var s = this.initJarRequest(e, t);
+this.requestMessage(s.serializeBinary(), Common.getOS(), b.MESSAGE_ID.JAR, Common.getSessionId(), o);
 },
 initJarRequest: function(e, t) {
 var o = new proto.BINJarRequest();
@@ -1745,31 +1888,31 @@ o.setZoneid(e);
 null !== t && o.setJartype(t);
 return o;
 },
-getLookUpGameHistoryRequest: function(e, t, o, r, i) {
-var n = new proto.BINLookUpGameHistoryRequest();
-n.setFirstresult(e);
-n.setMaxresult(t);
-n.setArgsList(o);
-if (0 !== r) {
-n.setOrderbyfield(r);
-n.setAsc(i);
+getLookUpGameHistoryRequest: function(e, t, o, s, r) {
+var i = new proto.BINLookUpGameHistoryRequest();
+i.setFirstresult(e);
+i.setMaxresult(t);
+i.setArgsList(o);
+if (0 !== s) {
+i.setOrderbyfield(s);
+i.setAsc(r);
 }
 cc.log("zone =", Common.getZoneId());
-cc.log("request history =", n);
-this.requestMessage(n.serializeBinary(), Common.getOS(), s.MESSAGE_ID.LOOK_UP_GAME_HISTORY, Common.getSessionId());
+cc.log("request history =", i);
+this.requestMessage(i.serializeBinary(), Common.getOS(), b.MESSAGE_ID.LOOK_UP_GAME_HISTORY, Common.getSessionId());
 },
 getCardConfigRequest: function(e) {
 var t = this.initCardConfigRequest(e);
-this.requestMessage(t.serializeBinary(), Common.getOS(), s.MESSAGE_ID.CARD_CONFIG, Common.getSessionId());
+this.requestMessage(t.serializeBinary(), Common.getOS(), b.MESSAGE_ID.CARD_CONFIG, Common.getSessionId());
 },
 initCardConfigRequest: function(e) {
 var t = new proto.BINCardConfigRequest();
 t.setType(e);
 return t;
 },
-getOpenIdLoginMessageFromServer: function(e, t, o, r) {
-var i = this.initOpenIdLoginMessage(e, t, o, r);
-this.callNetwork(this.initData(i.serializeBinary(), Common.getOS(), s.MESSAGE_ID.OPEN_ID_LOGIN, ""));
+getOpenIdLoginMessageFromServer: function(e, t, o, s) {
+var r = this.initOpenIdLoginMessage(e, t, o, s);
+this.callNetwork(this.initData(r.serializeBinary(), Common.getOS(), b.MESSAGE_ID.OPEN_ID_LOGIN, ""));
 },
 initOpenIdLoginMessage: function(e, t, o, s) {
 var r = new proto.BINOpenIdLoginRequest();
@@ -1779,29 +1922,29 @@ r.setFirstname(o);
 r.setLastname(s);
 return r;
 },
-getFilterMailFromServer: function(e, t, o, r) {
-var i = new proto.BINFilterMailRequest();
-i.setFirstresult(e);
-i.setMaxresult(t);
-i.setLastrequesttime(o);
-i.setSentmail(r);
-this.callNetwork(this.initData(i.serializeBinary(), Common.getOS(), s.MESSAGE_ID.FILTER_MAIL, Common.getSessionId()));
+getFilterMailFromServer: function(e, t, o, s) {
+var r = new proto.BINFilterMailRequest();
+r.setFirstresult(e);
+r.setMaxresult(t);
+r.setLastrequesttime(o);
+r.setSentmail(s);
+this.callNetwork(this.initData(r.serializeBinary(), Common.getOS(), b.MESSAGE_ID.FILTER_MAIL, Common.getSessionId()));
 },
 getViewUserInfoFromServer: function(e) {
 var t = new proto.BINViewUserInfoRequest();
 t.setTargetuserid(e);
-this.callNetwork(this.initData(t.serializeBinary(), Common.getOS(), s.MESSAGE_ID.VIEW_USER_INFO, Common.getSessionId()));
+this.callNetwork(this.initData(t.serializeBinary(), Common.getOS(), b.MESSAGE_ID.VIEW_USER_INFO, Common.getSessionId()));
 },
 sendBet: function(e, t, o) {
-var r = new proto.BINBetRequest();
-r.setRoomindex(e);
-r.setBetmoney(t);
-r.setBettype(o);
-this.callNetwork(this.initData(r.serializeBinary(), Common.getOS(), s.MESSAGE_ID.BET, Common.getSessionId()));
+var s = new proto.BINBetRequest();
+s.setRoomindex(e);
+s.setBetmoney(t);
+s.setBettype(o);
+this.callNetwork(this.initData(s.serializeBinary(), Common.getOS(), b.MESSAGE_ID.BET, Common.getSessionId()));
 },
 getLookupMoneyHistoryMessage: function(e, t, o) {
-var r = this.initLookupMoneyHistoryMessage(e, t, o);
-this.callNetwork(this.initData(r.serializeBinary(), Common.getOS(), s.MESSAGE_ID.LOOK_UP_MONEY_HISTORY, Common.getSessionId()));
+var s = this.initLookupMoneyHistoryMessage(e, t, o);
+this.callNetwork(this.initData(s.serializeBinary(), Common.getOS(), b.MESSAGE_ID.LOOK_UP_MONEY_HISTORY, Common.getSessionId()));
 },
 initLookupMoneyHistoryMessage: function(e, t, o) {
 var s = new proto.BINLookUpMoneyHistoryRequest();
@@ -1812,44 +1955,44 @@ return s;
 },
 getUserVerifyConfigRequest: function(e) {
 var t = this.initUserVerifyConfigRequest(e);
-this.callNetwork(this.initData(t.serializeBinary(), Common.getOS(), s.MESSAGE_ID.USER_VERIFY_CONFIG, Common.getSessionId()));
+this.callNetwork(this.initData(t.serializeBinary(), Common.getOS(), b.MESSAGE_ID.USER_VERIFY_CONFIG, Common.getSessionId()));
 },
 initUserVerifyConfigRequest: function(e) {
 var t = new proto.BINUserVerifyConfigRequest();
 t.setType(e);
 return t;
 },
-sendMail: function(e, t, o, r) {
-var i = new proto.BINSendMailRequest();
-i.setRecipientuserid(e);
-i.setTitle(t);
-i.setBody(o);
-i.setParentid(r);
-this.callNetwork(this.initData(i.serializeBinary(), Common.getOS(), s.MESSAGE_ID.SEND_MAIL, Common.getSessionId()));
+sendMail: function(e, t, o, s) {
+var r = new proto.BINSendMailRequest();
+r.setRecipientuserid(e);
+r.setTitle(t);
+r.setBody(o);
+r.setParentid(s);
+this.callNetwork(this.initData(r.serializeBinary(), Common.getOS(), b.MESSAGE_ID.SEND_MAIL, Common.getSessionId()));
 },
 deleteMail: function(e) {
 cc.log("ids =", e);
-if (e.length > 0) {
+if (0 < e.length) {
 for (var t = new proto.BINDeleteMailRequest(), o = 0; o < e.length; o++) t.addSelectedmailids(e[o]);
-this.callNetwork(this.initData(t.serializeBinary(), Common.getOS(), s.MESSAGE_ID.DELETE_MAIL, Common.getSessionId()));
+this.callNetwork(this.initData(t.serializeBinary(), Common.getOS(), b.MESSAGE_ID.DELETE_MAIL, Common.getSessionId()));
 }
 },
 readMail: function(e, t) {
 var o = new proto.BINReadedMailRequest();
 o.setReadedmailid(e);
 o.setGetcontent(t);
-this.callNetwork(this.initData(o.serializeBinary(), Common.getOS(), s.MESSAGE_ID.READED_MAIL, Common.getSessionId()));
+this.callNetwork(this.initData(o.serializeBinary(), Common.getOS(), b.MESSAGE_ID.READED_MAIL, Common.getSessionId()));
 },
 claimAttachMail: function(e, t) {
 var o = new proto.BINClaimAttachItemRequest();
 o.setMailid(e);
 o.setCaptchaanswers(t);
 cc.log("request =", o);
-this.callNetwork(this.initData(o.serializeBinary(), Common.getOS(), s.MESSAGE_ID.CLAIM_ATTACH_ITEM, Common.getSessionId()));
+this.callNetwork(this.initData(o.serializeBinary(), Common.getOS(), b.MESSAGE_ID.CLAIM_ATTACH_ITEM, Common.getSessionId()));
 },
 getRedeemGiftCodeHistoryFromServer: function(e, t) {
 var o = this.initRedeemGiftCodeHistoryMessage(e, t);
-this.callNetwork(this.initData(o.serializeBinary(), Common.getOS(), s.MESSAGE_ID.REDEEM_GIFT_CODE_HISTORY, Common.getSessionId()));
+this.callNetwork(this.initData(o.serializeBinary(), Common.getOS(), b.MESSAGE_ID.REDEEM_GIFT_CODE_HISTORY, Common.getSessionId()));
 },
 initRedeemGiftCodeHistoryMessage: function(e, t) {
 var o = new proto.BINRedeemGiftCodeHistoryRequest();
@@ -1859,20 +2002,20 @@ return o;
 },
 getRedeemGiftCodeFromServer: function(e) {
 var t = this.initRedeemGiftCodeMessage(e);
-this.callNetwork(this.initData(t.serializeBinary(), Common.getOS(), s.MESSAGE_ID.REDEEM_GIFT_CODE, Common.getSessionId()));
+this.callNetwork(this.initData(t.serializeBinary(), Common.getOS(), b.MESSAGE_ID.REDEEM_GIFT_CODE, Common.getSessionId()));
 },
 initRedeemGiftCodeMessage: function(e) {
 var t = new proto.BINRedeemGiftCodeRequest();
 t.setGiftcode(e);
 return t;
 },
-getInstantMessage: function(e, t, o, r, i) {
-var n = this.initInstantMessage(e, t, o, r, i);
-this.callNetwork(this.initData(n.serializeBinary(), Common.getOS(), s.MESSAGE_ID.INSTANT_MESSAGE, Common.getSessionId()));
+getInstantMessage: function(e, t, o, s, r) {
+var i = this.initInstantMessage(e, t, o, s, r);
+this.callNetwork(this.initData(i.serializeBinary(), Common.getOS(), b.MESSAGE_ID.INSTANT_MESSAGE, Common.getSessionId()));
 },
 getUpdateUserInfoMessageFromServer: function(e, t) {
 var o = this.initUpdateUserInfoMessage(e, t);
-this.callNetwork(this.initData(o.serializeBinary(), Common.getOS(), s.MESSAGE_ID.UPDATE_USER_INFO, Common.getSessionId()));
+this.callNetwork(this.initData(o.serializeBinary(), Common.getOS(), b.MESSAGE_ID.UPDATE_USER_INFO, Common.getSessionId()));
 },
 initUpdateUserInfoMessage: function(e, t) {
 cc.log("user_infos =", e);
@@ -1884,7 +2027,7 @@ s.setConfirmvalue(e.getConfirmvalue());
 return o;
 },
 initInstantMessage: function(e, t, o, s, r) {
-if (e > 0 && e < 4) {
+if (0 < e && e < 4) {
 var i = new proto.BINInstantMessageRequest();
 i.setScope(e);
 null !== r && i.setTextemoticonid(r);
@@ -1900,15 +2043,15 @@ return null;
 },
 connectNetwork: function() {
 if (null === window.ws || "undefined" == typeof window.ws || window.ws.readyState === WebSocket.CLOSED) {
-window.ws = new WebSocket(s.URL);
+window.ws = new WebSocket(b.URL);
 window.listMessage = [];
 window.ws.binaryType = "arraybuffer";
 window.ws.onopen = function(e) {
 console.log("on web socket");
-s.requestInitializeMessage(Common.getCp(), Common.getVersionCode(), Common.getFingerprint(), Common.getDeviceInfo(), "vn", "vi", Common.getPackageName(), !1, "");
+b.requestInitializeMessage(Common.getCp(), Common.getVersionCode(), Common.getFingerprint(), Common.getDeviceInfo(), "vn", "vi", Common.getPackageName(), !1, "");
 setTimeout(function() {
 window.myInterval = setInterval(function() {
-s.requestPingMessage(0);
+b.requestPingMessage(0);
 }, 15e3);
 }, 1);
 };
@@ -1923,17 +2066,16 @@ closeConnection: function() {
 window.ws.readyState === WebSocket.OPEN && window.ws.close();
 },
 onGameStatus: function(e) {
-if (null !== e.data || "undefined" != typeof e.data) for (var t = s.parseFrom(e.data, e.data.byteLength), o = 0; o < t.length; o++) {
+if (null !== e.data || "undefined" != typeof e.data) for (var t = b.parseFrom(e.data, e.data.byteLength), o = 0; o < t.length; o++) {
 cc.log(" message id:", t[o].message_id);
 1202 === t[o].message_id && cc.log("done");
 window.listMessage.push(t[o]);
 }
 },
 callNetwork: function(e, t, o) {
-var r = this;
 "undefined" == typeof o && null !== o && (o = !1);
 if (null === window.ws || "undefined" == typeof window.ws || window.ws.readyState === WebSocket.CLOSED) {
-window.ws = new WebSocket(s.URL);
+window.ws = new WebSocket(b.URL);
 window.listMessage = [];
 window.ws.binaryType = "arraybuffer";
 window.ws.onopen = function() {
@@ -1947,29 +2089,33 @@ console.log("Websocket instance was closed");
 };
 } else if (window.ws.readyState === WebSocket.OPEN) {
 cc.log("is loading:", o);
-"undefined" != typeof t && t !== s.MESSAGE_ID.INITIALIZE && t !== s.MESSAGE_ID.PING && t !== s.MESSAGE_ID.JAR && t !== s.MESSAGE_ID.CHANGE_HOST && t !== s.MESSAGE_ID.TURN && t !== s.MESSAGE_ID.INSTANT_MESSAGE && t !== s.MESSAGE_ID.CARD_CONFIG && t !== s.MESSAGE_ID.LOCK_UP_MONEY_HISTORY && t !== s.MESSAGE_ID.SMS_CONFIG && t !== s.MESSAGE_ID.FILTER_FRIEND && t !== s.MESSAGE_ID.BET && t !== s.MESSAGE_ID.EXTRA_BET && t !== s.MESSAGE_ID.ZONE_STATUS && t !== s.MESSAGE_ID.FILTER_ROOM && t !== s.MESSAGE_ID.LOOK_UP_GAME_HISTORY && r.showLoading();
+"undefined" != typeof t && t !== b.MESSAGE_ID.INITIALIZE && t !== b.MESSAGE_ID.PING && t !== b.MESSAGE_ID.JAR && t !== b.MESSAGE_ID.CHANGE_HOST && t !== b.MESSAGE_ID.TURN && t !== b.MESSAGE_ID.INSTANT_MESSAGE && t !== b.MESSAGE_ID.CARD_CONFIG && t !== b.MESSAGE_ID.LOCK_UP_MONEY_HISTORY && t !== b.MESSAGE_ID.SMS_CONFIG && t !== b.MESSAGE_ID.ASSET_CONFIG && t !== b.MESSAGE_ID.FILTER_FRIEND && t !== b.MESSAGE_ID.BET && t !== b.MESSAGE_ID.EXTRA_BET && t !== b.MESSAGE_ID.ZONE_STATUS && t !== b.MESSAGE_ID.FILTER_ROOM && t !== b.MESSAGE_ID.LOOK_UP_GAME_HISTORY && this.showLoading();
 window.ws.send(e);
 }
 },
 showLoading: function() {
-var e = cc.director.getScene();
-cc.isValid(e) && (cc.isValid(e.getChildByName("Loading")) ? e.getChildByName("Loading").getComponent("Loading").show() : cc.loader.loadRes("prefabs/Loading", function(t, o) {
-if (!t) {
-var s = cc.instantiate(o);
-if (cc.isValid(s)) {
-s.x = Common.width / 2;
-s.y = Common.height / 2;
-e.addChild(s, Config.index.LOADING);
+var s = cc.director.getScene();
+if (cc.isValid(s)) if (cc.isValid(s.getChildByName("Loading"))) {
+s.getChildByName("Loading").getComponent("Loading").show();
+} else cc.loader.loadRes("prefabs/Loading", function(e, t) {
+if (!e) {
+var o = cc.instantiate(t);
+if (cc.isValid(o)) {
+o.x = Common.width / 2;
+o.y = Common.height / 2;
+s.addChild(o, Config.index.LOADING);
 }
 }
-}));
+});
 },
 hideLoading: function() {
 var e = cc.director.getScene();
-cc.isValid(e) && cc.isValid(e.getChildByName("Loading")) && e.getChildByName("Loading").getComponent("Loading").stop();
+if (cc.isValid(e) && cc.isValid(e.getChildByName("Loading"))) {
+e.getChildByName("Loading").getComponent("Loading").stop();
+}
 }
 };
-t.exports = s;
+t.exports = b;
 cc._RF.pop();
 }, {
 Loading: "Loading",
@@ -1979,6 +2125,80 @@ login_pb: "login_pb",
 logout_pb: "logout_pb",
 notification_pb: "notification_pb",
 register_pb: "register_pb"
+} ],
+NodeDoiThuong: [ function(e, t, o) {
+"use strict";
+cc._RF.push(t, "13c263IhZhMMYy8PD4qTiCo", "NodeDoiThuong");
+var s = e("NetworkManager");
+cc.Class({
+extends: cc.Component,
+properties: {
+ui_left: cc.Node,
+tabLeftPrefab: cc.Prefab,
+scroll_view: cc.ScrollView,
+doithuong_itemPrefab: cc.Prefab
+},
+start: function() {},
+onLoad: function() {
+this.tabString = [];
+if (0 < Common.assetsConfigList.length) {
+Common.assetsConfigList.forEach(function(e) {
+this.tabString.includes(e.provider) || this.tabString.push(e.provider);
+}.bind(this));
+var e = cc.instantiate(this.tabLeftPrefab);
+e.getComponent("UITabLeft").setTab(this.tabString, 1, function(e) {
+this.onLeftEvent(e - 1);
+}.bind(this));
+this.ui_left.addChild(e);
+} else Common.showToast("Kênh đổi thưởng đang bảo trì, vui lòng thử lại sau!");
+},
+onLeftEvent: function(t) {
+cc.log("index:", t);
+this.itemsList = Common.assetsConfigList.filter(function(e) {
+return e.provider === this.tabString[t];
+}.bind(this));
+this.content = this.scroll_view.content;
+var e = cc.size(this.content.getContentSize().width, this.content.getContentSize().height), o = this.itemsList.length;
+this.content.removeAllChildren(!1);
+for (var s = 0; s < o; s++) {
+var r = this.itemsList[s], i = cc.instantiate(this.doithuong_itemPrefab);
+i.getComponent("ExchangeItem").init(r);
+var n = i.getComponent("ExchangeItem").node.getContentSize();
+cc.log("item size:", n, ", i:", parseInt(s % 3));
+if (0 == s) {
+e.width / 3 - n.width;
+var a = parseInt(o % 3);
+0 < a && a++;
+e = cc.size(e.width, 1.1 * n.height * a);
+this.content.setContentSize(e);
+}
+var p = parseInt(s % 3), l = parseInt(s / 3), g = (p - 1) * n.width * 1.25, u = (-.7 - l) * n.height * 1.15;
+i.setPositionX(g);
+i.setPositionY(u);
+this.content.addChild(i);
+}
+},
+onGameEvent: function() {
+s.checkEvent(function(e) {
+return this.handleMessage(e);
+}.bind(this));
+},
+handleMessage: function(e) {
+var t = !0;
+switch (e.message_id) {
+case s.MESSAGE_ID.ASSET_CONFIG:
+break;
+
+default:
+t = !1;
+}
+return t;
+},
+update: function(e) {}
+});
+cc._RF.pop();
+}, {
+NetworkManager: "NetworkManager"
 } ],
 NodeHeadLine: [ function(e, t, o) {
 "use strict";
@@ -2037,8 +2257,8 @@ this.initIap();
 },
 initIap: function() {
 if (cc.sys.platform === cc.sys.IPHONE || cc.sys.platform === cc.sys.IPAD || cc.sys.platform === cc.sys.ANDROID) {
-var e = this;
-e.productNames = [];
+var s = this;
+s.productNames = [];
 sdkbox.IAP.init();
 sdkbox.IAP.setDebug(!0);
 sdkbox.IAP.setListener({
@@ -2055,16 +2275,16 @@ cc.log("Purchase canceled: " + e.name);
 onRestored: function(e) {
 cc.log("Restored: " + e.name);
 },
-onProductRequestSuccess: function(t) {
-for (var o = 0; o < t.length; o++) {
+onProductRequestSuccess: function(e) {
+for (var t = 0; t < e.length; t++) {
 cc.log("================");
-cc.log("name: " + t[o].name);
-cc.log("price: " + t[o].price);
-cc.log("priceValue: " + t[o].priceValue);
+cc.log("name: " + e[t].name);
+cc.log("price: " + e[t].price);
+cc.log("priceValue: " + e[t].priceValue);
 cc.log("================");
-var s = t[o].name;
-cc.log("purchase: " + s);
-e.productNames[o] = s;
+var o = e[t].name;
+cc.log("purchase: " + o);
+s.productNames[t] = o;
 }
 },
 onProductRequestFailure: function(e) {
@@ -2118,17 +2338,17 @@ this.mailTitle.string = e.getTitle();
 this.mailSender.string = e.getSenderusername();
 this.messContent.string = Common.wordWrap(e.getBody(), 66);
 this.messContent.node.getContentSize().height > this.mailContent.content.getContentSize().height && this.mailContent.content.setContentSize(this.mailContent.content.getContentSize().width, this.messContent.node.getContentSize().height);
-if (e.getAttachitemid() > 0) {
+if (0 < e.getAttachitemid()) {
 this.btnReceived.node.active = !0;
 this.operation = e.getExpandeddata();
 this.mailId = e.getMailid();
 } else this.btnReceived.node.active = !1;
 },
 showCaptcha: function() {
-var e = this.operation, t = this.mailId;
-Common.showPopup(Config.name.POPUP_CAPTCHA, function(o) {
-o.init(e, t);
-o.appear();
+var t = this.operation, o = this.mailId;
+Common.showPopup(Config.name.POPUP_CAPTCHA, function(e) {
+e.init(t, o);
+e.appear();
 });
 }
 });
@@ -2176,13 +2396,13 @@ cc.log("item size:", a, ", i:", parseInt(r % 3));
 if (0 == r) {
 t.width / 3 - a.width;
 var p = parseInt(s % 3);
-p > 0 && p++;
+0 < p && p++;
 t = cc.size(t.width, 1.1 * a.height * p);
 this.content.setContentSize(t);
 }
-var l = parseInt(r % 3), u = parseInt(r / 3), g = (l - 1) * a.width * 1.25, d = (-.5 - u) * a.height * 1.15;
-n.setPositionX(g);
-n.setPositionY(d);
+var l = parseInt(r % 3), g = parseInt(r / 3), u = (l - 1) * a.width * 1.25, c = (-.5 - g) * a.height * 1.15;
+n.setPositionX(u);
+n.setPositionY(c);
 this.content.addChild(n);
 }
 },
@@ -2253,9 +2473,9 @@ onLeftEvent: function(e) {
 var t = this.tabInfo[e].productsList;
 this.providercode = this.tabInfo[e].providercode;
 cc.log("provider code:", this.providercode);
-var o = t.length, s = [ "Mệnh giá thẻ", "KM", "Số BIT" ], r = this._getdata(t, s, o);
-this.table_view.getComponent(cc.tableView).initTableView(r.length, {
-array: r,
+var o = t.length, s = this._getdata(t, [ "Mệnh giá thẻ", "KM", "Số BIT" ], o);
+this.table_view.getComponent(cc.tableView).initTableView(s.length, {
+array: s,
 target: this
 });
 },
@@ -2368,20 +2588,20 @@ avatarPrefab: cc.Prefab,
 avatarId: 0
 },
 onLoad: function() {
-var e = this;
+var t = this;
 this.content = this.scrollView.content;
-for (var t = cc.size(this.content.getContentSize().width, this.content.getContentSize().height), o = 0; o < 22; ++o) {
+for (var e = cc.size(this.content.getContentSize().width, this.content.getContentSize().height), o = 0; o < 22; ++o) {
 var s = cc.instantiate(this.avatarPrefab);
 s.setTag(o + 1e5);
-s.getComponent("AvatarItem").init(o, function(t) {
-cc.log("index =", t);
-e.setAvatarId(t);
+s.getComponent("AvatarItem").init(o, function(e) {
+cc.log("index =", e);
+t.setAvatarId(e);
 });
 var r = s.getComponent("AvatarItem").node.getContentSize();
 if (0 == o) {
-t.width / 3 - r.width;
-t = cc.size(t.width, 1.1 * r.height * 8);
-this.content.setContentSize(t);
+e.width / 3 - r.width;
+e = cc.size(e.width, 1.1 * r.height * 8);
+this.content.setContentSize(e);
 }
 var i = parseInt(o % 3), n = parseInt(o / 3), a = (i - 1) * r.width, p = (-.5 - n) * r.height * 1.1;
 s.setPositionX(a);
@@ -2415,11 +2635,13 @@ extends: s,
 properties: {
 phone: cc.EditBox
 },
-onLoad: function() {},
+onLoad: function() {
+this.text = "";
+},
 onGameEvent: function() {
-var e = this;
-r.checkEvent(function(t) {
-return e.handleMessage(t);
+var t = this;
+r.checkEvent(function(e) {
+return t.handleMessage(e);
 });
 },
 update: function(e) {
@@ -2446,14 +2668,11 @@ t.setInfofield(Config.Update.UPDATE_PHONE);
 t.setNewvalue(e);
 Common.setNewPhone(e);
 r.getUpdateUserInfoMessageFromServer(t, 1);
+this.disappear();
 } else Common.showToast(Common.KEYTEXT.BLANK_USERNAME);
 },
-changeInfoHander: function(e) {
-cc.log("response changepass =", e);
-if (e.getResponsecode()) {
-Common.showToast(e.getMessage());
-this.disappear();
-} else Common.showToast(e.getMessage());
+changeKeyboard: function(e) {
+this.phone.string = e.replace(/[^0-9]/g, "");
 }
 });
 cc._RF.pop();
@@ -2474,9 +2693,9 @@ renewPass: cc.EditBox
 },
 onLoad: function() {},
 onGameEvent: function() {
-var e = this;
-r.checkEvent(function(t) {
-return e.handleMessage(t);
+var t = this;
+r.checkEvent(function(e) {
+return t.handleMessage(e);
 });
 },
 update: function(e) {
@@ -2504,14 +2723,8 @@ s.setOldvalue(e);
 s.setNewvalue(t);
 s.setConfirmvalue(o);
 r.getUpdateUserInfoMessageFromServer(s, 1);
-} else Common.showToast(Common.KEYTEXT.PASSWORD_NOT_CHANGE); else Common.showToast(Common.KEYTEXT.PASSWORD_NOT_MATCH); else Common.showToast(Common.KEYTEXT.BLANK_USERNAME);
-},
-changePassHander: function(e) {
-cc.log("response changepass =", e);
-if (e.getResponsecode()) {
-Common.showToast(e.getMessage());
 this.disappear();
-} else Common.showToast(e.getMessage());
+} else Common.showToast(Common.KEYTEXT.PASSWORD_NOT_CHANGE); else Common.showToast(Common.KEYTEXT.PASSWORD_NOT_MATCH); else Common.showToast(Common.KEYTEXT.BLANK_USERNAME);
 }
 });
 cc._RF.pop();
@@ -2526,7 +2739,6 @@ var s = e("CommonPopup");
 cc.Class({
 extends: s,
 properties: {
-tabLeftPrefab: cc.Prefab,
 body: cc.Node,
 _tab: 1,
 subHistory: 1
@@ -2540,19 +2752,22 @@ initTabs: function(e, t) {
 this._super(e, t);
 },
 onEvent: function(e) {
-cc.log("index : ", e);
 var t = this.body.getChildByName("NodeNapThe"), o = this.body.getChildByName("NodeNapSMS");
 switch (e) {
 case 1:
+if (0 < Common.providerLists.length) {
 t.active = !0;
 o.active = !1;
 t.getComponent("NodeNapThe").initTabLeft();
+} else Common.showToast("Kênh nạp thẻ đang bảo trì, vui lòng thử lại!");
 break;
 
 case 2:
+if (0 < Common.smsConfigLists.length) {
 t.active = !1;
 o.active = !0;
 o.getComponent("NodeNapSMS").initTabLeft();
+} else Common.showToast("Kênh nạp SMS đang bảo trì, vui lòng thử lại!");
 }
 },
 cardConfigResponseHandler: function(e) {
@@ -2577,24 +2792,36 @@ Common.providerLists.push(o);
 }
 e.hasMessage() && "" !== e.getMessage() && Common.showToast(e.getMessage());
 },
-update: function(e) {},
-handleMessage: function(e) {
-e.response;
-e.message_id;
-return !1;
-},
-onGameEvent: function() {}
+update: function(e) {}
 });
 cc._RF.pop();
 }, {
 CommonPopup: "CommonPopup"
 } ],
+PopupExchange: [ function(e, t, o) {
+"use strict";
+cc._RF.push(t, "e79b2x66w1D57qZCQbQw+9N", "PopupExchange");
+var s = e("Popup");
+cc.Class({
+extends: s,
+properties: {
+body: cc.Node
+},
+start: function() {},
+onLoad: function() {},
+update: function(e) {},
+onGameEvent: function() {}
+});
+cc._RF.pop();
+}, {
+Popup: "Popup"
+} ],
 PopupGift: [ function(e, t, o) {
 "use strict";
 cc._RF.push(t, "d9c6f2t8zRHZo+sXkCS3+jP", "PopupGift");
-var s = e("NetworkManager"), r = e("CommonPopup");
+var r = e("NetworkManager"), s = e("CommonPopup");
 cc.Class({
-extends: r,
+extends: s,
 properties: {
 giftType: 1,
 giftInput: cc.Node,
@@ -2616,14 +2843,14 @@ this.setGiftType(1);
 } else if (2 === e) {
 this.tableView.active = !0;
 this.giftInput.active = !1;
-s.getRedeemGiftCodeHistoryFromServer(0, 20);
+r.getRedeemGiftCodeHistoryFromServer(0, 20);
 this.setGiftType(2);
 }
 },
 onGameEvent: function() {
-var e = this;
-s.checkEvent(function(t) {
-return e.handleMessage(t);
+var t = this;
+r.checkEvent(function(e) {
+return t.handleMessage(e);
 });
 },
 update: function(e) {
@@ -2632,14 +2859,14 @@ this.onGameEvent();
 handleMessage: function(e) {
 var t = e, o = !0;
 switch (t.message_id) {
-case s.MESSAGE_ID.REDEEM_GIFT_CODE_HISTORY:
-r = t.response;
-this.getRedeemGiftCodeHistory(r);
+case r.MESSAGE_ID.REDEEM_GIFT_CODE_HISTORY:
+var s = t.response;
+this.getRedeemGiftCodeHistory(s);
 break;
 
-case s.MESSAGE_ID.REDEEM_GIFT_CODE:
-var r = t.response;
-this.getRedeemGiftCode(r);
+case r.MESSAGE_ID.REDEEM_GIFT_CODE:
+s = t.response;
+this.getRedeemGiftCode(s);
 break;
 
 default:
@@ -2648,16 +2875,15 @@ o = !1;
 return o;
 },
 getRedeemGiftCodeHistory: function(e) {
-var t = this;
 cc.log("response =", e);
 if (0 !== e) if (e.getResponsecode()) {
-for (var o = [], s = 0; s < e.getGiftcodesList().length; s++) {
-var r = e.getGiftcodesList()[s];
-o.push(r);
+for (var t = [], o = 0; o < e.getGiftcodesList().length; o++) {
+var s = e.getGiftcodesList()[o];
+t.push(s);
 }
-var i = o.length, n = [ "Giftcode", "Giá trị", "Ngày nhận" ], a = this._getdata(o, n, i);
-t.tableView.getComponent(cc.tableView).initTableView(a.length, {
-array: a,
+var r = t.length, i = this._getdata(t, [ "Giftcode", "Giá trị", "Ngày nhận" ], r);
+this.tableView.getComponent(cc.tableView).initTableView(i.length, {
+array: i,
 target: this
 });
 } else e.hasMessage() && Common.showToast(e.getMessage());
@@ -2685,7 +2911,7 @@ this.giftType = e;
 },
 onGiftSubmit: function() {
 var e = this.giftCode.string;
-null !== e ? s.getRedeemGiftCodeFromServer(e) : Common.showToast(Common.KEYTEXT.BLANK_USERNAME);
+null !== e ? r.getRedeemGiftCodeFromServer(e) : Common.showToast(Common.KEYTEXT.BLANK_USERNAME);
 },
 onGiftCancel: function() {
 this.giftCode.string = "";
@@ -2699,9 +2925,9 @@ NetworkManager: "NetworkManager"
 PopupHistory: [ function(e, t, o) {
 "use strict";
 cc._RF.push(t, "2131eIuoptG5ZxvymQeGivv", "PopupHistory");
-var s = e("NetworkManager"), r = e("CommonPopup");
+var a = e("NetworkManager"), s = e("CommonPopup");
 cc.Class({
-extends: r,
+extends: s,
 properties: {
 historyType: 1
 },
@@ -2719,21 +2945,21 @@ onEvent: function(e) {
 this.getLookupHistoryRequest(-1, 20, e, !0);
 this.setHistoryType(e);
 },
-getLookupHistoryRequest: function(e, t, o, r) {
-var i = [], n = new proto.BINMapFieldEntry();
-n.setKey("historyType");
-n.setValue(o.toString());
-i.push(n);
-var a = new proto.BINMapFieldEntry();
-a.setKey("isCash");
-a.setValue(r ? "true" : "false");
-i.push(a);
-s.getLookUpGameHistoryRequest(e, t, i, -1, !1);
+getLookupHistoryRequest: function(e, t, o, s) {
+var r = [], i = new proto.BINMapFieldEntry();
+i.setKey("historyType");
+i.setValue(o.toString());
+r.push(i);
+var n = new proto.BINMapFieldEntry();
+n.setKey("isCash");
+n.setValue(s ? "true" : "false");
+r.push(n);
+a.getLookUpGameHistoryRequest(e, t, r, -1, !1);
 },
 onGameEvent: function() {
-var e = this;
-s.checkEvent(function(t) {
-return e.handleMessage(t);
+var t = this;
+a.checkEvent(function(e) {
+return t.handleMessage(e);
 });
 },
 update: function(e) {
@@ -2742,9 +2968,9 @@ this.onGameEvent();
 handleMessage: function(e) {
 var t = e, o = !0;
 switch (t.message_id) {
-case s.MESSAGE_ID.LOOK_UP_GAME_HISTORY:
-var r = t.response;
-this.lookupGameResponseHandler(r);
+case a.MESSAGE_ID.LOOK_UP_GAME_HISTORY:
+var s = t.response;
+this.lookupGameResponseHandler(s);
 break;
 
 default:
@@ -2756,20 +2982,19 @@ pingMessageResponseHandler: function(e) {
 e.getResponsecode();
 },
 lookupGameResponseHandler: function(e) {
-var t = this;
 if (0 !== e) {
 cc.log("look up game history response: ", e);
 e.hasMessage() && e.getMessage();
 if (e.getResponsecode()) {
-var o = e.getHistoriesList().length, s = Common.getHeadHistory(this.historyType), r = this._getdata(s, e.getHistoriesList(), o);
-t.tableView.getComponent(cc.tableView).initTableView(r.length, {
-array: r,
+var t = e.getHistoriesList().length, o = Common.getHeadHistory(this.historyType), s = this._getdata(o, e.getHistoriesList(), t);
+this.tableView.getComponent(cc.tableView).initTableView(s.length, {
+array: s,
 target: this
 });
 }
-if (e.getArgsList().length > 0) {
-var i = e.getArgsList()[0];
-"totalCount" === i.getKey() && (this.totalCount = parseInt(i.getValue()));
+if (0 < e.getArgsList().length) {
+var r = e.getArgsList()[0];
+"totalCount" === r.getKey() && (this.totalCount = parseInt(r.getValue()));
 }
 }
 },
@@ -2843,7 +3068,7 @@ target: this
 });
 }
 }
-if (e.getArgsList().length > 0) {
+if (0 < e.getArgsList().length) {
 var r = e.getArgsList()[0];
 "totalCount" === r.getKey() && (this.totalCount = parseInt(r.getValue()));
 }
@@ -2879,8 +3104,9 @@ this.list_tab.push(i);
 if ("userinfo" === t) {
 this.tableView.active = !1;
 this.contentMask.active = !0;
-var n = this.contentMask.getPositionX(), a = this.contentMask.getPositionY(), p = cc.instantiate(this.userinfoPrefab);
-p.getComponent("UserInfo").init();
+var p;
+n = this.contentMask.getPositionX(), a = this.contentMask.getPositionY();
+(p = cc.instantiate(this.userinfoPrefab)).getComponent("UserInfo").init();
 this.contentMask.addChild(p);
 }
 },
@@ -2900,8 +3126,8 @@ Popup: "Popup"
 PopupMail: [ function(e, t, o) {
 "use strict";
 cc._RF.push(t, "1e952tB/uJHVqV1OyrlXqN0", "PopupMail");
-var s = e("NetworkManager"), r = e("CommonPopup"), i = cc.Class({
-extends: r,
+var r = e("NetworkManager"), s = e("CommonPopup"), i = cc.Class({
+extends: s,
 properties: {
 mailType: 1,
 nodeSendAdmin: cc.Node,
@@ -2924,9 +3150,9 @@ initTabs: function(e, t) {
 this._super(e, t);
 },
 onGameEvent: function() {
-var e = this;
-s.checkEvent(function(t) {
-return e.handleMessage(t);
+var t = this;
+r.checkEvent(function(e) {
+return t.handleMessage(e);
 });
 },
 update: function(e) {
@@ -2935,61 +3161,59 @@ this.onGameEvent();
 handleMessage: function(e) {
 var t = e, o = !0;
 switch (t.message_id) {
-case s.MESSAGE_ID.FILTER_MAIL:
-r = t.response;
-this.filterEmailResponse(r);
+case r.MESSAGE_ID.FILTER_MAIL:
+var s = t.response;
+this.filterEmailResponse(s);
 break;
 
-case s.MESSAGE_ID.SEND_MAIL:
-r = t.response;
-this.sendMailResponse(r);
+case r.MESSAGE_ID.SEND_MAIL:
+s = t.response;
+this.sendMailResponse(s);
 break;
 
-case s.MESSAGE_ID.DELETE_MAIL:
-r = t.response;
-this.deleteMailResponse(r);
+case r.MESSAGE_ID.DELETE_MAIL:
+s = t.response;
+this.deleteMailResponse(s);
 
-case s.MESSAGE_ID.READED_MAIL:
-r = t.response;
-this.readMailResponse(r);
+case r.MESSAGE_ID.READED_MAIL:
+s = t.response;
+this.readMailResponse(s);
 break;
 
-case s.MESSAGE_ID.CLAIM_ATTACH_ITEM:
-var r = t.response;
-this.claimMailResponse(r);
+case r.MESSAGE_ID.CLAIM_ATTACH_ITEM:
+s = t.response;
+this.claimMailResponse(s);
 }
 return o;
 },
 onEvent: function(e) {
-var t = this;
 if (1 === e) {
-s.getFilterMailFromServer(0, 20, -1, !1);
+r.getFilterMailFromServer(0, 20, -1, !1);
 this.setMailType(e);
 } else if (2 === e) {
 cc.log("MAIL_SENT =", e);
-s.getFilterMailFromServer(0, 20, -1, !0);
+r.getFilterMailFromServer(0, 20, -1, !0);
 this.setMailType(e);
 } else if (3 === e) {
-t.tableView.active = !1;
-t.nodeSendAdmin.active = !0;
-t.nodeMailContent.active = !1;
+this.tableView.active = !1;
+this.nodeSendAdmin.active = !0;
+this.nodeMailContent.active = !1;
 }
 },
 filterEmailResponse: function(e) {
 cc.log("response =", e);
-var t = this;
-t.tableView.active = !0;
-t.nodeSendAdmin.active = !1;
-t.nodeMailContent.active = !1;
-t.nodeMailContent.removeAllChildren(!0);
+this.tableView.active = !0;
+this.nodeSendAdmin.active = !1;
+this.nodeMailContent.active = !1;
+this.nodeMailContent.removeAllChildren(!0);
 if (0 !== e) if (e.getResponsecode()) {
-for (var o, s = [], r = 0; r < e.getMailsList().length; r++) {
-o = this.parseFromBinMail(e.getMailsList()[r]);
-s.push(o);
+for (var t, o = [], s = 0; s < e.getMailsList().length; s++) {
+t = this.parseFromBinMail(e.getMailsList()[s]);
+o.push(t);
 }
-var i = e.getMailsList().length, n = this._getdata(s, i);
-this.setListMail(n);
-this.reloadEmail(n);
+var r = e.getMailsList().length, i = this._getdata(o, r);
+this.setListMail(i);
+this.reloadEmail(i);
 } else Common.showToast(e.getMessage(), 2);
 },
 _getdata: function(e, t) {
@@ -3028,7 +3252,7 @@ this.mailType = e;
 },
 onSendAdminEvent: function() {
 var e = this.title.string, t = this.content.string;
-null !== e && null !== t ? s.sendMail(1e6, e, t, 0) : Common.showToast(Common.KEYTEXT.BLANK_USERNAME);
+null !== e && null !== t ? r.sendMail(1e6, e, t, 0) : Common.showToast(Common.KEYTEXT.BLANK_USERNAME);
 },
 onCancelEvent: function() {
 this.title.string = "";
@@ -3061,16 +3285,16 @@ setReadMailComponent: function(e) {
 this.readMailComponent = e;
 },
 deleteMail: function(e) {
-var t = this.lstEmail, o = t[e].mail_id, r = [];
-r.push(o);
-s.deleteMail(r);
+var t = this.lstEmail, o = t[e].mail_id, s = [];
+s.push(o);
+r.deleteMail(s);
 t.splice(e, 1);
 this.setListMail(t);
 this.reloadEmail(t);
 },
 readMail: function(e, t) {
 this.setReadMailIndex(t);
-s.readMail(e, !0);
+r.readMail(e, !0);
 },
 readMailResponse: function(e) {
 if (0 !== e) {
@@ -3096,7 +3320,7 @@ cc.log("response claim =", e);
 if (0 !== e) if (e.getResponsecode()) {
 this.deleteMail(this.index);
 var t = this.readMailComponent;
-if (e.hasMessage() && t.getMailid() > 0 && t.getAttachitemid() > 0) if (3 === t.getAttachitemid()) Common.showToast(e.getMessage(), 3); else {
+if (e.hasMessage() && 0 < t.getMailid() && 0 < t.getAttachitemid()) if (3 === t.getAttachitemid()) Common.showToast(e.getMessage(), 3); else {
 this.disappear();
 Common.showToast(e.getMessage(), 3);
 }
@@ -3158,22 +3382,23 @@ item: cc.Prefab,
 content: cc.Node
 },
 onLoad: function() {},
-init: function(e) {
-this.callBack = e;
-this.initLine();
+init: function(e, t) {
+this.callBack = t;
+this.initLine(e);
 },
-initLine: function() {
-var e = this.content.getContentSize(), t = e.width / 5, o = e.height / 4;
+initLine: function(e) {
+var t = this.content.getContentSize(), o = t.width / 5, s = t.height / 4;
 this.list_items = [];
-for (var s = 0; s < 20; s++) {
-var r = cc.p(-e.width / 2 + t * (parseInt(s % 5) + .5), -o * (parseInt(s / 5) + .5)), i = cc.instantiate(this.item), n = i.getComponent("ItemSelectLine");
-n.init(s + 1, function(e) {
+for (var r = 0; r < 20; r++) {
+var i = cc.p(-t.width / 2 + o * (parseInt(r % 5) + .5), -s * (parseInt(r / 5) + .5)), n = cc.instantiate(this.item), a = n.getComponent("ItemSelectLine");
+a.init(r + 1, function(e) {
 this.callBack(Config.ON_EVENT.EVENT_SELECT_LINE, e);
 }.bind(this));
-i.setPosition(cc.p(r.x, r.y));
-this.list_items.push(n);
-this.content.addChild(i);
+n.setPosition(cc.p(i.x, i.y));
+this.list_items.push(a);
+this.content.addChild(n);
 }
+this.showLine(e);
 },
 onLineSelected: function() {},
 setDataLineWithType: function(e, t) {
@@ -3185,9 +3410,11 @@ this.showLine(e);
 },
 showLine: function(e) {
 for (var t = 0; t < this.list_items.length; t++) {
-for (var o = !1, s = 0; s < e.length; s++) if (t + 1 == e[s]) {
+for (var o = !1, s = 0; s < e.length; s++) {
+if (t + 1 == e[s]) {
 o = !0;
 break;
+}
 }
 this.list_items[t].change(o);
 }
@@ -3235,9 +3462,9 @@ Popup: "Popup"
 PopupTaiXiuResultList: [ function(e, t, o) {
 "use strict";
 cc._RF.push(t, "893af0zDMVOBakZQb8K2xiz", "PopupTaiXiuResultList");
-var s = e("NetworkManager"), r = e("Popup");
+var r = e("NetworkManager"), s = e("Popup");
 cc.Class({
-extends: r,
+extends: s,
 properties: {
 topUserType: 1
 },
@@ -3246,13 +3473,13 @@ var e = [], t = new proto.BINMapFieldEntry();
 t.setKey("historyType");
 t.setValue("3");
 e.push(t);
-s.getLookUpGameHistoryRequest(0, 120, e);
+r.getLookUpGameHistoryRequest(0, 120, e);
 },
 start: function() {},
 onGameEvent: function() {
-var e = this;
-s.checkEvent(function(t) {
-return e.handleMessage(t);
+var t = this;
+r.checkEvent(function(e) {
+return t.handleMessage(e);
 });
 },
 update: function(e) {
@@ -3261,9 +3488,9 @@ this.onGameEvent();
 handleMessage: function(e) {
 var t = e, o = !0;
 switch (t.message_id) {
-case s.MESSAGE_ID.LOOK_UP_GAME_HISTORY:
-var r = t.response;
-cc.log("history response:", r.toObject());
+case r.MESSAGE_ID.LOOK_UP_GAME_HISTORY:
+var s = t.response;
+cc.log("history response:", s.toObject());
 break;
 
 default:
@@ -3280,9 +3507,9 @@ Popup: "Popup"
 PopupTaiXiuTop: [ function(e, t, o) {
 "use strict";
 cc._RF.push(t, "7c965+P1YBFkI6BxYffQasA", "PopupTaiXiuTop");
-var s = e("NetworkManager"), r = e("CommonPopup");
+var p = e("NetworkManager"), s = e("CommonPopup");
 cc.Class({
-extends: r,
+extends: s,
 properties: {
 topUserType: 1
 },
@@ -3303,22 +3530,22 @@ this.getLookUpTopUser(Config.LookupTypeRequest.topUserWeekly, 0, 10, !0);
 this.setTopUserType(2);
 }
 },
-getLookUpTopUser: function(e, t, o, r) {
-var i = [], n = new proto.BINMapFieldEntry();
-n.setKey("historyType");
-n.setValue(e.toString());
-i.push(n);
-var a = new proto.BINMapFieldEntry();
-a.setKey("isCash");
-var p = r ? "true" : "false";
-a.setValue(p);
-i.push(a);
-s.getLookUpGameHistoryRequest(t, o, i);
+getLookUpTopUser: function(e, t, o, s) {
+var r = [], i = new proto.BINMapFieldEntry();
+i.setKey("historyType");
+i.setValue(e.toString());
+r.push(i);
+var n = new proto.BINMapFieldEntry();
+n.setKey("isCash");
+var a = s ? "true" : "false";
+n.setValue(a);
+r.push(n);
+p.getLookUpGameHistoryRequest(t, o, r);
 },
 onGameEvent: function() {
-var e = this;
-s.checkEvent(function(t) {
-return e.handleMessage(t);
+var t = this;
+p.checkEvent(function(e) {
+return t.handleMessage(e);
 });
 },
 update: function(e) {
@@ -3327,9 +3554,9 @@ this.onGameEvent();
 handleMessage: function(e) {
 var t = e, o = !0;
 switch (t.message_id) {
-case s.MESSAGE_ID.LOOK_UP_GAME_HISTORY:
-var r = t.response;
-this.lookupTopUser(r);
+case p.MESSAGE_ID.LOOK_UP_GAME_HISTORY:
+var s = t.response;
+this.lookupTopUser(s);
 break;
 
 default:
@@ -3339,25 +3566,25 @@ return o;
 },
 lookupTopUser: function(e) {
 cc.log("rs history taixiu =", e);
-var t = this;
 if (0 !== e && e.getResponsecode()) {
 cc.log("getHistoriesList =", e.getHistoriesList());
-var o = e.getHistoriesList()[0];
-cc.log("rank =", o.getFirst());
-for (var s = [], r = 0; r < e.getHistoriesList().length - 2; r++) s.push(e.getHistoriesList()[r]);
-var i = e.getHistoriesList().length, n = -1 != e.getHistoriesList()[i - 2].getFirst() ? e.getHistoriesList()[i - 2].getFirst() : "", a = (e.getHistoriesList()[i - 1].getFirst(), 
-e.getHistoriesList()[i - 2].getFifth()), p = (e.getHistoriesList()[i - 2].getThird(), 
-e.getHistoriesList()[i - 2].getFourth());
-if (1 !== n) {
-var l = {};
-l.rank = n;
-l.displayName = p;
-l.betWin = a;
+var t = e.getHistoriesList()[0];
+cc.log("rank =", t.getFirst());
+for (var o = [], s = 0; s < e.getHistoriesList().length - 2; s++) o.push(e.getHistoriesList()[s]);
+var r = e.getHistoriesList().length, i = -1 != e.getHistoriesList()[r - 2].getFirst() ? e.getHistoriesList()[r - 2].getFirst() : "", n = (e.getHistoriesList()[r - 1].getFirst(), 
+e.getHistoriesList()[r - 2].getFifth()), a = (e.getHistoriesList()[r - 2].getThird(), 
+e.getHistoriesList()[r - 2].getFourth());
+if (1 !== i) {
+var p = {};
+p.rank = i;
+p.displayName = a;
+p.betWin = n;
 }
-var i = s.length, u = [ "Hạng", "Tài khoản", "Tiền thắng" ], g = this._getdata(s, l, u, i);
-cc.log("data =", g);
-t.tableView.getComponent(cc.tableView).initTableView(g.length, {
-array: g,
+r = o.length;
+var l = this._getdata(o, p, [ "Hạng", "Tài khoản", "Tiền thắng" ], r);
+cc.log("data =", l);
+this.tableView.getComponent(cc.tableView).initTableView(l.length, {
+array: l,
 target: this
 });
 }
@@ -3390,17 +3617,7 @@ NetworkManager: "NetworkManager"
 PopupTaiXiu: [ function(e, t, o) {
 "use strict";
 cc._RF.push(t, "cbc51BY5shPt60Gdt1vcOLf", "PopupTaiXiu");
-var s = e("BaseScene"), r = e("NetworkManager"), i = e("Gate"), n = e("ItemChat"), a = e("TXMatch"), p = {
-BET: 1,
-BALANCE: 2,
-RESULT: 3,
-MATCH_END: 4,
-PREPARE_NEW_MATCH: 5
-}, l = {
-TAI: 1,
-XIU: 0,
-OTHER: -1
-};
+var s = e("BaseScene"), r = e("NetworkManager"), i = e("Gate"), n = e("ItemChat"), g = e("TXMatch"), a = 1, p = 2, l = 3, u = 1, c = 0;
 cc.Class({
 extends: s,
 properties: {
@@ -3421,39 +3638,108 @@ total_bet_xiu: cc.Label,
 tai_number_user: cc.Label,
 xiu_number_user: cc.Label,
 session: cc.Label,
+currentSession: 0,
 isNumber: !1,
 currentBet: 0,
 betState: -1,
 enterRoomResponse: null,
 roomIndex: -1,
-lstMatch: [ a ],
-currentMatch: a,
+lstMatch: [ g ],
+currentMatch: g,
 taiXiuResult: cc.Prefab,
 chat_view: cc.Node,
 edit_chat: cc.EditBox,
 item_chat: cc.Prefab,
 item_emotion: cc.Prefab,
 lstMessageChat: [ n ],
-bg_emotions: cc.ScrollView
+bg_emotions: cc.ScrollView,
+result_frames: [ cc.SpriteFrame ],
+result_sprites: [ cc.Sprite ],
+result_node: cc.Node,
+taixiu_xoc_anim: cc.Sprite,
+timer: cc.Label,
+can_keo: cc.Sprite,
+bat: cc.Sprite
+},
+onLoad: function() {
+cc.log("on load tai xiu");
+this.node.on("touchstart", function(e) {
+return !0;
+}, this.bg_dark);
+this.betState = -1;
+Common.setExistTaiXiu(!0);
+this.lstTaiXiuResult = [];
+this.countDownTimer = 0;
+},
+start: function() {
+this.current_chat_height = this.chat_view.getContentSize().height;
+this.isShowEmotion = !1;
+this.animation = this.taixiu_xoc_anim.getComponent(cc.Animation);
+this.animation.on("finished", this.onFinished, this);
+this.addChatEmotion();
+},
+onFinished: function() {
+cc.log("onFinished");
+this.taixiu_xoc_anim.node.active = !1;
+if (0 < this.currentMatch.getResult().length) {
+this.result_node.active = !0;
+for (var e = 0; e < this.result_sprites.length; e++) {
+var t = this.currentMatch.getResult()[e];
+0 < t && t <= 6 && (this.result_sprites[e].spriteFrame = this.result_frames[t - 1]);
+}
+}
+},
+onClose: function() {
+r.requestExitRoomMessage(0);
+},
+onGameStatus: function(e) {
+if (null !== e.data || "undefined" != typeof e.data) {
+var t = r.parseFrom(e.data, e.data.byteLength);
+if (0 < t.length) for (var o = 0; o < t.length; o++) {
+var s = t[o];
+this.handleMessage(s);
+}
+}
 },
 cancel: function() {},
 accept: function() {
-this.getTableStage() === p.BET ? r.sendBet(this.roomIndex, this.currentBet, this.betState) : Common.showToast("Chờ ván sau đi nhé");
+this.getTableStage() === a ? r.sendBet(this.roomIndex, this.currentBet, this.betState) : Common.showToast("Chờ ván sau đi nhé");
 },
 setEnterRoomResponse: function(e) {
 this.roomIndex = e.getRoomplay().getRoomindex();
 for (var t = 0; t < e.getArgsList().length; t++) {
 var o = e.getArgsList()[t].getKey(), s = e.getArgsList()[t].getValue();
-if ("currentTableStage" === o) this.setTableStage(parseInt(s)); else if ("cdTimerRemaining" === o) ; else if ("sessionId" === o) {
-this.currentMatch = new a(s, 1, 1, 1);
+if ("currentTableStage" === o) this.setTableStage(parseInt(s)); else if ("cdTimerRemaining" === o) {
+this.bat.node.active = !1;
+var r = this, i = parseInt(s / 1e3);
+this.countDownTimer = i;
+this.timer.node.active = !0;
+this.schedule(function() {
+r.addCountDownTimer();
+}, 1);
+} else if ("sessionId" === o) {
+this.currentMatch = new g(s, 1, 1, 1);
 this.session.string = s;
+this.currentSession = s;
 } else if ("resultHistorys" === o) {
-for (var r = s.split("|"), i = 0; i < r.length; i++) {
-var n = r[i].split("-"), p = new a(n[0], parseInt(n[1]), parseInt(n[2]), parseInt(n[3]));
-this.lstMatch.push(p);
+for (var n = s.split("|"), a = 0; a < n.length; a++) {
+var p = n[a].split("-"), l = new g(p[0], parseInt(p[1]), parseInt(p[2]), parseInt(p[3]));
+this.lstMatch.push(l);
 }
 this.updateLstMatchView();
 } else "betGateInfo" === o ? this.updateBetGateInfo(s) : "playerBetInfo" === o && this.updateUserBetLabel(s);
+}
+},
+addCountDownTimer: function() {
+if (this.countDownTimer < 0) {
+this.timer.node.active = !1;
+this.timer.string = "";
+this.unscheduleAllCallbacks();
+} else {
+var e = "";
+this.countDownTimer < 10 && 0 <= this.countDownTimer ? e = "0" + this.countDownTimer : 10 <= this.countDownTimer && this.countDownTimer < 100 && (e = this.countDownTimer);
+this.timer.string = "00:" + e;
+this.countDownTimer--;
 }
 },
 setTotalMoneyTaiXiu: function(e, t) {
@@ -3475,7 +3761,7 @@ if ("all" === t) this.currentBet = Common.getCash(); else {
 var o = parseInt(t);
 this.currentBet + o <= Common.getCash() && (this.currentBet += o);
 }
-this.betState === l.TAI ? this.setTotalMoneyTaiXiu(this.bet_money_tai, this.currentBet) : this.betState === l.XIU && this.setTotalMoneyTaiXiu(this.bet_money_xiu, this.currentBet);
+this.betState === u ? this.setTotalMoneyTaiXiu(this.bet_money_tai, this.currentBet) : this.betState === c && this.setTotalMoneyTaiXiu(this.bet_money_xiu, this.currentBet);
 },
 setBetMoneyNumber: function(e, t) {
 cc.log("data:", t);
@@ -3484,12 +3770,12 @@ if ("delete" === t) this.currentBet = 0; else if ("000" === t) 1e3 * this.curren
 var o = parseInt(t);
 10 * this.currentBet + o <= Common.getCash() && (this.currentBet = 10 * this.currentBet + o);
 }
-this.betState === l.TAI ? this.setTotalMoneyTaiXiu(this.bet_money_tai, this.currentBet) : this.betState === l.XIU && this.setTotalMoneyTaiXiu(this.bet_money_xiu, this.currentBet);
+this.betState === u ? this.setTotalMoneyTaiXiu(this.bet_money_tai, this.currentBet) : this.betState === c && this.setTotalMoneyTaiXiu(this.bet_money_xiu, this.currentBet);
 },
 datTai: function() {
 cc.log("dat cua tai", Common.getCash());
-if (this.betState !== l.TAI) {
-this.betState = l.TAI;
+if (this.betState !== u) {
+this.betState = u;
 this.bet_money_xiu.string = "Đặt xỉu";
 this.bet_money_tai.string = "0";
 this.currentBet = 0;
@@ -3497,37 +3783,11 @@ this.currentBet = 0;
 },
 datXiu: function() {
 cc.log("dat cua xiu", Common.getCash());
-if (this.betState !== l.XIU) {
-this.betState = l.XIU;
+if (this.betState !== c) {
+this.betState = c;
 this.bet_money_tai.string = "Đặt tài";
 this.bet_money_xiu.string = "0";
 this.currentBet = 0;
-}
-},
-onLoad: function() {
-cc.log("on load tai xiu");
-this.node.on("touchstart", function(e) {
-return !0;
-}, this.bg_dark);
-this.betState = -1;
-Common.setExistTaiXiu(!0);
-this.lstTaiXiuResult = [];
-},
-start: function() {
-this.current_chat_height = this.chat_view.getContentSize().height;
-this.isShowEmotion = !1;
-this.addChatEmotion();
-},
-onClose: function() {
-r.requestExitRoomMessage(0);
-},
-onGameStatus: function(e) {
-if (null !== e.data || "undefined" != typeof e.data) {
-var t = r.parseFrom(e.data, e.data.byteLength);
-if (t.length > 0) for (var o = 0; o < t.length; o++) {
-var s = t[o];
-this.handleMessage(s);
-}
 }
 },
 onChangeKeyBoard: function() {
@@ -3551,7 +3811,7 @@ if (t) return !0;
 t = !0;
 switch (e.message_id) {
 case r.MESSAGE_ID.START_MATCH:
-o = e.response;
+var o = e.response;
 this.handleStartMatchResponseHandler(o);
 break;
 
@@ -3585,7 +3845,7 @@ this.betResponseHandler(o);
 break;
 
 case r.MESSAGE_ID.INSTANT_MESSAGE:
-var o = e.response;
+o = e.response;
 this.instantMessageResponseHandler(o);
 break;
 
@@ -3618,7 +3878,9 @@ appendMesasgeChat: function(e) {
 var t = cc.instantiate(this.item_chat);
 t.getComponent("ItemChat").init(e);
 this.chat_view.addChild(t);
-for (var o = this.chat_view.children, s = 0, r = 0, i = 0; i < o.length; i++) s += (n = o[i].getComponent("ItemChat").node.getContentSize().height) + 10;
+for (var o = this.chat_view.children, s = 0, r = 0, i = 0; i < o.length; i++) {
+s += (n = o[i].getComponent("ItemChat").node.getContentSize().height) + 10;
+}
 for (i = 0; i < o.length; i++) {
 var n = o[i].getComponent("ItemChat").node.getContentSize().height;
 o[i].setPosition(cc.p(0, s - r));
@@ -3660,7 +3922,7 @@ var t = e.getBettype();
 e.getBetmoney();
 if (e.getSourceuserid() === Common.getUserId()) {
 this.currentBet = 0;
-this.betState === l.TAI ? this.setTotalMoneyTaiXiu(this.bet_money_tai, 0) : this.betState === l.XIU && this.setTotalMoneyTaiXiu(this.bet_money_xiu, 0);
+this.betState === u ? this.setTotalMoneyTaiXiu(this.bet_money_tai, 0) : this.betState === c && this.setTotalMoneyTaiXiu(this.bet_money_xiu, 0);
 }
 for (var o = 0; o < e.getArgsList().length; o++) {
 var s = e.getArgsList()[o].getKey(), r = e.getArgsList()[o].getValue();
@@ -3686,18 +3948,25 @@ var o = e.getArgsList()[t].getKey(), s = e.getArgsList()[t].getValue();
 if ("tableStage" === o) {
 var r = parseInt(s);
 this.setTableStage(r);
-r === p.BALANCE && Common.showToast("Cân cửa");
+if (r === p) {
+Common.showToast("Cân cửa");
+this.can_keo.node.active = !0;
+this.timer.node.active = !1;
+}
 } else if ("betGateInfo" === o) this.updateBetGateInfo(s); else if ("diceValues" === o) {
-if (this.getTableStage() == p.RESULT) {
+if (this.getTableStage() == l) {
 var i = s.split("-").map(Number);
 this.currentMatch.setResult(i[0], i[1], i[2]);
 cc.log("OK");
+this.bat.node.active = !1;
+this.can_keo.node.active = !1;
+this.showXocAnimation();
 }
 } else "totalValue" === o || "playerBetInfo" === o && this.updateUserBetLabel(s);
 }
 },
 handleStartMatchResponseHandler: function(e) {
-cc.log("start match response:", e.toObject());
+cc.log("start match response:", e);
 if (e.getResponsecode()) {
 e.getCountdowntimer(), e.getArgsList();
 for (var t = 0; t < e.getArgsList().length; t++) {
@@ -3705,6 +3974,7 @@ var o = e.getArgsList()[t].getKey(), s = e.getArgsList()[t].getValue();
 if ("sessionId" === o) {
 this.currentMatch.setSestionID(s);
 this.session.string = s;
+this.currentSession = s;
 }
 }
 Common.showToast(e.getMessage());
@@ -3720,7 +3990,7 @@ this.setTotalMoneyTaiXiu(this.total_bet_xiu, 0);
 this.setTotalMoneyTaiXiu(this.tai_number_user, 0);
 this.setTotalMoneyTaiXiu(this.xiu_number_user, 0);
 this.lstMatch.push(this.currentMatch.duplicate());
-this.lstMatch.length > 16 && this.lstMatch.shift();
+16 < this.lstMatch.length && this.lstMatch.shift();
 this.updateLstMatchView();
 }
 e.hasMessage() && "" !== e.getMessage() && Common.showToast(e.getMessage());
@@ -3728,14 +3998,22 @@ e.hasMessage() && "" !== e.getMessage() && Common.showToast(e.getMessage());
 handleMatchBeginResponseHandler: function(e) {
 cc.log("match begin response:", e.toObject());
 if (e.getResponsecode()) {
-this.setTableStage(p.BET);
+this.setTableStage(a);
 Common.showToast("Bat đầu đặt cược");
+var t = this;
+this.bat.node.active = !0;
+this.countDownTimer = parseInt(e.getCountdowntimer() / 1e3);
+this.timer.node.active = !0;
+t.schedule(function() {
+t.addCountDownTimer();
+}, 1);
+this.result_node.active = !1;
 }
 },
 onGameEvent: function() {
-var e = this;
-r.checkEvent(function(t) {
-return e.handleMessage(t);
+var t = this;
+r.checkEvent(function(e) {
+return t.handleMessage(e);
 });
 },
 update: function(e) {
@@ -3774,24 +4052,24 @@ cc.log("OK");
 for (var e = 0; e < this.lstMatch.length; e++) if (this.lstTaiXiuResult.length < 16) {
 var t = cc.instantiate(this.taiXiuResult);
 (o = t.getComponent("TaiXiuResult")).initNumber(this.lstMatch[e].sum());
-o.initResult(this.lstMatch[e].sum() >= 11);
+o.initResult(11 <= this.lstMatch[e].sum());
 t.setPosition((e - this.lstMatch.length / 2) * o.node.getContentSize().width * 1.2, 0);
 this.lstMatch_view.addChild(t);
 this.lstTaiXiuResult.push(o);
 } else {
-var o = this.lstTaiXiuResult[e];
-o.initNumber(this.lstMatch[e].sum());
-o.initResult(this.lstMatch[e].sum() >= 11);
+var o;
+(o = this.lstTaiXiuResult[e]).initNumber(this.lstMatch[e].sum());
+o.initResult(11 <= this.lstMatch[e].sum());
 }
 },
 openRulesPopup: function() {
 Common.openRules();
 },
 openTopUserPopup: function() {
-var e = [ "Theo ngày", "Theo tuần" ];
-Common.showPopup(Config.name.POPUP_TAIXIU_TOP, function(t) {
-t.addTabs(e, 1);
-t.appear();
+var t = [ "Theo ngày", "Theo tuần" ];
+Common.showPopup(Config.name.POPUP_TAIXIU_TOP, function(e) {
+e.addTabs(t, 1);
+e.appear();
 });
 },
 openBetHistoryPopup: function() {
@@ -3801,6 +4079,22 @@ e.appear();
 },
 openResultList: function() {
 Common.showPopup(Config.name.POPUP_TAIXIU_RESULT_LIST, function(e) {});
+},
+openSessionHistoryPopup: function() {
+var o = this;
+cc.log("crrSession =", this.currentSession);
+Common.showPopup(Config.name.POPUP_TAIXIU_SESSION_HISTORY, function(e) {
+var t = o.currentSession;
+e.init(t);
+e.appear();
+});
+},
+showXocAnimation: function() {
+this.taixiu_xoc_anim.node.active = !0;
+this.animation.play();
+},
+openStatis: function() {
+Common.showPopup(Config.name.POPUP_TAIXIU_STATIS, function(e) {});
 }
 });
 cc._RF.pop();
@@ -3814,30 +4108,30 @@ TXMatch: "TXMatch"
 PopupTaixiuBetHistory: [ function(e, t, o) {
 "use strict";
 cc._RF.push(t, "dda77pVyK1IoLf+6xOVMSXM", "PopupTaixiuBetHistory");
-var s = e("NetworkManager"), r = e("Popup");
+var p = e("NetworkManager"), s = e("Popup");
 cc.Class({
-extends: r,
+extends: s,
 properties: {
 tableView: cc.Node
 },
 onLoad: function() {
 this.getLookUpGameHistory(0, Config.NUM_LOAD.ITEM_PAGE, !0, 2, !1);
 },
-getLookUpGameHistory: function(e, t, o, r, i) {
-var n = [], a = new proto.BINMapFieldEntry();
-a.setKey("historyType");
-a.setValue(Config.LookupTypeRequest.userBetHist.toString());
-n.push(a);
-var p = new proto.BINMapFieldEntry();
-p.setKey("isCash");
-p.setValue(o ? "true" : "false");
-n.push(p);
-s.getLookUpGameHistoryRequest(e, t, n, r, i);
+getLookUpGameHistory: function(e, t, o, s, r) {
+var i = [], n = new proto.BINMapFieldEntry();
+n.setKey("historyType");
+n.setValue(Config.LookupTypeRequest.userBetHist.toString());
+i.push(n);
+var a = new proto.BINMapFieldEntry();
+a.setKey("isCash");
+a.setValue(o ? "true" : "false");
+i.push(a);
+p.getLookUpGameHistoryRequest(e, t, i, s, r);
 },
 onGameEvent: function() {
-var e = this;
-s.checkEvent(function(t) {
-return e.handleMessage(t);
+var t = this;
+p.checkEvent(function(e) {
+return t.handleMessage(e);
 });
 },
 update: function(e) {
@@ -3846,9 +4140,9 @@ this.onGameEvent();
 handleMessage: function(e) {
 var t = e, o = !0;
 switch (t.message_id) {
-case s.MESSAGE_ID.LOOK_UP_GAME_HISTORY:
-var r = t.response;
-this.lookupGameHistoryResponse(r);
+case p.MESSAGE_ID.LOOK_UP_GAME_HISTORY:
+var s = t.response;
+this.lookupGameHistoryResponse(s);
 break;
 
 default:
@@ -3858,12 +4152,11 @@ return o;
 },
 lookupGameHistoryResponse: function(e) {
 cc.log("response bet taixiu =", e);
-var t = this;
 if (0 !== e && e.getResponsecode()) {
-var o = e.getHistoriesList().length, s = Common.getHeadHistory(1), r = this._getdata(s, e.getHistoriesList(), o);
-cc.log("data bet taixiu =", r);
-t.tableView.getComponent(cc.tableView).initTableView(r.length, {
-array: r,
+var t = e.getHistoriesList().length, o = Common.getHeadHistory(1), s = this._getdata(o, e.getHistoriesList(), t);
+cc.log("data bet taixiu =", s);
+this.tableView.getComponent(cc.tableView).initTableView(s.length, {
+array: s,
 target: this
 });
 }
@@ -3899,6 +4192,270 @@ cc._RF.pop();
 NetworkManager: "NetworkManager",
 Popup: "Popup"
 } ],
+PopupTaixiuSession: [ function(e, t, o) {
+"use strict";
+cc._RF.push(t, "ba4280Ws2lFF6EpaACgZcxi", "PopupTaixiuSession");
+var u = e("NetworkManager"), s = e("Popup");
+cc.Class({
+extends: s,
+properties: {
+currentSess: 0,
+titleSession: cc.Label,
+titleDate: cc.Label,
+tableView: cc.Node,
+indexSession: 0,
+diceOne: cc.Sprite,
+diceTwo: cc.Sprite,
+diceThree: cc.Sprite,
+result: cc.Label,
+list_frame: [ cc.SpriteFrame ]
+},
+init: function(e) {
+this.getLookUpGameHistory(e - 1, 0, Config.NUM_LOAD.MORE_ITEM, !0, 2, !1);
+this.currentSess = e - 1;
+},
+getLookUpGameHistory: function(e, t, o, s, r, i) {
+var n = [], a = new proto.BINMapFieldEntry();
+a.setKey("historyType");
+a.setValue(Config.LookupTypeRequest.sessionAllUserBet.toString());
+n.push(a);
+var p = new proto.BINMapFieldEntry();
+p.setKey("sessionId");
+p.setValue(e.toString());
+n.push(p);
+var l = new proto.BINMapFieldEntry();
+l.setKey("isCash");
+var g = s ? "true" : "false";
+l.setValue(g);
+n.push(l);
+cc.log("entries =", n);
+u.getLookUpGameHistoryRequest(t, o, n, r, i);
+},
+onGameEvent: function() {
+var t = this;
+u.checkEvent(function(e) {
+return t.handleMessage(e);
+});
+},
+update: function(e) {
+this.onGameEvent();
+},
+handleMessage: function(e) {
+var t = e, o = !0;
+switch (t.message_id) {
+case u.MESSAGE_ID.LOOK_UP_GAME_HISTORY:
+var s = t.response;
+this.lookupGameResponseHandler(s);
+break;
+
+default:
+o = !1;
+}
+return o;
+},
+lookupGameResponseHandler: function(e) {
+if (0 !== e) if (e.getResponsecode()) {
+var t = e.getHistoriesList().length, o = Common.getHeadHistory(2), s = this._getdata(o, e.getHistoriesList(), t);
+this.tableView.getComponent(cc.tableView).initTableView(s.length, {
+array: s,
+target: this
+});
+cc.log("args =", e.getArgsList());
+for (var r = 0; r < e.getArgsList().length; r++) {
+var i = e.getArgsList()[r].getKey(), n = e.getArgsList()[r].getValue();
+if ("sessionId" === i) {
+cc.log("sessionId =", n);
+this.titleSession.string = "#" + n;
+this.currentSess = n;
+} else if ("startedTime" === i) {
+var a = Common.timeToDate(n);
+this.titleDate = a;
+} else if ("totalValue" === i) this.result.string = n; else if ("diceValues" === i) {
+var p = n.split(",");
+cc.log("values =", p);
+this.diceOne.spriteFrame = this.list_frame[parseInt(p[0] - 1)];
+this.diceTwo.spriteFrame = this.list_frame[parseInt(p[1] - 1)];
+this.diceThree.spriteFrame = this.list_frame[parseInt(p[2] - 1)];
+}
+}
+} else e.hasMessage() && Common.showToast(e.getMessage());
+},
+_getdata: function(e, t, o) {
+var s = [], r = {};
+r.time = e[0];
+r.userName = e[1];
+r.bigBet = e[2];
+r.smallBet = e[3];
+r.bigRefund = e[4];
+r.smallRefund = e[5];
+r.totalWin = e[6];
+s.push(r);
+for (var i = 0; i < o; ++i) {
+var n = {};
+n.time = Common.timeToDate(t[i].getFirst());
+n.userName = t[i].getSecond();
+n.bigBet = t[i].getThird();
+n.smallBet = t[i].getFourth();
+n.bigRefund = t[i].getFifth();
+n.smallRefund = t[i].getSixth();
+n.totalWin = t[i].getSeventh();
+s.push(n);
+}
+return s;
+},
+btnBackEvent: function() {
+this.getLookUpGameHistory(this.currentSess - 1, 0, Config.NUM_LOAD.MORE_ITEM, !0, 2, !1);
+this.currentSess = this.currentSess - 1;
+},
+btnNextEvent: function() {
+var e = parseInt(this.currentSess) + 1;
+this.getLookUpGameHistory(e, 0, Config.NUM_LOAD.MORE_ITEM, !0, 2, !1);
+this.currentSess = e;
+}
+});
+cc._RF.pop();
+}, {
+NetworkManager: "NetworkManager",
+Popup: "Popup"
+} ],
+PopupTaixiuStatis: [ function(e, t, o) {
+"use strict";
+cc._RF.push(t, "67679Oau7tAGYNLXAnWMe3r", "PopupTaixiuStatis");
+var r = e("NetworkManager"), s = e("Popup");
+cc.Class({
+extends: s,
+properties: {
+contentBottom: cc.Node,
+contentTop: cc.Node,
+taixiuSpritePrefab: cc.Prefab,
+bottom_tai: cc.Label,
+bottom_xiu: cc.Label,
+top_tai: cc.Label,
+top_xiu: cc.Label,
+analyticResultHis: [],
+displayAnalyticResultHis: []
+},
+onLoad: function() {
+this.getLookUpGameHistory(0, 120);
+},
+onGameEvent: function() {
+var t = this;
+r.checkEvent(function(e) {
+return t.handleMessage(e);
+});
+},
+update: function(e) {
+this.onGameEvent();
+},
+handleMessage: function(e) {
+var t = e, o = !0;
+switch (t.message_id) {
+case r.MESSAGE_ID.LOOK_UP_GAME_HISTORY:
+var s = t.response;
+this.lookupGameHistoryResponse(s);
+break;
+
+default:
+o = !1;
+}
+return o;
+},
+getLookUpGameHistory: function(e, t) {
+var o = [], s = new proto.BINMapFieldEntry();
+s.setKey("historyType");
+s.setValue(Config.LookupTypeRequest.sessionHist.toString());
+o.push(s);
+r.getLookUpGameHistoryRequest(e, t, o);
+},
+lookupGameHistoryResponse: function(e) {
+cc.log("rs =", e);
+if (0 !== e && e.getResponsecode() && 0 < e.getHistoriesList().length) {
+this.analyticResultHis = [];
+for (var t = 0; t < e.getHistoriesList().length; t++) {
+var o = parseInt(e.getHistoriesList()[t].getFirst()), s = e.getHistoriesList()[t].getSecond().split(","), r = [];
+r.push(o);
+for (var i = 0; i < s.length; i++) r.push(parseInt(s[i]));
+this.analyticResultHis.push(r);
+}
+this.getListAnalytic();
+this.displayAnalyticResultHis.reverse();
+this.updateBottomTable(this.analyticResultHis);
+this.updateTopTable(this.displayAnalyticResultHis);
+}
+},
+getListAnalytic: function() {
+var e = 0, t = 0;
+if (0 !== this.analyticResultHis[0].length) {
+var o = 10 < this.analyticResultHis[0][1] + this.analyticResultHis[0][2] + this.analyticResultHis[0][3];
+this.displayAnalyticResultHis = [];
+this.displayAnalyticResultHis.push(this.analyticResultHis[0]);
+for (var s = 1; s < this.analyticResultHis.length; s++) {
+if (4 === this.analyticResultHis[s].length && o === 10 < this.analyticResultHis[s][1] + this.analyticResultHis[s][2] + this.analyticResultHis[s][3]) {
+if (5 < ++t) {
+t -= 6;
+e++;
+}
+} else {
+o = !o;
+e++;
+t = 0;
+}
+if (!(e < 20)) break;
+this.displayAnalyticResultHis.push(this.analyticResultHis[s]);
+}
+}
+},
+updateTopTable: function(e) {
+for (var t = 0, o = 0, s = [], r = e.length - 1; 0 <= r; r--) {
+10 < e[r][1] + e[r][2] + e[r][3] ? t++ : o++;
+s.push(e[r]);
+}
+this.top_tai.string = t;
+this.top_xiu.string = o;
+var i = this.contentTop.getContentSize().width / 40, n = this.contentTop.getContentSize().height / 12, a = 0, p = 0, l = 10 < s[0][1] + s[0][2] + s[0][3];
+for (r = 1; r < s.length; r++) {
+if (10 < (l = s[r][1] + s[r][2] + s[r][3])) {
+if (5 < ++p) {
+p -= 6;
+a++;
+}
+} else {
+l = !l;
+a++;
+p = 0;
+}
+if (a < 20) {
+var g = i * (2 * a + 1) - this.contentTop.getContentSize().width / 2, u = n * (11 - 2 * p) - this.contentTop.getContentSize().height / 2, c = cc.instantiate(this.taixiuSpritePrefab);
+c.getComponent("TaixiuSprite").init(l);
+c.setPositionX(g);
+c.setPositionY(u);
+this.contentTop.addChild(c);
+}
+}
+},
+updateBottomTable: function(e) {
+for (var t = 0, o = 0, s = [], r = e.length - 1; 0 <= r; r--) {
+10 < e[r][1] + e[r][2] + e[r][3] ? t++ : o++;
+s.push(e[r]);
+}
+this.bottom_tai.string = t;
+this.bottom_xiu.string = o;
+var i = this.contentBottom.getContentSize().width / 40, n = this.contentBottom.getContentSize().height / 12;
+for (r = 0; r < s.length; ++r) {
+var a = s[r][1] + s[r][2] + s[r][3], p = cc.instantiate(this.taixiuSpritePrefab);
+p.getComponent("TaixiuSprite").init(a);
+var l = parseInt(r / 6), g = parseInt(r % 6), u = i * (2 * l + 1) - this.contentBottom.getContentSize().width / 2, c = n * (11 - 2 * g) - this.contentBottom.getContentSize().height / 2;
+p.setPositionX(u);
+p.setPositionY(c);
+this.contentBottom.addChild(p);
+}
+}
+});
+cc._RF.pop();
+}, {
+NetworkManager: "NetworkManager",
+Popup: "Popup"
+} ],
 PopupThreeCardHistory: [ function(e, t, o) {
 "use strict";
 cc._RF.push(t, "7d32cp2UZ5IqaajbH90eMMe", "PopupThreeCardHistory");
@@ -3907,8 +4464,7 @@ cc.Class({
 extends: s,
 properties: {},
 start: function() {
-var e = [ "Lịch sử quay", "Lịch sử nổ hũ", "Top cao thủ" ];
-this.addTabs(e);
+this.addTabs([ "Lịch sử quay", "Lịch sử nổ hũ", "Top cao thủ" ]);
 },
 addTabs: function(e) {
 this._super(e);
@@ -3924,16 +4480,17 @@ PopupHistory: "PopupHistory"
 PopupUserInfo: [ function(e, t, o) {
 "use strict";
 cc._RF.push(t, "16babYXR8hJxZ0dXR0gzrjI", "PopupUserInfo");
-var s = e("NetworkManager"), r = e("CommonPopup");
+var r = e("NetworkManager"), s = e("CommonPopup");
 cc.Class({
-extends: r,
+extends: s,
 properties: {
 userInfoPrefab: cc.Prefab,
 tabLeftPrefab: cc.Prefab,
 contentRight: cc.Node,
 tabLeftNode: cc.Node,
 _tab: 1,
-subHistory: 1
+subHistory: 1,
+list_item: []
 },
 onLoad: function() {},
 start: function() {},
@@ -3950,28 +4507,28 @@ this.tableView.active = !0;
 this.tabLeftNode.active = !1;
 this.contentRight.active = !1;
 var o = Common.getUserId();
-s.getViewUserInfoFromServer(o);
+r.getViewUserInfoFromServer(o);
 this.setTab(1);
 } else if (2 === e) {
 this.tableView.active = !1;
 this.tabLeftNode.active = !0;
 this.contentRight.active = !0;
-var r = [ "Dòng Mon", "Nạp Mon", "Giao Dịch" ], i = cc.instantiate(this.tabLeftPrefab);
-i.getComponent("UITabLeft").setTab(r, 1, function(e) {
+var s = cc.instantiate(this.tabLeftPrefab);
+s.getComponent("UITabLeft").setTab([ "Dòng Mon", "Nạp Mon", "Giao Dịch" ], 1, function(e) {
 t.onLeftEvent(e);
 });
-this.tabLeftNode.addChild(i);
+this.tabLeftNode.addChild(s);
 this.setTab(2);
 } else 3 === e && this.setTab(3);
 },
 onLeftEvent: function(e) {
-s.getLookupMoneyHistoryMessage(-1, 20, e);
+r.getLookupMoneyHistoryMessage(-1, 20, e);
 this.setSubHistory(e);
 },
 onGameEvent: function() {
-var e = this;
-s.checkEvent(function(t) {
-return e.handleMessage(t);
+var t = this;
+r.checkEvent(function(e) {
+return t.handleMessage(e);
 });
 },
 update: function(e) {
@@ -3980,18 +4537,23 @@ this.onGameEvent();
 handleMessage: function(e) {
 var t = e, o = !0;
 switch (t.message_id) {
-case s.MESSAGE_ID.VIEW_USER_INFO:
-r = t.response;
-this.viewUserInfoFromServer(r);
+case r.MESSAGE_ID.VIEW_USER_INFO:
+var s = t.response;
+this.viewUserInfoFromServer(s);
 break;
 
-case s.MESSAGE_ID.USER_VERIFY:
-r = t.response;
+case r.MESSAGE_ID.USER_VERIFY:
+s = t.response;
 break;
 
-case s.MESSAGE_ID.LOOK_UP_MONEY_HISTORY:
-var r = t.response;
-this.lookupMoneyHistoryResponse(r);
+case r.MESSAGE_ID.LOOK_UP_MONEY_HISTORY:
+s = t.response;
+this.lookupMoneyHistoryResponse(s);
+break;
+
+case r.MESSAGE_ID.UPDATE_USER_INFO:
+s = t.response;
+this.updateUserInfoFromServer(s);
 break;
 
 default:
@@ -4000,21 +4562,51 @@ o = !1;
 return o;
 },
 viewUserInfoFromServer: function(e) {
-var t = this;
 if (0 !== e) {
 if (e.getResponsecode() && e.hasUserinfo()) {
-var o = e.getUserinfo(), s = o.getAvatarid();
-s < 1e5 && (s = 0);
-var r = o.getUserid(), i = o.getLevel().getLevel(), n = o.getDisplayname(), a = o.getCash(), p = null;
-o.getUserid() === Common.getUserId() && (p = Common.getPhoneNumber());
-var l = o.getTrustedindex(), u = o.getTotalmatch(), g = o.getTotalwin(), d = o.getTotalmatch() - o.getTotalwin(), c = cc.instantiate(this.userInfoPrefab);
-c.getComponent("UserInfo").init("", n, i, r, p, l, u, g, d, a);
-t.tableView.addChild(c);
+var t = e.getUserinfo(), o = t.getAvatarid();
+o < 1e5 && (o = 0);
+this.avatarId = o;
+var s = t.getUserid();
+this.userId = t.getUserid();
+var r = t.getLevel().getLevel();
+this.level = t.getLevel().getLevel();
+var i = t.getDisplayname();
+this.displayName = t.getDisplayname();
+var n = t.getCash();
+this.cash = t.getCash();
+var a = null;
+t.getUserid() === Common.getUserId() && (a = Common.getPhoneNumber());
+this.phone = a;
+var p = t.getTrustedindex();
+this.chiso = t.getTrustedindex();
+var l = t.getTotalmatch();
+this.sovanchoi = t.getTotalmatch();
+var g = t.getTotalwin();
+this.sovanthang = t.getTotalwin();
+var u = t.getTotalmatch() - t.getTotalwin();
+this.sovanthua = u;
+var c = cc.instantiate(this.userInfoPrefab);
+c.getComponent("UserInfo").init("", i, r, s, a, p, l, g, u, n);
+this.list_item.push(c);
+this.tableView.addChild(c);
 }
 if (e.hasMessage()) {
-var h = e.getMessage();
-Common.showToast(h);
+var d = e.getMessage();
+Common.showToast(d);
 }
+}
+},
+updateUserInfoFromServer: function(e) {
+cc.log("updateUserInfoResponse =", e);
+if (0 !== e) {
+if (e.getResponsecode()) {
+var t = Common.getAvatarId() ? Common.getAvatarId() : this.avatarId, o = Common.getNewPhone() ? Common.getNewPhone() : this.phone;
+this.displayName, this.level, this.userId, this.chiso, this.sovanchoi, this.sovanthang, 
+this.sovanthua, this.cash;
+this.list_item[0].getComponent("UserInfo").updateInfo(t, o);
+}
+e.hasMessage() && e.getMessage() && Common.showToast(e.getMessage());
 }
 },
 lookupMoneyHistoryResponse: function(e) {
@@ -4027,11 +4619,11 @@ e.hasMessage() && Common.showToast(e.getMessage(), 2);
 }
 },
 loadMoneyLogsHistory: function(e) {
-var t = this, o = e.length, s = [ "Thời gian", "Phát sinh", "Số dư", "Mô tả" ];
-1 === this.subHistory ? s = [ "Thời gian", "Phát sinh", "Số dư", "Mô tả" ] : 2 === this.subHistory ? s = [ "Thời gian", "Mon nạp", "Số dư" ] : 1 === this.subHistory && (s = [ "Thời gian", "Loại thẻ", "Thông tin", "Trạng thái" ]);
-var r = this._getdata(e, s, o);
-t.contentRight.getComponent(cc.tableView).initTableView(r.length, {
-array: r,
+var t = e.length, o = [ "Thời gian", "Phát sinh", "Số dư", "Mô tả" ];
+1 === this.subHistory ? o = [ "Thời gian", "Phát sinh", "Số dư", "Mô tả" ] : 2 === this.subHistory ? o = [ "Thời gian", "Mon nạp", "Số dư" ] : 1 === this.subHistory && (o = [ "Thời gian", "Loại thẻ", "Thông tin", "Trạng thái" ]);
+var s = this._getdata(e, o, t);
+this.contentRight.getComponent(cc.tableView).initTableView(s.length, {
+array: s,
 target: this
 });
 },
@@ -4142,19 +4734,19 @@ this.name = e;
 },
 appear: function() {
 cc.log("appear popup");
-var e = this.background, t = this;
-this.node.on("touchstart", function(o, s) {
-var r = e.node.convertToNodeSpace(o.getLocation()), i = e.spriteFrame.getRect();
-if (!cc.rectContainsPoint(i, r)) {
-t.disappear();
+var r = this.background, i = this;
+this.node.on("touchstart", function(e, t) {
+var o = r.node.convertToNodeSpace(e.getLocation()), s = r.spriteFrame.getRect();
+if (!cc.rectContainsPoint(s, o)) {
+i.disappear();
 return !0;
 }
 return !1;
-}, e);
+}, r);
 this.bg_dark.node.runAction(cc.fadeTo(.15, 150));
 this.background.node.setScale(.7);
-var o = cc.scaleTo(.2, 1).easing(cc.easeBackOut());
-this.background.node.runAction(cc.sequence(o, cc.callFunc(function() {}, this)));
+var e = cc.scaleTo(.2, 1).easing(cc.easeBackOut());
+this.background.node.runAction(cc.sequence(e, cc.callFunc(function() {}, this)));
 }
 });
 cc._RF.pop();
@@ -4200,13 +4792,12 @@ this.syntax = o;
 this.number = s;
 },
 smsEvent: function() {
-cc.log("sms event:");
-var e = this;
-Common.showPopup(Config.name.POPUP_MESSAGE_BOX, function(t) {
-t.init("Soạn " + e.syntax + " đến " + e.number + " để nhận được " + e.cashValue + " BIT", Config.COMMON_POPUP_TYPE.MESSAGE_BOX.CONFIRM_TYPE, function() {
+var t = this;
+Common.showPopup(Config.name.POPUP_MESSAGE_BOX, function(e) {
+e.init("Soạn " + t.syntax + " đến " + t.number + " để nhận được " + t.cashValue + " BIT", Config.COMMON_POPUP_TYPE.MESSAGE_BOX.CONFIRM_TYPE, function() {
 cc.log("call back");
 });
-t.appear();
+e.appear();
 });
 }
 });
@@ -4236,11 +4827,30 @@ this.first = e;
 this.second = t;
 this.third = o;
 },
+getResult: function() {
+return [ this.first, this.second, this.third ];
+},
 sum: function() {
 return this.first + this.second + this.third;
 },
 duplicate: function() {
 return new s(this.sestionID, this.first, this.second, this.third);
+}
+});
+cc._RF.pop();
+}, {} ],
+TabItemTaixiu: [ function(e, t, o) {
+"use strict";
+cc._RF.push(t, "3beb3o5xslHxqicGA3IfEhG", "TabItemTaixiu");
+cc.Class({
+extends: cc.Component,
+properties: {
+lbl_session: cc.Label,
+lbl_date: cc.Label
+},
+init: function(e) {
+this.lbl_session.string = e;
+this.lbl_date.string = e;
 }
 });
 cc._RF.pop();
@@ -4283,9 +4893,26 @@ this.number.string = e;
 });
 cc._RF.pop();
 }, {} ],
+TaixiuSprite: [ function(e, t, o) {
+"use strict";
+cc._RF.push(t, "8ce32mGLrRNo5+Wx7tgHbU1", "TaixiuSprite");
+cc.Class({
+extends: cc.Component,
+properties: {
+list_frame: [ cc.SpriteFrame ],
+background: cc.Sprite
+},
+init: function(e) {
+this.background.spriteFrame = 10 < e ? this.list_frame[1] : this.list_frame[0];
+}
+});
+cc._RF.pop();
+}, {} ],
 ThreeCard: [ function(e, t, o) {
 "use strict";
-function s(e, t, o) {
+cc._RF.push(t, "0e13dxGd+9OFKjEHr3SXHmG", "ThreeCard");
+var s;
+function r(e, t, o) {
 t in e ? Object.defineProperty(e, t, {
 value: o,
 enumerable: !0,
@@ -4294,8 +4921,7 @@ writable: !0
 }) : e[t] = o;
 return e;
 }
-cc._RF.push(t, "0e13dxGd+9OFKjEHr3SXHmG", "ThreeCard");
-var r, i = e("NetworkManager"), n = e("BaseScene"), a = cc.Class((r = {
+var i = e("NetworkManager"), n = e("BaseScene"), a = cc.Class((r(s = {
 extends: n,
 properties: {
 bg: cc.Sprite,
@@ -4334,15 +4960,14 @@ i.requestExitRoomMessage(0);
 },
 onLoad: function() {
 this.userMoney.string = Common.numberFormatWithCommas(Common.getCash());
-a.instance = this;
-this.initFirstCard();
+(a.instance = this).initFirstCard();
 this.schedule(this.requestJar, 5);
 Common.setMiniThreeCardsSceneInstance(cc.director.getScene());
 },
 onGameEvent: function() {
-var e = this;
-i.checkEvent(function(t) {
-return e.handleMessage(t);
+var t = this;
+i.checkEvent(function(e) {
+return t.handleMessage(e);
 });
 },
 initFirstCard: function() {
@@ -4368,7 +4993,7 @@ this.init(t);
 init: function(e) {
 var t = e.getRoomplay();
 this.roomIndex = t.getRoomindex();
-if (e.getArgsList().length > 0) {
+if (0 < e.getArgsList().length) {
 var o = e.getArgsList()[0];
 "initValue" === o.getKey() && this.initValue(o.getValue());
 }
@@ -4381,47 +5006,50 @@ onDestroy: function() {
 cc.log("on destroy");
 this.unscheduleAllCallbacks();
 }
-}, s(r, "onGameEvent", function() {
-var e = this;
-i.checkEvent(function(t) {
-return e.handleMessage(t);
+}, "onGameEvent", function() {
+var t = this;
+i.checkEvent(function(e) {
+return t.handleMessage(e);
 });
-}), s(r, "quayEvent", function() {
+}), r(s, "quayEvent", function() {
 cc.instantiate(this.toastPrefab).getComponent("ToastScripts");
 var e = Common.getCash(), t = this.getBetMoney();
 cc.log("betMoney =", t);
-if (t > e) {
-o = "Bạn không có đủ tiền!";
+if (e < t) {
+var o = "Bạn không có đủ tiền!";
 Common.showToast(o);
 } else if (!this.autoSpinToggle.isChecked) if (this.isRun) {
-var o = "Xin vui lòng đợi!";
+o = "Xin vui lòng đợi!";
 Common.showToast(o);
 } else this.getTurnMiniThreeCardsRequest(this.calculateTurnType());
-}), s(r, "getTurnMiniThreeCardsRequest", function(e) {
+}), r(s, "getTurnMiniThreeCardsRequest", function(e) {
 this.isRun = !0;
 var t = [], o = new proto.BINMapFieldEntry();
 o.setKey("turnSlotType");
 o.setValue(e.toString());
 t.push(o);
 i.getTurnMessageFromServer(0, t);
-}), s(r, "exitRoomResponsehandler", function(e) {
+}), r(s, "exitRoomResponsehandler", function(e) {
 cc.log("exit room response handler:", e.toObject());
 e.getResponsecode();
 e.hasMessage();
-}), s(r, "exitZoneResponseHandler", function(e) {
+}), r(s, "exitZoneResponseHandler", function(e) {
 cc.log("exit zone response handler:", e.toObject());
 if (e.getResponsecode()) {
 Common.setZoneId(-1);
 cc.director.loadScene("Lobby");
 }
 e.hasMessage() && e.getMessage();
-}), s(r, "handleMessage", function(e) {
+}), r(s, "takeTurn", function() {
+this.time_move = this.fastSpinToggle.isChecked ? .4 : 1;
+this.getTurnMiniThreeCardsRequest(this.calculateTurnType());
+}), r(s, "handleMessage", function(e) {
 var t = this._super(e);
 if (t) return !0;
 t = !0;
 switch (e.message_id) {
 case i.MESSAGE_ID.UPDATE_MONEY:
-o = e.response;
+var o = e.response;
 this.updateMoneyMessageResponseHandler(o);
 break;
 
@@ -4440,7 +5068,7 @@ this.exitZoneResponseHandler(o);
 break;
 
 case i.MESSAGE_ID.JAR:
-var o = e.response;
+o = e.response;
 this.jarResponseHandler(o);
 break;
 
@@ -4448,24 +5076,24 @@ default:
 t = !1;
 }
 return t;
-}), s(r, "updateMoneyMessageResponseHandler", function(e) {
+}), r(s, "updateMoneyMessageResponseHandler", function(e) {
 if (e.getResponsecode()) {
 this.setBinUpdateMoney(e);
 this.removeTurnUpdateMoney();
 }
-}), s(r, "setBinUpdateMoney", function(e) {
+}), r(s, "setBinUpdateMoney", function(e) {
 this.updateMoneyResponse = e;
-}), s(r, "getBINUpdateMoneyResponse", function() {
+}), r(s, "getBINUpdateMoneyResponse", function() {
 return this.updateMoneyResponse;
-}), s(r, "setEnterZoneResponse", function(e) {
+}), r(s, "setEnterZoneResponse", function(e) {
 this.enterZoneResponse = e;
-}), s(r, "getEnterZoneResponse", function() {
+}), r(s, "getEnterZoneResponse", function() {
 return this.enterZoneResponse;
-}), s(r, "setEnterRoomResponse", function(e) {
+}), r(s, "setEnterRoomResponse", function(e) {
 this.enterRoomResponse = e;
-}), s(r, "getEnterRoomResponse", function() {
+}), r(s, "getEnterRoomResponse", function() {
 return this.enterRoomResponse;
-}), s(r, "removeTurnUpdateMoney", function() {
+}), r(s, "removeTurnUpdateMoney", function() {
 var e = this.getBINUpdateMoneyResponse();
 cc.log("updateMoneyResponse =", e.getMoneyboxesList());
 if (e.getResponsecode()) for (var t = 0; t < e.getMoneyboxesList().length; t++) {
@@ -4476,9 +5104,9 @@ Common.setCash(s);
 this.userMoney.string = Common.numberFormatWithCommas(s);
 }
 }
-}), s(r, "matchEndResponseHandler", function(e) {
+}), r(s, "matchEndResponseHandler", function(e) {
 if (e.getResponsecode()) {
-if (e.getArgsList().length > 0) for (var t = 0; t < e.getArgsList().length; t++) if ("currentCards" === e.getArgsList()[t].getKey()) {
+if (0 < e.getArgsList().length) for (var t = 0; t < e.getArgsList().length; t++) if ("currentCards" === e.getArgsList()[t].getKey()) {
 var o = e.getArgsList()[t].getValue().split(",").map(Number);
 this.implementSpinMiniThreeCards(o, e);
 }
@@ -4486,7 +5114,7 @@ this.implementSpinMiniThreeCards(o, e);
 this.isRun = !1;
 this.autoSpinToggle.isChecked = !1;
 }
-}), s(r, "implementSpinMiniThreeCards", function(e, t) {
+}), r(s, "implementSpinMiniThreeCards", function(e, t) {
 cc.log("carx =", e);
 var o = t.getTextemoticonsList()[0];
 this.isFinishSpin = !1;
@@ -4496,85 +5124,86 @@ cc.log("item value =", r);
 cc.log("stepCard =", this.stepCard);
 r[this.stepCard - 2] = e;
 if (r.length * this.number == this.list_item.length) {
-for (g = 0; g < this.list_item.length; g++) {
-var i = parseInt(g / this.number), n = parseInt(g % this.number);
-if (g < 3 * this.number) {
-var a = this.stepCard - (3 - i), p = n;
-this.list_item[g].getComponent("CardItem").replaceCard(this.list_recent_value[a][p]);
+for (var i = 0; i < this.list_item.length; i++) {
+var n = parseInt(i / this.number), a = parseInt(i % this.number);
+if (i < 3 * this.number) {
+var p = this.stepCard - (3 - n), l = a;
+this.list_item[i].getComponent("CardItem").replaceCard(this.list_recent_value[p][l]);
 }
-var l = (n - 1) * this.list_item[g].getContentSize().width, u = (i - 1) * this.list_item[g].getContentSize().height;
-this.list_item[g].setPositionX(l);
-this.list_item[g].setPositionY(u);
+var g = (a - 1) * this.list_item[i].getContentSize().width, u = (n - 1) * this.list_item[i].getContentSize().height;
+this.list_item[i].setPositionX(g);
+this.list_item[i].setPositionY(u);
 }
 this.list_recent_value = r;
-for (var g = 0; g < this.list_item.length; g++) {
-var i = parseInt(g / this.number), n = parseInt(g % this.number), d = this.list_item[g], c = r[i][n];
-g >= 3 * this.number && d.getComponent("CardItem").replaceCard(c);
-var h = d.getContentSize().height, f = cc.moveBy(.2, cc.p(0, .25 * h)), y = cc.moveBy(.15, cc.p(0, .25 * h)), B = cc.moveBy(this.time_move, cc.p(0, -(this.stepCard - 3) * h - .5 * h)), I = cc.delayTime(.3 * n);
-if (g == this.list_item.length - 1) {
+for (i = 0; i < this.list_item.length; i++) {
+n = parseInt(i / this.number), a = parseInt(i % this.number);
+var c = this.list_item[i], d = r[n][a];
+i >= 3 * this.number && c.getComponent("CardItem").replaceCard(d);
+var h = c.getContentSize().height, f = cc.moveBy(.2, cc.p(0, .25 * h)), y = cc.moveBy(.15, cc.p(0, .25 * h)), B = cc.moveBy(this.time_move, cc.p(0, -(this.stepCard - 3) * h - .5 * h)), I = cc.delayTime(.3 * a);
+if (i == this.list_item.length - 1) {
 var M = t.getTextemoticonsList()[0], R = M.getEmoticonid(), N = M.getMessage(), m = this.getBINUpdateMoneyResponse(), F = cc.callFunc(function() {
 this.handleRanking(R, N, m);
 }, this), b = cc.callFunc(function() {
 this.isBreakJar || (this.isFinishSpin = !0);
 }, this);
-d.runAction(cc.sequence(I, f, B, y, F, cc.delayTime(2), b, null));
-} else d.runAction(cc.sequence(I, f, B, y));
+c.runAction(cc.sequence(I, f, B, y, F, cc.delayTime(2), b, null));
+} else c.runAction(cc.sequence(I, f, B, y));
 }
 }
-}), s(r, "onDestroy", function() {
+}), r(s, "onDestroy", function() {
 this.unscheduleAllCallbacks();
-}), s(r, "_onDealEnd", function() {
+}), r(s, "_onDealEnd", function() {
 cc.log("run action");
-}), s(r, "handleAutoSpin", function() {
+}), r(s, "handleAutoSpin", function() {
 if (this.autoSpinToggle.isChecked && !this.isRun && this.isFinishSpin) {
 cc.instantiate(this.toastPrefab).getComponent("ToastScripts");
 var e = Common.getCash(), t = this.getBetMoney();
 cc.log("betMoney =", t);
-if (t > e) {
+if (e < t) {
 Common.showToast("Bạn không có đủ tiền!");
 this.autoSpinToggle.isChecked = !1;
 return;
 }
 this.getTurnMiniThreeCardsRequest(this.calculateTurnType());
 }
-}), s(r, "handleRanking", function(e, t, o) {
+}), r(s, "handleRanking", function(e, t, n) {
 if (54 !== e) if (72 !== e) {
 this.isUpdateMoney = !1;
 cc.log("mess =", t);
-var s = new cc.Node(t);
-s.parent = this.node;
-var r = s.addComponent(cc.Label);
-r.string = t;
-r.node.color = cc.color(248, 213, 82, 255);
-r.fontSize = 60;
-r.lineHeight = 70;
-var i = s.addComponent(cc.LabelOutline);
-i.color = new cc.Color(.5, .3, .7, 1);
-i.width = 3;
-var n = cc.fadeOut(1), a = cc.callFunc(function() {
-for (var e = 0; e < o.getMoneyboxesList().length; e++) {
+var o = new cc.Node(t);
+o.parent = this.node;
+var s = o.addComponent(cc.Label);
+s.string = t;
+s.node.color = cc.color(248, 213, 82, 255);
+s.fontSize = 60;
+s.lineHeight = 70;
+var r = o.addComponent(cc.LabelOutline);
+r.color = new cc.Color(.5, .3, .7, 1);
+r.width = 3;
+var i = cc.fadeOut(1), a = cc.callFunc(function() {
+for (var e = 0; e < n.getMoneyboxesList().length; e++) {
 var t = new cc.Node();
 t.parent = this.node;
-var s = o.getMoneyboxesList()[e];
-if (s.getDisplaychangemoney() > 0) {
+var o = n.getMoneyboxesList()[e];
+if (0 < o.getDisplaychangemoney()) {
 this.isUpdateMoney = !0;
-var r = t.addComponent(cc.Label);
-r.string = "+" + s.getDisplaychangemoney().toString();
-r.node.color = cc.color(248, 213, 82, 255);
-r.fontSize = 60;
-r.lineHeight = 70;
-var i = t.addComponent(cc.LabelOutline);
-i.color = new cc.Color(.5, .3, .7, 1);
-i.width = 3;
-var n = cc.fadeOut(1.5);
-r.node.runAction(cc.sequence(cc.moveBy(.5, cc.p(0, 20)), cc.delayTime(.25), cc.spawn(cc.moveBy(1, cc.p(0, 20)), n, null), cc.removeSelf(), null));
+var s = t.addComponent(cc.Label);
+s.string = "+" + o.getDisplaychangemoney().toString();
+s.node.color = cc.color(248, 213, 82, 255);
+s.fontSize = 60;
+s.lineHeight = 70;
+var r = t.addComponent(cc.LabelOutline);
+r.color = new cc.Color(.5, .3, .7, 1);
+r.width = 3;
+var i = cc.fadeOut(1.5);
+s.node.runAction(cc.sequence(cc.moveBy(.5, cc.p(0, 20)), cc.delayTime(.25), cc.spawn(cc.moveBy(1, cc.p(0, 20)), i, null), cc.removeSelf(), null));
 }
 }
 }, this), p = cc.callFunc(function() {
 this.isUpdateMoney && this.setOriginMoney();
 this.isRun = !1;
 }, this);
-r.node.runAction(cc.sequence(cc.moveBy(.5, cc.p(0, 50)), a, cc.spawn(cc.moveBy(1, cc.p(0, 50)), n, null), p, cc.removeSelf(), null));
+s.node.runAction(cc.sequence(cc.moveBy(.5, cc.p(0, 50)), a, cc.spawn(cc.moveBy(1, cc.p(0, 50)), i, null), p, cc.removeSelf(), null));
 } else {
 this.setOriginMoney();
 this.isRun = !1;
@@ -4582,11 +5211,11 @@ this.isRun = !1;
 this.showNoHu();
 this.isRun = !1;
 }
-}), s(r, "setOriginMoney", function() {
+}), r(s, "setOriginMoney", function() {
 var e = this.getBINUpdateMoneyResponse();
 if (0 !== e) for (var t = 0; t < e.getMoneyboxesList().length; t++) {
 var o = e.getMoneyboxesList()[t];
-if (o.getDisplaychangemoney() > 0) {
+if (0 < o.getDisplaychangemoney()) {
 var s = Common.getUserInfo();
 if (o.getUserid() === s.userid) {
 var r = o.getCurrentmoney();
@@ -4596,12 +5225,12 @@ this.userMoney.string = Common.numberFormatWithCommas(r);
 }
 }
 this.isRun = !1;
-}), s(r, "jarResponseHandler", function(e) {
+}), r(s, "jarResponseHandler", function(e) {
 cc.log("jarResponseHandler = ", e);
 if (e.getResponsecode()) {
 var t = 0, o = this.jarValue;
 this.jarValue = e.getJarvalue();
-if (e.getArgsList().length > 0) {
+if (0 < e.getArgsList().length) {
 var s = e.getArgsList()[0];
 "jarType" === s.getKey() && (t = parseInt(s.getValue().toString()));
 }
@@ -4612,9 +5241,11 @@ this.jarType = t;
 }
 e.hasMessage() && !e.getMessage() && Common.showToast(e.getMessage());
 this.isRequestJar = !1;
-}), s(r, "getAutoSpin", function() {
+}), r(s, "getAutoSpin", function() {
 this.autoSpinToggle.isChecked = !this.autoSpinToggle.isChecked;
-}), s(r, "showNoHu", function() {
+}), r(s, "getFastSpin", function() {
+this.fastSpinToggle.isChecked = !this.fastSpinToggle.isChecked;
+}), r(s, "showNoHu", function() {
 cc.log("showNoHu");
 var e = cc.instantiate(this.nohuPrefab).getComponent("Nohu");
 e.playAnim();
@@ -4626,58 +5257,58 @@ this.setOriginMoney();
 this.isBreakJar = !1;
 }, this);
 e.node.runAction(cc.sequence(cc.delayTime(2), o, cc.delayTime(1), cc.fadeOut(1), cc.removeSelf(), null));
-}), s(r, "initValue", function(e) {
+}), r(s, "initValue", function(e) {
 var t = JSON.parse(e);
 cc.log("results =", t);
 this.lbl_moneys = t.turnValueCash;
 cc.log("lbl_moneys =", this.lbl_moneys);
 var o = t.jarValue;
 this.showJarValue(o);
-}), s(r, "showJarValue", function(e) {
+}), r(s, "showJarValue", function(e) {
 this.jarValue = e;
 var t = Common.numberFormatWithCommas(this.jarValue);
 cc.log("number_cash =", t);
 this.moneyJar.string = t;
-}), s(r, "getBetMoney", function() {
+}), r(s, "getBetMoney", function() {
 var e = this.getEnterRoomResponse().getArgsList()[0], t = null;
 "initValue" === e.getKey() && (t = e.getValue());
 var o = this.getKeyBet();
 return JSON.parse(t).turnValueCash[o];
-}), s(r, "calculateTurnType", function() {
+}), r(s, "calculateTurnType", function() {
 return this.getKeyBet() + 1;
-}), s(r, "setKeyBet", function(e) {
+}), r(s, "setKeyBet", function(e) {
 this.bet = e;
-}), s(r, "getKeyBet", function() {
+}), r(s, "getKeyBet", function() {
 return this.bet;
-}), s(r, "betEvent", function() {
+}), r(s, "betEvent", function() {
 var e = this.getKeyBet();
 0 === e ? this.setKeyBet(1) : 1 === e ? this.setKeyBet(2) : 2 === e && this.setKeyBet(0);
 this.moneyBet.string = this.getBetMoney();
 this.requestJar();
-}), s(r, "requestJar", function() {
+}), r(s, "requestJar", function() {
 if (!this.isRequestJar) {
 this.isRequestJar = !0;
 i.getJarRequest(Common.getMiniGameZoneId(), this.calculateTurnType());
 }
-}), s(r, "showSpin", function() {
-var e = [ "Lịch sử quay", "Lịch sử nổ hũ", "Top cao thủ" ];
-Common.showPopup(Config.name.POPUP_HISTORY, function(t) {
-t.addTabs(e, 1);
-t.appear();
+}), r(s, "showSpin", function() {
+var t = [ "Lịch sử quay", "Lịch sử nổ hũ", "Top cao thủ" ];
+Common.showPopup(Config.name.POPUP_HISTORY, function(e) {
+e.addTabs(t, 1);
+e.appear();
 });
-}), s(r, "showTopUser", function() {
-var e = [ "Lịch sử quay", "Lịch sử nổ hũ", "Top cao thủ" ];
-Common.showPopup(Config.name.POPUP_HISTORY, function(t) {
-t.addTabs(e, 3);
-t.appear();
+}), r(s, "showTopUser", function() {
+var t = [ "Lịch sử quay", "Lịch sử nổ hũ", "Top cao thủ" ];
+Common.showPopup(Config.name.POPUP_HISTORY, function(e) {
+e.addTabs(t, 3);
+e.appear();
 });
-}), s(r, "openSettingPopup", function() {
+}), r(s, "openSettingPopup", function() {
 Common.showPopup(Config.name.POPUP_SETTING, function(e) {
 e.appear();
 });
-}), s(r, "openRulesPopup", function() {
+}), r(s, "openRulesPopup", function() {
 Common.openRules();
-}), r));
+}), s));
 cc._RF.pop();
 }, {
 BaseScene: "BaseScene",
@@ -4744,14 +5375,14 @@ cc._RF.pop();
 Treasure: [ function(e, t, o) {
 "use strict";
 cc._RF.push(t, "ee8e8jWSlFOoLXipVTopcGg", "Treasure");
-var s = e("BaseScene"), r = e("NetworkManager");
-cc.Class({
+var s = e("BaseScene"), i = e("NetworkManager"), r = cc.Class({
 extends: s,
 properties: {
 board_view: cc.Mask,
 itemPrefab: cc.Prefab,
 btn_select_lines: cc.Prefab,
 line_result: cc.Prefab,
+nohuPrefab: cc.Prefab,
 board_null_line: cc.Node,
 txt_jar_money: cc.Label,
 txt_bet_money: cc.Label,
@@ -4769,20 +5400,50 @@ number: 5,
 time_move: 3,
 jarValue: 0,
 roomIndex: 0,
-betType: 0
+betType: 0,
+txt_user_money: cc.Label,
+money_display: cc.Label
+},
+statics: {
+instance: null
 },
 update: function(e) {
 this.onGameEvent();
 },
 onGameEvent: function() {
-var e = this;
-r.checkEvent(function(t) {
-return e.handleMessage(t);
+var t = this;
+i.checkEvent(function(e) {
+return t.handleMessage(e);
 });
 },
+initDataFromLoading: function(e, t) {
+this.enterRoomResponse = t;
+this.zoneId = e;
+var o = this.enterRoomResponse.getRoomplay();
+this.roomIndex = o.getRoomindex();
+if (0 < this.enterRoomResponse.getArgsList().length) {
+var s = this.enterRoomResponse.getArgsList()[0];
+"initValue" == s.getKey() && this.initValue(s.getValue());
+}
+cc.log("enter room response:", this.enterRoomResponse.toObject());
+},
+initValue: function(e) {
+for (var t = JSON.parse(e), o = t.turnValueCash, s = 0; s < o.length; s++) {
+this.turnCashValue.push(o[s]);
+if (s < this.bets_select.length) {
+var r = Common.convertIntToMoneyView(o[s]);
+if (0 == s) {
+this.txt_bet_money.string = r;
+this.txt_total_bet_money.string = Common.numberFormatWithCommas(o[s] * this.lst_number.length);
+}
+this.bets_select[s].string = r;
+}
+}
+this.jarValue = t.jarValue;
+this.txt_jar_money.string = Common.numberFormatWithCommas(this.jarValue);
+},
 onLoad: function() {
-this.requestJar();
-this.schedule(this.requestJar, 5);
+(r.instance = this).schedule(this.requestJar, 5);
 this.init();
 this.initItemPool();
 this.initMenu();
@@ -4795,6 +5456,16 @@ this.lst_number = [ 6, 2, 8, 5, 1, 4, 10, 7, 3, 9, 16, 12, 19, 14, 13, 17, 18, 1
 this.lst_line_result = [];
 this.lst_line_selected = [];
 this.lst_line_selected_sprite = [];
+this.turnCashValue = [];
+this.indexCash = 0;
+this.prevMoney = 0;
+this.lastMoney = 0;
+this.displayChangeMoney = 0;
+this.txt_user_money.string = Common.numberFormatWithCommas(Common.getCash());
+cc.log("init");
+},
+getAutoSpin: function() {
+Common.showToast("Chức năng này đang được cập nhật");
 },
 initItemPool: function() {
 this.itemPool = new cc.NodePool();
@@ -4805,27 +5476,28 @@ this.itemPool.put(t);
 },
 getItem: function(e) {
 var t = null;
-(t = this.itemPool.size() > 0 ? this.itemPool.get() : cc.instantiate(this.itemPrefab)).getComponent("ItemPrefab").init(e);
+(t = 0 < this.itemPool.size() ? this.itemPool.get() : cc.instantiate(this.itemPrefab)).getComponent("ItemPrefab").init(e);
 return t;
 },
 initMenu: function() {
 this.lst_number = [ 6, 2, 8, 5, 1, 4, 10, 7, 3, 9, 16, 12, 19, 14, 13, 17, 18, 15, 11, 20 ];
 this.lst_line_selected = this.lst_number;
-for (s = 0; s < 20; s++) {
-var e = cc.instantiate(this.line_result);
-(i = e.getComponent("LineResult")).init(s);
-i.show(!1);
-this.board_null_line.addChild(e);
-this.lst_line_result.push(e);
+for (var e = 0; e < 20; e++) {
+var t = cc.instantiate(this.line_result);
+(r = t.getComponent("LineResult")).init(e);
+r.show(!1);
+this.board_null_line.addChild(t, 2);
+this.lst_line_result.push(t);
 }
-for (var t = 0, o = this.board_null_line.getContentSize(), s = 0; s < 20; s++) {
-var r = cc.instantiate(this.btn_select_lines), i = r.getComponent("ButtonSelectLines");
-i.initNumber(this.lst_number[s]);
-var n = r.getContentSize();
-0 == s && (t = 5 * n.height * .93 + n.height / 2);
-r.setPosition(cc.p(0 == parseInt(s / 10) ? -o.width / 2 + n.width / 2 : o.width / 2 - n.width / 2, t - n.height * (s % 10 * .93 + 1)));
-this.board_null_line.addChild(r);
-this.lst_line_selected_sprite.push(i);
+var o = 0, s = this.board_null_line.getContentSize();
+for (e = 0; e < 20; e++) {
+var r, i = cc.instantiate(this.btn_select_lines);
+(r = i.getComponent("ButtonSelectLines")).initNumber(this.lst_number[e]);
+var n = i.getContentSize();
+0 == e && (o = 5 * n.height * .93 + n.height / 2);
+i.setPosition(cc.p(0 == parseInt(e / 10) ? -s.width / 2 + n.width / 2 : s.width / 2 - n.width / 2, o - n.height * (e % 10 * .93 + 1)));
+this.board_null_line.addChild(i, 2);
+this.lst_line_selected_sprite.push(r);
 }
 this.setLineSelected();
 },
@@ -4840,46 +5512,74 @@ this.list_item.push(s);
 this.board_null_line.addChild(s);
 }
 },
-implementSpinTreasure: function(e, t) {
+showNoHu: function() {
+cc.log("showNoHu");
+var e = cc.instantiate(this.nohuPrefab).getComponent("Nohu");
+e.playAnim();
+this.node.addChild(e.node);
+var t = this, o = cc.callFunc(function() {
+cc.log("call func 2");
+Common.countNumberAnim(t.txt_jar_money, t.jarValue, 0, 0, 1);
+t.txt_jar_money.string = 0;
+t.isRequestJar = !1;
+t.requestJar();
+}, this);
+e.node.runAction(cc.sequence(cc.delayTime(2), o, cc.delayTime(1), cc.fadeOut(1), cc.removeSelf(), null));
+},
+implementSpinTreasure: function(e, t, o) {
 this.resetLineResult();
 cc.log("lst_line_results : xxx ", this.lst_line_result);
-if (0 != e.length) {
-for (a = 0; a < this.list_item.length; a++) {
-var o = parseInt(a / this.number), s = parseInt(a % this.number), r = 0;
-if (a < 3 * this.number) {
-r = this.list_recent_values[a] - 98;
-this.list_recent_values[a] = e[a];
-} else r = a >= this.list_item.length - 4 * this.number && a < this.list_item.length - 1 ? this.list_recent_values[a - this.list_item.length + 4 * this.number] - 98 : Math.floor(7 * Math.random());
-this.list_item[a].getComponent("ItemPrefab").init(r);
-var i = (s - 2) * this.list_item[a].getContentSize().width * 1.05, n = (o - 1) * this.list_item[a].getContentSize().height * 1.05;
-this.list_item[a].stopAllActions();
-this.list_item[a].setPositionX(i);
-this.list_item[a].setPositionY(n);
+if (0 != t.length) {
+this.txt_user_money.string = Common.numberFormatWithCommas(this.prevMoney);
+for (var s = 0; s < this.list_item.length; s++) {
+var r = parseInt(s / this.number), i = parseInt(s % this.number), n = 0;
+if (s < 3 * this.number) {
+n = this.list_recent_values[s] - 98;
+this.list_recent_values[s] = t[s];
+} else n = s >= this.list_item.length - 4 * this.number && s < this.list_item.length - 1 ? this.list_recent_values[s - this.list_item.length + 4 * this.number] - 98 : Math.floor(7 * Math.random());
+this.list_item[s].getComponent("ItemPrefab").init(n);
+var a = (i - 2) * this.list_item[s].getContentSize().width * 1.05, p = (r - 1) * this.list_item[s].getContentSize().height * 1.05;
+this.list_item[s].stopAllActions();
+this.list_item[s].setPositionX(a);
+this.list_item[s].setPositionY(p);
 }
-for (var a = 0; a < this.list_item.length; a++) {
-var o = parseInt(a / this.number), s = parseInt(a % this.number), p = this.list_item[a], l = 1.05 * p.getContentSize().height, u = cc.moveBy(1, cc.p(0, -this.stepMove * l * .25)).easing(cc.easeExponentialIn()), g = cc.moveBy(1, cc.p(0, -(.75 * this.stepMove - 4) * l)).easing(cc.easeBackOut()), d = cc.delayTime(.3 * s);
-if (a == this.list_item.length - 1) {
-var c = this, h = cc.callFunc(function() {
-for (o = 0; o < t.length; o++) if (t[o] < 20) {
-var e = c.lst_line_result[t[o] - 1];
-e.getComponent("LineResult").show(!0);
-e.getComponent("LineResult").animate();
+for (s = 0; s < this.list_item.length; s++) {
+r = parseInt(s / this.number), i = parseInt(s % this.number);
+var l = this.list_item[s], g = 1.05 * l.getContentSize().height, u = cc.moveBy(1, cc.p(0, -this.stepMove * g * .25)).easing(cc.easeExponentialIn()), c = cc.moveBy(1, cc.p(0, -(.75 * this.stepMove - 4) * g)).easing(cc.easeBackOut()), d = cc.delayTime(.3 * i);
+if (s == this.list_item.length - 1) {
+var h = this, f = cc.callFunc(function() {
+for (var e = 0; e < o.length; e++) if (o[e] < 20) {
+var t = h.lst_line_result[o[e] - 1];
+t.getComponent("LineResult").show(!0);
+t.getComponent("LineResult").animate();
 }
-for (var o = 0; o < c.list_item.length; o++) c.list_item[o].getComponent("ItemPrefab").animate();
+for (e = 0; e < h.list_item.length; e++) h.list_item[e].getComponent("ItemPrefab").animate();
+}), y = cc.callFunc(function() {
+h.txt_user_money.string = Common.numberFormatWithCommas(h.lastMoney);
+if (54 !== e) {
+h.txt_win_money.string = Common.numberFormatWithCommas(h.displayChangeMoney);
+h.implementDisplayChangeMoney(h.displayChangeMoney);
+} else h.showNoHu();
 });
-p.runAction(cc.sequence(d, u, g, h));
-} else p.runAction(cc.sequence(d, u, g));
+l.runAction(cc.sequence(d, u, c, f, y));
+} else l.runAction(cc.sequence(d, u, c));
 }
 }
+},
+implementDisplayChangeMoney: function(e) {
+this.money_display.node.setPositionY(0);
+this.money_display.string = "+" + e;
+this.money_display.node.runAction(cc.sequence(cc.fadeIn(.1), cc.moveBy(1, cc.p(0, 50)), cc.fadeOut(.5)));
 },
 resetLineResult: function() {
-for (var e = 0; e < this.lst_line_result.length; e++) this.lst_line_result[e].getComponent("LineResult").reset();
+for (var e = 0; e < this.lst_line_result.length; e++) {
+this.lst_line_result[e].getComponent("LineResult").reset();
+}
 },
 requestJar: function() {
-var e = this;
-if (!e.isRequestJar) {
-e.isRequestJar = !1;
-r.getJarRequest(Common.getZoneId(), this.betType + 1);
+if (!this.isRequestJar) {
+this.isRequestJar = !0;
+i.getJarRequest(Common.getZoneId(), this.betType + 1);
 }
 },
 getSpin: function() {
@@ -4892,14 +5592,14 @@ o.setValue(e.toString());
 t.push(o);
 var s = this.lst_line_selected.join(",");
 cc.log("lst_line_selected", this.lst_line_selected);
-var i = new proto.BINMapFieldEntry();
-i.setKey("lineSelected");
-i.setValue(s);
-t.push(i);
-r.getTurnMessageFromServer(0, t);
+var r = new proto.BINMapFieldEntry();
+r.setKey("lineSelected");
+r.setValue(s);
+t.push(r);
+i.getTurnMessageFromServer(0, t);
 },
 exitRoom: function() {
-r.requestExitRoomMessage(this.roomIndex);
+i.requestExitRoomMessage(this.roomIndex);
 },
 getKeyBet: function() {
 return this.betType;
@@ -4913,9 +5613,9 @@ cc.log("on destroy");
 },
 onGameStatus: function() {
 if (null !== event.data || "undefined" !== event.data) {
-var e = r.parseFrom(event.data, event.data.byteLength);
+var e = i.parseFrom(event.data, event.data.byteLength);
 cc.log("list message size:" + e.length);
-if (e.length > 0) for (var t = 0; t < e.length; t++) {
+if (0 < e.length) for (var t = 0; t < e.length; t++) {
 var o = e[t];
 this.handleMessage(o);
 }
@@ -4923,24 +5623,39 @@ this.handleMessage(o);
 },
 updateMoneyMessageResponseHandler: function(e) {
 cc.log("update money response:", e.toObject());
-e.getResponsecode();
+if (e.getResponsecode()) {
+var t = e.getMoneyboxesList()[0];
+if (1 === e.getMoneyboxesList().length) {
+Common.setCash(t.getCurrentmoney());
+this.txt_user_money.string = Common.numberFormatWithCommas(t.getCurrentmoney());
+} else {
+this.prevMoney = t.getCurrentmoney();
+this.lastMoney = e.getMoneyboxesList()[1].getCurrentmoney();
+this.displayChangeMoney = e.getMoneyboxesList()[1].getDisplaychangemoney();
+Common.setCash(e.getMoneyboxesList()[1].getCurrentmoney());
+}
+}
 e.hasMessage() && e.getMessage();
 },
 matchEndResponseHandler: function(e) {
 cc.log("match end response:", e.toObject());
-if (e.getResponsecode() && e.getArgsList().length > 0) {
-for (var t = null, o = null, s = 0; s < e.getArgsList().length; s++) {
-var r = e.getArgsList()[s];
-"listItem" == r.getKey() ? t = r.getValue().split(", ").map(function(e) {
+if (e.getResponsecode()) {
+var t = null;
+0 < e.getTextemoticonsList().length && (t = e.getTextemoticonsList()[0].getEmoticonid());
+if (0 < e.getArgsList().length) {
+for (var o = null, s = null, r = 0; r < e.getArgsList().length; r++) {
+var i = e.getArgsList()[r];
+"listItem" == i.getKey() ? o = i.getValue().split(", ").map(function(e) {
 return e = parseInt(e);
-}) : o = "" !== r.getValue() ? r.getValue().split(", ").map(function(e) {
+}) : s = "" !== i.getValue() ? i.getValue().split(", ").map(function(e) {
 return e = parseInt(e);
 }) : [];
 }
-if (null !== t && null !== o) {
-cc.log("list item:", t);
-cc.log("line win:", o);
-this.implementSpinTreasure(t, o);
+if (null !== o && null !== s) {
+cc.log("list item:", o);
+cc.log("line win:", s);
+this.implementSpinTreasure(t, o, s);
+}
 }
 }
 e.hasMessage() && e.getMessage();
@@ -4958,10 +5673,12 @@ cc.director.loadScene("Lobby");
 e.hasMessage() && e.getMessage();
 },
 jarResponseHandler: function(e) {
+cc.log("jar response message:", e.toObject());
 if (e.getResponsecode()) {
+this.isRequestJar = !1;
 var t = 0, o = this.jarValue;
 this.jarValue = e.getJarvalue();
-if (e.getArgsList().length > 0) {
+if (0 < e.getArgsList().length) {
 var s = e.getArgsList()[0];
 "jarType" === s.getKey() && (t = parseInt(s.getValue().toString()));
 }
@@ -4973,17 +5690,27 @@ this.jarType = t;
 e.hasMessage() && e.getMessage();
 },
 chonDongTouchEvent: function() {
-var e = this;
-Common.showPopup(Config.name.POPUP_SELECT_LINE, function(t) {
-t.init(function(t, o) {
-e.onEventLineSelected(t, o);
+var o = this;
+Common.showPopup(Config.name.POPUP_SELECT_LINE, function(e) {
+e.init(o.lst_line_selected, function(e, t) {
+o.onEventLineSelected(e, t);
 });
-t.appear();
+e.appear();
 });
 },
 chonCuocTouchEvent: function() {
 this.is_bet_select = !this.is_bet_select;
 this.popup_bet_select.active = this.is_bet_select;
+},
+chonMucCuocEvent: function(e, t) {
+if (t < this.bets_select.length && -1 < t) {
+this.indexCash = t;
+this.txt_bet_money.string = Common.convertIntToMoneyView(this.turnCashValue[this.indexCash]);
+this.is_bet_select = !1;
+this.popup_bet_select.active = this.is_bet_select;
+var o = this.turnCashValue[this.indexCash] * this.lst_line_selected.length;
+0 <= o && (this.txt_total_bet_money.string = Common.numberFormatWithCommas(o));
+}
 },
 onEventLineSelected: function(e, t) {
 if (e == Config.ON_EVENT.EVENT_SELECT_LINE) {
@@ -5016,6 +5743,8 @@ e++;
 } else r.initHighLight(!1);
 }
 this.txt_total_line.string = e;
+var i = this.turnCashValue[this.indexCash] * this.lst_line_selected.length;
+0 <= i && (this.txt_total_bet_money.string = Common.numberFormatWithCommas(i));
 },
 resetLineSelected: function() {
 this.lst_line_selected.clear();
@@ -5025,27 +5754,27 @@ var t = this._super(e);
 if (t) return !0;
 t = !0;
 switch (e.message_id) {
-case r.MESSAGE_ID.UPDATE_MONEY:
-o = e.response;
+case i.MESSAGE_ID.UPDATE_MONEY:
+var o = e.response;
 this.updateMoneyMessageResponseHandler(o);
 break;
 
-case r.MESSAGE_ID.MATCH_END:
+case i.MESSAGE_ID.MATCH_END:
 this.matchEndResponseHandler(e.response);
 break;
 
-case r.MESSAGE_ID.EXIT_ROOM:
+case i.MESSAGE_ID.EXIT_ROOM:
 o = e.response;
 this.exitRoomResponseHandler(o);
 break;
 
-case r.MESSAGE_ID.EXIT_ZONE:
+case i.MESSAGE_ID.EXIT_ZONE:
 o = e.response;
 this.exitZoneResponseHandler(o);
 break;
 
-case r.MESSAGE_ID.JAR:
-var o = e.response;
+case i.MESSAGE_ID.JAR:
+o = e.response;
 this.jarResponseHandler(o);
 break;
 
@@ -5056,6 +5785,20 @@ return t;
 },
 openRulesPopup: function() {
 Common.openRules();
+},
+showSpin: function() {
+var t = [ "Lịch sử quay", "Lịch sử nổ hũ", "Top cao thủ" ];
+Common.showPopup(Config.name.POPUP_HISTORY, function(e) {
+e.addTabs(t, 1);
+e.appear();
+});
+},
+showTopUser: function() {
+var t = [ "Lịch sử quay", "Lịch sử nổ hũ", "Top cao thủ" ];
+Common.showPopup(Config.name.POPUP_HISTORY, function(e) {
+e.addTabs(t, 3);
+e.appear();
+});
 }
 });
 cc._RF.pop();
@@ -5063,104 +5806,6 @@ cc._RF.pop();
 BaseScene: "BaseScene",
 NetworkManager: "NetworkManager"
 } ],
-Types: [ function(e, t, o) {
-"use strict";
-function s(e, t, o) {
-if (19 === o) {
-r = cc.Enum({
-Spade: 1,
-Heart: 0,
-Club: 2,
-Diamond: 3
-});
-i = "NAN,2,3,4,5,6,7,8,9,10,J,Q,K,A".split(",");
-} else {
-r = cc.Enum({
-Spade: 1,
-Heart: 3,
-Club: 2,
-Diamond: 0
-});
-i = "NAN,A,2,3,4,5,6,7,8,9,10,J,Q,K".split(",");
-}
-Object.defineProperties(this, {
-point: {
-value: e,
-writable: !1
-},
-suit: {
-value: t,
-writable: !1
-},
-id: {
-value: 13 * (t - 1) + (e - 1),
-writable: !1
-},
-pointName: {
-get: function() {
-return i[this.point];
-}
-},
-suitName: {
-get: function() {
-return r[this.suit];
-}
-},
-isBlackSuit: {
-get: function() {
-return this.suit === r.Spade || this.suit === r.Club;
-}
-},
-isRedSuit: {
-get: function() {
-return this.suit === r.Heart || this.suit === r.Diamond;
-}
-}
-});
-}
-cc._RF.push(t, "bd63cmlkU9MWaZWPaBOxmHC", "Types");
-var r = cc.Enum({
-Spade: 1,
-Heart: 3,
-Club: 2,
-Diamond: 0
-}), i = "NAN,A,2,3,4,5,6,7,8,9,10,J,Q,K".split(",");
-s.prototype.toString = function() {
-return this.suitName + " " + this.pointName;
-};
-var n = new Array(52);
-s.fromId = function(e) {
-return n[e];
-};
-!function() {
-for (var e = 1; e <= 4; e++) for (var t = 1; t <= 13; t++) {
-var o = new s(t, e);
-n[o.id] = o;
-}
-}();
-var a = cc.Enum({
-Normal: -1,
-Stand: -1,
-Report: -1,
-Bust: -1
-}), p = cc.Enum({
-Win: -1,
-Lose: -1,
-Tie: -1
-}), l = cc.Enum({
-Normal: -1,
-BlackJack: -1,
-FiveCard: -1
-});
-t.exports = {
-Suit: r,
-Card: s,
-ActorPlayingState: a,
-Hand: l,
-Outcome: p
-};
-cc._RF.pop();
-}, {} ],
 UILobby: [ function(e, t, o) {
 "use strict";
 cc._RF.push(t, "a8487WcWMxIQ5oTc7DMuas8", "UILobby");
@@ -5177,28 +5822,31 @@ avatarSprite: cc.Prefab
 },
 onLoad: function() {
 this.setUserInfo();
-0 === Common.providerLists.length && s.getCardConfigRequest(Config.CARD_CONFIG_TYPE.TYPE_CASH);
-0 === Common.smsConfigLists.length && s.requestSmsConfigMessage(1);
+},
+openExchange: function() {
+0 < Common.assetsConfigList.length ? Common.showPopup(Config.name.POPUP_EXCHANGE, function(e) {
+e.appear();
+}) : Common.showToast("Kênh đổi thưởng đang bảo trì, vui lòng thử lại sau!");
 },
 openMailPopup: function() {
-var e = [ "Mail đến", "Mail đi", "Gửi BQT" ];
-Common.showPopup(Config.name.POPUP_MAIL, function(t) {
-t.addTabs(e, 1);
-t.appear();
+var t = [ "Mail đến", "Mail đi", "Gửi BQT" ];
+Common.showPopup(Config.name.POPUP_MAIL, function(e) {
+e.addTabs(t, 1);
+e.appear();
 });
 },
 openChargePopup: function() {
-var e = [ "Thẻ cào", "SMS" ];
-Common.showPopup(Config.name.POPUP_CHARGING, function(t) {
-t.addTabs(e, 1);
-t.appear();
+var t = [ "Thẻ cào", "SMS" ];
+Common.showPopup(Config.name.POPUP_CHARGING, function(e) {
+e.addTabs(t, 1);
+e.appear();
 });
 },
 openUserInfoPopup: function() {
-var e = [ "Hồ sơ", "Lịch sử" ];
-Common.showPopup(Config.name.POPUP_USERINFO, function(t) {
-t.addTabs(e, 1);
-t.appear();
+var t = [ "Hồ sơ", "Lịch sử" ];
+Common.showPopup(Config.name.POPUP_USERINFO, function(e) {
+e.addTabs(t, 1);
+e.appear();
 });
 },
 openSettingPopup: function() {
@@ -5207,10 +5855,10 @@ e.appear();
 });
 },
 openGiftPopup: function() {
-var e = [ "Nhập giftcode", "Giftcode đã nhận" ];
-Common.showPopup(Config.name.POPUP_GIFT, function(t) {
-t.addTabs(e, 1);
-t.appear();
+var t = [ "Nhập giftcode", "Giftcode đã nhận" ];
+Common.showPopup(Config.name.POPUP_GIFT, function(e) {
+e.addTabs(t, 1);
+e.appear();
 });
 },
 setUserInfo: function() {
@@ -5222,7 +5870,7 @@ this.userAvatar.getComponent(cc.Sprite).spriteFrame = t;
 },
 update: function(e) {
 this.timeTotal = this.timeTotal + e;
-if (this.timeTotal >= .5) {
+if (.5 <= this.timeTotal) {
 this.timeTotal = 0;
 this.setUserInfo();
 }
@@ -5279,12 +5927,35 @@ o.providersList.push(i);
 }
 Common.smsConfigLists.push(o);
 }
-cc.log("sms config lists size:", Common.smsConfigLists.length);
 e.hasMessage() && "" !== e.getMessage() && Common.showToast(e.getMessage());
 },
 updateMoneyResponseHandler: function(e) {
 cc.log("update money response handler: ", e.toObject());
-e.getResponsecode();
+if (e.getResponsecode() && 0 < e.getMoneyboxesList().length) {
+var t = e.getMoneyboxesList()[0];
+if (t.getUserid() === Common.getUserId()) {
+Common.setCash(t.getCurrentmoney());
+this.setUserInfo();
+}
+}
+e.hasMessage() && "" !== e.getMessage() && Common.showToast(e.getMessage());
+},
+assetConfigResponseHandler: function(e) {
+cc.log("asset config response handler:", e.toObject());
+Common.assetsConfigList = [];
+e.getResponsecode() && e.getAssetsList().forEach(function(e) {
+var t = {};
+t.assetid = e.getAssetid();
+t.type = e.getType();
+t.provider = e.getProvider();
+t.parvalue = e.getParvalue();
+t.cashvalue = e.getCashvalue();
+t.assetname = e.getAssetname();
+t.active = e.getActive();
+t.minaccountbalance = e.getMinaccountbalance();
+t.trustedindex = e.getTrustedindex();
+Common.assetsConfigList.push(t);
+});
 e.hasMessage() && "" !== e.getMessage() && Common.showToast(e.getMessage());
 },
 handleMessage: function(e) {
@@ -5300,6 +5971,10 @@ break;
 
 case s.MESSAGE_ID.UPDATE_MONEY:
 this.updateMoneyResponseHandler(o);
+break;
+
+case s.MESSAGE_ID.ASSET_CONFIG:
+this.assetConfigResponseHandler(o);
 break;
 
 default:
@@ -5356,6 +6031,31 @@ this.callBackTab(e);
 });
 cc._RF.pop();
 }, {} ],
+UITabTaixiu: [ function(e, t, o) {
+"use strict";
+cc._RF.push(t, "6e78aavdNZKt4v3KWsUulA6", "UITabTaixiu");
+cc.Class({
+extends: cc.Component,
+properties: {
+scroll_view: cc.ScrollView,
+tab_item: cc.Prefab,
+currentSess: 0,
+list_item: []
+},
+setTab: function(e, t) {
+this.callBackTab = t;
+var o = cc.instantiate(this.tab_item);
+o.getComponent("TabItemTaixiu").init(e);
+var s = i * o.getContentSize().width;
+o.setPosition(cc.p(s, 0));
+this.list_item.push(o);
+this.scroll_view.content.addChild(o);
+this.currentSess = e;
+this.callBackTab(e);
+}
+});
+cc._RF.pop();
+}, {} ],
 UITab: [ function(e, t, o) {
 "use strict";
 cc._RF.push(t, "5a026phQ99PO6S++UWLYmXx", "UITab");
@@ -5390,9 +6090,9 @@ this.callBackTab(e);
 }, this);
 t && (s = 0);
 this.tab.node.runAction(cc.sequence(cc.moveTo(s, cc.p(i, r)), n));
-if (this.tab_size > 3) {
+if (3 < this.tab_size) {
 var a = 0;
-a = o > 1 && o < this.tab_size - 1 ? this.tab.node.getContentSize().width * (1 - o) - this.scroll_view.node.getContentSize().width / 2 : o == this.tab_size - 1 ? this.tab.node.getContentSize().width * (2 - o) - this.scroll_view.node.getContentSize().width / 2 : -this.scroll_view.node.getContentSize().width / 2;
+a = 1 < o && o < this.tab_size - 1 ? this.tab.node.getContentSize().width * (1 - o) - this.scroll_view.node.getContentSize().width / 2 : o == this.tab_size - 1 ? this.tab.node.getContentSize().width * (2 - o) - this.scroll_view.node.getContentSize().width / 2 : -this.scroll_view.node.getContentSize().width / 2;
 this.scroll_view.content.runAction(cc.moveTo(s, cc.p(a, 0)));
 }
 }
@@ -5414,7 +6114,8 @@ txt_chiso: cc.Label,
 txt_sovanchoi: cc.Label,
 txt_sovanthang: cc.Label,
 txt_sovanthua: cc.Label,
-avatarSprite: cc.Prefab
+avatarSprite: cc.Prefab,
+txt_money: cc.Label
 },
 onLoad: function() {},
 init: function(e, t, o, s, r, i, n, a, p, l) {
@@ -5426,8 +6127,16 @@ this.txt_chiso.string = i;
 this.txt_sovanchoi.string = n;
 this.txt_sovanthang.string = a;
 this.txt_sovanthua.string = p;
-var u = Common.getAvatarId() - 1e5, g = cc.instantiate(this.avatarSprite).getComponent("AvatarSprite").init(u);
-this.avatar.getComponent(cc.Sprite).spriteFrame = g;
+this.txt_money.string = l;
+var g = Common.getAvatarId() - 1e5, u = cc.instantiate(this.avatarSprite).getComponent("AvatarSprite").init(g);
+this.avatar.getComponent(cc.Sprite).spriteFrame = u;
+},
+updateInfo: function(e, t) {
+if (null !== e) {
+var o = e - 1e5, s = cc.instantiate(this.avatarSprite).getComponent("AvatarSprite").init(o);
+this.node.getChildByName("sanh_avatar_demo").getComponent(cc.Sprite).spriteFrame = s;
+}
+null !== t && (this.node.getChildByName("txt_phone").getComponent(cc.Label).string = t);
 },
 openChangePass: function() {
 Common.showPopup(Config.name.POPUP_CHANGE_PASS, function(e) {
@@ -5465,7 +6174,7 @@ t = t || 1;
 var o, s, r, i = this.unzipBase64(e), n = [];
 for (o = 0, r = i.length / t; o < r; o++) {
 n[o] = 0;
-for (s = t - 1; s >= 0; --s) n[o] += i.charCodeAt(o * t + s) << 8 * s;
+for (s = t - 1; 0 <= s; --s) n[o] += i.charCodeAt(o * t + s) << 8 * s;
 }
 return n;
 };
@@ -5474,7 +6183,7 @@ t = t || 1;
 var o, s, r, i = this.unzip(e), n = [];
 for (o = 0, r = i.length / t; o < r; o++) {
 n[o] = 0;
-for (s = t - 1; s >= 0; --s) n[o] += i.charCodeAt(o * t + s) << 8 * s;
+for (s = t - 1; 0 <= s; --s) n[o] += i.charCodeAt(o * t + s) << 8 * s;
 }
 return n;
 };
@@ -5509,7 +6218,7 @@ cc.Codec.Base64.decodeAsArray = function(e, t) {
 var o, s, r, i = this.decode(e), n = [];
 for (o = 0, r = i.length / t; o < r; o++) {
 n[o] = 0;
-for (s = t - 1; s >= 0; --s) n[o] += i.charCodeAt(o * t + s) << 8 * s;
+for (s = t - 1; 0 <= s; --s) n[o] += i.charCodeAt(o * t + s) << 8 * s;
 }
 return n;
 };
@@ -5555,19 +6264,21 @@ var t = new s.BinaryReader(e), o = new proto.BINPrivateBet();
 return proto.BINPrivateBet.deserializeBinaryFromReader(o, t);
 };
 proto.BINPrivateBet.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readInt64();
+var o = t.readInt64();
 e.setTargetuserid(o);
 break;
 
 case 2:
-var o = t.readInt64();
+o = t.readInt64();
 e.setBetmoney(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -5634,9 +6345,10 @@ var t = new s.BinaryReader(e), o = new proto.BINBetRequest();
 return proto.BINBetRequest.deserializeBinaryFromReader(o, t);
 };
 proto.BINBetRequest.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readInt32();
+var o = t.readInt32();
 e.setRoomindex(o);
 break;
 
@@ -5651,13 +6363,14 @@ e.setBetmoney(o);
 break;
 
 case 4:
-var o = new proto.BINPrivateBet();
+o = new proto.BINPrivateBet();
 t.readMessage(o, proto.BINPrivateBet.deserializeBinaryFromReader);
 e.addPrivatebets(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -5674,7 +6387,7 @@ var t = void 0;
 null != (t = s.Message.getField(this, 1)) && e.writeInt32(1, t);
 null != (t = s.Message.getField(this, 2)) && e.writeInt32(2, t);
 null != (t = s.Message.getField(this, 3)) && e.writeInt64(3, t);
-(t = this.getPrivatebetsList()).length > 0 && e.writeRepeatedMessage(4, t, proto.BINPrivateBet.serializeBinaryToWriter);
+0 < (t = this.getPrivatebetsList()).length && e.writeRepeatedMessage(4, t, proto.BINPrivateBet.serializeBinaryToWriter);
 };
 proto.BINBetRequest.prototype.getRoomindex = function() {
 return s.Message.getFieldWithDefault(this, 1, 0);
@@ -5754,9 +6467,10 @@ var t = new s.BinaryReader(e), o = new proto.BINBetResponse();
 return proto.BINBetResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINBetResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
@@ -5792,12 +6506,13 @@ e.addArgs(o);
 break;
 
 case 8:
-var o = t.readInt32();
+o = t.readInt32();
 e.setZoneid(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -5817,7 +6532,7 @@ null != (t = s.Message.getField(this, 3)) && e.writeInt64(3, t);
 null != (t = s.Message.getField(this, 4)) && e.writeInt32(4, t);
 null != (t = s.Message.getField(this, 5)) && e.writeInt64(5, t);
 null != (t = s.Message.getField(this, 6)) && e.writeInt64(6, t);
-(t = this.getArgsList()).length > 0 && e.writeRepeatedMessage(7, t, n.BINMapFieldEntry.serializeBinaryToWriter);
+0 < (t = this.getArgsList()).length && e.writeRepeatedMessage(7, t, n.BINMapFieldEntry.serializeBinaryToWriter);
 null != (t = s.Message.getField(this, 8)) && e.writeInt32(8, t);
 };
 proto.BINBetResponse.prototype.getResponsecode = function() {
@@ -5939,19 +6654,21 @@ var t = new s.BinaryReader(e), o = new proto.BINExtraBetRequest();
 return proto.BINExtraBetRequest.deserializeBinaryFromReader(o, t);
 };
 proto.BINExtraBetRequest.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readInt32();
+var o = t.readInt32();
 e.setRoomindex(o);
 break;
 
 case 2:
-var o = t.readInt32();
+o = t.readInt32();
 e.setAction(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -6017,9 +6734,10 @@ var t = new s.BinaryReader(e), o = new proto.BINExtraBetResponse();
 return proto.BINExtraBetResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINExtraBetResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
@@ -6029,13 +6747,14 @@ e.setMessage(o);
 break;
 
 case 3:
-var o = new n.BINMapFieldEntry();
+o = new n.BINMapFieldEntry();
 t.readMessage(o, n.BINMapFieldEntry.deserializeBinaryFromReader);
 e.addArgs(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -6051,7 +6770,7 @@ proto.BINExtraBetResponse.prototype.serializeBinaryToWriter = function(e) {
 var t = void 0;
 null != (t = s.Message.getField(this, 1)) && e.writeBool(1, t);
 null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
-(t = this.getArgsList()).length > 0 && e.writeRepeatedMessage(3, t, n.BINMapFieldEntry.serializeBinaryToWriter);
+0 < (t = this.getArgsList()).length && e.writeRepeatedMessage(3, t, n.BINMapFieldEntry.serializeBinaryToWriter);
 };
 proto.BINExtraBetResponse.prototype.getResponsecode = function() {
 return s.Message.getFieldWithDefault(this, 1, !1);
@@ -6107,7 +6826,7 @@ frame_cell: cc.SpriteFrame
 },
 onLoad: function() {},
 resetCell: function(e, t) {
-var o = this.node.getChildByName("eightItem"), s = o.getChildByName("item1").getComponent(cc.Label);
+var o = this.node.getChildByName("sevenItem"), s = o.getChildByName("item1").getComponent(cc.Label);
 s.string = "";
 var r = o.getChildByName("item2").getComponent(cc.Label);
 r.string = "";
@@ -6121,9 +6840,33 @@ var p = o.getChildByName("item6").getComponent(cc.Label);
 p.string = "";
 var l = o.getChildByName("item7").getComponent(cc.Label);
 l.string = "";
-var u = o.getChildByName("item8").getComponent(cc.Label);
+var g = this.node.getChildByName("eightItem"), u = g.getChildByName("item1").getComponent(cc.Label);
 u.string = "";
+var c = g.getChildByName("item2").getComponent(cc.Label);
+c.string = "";
+var d = g.getChildByName("item3").getComponent(cc.Label);
+d.string = "";
+var h = g.getChildByName("item4").getComponent(cc.Label);
+h.string = "";
+var f = g.getChildByName("item5").getComponent(cc.Label);
+f.string = "";
+var y = g.getChildByName("item6").getComponent(cc.Label);
+y.string = "";
+var B = g.getChildByName("item7").getComponent(cc.Label);
+B.string = "";
+var I = g.getChildByName("item8").getComponent(cc.Label);
+I.string = "";
 this.list_text = [];
+if (8 == e) {
+this.list_text.push(u);
+this.list_text.push(c);
+this.list_text.push(d);
+this.list_text.push(h);
+this.list_text.push(f);
+this.list_text.push(y);
+this.list_text.push(B);
+this.list_text.push(I);
+} else if (7 == e) {
 this.list_text.push(s);
 this.list_text.push(r);
 this.list_text.push(i);
@@ -6131,9 +6874,9 @@ this.list_text.push(n);
 this.list_text.push(a);
 this.list_text.push(p);
 this.list_text.push(l);
-this.list_text.push(u);
-var g = this.node.getChildByName("background").getComponent(cc.Sprite);
-g.spriteFrame = 0 == t ? this.frame_title : this.frame_cell;
+}
+var M = this.node.getChildByName("background").getComponent(cc.Sprite);
+M.spriteFrame = 0 == t ? this.frame_title : this.frame_cell;
 },
 init: function(e, t, o, s) {
 var r = t.array[e], i = Object.keys(r).length;
@@ -6165,15 +6908,15 @@ init: function(e, t, o, s) {
 this.node.removeAllChildren(!0);
 var r = t.array[e], i = cc.url.raw("resources/common/popup/popup_ingame/popup_gold_noidung.png"), n = cc.textureCache.addImage(i);
 0 != e && (this.node.getComponent(cc.Sprite).spriteFrame = new cc.SpriteFrame(n));
-for (var a = this.node.getContentSize().width, p = this.node.getContentSize().height, l = Object.keys(r).length, u = 0; u < l; u++) {
-var g = new cc.Node();
-g.parent = this.node;
-var d = g.addComponent(cc.Label), c = (u - l / 2 + .5) * a / (l + 1), h = .2 * p;
-d.node.setPositionX(c);
-d.node.setPositionY(-h);
-d.node.color = cc.color(112, 48, 22, 255);
-d.fontSize = 20;
-d.string = r[Object.keys(r)[u]].toString();
+for (var a = this.node.getContentSize().width, p = this.node.getContentSize().height, l = Object.keys(r).length, g = 0; g < l; g++) {
+var u = new cc.Node();
+u.parent = this.node;
+var c = u.addComponent(cc.Label), d = (g - l / 2 + .5) * a / (l + 1), h = .2 * p;
+c.node.setPositionX(d);
+c.node.setPositionY(-h);
+c.node.color = cc.color(112, 48, 22, 255);
+c.fontSize = 20;
+c.string = r[Object.keys(r)[g]].toString();
 }
 }
 });
@@ -6187,27 +6930,38 @@ cc._RF.push(t, "befa4nDmnxMwq1gFcSNs9RI", "cellSmall");
 cc.Class({
 extends: e("viewCell"),
 properties: {
-prefabData: cc.Prefab,
 frame_title: cc.SpriteFrame,
 frame_cell: cc.SpriteFrame
 },
 onLoad: function() {},
 resetCell: function(e, t) {
-var o = this.node.getChildByName("fourItem"), s = o.getChildByName("item1").getComponent(cc.Label);
+var o = this.node.getChildByName("threeItem"), s = o.getChildByName("item1").getComponent(cc.Label);
 s.string = "";
 var r = o.getChildByName("item2").getComponent(cc.Label);
 r.string = "";
 var i = o.getChildByName("item3").getComponent(cc.Label);
 i.string = "";
-var n = o.getChildByName("item4").getComponent(cc.Label);
-n.string = "";
+var n = this.node.getChildByName("fourItem"), a = n.getChildByName("item1").getComponent(cc.Label);
+a.string = "";
+var p = n.getChildByName("item2").getComponent(cc.Label);
+p.string = "";
+var l = n.getChildByName("item3").getComponent(cc.Label);
+l.string = "";
+var g = n.getChildByName("item4").getComponent(cc.Label);
+g.string = "";
 this.list_text = [];
+if (4 == e) {
+this.list_text.push(a);
+this.list_text.push(p);
+this.list_text.push(l);
+this.list_text.push(g);
+} else if (3 == e) {
 this.list_text.push(s);
 this.list_text.push(r);
 this.list_text.push(i);
-this.list_text.push(n);
-var a = this.node.getChildByName("background").getComponent(cc.Sprite);
-a.spriteFrame = 0 == t ? this.frame_title : this.frame_cell;
+}
+var u = this.node.getChildByName("background").getComponent(cc.Sprite);
+u.spriteFrame = 0 == t ? this.frame_title : this.frame_cell;
 },
 init: function(e, t, o, s) {
 var r = t.array[e], i = Object.keys(r).length;
@@ -6232,47 +6986,49 @@ viewCell: "viewCell"
 enter_room_pb: [ function(e, t, o) {
 "use strict";
 cc._RF.push(t, "1f684K9EiBDibjIOXO3B0FG", "enter_room_pb");
-var s = e("google-protobuf"), r = s, i = Function("return this")(), n = e("./filter_room_pb.js"), a = e("./player_pb.js"), p = e("./map_field_entry_pb.js");
-r.exportSymbol("proto.BINEnterRoomGroupRequest", null, i);
-r.exportSymbol("proto.BINEnterRoomRequest", null, i);
-r.exportSymbol("proto.BINEnterRoomResponse", null, i);
-r.exportSymbol("proto.BINPlayerEnterRoomResponse", null, i);
+var r = e("google-protobuf"), s = r, i = Function("return this")(), n = e("./filter_room_pb.js"), a = e("./player_pb.js"), p = e("./map_field_entry_pb.js");
+s.exportSymbol("proto.BINEnterRoomGroupRequest", null, i);
+s.exportSymbol("proto.BINEnterRoomRequest", null, i);
+s.exportSymbol("proto.BINEnterRoomResponse", null, i);
+s.exportSymbol("proto.BINPlayerEnterRoomResponse", null, i);
 proto.BINEnterRoomRequest = function(e) {
-s.Message.initialize(this, e, 0, -1, null, null);
+r.Message.initialize(this, e, 0, -1, null, null);
 };
-r.inherits(proto.BINEnterRoomRequest, s.Message);
-r.DEBUG && !COMPILED && (proto.BINEnterRoomRequest.displayName = "proto.BINEnterRoomRequest");
-if (s.Message.GENERATE_TO_OBJECT) {
+s.inherits(proto.BINEnterRoomRequest, r.Message);
+s.DEBUG && !COMPILED && (proto.BINEnterRoomRequest.displayName = "proto.BINEnterRoomRequest");
+if (r.Message.GENERATE_TO_OBJECT) {
 proto.BINEnterRoomRequest.prototype.toObject = function(e) {
 return proto.BINEnterRoomRequest.toObject(e, this);
 };
 proto.BINEnterRoomRequest.toObject = function(e, t) {
 var o = {
-roomindex: s.Message.getField(t, 1),
-password: s.Message.getField(t, 2)
+roomindex: r.Message.getField(t, 1),
+password: r.Message.getField(t, 2)
 };
 e && (o.$jspbMessageInstance = t);
 return o;
 };
 }
 proto.BINEnterRoomRequest.deserializeBinary = function(e) {
-var t = new s.BinaryReader(e), o = new proto.BINEnterRoomRequest();
+var t = new r.BinaryReader(e), o = new proto.BINEnterRoomRequest();
 return proto.BINEnterRoomRequest.deserializeBinaryFromReader(o, t);
 };
 proto.BINEnterRoomRequest.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readInt32();
+var o = t.readInt32();
 e.setRoomindex(o);
 break;
 
 case 2:
-var o = t.readString();
+o = t.readString();
 e.setPassword(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -6280,75 +7036,76 @@ proto.BINEnterRoomRequest.serializeBinaryToWriter = function(e, t) {
 e.serializeBinaryToWriter(t);
 };
 proto.BINEnterRoomRequest.prototype.serializeBinary = function() {
-var e = new s.BinaryWriter();
+var e = new r.BinaryWriter();
 this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINEnterRoomRequest.prototype.serializeBinaryToWriter = function(e) {
 var t = void 0;
-null != (t = s.Message.getField(this, 1)) && e.writeInt32(1, t);
-null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
+null != (t = r.Message.getField(this, 1)) && e.writeInt32(1, t);
+null != (t = r.Message.getField(this, 2)) && e.writeString(2, t);
 };
 proto.BINEnterRoomRequest.prototype.getRoomindex = function() {
-return s.Message.getFieldWithDefault(this, 1, 0);
+return r.Message.getFieldWithDefault(this, 1, 0);
 };
 proto.BINEnterRoomRequest.prototype.setRoomindex = function(e) {
-s.Message.setField(this, 1, e);
+r.Message.setField(this, 1, e);
 };
 proto.BINEnterRoomRequest.prototype.clearRoomindex = function() {
-s.Message.setField(this, 1, void 0);
+r.Message.setField(this, 1, void 0);
 };
 proto.BINEnterRoomRequest.prototype.hasRoomindex = function() {
-return null != s.Message.getField(this, 1);
+return null != r.Message.getField(this, 1);
 };
 proto.BINEnterRoomRequest.prototype.getPassword = function() {
-return s.Message.getFieldWithDefault(this, 2, "");
+return r.Message.getFieldWithDefault(this, 2, "");
 };
 proto.BINEnterRoomRequest.prototype.setPassword = function(e) {
-s.Message.setField(this, 2, e);
+r.Message.setField(this, 2, e);
 };
 proto.BINEnterRoomRequest.prototype.clearPassword = function() {
-s.Message.setField(this, 2, void 0);
+r.Message.setField(this, 2, void 0);
 };
 proto.BINEnterRoomRequest.prototype.hasPassword = function() {
-return null != s.Message.getField(this, 2);
+return null != r.Message.getField(this, 2);
 };
 proto.BINEnterRoomResponse = function(e) {
-s.Message.initialize(this, e, 0, -1, proto.BINEnterRoomResponse.repeatedFields_, null);
+r.Message.initialize(this, e, 0, -1, proto.BINEnterRoomResponse.repeatedFields_, null);
 };
-r.inherits(proto.BINEnterRoomResponse, s.Message);
-r.DEBUG && !COMPILED && (proto.BINEnterRoomResponse.displayName = "proto.BINEnterRoomResponse");
+s.inherits(proto.BINEnterRoomResponse, r.Message);
+s.DEBUG && !COMPILED && (proto.BINEnterRoomResponse.displayName = "proto.BINEnterRoomResponse");
 proto.BINEnterRoomResponse.repeatedFields_ = [ 6, 7, 11 ];
-if (s.Message.GENERATE_TO_OBJECT) {
+if (r.Message.GENERATE_TO_OBJECT) {
 proto.BINEnterRoomResponse.prototype.toObject = function(e) {
 return proto.BINEnterRoomResponse.toObject(e, this);
 };
 proto.BINEnterRoomResponse.toObject = function(e, t) {
-var o, r = {
-responsecode: s.Message.getField(t, 1),
-message: s.Message.getField(t, 2),
-zoneid: s.Message.getField(t, 3),
+var o, s = {
+responsecode: r.Message.getField(t, 1),
+message: r.Message.getField(t, 2),
+zoneid: r.Message.getField(t, 3),
 roomplay: (o = t.getRoomplay()) && n.BINRoomPlay.toObject(e, o),
-roomisplaying: s.Message.getField(t, 5),
-playingplayersList: s.Message.toObjectList(t.getPlayingplayersList(), a.BINPlayer.toObject, e),
-waitingplayersList: s.Message.toObjectList(t.getWaitingplayersList(), a.BINPlayer.toObject, e),
-owneruserid: s.Message.getField(t, 8),
-currentturnuserid: s.Message.getField(t, 9),
-enterroomstatus: s.Message.getField(t, 10),
-argsList: s.Message.toObjectList(t.getArgsList(), p.BINMapFieldEntry.toObject, e)
+roomisplaying: r.Message.getField(t, 5),
+playingplayersList: r.Message.toObjectList(t.getPlayingplayersList(), a.BINPlayer.toObject, e),
+waitingplayersList: r.Message.toObjectList(t.getWaitingplayersList(), a.BINPlayer.toObject, e),
+owneruserid: r.Message.getField(t, 8),
+currentturnuserid: r.Message.getField(t, 9),
+enterroomstatus: r.Message.getField(t, 10),
+argsList: r.Message.toObjectList(t.getArgsList(), p.BINMapFieldEntry.toObject, e)
 };
-e && (r.$jspbMessageInstance = t);
-return r;
+e && (s.$jspbMessageInstance = t);
+return s;
 };
 }
 proto.BINEnterRoomResponse.deserializeBinary = function(e) {
-var t = new s.BinaryReader(e), o = new proto.BINEnterRoomResponse();
+var t = new r.BinaryReader(e), o = new proto.BINEnterRoomResponse();
 return proto.BINEnterRoomResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINEnterRoomResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
@@ -6401,7 +7158,7 @@ e.setEnterroomstatus(o);
 break;
 
 case 11:
-var o = new p.BINMapFieldEntry();
+o = new p.BINMapFieldEntry();
 t.readMessage(o, p.BINMapFieldEntry.deserializeBinaryFromReader);
 e.addArgs(o);
 break;
@@ -6409,198 +7166,201 @@ break;
 default:
 t.skipField();
 }
+}
 return e;
 };
 proto.BINEnterRoomResponse.serializeBinaryToWriter = function(e, t) {
 e.serializeBinaryToWriter(t);
 };
 proto.BINEnterRoomResponse.prototype.serializeBinary = function() {
-var e = new s.BinaryWriter();
+var e = new r.BinaryWriter();
 this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINEnterRoomResponse.prototype.serializeBinaryToWriter = function(e) {
 var t = void 0;
-null != (t = s.Message.getField(this, 1)) && e.writeBool(1, t);
-null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
-null != (t = s.Message.getField(this, 3)) && e.writeInt32(3, t);
+null != (t = r.Message.getField(this, 1)) && e.writeBool(1, t);
+null != (t = r.Message.getField(this, 2)) && e.writeString(2, t);
+null != (t = r.Message.getField(this, 3)) && e.writeInt32(3, t);
 null != (t = this.getRoomplay()) && e.writeMessage(4, t, n.BINRoomPlay.serializeBinaryToWriter);
-null != (t = s.Message.getField(this, 5)) && e.writeBool(5, t);
-(t = this.getPlayingplayersList()).length > 0 && e.writeRepeatedMessage(6, t, a.BINPlayer.serializeBinaryToWriter);
-(t = this.getWaitingplayersList()).length > 0 && e.writeRepeatedMessage(7, t, a.BINPlayer.serializeBinaryToWriter);
-null != (t = s.Message.getField(this, 8)) && e.writeInt64(8, t);
-null != (t = s.Message.getField(this, 9)) && e.writeInt64(9, t);
-null != (t = s.Message.getField(this, 10)) && e.writeInt32(10, t);
-(t = this.getArgsList()).length > 0 && e.writeRepeatedMessage(11, t, p.BINMapFieldEntry.serializeBinaryToWriter);
+null != (t = r.Message.getField(this, 5)) && e.writeBool(5, t);
+0 < (t = this.getPlayingplayersList()).length && e.writeRepeatedMessage(6, t, a.BINPlayer.serializeBinaryToWriter);
+0 < (t = this.getWaitingplayersList()).length && e.writeRepeatedMessage(7, t, a.BINPlayer.serializeBinaryToWriter);
+null != (t = r.Message.getField(this, 8)) && e.writeInt64(8, t);
+null != (t = r.Message.getField(this, 9)) && e.writeInt64(9, t);
+null != (t = r.Message.getField(this, 10)) && e.writeInt32(10, t);
+0 < (t = this.getArgsList()).length && e.writeRepeatedMessage(11, t, p.BINMapFieldEntry.serializeBinaryToWriter);
 };
 proto.BINEnterRoomResponse.prototype.getResponsecode = function() {
-return s.Message.getFieldWithDefault(this, 1, !1);
+return r.Message.getFieldWithDefault(this, 1, !1);
 };
 proto.BINEnterRoomResponse.prototype.setResponsecode = function(e) {
-s.Message.setField(this, 1, e);
+r.Message.setField(this, 1, e);
 };
 proto.BINEnterRoomResponse.prototype.clearResponsecode = function() {
-s.Message.setField(this, 1, void 0);
+r.Message.setField(this, 1, void 0);
 };
 proto.BINEnterRoomResponse.prototype.hasResponsecode = function() {
-return null != s.Message.getField(this, 1);
+return null != r.Message.getField(this, 1);
 };
 proto.BINEnterRoomResponse.prototype.getMessage = function() {
-return s.Message.getFieldWithDefault(this, 2, "");
+return r.Message.getFieldWithDefault(this, 2, "");
 };
 proto.BINEnterRoomResponse.prototype.setMessage = function(e) {
-s.Message.setField(this, 2, e);
+r.Message.setField(this, 2, e);
 };
 proto.BINEnterRoomResponse.prototype.clearMessage = function() {
-s.Message.setField(this, 2, void 0);
+r.Message.setField(this, 2, void 0);
 };
 proto.BINEnterRoomResponse.prototype.hasMessage = function() {
-return null != s.Message.getField(this, 2);
+return null != r.Message.getField(this, 2);
 };
 proto.BINEnterRoomResponse.prototype.getZoneid = function() {
-return s.Message.getFieldWithDefault(this, 3, 0);
+return r.Message.getFieldWithDefault(this, 3, 0);
 };
 proto.BINEnterRoomResponse.prototype.setZoneid = function(e) {
-s.Message.setField(this, 3, e);
+r.Message.setField(this, 3, e);
 };
 proto.BINEnterRoomResponse.prototype.clearZoneid = function() {
-s.Message.setField(this, 3, void 0);
+r.Message.setField(this, 3, void 0);
 };
 proto.BINEnterRoomResponse.prototype.hasZoneid = function() {
-return null != s.Message.getField(this, 3);
+return null != r.Message.getField(this, 3);
 };
 proto.BINEnterRoomResponse.prototype.getRoomplay = function() {
-return s.Message.getWrapperField(this, n.BINRoomPlay, 4);
+return r.Message.getWrapperField(this, n.BINRoomPlay, 4);
 };
 proto.BINEnterRoomResponse.prototype.setRoomplay = function(e) {
-s.Message.setWrapperField(this, 4, e);
+r.Message.setWrapperField(this, 4, e);
 };
 proto.BINEnterRoomResponse.prototype.clearRoomplay = function() {
 this.setRoomplay(void 0);
 };
 proto.BINEnterRoomResponse.prototype.hasRoomplay = function() {
-return null != s.Message.getField(this, 4);
+return null != r.Message.getField(this, 4);
 };
 proto.BINEnterRoomResponse.prototype.getRoomisplaying = function() {
-return s.Message.getFieldWithDefault(this, 5, !1);
+return r.Message.getFieldWithDefault(this, 5, !1);
 };
 proto.BINEnterRoomResponse.prototype.setRoomisplaying = function(e) {
-s.Message.setField(this, 5, e);
+r.Message.setField(this, 5, e);
 };
 proto.BINEnterRoomResponse.prototype.clearRoomisplaying = function() {
-s.Message.setField(this, 5, void 0);
+r.Message.setField(this, 5, void 0);
 };
 proto.BINEnterRoomResponse.prototype.hasRoomisplaying = function() {
-return null != s.Message.getField(this, 5);
+return null != r.Message.getField(this, 5);
 };
 proto.BINEnterRoomResponse.prototype.getPlayingplayersList = function() {
-return s.Message.getRepeatedWrapperField(this, a.BINPlayer, 6);
+return r.Message.getRepeatedWrapperField(this, a.BINPlayer, 6);
 };
 proto.BINEnterRoomResponse.prototype.setPlayingplayersList = function(e) {
-s.Message.setRepeatedWrapperField(this, 6, e);
+r.Message.setRepeatedWrapperField(this, 6, e);
 };
 proto.BINEnterRoomResponse.prototype.addPlayingplayers = function(e, t) {
-return s.Message.addToRepeatedWrapperField(this, 6, e, proto.BINPlayer, t);
+return r.Message.addToRepeatedWrapperField(this, 6, e, proto.BINPlayer, t);
 };
 proto.BINEnterRoomResponse.prototype.clearPlayingplayersList = function() {
 this.setPlayingplayersList([]);
 };
 proto.BINEnterRoomResponse.prototype.getWaitingplayersList = function() {
-return s.Message.getRepeatedWrapperField(this, a.BINPlayer, 7);
+return r.Message.getRepeatedWrapperField(this, a.BINPlayer, 7);
 };
 proto.BINEnterRoomResponse.prototype.setWaitingplayersList = function(e) {
-s.Message.setRepeatedWrapperField(this, 7, e);
+r.Message.setRepeatedWrapperField(this, 7, e);
 };
 proto.BINEnterRoomResponse.prototype.addWaitingplayers = function(e, t) {
-return s.Message.addToRepeatedWrapperField(this, 7, e, proto.BINPlayer, t);
+return r.Message.addToRepeatedWrapperField(this, 7, e, proto.BINPlayer, t);
 };
 proto.BINEnterRoomResponse.prototype.clearWaitingplayersList = function() {
 this.setWaitingplayersList([]);
 };
 proto.BINEnterRoomResponse.prototype.getOwneruserid = function() {
-return s.Message.getFieldWithDefault(this, 8, 0);
+return r.Message.getFieldWithDefault(this, 8, 0);
 };
 proto.BINEnterRoomResponse.prototype.setOwneruserid = function(e) {
-s.Message.setField(this, 8, e);
+r.Message.setField(this, 8, e);
 };
 proto.BINEnterRoomResponse.prototype.clearOwneruserid = function() {
-s.Message.setField(this, 8, void 0);
+r.Message.setField(this, 8, void 0);
 };
 proto.BINEnterRoomResponse.prototype.hasOwneruserid = function() {
-return null != s.Message.getField(this, 8);
+return null != r.Message.getField(this, 8);
 };
 proto.BINEnterRoomResponse.prototype.getCurrentturnuserid = function() {
-return s.Message.getFieldWithDefault(this, 9, 0);
+return r.Message.getFieldWithDefault(this, 9, 0);
 };
 proto.BINEnterRoomResponse.prototype.setCurrentturnuserid = function(e) {
-s.Message.setField(this, 9, e);
+r.Message.setField(this, 9, e);
 };
 proto.BINEnterRoomResponse.prototype.clearCurrentturnuserid = function() {
-s.Message.setField(this, 9, void 0);
+r.Message.setField(this, 9, void 0);
 };
 proto.BINEnterRoomResponse.prototype.hasCurrentturnuserid = function() {
-return null != s.Message.getField(this, 9);
+return null != r.Message.getField(this, 9);
 };
 proto.BINEnterRoomResponse.prototype.getEnterroomstatus = function() {
-return s.Message.getFieldWithDefault(this, 10, 0);
+return r.Message.getFieldWithDefault(this, 10, 0);
 };
 proto.BINEnterRoomResponse.prototype.setEnterroomstatus = function(e) {
-s.Message.setField(this, 10, e);
+r.Message.setField(this, 10, e);
 };
 proto.BINEnterRoomResponse.prototype.clearEnterroomstatus = function() {
-s.Message.setField(this, 10, void 0);
+r.Message.setField(this, 10, void 0);
 };
 proto.BINEnterRoomResponse.prototype.hasEnterroomstatus = function() {
-return null != s.Message.getField(this, 10);
+return null != r.Message.getField(this, 10);
 };
 proto.BINEnterRoomResponse.prototype.getArgsList = function() {
-return s.Message.getRepeatedWrapperField(this, p.BINMapFieldEntry, 11);
+return r.Message.getRepeatedWrapperField(this, p.BINMapFieldEntry, 11);
 };
 proto.BINEnterRoomResponse.prototype.setArgsList = function(e) {
-s.Message.setRepeatedWrapperField(this, 11, e);
+r.Message.setRepeatedWrapperField(this, 11, e);
 };
 proto.BINEnterRoomResponse.prototype.addArgs = function(e, t) {
-return s.Message.addToRepeatedWrapperField(this, 11, e, proto.BINMapFieldEntry, t);
+return r.Message.addToRepeatedWrapperField(this, 11, e, proto.BINMapFieldEntry, t);
 };
 proto.BINEnterRoomResponse.prototype.clearArgsList = function() {
 this.setArgsList([]);
 };
 proto.BINEnterRoomGroupRequest = function(e) {
-s.Message.initialize(this, e, 0, -1, null, null);
+r.Message.initialize(this, e, 0, -1, null, null);
 };
-r.inherits(proto.BINEnterRoomGroupRequest, s.Message);
-r.DEBUG && !COMPILED && (proto.BINEnterRoomGroupRequest.displayName = "proto.BINEnterRoomGroupRequest");
-if (s.Message.GENERATE_TO_OBJECT) {
+s.inherits(proto.BINEnterRoomGroupRequest, r.Message);
+s.DEBUG && !COMPILED && (proto.BINEnterRoomGroupRequest.displayName = "proto.BINEnterRoomGroupRequest");
+if (r.Message.GENERATE_TO_OBJECT) {
 proto.BINEnterRoomGroupRequest.prototype.toObject = function(e) {
 return proto.BINEnterRoomGroupRequest.toObject(e, this);
 };
 proto.BINEnterRoomGroupRequest.toObject = function(e, t) {
 var o = {
-roomgroupid: s.Message.getField(t, 1),
-viproom: s.Message.getField(t, 2)
+roomgroupid: r.Message.getField(t, 1),
+viproom: r.Message.getField(t, 2)
 };
 e && (o.$jspbMessageInstance = t);
 return o;
 };
 }
 proto.BINEnterRoomGroupRequest.deserializeBinary = function(e) {
-var t = new s.BinaryReader(e), o = new proto.BINEnterRoomGroupRequest();
+var t = new r.BinaryReader(e), o = new proto.BINEnterRoomGroupRequest();
 return proto.BINEnterRoomGroupRequest.deserializeBinaryFromReader(o, t);
 };
 proto.BINEnterRoomGroupRequest.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readInt32();
+var o = t.readInt32();
 e.setRoomgroupid(o);
 break;
 
 case 2:
-var o = t.readBool();
+o = t.readBool();
 e.setViproom(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -6608,68 +7368,69 @@ proto.BINEnterRoomGroupRequest.serializeBinaryToWriter = function(e, t) {
 e.serializeBinaryToWriter(t);
 };
 proto.BINEnterRoomGroupRequest.prototype.serializeBinary = function() {
-var e = new s.BinaryWriter();
+var e = new r.BinaryWriter();
 this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINEnterRoomGroupRequest.prototype.serializeBinaryToWriter = function(e) {
 var t = void 0;
-null != (t = s.Message.getField(this, 1)) && e.writeInt32(1, t);
-null != (t = s.Message.getField(this, 2)) && e.writeBool(2, t);
+null != (t = r.Message.getField(this, 1)) && e.writeInt32(1, t);
+null != (t = r.Message.getField(this, 2)) && e.writeBool(2, t);
 };
 proto.BINEnterRoomGroupRequest.prototype.getRoomgroupid = function() {
-return s.Message.getFieldWithDefault(this, 1, 0);
+return r.Message.getFieldWithDefault(this, 1, 0);
 };
 proto.BINEnterRoomGroupRequest.prototype.setRoomgroupid = function(e) {
-s.Message.setField(this, 1, e);
+r.Message.setField(this, 1, e);
 };
 proto.BINEnterRoomGroupRequest.prototype.clearRoomgroupid = function() {
-s.Message.setField(this, 1, void 0);
+r.Message.setField(this, 1, void 0);
 };
 proto.BINEnterRoomGroupRequest.prototype.hasRoomgroupid = function() {
-return null != s.Message.getField(this, 1);
+return null != r.Message.getField(this, 1);
 };
 proto.BINEnterRoomGroupRequest.prototype.getViproom = function() {
-return s.Message.getFieldWithDefault(this, 2, !1);
+return r.Message.getFieldWithDefault(this, 2, !1);
 };
 proto.BINEnterRoomGroupRequest.prototype.setViproom = function(e) {
-s.Message.setField(this, 2, e);
+r.Message.setField(this, 2, e);
 };
 proto.BINEnterRoomGroupRequest.prototype.clearViproom = function() {
-s.Message.setField(this, 2, void 0);
+r.Message.setField(this, 2, void 0);
 };
 proto.BINEnterRoomGroupRequest.prototype.hasViproom = function() {
-return null != s.Message.getField(this, 2);
+return null != r.Message.getField(this, 2);
 };
 proto.BINPlayerEnterRoomResponse = function(e) {
-s.Message.initialize(this, e, 0, -1, null, null);
+r.Message.initialize(this, e, 0, -1, null, null);
 };
-r.inherits(proto.BINPlayerEnterRoomResponse, s.Message);
-r.DEBUG && !COMPILED && (proto.BINPlayerEnterRoomResponse.displayName = "proto.BINPlayerEnterRoomResponse");
-if (s.Message.GENERATE_TO_OBJECT) {
+s.inherits(proto.BINPlayerEnterRoomResponse, r.Message);
+s.DEBUG && !COMPILED && (proto.BINPlayerEnterRoomResponse.displayName = "proto.BINPlayerEnterRoomResponse");
+if (r.Message.GENERATE_TO_OBJECT) {
 proto.BINPlayerEnterRoomResponse.prototype.toObject = function(e) {
 return proto.BINPlayerEnterRoomResponse.toObject(e, this);
 };
 proto.BINPlayerEnterRoomResponse.toObject = function(e, t) {
-var o, r = {
-responsecode: s.Message.getField(t, 1),
-message: s.Message.getField(t, 2),
+var o, s = {
+responsecode: r.Message.getField(t, 1),
+message: r.Message.getField(t, 2),
 player: (o = t.getPlayer()) && a.BINPlayer.toObject(e, o),
-enterroomstatus: s.Message.getField(t, 4),
-changeownerroomcd: s.Message.getField(t, 5)
+enterroomstatus: r.Message.getField(t, 4),
+changeownerroomcd: r.Message.getField(t, 5)
 };
-e && (r.$jspbMessageInstance = t);
-return r;
+e && (s.$jspbMessageInstance = t);
+return s;
 };
 }
 proto.BINPlayerEnterRoomResponse.deserializeBinary = function(e) {
-var t = new s.BinaryReader(e), o = new proto.BINPlayerEnterRoomResponse();
+var t = new r.BinaryReader(e), o = new proto.BINPlayerEnterRoomResponse();
 return proto.BINPlayerEnterRoomResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINPlayerEnterRoomResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
@@ -6690,12 +7451,13 @@ e.setEnterroomstatus(o);
 break;
 
 case 5:
-var o = t.readInt32();
+o = t.readInt32();
 e.setChangeownerroomcd(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -6703,79 +7465,79 @@ proto.BINPlayerEnterRoomResponse.serializeBinaryToWriter = function(e, t) {
 e.serializeBinaryToWriter(t);
 };
 proto.BINPlayerEnterRoomResponse.prototype.serializeBinary = function() {
-var e = new s.BinaryWriter();
+var e = new r.BinaryWriter();
 this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINPlayerEnterRoomResponse.prototype.serializeBinaryToWriter = function(e) {
 var t = void 0;
-null != (t = s.Message.getField(this, 1)) && e.writeBool(1, t);
-null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
+null != (t = r.Message.getField(this, 1)) && e.writeBool(1, t);
+null != (t = r.Message.getField(this, 2)) && e.writeString(2, t);
 null != (t = this.getPlayer()) && e.writeMessage(3, t, a.BINPlayer.serializeBinaryToWriter);
-null != (t = s.Message.getField(this, 4)) && e.writeInt32(4, t);
-null != (t = s.Message.getField(this, 5)) && e.writeInt32(5, t);
+null != (t = r.Message.getField(this, 4)) && e.writeInt32(4, t);
+null != (t = r.Message.getField(this, 5)) && e.writeInt32(5, t);
 };
 proto.BINPlayerEnterRoomResponse.prototype.getResponsecode = function() {
-return s.Message.getFieldWithDefault(this, 1, !1);
+return r.Message.getFieldWithDefault(this, 1, !1);
 };
 proto.BINPlayerEnterRoomResponse.prototype.setResponsecode = function(e) {
-s.Message.setField(this, 1, e);
+r.Message.setField(this, 1, e);
 };
 proto.BINPlayerEnterRoomResponse.prototype.clearResponsecode = function() {
-s.Message.setField(this, 1, void 0);
+r.Message.setField(this, 1, void 0);
 };
 proto.BINPlayerEnterRoomResponse.prototype.hasResponsecode = function() {
-return null != s.Message.getField(this, 1);
+return null != r.Message.getField(this, 1);
 };
 proto.BINPlayerEnterRoomResponse.prototype.getMessage = function() {
-return s.Message.getFieldWithDefault(this, 2, "");
+return r.Message.getFieldWithDefault(this, 2, "");
 };
 proto.BINPlayerEnterRoomResponse.prototype.setMessage = function(e) {
-s.Message.setField(this, 2, e);
+r.Message.setField(this, 2, e);
 };
 proto.BINPlayerEnterRoomResponse.prototype.clearMessage = function() {
-s.Message.setField(this, 2, void 0);
+r.Message.setField(this, 2, void 0);
 };
 proto.BINPlayerEnterRoomResponse.prototype.hasMessage = function() {
-return null != s.Message.getField(this, 2);
+return null != r.Message.getField(this, 2);
 };
 proto.BINPlayerEnterRoomResponse.prototype.getPlayer = function() {
-return s.Message.getWrapperField(this, a.BINPlayer, 3);
+return r.Message.getWrapperField(this, a.BINPlayer, 3);
 };
 proto.BINPlayerEnterRoomResponse.prototype.setPlayer = function(e) {
-s.Message.setWrapperField(this, 3, e);
+r.Message.setWrapperField(this, 3, e);
 };
 proto.BINPlayerEnterRoomResponse.prototype.clearPlayer = function() {
 this.setPlayer(void 0);
 };
 proto.BINPlayerEnterRoomResponse.prototype.hasPlayer = function() {
-return null != s.Message.getField(this, 3);
+return null != r.Message.getField(this, 3);
 };
 proto.BINPlayerEnterRoomResponse.prototype.getEnterroomstatus = function() {
-return s.Message.getFieldWithDefault(this, 4, 0);
+return r.Message.getFieldWithDefault(this, 4, 0);
 };
 proto.BINPlayerEnterRoomResponse.prototype.setEnterroomstatus = function(e) {
-s.Message.setField(this, 4, e);
+r.Message.setField(this, 4, e);
 };
 proto.BINPlayerEnterRoomResponse.prototype.clearEnterroomstatus = function() {
-s.Message.setField(this, 4, void 0);
+r.Message.setField(this, 4, void 0);
 };
 proto.BINPlayerEnterRoomResponse.prototype.hasEnterroomstatus = function() {
-return null != s.Message.getField(this, 4);
+return null != r.Message.getField(this, 4);
 };
 proto.BINPlayerEnterRoomResponse.prototype.getChangeownerroomcd = function() {
-return s.Message.getFieldWithDefault(this, 5, 0);
+return r.Message.getFieldWithDefault(this, 5, 0);
 };
 proto.BINPlayerEnterRoomResponse.prototype.setChangeownerroomcd = function(e) {
-s.Message.setField(this, 5, e);
+r.Message.setField(this, 5, e);
 };
 proto.BINPlayerEnterRoomResponse.prototype.clearChangeownerroomcd = function() {
-s.Message.setField(this, 5, void 0);
+r.Message.setField(this, 5, void 0);
 };
 proto.BINPlayerEnterRoomResponse.prototype.hasChangeownerroomcd = function() {
-return null != s.Message.getField(this, 5);
+return null != r.Message.getField(this, 5);
 };
-r.object.extend(o, proto);
+s.object.extend(o, proto);
 cc._RF.pop();
 }, {
 "./filter_room_pb.js": "filter_room_pb",
@@ -6814,7 +7576,8 @@ var t = new s.BinaryReader(e), o = new proto.BINEnterZoneRequest();
 return proto.BINEnterZoneRequest.deserializeBinaryFromReader(o, t);
 };
 proto.BINEnterZoneRequest.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
 var o = t.readInt32();
 e.setZoneid(o);
@@ -6822,6 +7585,7 @@ break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -6834,7 +7598,7 @@ this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINEnterZoneRequest.prototype.serializeBinaryToWriter = function(e) {
-var t = void 0;
+var t;
 null != (t = s.Message.getField(this, 1)) && e.writeInt32(1, t);
 };
 proto.BINEnterZoneRequest.prototype.getZoneid = function() {
@@ -6881,9 +7645,10 @@ var t = new s.BinaryReader(e), o = new proto.BINRoomConfig();
 return proto.BINRoomConfig.deserializeBinaryFromReader(o, t);
 };
 proto.BINRoomConfig.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readInt32();
+var o = t.readInt32();
 e.setRoomgroupid(o);
 break;
 
@@ -6933,12 +7698,13 @@ e.setTax(o);
 break;
 
 case 11:
-var o = t.readBool();
+o = t.readBool();
 e.setActive(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -7126,9 +7892,10 @@ var t = new s.BinaryReader(e), o = new proto.BINEnterZoneResponse();
 return proto.BINEnterZoneResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINEnterZoneResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
@@ -7165,12 +7932,13 @@ e.setZoneid(o);
 break;
 
 case 8:
-var o = t.readBool();
+o = t.readBool();
 e.setJarstatus(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -7188,8 +7956,8 @@ null != (t = s.Message.getField(this, 1)) && e.writeBool(1, t);
 null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
 null != (t = s.Message.getField(this, 3)) && e.writeBool(3, t);
 null != (t = s.Message.getField(this, 4)) && e.writeInt32(4, t);
-(t = this.getCashroomconfigsList()).length > 0 && e.writeRepeatedMessage(5, t, proto.BINRoomConfig.serializeBinaryToWriter);
-(t = this.getGoldroomconfigsList()).length > 0 && e.writeRepeatedMessage(6, t, proto.BINRoomConfig.serializeBinaryToWriter);
+0 < (t = this.getCashroomconfigsList()).length && e.writeRepeatedMessage(5, t, proto.BINRoomConfig.serializeBinaryToWriter);
+0 < (t = this.getGoldroomconfigsList()).length && e.writeRepeatedMessage(6, t, proto.BINRoomConfig.serializeBinaryToWriter);
 null != (t = s.Message.getField(this, 7)) && e.writeInt32(7, t);
 null != (t = s.Message.getField(this, 8)) && e.writeBool(8, t);
 };
@@ -7311,7 +8079,8 @@ var t = new s.BinaryReader(e), o = new proto.BINExitZoneRequest();
 return proto.BINExitZoneRequest.deserializeBinaryFromReader(o, t);
 };
 proto.BINExitZoneRequest.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
 var o = t.readInt32();
 e.setZoneid(o);
@@ -7319,6 +8088,7 @@ break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -7331,7 +8101,7 @@ this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINExitZoneRequest.prototype.serializeBinaryToWriter = function(e) {
-var t = void 0;
+var t;
 null != (t = s.Message.getField(this, 1)) && e.writeInt32(1, t);
 };
 proto.BINExitZoneRequest.prototype.getZoneid = function() {
@@ -7370,9 +8140,10 @@ var t = new s.BinaryReader(e), o = new proto.BINExitZoneResponse();
 return proto.BINExitZoneResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINExitZoneResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
@@ -7382,12 +8153,13 @@ e.setMessage(o);
 break;
 
 case 3:
-var o = t.readInt32();
+o = t.readInt32();
 e.setZoneid(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -7446,6 +8218,1600 @@ cc._RF.pop();
 }, {
 "google-protobuf": "google-protobuf"
 } ],
+exchange_pb: [ function(e, t, o) {
+"use strict";
+cc._RF.push(t, "4f721WXEflLZ5+yuDBv/pMZ", "exchange_pb");
+var s = e("google-protobuf"), r = s, i = Function("return this")();
+r.exportSymbol("proto.BINApproveExchangeAssetRequest", null, i);
+r.exportSymbol("proto.BINApproveExchangeAssetResponse", null, i);
+r.exportSymbol("proto.BINAsset", null, i);
+r.exportSymbol("proto.BINAssetConfigRequest", null, i);
+r.exportSymbol("proto.BINAssetConfigResponse", null, i);
+r.exportSymbol("proto.BINExchangeAsset", null, i);
+r.exportSymbol("proto.BINExchangeAssetHistoryRequest", null, i);
+r.exportSymbol("proto.BINExchangeAssetHistoryResponse", null, i);
+r.exportSymbol("proto.BINExchangeAssetRequest", null, i);
+r.exportSymbol("proto.BINExchangeAssetResponse", null, i);
+r.exportSymbol("proto.BINExchangeC2GConfigRequest", null, i);
+r.exportSymbol("proto.BINExchangeC2GConfigResponse", null, i);
+r.exportSymbol("proto.BINExchangeCashToGoldRequest", null, i);
+r.exportSymbol("proto.BINExchangeCashToGoldResponse", null, i);
+proto.BINAssetConfigRequest = function(e) {
+s.Message.initialize(this, e, 0, -1, null, null);
+};
+r.inherits(proto.BINAssetConfigRequest, s.Message);
+r.DEBUG && !COMPILED && (proto.BINAssetConfigRequest.displayName = "proto.BINAssetConfigRequest");
+if (s.Message.GENERATE_TO_OBJECT) {
+proto.BINAssetConfigRequest.prototype.toObject = function(e) {
+return proto.BINAssetConfigRequest.toObject(e, this);
+};
+proto.BINAssetConfigRequest.toObject = function(e, t) {
+var o = {
+type: s.Message.getField(t, 1)
+};
+e && (o.$jspbMessageInstance = t);
+return o;
+};
+}
+proto.BINAssetConfigRequest.deserializeBinary = function(e) {
+var t = new s.BinaryReader(e), o = new proto.BINAssetConfigRequest();
+return proto.BINAssetConfigRequest.deserializeBinaryFromReader(o, t);
+};
+proto.BINAssetConfigRequest.deserializeBinaryFromReader = function(e, t) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
+case 1:
+var o = t.readInt32();
+e.setType(o);
+break;
+
+default:
+t.skipField();
+}
+}
+return e;
+};
+proto.BINAssetConfigRequest.serializeBinaryToWriter = function(e, t) {
+e.serializeBinaryToWriter(t);
+};
+proto.BINAssetConfigRequest.prototype.serializeBinary = function() {
+var e = new s.BinaryWriter();
+this.serializeBinaryToWriter(e);
+return e.getResultBuffer();
+};
+proto.BINAssetConfigRequest.prototype.serializeBinaryToWriter = function(e) {
+var t;
+null != (t = s.Message.getField(this, 1)) && e.writeInt32(1, t);
+};
+proto.BINAssetConfigRequest.prototype.getType = function() {
+return s.Message.getFieldWithDefault(this, 1, 0);
+};
+proto.BINAssetConfigRequest.prototype.setType = function(e) {
+s.Message.setField(this, 1, e);
+};
+proto.BINAssetConfigRequest.prototype.clearType = function() {
+s.Message.setField(this, 1, void 0);
+};
+proto.BINAssetConfigRequest.prototype.hasType = function() {
+return null != s.Message.getField(this, 1);
+};
+proto.BINAsset = function(e) {
+s.Message.initialize(this, e, 0, -1, null, null);
+};
+r.inherits(proto.BINAsset, s.Message);
+r.DEBUG && !COMPILED && (proto.BINAsset.displayName = "proto.BINAsset");
+if (s.Message.GENERATE_TO_OBJECT) {
+proto.BINAsset.prototype.toObject = function(e) {
+return proto.BINAsset.toObject(e, this);
+};
+proto.BINAsset.toObject = function(e, t) {
+var o = {
+assetid: s.Message.getField(t, 1),
+type: s.Message.getField(t, 2),
+provider: s.Message.getField(t, 3),
+parvalue: s.Message.getField(t, 4),
+cashvalue: s.Message.getField(t, 5),
+trustedindex: s.Message.getField(t, 6),
+minaccountbalance: s.Message.getField(t, 7),
+active: s.Message.getField(t, 8),
+assetname: s.Message.getField(t, 9)
+};
+e && (o.$jspbMessageInstance = t);
+return o;
+};
+}
+proto.BINAsset.deserializeBinary = function(e) {
+var t = new s.BinaryReader(e), o = new proto.BINAsset();
+return proto.BINAsset.deserializeBinaryFromReader(o, t);
+};
+proto.BINAsset.deserializeBinaryFromReader = function(e, t) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
+case 1:
+var o = t.readInt32();
+e.setAssetid(o);
+break;
+
+case 2:
+o = t.readInt32();
+e.setType(o);
+break;
+
+case 3:
+o = t.readString();
+e.setProvider(o);
+break;
+
+case 4:
+o = t.readInt64();
+e.setParvalue(o);
+break;
+
+case 5:
+o = t.readInt64();
+e.setCashvalue(o);
+break;
+
+case 6:
+o = t.readInt64();
+e.setTrustedindex(o);
+break;
+
+case 7:
+o = t.readInt64();
+e.setMinaccountbalance(o);
+break;
+
+case 8:
+o = t.readBool();
+e.setActive(o);
+break;
+
+case 9:
+o = t.readString();
+e.setAssetname(o);
+break;
+
+default:
+t.skipField();
+}
+}
+return e;
+};
+proto.BINAsset.serializeBinaryToWriter = function(e, t) {
+e.serializeBinaryToWriter(t);
+};
+proto.BINAsset.prototype.serializeBinary = function() {
+var e = new s.BinaryWriter();
+this.serializeBinaryToWriter(e);
+return e.getResultBuffer();
+};
+proto.BINAsset.prototype.serializeBinaryToWriter = function(e) {
+var t = void 0;
+null != (t = s.Message.getField(this, 1)) && e.writeInt32(1, t);
+null != (t = s.Message.getField(this, 2)) && e.writeInt32(2, t);
+null != (t = s.Message.getField(this, 3)) && e.writeString(3, t);
+null != (t = s.Message.getField(this, 4)) && e.writeInt64(4, t);
+null != (t = s.Message.getField(this, 5)) && e.writeInt64(5, t);
+null != (t = s.Message.getField(this, 6)) && e.writeInt64(6, t);
+null != (t = s.Message.getField(this, 7)) && e.writeInt64(7, t);
+null != (t = s.Message.getField(this, 8)) && e.writeBool(8, t);
+null != (t = s.Message.getField(this, 9)) && e.writeString(9, t);
+};
+proto.BINAsset.prototype.getAssetid = function() {
+return s.Message.getFieldWithDefault(this, 1, 0);
+};
+proto.BINAsset.prototype.setAssetid = function(e) {
+s.Message.setField(this, 1, e);
+};
+proto.BINAsset.prototype.clearAssetid = function() {
+s.Message.setField(this, 1, void 0);
+};
+proto.BINAsset.prototype.hasAssetid = function() {
+return null != s.Message.getField(this, 1);
+};
+proto.BINAsset.prototype.getType = function() {
+return s.Message.getFieldWithDefault(this, 2, 0);
+};
+proto.BINAsset.prototype.setType = function(e) {
+s.Message.setField(this, 2, e);
+};
+proto.BINAsset.prototype.clearType = function() {
+s.Message.setField(this, 2, void 0);
+};
+proto.BINAsset.prototype.hasType = function() {
+return null != s.Message.getField(this, 2);
+};
+proto.BINAsset.prototype.getProvider = function() {
+return s.Message.getFieldWithDefault(this, 3, "");
+};
+proto.BINAsset.prototype.setProvider = function(e) {
+s.Message.setField(this, 3, e);
+};
+proto.BINAsset.prototype.clearProvider = function() {
+s.Message.setField(this, 3, void 0);
+};
+proto.BINAsset.prototype.hasProvider = function() {
+return null != s.Message.getField(this, 3);
+};
+proto.BINAsset.prototype.getParvalue = function() {
+return s.Message.getFieldWithDefault(this, 4, 0);
+};
+proto.BINAsset.prototype.setParvalue = function(e) {
+s.Message.setField(this, 4, e);
+};
+proto.BINAsset.prototype.clearParvalue = function() {
+s.Message.setField(this, 4, void 0);
+};
+proto.BINAsset.prototype.hasParvalue = function() {
+return null != s.Message.getField(this, 4);
+};
+proto.BINAsset.prototype.getCashvalue = function() {
+return s.Message.getFieldWithDefault(this, 5, 0);
+};
+proto.BINAsset.prototype.setCashvalue = function(e) {
+s.Message.setField(this, 5, e);
+};
+proto.BINAsset.prototype.clearCashvalue = function() {
+s.Message.setField(this, 5, void 0);
+};
+proto.BINAsset.prototype.hasCashvalue = function() {
+return null != s.Message.getField(this, 5);
+};
+proto.BINAsset.prototype.getTrustedindex = function() {
+return s.Message.getFieldWithDefault(this, 6, 0);
+};
+proto.BINAsset.prototype.setTrustedindex = function(e) {
+s.Message.setField(this, 6, e);
+};
+proto.BINAsset.prototype.clearTrustedindex = function() {
+s.Message.setField(this, 6, void 0);
+};
+proto.BINAsset.prototype.hasTrustedindex = function() {
+return null != s.Message.getField(this, 6);
+};
+proto.BINAsset.prototype.getMinaccountbalance = function() {
+return s.Message.getFieldWithDefault(this, 7, 0);
+};
+proto.BINAsset.prototype.setMinaccountbalance = function(e) {
+s.Message.setField(this, 7, e);
+};
+proto.BINAsset.prototype.clearMinaccountbalance = function() {
+s.Message.setField(this, 7, void 0);
+};
+proto.BINAsset.prototype.hasMinaccountbalance = function() {
+return null != s.Message.getField(this, 7);
+};
+proto.BINAsset.prototype.getActive = function() {
+return s.Message.getFieldWithDefault(this, 8, !1);
+};
+proto.BINAsset.prototype.setActive = function(e) {
+s.Message.setField(this, 8, e);
+};
+proto.BINAsset.prototype.clearActive = function() {
+s.Message.setField(this, 8, void 0);
+};
+proto.BINAsset.prototype.hasActive = function() {
+return null != s.Message.getField(this, 8);
+};
+proto.BINAsset.prototype.getAssetname = function() {
+return s.Message.getFieldWithDefault(this, 9, "");
+};
+proto.BINAsset.prototype.setAssetname = function(e) {
+s.Message.setField(this, 9, e);
+};
+proto.BINAsset.prototype.clearAssetname = function() {
+s.Message.setField(this, 9, void 0);
+};
+proto.BINAsset.prototype.hasAssetname = function() {
+return null != s.Message.getField(this, 9);
+};
+proto.BINAssetConfigResponse = function(e) {
+s.Message.initialize(this, e, 0, -1, proto.BINAssetConfigResponse.repeatedFields_, null);
+};
+r.inherits(proto.BINAssetConfigResponse, s.Message);
+r.DEBUG && !COMPILED && (proto.BINAssetConfigResponse.displayName = "proto.BINAssetConfigResponse");
+proto.BINAssetConfigResponse.repeatedFields_ = [ 4 ];
+if (s.Message.GENERATE_TO_OBJECT) {
+proto.BINAssetConfigResponse.prototype.toObject = function(e) {
+return proto.BINAssetConfigResponse.toObject(e, this);
+};
+proto.BINAssetConfigResponse.toObject = function(e, t) {
+var o = {
+responsecode: s.Message.getField(t, 1),
+message: s.Message.getField(t, 2),
+enablesecuritycheck: s.Message.getField(t, 3),
+assetsList: s.Message.toObjectList(t.getAssetsList(), proto.BINAsset.toObject, e)
+};
+e && (o.$jspbMessageInstance = t);
+return o;
+};
+}
+proto.BINAssetConfigResponse.deserializeBinary = function(e) {
+var t = new s.BinaryReader(e), o = new proto.BINAssetConfigResponse();
+return proto.BINAssetConfigResponse.deserializeBinaryFromReader(o, t);
+};
+proto.BINAssetConfigResponse.deserializeBinaryFromReader = function(e, t) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
+case 1:
+var o = t.readBool();
+e.setResponsecode(o);
+break;
+
+case 2:
+o = t.readString();
+e.setMessage(o);
+break;
+
+case 3:
+o = t.readBool();
+e.setEnablesecuritycheck(o);
+break;
+
+case 4:
+o = new proto.BINAsset();
+t.readMessage(o, proto.BINAsset.deserializeBinaryFromReader);
+e.addAssets(o);
+break;
+
+default:
+t.skipField();
+}
+}
+return e;
+};
+proto.BINAssetConfigResponse.serializeBinaryToWriter = function(e, t) {
+e.serializeBinaryToWriter(t);
+};
+proto.BINAssetConfigResponse.prototype.serializeBinary = function() {
+var e = new s.BinaryWriter();
+this.serializeBinaryToWriter(e);
+return e.getResultBuffer();
+};
+proto.BINAssetConfigResponse.prototype.serializeBinaryToWriter = function(e) {
+var t = void 0;
+null != (t = s.Message.getField(this, 1)) && e.writeBool(1, t);
+null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
+null != (t = s.Message.getField(this, 3)) && e.writeBool(3, t);
+0 < (t = this.getAssetsList()).length && e.writeRepeatedMessage(4, t, proto.BINAsset.serializeBinaryToWriter);
+};
+proto.BINAssetConfigResponse.prototype.getResponsecode = function() {
+return s.Message.getFieldWithDefault(this, 1, !1);
+};
+proto.BINAssetConfigResponse.prototype.setResponsecode = function(e) {
+s.Message.setField(this, 1, e);
+};
+proto.BINAssetConfigResponse.prototype.clearResponsecode = function() {
+s.Message.setField(this, 1, void 0);
+};
+proto.BINAssetConfigResponse.prototype.hasResponsecode = function() {
+return null != s.Message.getField(this, 1);
+};
+proto.BINAssetConfigResponse.prototype.getMessage = function() {
+return s.Message.getFieldWithDefault(this, 2, "");
+};
+proto.BINAssetConfigResponse.prototype.setMessage = function(e) {
+s.Message.setField(this, 2, e);
+};
+proto.BINAssetConfigResponse.prototype.clearMessage = function() {
+s.Message.setField(this, 2, void 0);
+};
+proto.BINAssetConfigResponse.prototype.hasMessage = function() {
+return null != s.Message.getField(this, 2);
+};
+proto.BINAssetConfigResponse.prototype.getEnablesecuritycheck = function() {
+return s.Message.getFieldWithDefault(this, 3, !1);
+};
+proto.BINAssetConfigResponse.prototype.setEnablesecuritycheck = function(e) {
+s.Message.setField(this, 3, e);
+};
+proto.BINAssetConfigResponse.prototype.clearEnablesecuritycheck = function() {
+s.Message.setField(this, 3, void 0);
+};
+proto.BINAssetConfigResponse.prototype.hasEnablesecuritycheck = function() {
+return null != s.Message.getField(this, 3);
+};
+proto.BINAssetConfigResponse.prototype.getAssetsList = function() {
+return s.Message.getRepeatedWrapperField(this, proto.BINAsset, 4);
+};
+proto.BINAssetConfigResponse.prototype.setAssetsList = function(e) {
+s.Message.setRepeatedWrapperField(this, 4, e);
+};
+proto.BINAssetConfigResponse.prototype.addAssets = function(e, t) {
+return s.Message.addToRepeatedWrapperField(this, 4, e, proto.BINAsset, t);
+};
+proto.BINAssetConfigResponse.prototype.clearAssetsList = function() {
+this.setAssetsList([]);
+};
+proto.BINExchangeAssetRequest = function(e) {
+s.Message.initialize(this, e, 0, -1, null, null);
+};
+r.inherits(proto.BINExchangeAssetRequest, s.Message);
+r.DEBUG && !COMPILED && (proto.BINExchangeAssetRequest.displayName = "proto.BINExchangeAssetRequest");
+if (s.Message.GENERATE_TO_OBJECT) {
+proto.BINExchangeAssetRequest.prototype.toObject = function(e) {
+return proto.BINExchangeAssetRequest.toObject(e, this);
+};
+proto.BINExchangeAssetRequest.toObject = function(e, t) {
+var o = {
+assetid: s.Message.getField(t, 1),
+amount: s.Message.getField(t, 2),
+usersecuritykey: s.Message.getField(t, 3),
+captchasecuritykey: s.Message.getField(t, 4),
+captcha: s.Message.getField(t, 5)
+};
+e && (o.$jspbMessageInstance = t);
+return o;
+};
+}
+proto.BINExchangeAssetRequest.deserializeBinary = function(e) {
+var t = new s.BinaryReader(e), o = new proto.BINExchangeAssetRequest();
+return proto.BINExchangeAssetRequest.deserializeBinaryFromReader(o, t);
+};
+proto.BINExchangeAssetRequest.deserializeBinaryFromReader = function(e, t) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
+case 1:
+var o = t.readInt32();
+e.setAssetid(o);
+break;
+
+case 2:
+o = t.readInt32();
+e.setAmount(o);
+break;
+
+case 3:
+o = t.readString();
+e.setUsersecuritykey(o);
+break;
+
+case 4:
+o = t.readString();
+e.setCaptchasecuritykey(o);
+break;
+
+case 5:
+o = t.readString();
+e.setCaptcha(o);
+break;
+
+default:
+t.skipField();
+}
+}
+return e;
+};
+proto.BINExchangeAssetRequest.serializeBinaryToWriter = function(e, t) {
+e.serializeBinaryToWriter(t);
+};
+proto.BINExchangeAssetRequest.prototype.serializeBinary = function() {
+var e = new s.BinaryWriter();
+this.serializeBinaryToWriter(e);
+return e.getResultBuffer();
+};
+proto.BINExchangeAssetRequest.prototype.serializeBinaryToWriter = function(e) {
+var t = void 0;
+null != (t = s.Message.getField(this, 1)) && e.writeInt32(1, t);
+null != (t = s.Message.getField(this, 2)) && e.writeInt32(2, t);
+null != (t = s.Message.getField(this, 3)) && e.writeString(3, t);
+null != (t = s.Message.getField(this, 4)) && e.writeString(4, t);
+null != (t = s.Message.getField(this, 5)) && e.writeString(5, t);
+};
+proto.BINExchangeAssetRequest.prototype.getAssetid = function() {
+return s.Message.getFieldWithDefault(this, 1, 0);
+};
+proto.BINExchangeAssetRequest.prototype.setAssetid = function(e) {
+s.Message.setField(this, 1, e);
+};
+proto.BINExchangeAssetRequest.prototype.clearAssetid = function() {
+s.Message.setField(this, 1, void 0);
+};
+proto.BINExchangeAssetRequest.prototype.hasAssetid = function() {
+return null != s.Message.getField(this, 1);
+};
+proto.BINExchangeAssetRequest.prototype.getAmount = function() {
+return s.Message.getFieldWithDefault(this, 2, 0);
+};
+proto.BINExchangeAssetRequest.prototype.setAmount = function(e) {
+s.Message.setField(this, 2, e);
+};
+proto.BINExchangeAssetRequest.prototype.clearAmount = function() {
+s.Message.setField(this, 2, void 0);
+};
+proto.BINExchangeAssetRequest.prototype.hasAmount = function() {
+return null != s.Message.getField(this, 2);
+};
+proto.BINExchangeAssetRequest.prototype.getUsersecuritykey = function() {
+return s.Message.getFieldWithDefault(this, 3, "");
+};
+proto.BINExchangeAssetRequest.prototype.setUsersecuritykey = function(e) {
+s.Message.setField(this, 3, e);
+};
+proto.BINExchangeAssetRequest.prototype.clearUsersecuritykey = function() {
+s.Message.setField(this, 3, void 0);
+};
+proto.BINExchangeAssetRequest.prototype.hasUsersecuritykey = function() {
+return null != s.Message.getField(this, 3);
+};
+proto.BINExchangeAssetRequest.prototype.getCaptchasecuritykey = function() {
+return s.Message.getFieldWithDefault(this, 4, "");
+};
+proto.BINExchangeAssetRequest.prototype.setCaptchasecuritykey = function(e) {
+s.Message.setField(this, 4, e);
+};
+proto.BINExchangeAssetRequest.prototype.clearCaptchasecuritykey = function() {
+s.Message.setField(this, 4, void 0);
+};
+proto.BINExchangeAssetRequest.prototype.hasCaptchasecuritykey = function() {
+return null != s.Message.getField(this, 4);
+};
+proto.BINExchangeAssetRequest.prototype.getCaptcha = function() {
+return s.Message.getFieldWithDefault(this, 5, "");
+};
+proto.BINExchangeAssetRequest.prototype.setCaptcha = function(e) {
+s.Message.setField(this, 5, e);
+};
+proto.BINExchangeAssetRequest.prototype.clearCaptcha = function() {
+s.Message.setField(this, 5, void 0);
+};
+proto.BINExchangeAssetRequest.prototype.hasCaptcha = function() {
+return null != s.Message.getField(this, 5);
+};
+proto.BINExchangeAssetResponse = function(e) {
+s.Message.initialize(this, e, 0, -1, null, null);
+};
+r.inherits(proto.BINExchangeAssetResponse, s.Message);
+r.DEBUG && !COMPILED && (proto.BINExchangeAssetResponse.displayName = "proto.BINExchangeAssetResponse");
+if (s.Message.GENERATE_TO_OBJECT) {
+proto.BINExchangeAssetResponse.prototype.toObject = function(e) {
+return proto.BINExchangeAssetResponse.toObject(e, this);
+};
+proto.BINExchangeAssetResponse.toObject = function(e, t) {
+var o = {
+responsecode: s.Message.getField(t, 1),
+message: s.Message.getField(t, 2)
+};
+e && (o.$jspbMessageInstance = t);
+return o;
+};
+}
+proto.BINExchangeAssetResponse.deserializeBinary = function(e) {
+var t = new s.BinaryReader(e), o = new proto.BINExchangeAssetResponse();
+return proto.BINExchangeAssetResponse.deserializeBinaryFromReader(o, t);
+};
+proto.BINExchangeAssetResponse.deserializeBinaryFromReader = function(e, t) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
+case 1:
+var o = t.readBool();
+e.setResponsecode(o);
+break;
+
+case 2:
+o = t.readString();
+e.setMessage(o);
+break;
+
+default:
+t.skipField();
+}
+}
+return e;
+};
+proto.BINExchangeAssetResponse.serializeBinaryToWriter = function(e, t) {
+e.serializeBinaryToWriter(t);
+};
+proto.BINExchangeAssetResponse.prototype.serializeBinary = function() {
+var e = new s.BinaryWriter();
+this.serializeBinaryToWriter(e);
+return e.getResultBuffer();
+};
+proto.BINExchangeAssetResponse.prototype.serializeBinaryToWriter = function(e) {
+var t = void 0;
+null != (t = s.Message.getField(this, 1)) && e.writeBool(1, t);
+null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
+};
+proto.BINExchangeAssetResponse.prototype.getResponsecode = function() {
+return s.Message.getFieldWithDefault(this, 1, !1);
+};
+proto.BINExchangeAssetResponse.prototype.setResponsecode = function(e) {
+s.Message.setField(this, 1, e);
+};
+proto.BINExchangeAssetResponse.prototype.clearResponsecode = function() {
+s.Message.setField(this, 1, void 0);
+};
+proto.BINExchangeAssetResponse.prototype.hasResponsecode = function() {
+return null != s.Message.getField(this, 1);
+};
+proto.BINExchangeAssetResponse.prototype.getMessage = function() {
+return s.Message.getFieldWithDefault(this, 2, "");
+};
+proto.BINExchangeAssetResponse.prototype.setMessage = function(e) {
+s.Message.setField(this, 2, e);
+};
+proto.BINExchangeAssetResponse.prototype.clearMessage = function() {
+s.Message.setField(this, 2, void 0);
+};
+proto.BINExchangeAssetResponse.prototype.hasMessage = function() {
+return null != s.Message.getField(this, 2);
+};
+proto.BINApproveExchangeAssetRequest = function(e) {
+s.Message.initialize(this, e, 0, -1, null, null);
+};
+r.inherits(proto.BINApproveExchangeAssetRequest, s.Message);
+r.DEBUG && !COMPILED && (proto.BINApproveExchangeAssetRequest.displayName = "proto.BINApproveExchangeAssetRequest");
+if (s.Message.GENERATE_TO_OBJECT) {
+proto.BINApproveExchangeAssetRequest.prototype.toObject = function(e) {
+return proto.BINApproveExchangeAssetRequest.toObject(e, this);
+};
+proto.BINApproveExchangeAssetRequest.toObject = function(e, t) {
+var o = {
+requestid: s.Message.getField(t, 1),
+accept: s.Message.getField(t, 2),
+rejectreason: s.Message.getField(t, 3)
+};
+e && (o.$jspbMessageInstance = t);
+return o;
+};
+}
+proto.BINApproveExchangeAssetRequest.deserializeBinary = function(e) {
+var t = new s.BinaryReader(e), o = new proto.BINApproveExchangeAssetRequest();
+return proto.BINApproveExchangeAssetRequest.deserializeBinaryFromReader(o, t);
+};
+proto.BINApproveExchangeAssetRequest.deserializeBinaryFromReader = function(e, t) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
+case 1:
+var o = t.readInt32();
+e.setRequestid(o);
+break;
+
+case 2:
+o = t.readBool();
+e.setAccept(o);
+break;
+
+case 3:
+o = t.readString();
+e.setRejectreason(o);
+break;
+
+default:
+t.skipField();
+}
+}
+return e;
+};
+proto.BINApproveExchangeAssetRequest.serializeBinaryToWriter = function(e, t) {
+e.serializeBinaryToWriter(t);
+};
+proto.BINApproveExchangeAssetRequest.prototype.serializeBinary = function() {
+var e = new s.BinaryWriter();
+this.serializeBinaryToWriter(e);
+return e.getResultBuffer();
+};
+proto.BINApproveExchangeAssetRequest.prototype.serializeBinaryToWriter = function(e) {
+var t = void 0;
+null != (t = s.Message.getField(this, 1)) && e.writeInt32(1, t);
+null != (t = s.Message.getField(this, 2)) && e.writeBool(2, t);
+null != (t = s.Message.getField(this, 3)) && e.writeString(3, t);
+};
+proto.BINApproveExchangeAssetRequest.prototype.getRequestid = function() {
+return s.Message.getFieldWithDefault(this, 1, 0);
+};
+proto.BINApproveExchangeAssetRequest.prototype.setRequestid = function(e) {
+s.Message.setField(this, 1, e);
+};
+proto.BINApproveExchangeAssetRequest.prototype.clearRequestid = function() {
+s.Message.setField(this, 1, void 0);
+};
+proto.BINApproveExchangeAssetRequest.prototype.hasRequestid = function() {
+return null != s.Message.getField(this, 1);
+};
+proto.BINApproveExchangeAssetRequest.prototype.getAccept = function() {
+return s.Message.getFieldWithDefault(this, 2, !1);
+};
+proto.BINApproveExchangeAssetRequest.prototype.setAccept = function(e) {
+s.Message.setField(this, 2, e);
+};
+proto.BINApproveExchangeAssetRequest.prototype.clearAccept = function() {
+s.Message.setField(this, 2, void 0);
+};
+proto.BINApproveExchangeAssetRequest.prototype.hasAccept = function() {
+return null != s.Message.getField(this, 2);
+};
+proto.BINApproveExchangeAssetRequest.prototype.getRejectreason = function() {
+return s.Message.getFieldWithDefault(this, 3, "");
+};
+proto.BINApproveExchangeAssetRequest.prototype.setRejectreason = function(e) {
+s.Message.setField(this, 3, e);
+};
+proto.BINApproveExchangeAssetRequest.prototype.clearRejectreason = function() {
+s.Message.setField(this, 3, void 0);
+};
+proto.BINApproveExchangeAssetRequest.prototype.hasRejectreason = function() {
+return null != s.Message.getField(this, 3);
+};
+proto.BINApproveExchangeAssetResponse = function(e) {
+s.Message.initialize(this, e, 0, -1, null, null);
+};
+r.inherits(proto.BINApproveExchangeAssetResponse, s.Message);
+r.DEBUG && !COMPILED && (proto.BINApproveExchangeAssetResponse.displayName = "proto.BINApproveExchangeAssetResponse");
+if (s.Message.GENERATE_TO_OBJECT) {
+proto.BINApproveExchangeAssetResponse.prototype.toObject = function(e) {
+return proto.BINApproveExchangeAssetResponse.toObject(e, this);
+};
+proto.BINApproveExchangeAssetResponse.toObject = function(e, t) {
+var o = {
+responsecode: s.Message.getField(t, 1),
+message: s.Message.getField(t, 2),
+accepted: s.Message.getField(t, 3)
+};
+e && (o.$jspbMessageInstance = t);
+return o;
+};
+}
+proto.BINApproveExchangeAssetResponse.deserializeBinary = function(e) {
+var t = new s.BinaryReader(e), o = new proto.BINApproveExchangeAssetResponse();
+return proto.BINApproveExchangeAssetResponse.deserializeBinaryFromReader(o, t);
+};
+proto.BINApproveExchangeAssetResponse.deserializeBinaryFromReader = function(e, t) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
+case 1:
+var o = t.readBool();
+e.setResponsecode(o);
+break;
+
+case 2:
+o = t.readString();
+e.setMessage(o);
+break;
+
+case 3:
+o = t.readBool();
+e.setAccepted(o);
+break;
+
+default:
+t.skipField();
+}
+}
+return e;
+};
+proto.BINApproveExchangeAssetResponse.serializeBinaryToWriter = function(e, t) {
+e.serializeBinaryToWriter(t);
+};
+proto.BINApproveExchangeAssetResponse.prototype.serializeBinary = function() {
+var e = new s.BinaryWriter();
+this.serializeBinaryToWriter(e);
+return e.getResultBuffer();
+};
+proto.BINApproveExchangeAssetResponse.prototype.serializeBinaryToWriter = function(e) {
+var t = void 0;
+null != (t = s.Message.getField(this, 1)) && e.writeBool(1, t);
+null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
+null != (t = s.Message.getField(this, 3)) && e.writeBool(3, t);
+};
+proto.BINApproveExchangeAssetResponse.prototype.getResponsecode = function() {
+return s.Message.getFieldWithDefault(this, 1, !1);
+};
+proto.BINApproveExchangeAssetResponse.prototype.setResponsecode = function(e) {
+s.Message.setField(this, 1, e);
+};
+proto.BINApproveExchangeAssetResponse.prototype.clearResponsecode = function() {
+s.Message.setField(this, 1, void 0);
+};
+proto.BINApproveExchangeAssetResponse.prototype.hasResponsecode = function() {
+return null != s.Message.getField(this, 1);
+};
+proto.BINApproveExchangeAssetResponse.prototype.getMessage = function() {
+return s.Message.getFieldWithDefault(this, 2, "");
+};
+proto.BINApproveExchangeAssetResponse.prototype.setMessage = function(e) {
+s.Message.setField(this, 2, e);
+};
+proto.BINApproveExchangeAssetResponse.prototype.clearMessage = function() {
+s.Message.setField(this, 2, void 0);
+};
+proto.BINApproveExchangeAssetResponse.prototype.hasMessage = function() {
+return null != s.Message.getField(this, 2);
+};
+proto.BINApproveExchangeAssetResponse.prototype.getAccepted = function() {
+return s.Message.getFieldWithDefault(this, 3, !1);
+};
+proto.BINApproveExchangeAssetResponse.prototype.setAccepted = function(e) {
+s.Message.setField(this, 3, e);
+};
+proto.BINApproveExchangeAssetResponse.prototype.clearAccepted = function() {
+s.Message.setField(this, 3, void 0);
+};
+proto.BINApproveExchangeAssetResponse.prototype.hasAccepted = function() {
+return null != s.Message.getField(this, 3);
+};
+proto.BINExchangeAssetHistoryRequest = function(e) {
+s.Message.initialize(this, e, 0, -1, null, null);
+};
+r.inherits(proto.BINExchangeAssetHistoryRequest, s.Message);
+r.DEBUG && !COMPILED && (proto.BINExchangeAssetHistoryRequest.displayName = "proto.BINExchangeAssetHistoryRequest");
+if (s.Message.GENERATE_TO_OBJECT) {
+proto.BINExchangeAssetHistoryRequest.prototype.toObject = function(e) {
+return proto.BINExchangeAssetHistoryRequest.toObject(e, this);
+};
+proto.BINExchangeAssetHistoryRequest.toObject = function(e, t) {
+var o = {
+firstresult: s.Message.getField(t, 1),
+maxresult: s.Message.getField(t, 2)
+};
+e && (o.$jspbMessageInstance = t);
+return o;
+};
+}
+proto.BINExchangeAssetHistoryRequest.deserializeBinary = function(e) {
+var t = new s.BinaryReader(e), o = new proto.BINExchangeAssetHistoryRequest();
+return proto.BINExchangeAssetHistoryRequest.deserializeBinaryFromReader(o, t);
+};
+proto.BINExchangeAssetHistoryRequest.deserializeBinaryFromReader = function(e, t) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
+case 1:
+var o = t.readInt32();
+e.setFirstresult(o);
+break;
+
+case 2:
+o = t.readInt32();
+e.setMaxresult(o);
+break;
+
+default:
+t.skipField();
+}
+}
+return e;
+};
+proto.BINExchangeAssetHistoryRequest.serializeBinaryToWriter = function(e, t) {
+e.serializeBinaryToWriter(t);
+};
+proto.BINExchangeAssetHistoryRequest.prototype.serializeBinary = function() {
+var e = new s.BinaryWriter();
+this.serializeBinaryToWriter(e);
+return e.getResultBuffer();
+};
+proto.BINExchangeAssetHistoryRequest.prototype.serializeBinaryToWriter = function(e) {
+var t = void 0;
+null != (t = s.Message.getField(this, 1)) && e.writeInt32(1, t);
+null != (t = s.Message.getField(this, 2)) && e.writeInt32(2, t);
+};
+proto.BINExchangeAssetHistoryRequest.prototype.getFirstresult = function() {
+return s.Message.getFieldWithDefault(this, 1, 0);
+};
+proto.BINExchangeAssetHistoryRequest.prototype.setFirstresult = function(e) {
+s.Message.setField(this, 1, e);
+};
+proto.BINExchangeAssetHistoryRequest.prototype.clearFirstresult = function() {
+s.Message.setField(this, 1, void 0);
+};
+proto.BINExchangeAssetHistoryRequest.prototype.hasFirstresult = function() {
+return null != s.Message.getField(this, 1);
+};
+proto.BINExchangeAssetHistoryRequest.prototype.getMaxresult = function() {
+return s.Message.getFieldWithDefault(this, 2, 0);
+};
+proto.BINExchangeAssetHistoryRequest.prototype.setMaxresult = function(e) {
+s.Message.setField(this, 2, e);
+};
+proto.BINExchangeAssetHistoryRequest.prototype.clearMaxresult = function() {
+s.Message.setField(this, 2, void 0);
+};
+proto.BINExchangeAssetHistoryRequest.prototype.hasMaxresult = function() {
+return null != s.Message.getField(this, 2);
+};
+proto.BINExchangeAsset = function(e) {
+s.Message.initialize(this, e, 0, -1, null, null);
+};
+r.inherits(proto.BINExchangeAsset, s.Message);
+r.DEBUG && !COMPILED && (proto.BINExchangeAsset.displayName = "proto.BINExchangeAsset");
+if (s.Message.GENERATE_TO_OBJECT) {
+proto.BINExchangeAsset.prototype.toObject = function(e) {
+return proto.BINExchangeAsset.toObject(e, this);
+};
+proto.BINExchangeAsset.toObject = function(e, t) {
+var o = {
+type: s.Message.getField(t, 1),
+requestedtime: s.Message.getField(t, 2),
+parvalue: s.Message.getField(t, 3),
+amount: s.Message.getField(t, 4),
+cashvalue: s.Message.getField(t, 5),
+name: s.Message.getField(t, 6),
+status: s.Message.getField(t, 7),
+exchangeinfo: s.Message.getField(t, 8),
+description: s.Message.getField(t, 9)
+};
+e && (o.$jspbMessageInstance = t);
+return o;
+};
+}
+proto.BINExchangeAsset.deserializeBinary = function(e) {
+var t = new s.BinaryReader(e), o = new proto.BINExchangeAsset();
+return proto.BINExchangeAsset.deserializeBinaryFromReader(o, t);
+};
+proto.BINExchangeAsset.deserializeBinaryFromReader = function(e, t) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
+case 1:
+var o = t.readInt32();
+e.setType(o);
+break;
+
+case 2:
+o = t.readInt64();
+e.setRequestedtime(o);
+break;
+
+case 3:
+o = t.readInt64();
+e.setParvalue(o);
+break;
+
+case 4:
+o = t.readInt32();
+e.setAmount(o);
+break;
+
+case 5:
+o = t.readInt64();
+e.setCashvalue(o);
+break;
+
+case 6:
+o = t.readString();
+e.setName(o);
+break;
+
+case 7:
+o = t.readInt32();
+e.setStatus(o);
+break;
+
+case 8:
+o = t.readString();
+e.setExchangeinfo(o);
+break;
+
+case 9:
+o = t.readString();
+e.setDescription(o);
+break;
+
+default:
+t.skipField();
+}
+}
+return e;
+};
+proto.BINExchangeAsset.serializeBinaryToWriter = function(e, t) {
+e.serializeBinaryToWriter(t);
+};
+proto.BINExchangeAsset.prototype.serializeBinary = function() {
+var e = new s.BinaryWriter();
+this.serializeBinaryToWriter(e);
+return e.getResultBuffer();
+};
+proto.BINExchangeAsset.prototype.serializeBinaryToWriter = function(e) {
+var t = void 0;
+null != (t = s.Message.getField(this, 1)) && e.writeInt32(1, t);
+null != (t = s.Message.getField(this, 2)) && e.writeInt64(2, t);
+null != (t = s.Message.getField(this, 3)) && e.writeInt64(3, t);
+null != (t = s.Message.getField(this, 4)) && e.writeInt32(4, t);
+null != (t = s.Message.getField(this, 5)) && e.writeInt64(5, t);
+null != (t = s.Message.getField(this, 6)) && e.writeString(6, t);
+null != (t = s.Message.getField(this, 7)) && e.writeInt32(7, t);
+null != (t = s.Message.getField(this, 8)) && e.writeString(8, t);
+null != (t = s.Message.getField(this, 9)) && e.writeString(9, t);
+};
+proto.BINExchangeAsset.prototype.getType = function() {
+return s.Message.getFieldWithDefault(this, 1, 0);
+};
+proto.BINExchangeAsset.prototype.setType = function(e) {
+s.Message.setField(this, 1, e);
+};
+proto.BINExchangeAsset.prototype.clearType = function() {
+s.Message.setField(this, 1, void 0);
+};
+proto.BINExchangeAsset.prototype.hasType = function() {
+return null != s.Message.getField(this, 1);
+};
+proto.BINExchangeAsset.prototype.getRequestedtime = function() {
+return s.Message.getFieldWithDefault(this, 2, 0);
+};
+proto.BINExchangeAsset.prototype.setRequestedtime = function(e) {
+s.Message.setField(this, 2, e);
+};
+proto.BINExchangeAsset.prototype.clearRequestedtime = function() {
+s.Message.setField(this, 2, void 0);
+};
+proto.BINExchangeAsset.prototype.hasRequestedtime = function() {
+return null != s.Message.getField(this, 2);
+};
+proto.BINExchangeAsset.prototype.getParvalue = function() {
+return s.Message.getFieldWithDefault(this, 3, 0);
+};
+proto.BINExchangeAsset.prototype.setParvalue = function(e) {
+s.Message.setField(this, 3, e);
+};
+proto.BINExchangeAsset.prototype.clearParvalue = function() {
+s.Message.setField(this, 3, void 0);
+};
+proto.BINExchangeAsset.prototype.hasParvalue = function() {
+return null != s.Message.getField(this, 3);
+};
+proto.BINExchangeAsset.prototype.getAmount = function() {
+return s.Message.getFieldWithDefault(this, 4, 0);
+};
+proto.BINExchangeAsset.prototype.setAmount = function(e) {
+s.Message.setField(this, 4, e);
+};
+proto.BINExchangeAsset.prototype.clearAmount = function() {
+s.Message.setField(this, 4, void 0);
+};
+proto.BINExchangeAsset.prototype.hasAmount = function() {
+return null != s.Message.getField(this, 4);
+};
+proto.BINExchangeAsset.prototype.getCashvalue = function() {
+return s.Message.getFieldWithDefault(this, 5, 0);
+};
+proto.BINExchangeAsset.prototype.setCashvalue = function(e) {
+s.Message.setField(this, 5, e);
+};
+proto.BINExchangeAsset.prototype.clearCashvalue = function() {
+s.Message.setField(this, 5, void 0);
+};
+proto.BINExchangeAsset.prototype.hasCashvalue = function() {
+return null != s.Message.getField(this, 5);
+};
+proto.BINExchangeAsset.prototype.getName = function() {
+return s.Message.getFieldWithDefault(this, 6, "");
+};
+proto.BINExchangeAsset.prototype.setName = function(e) {
+s.Message.setField(this, 6, e);
+};
+proto.BINExchangeAsset.prototype.clearName = function() {
+s.Message.setField(this, 6, void 0);
+};
+proto.BINExchangeAsset.prototype.hasName = function() {
+return null != s.Message.getField(this, 6);
+};
+proto.BINExchangeAsset.prototype.getStatus = function() {
+return s.Message.getFieldWithDefault(this, 7, 0);
+};
+proto.BINExchangeAsset.prototype.setStatus = function(e) {
+s.Message.setField(this, 7, e);
+};
+proto.BINExchangeAsset.prototype.clearStatus = function() {
+s.Message.setField(this, 7, void 0);
+};
+proto.BINExchangeAsset.prototype.hasStatus = function() {
+return null != s.Message.getField(this, 7);
+};
+proto.BINExchangeAsset.prototype.getExchangeinfo = function() {
+return s.Message.getFieldWithDefault(this, 8, "");
+};
+proto.BINExchangeAsset.prototype.setExchangeinfo = function(e) {
+s.Message.setField(this, 8, e);
+};
+proto.BINExchangeAsset.prototype.clearExchangeinfo = function() {
+s.Message.setField(this, 8, void 0);
+};
+proto.BINExchangeAsset.prototype.hasExchangeinfo = function() {
+return null != s.Message.getField(this, 8);
+};
+proto.BINExchangeAsset.prototype.getDescription = function() {
+return s.Message.getFieldWithDefault(this, 9, "");
+};
+proto.BINExchangeAsset.prototype.setDescription = function(e) {
+s.Message.setField(this, 9, e);
+};
+proto.BINExchangeAsset.prototype.clearDescription = function() {
+s.Message.setField(this, 9, void 0);
+};
+proto.BINExchangeAsset.prototype.hasDescription = function() {
+return null != s.Message.getField(this, 9);
+};
+proto.BINExchangeAssetHistoryResponse = function(e) {
+s.Message.initialize(this, e, 0, -1, proto.BINExchangeAssetHistoryResponse.repeatedFields_, null);
+};
+r.inherits(proto.BINExchangeAssetHistoryResponse, s.Message);
+r.DEBUG && !COMPILED && (proto.BINExchangeAssetHistoryResponse.displayName = "proto.BINExchangeAssetHistoryResponse");
+proto.BINExchangeAssetHistoryResponse.repeatedFields_ = [ 3 ];
+if (s.Message.GENERATE_TO_OBJECT) {
+proto.BINExchangeAssetHistoryResponse.prototype.toObject = function(e) {
+return proto.BINExchangeAssetHistoryResponse.toObject(e, this);
+};
+proto.BINExchangeAssetHistoryResponse.toObject = function(e, t) {
+var o = {
+responsecode: s.Message.getField(t, 1),
+message: s.Message.getField(t, 2),
+exchangehistoriesList: s.Message.toObjectList(t.getExchangehistoriesList(), proto.BINExchangeAsset.toObject, e)
+};
+e && (o.$jspbMessageInstance = t);
+return o;
+};
+}
+proto.BINExchangeAssetHistoryResponse.deserializeBinary = function(e) {
+var t = new s.BinaryReader(e), o = new proto.BINExchangeAssetHistoryResponse();
+return proto.BINExchangeAssetHistoryResponse.deserializeBinaryFromReader(o, t);
+};
+proto.BINExchangeAssetHistoryResponse.deserializeBinaryFromReader = function(e, t) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
+case 1:
+var o = t.readBool();
+e.setResponsecode(o);
+break;
+
+case 2:
+o = t.readString();
+e.setMessage(o);
+break;
+
+case 3:
+o = new proto.BINExchangeAsset();
+t.readMessage(o, proto.BINExchangeAsset.deserializeBinaryFromReader);
+e.addExchangehistories(o);
+break;
+
+default:
+t.skipField();
+}
+}
+return e;
+};
+proto.BINExchangeAssetHistoryResponse.serializeBinaryToWriter = function(e, t) {
+e.serializeBinaryToWriter(t);
+};
+proto.BINExchangeAssetHistoryResponse.prototype.serializeBinary = function() {
+var e = new s.BinaryWriter();
+this.serializeBinaryToWriter(e);
+return e.getResultBuffer();
+};
+proto.BINExchangeAssetHistoryResponse.prototype.serializeBinaryToWriter = function(e) {
+var t = void 0;
+null != (t = s.Message.getField(this, 1)) && e.writeBool(1, t);
+null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
+0 < (t = this.getExchangehistoriesList()).length && e.writeRepeatedMessage(3, t, proto.BINExchangeAsset.serializeBinaryToWriter);
+};
+proto.BINExchangeAssetHistoryResponse.prototype.getResponsecode = function() {
+return s.Message.getFieldWithDefault(this, 1, !1);
+};
+proto.BINExchangeAssetHistoryResponse.prototype.setResponsecode = function(e) {
+s.Message.setField(this, 1, e);
+};
+proto.BINExchangeAssetHistoryResponse.prototype.clearResponsecode = function() {
+s.Message.setField(this, 1, void 0);
+};
+proto.BINExchangeAssetHistoryResponse.prototype.hasResponsecode = function() {
+return null != s.Message.getField(this, 1);
+};
+proto.BINExchangeAssetHistoryResponse.prototype.getMessage = function() {
+return s.Message.getFieldWithDefault(this, 2, "");
+};
+proto.BINExchangeAssetHistoryResponse.prototype.setMessage = function(e) {
+s.Message.setField(this, 2, e);
+};
+proto.BINExchangeAssetHistoryResponse.prototype.clearMessage = function() {
+s.Message.setField(this, 2, void 0);
+};
+proto.BINExchangeAssetHistoryResponse.prototype.hasMessage = function() {
+return null != s.Message.getField(this, 2);
+};
+proto.BINExchangeAssetHistoryResponse.prototype.getExchangehistoriesList = function() {
+return s.Message.getRepeatedWrapperField(this, proto.BINExchangeAsset, 3);
+};
+proto.BINExchangeAssetHistoryResponse.prototype.setExchangehistoriesList = function(e) {
+s.Message.setRepeatedWrapperField(this, 3, e);
+};
+proto.BINExchangeAssetHistoryResponse.prototype.addExchangehistories = function(e, t) {
+return s.Message.addToRepeatedWrapperField(this, 3, e, proto.BINExchangeAsset, t);
+};
+proto.BINExchangeAssetHistoryResponse.prototype.clearExchangehistoriesList = function() {
+this.setExchangehistoriesList([]);
+};
+proto.BINExchangeC2GConfigRequest = function(e) {
+s.Message.initialize(this, e, 0, -1, null, null);
+};
+r.inherits(proto.BINExchangeC2GConfigRequest, s.Message);
+r.DEBUG && !COMPILED && (proto.BINExchangeC2GConfigRequest.displayName = "proto.BINExchangeC2GConfigRequest");
+if (s.Message.GENERATE_TO_OBJECT) {
+proto.BINExchangeC2GConfigRequest.prototype.toObject = function(e) {
+return proto.BINExchangeC2GConfigRequest.toObject(e, this);
+};
+proto.BINExchangeC2GConfigRequest.toObject = function(e, t) {
+var o = {
+type: s.Message.getField(t, 1)
+};
+e && (o.$jspbMessageInstance = t);
+return o;
+};
+}
+proto.BINExchangeC2GConfigRequest.deserializeBinary = function(e) {
+var t = new s.BinaryReader(e), o = new proto.BINExchangeC2GConfigRequest();
+return proto.BINExchangeC2GConfigRequest.deserializeBinaryFromReader(o, t);
+};
+proto.BINExchangeC2GConfigRequest.deserializeBinaryFromReader = function(e, t) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
+case 1:
+var o = t.readInt32();
+e.setType(o);
+break;
+
+default:
+t.skipField();
+}
+}
+return e;
+};
+proto.BINExchangeC2GConfigRequest.serializeBinaryToWriter = function(e, t) {
+e.serializeBinaryToWriter(t);
+};
+proto.BINExchangeC2GConfigRequest.prototype.serializeBinary = function() {
+var e = new s.BinaryWriter();
+this.serializeBinaryToWriter(e);
+return e.getResultBuffer();
+};
+proto.BINExchangeC2GConfigRequest.prototype.serializeBinaryToWriter = function(e) {
+var t;
+null != (t = s.Message.getField(this, 1)) && e.writeInt32(1, t);
+};
+proto.BINExchangeC2GConfigRequest.prototype.getType = function() {
+return s.Message.getFieldWithDefault(this, 1, 0);
+};
+proto.BINExchangeC2GConfigRequest.prototype.setType = function(e) {
+s.Message.setField(this, 1, e);
+};
+proto.BINExchangeC2GConfigRequest.prototype.clearType = function() {
+s.Message.setField(this, 1, void 0);
+};
+proto.BINExchangeC2GConfigRequest.prototype.hasType = function() {
+return null != s.Message.getField(this, 1);
+};
+proto.BINExchangeC2GConfigResponse = function(e) {
+s.Message.initialize(this, e, 0, -1, null, null);
+};
+r.inherits(proto.BINExchangeC2GConfigResponse, s.Message);
+r.DEBUG && !COMPILED && (proto.BINExchangeC2GConfigResponse.displayName = "proto.BINExchangeC2GConfigResponse");
+if (s.Message.GENERATE_TO_OBJECT) {
+proto.BINExchangeC2GConfigResponse.prototype.toObject = function(e) {
+return proto.BINExchangeC2GConfigResponse.toObject(e, this);
+};
+proto.BINExchangeC2GConfigResponse.toObject = function(e, t) {
+var o = {
+responsecode: s.Message.getField(t, 1),
+message: s.Message.getField(t, 2),
+avaiablecash: s.Message.getField(t, 3),
+tax: s.Message.getField(t, 4)
+};
+e && (o.$jspbMessageInstance = t);
+return o;
+};
+}
+proto.BINExchangeC2GConfigResponse.deserializeBinary = function(e) {
+var t = new s.BinaryReader(e), o = new proto.BINExchangeC2GConfigResponse();
+return proto.BINExchangeC2GConfigResponse.deserializeBinaryFromReader(o, t);
+};
+proto.BINExchangeC2GConfigResponse.deserializeBinaryFromReader = function(e, t) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
+case 1:
+var o = t.readBool();
+e.setResponsecode(o);
+break;
+
+case 2:
+o = t.readString();
+e.setMessage(o);
+break;
+
+case 3:
+o = t.readInt64();
+e.setAvaiablecash(o);
+break;
+
+case 4:
+o = t.readInt32();
+e.setTax(o);
+break;
+
+default:
+t.skipField();
+}
+}
+return e;
+};
+proto.BINExchangeC2GConfigResponse.serializeBinaryToWriter = function(e, t) {
+e.serializeBinaryToWriter(t);
+};
+proto.BINExchangeC2GConfigResponse.prototype.serializeBinary = function() {
+var e = new s.BinaryWriter();
+this.serializeBinaryToWriter(e);
+return e.getResultBuffer();
+};
+proto.BINExchangeC2GConfigResponse.prototype.serializeBinaryToWriter = function(e) {
+var t = void 0;
+null != (t = s.Message.getField(this, 1)) && e.writeBool(1, t);
+null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
+null != (t = s.Message.getField(this, 3)) && e.writeInt64(3, t);
+null != (t = s.Message.getField(this, 4)) && e.writeInt32(4, t);
+};
+proto.BINExchangeC2GConfigResponse.prototype.getResponsecode = function() {
+return s.Message.getFieldWithDefault(this, 1, !1);
+};
+proto.BINExchangeC2GConfigResponse.prototype.setResponsecode = function(e) {
+s.Message.setField(this, 1, e);
+};
+proto.BINExchangeC2GConfigResponse.prototype.clearResponsecode = function() {
+s.Message.setField(this, 1, void 0);
+};
+proto.BINExchangeC2GConfigResponse.prototype.hasResponsecode = function() {
+return null != s.Message.getField(this, 1);
+};
+proto.BINExchangeC2GConfigResponse.prototype.getMessage = function() {
+return s.Message.getFieldWithDefault(this, 2, "");
+};
+proto.BINExchangeC2GConfigResponse.prototype.setMessage = function(e) {
+s.Message.setField(this, 2, e);
+};
+proto.BINExchangeC2GConfigResponse.prototype.clearMessage = function() {
+s.Message.setField(this, 2, void 0);
+};
+proto.BINExchangeC2GConfigResponse.prototype.hasMessage = function() {
+return null != s.Message.getField(this, 2);
+};
+proto.BINExchangeC2GConfigResponse.prototype.getAvaiablecash = function() {
+return s.Message.getFieldWithDefault(this, 3, 0);
+};
+proto.BINExchangeC2GConfigResponse.prototype.setAvaiablecash = function(e) {
+s.Message.setField(this, 3, e);
+};
+proto.BINExchangeC2GConfigResponse.prototype.clearAvaiablecash = function() {
+s.Message.setField(this, 3, void 0);
+};
+proto.BINExchangeC2GConfigResponse.prototype.hasAvaiablecash = function() {
+return null != s.Message.getField(this, 3);
+};
+proto.BINExchangeC2GConfigResponse.prototype.getTax = function() {
+return s.Message.getFieldWithDefault(this, 4, 0);
+};
+proto.BINExchangeC2GConfigResponse.prototype.setTax = function(e) {
+s.Message.setField(this, 4, e);
+};
+proto.BINExchangeC2GConfigResponse.prototype.clearTax = function() {
+s.Message.setField(this, 4, void 0);
+};
+proto.BINExchangeC2GConfigResponse.prototype.hasTax = function() {
+return null != s.Message.getField(this, 4);
+};
+proto.BINExchangeCashToGoldRequest = function(e) {
+s.Message.initialize(this, e, 0, -1, null, null);
+};
+r.inherits(proto.BINExchangeCashToGoldRequest, s.Message);
+r.DEBUG && !COMPILED && (proto.BINExchangeCashToGoldRequest.displayName = "proto.BINExchangeCashToGoldRequest");
+if (s.Message.GENERATE_TO_OBJECT) {
+proto.BINExchangeCashToGoldRequest.prototype.toObject = function(e) {
+return proto.BINExchangeCashToGoldRequest.toObject(e, this);
+};
+proto.BINExchangeCashToGoldRequest.toObject = function(e, t) {
+var o = {
+cashvalue: s.Message.getField(t, 1)
+};
+e && (o.$jspbMessageInstance = t);
+return o;
+};
+}
+proto.BINExchangeCashToGoldRequest.deserializeBinary = function(e) {
+var t = new s.BinaryReader(e), o = new proto.BINExchangeCashToGoldRequest();
+return proto.BINExchangeCashToGoldRequest.deserializeBinaryFromReader(o, t);
+};
+proto.BINExchangeCashToGoldRequest.deserializeBinaryFromReader = function(e, t) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
+case 1:
+var o = t.readInt64();
+e.setCashvalue(o);
+break;
+
+default:
+t.skipField();
+}
+}
+return e;
+};
+proto.BINExchangeCashToGoldRequest.serializeBinaryToWriter = function(e, t) {
+e.serializeBinaryToWriter(t);
+};
+proto.BINExchangeCashToGoldRequest.prototype.serializeBinary = function() {
+var e = new s.BinaryWriter();
+this.serializeBinaryToWriter(e);
+return e.getResultBuffer();
+};
+proto.BINExchangeCashToGoldRequest.prototype.serializeBinaryToWriter = function(e) {
+var t;
+null != (t = s.Message.getField(this, 1)) && e.writeInt64(1, t);
+};
+proto.BINExchangeCashToGoldRequest.prototype.getCashvalue = function() {
+return s.Message.getFieldWithDefault(this, 1, 0);
+};
+proto.BINExchangeCashToGoldRequest.prototype.setCashvalue = function(e) {
+s.Message.setField(this, 1, e);
+};
+proto.BINExchangeCashToGoldRequest.prototype.clearCashvalue = function() {
+s.Message.setField(this, 1, void 0);
+};
+proto.BINExchangeCashToGoldRequest.prototype.hasCashvalue = function() {
+return null != s.Message.getField(this, 1);
+};
+proto.BINExchangeCashToGoldResponse = function(e) {
+s.Message.initialize(this, e, 0, -1, null, null);
+};
+r.inherits(proto.BINExchangeCashToGoldResponse, s.Message);
+r.DEBUG && !COMPILED && (proto.BINExchangeCashToGoldResponse.displayName = "proto.BINExchangeCashToGoldResponse");
+if (s.Message.GENERATE_TO_OBJECT) {
+proto.BINExchangeCashToGoldResponse.prototype.toObject = function(e) {
+return proto.BINExchangeCashToGoldResponse.toObject(e, this);
+};
+proto.BINExchangeCashToGoldResponse.toObject = function(e, t) {
+var o = {
+responsecode: s.Message.getField(t, 1),
+message: s.Message.getField(t, 2),
+cashvalue: s.Message.getField(t, 3),
+goldvalue: s.Message.getField(t, 4),
+tax: s.Message.getField(t, 5),
+taxvalue: s.Message.getField(t, 6)
+};
+e && (o.$jspbMessageInstance = t);
+return o;
+};
+}
+proto.BINExchangeCashToGoldResponse.deserializeBinary = function(e) {
+var t = new s.BinaryReader(e), o = new proto.BINExchangeCashToGoldResponse();
+return proto.BINExchangeCashToGoldResponse.deserializeBinaryFromReader(o, t);
+};
+proto.BINExchangeCashToGoldResponse.deserializeBinaryFromReader = function(e, t) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
+case 1:
+var o = t.readBool();
+e.setResponsecode(o);
+break;
+
+case 2:
+o = t.readString();
+e.setMessage(o);
+break;
+
+case 3:
+o = t.readInt64();
+e.setCashvalue(o);
+break;
+
+case 4:
+o = t.readInt64();
+e.setGoldvalue(o);
+break;
+
+case 5:
+o = t.readInt32();
+e.setTax(o);
+break;
+
+case 6:
+o = t.readInt32();
+e.setTaxvalue(o);
+break;
+
+default:
+t.skipField();
+}
+}
+return e;
+};
+proto.BINExchangeCashToGoldResponse.serializeBinaryToWriter = function(e, t) {
+e.serializeBinaryToWriter(t);
+};
+proto.BINExchangeCashToGoldResponse.prototype.serializeBinary = function() {
+var e = new s.BinaryWriter();
+this.serializeBinaryToWriter(e);
+return e.getResultBuffer();
+};
+proto.BINExchangeCashToGoldResponse.prototype.serializeBinaryToWriter = function(e) {
+var t = void 0;
+null != (t = s.Message.getField(this, 1)) && e.writeBool(1, t);
+null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
+null != (t = s.Message.getField(this, 3)) && e.writeInt64(3, t);
+null != (t = s.Message.getField(this, 4)) && e.writeInt64(4, t);
+null != (t = s.Message.getField(this, 5)) && e.writeInt32(5, t);
+null != (t = s.Message.getField(this, 6)) && e.writeInt32(6, t);
+};
+proto.BINExchangeCashToGoldResponse.prototype.getResponsecode = function() {
+return s.Message.getFieldWithDefault(this, 1, !1);
+};
+proto.BINExchangeCashToGoldResponse.prototype.setResponsecode = function(e) {
+s.Message.setField(this, 1, e);
+};
+proto.BINExchangeCashToGoldResponse.prototype.clearResponsecode = function() {
+s.Message.setField(this, 1, void 0);
+};
+proto.BINExchangeCashToGoldResponse.prototype.hasResponsecode = function() {
+return null != s.Message.getField(this, 1);
+};
+proto.BINExchangeCashToGoldResponse.prototype.getMessage = function() {
+return s.Message.getFieldWithDefault(this, 2, "");
+};
+proto.BINExchangeCashToGoldResponse.prototype.setMessage = function(e) {
+s.Message.setField(this, 2, e);
+};
+proto.BINExchangeCashToGoldResponse.prototype.clearMessage = function() {
+s.Message.setField(this, 2, void 0);
+};
+proto.BINExchangeCashToGoldResponse.prototype.hasMessage = function() {
+return null != s.Message.getField(this, 2);
+};
+proto.BINExchangeCashToGoldResponse.prototype.getCashvalue = function() {
+return s.Message.getFieldWithDefault(this, 3, 0);
+};
+proto.BINExchangeCashToGoldResponse.prototype.setCashvalue = function(e) {
+s.Message.setField(this, 3, e);
+};
+proto.BINExchangeCashToGoldResponse.prototype.clearCashvalue = function() {
+s.Message.setField(this, 3, void 0);
+};
+proto.BINExchangeCashToGoldResponse.prototype.hasCashvalue = function() {
+return null != s.Message.getField(this, 3);
+};
+proto.BINExchangeCashToGoldResponse.prototype.getGoldvalue = function() {
+return s.Message.getFieldWithDefault(this, 4, 0);
+};
+proto.BINExchangeCashToGoldResponse.prototype.setGoldvalue = function(e) {
+s.Message.setField(this, 4, e);
+};
+proto.BINExchangeCashToGoldResponse.prototype.clearGoldvalue = function() {
+s.Message.setField(this, 4, void 0);
+};
+proto.BINExchangeCashToGoldResponse.prototype.hasGoldvalue = function() {
+return null != s.Message.getField(this, 4);
+};
+proto.BINExchangeCashToGoldResponse.prototype.getTax = function() {
+return s.Message.getFieldWithDefault(this, 5, 0);
+};
+proto.BINExchangeCashToGoldResponse.prototype.setTax = function(e) {
+s.Message.setField(this, 5, e);
+};
+proto.BINExchangeCashToGoldResponse.prototype.clearTax = function() {
+s.Message.setField(this, 5, void 0);
+};
+proto.BINExchangeCashToGoldResponse.prototype.hasTax = function() {
+return null != s.Message.getField(this, 5);
+};
+proto.BINExchangeCashToGoldResponse.prototype.getTaxvalue = function() {
+return s.Message.getFieldWithDefault(this, 6, 0);
+};
+proto.BINExchangeCashToGoldResponse.prototype.setTaxvalue = function(e) {
+s.Message.setField(this, 6, e);
+};
+proto.BINExchangeCashToGoldResponse.prototype.clearTaxvalue = function() {
+s.Message.setField(this, 6, void 0);
+};
+proto.BINExchangeCashToGoldResponse.prototype.hasTaxvalue = function() {
+return null != s.Message.getField(this, 6);
+};
+r.object.extend(o, proto);
+cc._RF.pop();
+}, {
+"google-protobuf": "google-protobuf"
+} ],
 exit_room_pb: [ function(e, t, o) {
 "use strict";
 cc._RF.push(t, "17533cwVPZCJZ3YpNlQ/1xs", "exit_room_pb");
@@ -7478,7 +9844,8 @@ var t = new s.BinaryReader(e), o = new proto.BINExitRoomRequest();
 return proto.BINExitRoomRequest.deserializeBinaryFromReader(o, t);
 };
 proto.BINExitRoomRequest.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
 var o = t.readInt32();
 e.setRoomindex(o);
@@ -7486,6 +9853,7 @@ break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -7498,7 +9866,7 @@ this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINExitRoomRequest.prototype.serializeBinaryToWriter = function(e) {
-var t = void 0;
+var t;
 null != (t = s.Message.getField(this, 1)) && e.writeInt32(1, t);
 };
 proto.BINExitRoomRequest.prototype.getRoomindex = function() {
@@ -7539,9 +9907,10 @@ var t = new s.BinaryReader(e), o = new proto.BINExitRoomResponse();
 return proto.BINExitRoomResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINExitRoomResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
@@ -7561,12 +9930,13 @@ e.setNotenoughmoney(o);
 break;
 
 case 5:
-var o = t.readInt32();
+o = t.readInt32();
 e.setZoneid(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -7670,9 +10040,10 @@ var t = new s.BinaryReader(e), o = new proto.BINPlayerExitAfterMatchEndResponse(
 return proto.BINPlayerExitAfterMatchEndResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINPlayerExitAfterMatchEndResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
@@ -7682,12 +10053,13 @@ e.setMessage(o);
 break;
 
 case 3:
-var o = t.readInt64();
+o = t.readInt64();
 e.setExituserid(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -7767,9 +10139,10 @@ var t = new s.BinaryReader(e), o = new proto.BINPlayerExitRoomResponse();
 return proto.BINPlayerExitRoomResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINPlayerExitRoomResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
@@ -7789,12 +10162,13 @@ e.setOwneruserid(o);
 break;
 
 case 5:
-var o = t.readInt32();
+o = t.readInt32();
 e.setChangeownerroomcd(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -7896,7 +10270,8 @@ var t = new s.BinaryReader(e), o = new proto.BINCancelExitAfterMatchEndRequest()
 return proto.BINCancelExitAfterMatchEndRequest.deserializeBinaryFromReader(o, t);
 };
 proto.BINCancelExitAfterMatchEndRequest.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
 var o = t.readInt32();
 e.setRoomindex(o);
@@ -7904,6 +10279,7 @@ break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -7916,7 +10292,7 @@ this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINCancelExitAfterMatchEndRequest.prototype.serializeBinaryToWriter = function(e) {
-var t = void 0;
+var t;
 null != (t = s.Message.getField(this, 1)) && e.writeInt32(1, t);
 };
 proto.BINCancelExitAfterMatchEndRequest.prototype.getRoomindex = function() {
@@ -7955,9 +10331,10 @@ var t = new s.BinaryReader(e), o = new proto.BINCancelExitAfterMatchEndResponse(
 return proto.BINCancelExitAfterMatchEndResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINCancelExitAfterMatchEndResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
@@ -7967,12 +10344,13 @@ e.setMessage(o);
 break;
 
 case 3:
-var o = t.readInt64();
+o = t.readInt64();
 e.setCancelexituserid(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -8069,9 +10447,10 @@ var t = new s.BinaryReader(e), o = new proto.BINFilterRoomRequest();
 return proto.BINFilterRoomRequest.deserializeBinaryFromReader(o, t);
 };
 proto.BINFilterRoomRequest.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readInt32();
+var o = t.readInt32();
 e.setZoneid(o);
 break;
 
@@ -8101,12 +10480,13 @@ e.setAsc(o);
 break;
 
 case 7:
-var o = t.readInt32();
+o = t.readInt32();
 e.setRoomgroup(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -8249,9 +10629,10 @@ var t = new s.BinaryReader(e), o = new proto.BINRoomPlay();
 return proto.BINRoomPlay.deserializeBinaryFromReader(o, t);
 };
 proto.BINRoomPlay.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readInt32();
+var o = t.readInt32();
 e.setRoomindex(o);
 break;
 
@@ -8326,12 +10707,13 @@ e.setPasswordrequired(o);
 break;
 
 case 16:
-var o = t.readString();
+o = t.readString();
 e.setRoomconfig(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -8579,9 +10961,10 @@ var t = new s.BinaryReader(e), o = new proto.BINFilterRoomResponse();
 return proto.BINFilterRoomResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINFilterRoomResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
@@ -8591,13 +10974,14 @@ e.setMessage(o);
 break;
 
 case 3:
-var o = new proto.BINRoomPlay();
+o = new proto.BINRoomPlay();
 t.readMessage(o, proto.BINRoomPlay.deserializeBinaryFromReader);
 e.addRoomplays(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -8613,7 +10997,7 @@ proto.BINFilterRoomResponse.prototype.serializeBinaryToWriter = function(e) {
 var t = void 0;
 null != (t = s.Message.getField(this, 1)) && e.writeBool(1, t);
 null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
-(t = this.getRoomplaysList()).length > 0 && e.writeRepeatedMessage(3, t, proto.BINRoomPlay.serializeBinaryToWriter);
+0 < (t = this.getRoomplaysList()).length && e.writeRepeatedMessage(3, t, proto.BINRoomPlay.serializeBinaryToWriter);
 };
 proto.BINFilterRoomResponse.prototype.getResponsecode = function() {
 return s.Message.getFieldWithDefault(this, 1, !1);
@@ -8675,19 +11059,21 @@ var t = new s.BinaryReader(e), o = new proto.BINRoomStatusRequest();
 return proto.BINRoomStatusRequest.deserializeBinaryFromReader(o, t);
 };
 proto.BINRoomStatusRequest.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readInt32();
+var o = t.readInt32();
 e.setZoneid(o);
 break;
 
 case 2:
-var o = t.readInt32();
+o = t.readInt32();
 e.addIndexs(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -8702,7 +11088,7 @@ return e.getResultBuffer();
 proto.BINRoomStatusRequest.prototype.serializeBinaryToWriter = function(e) {
 var t = void 0;
 null != (t = s.Message.getField(this, 1)) && e.writeInt32(1, t);
-(t = this.getIndexsList()).length > 0 && e.writeRepeatedInt32(2, t);
+0 < (t = this.getIndexsList()).length && e.writeRepeatedInt32(2, t);
 };
 proto.BINRoomStatusRequest.prototype.getZoneid = function() {
 return s.Message.getFieldWithDefault(this, 1, 0);
@@ -8755,9 +11141,10 @@ var t = new s.BinaryReader(e), o = new proto.BINRoomStatus();
 return proto.BINRoomStatus.deserializeBinaryFromReader(o, t);
 };
 proto.BINRoomStatus.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readInt32();
+var o = t.readInt32();
 e.setRoomindex(o);
 break;
 
@@ -8782,12 +11169,13 @@ e.setPlayingplayer(o);
 break;
 
 case 6:
-var o = t.readBool();
+o = t.readBool();
 e.setPasswordrequired(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -8905,9 +11293,10 @@ var t = new s.BinaryReader(e), o = new proto.BINRoomStatusResponse();
 return proto.BINRoomStatusResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINRoomStatusResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
@@ -8917,13 +11306,14 @@ e.setMessage(o);
 break;
 
 case 3:
-var o = new proto.BINRoomStatus();
+o = new proto.BINRoomStatus();
 t.readMessage(o, proto.BINRoomStatus.deserializeBinaryFromReader);
 e.addRoomstatuses(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -8939,7 +11329,7 @@ proto.BINRoomStatusResponse.prototype.serializeBinaryToWriter = function(e) {
 var t = void 0;
 null != (t = s.Message.getField(this, 1)) && e.writeBool(1, t);
 null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
-(t = this.getRoomstatusesList()).length > 0 && e.writeRepeatedMessage(3, t, proto.BINRoomStatus.serializeBinaryToWriter);
+0 < (t = this.getRoomstatusesList()).length && e.writeRepeatedMessage(3, t, proto.BINRoomStatus.serializeBinaryToWriter);
 };
 proto.BINRoomStatusResponse.prototype.getResponsecode = function() {
 return s.Message.getFieldWithDefault(this, 1, !1);
@@ -8985,60 +11375,62 @@ cc._RF.pop();
 friend_pb: [ function(e, t, o) {
 "use strict";
 cc._RF.push(t, "300cajwemlM/bx1UWYO1LSU", "friend_pb");
-var s = e("google-protobuf"), r = s, i = Function("return this")(), n = e("./user_info_pb.js");
-r.exportSymbol("proto.BINAddFriend", null, i);
-r.exportSymbol("proto.BINAddFriendRequest", null, i);
-r.exportSymbol("proto.BINAddFriendResponse", null, i);
-r.exportSymbol("proto.BINApproveAddFriendRequest", null, i);
-r.exportSymbol("proto.BINApproveAddFriendResponse", null, i);
-r.exportSymbol("proto.BINFilterAddFriendRequest", null, i);
-r.exportSymbol("proto.BINFilterAddFriendResponse", null, i);
-r.exportSymbol("proto.BINFilterFriendRequest", null, i);
-r.exportSymbol("proto.BINFilterFriendResponse", null, i);
-r.exportSymbol("proto.BINFindUserByIdRequest", null, i);
-r.exportSymbol("proto.BINFindUserByIdResponse", null, i);
-r.exportSymbol("proto.BINFindUserRequest", null, i);
-r.exportSymbol("proto.BINFindUserResponse", null, i);
-r.exportSymbol("proto.BINRemoveFriendRequest", null, i);
-r.exportSymbol("proto.BINRemoveFriendResponse", null, i);
-r.exportSymbol("proto.BINViewUserInfoRequest", null, i);
-r.exportSymbol("proto.BINViewUserInfoResponse", null, i);
+var r = e("google-protobuf"), s = r, i = Function("return this")(), n = e("./user_info_pb.js");
+s.exportSymbol("proto.BINAddFriend", null, i);
+s.exportSymbol("proto.BINAddFriendRequest", null, i);
+s.exportSymbol("proto.BINAddFriendResponse", null, i);
+s.exportSymbol("proto.BINApproveAddFriendRequest", null, i);
+s.exportSymbol("proto.BINApproveAddFriendResponse", null, i);
+s.exportSymbol("proto.BINFilterAddFriendRequest", null, i);
+s.exportSymbol("proto.BINFilterAddFriendResponse", null, i);
+s.exportSymbol("proto.BINFilterFriendRequest", null, i);
+s.exportSymbol("proto.BINFilterFriendResponse", null, i);
+s.exportSymbol("proto.BINFindUserByIdRequest", null, i);
+s.exportSymbol("proto.BINFindUserByIdResponse", null, i);
+s.exportSymbol("proto.BINFindUserRequest", null, i);
+s.exportSymbol("proto.BINFindUserResponse", null, i);
+s.exportSymbol("proto.BINRemoveFriendRequest", null, i);
+s.exportSymbol("proto.BINRemoveFriendResponse", null, i);
+s.exportSymbol("proto.BINViewUserInfoRequest", null, i);
+s.exportSymbol("proto.BINViewUserInfoResponse", null, i);
 proto.BINFilterFriendRequest = function(e) {
-s.Message.initialize(this, e, 0, -1, null, null);
+r.Message.initialize(this, e, 0, -1, null, null);
 };
-r.inherits(proto.BINFilterFriendRequest, s.Message);
-r.DEBUG && !COMPILED && (proto.BINFilterFriendRequest.displayName = "proto.BINFilterFriendRequest");
-if (s.Message.GENERATE_TO_OBJECT) {
+s.inherits(proto.BINFilterFriendRequest, r.Message);
+s.DEBUG && !COMPILED && (proto.BINFilterFriendRequest.displayName = "proto.BINFilterFriendRequest");
+if (r.Message.GENERATE_TO_OBJECT) {
 proto.BINFilterFriendRequest.prototype.toObject = function(e) {
 return proto.BINFilterFriendRequest.toObject(e, this);
 };
 proto.BINFilterFriendRequest.toObject = function(e, t) {
 var o = {
-firstresult: s.Message.getField(t, 1),
-maxresult: s.Message.getField(t, 2)
+firstresult: r.Message.getField(t, 1),
+maxresult: r.Message.getField(t, 2)
 };
 e && (o.$jspbMessageInstance = t);
 return o;
 };
 }
 proto.BINFilterFriendRequest.deserializeBinary = function(e) {
-var t = new s.BinaryReader(e), o = new proto.BINFilterFriendRequest();
+var t = new r.BinaryReader(e), o = new proto.BINFilterFriendRequest();
 return proto.BINFilterFriendRequest.deserializeBinaryFromReader(o, t);
 };
 proto.BINFilterFriendRequest.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readInt32();
+var o = t.readInt32();
 e.setFirstresult(o);
 break;
 
 case 2:
-var o = t.readInt32();
+o = t.readInt32();
 e.setMaxresult(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -9046,67 +11438,68 @@ proto.BINFilterFriendRequest.serializeBinaryToWriter = function(e, t) {
 e.serializeBinaryToWriter(t);
 };
 proto.BINFilterFriendRequest.prototype.serializeBinary = function() {
-var e = new s.BinaryWriter();
+var e = new r.BinaryWriter();
 this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINFilterFriendRequest.prototype.serializeBinaryToWriter = function(e) {
 var t = void 0;
-null != (t = s.Message.getField(this, 1)) && e.writeInt32(1, t);
-null != (t = s.Message.getField(this, 2)) && e.writeInt32(2, t);
+null != (t = r.Message.getField(this, 1)) && e.writeInt32(1, t);
+null != (t = r.Message.getField(this, 2)) && e.writeInt32(2, t);
 };
 proto.BINFilterFriendRequest.prototype.getFirstresult = function() {
-return s.Message.getFieldWithDefault(this, 1, 0);
+return r.Message.getFieldWithDefault(this, 1, 0);
 };
 proto.BINFilterFriendRequest.prototype.setFirstresult = function(e) {
-s.Message.setField(this, 1, e);
+r.Message.setField(this, 1, e);
 };
 proto.BINFilterFriendRequest.prototype.clearFirstresult = function() {
-s.Message.setField(this, 1, void 0);
+r.Message.setField(this, 1, void 0);
 };
 proto.BINFilterFriendRequest.prototype.hasFirstresult = function() {
-return null != s.Message.getField(this, 1);
+return null != r.Message.getField(this, 1);
 };
 proto.BINFilterFriendRequest.prototype.getMaxresult = function() {
-return s.Message.getFieldWithDefault(this, 2, 0);
+return r.Message.getFieldWithDefault(this, 2, 0);
 };
 proto.BINFilterFriendRequest.prototype.setMaxresult = function(e) {
-s.Message.setField(this, 2, e);
+r.Message.setField(this, 2, e);
 };
 proto.BINFilterFriendRequest.prototype.clearMaxresult = function() {
-s.Message.setField(this, 2, void 0);
+r.Message.setField(this, 2, void 0);
 };
 proto.BINFilterFriendRequest.prototype.hasMaxresult = function() {
-return null != s.Message.getField(this, 2);
+return null != r.Message.getField(this, 2);
 };
 proto.BINFilterFriendResponse = function(e) {
-s.Message.initialize(this, e, 0, -1, proto.BINFilterFriendResponse.repeatedFields_, null);
+r.Message.initialize(this, e, 0, -1, proto.BINFilterFriendResponse.repeatedFields_, null);
 };
-r.inherits(proto.BINFilterFriendResponse, s.Message);
-r.DEBUG && !COMPILED && (proto.BINFilterFriendResponse.displayName = "proto.BINFilterFriendResponse");
+s.inherits(proto.BINFilterFriendResponse, r.Message);
+s.DEBUG && !COMPILED && (proto.BINFilterFriendResponse.displayName = "proto.BINFilterFriendResponse");
 proto.BINFilterFriendResponse.repeatedFields_ = [ 3 ];
-if (s.Message.GENERATE_TO_OBJECT) {
+if (r.Message.GENERATE_TO_OBJECT) {
 proto.BINFilterFriendResponse.prototype.toObject = function(e) {
 return proto.BINFilterFriendResponse.toObject(e, this);
 };
 proto.BINFilterFriendResponse.toObject = function(e, t) {
 var o = {
-responsecode: s.Message.getField(t, 1),
-message: s.Message.getField(t, 2),
-currentfriendsList: s.Message.toObjectList(t.getCurrentfriendsList(), n.BINUserInfo.toObject, e)
+responsecode: r.Message.getField(t, 1),
+message: r.Message.getField(t, 2),
+currentfriendsList: r.Message.toObjectList(t.getCurrentfriendsList(), n.BINUserInfo.toObject, e)
 };
 e && (o.$jspbMessageInstance = t);
 return o;
 };
 }
 proto.BINFilterFriendResponse.deserializeBinary = function(e) {
-var t = new s.BinaryReader(e), o = new proto.BINFilterFriendResponse();
+var t = new r.BinaryReader(e), o = new proto.BINFilterFriendResponse();
 return proto.BINFilterFriendResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINFilterFriendResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
@@ -9116,7 +11509,7 @@ e.setMessage(o);
 break;
 
 case 3:
-var o = new n.BINUserInfo();
+o = new n.BINUserInfo();
 t.readMessage(o, n.BINUserInfo.deserializeBinaryFromReader);
 e.addCurrentfriends(o);
 break;
@@ -9124,81 +11517,83 @@ break;
 default:
 t.skipField();
 }
+}
 return e;
 };
 proto.BINFilterFriendResponse.serializeBinaryToWriter = function(e, t) {
 e.serializeBinaryToWriter(t);
 };
 proto.BINFilterFriendResponse.prototype.serializeBinary = function() {
-var e = new s.BinaryWriter();
+var e = new r.BinaryWriter();
 this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINFilterFriendResponse.prototype.serializeBinaryToWriter = function(e) {
 var t = void 0;
-null != (t = s.Message.getField(this, 1)) && e.writeBool(1, t);
-null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
-(t = this.getCurrentfriendsList()).length > 0 && e.writeRepeatedMessage(3, t, n.BINUserInfo.serializeBinaryToWriter);
+null != (t = r.Message.getField(this, 1)) && e.writeBool(1, t);
+null != (t = r.Message.getField(this, 2)) && e.writeString(2, t);
+0 < (t = this.getCurrentfriendsList()).length && e.writeRepeatedMessage(3, t, n.BINUserInfo.serializeBinaryToWriter);
 };
 proto.BINFilterFriendResponse.prototype.getResponsecode = function() {
-return s.Message.getFieldWithDefault(this, 1, !1);
+return r.Message.getFieldWithDefault(this, 1, !1);
 };
 proto.BINFilterFriendResponse.prototype.setResponsecode = function(e) {
-s.Message.setField(this, 1, e);
+r.Message.setField(this, 1, e);
 };
 proto.BINFilterFriendResponse.prototype.clearResponsecode = function() {
-s.Message.setField(this, 1, void 0);
+r.Message.setField(this, 1, void 0);
 };
 proto.BINFilterFriendResponse.prototype.hasResponsecode = function() {
-return null != s.Message.getField(this, 1);
+return null != r.Message.getField(this, 1);
 };
 proto.BINFilterFriendResponse.prototype.getMessage = function() {
-return s.Message.getFieldWithDefault(this, 2, "");
+return r.Message.getFieldWithDefault(this, 2, "");
 };
 proto.BINFilterFriendResponse.prototype.setMessage = function(e) {
-s.Message.setField(this, 2, e);
+r.Message.setField(this, 2, e);
 };
 proto.BINFilterFriendResponse.prototype.clearMessage = function() {
-s.Message.setField(this, 2, void 0);
+r.Message.setField(this, 2, void 0);
 };
 proto.BINFilterFriendResponse.prototype.hasMessage = function() {
-return null != s.Message.getField(this, 2);
+return null != r.Message.getField(this, 2);
 };
 proto.BINFilterFriendResponse.prototype.getCurrentfriendsList = function() {
-return s.Message.getRepeatedWrapperField(this, n.BINUserInfo, 3);
+return r.Message.getRepeatedWrapperField(this, n.BINUserInfo, 3);
 };
 proto.BINFilterFriendResponse.prototype.setCurrentfriendsList = function(e) {
-s.Message.setRepeatedWrapperField(this, 3, e);
+r.Message.setRepeatedWrapperField(this, 3, e);
 };
 proto.BINFilterFriendResponse.prototype.addCurrentfriends = function(e, t) {
-return s.Message.addToRepeatedWrapperField(this, 3, e, proto.BINUserInfo, t);
+return r.Message.addToRepeatedWrapperField(this, 3, e, proto.BINUserInfo, t);
 };
 proto.BINFilterFriendResponse.prototype.clearCurrentfriendsList = function() {
 this.setCurrentfriendsList([]);
 };
 proto.BINAddFriendRequest = function(e) {
-s.Message.initialize(this, e, 0, -1, null, null);
+r.Message.initialize(this, e, 0, -1, null, null);
 };
-r.inherits(proto.BINAddFriendRequest, s.Message);
-r.DEBUG && !COMPILED && (proto.BINAddFriendRequest.displayName = "proto.BINAddFriendRequest");
-if (s.Message.GENERATE_TO_OBJECT) {
+s.inherits(proto.BINAddFriendRequest, r.Message);
+s.DEBUG && !COMPILED && (proto.BINAddFriendRequest.displayName = "proto.BINAddFriendRequest");
+if (r.Message.GENERATE_TO_OBJECT) {
 proto.BINAddFriendRequest.prototype.toObject = function(e) {
 return proto.BINAddFriendRequest.toObject(e, this);
 };
 proto.BINAddFriendRequest.toObject = function(e, t) {
 var o = {
-targetuserid: s.Message.getField(t, 1)
+targetuserid: r.Message.getField(t, 1)
 };
 e && (o.$jspbMessageInstance = t);
 return o;
 };
 }
 proto.BINAddFriendRequest.deserializeBinary = function(e) {
-var t = new s.BinaryReader(e), o = new proto.BINAddFriendRequest();
+var t = new r.BinaryReader(e), o = new proto.BINAddFriendRequest();
 return proto.BINAddFriendRequest.deserializeBinaryFromReader(o, t);
 };
 proto.BINAddFriendRequest.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
 var o = t.readInt64();
 e.setTargetuserid(o);
@@ -9207,59 +11602,61 @@ break;
 default:
 t.skipField();
 }
+}
 return e;
 };
 proto.BINAddFriendRequest.serializeBinaryToWriter = function(e, t) {
 e.serializeBinaryToWriter(t);
 };
 proto.BINAddFriendRequest.prototype.serializeBinary = function() {
-var e = new s.BinaryWriter();
+var e = new r.BinaryWriter();
 this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINAddFriendRequest.prototype.serializeBinaryToWriter = function(e) {
-var t = void 0;
-null != (t = s.Message.getField(this, 1)) && e.writeInt64(1, t);
+var t;
+null != (t = r.Message.getField(this, 1)) && e.writeInt64(1, t);
 };
 proto.BINAddFriendRequest.prototype.getTargetuserid = function() {
-return s.Message.getFieldWithDefault(this, 1, 0);
+return r.Message.getFieldWithDefault(this, 1, 0);
 };
 proto.BINAddFriendRequest.prototype.setTargetuserid = function(e) {
-s.Message.setField(this, 1, e);
+r.Message.setField(this, 1, e);
 };
 proto.BINAddFriendRequest.prototype.clearTargetuserid = function() {
-s.Message.setField(this, 1, void 0);
+r.Message.setField(this, 1, void 0);
 };
 proto.BINAddFriendRequest.prototype.hasTargetuserid = function() {
-return null != s.Message.getField(this, 1);
+return null != r.Message.getField(this, 1);
 };
 proto.BINAddFriendResponse = function(e) {
-s.Message.initialize(this, e, 0, -1, null, null);
+r.Message.initialize(this, e, 0, -1, null, null);
 };
-r.inherits(proto.BINAddFriendResponse, s.Message);
-r.DEBUG && !COMPILED && (proto.BINAddFriendResponse.displayName = "proto.BINAddFriendResponse");
-if (s.Message.GENERATE_TO_OBJECT) {
+s.inherits(proto.BINAddFriendResponse, r.Message);
+s.DEBUG && !COMPILED && (proto.BINAddFriendResponse.displayName = "proto.BINAddFriendResponse");
+if (r.Message.GENERATE_TO_OBJECT) {
 proto.BINAddFriendResponse.prototype.toObject = function(e) {
 return proto.BINAddFriendResponse.toObject(e, this);
 };
 proto.BINAddFriendResponse.toObject = function(e, t) {
 var o = {
-responsecode: s.Message.getField(t, 1),
-message: s.Message.getField(t, 2),
-friendstatus: s.Message.getField(t, 3)
+responsecode: r.Message.getField(t, 1),
+message: r.Message.getField(t, 2),
+friendstatus: r.Message.getField(t, 3)
 };
 e && (o.$jspbMessageInstance = t);
 return o;
 };
 }
 proto.BINAddFriendResponse.deserializeBinary = function(e) {
-var t = new s.BinaryReader(e), o = new proto.BINAddFriendResponse();
+var t = new r.BinaryReader(e), o = new proto.BINAddFriendResponse();
 return proto.BINAddFriendResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINAddFriendResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
@@ -9269,12 +11666,13 @@ e.setMessage(o);
 break;
 
 case 3:
-var o = t.readInt32();
+o = t.readInt32();
 e.setFriendstatus(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -9282,83 +11680,84 @@ proto.BINAddFriendResponse.serializeBinaryToWriter = function(e, t) {
 e.serializeBinaryToWriter(t);
 };
 proto.BINAddFriendResponse.prototype.serializeBinary = function() {
-var e = new s.BinaryWriter();
+var e = new r.BinaryWriter();
 this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINAddFriendResponse.prototype.serializeBinaryToWriter = function(e) {
 var t = void 0;
-null != (t = s.Message.getField(this, 1)) && e.writeBool(1, t);
-null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
-null != (t = s.Message.getField(this, 3)) && e.writeInt32(3, t);
+null != (t = r.Message.getField(this, 1)) && e.writeBool(1, t);
+null != (t = r.Message.getField(this, 2)) && e.writeString(2, t);
+null != (t = r.Message.getField(this, 3)) && e.writeInt32(3, t);
 };
 proto.BINAddFriendResponse.prototype.getResponsecode = function() {
-return s.Message.getFieldWithDefault(this, 1, !1);
+return r.Message.getFieldWithDefault(this, 1, !1);
 };
 proto.BINAddFriendResponse.prototype.setResponsecode = function(e) {
-s.Message.setField(this, 1, e);
+r.Message.setField(this, 1, e);
 };
 proto.BINAddFriendResponse.prototype.clearResponsecode = function() {
-s.Message.setField(this, 1, void 0);
+r.Message.setField(this, 1, void 0);
 };
 proto.BINAddFriendResponse.prototype.hasResponsecode = function() {
-return null != s.Message.getField(this, 1);
+return null != r.Message.getField(this, 1);
 };
 proto.BINAddFriendResponse.prototype.getMessage = function() {
-return s.Message.getFieldWithDefault(this, 2, "");
+return r.Message.getFieldWithDefault(this, 2, "");
 };
 proto.BINAddFriendResponse.prototype.setMessage = function(e) {
-s.Message.setField(this, 2, e);
+r.Message.setField(this, 2, e);
 };
 proto.BINAddFriendResponse.prototype.clearMessage = function() {
-s.Message.setField(this, 2, void 0);
+r.Message.setField(this, 2, void 0);
 };
 proto.BINAddFriendResponse.prototype.hasMessage = function() {
-return null != s.Message.getField(this, 2);
+return null != r.Message.getField(this, 2);
 };
 proto.BINAddFriendResponse.prototype.getFriendstatus = function() {
-return s.Message.getFieldWithDefault(this, 3, 0);
+return r.Message.getFieldWithDefault(this, 3, 0);
 };
 proto.BINAddFriendResponse.prototype.setFriendstatus = function(e) {
-s.Message.setField(this, 3, e);
+r.Message.setField(this, 3, e);
 };
 proto.BINAddFriendResponse.prototype.clearFriendstatus = function() {
-s.Message.setField(this, 3, void 0);
+r.Message.setField(this, 3, void 0);
 };
 proto.BINAddFriendResponse.prototype.hasFriendstatus = function() {
-return null != s.Message.getField(this, 3);
+return null != r.Message.getField(this, 3);
 };
 proto.BINAddFriend = function(e) {
-s.Message.initialize(this, e, 0, -1, null, null);
+r.Message.initialize(this, e, 0, -1, null, null);
 };
-r.inherits(proto.BINAddFriend, s.Message);
-r.DEBUG && !COMPILED && (proto.BINAddFriend.displayName = "proto.BINAddFriend");
-if (s.Message.GENERATE_TO_OBJECT) {
+s.inherits(proto.BINAddFriend, r.Message);
+s.DEBUG && !COMPILED && (proto.BINAddFriend.displayName = "proto.BINAddFriend");
+if (r.Message.GENERATE_TO_OBJECT) {
 proto.BINAddFriend.prototype.toObject = function(e) {
 return proto.BINAddFriend.toObject(e, this);
 };
 proto.BINAddFriend.toObject = function(e, t) {
-var o, r = {
-requestid: s.Message.getField(t, 1),
+var o, s = {
+requestid: r.Message.getField(t, 1),
 senderuser: (o = t.getSenderuser()) && n.BINUserInfo.toObject(e, o)
 };
-e && (r.$jspbMessageInstance = t);
-return r;
+e && (s.$jspbMessageInstance = t);
+return s;
 };
 }
 proto.BINAddFriend.deserializeBinary = function(e) {
-var t = new s.BinaryReader(e), o = new proto.BINAddFriend();
+var t = new r.BinaryReader(e), o = new proto.BINAddFriend();
 return proto.BINAddFriend.deserializeBinaryFromReader(o, t);
 };
 proto.BINAddFriend.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readInt32();
+var o = t.readInt32();
 e.setRequestid(o);
 break;
 
 case 2:
-var o = new n.BINUserInfo();
+o = new n.BINUserInfo();
 t.readMessage(o, n.BINUserInfo.deserializeBinaryFromReader);
 e.setSenderuser(o);
 break;
@@ -9366,81 +11765,84 @@ break;
 default:
 t.skipField();
 }
+}
 return e;
 };
 proto.BINAddFriend.serializeBinaryToWriter = function(e, t) {
 e.serializeBinaryToWriter(t);
 };
 proto.BINAddFriend.prototype.serializeBinary = function() {
-var e = new s.BinaryWriter();
+var e = new r.BinaryWriter();
 this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINAddFriend.prototype.serializeBinaryToWriter = function(e) {
 var t = void 0;
-null != (t = s.Message.getField(this, 1)) && e.writeInt32(1, t);
+null != (t = r.Message.getField(this, 1)) && e.writeInt32(1, t);
 null != (t = this.getSenderuser()) && e.writeMessage(2, t, n.BINUserInfo.serializeBinaryToWriter);
 };
 proto.BINAddFriend.prototype.getRequestid = function() {
-return s.Message.getFieldWithDefault(this, 1, 0);
+return r.Message.getFieldWithDefault(this, 1, 0);
 };
 proto.BINAddFriend.prototype.setRequestid = function(e) {
-s.Message.setField(this, 1, e);
+r.Message.setField(this, 1, e);
 };
 proto.BINAddFriend.prototype.clearRequestid = function() {
-s.Message.setField(this, 1, void 0);
+r.Message.setField(this, 1, void 0);
 };
 proto.BINAddFriend.prototype.hasRequestid = function() {
-return null != s.Message.getField(this, 1);
+return null != r.Message.getField(this, 1);
 };
 proto.BINAddFriend.prototype.getSenderuser = function() {
-return s.Message.getWrapperField(this, n.BINUserInfo, 2, 1);
+return r.Message.getWrapperField(this, n.BINUserInfo, 2, 1);
 };
 proto.BINAddFriend.prototype.setSenderuser = function(e) {
-s.Message.setWrapperField(this, 2, e);
+r.Message.setWrapperField(this, 2, e);
 };
 proto.BINAddFriend.prototype.clearSenderuser = function() {
-s.Message.setField(this, 2, void 0);
+r.Message.setField(this, 2, void 0);
 };
 proto.BINAddFriend.prototype.hasSenderuser = function() {
-return null != s.Message.getField(this, 2);
+return null != r.Message.getField(this, 2);
 };
 proto.BINFilterAddFriendRequest = function(e) {
-s.Message.initialize(this, e, 0, -1, null, null);
+r.Message.initialize(this, e, 0, -1, null, null);
 };
-r.inherits(proto.BINFilterAddFriendRequest, s.Message);
-r.DEBUG && !COMPILED && (proto.BINFilterAddFriendRequest.displayName = "proto.BINFilterAddFriendRequest");
-if (s.Message.GENERATE_TO_OBJECT) {
+s.inherits(proto.BINFilterAddFriendRequest, r.Message);
+s.DEBUG && !COMPILED && (proto.BINFilterAddFriendRequest.displayName = "proto.BINFilterAddFriendRequest");
+if (r.Message.GENERATE_TO_OBJECT) {
 proto.BINFilterAddFriendRequest.prototype.toObject = function(e) {
 return proto.BINFilterAddFriendRequest.toObject(e, this);
 };
 proto.BINFilterAddFriendRequest.toObject = function(e, t) {
 var o = {
-firstresult: s.Message.getField(t, 1),
-maxresult: s.Message.getField(t, 2)
+firstresult: r.Message.getField(t, 1),
+maxresult: r.Message.getField(t, 2)
 };
 e && (o.$jspbMessageInstance = t);
 return o;
 };
 }
 proto.BINFilterAddFriendRequest.deserializeBinary = function(e) {
-var t = new s.BinaryReader(e), o = new proto.BINFilterAddFriendRequest();
+var t = new r.BinaryReader(e), o = new proto.BINFilterAddFriendRequest();
 return proto.BINFilterAddFriendRequest.deserializeBinaryFromReader(o, t);
 };
 proto.BINFilterAddFriendRequest.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readInt32();
+var o = t.readInt32();
 e.setFirstresult(o);
 break;
 
 case 2:
-var o = t.readInt32();
+o = t.readInt32();
 e.setMaxresult(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -9448,67 +11850,68 @@ proto.BINFilterAddFriendRequest.serializeBinaryToWriter = function(e, t) {
 e.serializeBinaryToWriter(t);
 };
 proto.BINFilterAddFriendRequest.prototype.serializeBinary = function() {
-var e = new s.BinaryWriter();
+var e = new r.BinaryWriter();
 this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINFilterAddFriendRequest.prototype.serializeBinaryToWriter = function(e) {
 var t = void 0;
-null != (t = s.Message.getField(this, 1)) && e.writeInt32(1, t);
-null != (t = s.Message.getField(this, 2)) && e.writeInt32(2, t);
+null != (t = r.Message.getField(this, 1)) && e.writeInt32(1, t);
+null != (t = r.Message.getField(this, 2)) && e.writeInt32(2, t);
 };
 proto.BINFilterAddFriendRequest.prototype.getFirstresult = function() {
-return s.Message.getFieldWithDefault(this, 1, 0);
+return r.Message.getFieldWithDefault(this, 1, 0);
 };
 proto.BINFilterAddFriendRequest.prototype.setFirstresult = function(e) {
-s.Message.setField(this, 1, e);
+r.Message.setField(this, 1, e);
 };
 proto.BINFilterAddFriendRequest.prototype.clearFirstresult = function() {
-s.Message.setField(this, 1, void 0);
+r.Message.setField(this, 1, void 0);
 };
 proto.BINFilterAddFriendRequest.prototype.hasFirstresult = function() {
-return null != s.Message.getField(this, 1);
+return null != r.Message.getField(this, 1);
 };
 proto.BINFilterAddFriendRequest.prototype.getMaxresult = function() {
-return s.Message.getFieldWithDefault(this, 2, 0);
+return r.Message.getFieldWithDefault(this, 2, 0);
 };
 proto.BINFilterAddFriendRequest.prototype.setMaxresult = function(e) {
-s.Message.setField(this, 2, e);
+r.Message.setField(this, 2, e);
 };
 proto.BINFilterAddFriendRequest.prototype.clearMaxresult = function() {
-s.Message.setField(this, 2, void 0);
+r.Message.setField(this, 2, void 0);
 };
 proto.BINFilterAddFriendRequest.prototype.hasMaxresult = function() {
-return null != s.Message.getField(this, 2);
+return null != r.Message.getField(this, 2);
 };
 proto.BINFilterAddFriendResponse = function(e) {
-s.Message.initialize(this, e, 0, -1, proto.BINFilterAddFriendResponse.repeatedFields_, null);
+r.Message.initialize(this, e, 0, -1, proto.BINFilterAddFriendResponse.repeatedFields_, null);
 };
-r.inherits(proto.BINFilterAddFriendResponse, s.Message);
-r.DEBUG && !COMPILED && (proto.BINFilterAddFriendResponse.displayName = "proto.BINFilterAddFriendResponse");
+s.inherits(proto.BINFilterAddFriendResponse, r.Message);
+s.DEBUG && !COMPILED && (proto.BINFilterAddFriendResponse.displayName = "proto.BINFilterAddFriendResponse");
 proto.BINFilterAddFriendResponse.repeatedFields_ = [ 3 ];
-if (s.Message.GENERATE_TO_OBJECT) {
+if (r.Message.GENERATE_TO_OBJECT) {
 proto.BINFilterAddFriendResponse.prototype.toObject = function(e) {
 return proto.BINFilterAddFriendResponse.toObject(e, this);
 };
 proto.BINFilterAddFriendResponse.toObject = function(e, t) {
 var o = {
-responsecode: s.Message.getField(t, 1),
-message: s.Message.getField(t, 2),
-requestfriendsList: s.Message.toObjectList(t.getRequestfriendsList(), proto.BINAddFriend.toObject, e)
+responsecode: r.Message.getField(t, 1),
+message: r.Message.getField(t, 2),
+requestfriendsList: r.Message.toObjectList(t.getRequestfriendsList(), proto.BINAddFriend.toObject, e)
 };
 e && (o.$jspbMessageInstance = t);
 return o;
 };
 }
 proto.BINFilterAddFriendResponse.deserializeBinary = function(e) {
-var t = new s.BinaryReader(e), o = new proto.BINFilterAddFriendResponse();
+var t = new r.BinaryReader(e), o = new proto.BINFilterAddFriendResponse();
 return proto.BINFilterAddFriendResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINFilterAddFriendResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
@@ -9518,7 +11921,7 @@ e.setMessage(o);
 break;
 
 case 3:
-var o = new proto.BINAddFriend();
+o = new proto.BINAddFriend();
 t.readMessage(o, proto.BINAddFriend.deserializeBinaryFromReader);
 e.addRequestfriends(o);
 break;
@@ -9526,94 +11929,97 @@ break;
 default:
 t.skipField();
 }
+}
 return e;
 };
 proto.BINFilterAddFriendResponse.serializeBinaryToWriter = function(e, t) {
 e.serializeBinaryToWriter(t);
 };
 proto.BINFilterAddFriendResponse.prototype.serializeBinary = function() {
-var e = new s.BinaryWriter();
+var e = new r.BinaryWriter();
 this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINFilterAddFriendResponse.prototype.serializeBinaryToWriter = function(e) {
 var t = void 0;
-null != (t = s.Message.getField(this, 1)) && e.writeBool(1, t);
-null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
-(t = this.getRequestfriendsList()).length > 0 && e.writeRepeatedMessage(3, t, proto.BINAddFriend.serializeBinaryToWriter);
+null != (t = r.Message.getField(this, 1)) && e.writeBool(1, t);
+null != (t = r.Message.getField(this, 2)) && e.writeString(2, t);
+0 < (t = this.getRequestfriendsList()).length && e.writeRepeatedMessage(3, t, proto.BINAddFriend.serializeBinaryToWriter);
 };
 proto.BINFilterAddFriendResponse.prototype.getResponsecode = function() {
-return s.Message.getFieldWithDefault(this, 1, !1);
+return r.Message.getFieldWithDefault(this, 1, !1);
 };
 proto.BINFilterAddFriendResponse.prototype.setResponsecode = function(e) {
-s.Message.setField(this, 1, e);
+r.Message.setField(this, 1, e);
 };
 proto.BINFilterAddFriendResponse.prototype.clearResponsecode = function() {
-s.Message.setField(this, 1, void 0);
+r.Message.setField(this, 1, void 0);
 };
 proto.BINFilterAddFriendResponse.prototype.hasResponsecode = function() {
-return null != s.Message.getField(this, 1);
+return null != r.Message.getField(this, 1);
 };
 proto.BINFilterAddFriendResponse.prototype.getMessage = function() {
-return s.Message.getFieldWithDefault(this, 2, "");
+return r.Message.getFieldWithDefault(this, 2, "");
 };
 proto.BINFilterAddFriendResponse.prototype.setMessage = function(e) {
-s.Message.setField(this, 2, e);
+r.Message.setField(this, 2, e);
 };
 proto.BINFilterAddFriendResponse.prototype.clearMessage = function() {
-s.Message.setField(this, 2, void 0);
+r.Message.setField(this, 2, void 0);
 };
 proto.BINFilterAddFriendResponse.prototype.hasMessage = function() {
-return null != s.Message.getField(this, 2);
+return null != r.Message.getField(this, 2);
 };
 proto.BINFilterAddFriendResponse.prototype.getRequestfriendsList = function() {
-return s.Message.getRepeatedWrapperField(this, proto.BINAddFriend, 3);
+return r.Message.getRepeatedWrapperField(this, proto.BINAddFriend, 3);
 };
 proto.BINFilterAddFriendResponse.prototype.setRequestfriendsList = function(e) {
-s.Message.setRepeatedWrapperField(this, 3, e);
+r.Message.setRepeatedWrapperField(this, 3, e);
 };
 proto.BINFilterAddFriendResponse.prototype.addRequestfriends = function(e, t) {
-return s.Message.addToRepeatedWrapperField(this, 3, e, proto.BINAddFriend, t);
+return r.Message.addToRepeatedWrapperField(this, 3, e, proto.BINAddFriend, t);
 };
 proto.BINFilterAddFriendResponse.prototype.clearRequestfriendsList = function() {
 this.setRequestfriendsList([]);
 };
 proto.BINApproveAddFriendRequest = function(e) {
-s.Message.initialize(this, e, 0, -1, null, null);
+r.Message.initialize(this, e, 0, -1, null, null);
 };
-r.inherits(proto.BINApproveAddFriendRequest, s.Message);
-r.DEBUG && !COMPILED && (proto.BINApproveAddFriendRequest.displayName = "proto.BINApproveAddFriendRequest");
-if (s.Message.GENERATE_TO_OBJECT) {
+s.inherits(proto.BINApproveAddFriendRequest, r.Message);
+s.DEBUG && !COMPILED && (proto.BINApproveAddFriendRequest.displayName = "proto.BINApproveAddFriendRequest");
+if (r.Message.GENERATE_TO_OBJECT) {
 proto.BINApproveAddFriendRequest.prototype.toObject = function(e) {
 return proto.BINApproveAddFriendRequest.toObject(e, this);
 };
 proto.BINApproveAddFriendRequest.toObject = function(e, t) {
 var o = {
-senderuserid: s.Message.getField(t, 1),
-accepted: s.Message.getField(t, 2)
+senderuserid: r.Message.getField(t, 1),
+accepted: r.Message.getField(t, 2)
 };
 e && (o.$jspbMessageInstance = t);
 return o;
 };
 }
 proto.BINApproveAddFriendRequest.deserializeBinary = function(e) {
-var t = new s.BinaryReader(e), o = new proto.BINApproveAddFriendRequest();
+var t = new r.BinaryReader(e), o = new proto.BINApproveAddFriendRequest();
 return proto.BINApproveAddFriendRequest.deserializeBinaryFromReader(o, t);
 };
 proto.BINApproveAddFriendRequest.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readInt64();
+var o = t.readInt64();
 e.setSenderuserid(o);
 break;
 
 case 2:
-var o = t.readBool();
+o = t.readBool();
 e.setAccepted(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -9621,66 +12027,67 @@ proto.BINApproveAddFriendRequest.serializeBinaryToWriter = function(e, t) {
 e.serializeBinaryToWriter(t);
 };
 proto.BINApproveAddFriendRequest.prototype.serializeBinary = function() {
-var e = new s.BinaryWriter();
+var e = new r.BinaryWriter();
 this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINApproveAddFriendRequest.prototype.serializeBinaryToWriter = function(e) {
 var t = void 0;
-null != (t = s.Message.getField(this, 1)) && e.writeInt64(1, t);
-null != (t = s.Message.getField(this, 2)) && e.writeBool(2, t);
+null != (t = r.Message.getField(this, 1)) && e.writeInt64(1, t);
+null != (t = r.Message.getField(this, 2)) && e.writeBool(2, t);
 };
 proto.BINApproveAddFriendRequest.prototype.getSenderuserid = function() {
-return s.Message.getFieldWithDefault(this, 1, 0);
+return r.Message.getFieldWithDefault(this, 1, 0);
 };
 proto.BINApproveAddFriendRequest.prototype.setSenderuserid = function(e) {
-s.Message.setField(this, 1, e);
+r.Message.setField(this, 1, e);
 };
 proto.BINApproveAddFriendRequest.prototype.clearSenderuserid = function() {
-s.Message.setField(this, 1, void 0);
+r.Message.setField(this, 1, void 0);
 };
 proto.BINApproveAddFriendRequest.prototype.hasSenderuserid = function() {
-return null != s.Message.getField(this, 1);
+return null != r.Message.getField(this, 1);
 };
 proto.BINApproveAddFriendRequest.prototype.getAccepted = function() {
-return s.Message.getFieldWithDefault(this, 2, !1);
+return r.Message.getFieldWithDefault(this, 2, !1);
 };
 proto.BINApproveAddFriendRequest.prototype.setAccepted = function(e) {
-s.Message.setField(this, 2, e);
+r.Message.setField(this, 2, e);
 };
 proto.BINApproveAddFriendRequest.prototype.clearAccepted = function() {
-s.Message.setField(this, 2, void 0);
+r.Message.setField(this, 2, void 0);
 };
 proto.BINApproveAddFriendRequest.prototype.hasAccepted = function() {
-return null != s.Message.getField(this, 2);
+return null != r.Message.getField(this, 2);
 };
 proto.BINApproveAddFriendResponse = function(e) {
-s.Message.initialize(this, e, 0, -1, null, null);
+r.Message.initialize(this, e, 0, -1, null, null);
 };
-r.inherits(proto.BINApproveAddFriendResponse, s.Message);
-r.DEBUG && !COMPILED && (proto.BINApproveAddFriendResponse.displayName = "proto.BINApproveAddFriendResponse");
-if (s.Message.GENERATE_TO_OBJECT) {
+s.inherits(proto.BINApproveAddFriendResponse, r.Message);
+s.DEBUG && !COMPILED && (proto.BINApproveAddFriendResponse.displayName = "proto.BINApproveAddFriendResponse");
+if (r.Message.GENERATE_TO_OBJECT) {
 proto.BINApproveAddFriendResponse.prototype.toObject = function(e) {
 return proto.BINApproveAddFriendResponse.toObject(e, this);
 };
 proto.BINApproveAddFriendResponse.toObject = function(e, t) {
 var o = {
-responsecode: s.Message.getField(t, 1),
-message: s.Message.getField(t, 2),
-friendstatus: s.Message.getField(t, 3)
+responsecode: r.Message.getField(t, 1),
+message: r.Message.getField(t, 2),
+friendstatus: r.Message.getField(t, 3)
 };
 e && (o.$jspbMessageInstance = t);
 return o;
 };
 }
 proto.BINApproveAddFriendResponse.deserializeBinary = function(e) {
-var t = new s.BinaryReader(e), o = new proto.BINApproveAddFriendResponse();
+var t = new r.BinaryReader(e), o = new proto.BINApproveAddFriendResponse();
 return proto.BINApproveAddFriendResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINApproveAddFriendResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
@@ -9690,12 +12097,13 @@ e.setMessage(o);
 break;
 
 case 3:
-var o = t.readInt32();
+o = t.readInt32();
 e.setFriendstatus(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -9703,79 +12111,80 @@ proto.BINApproveAddFriendResponse.serializeBinaryToWriter = function(e, t) {
 e.serializeBinaryToWriter(t);
 };
 proto.BINApproveAddFriendResponse.prototype.serializeBinary = function() {
-var e = new s.BinaryWriter();
+var e = new r.BinaryWriter();
 this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINApproveAddFriendResponse.prototype.serializeBinaryToWriter = function(e) {
 var t = void 0;
-null != (t = s.Message.getField(this, 1)) && e.writeBool(1, t);
-null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
-null != (t = s.Message.getField(this, 3)) && e.writeInt32(3, t);
+null != (t = r.Message.getField(this, 1)) && e.writeBool(1, t);
+null != (t = r.Message.getField(this, 2)) && e.writeString(2, t);
+null != (t = r.Message.getField(this, 3)) && e.writeInt32(3, t);
 };
 proto.BINApproveAddFriendResponse.prototype.getResponsecode = function() {
-return s.Message.getFieldWithDefault(this, 1, !1);
+return r.Message.getFieldWithDefault(this, 1, !1);
 };
 proto.BINApproveAddFriendResponse.prototype.setResponsecode = function(e) {
-s.Message.setField(this, 1, e);
+r.Message.setField(this, 1, e);
 };
 proto.BINApproveAddFriendResponse.prototype.clearResponsecode = function() {
-s.Message.setField(this, 1, void 0);
+r.Message.setField(this, 1, void 0);
 };
 proto.BINApproveAddFriendResponse.prototype.hasResponsecode = function() {
-return null != s.Message.getField(this, 1);
+return null != r.Message.getField(this, 1);
 };
 proto.BINApproveAddFriendResponse.prototype.getMessage = function() {
-return s.Message.getFieldWithDefault(this, 2, "");
+return r.Message.getFieldWithDefault(this, 2, "");
 };
 proto.BINApproveAddFriendResponse.prototype.setMessage = function(e) {
-s.Message.setField(this, 2, e);
+r.Message.setField(this, 2, e);
 };
 proto.BINApproveAddFriendResponse.prototype.clearMessage = function() {
-s.Message.setField(this, 2, void 0);
+r.Message.setField(this, 2, void 0);
 };
 proto.BINApproveAddFriendResponse.prototype.hasMessage = function() {
-return null != s.Message.getField(this, 2);
+return null != r.Message.getField(this, 2);
 };
 proto.BINApproveAddFriendResponse.prototype.getFriendstatus = function() {
-return s.Message.getFieldWithDefault(this, 3, 0);
+return r.Message.getFieldWithDefault(this, 3, 0);
 };
 proto.BINApproveAddFriendResponse.prototype.setFriendstatus = function(e) {
-s.Message.setField(this, 3, e);
+r.Message.setField(this, 3, e);
 };
 proto.BINApproveAddFriendResponse.prototype.clearFriendstatus = function() {
-s.Message.setField(this, 3, void 0);
+r.Message.setField(this, 3, void 0);
 };
 proto.BINApproveAddFriendResponse.prototype.hasFriendstatus = function() {
-return null != s.Message.getField(this, 3);
+return null != r.Message.getField(this, 3);
 };
 proto.BINFindUserRequest = function(e) {
-s.Message.initialize(this, e, 0, -1, null, null);
+r.Message.initialize(this, e, 0, -1, null, null);
 };
-r.inherits(proto.BINFindUserRequest, s.Message);
-r.DEBUG && !COMPILED && (proto.BINFindUserRequest.displayName = "proto.BINFindUserRequest");
-if (s.Message.GENERATE_TO_OBJECT) {
+s.inherits(proto.BINFindUserRequest, r.Message);
+s.DEBUG && !COMPILED && (proto.BINFindUserRequest.displayName = "proto.BINFindUserRequest");
+if (r.Message.GENERATE_TO_OBJECT) {
 proto.BINFindUserRequest.prototype.toObject = function(e) {
 return proto.BINFindUserRequest.toObject(e, this);
 };
 proto.BINFindUserRequest.toObject = function(e, t) {
 var o = {
-usernamequery: s.Message.getField(t, 1),
-firstresult: s.Message.getField(t, 2),
-maxresult: s.Message.getField(t, 3)
+usernamequery: r.Message.getField(t, 1),
+firstresult: r.Message.getField(t, 2),
+maxresult: r.Message.getField(t, 3)
 };
 e && (o.$jspbMessageInstance = t);
 return o;
 };
 }
 proto.BINFindUserRequest.deserializeBinary = function(e) {
-var t = new s.BinaryReader(e), o = new proto.BINFindUserRequest();
+var t = new r.BinaryReader(e), o = new proto.BINFindUserRequest();
 return proto.BINFindUserRequest.deserializeBinaryFromReader(o, t);
 };
 proto.BINFindUserRequest.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readString();
+var o = t.readString();
 e.setUsernamequery(o);
 break;
 
@@ -9785,12 +12194,13 @@ e.setFirstresult(o);
 break;
 
 case 3:
-var o = t.readInt32();
+o = t.readInt32();
 e.setMaxresult(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -9798,80 +12208,81 @@ proto.BINFindUserRequest.serializeBinaryToWriter = function(e, t) {
 e.serializeBinaryToWriter(t);
 };
 proto.BINFindUserRequest.prototype.serializeBinary = function() {
-var e = new s.BinaryWriter();
+var e = new r.BinaryWriter();
 this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINFindUserRequest.prototype.serializeBinaryToWriter = function(e) {
 var t = void 0;
-null != (t = s.Message.getField(this, 1)) && e.writeString(1, t);
-null != (t = s.Message.getField(this, 2)) && e.writeInt32(2, t);
-null != (t = s.Message.getField(this, 3)) && e.writeInt32(3, t);
+null != (t = r.Message.getField(this, 1)) && e.writeString(1, t);
+null != (t = r.Message.getField(this, 2)) && e.writeInt32(2, t);
+null != (t = r.Message.getField(this, 3)) && e.writeInt32(3, t);
 };
 proto.BINFindUserRequest.prototype.getUsernamequery = function() {
-return s.Message.getFieldWithDefault(this, 1, "");
+return r.Message.getFieldWithDefault(this, 1, "");
 };
 proto.BINFindUserRequest.prototype.setUsernamequery = function(e) {
-s.Message.setField(this, 1, e);
+r.Message.setField(this, 1, e);
 };
 proto.BINFindUserRequest.prototype.clearUsernamequery = function() {
-s.Message.setField(this, 1, void 0);
+r.Message.setField(this, 1, void 0);
 };
 proto.BINFindUserRequest.prototype.hasUsernamequery = function() {
-return null != s.Message.getField(this, 1);
+return null != r.Message.getField(this, 1);
 };
 proto.BINFindUserRequest.prototype.getFirstresult = function() {
-return s.Message.getFieldWithDefault(this, 2, 0);
+return r.Message.getFieldWithDefault(this, 2, 0);
 };
 proto.BINFindUserRequest.prototype.setFirstresult = function(e) {
-s.Message.setField(this, 2, e);
+r.Message.setField(this, 2, e);
 };
 proto.BINFindUserRequest.prototype.clearFirstresult = function() {
-s.Message.setField(this, 2, void 0);
+r.Message.setField(this, 2, void 0);
 };
 proto.BINFindUserRequest.prototype.hasFirstresult = function() {
-return null != s.Message.getField(this, 2);
+return null != r.Message.getField(this, 2);
 };
 proto.BINFindUserRequest.prototype.getMaxresult = function() {
-return s.Message.getFieldWithDefault(this, 3, 0);
+return r.Message.getFieldWithDefault(this, 3, 0);
 };
 proto.BINFindUserRequest.prototype.setMaxresult = function(e) {
-s.Message.setField(this, 3, e);
+r.Message.setField(this, 3, e);
 };
 proto.BINFindUserRequest.prototype.clearMaxresult = function() {
-s.Message.setField(this, 3, void 0);
+r.Message.setField(this, 3, void 0);
 };
 proto.BINFindUserRequest.prototype.hasMaxresult = function() {
-return null != s.Message.getField(this, 3);
+return null != r.Message.getField(this, 3);
 };
 proto.BINFindUserResponse = function(e) {
-s.Message.initialize(this, e, 0, -1, proto.BINFindUserResponse.repeatedFields_, null);
+r.Message.initialize(this, e, 0, -1, proto.BINFindUserResponse.repeatedFields_, null);
 };
-r.inherits(proto.BINFindUserResponse, s.Message);
-r.DEBUG && !COMPILED && (proto.BINFindUserResponse.displayName = "proto.BINFindUserResponse");
+s.inherits(proto.BINFindUserResponse, r.Message);
+s.DEBUG && !COMPILED && (proto.BINFindUserResponse.displayName = "proto.BINFindUserResponse");
 proto.BINFindUserResponse.repeatedFields_ = [ 3 ];
-if (s.Message.GENERATE_TO_OBJECT) {
+if (r.Message.GENERATE_TO_OBJECT) {
 proto.BINFindUserResponse.prototype.toObject = function(e) {
 return proto.BINFindUserResponse.toObject(e, this);
 };
 proto.BINFindUserResponse.toObject = function(e, t) {
 var o = {
-responsecode: s.Message.getField(t, 1),
-message: s.Message.getField(t, 2),
-userinfosList: s.Message.toObjectList(t.getUserinfosList(), n.BINUserInfo.toObject, e)
+responsecode: r.Message.getField(t, 1),
+message: r.Message.getField(t, 2),
+userinfosList: r.Message.toObjectList(t.getUserinfosList(), n.BINUserInfo.toObject, e)
 };
 e && (o.$jspbMessageInstance = t);
 return o;
 };
 }
 proto.BINFindUserResponse.deserializeBinary = function(e) {
-var t = new s.BinaryReader(e), o = new proto.BINFindUserResponse();
+var t = new r.BinaryReader(e), o = new proto.BINFindUserResponse();
 return proto.BINFindUserResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINFindUserResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
@@ -9881,7 +12292,7 @@ e.setMessage(o);
 break;
 
 case 3:
-var o = new n.BINUserInfo();
+o = new n.BINUserInfo();
 t.readMessage(o, n.BINUserInfo.deserializeBinaryFromReader);
 e.addUserinfos(o);
 break;
@@ -9889,81 +12300,83 @@ break;
 default:
 t.skipField();
 }
+}
 return e;
 };
 proto.BINFindUserResponse.serializeBinaryToWriter = function(e, t) {
 e.serializeBinaryToWriter(t);
 };
 proto.BINFindUserResponse.prototype.serializeBinary = function() {
-var e = new s.BinaryWriter();
+var e = new r.BinaryWriter();
 this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINFindUserResponse.prototype.serializeBinaryToWriter = function(e) {
 var t = void 0;
-null != (t = s.Message.getField(this, 1)) && e.writeBool(1, t);
-null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
-(t = this.getUserinfosList()).length > 0 && e.writeRepeatedMessage(3, t, n.BINUserInfo.serializeBinaryToWriter);
+null != (t = r.Message.getField(this, 1)) && e.writeBool(1, t);
+null != (t = r.Message.getField(this, 2)) && e.writeString(2, t);
+0 < (t = this.getUserinfosList()).length && e.writeRepeatedMessage(3, t, n.BINUserInfo.serializeBinaryToWriter);
 };
 proto.BINFindUserResponse.prototype.getResponsecode = function() {
-return s.Message.getFieldWithDefault(this, 1, !1);
+return r.Message.getFieldWithDefault(this, 1, !1);
 };
 proto.BINFindUserResponse.prototype.setResponsecode = function(e) {
-s.Message.setField(this, 1, e);
+r.Message.setField(this, 1, e);
 };
 proto.BINFindUserResponse.prototype.clearResponsecode = function() {
-s.Message.setField(this, 1, void 0);
+r.Message.setField(this, 1, void 0);
 };
 proto.BINFindUserResponse.prototype.hasResponsecode = function() {
-return null != s.Message.getField(this, 1);
+return null != r.Message.getField(this, 1);
 };
 proto.BINFindUserResponse.prototype.getMessage = function() {
-return s.Message.getFieldWithDefault(this, 2, "");
+return r.Message.getFieldWithDefault(this, 2, "");
 };
 proto.BINFindUserResponse.prototype.setMessage = function(e) {
-s.Message.setField(this, 2, e);
+r.Message.setField(this, 2, e);
 };
 proto.BINFindUserResponse.prototype.clearMessage = function() {
-s.Message.setField(this, 2, void 0);
+r.Message.setField(this, 2, void 0);
 };
 proto.BINFindUserResponse.prototype.hasMessage = function() {
-return null != s.Message.getField(this, 2);
+return null != r.Message.getField(this, 2);
 };
 proto.BINFindUserResponse.prototype.getUserinfosList = function() {
-return s.Message.getRepeatedWrapperField(this, n.BINUserInfo, 3);
+return r.Message.getRepeatedWrapperField(this, n.BINUserInfo, 3);
 };
 proto.BINFindUserResponse.prototype.setUserinfosList = function(e) {
-s.Message.setRepeatedWrapperField(this, 3, e);
+r.Message.setRepeatedWrapperField(this, 3, e);
 };
 proto.BINFindUserResponse.prototype.addUserinfos = function(e, t) {
-return s.Message.addToRepeatedWrapperField(this, 3, e, proto.BINUserInfo, t);
+return r.Message.addToRepeatedWrapperField(this, 3, e, proto.BINUserInfo, t);
 };
 proto.BINFindUserResponse.prototype.clearUserinfosList = function() {
 this.setUserinfosList([]);
 };
 proto.BINFindUserByIdRequest = function(e) {
-s.Message.initialize(this, e, 0, -1, null, null);
+r.Message.initialize(this, e, 0, -1, null, null);
 };
-r.inherits(proto.BINFindUserByIdRequest, s.Message);
-r.DEBUG && !COMPILED && (proto.BINFindUserByIdRequest.displayName = "proto.BINFindUserByIdRequest");
-if (s.Message.GENERATE_TO_OBJECT) {
+s.inherits(proto.BINFindUserByIdRequest, r.Message);
+s.DEBUG && !COMPILED && (proto.BINFindUserByIdRequest.displayName = "proto.BINFindUserByIdRequest");
+if (r.Message.GENERATE_TO_OBJECT) {
 proto.BINFindUserByIdRequest.prototype.toObject = function(e) {
 return proto.BINFindUserByIdRequest.toObject(e, this);
 };
 proto.BINFindUserByIdRequest.toObject = function(e, t) {
 var o = {
-targetuserid: s.Message.getField(t, 1)
+targetuserid: r.Message.getField(t, 1)
 };
 e && (o.$jspbMessageInstance = t);
 return o;
 };
 }
 proto.BINFindUserByIdRequest.deserializeBinary = function(e) {
-var t = new s.BinaryReader(e), o = new proto.BINFindUserByIdRequest();
+var t = new r.BinaryReader(e), o = new proto.BINFindUserByIdRequest();
 return proto.BINFindUserByIdRequest.deserializeBinaryFromReader(o, t);
 };
 proto.BINFindUserByIdRequest.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
 var o = t.readInt64();
 e.setTargetuserid(o);
@@ -9972,59 +12385,61 @@ break;
 default:
 t.skipField();
 }
+}
 return e;
 };
 proto.BINFindUserByIdRequest.serializeBinaryToWriter = function(e, t) {
 e.serializeBinaryToWriter(t);
 };
 proto.BINFindUserByIdRequest.prototype.serializeBinary = function() {
-var e = new s.BinaryWriter();
+var e = new r.BinaryWriter();
 this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINFindUserByIdRequest.prototype.serializeBinaryToWriter = function(e) {
-var t = void 0;
-null != (t = s.Message.getField(this, 1)) && e.writeInt64(1, t);
+var t;
+null != (t = r.Message.getField(this, 1)) && e.writeInt64(1, t);
 };
 proto.BINFindUserByIdRequest.prototype.getTargetuserid = function() {
-return s.Message.getFieldWithDefault(this, 1, 0);
+return r.Message.getFieldWithDefault(this, 1, 0);
 };
 proto.BINFindUserByIdRequest.prototype.setTargetuserid = function(e) {
-s.Message.setField(this, 1, e);
+r.Message.setField(this, 1, e);
 };
 proto.BINFindUserByIdRequest.prototype.clearTargetuserid = function() {
-s.Message.setField(this, 1, void 0);
+r.Message.setField(this, 1, void 0);
 };
 proto.BINFindUserByIdRequest.prototype.hasTargetuserid = function() {
-return null != s.Message.getField(this, 1);
+return null != r.Message.getField(this, 1);
 };
 proto.BINFindUserByIdResponse = function(e) {
-s.Message.initialize(this, e, 0, -1, null, null);
+r.Message.initialize(this, e, 0, -1, null, null);
 };
-r.inherits(proto.BINFindUserByIdResponse, s.Message);
-r.DEBUG && !COMPILED && (proto.BINFindUserByIdResponse.displayName = "proto.BINFindUserByIdResponse");
-if (s.Message.GENERATE_TO_OBJECT) {
+s.inherits(proto.BINFindUserByIdResponse, r.Message);
+s.DEBUG && !COMPILED && (proto.BINFindUserByIdResponse.displayName = "proto.BINFindUserByIdResponse");
+if (r.Message.GENERATE_TO_OBJECT) {
 proto.BINFindUserByIdResponse.prototype.toObject = function(e) {
 return proto.BINFindUserByIdResponse.toObject(e, this);
 };
 proto.BINFindUserByIdResponse.toObject = function(e, t) {
-var o, r = {
-responsecode: s.Message.getField(t, 1),
-message: s.Message.getField(t, 2),
+var o, s = {
+responsecode: r.Message.getField(t, 1),
+message: r.Message.getField(t, 2),
 userinfo: (o = t.getUserinfo()) && n.BINUserInfo.toObject(e, o)
 };
-e && (r.$jspbMessageInstance = t);
-return r;
+e && (s.$jspbMessageInstance = t);
+return s;
 };
 }
 proto.BINFindUserByIdResponse.deserializeBinary = function(e) {
-var t = new s.BinaryReader(e), o = new proto.BINFindUserByIdResponse();
+var t = new r.BinaryReader(e), o = new proto.BINFindUserByIdResponse();
 return proto.BINFindUserByIdResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINFindUserByIdResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
@@ -10034,7 +12449,7 @@ e.setMessage(o);
 break;
 
 case 3:
-var o = new n.BINUserInfo();
+o = new n.BINUserInfo();
 t.readMessage(o, n.BINUserInfo.deserializeBinaryFromReader);
 e.setUserinfo(o);
 break;
@@ -10042,81 +12457,83 @@ break;
 default:
 t.skipField();
 }
+}
 return e;
 };
 proto.BINFindUserByIdResponse.serializeBinaryToWriter = function(e, t) {
 e.serializeBinaryToWriter(t);
 };
 proto.BINFindUserByIdResponse.prototype.serializeBinary = function() {
-var e = new s.BinaryWriter();
+var e = new r.BinaryWriter();
 this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINFindUserByIdResponse.prototype.serializeBinaryToWriter = function(e) {
 var t = void 0;
-null != (t = s.Message.getField(this, 1)) && e.writeBool(1, t);
-null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
+null != (t = r.Message.getField(this, 1)) && e.writeBool(1, t);
+null != (t = r.Message.getField(this, 2)) && e.writeString(2, t);
 null != (t = this.getUserinfo()) && e.writeMessage(3, t, n.BINUserInfo.serializeBinaryToWriter);
 };
 proto.BINFindUserByIdResponse.prototype.getResponsecode = function() {
-return s.Message.getFieldWithDefault(this, 1, !1);
+return r.Message.getFieldWithDefault(this, 1, !1);
 };
 proto.BINFindUserByIdResponse.prototype.setResponsecode = function(e) {
-s.Message.setField(this, 1, e);
+r.Message.setField(this, 1, e);
 };
 proto.BINFindUserByIdResponse.prototype.clearResponsecode = function() {
-s.Message.setField(this, 1, void 0);
+r.Message.setField(this, 1, void 0);
 };
 proto.BINFindUserByIdResponse.prototype.hasResponsecode = function() {
-return null != s.Message.getField(this, 1);
+return null != r.Message.getField(this, 1);
 };
 proto.BINFindUserByIdResponse.prototype.getMessage = function() {
-return s.Message.getFieldWithDefault(this, 2, "");
+return r.Message.getFieldWithDefault(this, 2, "");
 };
 proto.BINFindUserByIdResponse.prototype.setMessage = function(e) {
-s.Message.setField(this, 2, e);
+r.Message.setField(this, 2, e);
 };
 proto.BINFindUserByIdResponse.prototype.clearMessage = function() {
-s.Message.setField(this, 2, void 0);
+r.Message.setField(this, 2, void 0);
 };
 proto.BINFindUserByIdResponse.prototype.hasMessage = function() {
-return null != s.Message.getField(this, 2);
+return null != r.Message.getField(this, 2);
 };
 proto.BINFindUserByIdResponse.prototype.getUserinfo = function() {
-return s.Message.getWrapperField(this, n.BINUserInfo, 3);
+return r.Message.getWrapperField(this, n.BINUserInfo, 3);
 };
 proto.BINFindUserByIdResponse.prototype.setUserinfo = function(e) {
-s.Message.setWrapperField(this, 3, e);
+r.Message.setWrapperField(this, 3, e);
 };
 proto.BINFindUserByIdResponse.prototype.clearUserinfo = function() {
 this.setUserinfo(void 0);
 };
 proto.BINFindUserByIdResponse.prototype.hasUserinfo = function() {
-return null != s.Message.getField(this, 3);
+return null != r.Message.getField(this, 3);
 };
 proto.BINViewUserInfoRequest = function(e) {
-s.Message.initialize(this, e, 0, -1, null, null);
+r.Message.initialize(this, e, 0, -1, null, null);
 };
-r.inherits(proto.BINViewUserInfoRequest, s.Message);
-r.DEBUG && !COMPILED && (proto.BINViewUserInfoRequest.displayName = "proto.BINViewUserInfoRequest");
-if (s.Message.GENERATE_TO_OBJECT) {
+s.inherits(proto.BINViewUserInfoRequest, r.Message);
+s.DEBUG && !COMPILED && (proto.BINViewUserInfoRequest.displayName = "proto.BINViewUserInfoRequest");
+if (r.Message.GENERATE_TO_OBJECT) {
 proto.BINViewUserInfoRequest.prototype.toObject = function(e) {
 return proto.BINViewUserInfoRequest.toObject(e, this);
 };
 proto.BINViewUserInfoRequest.toObject = function(e, t) {
 var o = {
-targetuserid: s.Message.getField(t, 1)
+targetuserid: r.Message.getField(t, 1)
 };
 e && (o.$jspbMessageInstance = t);
 return o;
 };
 }
 proto.BINViewUserInfoRequest.deserializeBinary = function(e) {
-var t = new s.BinaryReader(e), o = new proto.BINViewUserInfoRequest();
+var t = new r.BinaryReader(e), o = new proto.BINViewUserInfoRequest();
 return proto.BINViewUserInfoRequest.deserializeBinaryFromReader(o, t);
 };
 proto.BINViewUserInfoRequest.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
 var o = t.readInt64();
 e.setTargetuserid(o);
@@ -10125,60 +12542,62 @@ break;
 default:
 t.skipField();
 }
+}
 return e;
 };
 proto.BINViewUserInfoRequest.serializeBinaryToWriter = function(e, t) {
 e.serializeBinaryToWriter(t);
 };
 proto.BINViewUserInfoRequest.prototype.serializeBinary = function() {
-var e = new s.BinaryWriter();
+var e = new r.BinaryWriter();
 this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINViewUserInfoRequest.prototype.serializeBinaryToWriter = function(e) {
-var t = void 0;
-null != (t = s.Message.getField(this, 1)) && e.writeInt64(1, t);
+var t;
+null != (t = r.Message.getField(this, 1)) && e.writeInt64(1, t);
 };
 proto.BINViewUserInfoRequest.prototype.getTargetuserid = function() {
-return s.Message.getFieldWithDefault(this, 1, 0);
+return r.Message.getFieldWithDefault(this, 1, 0);
 };
 proto.BINViewUserInfoRequest.prototype.setTargetuserid = function(e) {
-s.Message.setField(this, 1, e);
+r.Message.setField(this, 1, e);
 };
 proto.BINViewUserInfoRequest.prototype.clearTargetuserid = function() {
-s.Message.setField(this, 1, void 0);
+r.Message.setField(this, 1, void 0);
 };
 proto.BINViewUserInfoRequest.prototype.hasTargetuserid = function() {
-return null != s.Message.getField(this, 1);
+return null != r.Message.getField(this, 1);
 };
 proto.BINViewUserInfoResponse = function(e) {
-s.Message.initialize(this, e, 0, -1, null, null);
+r.Message.initialize(this, e, 0, -1, null, null);
 };
-r.inherits(proto.BINViewUserInfoResponse, s.Message);
-r.DEBUG && !COMPILED && (proto.BINViewUserInfoResponse.displayName = "proto.BINViewUserInfoResponse");
-if (s.Message.GENERATE_TO_OBJECT) {
+s.inherits(proto.BINViewUserInfoResponse, r.Message);
+s.DEBUG && !COMPILED && (proto.BINViewUserInfoResponse.displayName = "proto.BINViewUserInfoResponse");
+if (r.Message.GENERATE_TO_OBJECT) {
 proto.BINViewUserInfoResponse.prototype.toObject = function(e) {
 return proto.BINViewUserInfoResponse.toObject(e, this);
 };
 proto.BINViewUserInfoResponse.toObject = function(e, t) {
-var o, r = {
-responsecode: s.Message.getField(t, 1),
-message: s.Message.getField(t, 2),
+var o, s = {
+responsecode: r.Message.getField(t, 1),
+message: r.Message.getField(t, 2),
 userinfo: (o = t.getUserinfo()) && n.BINUserInfo.toObject(e, o),
-friendstatus: s.Message.getField(t, 4)
+friendstatus: r.Message.getField(t, 4)
 };
-e && (r.$jspbMessageInstance = t);
-return r;
+e && (s.$jspbMessageInstance = t);
+return s;
 };
 }
 proto.BINViewUserInfoResponse.deserializeBinary = function(e) {
-var t = new s.BinaryReader(e), o = new proto.BINViewUserInfoResponse();
+var t = new r.BinaryReader(e), o = new proto.BINViewUserInfoResponse();
 return proto.BINViewUserInfoResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINViewUserInfoResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
@@ -10194,12 +12613,13 @@ e.setUserinfo(o);
 break;
 
 case 4:
-var o = t.readInt32();
+o = t.readInt32();
 e.setFriendstatus(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -10207,88 +12627,89 @@ proto.BINViewUserInfoResponse.serializeBinaryToWriter = function(e, t) {
 e.serializeBinaryToWriter(t);
 };
 proto.BINViewUserInfoResponse.prototype.serializeBinary = function() {
-var e = new s.BinaryWriter();
+var e = new r.BinaryWriter();
 this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINViewUserInfoResponse.prototype.serializeBinaryToWriter = function(e) {
 var t = void 0;
-null != (t = s.Message.getField(this, 1)) && e.writeBool(1, t);
-null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
+null != (t = r.Message.getField(this, 1)) && e.writeBool(1, t);
+null != (t = r.Message.getField(this, 2)) && e.writeString(2, t);
 null != (t = this.getUserinfo()) && e.writeMessage(3, t, n.BINUserInfo.serializeBinaryToWriter);
-null != (t = s.Message.getField(this, 4)) && e.writeInt32(4, t);
+null != (t = r.Message.getField(this, 4)) && e.writeInt32(4, t);
 };
 proto.BINViewUserInfoResponse.prototype.getResponsecode = function() {
-return s.Message.getFieldWithDefault(this, 1, !1);
+return r.Message.getFieldWithDefault(this, 1, !1);
 };
 proto.BINViewUserInfoResponse.prototype.setResponsecode = function(e) {
-s.Message.setField(this, 1, e);
+r.Message.setField(this, 1, e);
 };
 proto.BINViewUserInfoResponse.prototype.clearResponsecode = function() {
-s.Message.setField(this, 1, void 0);
+r.Message.setField(this, 1, void 0);
 };
 proto.BINViewUserInfoResponse.prototype.hasResponsecode = function() {
-return null != s.Message.getField(this, 1);
+return null != r.Message.getField(this, 1);
 };
 proto.BINViewUserInfoResponse.prototype.getMessage = function() {
-return s.Message.getFieldWithDefault(this, 2, "");
+return r.Message.getFieldWithDefault(this, 2, "");
 };
 proto.BINViewUserInfoResponse.prototype.setMessage = function(e) {
-s.Message.setField(this, 2, e);
+r.Message.setField(this, 2, e);
 };
 proto.BINViewUserInfoResponse.prototype.clearMessage = function() {
-s.Message.setField(this, 2, void 0);
+r.Message.setField(this, 2, void 0);
 };
 proto.BINViewUserInfoResponse.prototype.hasMessage = function() {
-return null != s.Message.getField(this, 2);
+return null != r.Message.getField(this, 2);
 };
 proto.BINViewUserInfoResponse.prototype.getUserinfo = function() {
-return s.Message.getWrapperField(this, n.BINUserInfo, 3);
+return r.Message.getWrapperField(this, n.BINUserInfo, 3);
 };
 proto.BINViewUserInfoResponse.prototype.setUserinfo = function(e) {
-s.Message.setWrapperField(this, 3, e);
+r.Message.setWrapperField(this, 3, e);
 };
 proto.BINViewUserInfoResponse.prototype.clearUserinfo = function() {
 this.setUserinfo(void 0);
 };
 proto.BINViewUserInfoResponse.prototype.hasUserinfo = function() {
-return null != s.Message.getField(this, 3);
+return null != r.Message.getField(this, 3);
 };
 proto.BINViewUserInfoResponse.prototype.getFriendstatus = function() {
-return s.Message.getFieldWithDefault(this, 4, 0);
+return r.Message.getFieldWithDefault(this, 4, 0);
 };
 proto.BINViewUserInfoResponse.prototype.setFriendstatus = function(e) {
-s.Message.setField(this, 4, e);
+r.Message.setField(this, 4, e);
 };
 proto.BINViewUserInfoResponse.prototype.clearFriendstatus = function() {
-s.Message.setField(this, 4, void 0);
+r.Message.setField(this, 4, void 0);
 };
 proto.BINViewUserInfoResponse.prototype.hasFriendstatus = function() {
-return null != s.Message.getField(this, 4);
+return null != r.Message.getField(this, 4);
 };
 proto.BINRemoveFriendRequest = function(e) {
-s.Message.initialize(this, e, 0, -1, null, null);
+r.Message.initialize(this, e, 0, -1, null, null);
 };
-r.inherits(proto.BINRemoveFriendRequest, s.Message);
-r.DEBUG && !COMPILED && (proto.BINRemoveFriendRequest.displayName = "proto.BINRemoveFriendRequest");
-if (s.Message.GENERATE_TO_OBJECT) {
+s.inherits(proto.BINRemoveFriendRequest, r.Message);
+s.DEBUG && !COMPILED && (proto.BINRemoveFriendRequest.displayName = "proto.BINRemoveFriendRequest");
+if (r.Message.GENERATE_TO_OBJECT) {
 proto.BINRemoveFriendRequest.prototype.toObject = function(e) {
 return proto.BINRemoveFriendRequest.toObject(e, this);
 };
 proto.BINRemoveFriendRequest.toObject = function(e, t) {
 var o = {
-targetuserid: s.Message.getField(t, 1)
+targetuserid: r.Message.getField(t, 1)
 };
 e && (o.$jspbMessageInstance = t);
 return o;
 };
 }
 proto.BINRemoveFriendRequest.deserializeBinary = function(e) {
-var t = new s.BinaryReader(e), o = new proto.BINRemoveFriendRequest();
+var t = new r.BinaryReader(e), o = new proto.BINRemoveFriendRequest();
 return proto.BINRemoveFriendRequest.deserializeBinaryFromReader(o, t);
 };
 proto.BINRemoveFriendRequest.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
 var o = t.readInt64();
 e.setTargetuserid(o);
@@ -10297,59 +12718,61 @@ break;
 default:
 t.skipField();
 }
+}
 return e;
 };
 proto.BINRemoveFriendRequest.serializeBinaryToWriter = function(e, t) {
 e.serializeBinaryToWriter(t);
 };
 proto.BINRemoveFriendRequest.prototype.serializeBinary = function() {
-var e = new s.BinaryWriter();
+var e = new r.BinaryWriter();
 this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINRemoveFriendRequest.prototype.serializeBinaryToWriter = function(e) {
-var t = void 0;
-null != (t = s.Message.getField(this, 1)) && e.writeInt64(1, t);
+var t;
+null != (t = r.Message.getField(this, 1)) && e.writeInt64(1, t);
 };
 proto.BINRemoveFriendRequest.prototype.getTargetuserid = function() {
-return s.Message.getFieldWithDefault(this, 1, 0);
+return r.Message.getFieldWithDefault(this, 1, 0);
 };
 proto.BINRemoveFriendRequest.prototype.setTargetuserid = function(e) {
-s.Message.setField(this, 1, e);
+r.Message.setField(this, 1, e);
 };
 proto.BINRemoveFriendRequest.prototype.clearTargetuserid = function() {
-s.Message.setField(this, 1, void 0);
+r.Message.setField(this, 1, void 0);
 };
 proto.BINRemoveFriendRequest.prototype.hasTargetuserid = function() {
-return null != s.Message.getField(this, 1);
+return null != r.Message.getField(this, 1);
 };
 proto.BINRemoveFriendResponse = function(e) {
-s.Message.initialize(this, e, 0, -1, null, null);
+r.Message.initialize(this, e, 0, -1, null, null);
 };
-r.inherits(proto.BINRemoveFriendResponse, s.Message);
-r.DEBUG && !COMPILED && (proto.BINRemoveFriendResponse.displayName = "proto.BINRemoveFriendResponse");
-if (s.Message.GENERATE_TO_OBJECT) {
+s.inherits(proto.BINRemoveFriendResponse, r.Message);
+s.DEBUG && !COMPILED && (proto.BINRemoveFriendResponse.displayName = "proto.BINRemoveFriendResponse");
+if (r.Message.GENERATE_TO_OBJECT) {
 proto.BINRemoveFriendResponse.prototype.toObject = function(e) {
 return proto.BINRemoveFriendResponse.toObject(e, this);
 };
 proto.BINRemoveFriendResponse.toObject = function(e, t) {
 var o = {
-responsecode: s.Message.getField(t, 1),
-message: s.Message.getField(t, 2),
-friendstatus: s.Message.getField(t, 3)
+responsecode: r.Message.getField(t, 1),
+message: r.Message.getField(t, 2),
+friendstatus: r.Message.getField(t, 3)
 };
 e && (o.$jspbMessageInstance = t);
 return o;
 };
 }
 proto.BINRemoveFriendResponse.deserializeBinary = function(e) {
-var t = new s.BinaryReader(e), o = new proto.BINRemoveFriendResponse();
+var t = new r.BinaryReader(e), o = new proto.BINRemoveFriendResponse();
 return proto.BINRemoveFriendResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINRemoveFriendResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
@@ -10359,12 +12782,13 @@ e.setMessage(o);
 break;
 
 case 3:
-var o = t.readInt32();
+o = t.readInt32();
 e.setFriendstatus(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -10372,53 +12796,53 @@ proto.BINRemoveFriendResponse.serializeBinaryToWriter = function(e, t) {
 e.serializeBinaryToWriter(t);
 };
 proto.BINRemoveFriendResponse.prototype.serializeBinary = function() {
-var e = new s.BinaryWriter();
+var e = new r.BinaryWriter();
 this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINRemoveFriendResponse.prototype.serializeBinaryToWriter = function(e) {
 var t = void 0;
-null != (t = s.Message.getField(this, 1)) && e.writeBool(1, t);
-null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
-null != (t = s.Message.getField(this, 3)) && e.writeInt32(3, t);
+null != (t = r.Message.getField(this, 1)) && e.writeBool(1, t);
+null != (t = r.Message.getField(this, 2)) && e.writeString(2, t);
+null != (t = r.Message.getField(this, 3)) && e.writeInt32(3, t);
 };
 proto.BINRemoveFriendResponse.prototype.getResponsecode = function() {
-return s.Message.getFieldWithDefault(this, 1, !1);
+return r.Message.getFieldWithDefault(this, 1, !1);
 };
 proto.BINRemoveFriendResponse.prototype.setResponsecode = function(e) {
-s.Message.setField(this, 1, e);
+r.Message.setField(this, 1, e);
 };
 proto.BINRemoveFriendResponse.prototype.clearResponsecode = function() {
-s.Message.setField(this, 1, void 0);
+r.Message.setField(this, 1, void 0);
 };
 proto.BINRemoveFriendResponse.prototype.hasResponsecode = function() {
-return null != s.Message.getField(this, 1);
+return null != r.Message.getField(this, 1);
 };
 proto.BINRemoveFriendResponse.prototype.getMessage = function() {
-return s.Message.getFieldWithDefault(this, 2, "");
+return r.Message.getFieldWithDefault(this, 2, "");
 };
 proto.BINRemoveFriendResponse.prototype.setMessage = function(e) {
-s.Message.setField(this, 2, e);
+r.Message.setField(this, 2, e);
 };
 proto.BINRemoveFriendResponse.prototype.clearMessage = function() {
-s.Message.setField(this, 2, void 0);
+r.Message.setField(this, 2, void 0);
 };
 proto.BINRemoveFriendResponse.prototype.hasMessage = function() {
-return null != s.Message.getField(this, 2);
+return null != r.Message.getField(this, 2);
 };
 proto.BINRemoveFriendResponse.prototype.getFriendstatus = function() {
-return s.Message.getFieldWithDefault(this, 3, 0);
+return r.Message.getFieldWithDefault(this, 3, 0);
 };
 proto.BINRemoveFriendResponse.prototype.setFriendstatus = function(e) {
-s.Message.setField(this, 3, e);
+r.Message.setField(this, 3, e);
 };
 proto.BINRemoveFriendResponse.prototype.clearFriendstatus = function() {
-s.Message.setField(this, 3, void 0);
+r.Message.setField(this, 3, void 0);
 };
 proto.BINRemoveFriendResponse.prototype.hasFriendstatus = function() {
-return null != s.Message.getField(this, 3);
+return null != r.Message.getField(this, 3);
 };
-r.object.extend(o, proto);
+s.object.extend(o, proto);
 cc._RF.pop();
 }, {
 "./user_info_pb.js": "user_info_pb",
@@ -10455,7 +12879,8 @@ var t = new s.BinaryReader(e), o = new proto.BINRedeemGiftCodeRequest();
 return proto.BINRedeemGiftCodeRequest.deserializeBinaryFromReader(o, t);
 };
 proto.BINRedeemGiftCodeRequest.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
 var o = t.readString();
 e.setGiftcode(o);
@@ -10463,6 +12888,7 @@ break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -10475,7 +12901,7 @@ this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINRedeemGiftCodeRequest.prototype.serializeBinaryToWriter = function(e) {
-var t = void 0;
+var t;
 null != (t = s.Message.getField(this, 1)) && e.writeString(1, t);
 };
 proto.BINRedeemGiftCodeRequest.prototype.getGiftcode = function() {
@@ -10516,9 +12942,10 @@ var t = new s.BinaryReader(e), o = new proto.BINRedeemGiftCodeResponse();
 return proto.BINRedeemGiftCodeResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINRedeemGiftCodeResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
@@ -10533,13 +12960,14 @@ e.setSuccess(o);
 break;
 
 case 4:
-var o = new n.BINMapFieldEntry();
+o = new n.BINMapFieldEntry();
 t.readMessage(o, n.BINMapFieldEntry.deserializeBinaryFromReader);
 e.addArgs(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -10556,7 +12984,7 @@ var t = void 0;
 null != (t = s.Message.getField(this, 1)) && e.writeBool(1, t);
 null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
 null != (t = s.Message.getField(this, 3)) && e.writeBool(3, t);
-(t = this.getArgsList()).length > 0 && e.writeRepeatedMessage(4, t, n.BINMapFieldEntry.serializeBinaryToWriter);
+0 < (t = this.getArgsList()).length && e.writeRepeatedMessage(4, t, n.BINMapFieldEntry.serializeBinaryToWriter);
 };
 proto.BINRedeemGiftCodeResponse.prototype.getResponsecode = function() {
 return s.Message.getFieldWithDefault(this, 1, !1);
@@ -10632,9 +13060,10 @@ var t = new s.BinaryReader(e), o = new proto.BINGiftCode();
 return proto.BINGiftCode.deserializeBinaryFromReader(o, t);
 };
 proto.BINGiftCode.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readString();
+var o = t.readString();
 e.setGiftcode(o);
 break;
 
@@ -10654,12 +13083,13 @@ e.setCash(o);
 break;
 
 case 5:
-var o = t.readInt32();
+o = t.readInt32();
 e.setGold(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -10762,19 +13192,21 @@ var t = new s.BinaryReader(e), o = new proto.BINRedeemGiftCodeHistoryRequest();
 return proto.BINRedeemGiftCodeHistoryRequest.deserializeBinaryFromReader(o, t);
 };
 proto.BINRedeemGiftCodeHistoryRequest.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readInt32();
+var o = t.readInt32();
 e.setFirstresult(o);
 break;
 
 case 2:
-var o = t.readInt32();
+o = t.readInt32();
 e.setMaxresult(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -10840,9 +13272,10 @@ var t = new s.BinaryReader(e), o = new proto.BINRedeemGiftCodeHistoryResponse();
 return proto.BINRedeemGiftCodeHistoryResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINRedeemGiftCodeHistoryResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
@@ -10852,13 +13285,14 @@ e.setMessage(o);
 break;
 
 case 3:
-var o = new proto.BINGiftCode();
+o = new proto.BINGiftCode();
 t.readMessage(o, proto.BINGiftCode.deserializeBinaryFromReader);
 e.addGiftcodes(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -10874,7 +13308,7 @@ proto.BINRedeemGiftCodeHistoryResponse.prototype.serializeBinaryToWriter = funct
 var t = void 0;
 null != (t = s.Message.getField(this, 1)) && e.writeBool(1, t);
 null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
-(t = this.getGiftcodesList()).length > 0 && e.writeRepeatedMessage(3, t, proto.BINGiftCode.serializeBinaryToWriter);
+0 < (t = this.getGiftcodesList()).length && e.writeRepeatedMessage(3, t, proto.BINGiftCode.serializeBinaryToWriter);
 };
 proto.BINRedeemGiftCodeHistoryResponse.prototype.getResponsecode = function() {
 return s.Message.getFieldWithDefault(this, 1, !1);
@@ -10982,33 +13416,33 @@ r && Object.defineProperty(e, s, r);
 } else e[s] = t[s];
 };
 $jscomp.array = $jscomp.array || {};
-$jscomp.iteratorFromArray = function(e, t) {
+$jscomp.iteratorFromArray = function(t, o) {
 $jscomp.initSymbolIterator();
-e instanceof String && (e += "");
-var o = 0, s = {
+t instanceof String && (t += "");
+var s = 0, r = {
 next: function() {
-if (o < e.length) {
-var r = o++;
+if (s < t.length) {
+var e = s++;
 return {
-value: t(r, e[r]),
+value: o(e, t[e]),
 done: !1
 };
 }
-s.next = function() {
+r.next = function() {
 return {
 done: !0,
 value: void 0
 };
 };
-return s.next();
+return r.next();
 }
 };
 $jscomp.initSymbol();
 $jscomp.initSymbolIterator();
-s[Symbol.iterator] = function() {
-return s;
+r[Symbol.iterator] = function() {
+return r;
 };
-return s;
+return r;
 };
 $jscomp.findInternal = function(e, t, o) {
 e instanceof String && (e = String(e));
@@ -11077,7 +13511,7 @@ e = Number(e);
 t = Number(t);
 o = Number(null != o ? o : s);
 if (e < t) for (o = Math.min(o, s); t < o; ) t in this ? this[e++] = this[t++] : (delete this[e++], 
-t++); else for (o = Math.min(o, s + t - e), e += o - t; o > t; ) --o in this ? this[--e] = this[o] : delete this[e];
+t++); else for (e += (o = Math.min(o, s + t - e)) - t; t < o; ) --o in this ? this[--e] = this[o] : delete this[e];
 return this;
 };
 $jscomp.array.copyWithin$install = function() {
@@ -11085,9 +13519,9 @@ $jscomp.array.installHelper_("copyWithin", $jscomp.array.copyWithin);
 };
 $jscomp.array.fill = function(e, t, o) {
 var s = this.length || 0;
-0 > t && (t = Math.max(0, s + t));
-(null == o || o > s) && (o = s);
-0 > (o = Number(o)) && (o = Math.max(0, s + o));
+t < 0 && (t = Math.max(0, s + t));
+(null == o || s < o) && (o = s);
+(o = Number(o)) < 0 && (o = Math.max(0, s + o));
 for (t = Number(t || 0); t < o; t++) this[t] = e;
 return this;
 };
@@ -11186,7 +13620,7 @@ $jscomp.Map.maybeGetEntry = function(e, t) {
 var o = $jscomp.Map.getId(t), s = e.data_[o];
 if (s && Object.prototype.hasOwnProperty.call(e.data_, o)) for (var r = 0; r < s.length; r++) {
 var i = s[r];
-if (t !== t && i.key !== i.key || t === i.key) return {
+if (t != t && i.key != i.key || t === i.key) return {
 id: o,
 list: s,
 index: r,
@@ -11278,14 +13712,14 @@ $jscomp.math.log2 = function(e) {
 return Math.log(e) / Math.LN2;
 };
 $jscomp.math.log1p = function(e) {
-if (.25 > (e = Number(e)) && -.25 < e) {
+if ((e = Number(e)) < .25 && -.25 < e) {
 for (var t = e, o = 1, s = e, r = 0, i = 1; r != s; ) s = (r = s) + (i *= -1) * (t *= e) / ++o;
 return s;
 }
 return Math.log(1 + e);
 };
 $jscomp.math.expm1 = function(e) {
-if (.25 > (e = Number(e)) && -.25 < e) {
+if ((e = Number(e)) < .25 && -.25 < e) {
 for (var t = e, o = 1, s = e, r = 0; r != s; ) s = (r = s) + (t *= e / ++o);
 return s;
 }
@@ -11301,7 +13735,7 @@ return 0 === (e = Number(e)) ? e : (Math.exp(e) - Math.exp(-e)) / 2;
 $jscomp.math.tanh = function(e) {
 if (0 === (e = Number(e))) return e;
 var t = (1 - (t = Math.exp(-2 * Math.abs(e)))) / (1 + t);
-return 0 > e ? -t : t;
+return e < 0 ? -t : t;
 };
 $jscomp.math.acosh = function(e) {
 e = Number(e);
@@ -11310,7 +13744,7 @@ return Math.log(e + Math.sqrt(e * e - 1));
 $jscomp.math.asinh = function(e) {
 if (0 === (e = Number(e))) return e;
 var t = Math.log(Math.abs(e) + Math.sqrt(e * e + 1));
-return 0 > e ? -t : t;
+return e < 0 ? -t : t;
 };
 $jscomp.math.atanh = function(e) {
 e = Number(e);
@@ -11321,7 +13755,7 @@ e = Number(e);
 t = Number(t);
 var s, r, i, n = Math.max(Math.abs(e), Math.abs(t));
 for (s = 2; s < arguments.length; s++) n = Math.max(n, Math.abs(arguments[s]));
-if (1e100 < n || 1e-100 > n) {
+if (1e100 < n || n < 1e-100) {
 i = (e /= n) * e + (t /= n) * t;
 for (s = 2; s < arguments.length; s++) i += (r = Number(arguments[s]) / n) * r;
 return Math.sqrt(i) * n;
@@ -11334,13 +13768,13 @@ $jscomp.math.trunc = function(e) {
 e = Number(e);
 if (isNaN(e) || Infinity === e || -Infinity === e || 0 === e) return e;
 var t = Math.floor(Math.abs(e));
-return 0 > e ? -t : t;
+return e < 0 ? -t : t;
 };
 $jscomp.math.cbrt = function(e) {
 if (0 === e) return e;
 e = Number(e);
 var t = Math.pow(Math.abs(e), 1 / 3);
-return 0 > e ? -t : t;
+return e < 0 ? -t : t;
 };
 $jscomp.number = $jscomp.number || {};
 $jscomp.number.isFinite = function(e) {
@@ -11367,7 +13801,7 @@ if (s) for (var r in s) Object.prototype.hasOwnProperty.call(s, r) && (e[r] = s[
 return e;
 };
 $jscomp.object.is = function(e, t) {
-return e === t ? 0 !== e || 1 / e == 1 / t : e !== e && t !== t;
+return e === t ? 0 !== e || 1 / e == 1 / t : e != e && t != t;
 };
 $jscomp.ASSUME_NO_NATIVE_SET = !1;
 $jscomp.Set$isConformant = function() {
@@ -11418,10 +13852,10 @@ return this.map_.entries();
 $jscomp.Set.prototype.values = function() {
 return this.map_.values();
 };
-$jscomp.Set.prototype.forEach = function(e, t) {
-var o = this;
-this.map_.forEach(function(s) {
-return e.call(t, s, s, o);
+$jscomp.Set.prototype.forEach = function(t, o) {
+var s = this;
+this.map_.forEach(function(e) {
+return t.call(o, e, e, s);
 });
 };
 $jscomp.Set$install = function() {
@@ -11439,15 +13873,15 @@ return e + "";
 $jscomp.string.fromCodePoint = function(e) {
 for (var t = "", o = 0; o < arguments.length; o++) {
 var s = Number(arguments[o]);
-if (0 > s || 1114111 < s || s !== Math.floor(s)) throw new RangeError("invalid_code_point " + s);
-65535 >= s ? t += String.fromCharCode(s) : (s -= 65536, t += String.fromCharCode(s >>> 10 & 1023 | 55296), 
+if (s < 0 || 1114111 < s || s !== Math.floor(s)) throw new RangeError("invalid_code_point " + s);
+s <= 65535 ? t += String.fromCharCode(s) : (s -= 65536, t += String.fromCharCode(s >>> 10 & 1023 | 55296), 
 t += String.fromCharCode(1023 & s | 56320));
 }
 return t;
 };
 $jscomp.string.repeat = function(e) {
 var t = $jscomp.checkStringArgs(this, null, "repeat");
-if (0 > e || 1342177279 < e) throw new RangeError("Invalid count value");
+if (e < 0 || 1342177279 < e) throw new RangeError("Invalid count value");
 e |= 0;
 for (var o = ""; e; ) (1 & e && (o += t), e >>>= 1) && (t += t);
 return o;
@@ -11460,7 +13894,7 @@ var t = $jscomp.checkStringArgs(this, null, "codePointAt"), o = t.length;
 if (0 <= (e = Number(e) || 0) && e < o) {
 e |= 0;
 var s = t.charCodeAt(e);
-return 55296 > s || 56319 < s || e + 1 === o ? s : 56320 > (e = t.charCodeAt(e + 1)) || 57343 < e ? s : 1024 * (s - 55296) + e + 9216;
+return s < 55296 || 56319 < s || e + 1 === o ? s : (e = t.charCodeAt(e + 1)) < 56320 || 57343 < e ? s : 1024 * (s - 55296) + e + 9216;
 }
 };
 $jscomp.string.codePointAt$install = function() {
@@ -11476,7 +13910,7 @@ $jscomp.string.startsWith = function(e, t) {
 var o = $jscomp.checkStringArgs(this, e, "startsWith");
 e += "";
 for (var s = o.length, r = e.length, i = Math.max(0, Math.min(0 | t, o.length)), n = 0; n < r && i < s; ) if (o[i++] != e[n++]) return !1;
-return n >= r;
+return r <= n;
 };
 $jscomp.string.startsWith$install = function() {
 String.prototype.startsWith || (String.prototype.startsWith = $jscomp.string.startsWith);
@@ -11486,12 +13920,12 @@ var o = $jscomp.checkStringArgs(this, e, "endsWith");
 e += "";
 void 0 === t && (t = o.length);
 for (var s = Math.max(0, Math.min(0 | t, o.length)), r = e.length; 0 < r && 0 < s; ) if (o[--s] != e[--r]) return !1;
-return 0 >= r;
+return r <= 0;
 };
 $jscomp.string.endsWith$install = function() {
 String.prototype.endsWith || (String.prototype.endsWith = $jscomp.string.endsWith);
 };
-var COMPILED = !0, goog = goog || {};
+var COMPILED = !0, goog = goog || {}, JDa, KDa;
 goog.global = $jscomp.getGlobal("undefined" == typeof window ? module.exports : window);
 goog.isDef = function(e) {
 return void 0 !== e;
@@ -11708,29 +14142,28 @@ return !1;
 "complete" == e.readyState && goog.lastNonModuleScriptIndex_ == t && goog.loadQueuedModules_();
 return !0;
 }, goog.writeScripts_ = function(e) {
-function t(e) {
-if (!(e in r.written || e in r.visited)) {
-r.visited[e] = !0;
-if (e in r.requires) for (var i in r.requires[e]) if (!goog.isProvided_(i)) {
-if (!(i in r.nameToPath)) throw Error("Undefined nameToPath for " + i);
-t(r.nameToPath[i]);
+var s = [], r = {}, i = goog.dependencies_;
+(function e(t) {
+if (!(t in i.written || t in i.visited)) {
+i.visited[t] = !0;
+if (t in i.requires) for (var o in i.requires[t]) if (!goog.isProvided_(o)) {
+if (!(o in i.nameToPath)) throw Error("Undefined nameToPath for " + o);
+e(i.nameToPath[o]);
 }
-e in s || (s[e] = !0, o.push(e));
+t in r || (r[t] = !0, s.push(t));
 }
+})(e);
+for (e = 0; e < s.length; e++) {
+var t = s[e];
+goog.dependencies_.written[t] = !0;
 }
-var o = [], s = {}, r = goog.dependencies_;
-t(e);
-for (e = 0; e < o.length; e++) {
-var i = o[e];
-goog.dependencies_.written[i] = !0;
-}
-var n = goog.moduleLoaderState_;
+var o = goog.moduleLoaderState_;
 goog.moduleLoaderState_ = null;
-for (e = 0; e < o.length; e++) {
-if (!(i = o[e])) throw goog.moduleLoaderState_ = n, Error("Undefined script input");
-r.pathIsModule[i] ? goog.importModule_(goog.basePath + i) : goog.importScript_(goog.basePath + i);
+for (e = 0; e < s.length; e++) {
+if (!(t = s[e])) throw goog.moduleLoaderState_ = o, Error("Undefined script input");
+i.pathIsModule[t] ? goog.importModule_(goog.basePath + t) : goog.importScript_(goog.basePath + t);
 }
-goog.moduleLoaderState_ = n;
+goog.moduleLoaderState_ = o;
 }, goog.getPathFromDeps_ = function(e) {
 return e in goog.dependencies_.nameToPath ? goog.dependencies_.nameToPath[e] : null;
 }, goog.findBasePath_(), goog.global.CLOSURE_NO_DEPS || goog.importScript_(goog.basePath + "deps.js"));
@@ -11829,30 +14262,30 @@ return e;
 goog.bindNative_ = function(e, t, o) {
 return e.call.apply(e.bind, arguments);
 };
-goog.bindJs_ = function(e, t, o) {
-if (!e) throw Error();
+goog.bindJs_ = function(t, o, e) {
+if (!t) throw Error();
 if (2 < arguments.length) {
 var s = Array.prototype.slice.call(arguments, 2);
 return function() {
-var o = Array.prototype.slice.call(arguments);
-Array.prototype.unshift.apply(o, s);
-return e.apply(t, o);
+var e = Array.prototype.slice.call(arguments);
+Array.prototype.unshift.apply(e, s);
+return t.apply(o, e);
 };
 }
 return function() {
-return e.apply(t, arguments);
+return t.apply(o, arguments);
 };
 };
 goog.bind = function(e, t, o) {
 Function.prototype.bind && -1 != Function.prototype.bind.toString().indexOf("native code") ? goog.bind = goog.bindNative_ : goog.bind = goog.bindJs_;
 return goog.bind.apply(null, arguments);
 };
-goog.partial = function(e, t) {
+goog.partial = function(t, e) {
 var o = Array.prototype.slice.call(arguments, 1);
 return function() {
-var t = o.slice();
-t.push.apply(t, arguments);
-return e.apply(this, t);
+var e = o.slice();
+e.push.apply(e, arguments);
+return t.apply(this, e);
 };
 };
 goog.mixin = function(e, t) {
@@ -11883,25 +14316,26 @@ t.body.removeChild(o);
 };
 goog.evalWorksForGlobals_ = null;
 goog.getCssName = function(e, t) {
-var o = function(e) {
+var s = function(e) {
 return goog.cssNameMapping_[e] || e;
-}, s = function(e) {
+}, o = function(e) {
 e = e.split("-");
-for (var t = [], s = 0; s < e.length; s++) t.push(o(e[s]));
+for (var t = [], o = 0; o < e.length; o++) t.push(s(e[o]));
 return t.join("-");
-}, s = goog.cssNameMapping_ ? "BY_WHOLE" == goog.cssNameMappingStyle_ ? o : s : function(e) {
+};
+o = goog.cssNameMapping_ ? "BY_WHOLE" == goog.cssNameMappingStyle_ ? s : o : function(e) {
 return e;
 };
-return t ? e + "-" + s(t) : s(e);
+return t ? e + "-" + o(t) : o(e);
 };
 goog.setCssNameMapping = function(e, t) {
 goog.cssNameMapping_ = e;
 goog.cssNameMappingStyle_ = t;
 };
 !COMPILED && goog.global.CLOSURE_CSS_NAME_MAPPING && (goog.cssNameMapping_ = goog.global.CLOSURE_CSS_NAME_MAPPING);
-goog.getMsg = function(e, t) {
-t && (e = e.replace(/\{\$([^}]+)}/g, function(e, o) {
-return null != t && o in t ? t[o] : e;
+goog.getMsg = function(e, o) {
+o && (e = e.replace(/\{\$([^}]+)}/g, function(e, t) {
+return null != o && t in o ? o[t] : e;
 }));
 return e;
 };
@@ -11914,15 +14348,14 @@ goog.exportPath_(e, t, o);
 goog.exportProperty = function(e, t, o) {
 e[t] = o;
 };
-goog.inherits = function(e, t) {
-function o() {}
-o.prototype = t.prototype;
-e.superClass_ = t.prototype;
-e.prototype = new o();
-e.prototype.constructor = e;
-e.base = function(e, o, s) {
-for (var r = Array(arguments.length - 2), i = 2; i < arguments.length; i++) r[i - 2] = arguments[i];
-return t.prototype[o].apply(e, r);
+goog.inherits = function(e, i) {
+function t() {}
+t.prototype = i.prototype;
+e.superClass_ = i.prototype;
+e.prototype = new t();
+(e.prototype.constructor = e).base = function(e, t, o) {
+for (var s = Array(arguments.length - 2), r = 2; r < arguments.length; r++) s[r - 2] = arguments[r];
+return i.prototype[t].apply(e, s);
 };
 };
 goog.base = function(e, t, o) {
@@ -11934,7 +14367,8 @@ return s.superClass_.constructor.apply(e, r);
 }
 r = Array(arguments.length - 2);
 for (i = 2; i < arguments.length; i++) r[i - 2] = arguments[i];
-for (var i = !1, n = e.constructor; n; n = n.superClass_ && n.superClass_.constructor) if (n.prototype[t] === s) i = !0; else if (i) return n.prototype[t].apply(e, r);
+i = !1;
+for (var n = e.constructor; n; n = n.superClass_ && n.superClass_.constructor) if (n.prototype[t] === s) i = !0; else if (i) return n.prototype[t].apply(e, r);
 if (e[t] === s) return e.constructor.prototype[t].apply(e, r);
 throw Error("goog.base called from a method of one name to a method of a different name");
 };
@@ -11956,17 +14390,17 @@ null != s && (s instanceof Function ? s(o) : goog.defineClass.applyProperties_(o
 return o;
 };
 goog.defineClass.SEAL_CLASS_INSTANCES = goog.DEBUG;
-goog.defineClass.createSealingConstructor_ = function(e, t) {
+goog.defineClass.createSealingConstructor_ = function(o, e) {
 if (goog.defineClass.SEAL_CLASS_INSTANCES && Object.seal instanceof Function) {
-if (t && t.prototype && t.prototype[goog.UNSEALABLE_CONSTRUCTOR_PROPERTY_]) return e;
-return function t() {
-var o = e.apply(this, arguments) || this;
-o[goog.UID_PROPERTY_] = o[goog.UID_PROPERTY_];
-this.constructor === t && Object.seal(o);
-return o;
+if (e && e.prototype && e.prototype[goog.UNSEALABLE_CONSTRUCTOR_PROPERTY_]) return o;
+return function e() {
+var t = o.apply(this, arguments) || this;
+t[goog.UID_PROPERTY_] = t[goog.UID_PROPERTY_];
+this.constructor === e && Object.seal(t);
+return t;
 };
 }
-return e;
+return o;
 };
 goog.defineClass.OBJECT_PROTOTYPE_FIELDS_ = "constructor hasOwnProperty isPrototypeOf propertyIsEnumerable toLocaleString toString valueOf".split(" ");
 goog.defineClass.applyProperties_ = function(e, t) {
@@ -12060,7 +14494,7 @@ goog.string.isSpace = function(e) {
 return " " == e;
 };
 goog.string.isUnicodeChar = function(e) {
-return 1 == e.length && " " <= e && "~" >= e || "" <= e && "�" >= e;
+return 1 == e.length && " " <= e && e <= "~" || "" <= e && e <= "�";
 };
 goog.string.stripNewlines = function(e) {
 return e.replace(/(\r\n|\r|\n)+/g, " ");
@@ -12148,22 +14582,22 @@ goog.string.unescapeEntitiesWithDocument = function(e, t) {
 return goog.string.contains(e, "&") ? goog.string.unescapeEntitiesUsingDom_(e, t) : e;
 };
 goog.string.unescapeEntitiesUsingDom_ = function(e, t) {
-var o, s = {
+var r, i = {
 "&amp;": "&",
 "&lt;": "<",
 "&gt;": ">",
 "&quot;": '"'
 };
-o = t ? t.createElement("div") : goog.global.document.createElement("div");
+r = t ? t.createElement("div") : goog.global.document.createElement("div");
 return e.replace(goog.string.HTML_ENTITY_PATTERN_, function(e, t) {
-var r = s[e];
-if (r) return r;
+var o = i[e];
+if (o) return o;
 if ("#" == t.charAt(0)) {
-var i = Number("0" + t.substr(1));
-isNaN(i) || (r = String.fromCharCode(i));
+var s = Number("0" + t.substr(1));
+isNaN(s) || (o = String.fromCharCode(s));
 }
-r || (o.innerHTML = e + " ", r = o.firstChild.nodeValue.slice(0, -1));
-return s[e] = r;
+o || (r.innerHTML = e + " ", o = r.firstChild.nodeValue.slice(0, -1));
+return i[e] = o;
 });
 };
 goog.string.unescapePureXmlEntities_ = function(e) {
@@ -12213,7 +14647,7 @@ return e;
 goog.string.truncateMiddle = function(e, t, o, s) {
 o && (e = goog.string.unescapeEntities(e));
 if (s && e.length > t) {
-s > t && (s = t);
+t < s && (s = t);
 var r = e.length - s;
 e = e.substring(0, t - s) + "..." + e.substring(r);
 } else e.length > t && (s = Math.floor(t / 2), r = e.length - s, e = e.substring(0, s + t % 2) + "..." + e.substring(r));
@@ -12239,7 +14673,7 @@ goog.string.quote = function(e) {
 e = String(e);
 for (var t = [ '"' ], o = 0; o < e.length; o++) {
 var s = e.charAt(o), r = s.charCodeAt(0);
-t[o + 1] = goog.string.specialEscapeChars_[s] || (31 < r && 127 > r ? s : goog.string.escapeChar(s));
+t[o + 1] = goog.string.specialEscapeChars_[s] || (31 < r && r < 127 ? s : goog.string.escapeChar(s));
 }
 t.push('"');
 return t.join("");
@@ -12252,8 +14686,8 @@ goog.string.escapeChar = function(e) {
 if (e in goog.string.jsEscapeCache_) return goog.string.jsEscapeCache_[e];
 if (e in goog.string.specialEscapeChars_) return goog.string.jsEscapeCache_[e] = goog.string.specialEscapeChars_[e];
 var t, o = e.charCodeAt(0);
-if (31 < o && 127 > o) t = e; else {
-256 > o ? (t = "\\x", 16 > o || 256 < o) && (t += "0") : (t = "\\u", 4096 > o && (t += "0"));
+if (31 < o && o < 127) t = e; else {
+o < 256 ? (t = "\\x", o < 16 || 256 < o) && (t += "0") : (t = "\\u", o < 4096 && (t += "0"));
 t += o.toString(16).toUpperCase();
 }
 return goog.string.jsEscapeCache_[e] = t;
@@ -12303,17 +14737,19 @@ return Math.floor(2147483648 * Math.random()).toString(36) + Math.abs(Math.floor
 };
 goog.string.compareVersions = function(e, t) {
 for (var o = 0, s = goog.string.trim(String(e)).split("."), r = goog.string.trim(String(t)).split("."), i = Math.max(s.length, r.length), n = 0; 0 == o && n < i; n++) {
-var a = s[n] || "", p = r[n] || "", l = RegExp("(\\d*)(\\D*)", "g"), u = RegExp("(\\d*)(\\D*)", "g");
+var a = s[n] || "", p = r[n] || "", l = RegExp("(\\d*)(\\D*)", "g"), g = RegExp("(\\d*)(\\D*)", "g");
 do {
-var g = l.exec(a) || [ "", "", "" ], d = u.exec(p) || [ "", "", "" ];
-if (0 == g[0].length && 0 == d[0].length) break;
-var o = 0 == g[1].length ? 0 : parseInt(g[1], 10), c = 0 == d[1].length ? 0 : parseInt(d[1], 10), o = goog.string.compareElements_(o, c) || goog.string.compareElements_(0 == g[2].length, 0 == d[2].length) || goog.string.compareElements_(g[2], d[2]);
+var u = l.exec(a) || [ "", "", "" ], c = g.exec(p) || [ "", "", "" ];
+if (0 == u[0].length && 0 == c[0].length) break;
+o = 0 == u[1].length ? 0 : parseInt(u[1], 10);
+var d = 0 == c[1].length ? 0 : parseInt(c[1], 10);
+o = goog.string.compareElements_(o, d) || goog.string.compareElements_(0 == u[2].length, 0 == c[2].length) || goog.string.compareElements_(u[2], c[2]);
 } while (0 == o);
 }
 return o;
 };
 goog.string.compareElements_ = function(e, t) {
-return e < t ? -1 : e > t ? 1 : 0;
+return e < t ? -1 : t < e ? 1 : 0;
 };
 goog.string.hashCode = function(e) {
 for (var t = 0, o = 0; o < e.length; ++o) t = 31 * t + e.charCodeAt(o) >>> 0;
@@ -12387,8 +14823,11 @@ throw e;
 };
 goog.asserts.errorHandler_ = goog.asserts.DEFAULT_ERROR_HANDLER;
 goog.asserts.doAssertFailure_ = function(e, t, o, s) {
-r = "Assertion failed";
-if (o) var r = r + ": " + o, i = s; else e && (r += ": " + e, i = t);
+var r = "Assertion failed";
+if (o) {
+r = r + ": " + o;
+var i = s;
+} else e && (r += ": " + e, i = t);
 e = new goog.asserts.AssertionError("" + r, i || []);
 goog.asserts.errorHandler_(e);
 };
@@ -12451,7 +14890,7 @@ goog.array.indexOf = goog.NATIVE_ARRAY_PROTOTYPES && (goog.array.ASSUME_NATIVE_F
 goog.asserts.assert(null != e.length);
 return Array.prototype.indexOf.call(e, t, o);
 } : function(e, t, o) {
-o = null == o ? 0 : 0 > o ? Math.max(0, e.length + o) : o;
+o = null == o ? 0 : o < 0 ? Math.max(0, e.length + o) : o;
 if (goog.isString(e)) return goog.isString(t) && 1 == t.length ? e.indexOf(t, o) : -1;
 for (;o < e.length; o++) if (o in e && e[o] === t) return o;
 return -1;
@@ -12460,7 +14899,7 @@ goog.array.lastIndexOf = goog.NATIVE_ARRAY_PROTOTYPES && (goog.array.ASSUME_NATI
 goog.asserts.assert(null != e.length);
 return Array.prototype.lastIndexOf.call(e, t, null == o ? e.length - 1 : o);
 } : function(e, t, o) {
-0 > (o = null == o ? e.length - 1 : o) && (o = Math.max(0, e.length + o));
+(o = null == o ? e.length - 1 : o) < 0 && (o = Math.max(0, e.length + o));
 if (goog.isString(e)) return goog.isString(t) && 1 == t.length ? e.lastIndexOf(t, o) : -1;
 for (;0 <= o; o--) if (o in e && e[o] === t) return o;
 return -1;
@@ -12472,7 +14911,8 @@ Array.prototype.forEach.call(e, t, o);
 for (var s = e.length, r = goog.isString(e) ? e.split("") : e, i = 0; i < s; i++) i in r && t.call(o, r[i], i, e);
 };
 goog.array.forEachRight = function(e, t, o) {
-for (var s = e.length, r = goog.isString(e) ? e.split("") : e, s = s - 1; 0 <= s; --s) s in r && t.call(o, r[s], s, e);
+var s = e.length, r = goog.isString(e) ? e.split("") : e;
+for (s = s - 1; 0 <= s; --s) s in r && t.call(o, r[s], s, e);
 };
 goog.array.filter = goog.NATIVE_ARRAY_PROTOTYPES && (goog.array.ASSUME_NATIVE_FUNCTIONS || Array.prototype.filter) ? function(e, t, o) {
 goog.asserts.assert(null != e.length);
@@ -12495,24 +14935,24 @@ goog.array.reduce = goog.NATIVE_ARRAY_PROTOTYPES && (goog.array.ASSUME_NATIVE_FU
 goog.asserts.assert(null != e.length);
 s && (t = goog.bind(t, s));
 return Array.prototype.reduce.call(e, t, o);
-} : function(e, t, o, s) {
-var r = o;
-goog.array.forEach(e, function(o, i) {
-r = t.call(s, r, o, i, e);
+} : function(o, s, e, r) {
+var i = e;
+goog.array.forEach(o, function(e, t) {
+i = s.call(r, i, e, t, o);
 });
-return r;
+return i;
 };
 goog.array.reduceRight = goog.NATIVE_ARRAY_PROTOTYPES && (goog.array.ASSUME_NATIVE_FUNCTIONS || Array.prototype.reduceRight) ? function(e, t, o, s) {
 goog.asserts.assert(null != e.length);
 goog.asserts.assert(null != t);
 s && (t = goog.bind(t, s));
 return Array.prototype.reduceRight.call(e, t, o);
-} : function(e, t, o, s) {
-var r = o;
-goog.array.forEachRight(e, function(o, i) {
-r = t.call(s, r, o, i, e);
+} : function(o, s, e, r) {
+var i = e;
+goog.array.forEachRight(o, function(e, t) {
+i = s.call(r, i, e, t, o);
 });
-return r;
+return i;
 };
 goog.array.some = goog.NATIVE_ARRAY_PROTOTYPES && (goog.array.ASSUME_NATIVE_FUNCTIONS || Array.prototype.some) ? function(e, t, o) {
 goog.asserts.assert(null != e.length);
@@ -12528,25 +14968,26 @@ return Array.prototype.every.call(e, t, o);
 for (var s = e.length, r = goog.isString(e) ? e.split("") : e, i = 0; i < s; i++) if (i in r && !t.call(o, r[i], i, e)) return !1;
 return !0;
 };
-goog.array.count = function(e, t, o) {
-var s = 0;
-goog.array.forEach(e, function(e, r, i) {
-t.call(o, e, r, i) && ++s;
-}, o);
-return s;
+goog.array.count = function(e, s, r) {
+var i = 0;
+goog.array.forEach(e, function(e, t, o) {
+s.call(r, e, t, o) && ++i;
+}, r);
+return i;
 };
 goog.array.find = function(e, t, o) {
-return 0 > (t = goog.array.findIndex(e, t, o)) ? null : goog.isString(e) ? e.charAt(t) : e[t];
+return (t = goog.array.findIndex(e, t, o)) < 0 ? null : goog.isString(e) ? e.charAt(t) : e[t];
 };
 goog.array.findIndex = function(e, t, o) {
 for (var s = e.length, r = goog.isString(e) ? e.split("") : e, i = 0; i < s; i++) if (i in r && t.call(o, r[i], i, e)) return i;
 return -1;
 };
 goog.array.findRight = function(e, t, o) {
-return 0 > (t = goog.array.findIndexRight(e, t, o)) ? null : goog.isString(e) ? e.charAt(t) : e[t];
+return (t = goog.array.findIndexRight(e, t, o)) < 0 ? null : goog.isString(e) ? e.charAt(t) : e[t];
 };
 goog.array.findIndexRight = function(e, t, o) {
-for (var s = e.length, r = goog.isString(e) ? e.split("") : e, s = s - 1; 0 <= s; s--) if (s in r && t.call(o, r[s], s, e)) return s;
+var s = e.length, r = goog.isString(e) ? e.split("") : e;
+for (s = s - 1; 0 <= s; s--) if (s in r && t.call(o, r[s], s, e)) return s;
 return -1;
 };
 goog.array.contains = function(e, t) {
@@ -12570,7 +15011,7 @@ goog.partial(goog.array.splice, e, o, 0).apply(null, t);
 };
 goog.array.insertBefore = function(e, t, o) {
 var s;
-2 == arguments.length || 0 > (s = goog.array.indexOf(e, o)) ? e.push(t) : goog.array.insertAt(e, t, s);
+2 == arguments.length || (s = goog.array.indexOf(e, o)) < 0 ? e.push(t) : goog.array.insertAt(e, t, s);
 };
 goog.array.remove = function(e, t) {
 var o, s = goog.array.indexOf(e, t);
@@ -12584,12 +15025,12 @@ return 1 == Array.prototype.splice.call(e, t, 1).length;
 goog.array.removeIf = function(e, t, o) {
 return 0 <= (t = goog.array.findIndex(e, t, o)) && (goog.array.removeAt(e, t), !0);
 };
-goog.array.removeAllIf = function(e, t, o) {
-var s = 0;
-goog.array.forEachRight(e, function(r, i) {
-t.call(o, r, i, e) && goog.array.removeAt(e, i) && s++;
+goog.array.removeAllIf = function(o, s, r) {
+var i = 0;
+goog.array.forEachRight(o, function(e, t) {
+s.call(r, e, t, o) && goog.array.removeAt(o, t) && i++;
 });
-return s;
+return i;
 };
 goog.array.concat = function(e) {
 return Array.prototype.concat.apply(Array.prototype, arguments);
@@ -12622,15 +15063,16 @@ return Array.prototype.splice.apply(e, goog.array.slice(arguments, 1));
 };
 goog.array.slice = function(e, t, o) {
 goog.asserts.assert(null != e.length);
-return 2 >= arguments.length ? Array.prototype.slice.call(e, t) : Array.prototype.slice.call(e, t, o);
+return arguments.length <= 2 ? Array.prototype.slice.call(e, t) : Array.prototype.slice.call(e, t, o);
 };
 goog.array.removeDuplicates = function(e, t, o) {
 t = t || e;
-s = function(e) {
+var s = function(e) {
 return goog.isObject(e) ? "o" + goog.getUid(e) : ("undefined" == typeof e ? "undefined" : _typeof(e)).charAt(0) + e;
 };
 o = o || s;
-for (var s = {}, r = 0, i = 0; i < e.length; ) {
+s = {};
+for (var r = 0, i = 0; i < e.length; ) {
 var n = e[i++], a = o(n);
 Object.prototype.hasOwnProperty.call(s, a) || (s[a] = !0, t[r++] = n);
 }
@@ -12663,10 +15105,10 @@ return s(e.value, t.value) || e.index - t.index;
 });
 for (o = 0; o < e.length; o++) e[o] = e[o].value;
 };
-goog.array.sortByKey = function(e, t, o) {
-var s = o || goog.array.defaultCompare;
-goog.array.sort(e, function(e, o) {
-return s(t(e), t(o));
+goog.array.sortByKey = function(e, o, t) {
+var s = t || goog.array.defaultCompare;
+goog.array.sort(e, function(e, t) {
+return s(o(e), o(t));
 });
 };
 goog.array.sortObjectsByKey = function(e, t, o) {
@@ -12698,7 +15140,7 @@ if (0 != i) return i;
 return goog.array.defaultCompare(e.length, t.length);
 };
 goog.array.defaultCompare = function(e, t) {
-return e > t ? 1 : e < t ? -1 : 0;
+return t < e ? 1 : e < t ? -1 : 0;
 };
 goog.array.inverseDefaultCompare = function(e, t) {
 return -goog.array.defaultCompare(e, t);
@@ -12707,7 +15149,7 @@ goog.array.defaultCompareEquality = function(e, t) {
 return e === t;
 };
 goog.array.binaryInsert = function(e, t, o) {
-return 0 > (o = goog.array.binarySearch(e, t, o)) && (goog.array.insertAt(e, t, -(o + 1)), 
+return (o = goog.array.binarySearch(e, t, o)) < 0 && (goog.array.insertAt(e, t, -(o + 1)), 
 !0);
 };
 goog.array.binaryRemove = function(e, t, o) {
@@ -12720,19 +15162,18 @@ goog.isDef(n) && (s[n] || (s[n] = [])).push(i);
 }
 return s;
 };
-goog.array.toObject = function(e, t, o) {
-var s = {};
-goog.array.forEach(e, function(r, i) {
-s[t.call(o, r, i, e)] = r;
+goog.array.toObject = function(o, s, r) {
+var i = {};
+goog.array.forEach(o, function(e, t) {
+i[s.call(r, e, t, o)] = e;
 });
-return s;
+return i;
 };
 goog.array.range = function(e, t, o) {
 var s = [], r = 0, i = e;
-o = o || 1;
 void 0 !== t && (r = e, i = t);
-if (0 > o * (i - r)) return [];
-if (0 < o) for (e = r; e < i; e += o) s.push(e); else for (e = r; e > i; e += o) s.push(e);
+if ((o = o || 1) * (i - r) < 0) return [];
+if (0 < o) for (e = r; e < i; e += o) s.push(e); else for (e = r; i < e; e += o) s.push(e);
 return s;
 };
 goog.array.repeat = function(e, t) {
@@ -12742,13 +15183,14 @@ return o;
 goog.array.flatten = function(e) {
 for (var t = [], o = 0; o < arguments.length; o++) {
 var s = arguments[o];
-if (goog.isArray(s)) for (var r = 0; r < s.length; r += 8192) for (var i = goog.array.slice(s, r, r + 8192), i = goog.array.flatten.apply(null, i), n = 0; n < i.length; n++) t.push(i[n]); else t.push(s);
+if (goog.isArray(s)) for (var r = 0; r < s.length; r += 8192) for (var i = goog.array.slice(s, r, r + 8192), n = (i = goog.array.flatten.apply(null, i), 
+0); n < i.length; n++) t.push(i[n]); else t.push(s);
 }
 return t;
 };
 goog.array.rotate = function(e, t) {
 goog.asserts.assert(null != e.length);
-e.length && (0 < (t %= e.length) ? Array.prototype.unshift.apply(e, e.splice(-t, t)) : 0 > t && Array.prototype.push.apply(e, e.splice(0, -t)));
+e.length && (0 < (t %= e.length) ? Array.prototype.unshift.apply(e, e.splice(-t, t)) : t < 0 && Array.prototype.push.apply(e, e.splice(0, -t)));
 return e;
 };
 goog.array.moveItem = function(e, t, o) {
@@ -12759,7 +15201,7 @@ Array.prototype.splice.call(e, o, 0, t[0]);
 };
 goog.array.zip = function(e) {
 if (!arguments.length) return [];
-for (var t = [], o = arguments[0].length, s = 1; s < arguments.length; s++) arguments[s].length < o && (o = arguments[s].length);
+for (var t = [], o = e.length, s = 1; s < arguments.length; s++) arguments[s].length < o && (o = arguments[s].length);
 for (s = 0; s < o; s++) {
 for (var r = [], i = 0; i < arguments.length; i++) r.push(arguments[i][s]);
 t.push(r);
@@ -12773,10 +15215,10 @@ e[s] = e[r];
 e[r] = i;
 }
 };
-goog.array.copyByIndex = function(e, t) {
+goog.array.copyByIndex = function(t, e) {
 var o = [];
-goog.array.forEach(t, function(t) {
-o.push(e[t]);
+goog.array.forEach(e, function(e) {
+o.push(t[e]);
 });
 return o;
 };
@@ -12789,8 +15231,11 @@ t[o++] = r;
 return t;
 };
 goog.crypt.byteArrayToString = function(e) {
-if (8192 >= e.length) return String.fromCharCode.apply(null, e);
-for (var t = "", o = 0; o < e.length; o += 8192) var s = goog.array.slice(e, o, o + 8192), t = t + String.fromCharCode.apply(null, s);
+if (e.length <= 8192) return String.fromCharCode.apply(null, e);
+for (var t = "", o = 0; o < e.length; o += 8192) {
+var s = goog.array.slice(e, o, o + 8192);
+t = t + String.fromCharCode.apply(null, s);
+}
 return t;
 };
 goog.crypt.byteArrayToHex = function(e) {
@@ -12806,21 +15251,24 @@ return t;
 goog.crypt.stringToUtf8ByteArray = function(e) {
 for (var t = [], o = 0, s = 0; s < e.length; s++) {
 var r = e.charCodeAt(s);
-128 > r ? t[o++] = r : (2048 > r ? t[o++] = r >> 6 | 192 : (55296 == (64512 & r) && s + 1 < e.length && 56320 == (64512 & e.charCodeAt(s + 1)) ? (r = 65536 + ((1023 & r) << 10) + (1023 & e.charCodeAt(++s)), 
+r < 128 ? t[o++] = r : (r < 2048 ? t[o++] = r >> 6 | 192 : (55296 == (64512 & r) && s + 1 < e.length && 56320 == (64512 & e.charCodeAt(s + 1)) ? (r = 65536 + ((1023 & r) << 10) + (1023 & e.charCodeAt(++s)), 
 t[o++] = r >> 18 | 240, t[o++] = r >> 12 & 63 | 128) : t[o++] = r >> 12 | 224, t[o++] = r >> 6 & 63 | 128), 
 t[o++] = 63 & r | 128);
 }
 return t;
 };
 goog.crypt.utf8ByteArrayToString = function(e) {
-for (var t = [], o = 0, s = 0; o < e.length; ) if (128 > (n = e[o++])) t[s++] = String.fromCharCode(n); else if (191 < n && 224 > n) {
-r = e[o++];
+for (var t = [], o = 0, s = 0; o < e.length; ) {
+if ((n = e[o++]) < 128) t[s++] = String.fromCharCode(n); else if (191 < n && n < 224) {
+var r = e[o++];
 t[s++] = String.fromCharCode((31 & n) << 6 | 63 & r);
-} else if (239 < n && 365 > n) {
-var r = e[o++], i = e[o++], n = ((7 & n) << 18 | (63 & r) << 12 | (63 & i) << 6 | 63 & e[o++]) - 65536;
+} else if (239 < n && n < 365) {
+r = e[o++];
+var i = e[o++], n = ((7 & n) << 18 | (63 & r) << 12 | (63 & i) << 6 | 63 & e[o++]) - 65536;
 t[s++] = String.fromCharCode(55296 + (n >> 10));
 t[s++] = String.fromCharCode(56320 + (1023 & n));
 } else r = e[o++], i = e[o++], t[s++] = String.fromCharCode((15 & n) << 12 | (63 & r) << 6 | 63 & i);
+}
 return t.join("");
 };
 goog.crypt.xorByteArray = function(e, t) {
@@ -12986,14 +15434,14 @@ Object.prototype.hasOwnProperty.call(s, o) && (e[o] = s[o]);
 };
 goog.object.create = function(e) {
 var t = arguments.length;
-if (1 == t && goog.isArray(arguments[0])) return goog.object.create.apply(null, arguments[0]);
+if (1 == t && goog.isArray(e)) return goog.object.create.apply(null, e);
 if (t % 2) throw Error("Uneven number of arguments");
 for (var o = {}, s = 0; s < t; s += 2) o[arguments[s]] = arguments[s + 1];
 return o;
 };
 goog.object.createSet = function(e) {
 var t = arguments.length;
-if (1 == t && goog.isArray(arguments[0])) return goog.object.createSet.apply(null, arguments[0]);
+if (1 == t && goog.isArray(e)) return goog.object.createSet.apply(null, e);
 for (var o = {}, s = 0; s < t; s++) o[arguments[s]] = !0;
 return o;
 };
@@ -13050,9 +15498,10 @@ function e(e) {
 e = goog.array.find(e, s);
 return o[e] || "";
 }
-t = goog.labs.userAgent.util.getUserAgent();
+var t = goog.labs.userAgent.util.getUserAgent();
 if (goog.labs.userAgent.browser.isIE()) return goog.labs.userAgent.browser.getIEVersion_(t);
-var t = goog.labs.userAgent.util.extractVersionTuples(t), o = {};
+t = goog.labs.userAgent.util.extractVersionTuples(t);
+var o = {};
 goog.array.forEach(t, function(e) {
 o[e[0]] = e[1];
 });
@@ -13100,11 +15549,10 @@ goog.labs.userAgent.engine.isGecko = function() {
 return goog.labs.userAgent.util.matchUserAgent("Gecko") && !goog.labs.userAgent.engine.isWebKit() && !goog.labs.userAgent.engine.isTrident() && !goog.labs.userAgent.engine.isEdge();
 };
 goog.labs.userAgent.engine.getVersion = function() {
-if (e = goog.labs.userAgent.util.getUserAgent()) {
-var e = goog.labs.userAgent.util.extractVersionTuples(e), t = goog.labs.userAgent.engine.getEngineTuple_(e);
-if (t) return "Gecko" == t[0] ? goog.labs.userAgent.engine.getVersionForKey_(e, "Firefox") : t[1];
-var o;
-if ((e = e[0]) && (o = e[2]) && (o = /Trident\/([^\s;]+)/.exec(o))) return o[1];
+if (t = goog.labs.userAgent.util.getUserAgent()) {
+var e, t = goog.labs.userAgent.util.extractVersionTuples(t), o = goog.labs.userAgent.engine.getEngineTuple_(t);
+if (o) return "Gecko" == o[0] ? goog.labs.userAgent.engine.getVersionForKey_(t, "Firefox") : o[1];
+if ((t = t[0]) && (e = t[2]) && (e = /Trident\/([^\s;]+)/.exec(e))) return e[1];
 }
 return "";
 };
@@ -13154,12 +15602,7 @@ return goog.labs.userAgent.util.matchUserAgent("CrOS");
 };
 goog.labs.userAgent.platform.getVersion = function() {
 var e = goog.labs.userAgent.util.getUserAgent(), t = "";
-goog.labs.userAgent.platform.isWindows() ? (t = /Windows (?:NT|Phone) ([0-9.]+)/, 
-t = (e = t.exec(e)) ? e[1] : "0.0") : goog.labs.userAgent.platform.isIos() ? (t = /(?:iPhone|iPod|iPad|CPU)\s+OS\s+(\S+)/, 
-t = (e = t.exec(e)) && e[1].replace(/_/g, ".")) : goog.labs.userAgent.platform.isMacintosh() ? (t = /Mac OS X ([0-9_.]+)/, 
-t = (e = t.exec(e)) ? e[1].replace(/_/g, ".") : "10") : goog.labs.userAgent.platform.isAndroid() ? (t = /Android\s+([^\);]+)(\)|;)/, 
-t = (e = t.exec(e)) && e[1]) : goog.labs.userAgent.platform.isChromeOS() && (t = /(?:CrOS\s+(?:i686|x86_64)\s+([0-9.]+))/, 
-t = (e = t.exec(e)) && e[1]);
+goog.labs.userAgent.platform.isWindows() ? t = (e = (t = /Windows (?:NT|Phone) ([0-9.]+)/).exec(e)) ? e[1] : "0.0" : goog.labs.userAgent.platform.isIos() ? t = (e = (t = /(?:iPhone|iPod|iPad|CPU)\s+OS\s+(\S+)/).exec(e)) && e[1].replace(/_/g, ".") : goog.labs.userAgent.platform.isMacintosh() ? t = (e = (t = /Mac OS X ([0-9_.]+)/).exec(e)) ? e[1].replace(/_/g, ".") : "10" : goog.labs.userAgent.platform.isAndroid() ? t = (e = (t = /Android\s+([^\);]+)(\)|;)/).exec(e)) && e[1] : goog.labs.userAgent.platform.isChromeOS() && (t = (e = (t = /(?:CrOS\s+(?:i686|x86_64)\s+([0-9.]+))/).exec(e)) && e[1]);
 return t || "";
 };
 goog.labs.userAgent.platform.isVersionOrHigher = function(e) {
@@ -13219,11 +15662,11 @@ goog.userAgent.ANDROID = goog.userAgent.PLATFORM_KNOWN_ ? goog.userAgent.ASSUME_
 goog.userAgent.IPHONE = goog.userAgent.PLATFORM_KNOWN_ ? goog.userAgent.ASSUME_IPHONE : goog.labs.userAgent.platform.isIphone();
 goog.userAgent.IPAD = goog.userAgent.PLATFORM_KNOWN_ ? goog.userAgent.ASSUME_IPAD : goog.labs.userAgent.platform.isIpad();
 goog.userAgent.operaVersion_ = function() {
-var e = goog.global.opera.version;
+var t = goog.global.opera.version;
 try {
-return e();
-} catch (t) {
-return e;
+return t();
+} catch (e) {
+return t;
 }
 };
 goog.userAgent.determineVersion_ = function() {
@@ -13253,10 +15696,8 @@ goog.userAgent.isDocumentModeOrHigher = function(e) {
 return Number(goog.userAgent.DOCUMENT_MODE) >= e;
 };
 goog.userAgent.isDocumentMode = goog.userAgent.isDocumentModeOrHigher;
-goog.userAgent.DOCUMENT_MODE = function() {
-var e = goog.global.document, t = goog.userAgent.getDocumentMode_();
-return e && goog.userAgent.IE ? t || ("CSS1Compat" == e.compatMode ? parseInt(goog.userAgent.VERSION, 10) : 5) : void 0;
-}();
+goog.userAgent.DOCUMENT_MODE = (JDa = goog.global.document, KDa = goog.userAgent.getDocumentMode_(), 
+JDa && goog.userAgent.IE ? KDa || ("CSS1Compat" == JDa.compatMode ? parseInt(goog.userAgent.VERSION, 10) : 5) : void 0);
 goog.userAgent.product = {};
 goog.userAgent.product.ASSUME_FIREFOX = !1;
 goog.userAgent.product.ASSUME_IPHONE = !1;
@@ -13294,9 +15735,10 @@ goog.crypt.base64.encodeByteArray = function(e, t) {
 goog.asserts.assert(goog.isArrayLike(e), "encodeByteArray takes an array as a parameter");
 goog.crypt.base64.init_();
 for (var o = t ? goog.crypt.base64.byteToCharMapWebSafe_ : goog.crypt.base64.byteToCharMap_, s = [], r = 0; r < e.length; r += 3) {
-var i = e[r], n = r + 1 < e.length, a = n ? e[r + 1] : 0, p = r + 2 < e.length, l = i >> 2, i = (3 & i) << 4 | a >> 4, a = (15 & a) << 2 | (u = p ? e[r + 2] : 0) >> 6, u = 63 & u;
-p || (u = 64, n || (a = 64));
-s.push(o[l], o[i], o[a], o[u]);
+var i = e[r], n = r + 1 < e.length, a = n ? e[r + 1] : 0, p = r + 2 < e.length, l = i >> 2, g = (i = (3 & i) << 4 | a >> 4, 
+a = (15 & a) << 2 | (g = p ? e[r + 2] : 0) >> 6, 63 & g);
+p || (g = 64, n || (a = 64));
+s.push(o[l], o[i], o[a], o[g]);
 }
 return s.join("");
 };
@@ -13326,21 +15768,21 @@ t[o++] = e;
 });
 return t.subarray(0, o);
 };
-goog.crypt.base64.decodeStringInternal_ = function(e, t) {
-function o(t) {
-for (;s < e.length; ) {
-var o = e.charAt(s++), r = goog.crypt.base64.charToByteMap_[o];
-if (null != r) return r;
-if (!goog.string.isEmptyOrWhitespace(o)) throw Error("Unknown base64 encoding at char: " + o);
+goog.crypt.base64.decodeStringInternal_ = function(s, e) {
+function t(e) {
+for (;r < s.length; ) {
+var t = s.charAt(r++), o = goog.crypt.base64.charToByteMap_[t];
+if (null != o) return o;
+if (!goog.string.isEmptyOrWhitespace(t)) throw Error("Unknown base64 encoding at char: " + t);
 }
-return t;
+return e;
 }
 goog.crypt.base64.init_();
-for (var s = 0; ;) {
-var r = o(-1), i = o(0), n = o(64), a = o(64);
-if (64 === a && -1 === r) break;
-t(r << 2 | i >> 4);
-64 != n && (t(i << 4 & 240 | n >> 2), 64 != a && t(n << 6 & 192 | a));
+for (var r = 0; ;) {
+var o = t(-1), i = t(0), n = t(64), a = t(64);
+if (64 === a && -1 === o) break;
+e(o << 2 | i >> 4);
+64 != n && (e(i << 4 & 240 | n >> 2), 64 != a && e(n << 6 & 192 | a));
 }
 };
 goog.crypt.base64.init_ = function() {
@@ -13610,8 +16052,8 @@ for (var i = void 0, n = void 0; t.nextField() && !t.isEndGroup(); ) {
 var a = t.getFieldNumber();
 1 == a ? i = o.call(t) : 2 == a && (e.valueCtor_ ? (n = new e.valueCtor_(), s.call(t, n, r)) : n = s.call(t));
 }
-goog.asserts.assert(void 0 != i);
-goog.asserts.assert(void 0 != n);
+goog.asserts.assert(null != i);
+goog.asserts.assert(null != n);
 e.set(i, n);
 };
 jspb.Map.prototype.stringKeys_ = function() {
@@ -13782,20 +16224,20 @@ t < e.pivot_ ? e.array[jspb.Message.getIndex_(e, t)] = o : e.extensionObject_[t]
 };
 jspb.Message.addToRepeatedField = function(e, t, o, s) {
 e = jspb.Message.getField(e, t);
-void 0 != s ? e.splice(s, 0, o) : e.push(o);
+null != s ? e.splice(s, 0, o) : e.push(o);
 };
 jspb.Message.setOneofField = function(e, t, o, s) {
 (o = jspb.Message.computeOneofCase(e, o)) && o !== t && void 0 !== s && (e.wrappers_ && o in e.wrappers_ && (e.wrappers_[o] = void 0), 
 jspb.Message.setField(e, o, void 0));
 jspb.Message.setField(e, t, s);
 };
-jspb.Message.computeOneofCase = function(e, t) {
-var o, s;
-goog.array.forEach(t, function(t) {
-var r = jspb.Message.getField(e, t);
-goog.isDefAndNotNull(r) && (o = t, s = r, jspb.Message.setField(e, t, void 0));
+jspb.Message.computeOneofCase = function(o, e) {
+var s, r;
+goog.array.forEach(e, function(e) {
+var t = jspb.Message.getField(o, e);
+goog.isDefAndNotNull(t) && (s = e, r = t, jspb.Message.setField(o, e, void 0));
 });
-return o ? (jspb.Message.setField(e, o, s), o) : 0;
+return s ? (jspb.Message.setField(o, s, r), s) : 0;
 };
 jspb.Message.getWrapperField = function(e, t, o, s) {
 e.wrappers_ || (e.wrappers_ = {});
@@ -13842,7 +16284,7 @@ var i = e.wrappers_[t];
 i || (i = e.wrappers_[t] = []);
 o = o || new s();
 e = jspb.Message.getField(e, t);
-void 0 != r ? (i.splice(r, 0, o), e.splice(r, 0, o.toArray())) : (i.push(o), e.push(o.toArray()));
+null != r ? (i.splice(r, 0, o), e.splice(r, 0, o.toArray())) : (i.push(o), e.push(o.toArray()));
 return o;
 };
 jspb.Message.toMap = function(e, t, o, s) {
@@ -13863,17 +16305,17 @@ jspb.Message.GENERATE_TO_STRING && (jspb.Message.prototype.toString = function()
 this.syncMapFields_();
 return this.array.toString();
 });
-jspb.Message.prototype.getExtension = function(e) {
+jspb.Message.prototype.getExtension = function(t) {
 if (this.extensionObject_) {
 this.wrappers_ || (this.wrappers_ = {});
-var t = e.fieldIndex;
-if (e.isRepeated) {
-if (e.isMessageType()) return this.wrappers_[t] || (this.wrappers_[t] = goog.array.map(this.extensionObject_[t] || [], function(t) {
-return new e.ctor(t);
-})), this.wrappers_[t];
-} else if (e.isMessageType()) return !this.wrappers_[t] && this.extensionObject_[t] && (this.wrappers_[t] = new e.ctor(this.extensionObject_[t])), 
-this.wrappers_[t];
-return this.extensionObject_[t];
+var e = t.fieldIndex;
+if (t.isRepeated) {
+if (t.isMessageType()) return this.wrappers_[e] || (this.wrappers_[e] = goog.array.map(this.extensionObject_[e] || [], function(e) {
+return new t.ctor(e);
+})), this.wrappers_[e];
+} else if (t.isMessageType()) return !this.wrappers_[e] && this.extensionObject_[e] && (this.wrappers_[e] = new t.ctor(this.extensionObject_[e])), 
+this.wrappers_[e];
+return this.extensionObject_[e];
 }
 };
 jspb.Message.prototype.setExtension = function(e, t) {
@@ -13910,19 +16352,20 @@ if (e == t) return !0;
 if (!goog.isObject(e) || !goog.isObject(t) || e.constructor != t.constructor) return !1;
 if (jspb.Message.SUPPORTS_UINT8ARRAY_ && e.constructor === Uint8Array) {
 if (e.length != t.length) return !1;
-for (i = 0; i < e.length; i++) if (e[i] != t[i]) return !1;
+for (var o = 0; o < e.length; o++) if (e[o] != t[o]) return !1;
 return !0;
 }
 if (e.constructor === Array) {
-for (var o = void 0, s = void 0, r = Math.max(e.length, t.length), i = 0; i < r; i++) {
-var n = e[i], a = t[i];
-n && n.constructor == Object && (goog.asserts.assert(void 0 === o), goog.asserts.assert(i === e.length - 1), 
-o = n, n = void 0);
-a && a.constructor == Object && (goog.asserts.assert(void 0 === s), goog.asserts.assert(i === t.length - 1), 
-s = a, a = void 0);
+var s = void 0, r = void 0, i = Math.max(e.length, t.length);
+for (o = 0; o < i; o++) {
+var n = e[o], a = t[o];
+n && n.constructor == Object && (goog.asserts.assert(void 0 === s), goog.asserts.assert(o === e.length - 1), 
+s = n, n = void 0);
+a && a.constructor == Object && (goog.asserts.assert(void 0 === r), goog.asserts.assert(o === t.length - 1), 
+r = a, a = void 0);
 if (!jspb.Message.compareFields(n, a)) return !1;
 }
-return !o && !s || (o = o || {}, s = s || {}, jspb.Message.compareExtensions(o, s));
+return !s && !r || (s = s || {}, r = r || {}, jspb.Message.compareExtensions(s, r));
 }
 if (e.constructor === Object) return jspb.Message.compareExtensions(e, t);
 throw Error("Invalid type in JSPB array");
@@ -13959,8 +16402,7 @@ for (s in e) null != (t = e[s]) && (o[s] = "object" == ("undefined" == typeof t 
 return o;
 };
 jspb.Message.registerMessageType = function(e, t) {
-jspb.Message.registry_[e] = t;
-t.messageId = e;
+(jspb.Message.registry_[e] = t).messageId = e;
 };
 jspb.Message.registry_ = {};
 jspb.Message.messageSetExtensions = {};
@@ -14059,7 +16501,7 @@ jspb.utils.split64Low = t;
 jspb.utils.split64High = e;
 };
 jspb.utils.splitInt64 = function(e) {
-var t = 0 > e, o = (e = Math.abs(e)) >>> 0;
+var t = e < 0, o = (e = Math.abs(e)) >>> 0;
 e = Math.floor((e - o) / jspb.BinaryConstants.TWO_TO_32);
 e >>>= 0;
 t && (e = ~e >>> 0, 4294967295 < (o = 1 + (~o >>> 0)) && (o = 0, 4294967295 < ++e && (e = 0)));
@@ -14067,7 +16509,7 @@ jspb.utils.split64Low = o;
 jspb.utils.split64High = e;
 };
 jspb.utils.splitZigzag64 = function(e) {
-var t = 0 > e;
+var t = e < 0;
 e = 2 * Math.abs(e);
 jspb.utils.splitUint64(e);
 e = jspb.utils.split64Low;
@@ -14077,7 +16519,7 @@ jspb.utils.split64Low = e;
 jspb.utils.split64High = o;
 };
 jspb.utils.splitFloat32 = function(e) {
-var t, o = 0 > e ? 1 : 0;
+var t, o = e < 0 ? 1 : 0;
 0 === (e = o ? -e : e) ? 0 < 1 / e ? (jspb.utils.split64High = 0, jspb.utils.split64Low = 0) : (jspb.utils.split64High = 0, 
 jspb.utils.split64Low = 2147483648) : isNaN(e) ? (jspb.utils.split64High = 0, jspb.utils.split64Low = 2147483647) : e > jspb.BinaryConstants.FLOAT32_MAX ? (jspb.utils.split64High = 0, 
 jspb.utils.split64Low = (o << 31 | 2139095040) >>> 0) : e < jspb.BinaryConstants.FLOAT32_MIN ? (e = Math.round(e / Math.pow(2, -149)), 
@@ -14086,7 +16528,7 @@ e *= Math.pow(2, -t), e = 8388607 & Math.round(e * jspb.BinaryConstants.TWO_TO_2
 jspb.utils.split64High = 0, jspb.utils.split64Low = (o << 31 | t + 127 << 23 | e) >>> 0);
 };
 jspb.utils.splitFloat64 = function(e) {
-var t = 0 > e ? 1 : 0;
+var t = e < 0 ? 1 : 0;
 if (0 === (e = t ? -e : e)) jspb.utils.split64High = 0 < 1 / e ? 0 : 2147483648, 
 jspb.utils.split64Low = 0; else if (isNaN(e)) jspb.utils.split64High = 2147483647, 
 jspb.utils.split64Low = 4294967295; else if (e > jspb.BinaryConstants.FLOAT64_MAX) jspb.utils.split64High = (t << 31 | 2146435072) >>> 0, 
@@ -14115,7 +16557,7 @@ return t * jspb.BinaryConstants.TWO_TO_32 + e;
 };
 jspb.utils.joinInt64 = function(e, t) {
 var o = 2147483648 & t;
-o && (e = 1 + ~e >>> 0, t = ~t >>> 0, 0 == e && (t = t + 1 >>> 0));
+o && (t = ~t >>> 0, 0 == (e = 1 + ~e >>> 0) && (t = t + 1 >>> 0));
 var s = jspb.utils.joinUint64(e, t);
 return o ? -s : s;
 };
@@ -14123,7 +16565,7 @@ jspb.utils.joinZigzag64 = function(e, t) {
 var o = 1 & e;
 e = (e >>> 1 | t << 31) >>> 0;
 t >>>= 1;
-o && 0 == (e = e + 1 >>> 0) && (t = t + 1 >>> 0);
+o && (0 == (e = e + 1 >>> 0) && (t = t + 1 >>> 0));
 var s = jspb.utils.joinUint64(e, t);
 return o ? -s : s;
 };
@@ -14141,12 +16583,12 @@ return String.fromCharCode(e >>> 0 & 255, e >>> 8 & 255, e >>> 16 & 255, e >>> 2
 jspb.utils.DIGITS = "0123456789abcdef".split("");
 jspb.utils.joinUnsignedDecimalString = function(e, t) {
 function o(e) {
-for (var t = 1e7, o = 0; 7 > o; o++) {
+for (var t = 1e7, o = 0; o < 7; o++) {
 var s = e / (t = t / 10) % 10 >>> 0;
 (0 != s || a) && (a = !0, p += n[s]);
 }
 }
-if (2097151 >= t) return "" + (jspb.BinaryConstants.TWO_TO_32 * t + e);
+if (t <= 2097151) return "" + (jspb.BinaryConstants.TWO_TO_32 * t + e);
 var s = (16777215 & e) + 6777216 * (r = (e >>> 24 | t << 8) >>> 0 & 16777215) + 6710656 * (i = t >> 16 & 65535), r = r + 8147497 * i, i = 2 * i;
 1e7 <= s && (r += Math.floor(s / 1e7), s %= 1e7);
 1e7 <= r && (i += Math.floor(r / 1e7), r %= 1e7);
@@ -14158,7 +16600,7 @@ return p;
 };
 jspb.utils.joinSignedDecimalString = function(e, t) {
 var o = 2147483648 & t;
-o && (e = 1 + ~e >>> 0, t = ~t + (0 == e ? 1 : 0) >>> 0);
+o && (t = ~t + (0 == (e = 1 + ~e >>> 0) ? 1 : 0) >>> 0);
 var s = jspb.utils.joinUnsignedDecimalString(e, t);
 return o ? "-" + s : s;
 };
@@ -14173,20 +16615,20 @@ return o;
 };
 jspb.utils.decimalStringToHash64 = function(e) {
 function t(e, t) {
-for (var o = 0; 8 > o && (1 !== e || 0 < t); o++) {
-var r = e * s[o] + t;
-s[o] = 255 & r;
-t = r >>> 8;
+for (var o = 0; o < 8 && (1 !== e || 0 < t); o++) {
+var s = e * r[o] + t;
+r[o] = 255 & s;
+t = s >>> 8;
 }
 }
 goog.asserts.assert(0 < e.length);
 var o = !1;
 "-" === e[0] && (o = !0, e = e.slice(1));
-for (var s = [ 0, 0, 0, 0, 0, 0, 0, 0 ], r = 0; r < e.length; r++) t(10, jspb.utils.DIGITS.indexOf(e[r]));
+for (var r = [ 0, 0, 0, 0, 0, 0, 0, 0 ], s = 0; s < e.length; s++) t(10, jspb.utils.DIGITS.indexOf(e[s]));
 o && (function() {
-for (var e = 0; 8 > e; e++) s[e] = 255 & ~s[e];
+for (var e = 0; e < 8; e++) r[e] = 255 & ~r[e];
 }(), t(1, 1));
-return String.fromCharCode.apply(null, s);
+return String.fromCharCode.apply(null, r);
 };
 jspb.utils.splitDecimalString = function(e) {
 jspb.utils.splitHash64(jspb.utils.decimalStringToHash64(e));
@@ -14195,7 +16637,7 @@ jspb.utils.hash64ToHexString = function(e) {
 var t = Array(18);
 t[0] = "0";
 t[1] = "x";
-for (var o = 0; 8 > o; o++) {
+for (var o = 0; o < 8; o++) {
 var s = e.charCodeAt(7 - o);
 t[2 * o + 2] = jspb.utils.DIGITS[s >> 4];
 t[2 * o + 3] = jspb.utils.DIGITS[15 & s];
@@ -14207,7 +16649,10 @@ e = e.toLowerCase();
 goog.asserts.assert(18 == e.length);
 goog.asserts.assert("0" == e[0]);
 goog.asserts.assert("x" == e[1]);
-for (var t = "", o = 0; 8 > o; o++) var s = jspb.utils.DIGITS.indexOf(e[2 * o + 2]), r = jspb.utils.DIGITS.indexOf(e[2 * o + 3]), t = String.fromCharCode(16 * s + r) + t;
+for (var t = "", o = 0; o < 8; o++) {
+var s = jspb.utils.DIGITS.indexOf(e[2 * o + 2]), r = jspb.utils.DIGITS.indexOf(e[2 * o + 3]);
+t = String.fromCharCode(16 * s + r) + t;
+}
 return t;
 };
 jspb.utils.hash64ToNumber = function(e, t) {
@@ -14225,7 +16670,7 @@ return o - t - s;
 };
 jspb.utils.countVarintFields = function(e, t, o, s) {
 var r = 0;
-if (128 > (s = 8 * s + jspb.BinaryConstants.WireType.VARINT)) for (;t < o && e[t++] == s; ) for (r++; ;) {
+if ((s = 8 * s + jspb.BinaryConstants.WireType.VARINT) < 128) for (;t < o && e[t++] == s; ) for (r++; ;) {
 var i = e[t++];
 if (0 == (128 & i)) break;
 } else for (;t < o; ) {
@@ -14241,7 +16686,7 @@ return r;
 };
 jspb.utils.countFixedFields_ = function(e, t, o, s, r) {
 var i = 0;
-if (128 > s) for (;t < o && e[t++] == s; ) i++, t += r; else for (;t < o; ) {
+if (s < 128) for (;t < o && e[t++] == s; ) i++, t += r; else for (;t < o; ) {
 for (var n = s; 128 < n; ) {
 if (e[t++] != (127 & n | 128)) return i;
 n >>= 7;
@@ -14267,7 +16712,7 @@ i >>= 7;
 }
 if (e[t++] != i) break;
 r++;
-for (var n = 0, a = 1; i = e[t++], n += (127 & i) * a, a *= 128, 0 != (128 & i); ) ;
+for (var n = 0, a = 1; n += (127 & (i = e[t++])) * a, a *= 128, 0 != (128 & i); ) ;
 t += n;
 }
 return r;
@@ -14276,7 +16721,7 @@ jspb.utils.debugBytesToTextFormat = function(e) {
 var t = '"';
 if (e) {
 e = jspb.utils.byteSourceToUint8Array(e);
-for (var o = 0; o < e.length; o++) t += "\\x", 16 > e[o] && (t += "0"), t += e[o].toString(16);
+for (var o = 0; o < e.length; o++) t += "\\x", e[o] < 16 && (t += "0"), t += e[o].toString(16);
 }
 return t + '"';
 };
@@ -14324,7 +16769,7 @@ return new jspb.BinaryIterator(e, t, o);
 };
 jspb.BinaryIterator.prototype.free = function() {
 this.clear();
-100 > jspb.BinaryIterator.instanceCache_.length && jspb.BinaryIterator.instanceCache_.push(this);
+jspb.BinaryIterator.instanceCache_.length < 100 && jspb.BinaryIterator.instanceCache_.push(this);
 };
 jspb.BinaryIterator.prototype.clear = function() {
 this.decoder_ && this.decoder_.free();
@@ -14362,7 +16807,7 @@ return new jspb.BinaryDecoder(e, t, o);
 };
 jspb.BinaryDecoder.prototype.free = function() {
 this.clear();
-100 > jspb.BinaryDecoder.instanceCache_.length && jspb.BinaryDecoder.instanceCache_.push(this);
+jspb.BinaryDecoder.instanceCache_.length < 100 && jspb.BinaryDecoder.instanceCache_.push(this);
 };
 jspb.BinaryDecoder.prototype.clone = function() {
 return jspb.BinaryDecoder.alloc(this.bytes_, this.start_, this.end_ - this.start_);
@@ -14407,20 +16852,20 @@ jspb.BinaryDecoder.prototype.pastEnd = function() {
 return this.cursor_ > this.end_;
 };
 jspb.BinaryDecoder.prototype.getError = function() {
-return this.error_ || 0 > this.cursor_ || this.cursor_ > this.end_;
+return this.error_ || this.cursor_ < 0 || this.cursor_ > this.end_;
 };
 jspb.BinaryDecoder.prototype.readSplitVarint64_ = function() {
-for (var e, t, o = 0, s = 0; 4 > s; s++) if (e = this.bytes_[this.cursor_++], o |= (127 & e) << 7 * s, 
-128 > e) {
+for (var e, t, o = 0, s = 0; s < 4; s++) if (o |= (127 & (e = this.bytes_[this.cursor_++])) << 7 * s, 
+e < 128) {
 this.tempLow_ = o >>> 0;
 this.tempHigh_ = 0;
 return;
 }
 o |= (127 & (e = this.bytes_[this.cursor_++])) << 28;
 t = 0 | (127 & e) >> 4;
-if (128 > e) this.tempLow_ = o >>> 0, this.tempHigh_ = t >>> 0; else {
-for (s = 0; 5 > s; s++) if (e = this.bytes_[this.cursor_++], t |= (127 & e) << 7 * s + 3, 
-128 > e) {
+if (e < 128) this.tempLow_ = o >>> 0, this.tempHigh_ = t >>> 0; else {
+for (s = 0; s < 5; s++) if (t |= (127 & (e = this.bytes_[this.cursor_++])) << 7 * s + 3, 
+e < 128) {
 this.tempLow_ = o >>> 0;
 this.tempHigh_ = t >>> 0;
 return;
@@ -14439,19 +16884,19 @@ this.cursor_--;
 };
 jspb.BinaryDecoder.prototype.readUnsignedVarint32 = function() {
 var e, t = this.bytes_, o = 127 & (e = t[this.cursor_ + 0]);
-if (128 > e) return this.cursor_ += 1, goog.asserts.assert(this.cursor_ <= this.end_), 
+if (e < 128) return this.cursor_ += 1, goog.asserts.assert(this.cursor_ <= this.end_), 
 o;
 o |= (127 & (e = t[this.cursor_ + 1])) << 7;
-if (128 > e) return this.cursor_ += 2, goog.asserts.assert(this.cursor_ <= this.end_), 
+if (e < 128) return this.cursor_ += 2, goog.asserts.assert(this.cursor_ <= this.end_), 
 o;
 o |= (127 & (e = t[this.cursor_ + 2])) << 14;
-if (128 > e) return this.cursor_ += 3, goog.asserts.assert(this.cursor_ <= this.end_), 
+if (e < 128) return this.cursor_ += 3, goog.asserts.assert(this.cursor_ <= this.end_), 
 o;
 o |= (127 & (e = t[this.cursor_ + 3])) << 21;
-if (128 > e) return this.cursor_ += 4, goog.asserts.assert(this.cursor_ <= this.end_), 
+if (e < 128) return this.cursor_ += 4, goog.asserts.assert(this.cursor_ <= this.end_), 
 o;
 o |= (15 & (e = t[this.cursor_ + 4])) << 28;
-if (128 > e) return goog.asserts.assert(0 == (240 & e)), this.cursor_ += 5, goog.asserts.assert(this.cursor_ <= this.end_), 
+if (e < 128) return goog.asserts.assert(0 == (240 & e)), this.cursor_ += 5, goog.asserts.assert(this.cursor_ <= this.end_), 
 o >>> 0;
 goog.asserts.assert(240 == (240 & e));
 goog.asserts.assert(255 == t[this.cursor_ + 5]);
@@ -14566,15 +17011,18 @@ return this.readSignedVarint32();
 jspb.BinaryDecoder.prototype.readString = function(e) {
 var t = this.bytes_, o = this.cursor_;
 e = o + e;
-for (var s = []; o < e; ) if (128 > (n = t[o++])) s.push(n); else if (!(192 > n)) if (224 > n) {
-r = t[o++];
+for (var s = []; o < e; ) {
+if ((n = t[o++]) < 128) s.push(n); else if (!(n < 192)) if (n < 224) {
+var r = t[o++];
 s.push((31 & n) << 6 | 63 & r);
-} else if (240 > n) {
-var r = t[o++], i = t[o++];
+} else if (n < 240) {
+r = t[o++];
+var i = t[o++];
 s.push((15 & n) << 12 | (63 & r) << 6 | 63 & i);
-} else if (248 > n) {
+} else if (n < 248) {
 var n = (n = (7 & n) << 18 | (63 & (r = t[o++])) << 12 | (63 & (i = t[o++])) << 6 | 63 & t[o++]) - 65536;
 s.push(55296 + (n >> 10 & 1023), 56320 + (1023 & n));
+}
 }
 t = String.fromCharCode.apply(null, s);
 this.cursor_ = o;
@@ -14585,7 +17033,7 @@ var e = this.readUnsignedVarint32();
 return this.readString(e);
 };
 jspb.BinaryDecoder.prototype.readBytes = function(e) {
-if (0 > e || this.cursor_ + e > this.bytes_.length) return this.error_ = !0, goog.asserts.fail("Invalid byte length!"), 
+if (e < 0 || this.cursor_ + e > this.bytes_.length) return this.error_ = !0, goog.asserts.fail("Invalid byte length!"), 
 new Uint8Array(0);
 var t = this.bytes_.subarray(this.cursor_, this.cursor_ + e);
 this.cursor_ += e;
@@ -14597,7 +17045,8 @@ this.readSplitVarint64_();
 return jspb.utils.joinHash64(this.tempLow_, this.tempHigh_);
 };
 jspb.BinaryDecoder.prototype.readFixedHash64 = function() {
-var e = this.bytes_, t = this.cursor_, o = e[t + 0], s = e[t + 1], r = e[t + 2], i = e[t + 3], n = e[t + 4], a = e[t + 5], p = e[t + 6], e = e[t + 7];
+var e = this.bytes_, t = this.cursor_, o = e[t + 0], s = e[t + 1], r = e[t + 2], i = e[t + 3], n = e[t + 4], a = e[t + 5], p = e[t + 6];
+e = e[t + 7];
 this.cursor_ += 8;
 return String.fromCharCode(o, s, r, i, n, a, p, e);
 };
@@ -14625,7 +17074,7 @@ this.nextField_ = jspb.BinaryConstants.INVALID_FIELD_NUMBER;
 this.nextWireType_ = jspb.BinaryConstants.WireType.INVALID;
 this.error_ = !1;
 this.readCallbacks_ = null;
-100 > jspb.BinaryReader.instanceCache_.length && jspb.BinaryReader.instanceCache_.push(this);
+jspb.BinaryReader.instanceCache_.length < 100 && jspb.BinaryReader.instanceCache_.push(this);
 };
 jspb.BinaryReader.prototype.getFieldCursor = function() {
 return this.fieldCursor_;
@@ -14665,7 +17114,7 @@ jspb.BinaryReader.prototype.nextField = function() {
 if (this.decoder_.atEnd()) return !1;
 if (this.getError()) return goog.asserts.fail("Decoder hit an error"), !1;
 this.fieldCursor_ = this.decoder_.getCursor();
-var e = this.decoder_.readUnsignedVarint32(), t = e >>> 3;
+var e, t = (e = this.decoder_.readUnsignedVarint32()) >>> 3;
 if ((e = 7 & e) != jspb.BinaryConstants.WireType.VARINT && e != jspb.BinaryConstants.WireType.FIXED32 && e != jspb.BinaryConstants.WireType.FIXED64 && e != jspb.BinaryConstants.WireType.DELIMITED && e != jspb.BinaryConstants.WireType.START_GROUP && e != jspb.BinaryConstants.WireType.END_GROUP) return goog.asserts.fail("Invalid wire type"), 
 this.error_ = !0, !1;
 this.nextField_ = t;
@@ -14822,7 +17271,8 @@ return 0;
 };
 jspb.BinaryReader.prototype.readMessage = function(e, t) {
 goog.asserts.assert(this.nextWireType_ == jspb.BinaryConstants.WireType.DELIMITED);
-var o = this.decoder_.getEnd(), s = this.decoder_.readUnsignedVarint32(), s = this.decoder_.getCursor() + s;
+var o = this.decoder_.getEnd(), s = this.decoder_.readUnsignedVarint32();
+s = this.decoder_.getCursor() + s;
 this.decoder_.setEnd(s);
 t(e, this);
 this.decoder_.setCursor(s);
@@ -14837,7 +17287,8 @@ this.error_ = !0);
 };
 jspb.BinaryReader.prototype.getFieldDecoder = function() {
 goog.asserts.assert(this.nextWireType_ == jspb.BinaryConstants.WireType.DELIMITED);
-var e = this.decoder_.readUnsignedVarint32(), t = this.decoder_.getCursor(), o = t + e, e = jspb.BinaryDecoder.alloc(this.decoder_.getBuffer(), t, e);
+var e = this.decoder_.readUnsignedVarint32(), t = this.decoder_.getCursor(), o = t + e;
+e = jspb.BinaryDecoder.alloc(this.decoder_.getBuffer(), t, e);
 this.decoder_.setCursor(o);
 return e;
 };
@@ -14949,7 +17400,8 @@ return this.decoder_.readFixedHash64();
 };
 jspb.BinaryReader.prototype.readPackedField_ = function(e) {
 goog.asserts.assert(this.nextWireType_ == jspb.BinaryConstants.WireType.DELIMITED);
-for (var t = this.decoder_.readUnsignedVarint32(), t = this.decoder_.getCursor() + t, o = []; this.decoder_.getCursor() < t; ) o.push(e.call(this.decoder_));
+for (var t = this.decoder_.readUnsignedVarint32(), o = (t = this.decoder_.getCursor() + t, 
+[]); this.decoder_.getCursor() < t; ) o.push(e.call(this.decoder_));
 return o;
 };
 jspb.BinaryReader.prototype.readPackedInt32 = function() {
@@ -15058,7 +17510,7 @@ jspb.BinaryEncoder.prototype.writeSignedVarint32 = function(e) {
 goog.asserts.assert(e == Math.floor(e));
 goog.asserts.assert(e >= -jspb.BinaryConstants.TWO_TO_31 && e < jspb.BinaryConstants.TWO_TO_31);
 if (0 <= e) this.writeUnsignedVarint32(e); else {
-for (var t = 0; 9 > t; t++) this.buffer_.push(127 & e | 128), e >>= 7;
+for (var t = 0; t < 9; t++) this.buffer_.push(127 & e | 128), e >>= 7;
 this.buffer_.push(1);
 }
 };
@@ -15090,12 +17542,12 @@ this.writeZigzagVarint64(parseInt(e, 10));
 };
 jspb.BinaryEncoder.prototype.writeUint8 = function(e) {
 goog.asserts.assert(e == Math.floor(e));
-goog.asserts.assert(0 <= e && 256 > e);
+goog.asserts.assert(0 <= e && e < 256);
 this.buffer_.push(e >>> 0 & 255);
 };
 jspb.BinaryEncoder.prototype.writeUint16 = function(e) {
 goog.asserts.assert(e == Math.floor(e));
-goog.asserts.assert(0 <= e && 65536 > e);
+goog.asserts.assert(0 <= e && e < 65536);
 this.buffer_.push(e >>> 0 & 255);
 this.buffer_.push(e >>> 8 & 255);
 };
@@ -15116,12 +17568,12 @@ this.writeUint32(jspb.utils.split64High);
 };
 jspb.BinaryEncoder.prototype.writeInt8 = function(e) {
 goog.asserts.assert(e == Math.floor(e));
-goog.asserts.assert(-128 <= e && 128 > e);
+goog.asserts.assert(-128 <= e && e < 128);
 this.buffer_.push(e >>> 0 & 255);
 };
 jspb.BinaryEncoder.prototype.writeInt16 = function(e) {
 goog.asserts.assert(e == Math.floor(e));
-goog.asserts.assert(-32768 <= e && 32768 > e);
+goog.asserts.assert(-32768 <= e && e < 32768);
 this.buffer_.push(e >>> 0 & 255);
 this.buffer_.push(e >>> 8 & 255);
 };
@@ -15180,10 +17632,10 @@ this.writeUint32(jspb.utils.split64High);
 jspb.BinaryEncoder.prototype.writeString = function(e) {
 for (var t = this.buffer_.length, o = 0; o < e.length; o++) {
 var s = e.charCodeAt(o);
-if (128 > s) this.buffer_.push(s); else if (2048 > s) this.buffer_.push(s >> 6 | 192), 
-this.buffer_.push(63 & s | 128); else if (65536 > s) if (55296 <= s && 56319 >= s && o + 1 < e.length) {
+if (s < 128) this.buffer_.push(s); else if (s < 2048) this.buffer_.push(s >> 6 | 192), 
+this.buffer_.push(63 & s | 128); else if (s < 65536) if (55296 <= s && s <= 56319 && o + 1 < e.length) {
 var r = e.charCodeAt(o + 1);
-56320 <= r && 57343 >= r && (s = 1024 * (s - 55296) + r - 56320 + 65536, this.buffer_.push(s >> 18 | 240), 
+56320 <= r && r <= 57343 && (s = 1024 * (s - 55296) + r - 56320 + 65536, this.buffer_.push(s >> 18 | 240), 
 this.buffer_.push(s >> 12 & 63 | 128), this.buffer_.push(s >> 6 & 63 | 128), this.buffer_.push(63 & s | 128), 
 o++);
 } else this.buffer_.push(s >> 12 | 224), this.buffer_.push(s >> 6 & 63 | 128), this.buffer_.push(63 & s | 128);
@@ -15217,7 +17669,7 @@ jspb.arith.UInt64.prototype.add = function(e) {
 return new jspb.arith.UInt64((this.lo + e.lo & 4294967295) >>> 0 >>> 0, ((this.hi + e.hi & 4294967295) >>> 0) + (4294967296 <= this.lo + e.lo ? 1 : 0) >>> 0);
 };
 jspb.arith.UInt64.prototype.sub = function(e) {
-return new jspb.arith.UInt64((this.lo - e.lo & 4294967295) >>> 0 >>> 0, ((this.hi - e.hi & 4294967295) >>> 0) - (0 > this.lo - e.lo ? 1 : 0) >>> 0);
+return new jspb.arith.UInt64((this.lo - e.lo & 4294967295) >>> 0 >>> 0, ((this.hi - e.hi & 4294967295) >>> 0) - (this.lo - e.lo < 0 ? 1 : 0) >>> 0);
 };
 jspb.arith.UInt64.mul32x32 = function(e, t) {
 for (var o = e >>> 16, s = 65535 & t, r = t >>> 16, i = (n = 65535 & e) * s + 65536 * (n * r & 65535) + 65536 * (o * s & 65535), n = o * r + (n * r >>> 16) + (o * s >>> 16); 4294967296 <= i; ) i -= 4294967296, 
@@ -15235,18 +17687,21 @@ if (0 == e) return [];
 var t = new jspb.arith.UInt64(0, 0), o = new jspb.arith.UInt64(this.lo, this.hi);
 e = new jspb.arith.UInt64(e, 0);
 for (var s = new jspb.arith.UInt64(1, 0); !e.msb(); ) e = e.leftShift(), s = s.leftShift();
-for (;!s.zero(); ) 0 >= e.cmp(o) && (t = t.add(s), o = o.sub(e)), e = e.rightShift(), 
+for (;!s.zero(); ) e.cmp(o) <= 0 && (t = t.add(s), o = o.sub(e)), e = e.rightShift(), 
 s = s.rightShift();
 return [ t, o ];
 };
 jspb.arith.UInt64.prototype.toString = function() {
-for (var e = "", t = this; !t.zero(); ) var o = (t = t.div(10))[0], e = t[1].lo + e, t = o;
+for (var e = "", t = this; !t.zero(); ) {
+var o = (t = t.div(10))[0];
+e = t[1].lo + e, t = o;
+}
 "" == e && (e = "0");
 return e;
 };
 jspb.arith.UInt64.fromString = function(e) {
 for (var t = new jspb.arith.UInt64(0, 0), o = new jspb.arith.UInt64(0, 0), s = 0; s < e.length; s++) {
-if ("0" > e[s] || "9" < e[s]) return null;
+if (e[s] < "0" || "9" < e[s]) return null;
 var r = parseInt(e[s], 10);
 o.lo = r;
 t = t.mul(10).add(o);
@@ -15264,7 +17719,7 @@ jspb.arith.Int64.prototype.add = function(e) {
 return new jspb.arith.Int64((this.lo + e.lo & 4294967295) >>> 0 >>> 0, ((this.hi + e.hi & 4294967295) >>> 0) + (4294967296 <= this.lo + e.lo ? 1 : 0) >>> 0);
 };
 jspb.arith.Int64.prototype.sub = function(e) {
-return new jspb.arith.Int64((this.lo - e.lo & 4294967295) >>> 0 >>> 0, ((this.hi - e.hi & 4294967295) >>> 0) - (0 > this.lo - e.lo ? 1 : 0) >>> 0);
+return new jspb.arith.Int64((this.lo - e.lo & 4294967295) >>> 0 >>> 0, ((this.hi - e.hi & 4294967295) >>> 0) - (this.lo - e.lo < 0 ? 1 : 0) >>> 0);
 };
 jspb.arith.Int64.prototype.clone = function() {
 return new jspb.arith.Int64(this.lo, this.hi);
@@ -15302,7 +17757,8 @@ e.push(this.totalLength_);
 return e;
 };
 jspb.BinaryWriter.prototype.endDelimited_ = function(e) {
-var t = e.pop(), t = this.totalLength_ + this.encoder_.length() - t;
+var t = e.pop();
+t = this.totalLength_ + this.encoder_.length() - t;
 for (goog.asserts.assert(0 <= t); 127 < t; ) e.push(127 & t | 128), t >>>= 7, this.totalLength_++;
 e.push(t);
 this.totalLength_++;
@@ -15939,11 +18395,11 @@ var e, t = this.Places[this.treepos];
 if (17 === this.len) return -1;
 this.treepos++;
 this.len++;
-if ((e = this.IsPat()) >= 0) t.b0 = e; else {
+if (0 <= (e = this.IsPat())) t.b0 = e; else {
 t.b0 = 32768;
 if (this.Rec()) return -1;
 }
-if ((e = this.IsPat()) >= 0) {
+if (0 <= (e = this.IsPat())) {
 t.b1 = e;
 t.jump = null;
 } else {
@@ -15992,89 +18448,89 @@ s |= this.readByte() << 8;
 r = this.readByte();
 65535 & (s ^ ~(r |= this.readByte() << 8)) && document.write("BlockLen checksum mismatch\n");
 for (;s--; ) {
-f = this.readByte();
-this.addBuffer(f);
+i = this.readByte();
+this.addBuffer(i);
 }
 } else if (1 === t) for (;;) {
-(i = cc.Codec.GZip.bitReverse[this.readBits(7)] >> 1) > 23 ? (i = i << 1 | this.readBit()) > 199 ? i = (i -= 128) << 1 | this.readBit() : (i -= 48) > 143 && (i += 136) : i += 256;
-if (i < 256) this.addBuffer(i); else {
-if (256 === i) break;
-i -= 257;
-c = this.readBits(cc.Codec.GZip.cplext[i]) + cc.Codec.GZip.cplens[i];
-i = cc.Codec.GZip.bitReverse[this.readBits(5)] >> 3;
-if (cc.Codec.GZip.cpdext[i] > 8) {
-h = this.readBits(8);
-h |= this.readBits(cc.Codec.GZip.cpdext[i] - 8) << 8;
-} else h = this.readBits(cc.Codec.GZip.cpdext[i]);
-h += cc.Codec.GZip.cpdist[i];
-for (i = 0; i < c; i++) {
-f = this.buf32k[this.bIdx - h & 32767];
-this.addBuffer(f);
+23 < (n = cc.Codec.GZip.bitReverse[this.readBits(7)] >> 1) ? 199 < (n = n << 1 | this.readBit()) ? n = (n -= 128) << 1 | this.readBit() : 143 < (n -= 48) && (n += 136) : n += 256;
+if (n < 256) this.addBuffer(n); else {
+if (256 === n) break;
+n -= 257;
+h = this.readBits(cc.Codec.GZip.cplext[n]) + cc.Codec.GZip.cplens[n];
+n = cc.Codec.GZip.bitReverse[this.readBits(5)] >> 3;
+if (8 < cc.Codec.GZip.cpdext[n]) {
+f = this.readBits(8);
+f |= this.readBits(cc.Codec.GZip.cpdext[n] - 8) << 8;
+} else f = this.readBits(cc.Codec.GZip.cpdext[n]);
+f += cc.Codec.GZip.cpdist[n];
+for (n = 0; n < h; n++) {
+var i = this.buf32k[this.bIdx - f & 32767];
+this.addBuffer(i);
 }
 }
 } else if (2 === t) {
-var i, n, a, p, l, u = new Array(320);
-a = 257 + this.readBits(5);
-p = 1 + this.readBits(5);
-l = 4 + this.readBits(4);
-for (i = 0; i < 19; i++) u[i] = 0;
-for (i = 0; i < l; i++) u[cc.Codec.GZip.border[i]] = this.readBits(3);
-c = this.distanceTree.length;
-for (o = 0; o < c; o++) this.distanceTree[o] = new cc.Codec.GZip.HufNode();
+var n, a, p, l, g, u = new Array(320);
+p = 257 + this.readBits(5);
+l = 1 + this.readBits(5);
+g = 4 + this.readBits(4);
+for (n = 0; n < 19; n++) u[n] = 0;
+for (n = 0; n < g; n++) u[cc.Codec.GZip.border[n]] = this.readBits(3);
+h = this.distanceTree.length;
+for (o = 0; o < h; o++) this.distanceTree[o] = new cc.Codec.GZip.HufNode();
 if (this.CreateTree(this.distanceTree, 19, u, 0)) {
 this.flushBuffer();
 return 1;
 }
-n = a + p;
+a = p + l;
 o = 0;
-for (;o < n; ) {
+for (;o < a; ) {
 0;
-if ((i = this.DecodeValue(this.distanceTree)) < 16) u[o++] = i; else if (16 === i) {
-var g;
-if (o + (i = 3 + this.readBits(2)) > n) {
+if ((n = this.DecodeValue(this.distanceTree)) < 16) u[o++] = n; else if (16 === n) {
+var c;
+if (a < o + (n = 3 + this.readBits(2))) {
 this.flushBuffer();
 return 1;
 }
-g = o ? u[o - 1] : 0;
-for (;i--; ) u[o++] = g;
+c = o ? u[o - 1] : 0;
+for (;n--; ) u[o++] = c;
 } else {
-if (o + (i = 17 === i ? 3 + this.readBits(3) : 11 + this.readBits(7)) > n) {
+if (a < o + (n = 17 === n ? 3 + this.readBits(3) : 11 + this.readBits(7))) {
 this.flushBuffer();
 return 1;
 }
-for (;i--; ) u[o++] = 0;
+for (;n--; ) u[o++] = 0;
 }
 }
-c = this.literalTree.length;
-for (o = 0; o < c; o++) this.literalTree[o] = new cc.Codec.GZip.HufNode();
-if (this.CreateTree(this.literalTree, a, u, 0)) {
+h = this.literalTree.length;
+for (o = 0; o < h; o++) this.literalTree[o] = new cc.Codec.GZip.HufNode();
+if (this.CreateTree(this.literalTree, p, u, 0)) {
 this.flushBuffer();
 return 1;
 }
-c = this.literalTree.length;
-for (o = 0; o < c; o++) this.distanceTree[o] = new cc.Codec.GZip.HufNode();
+h = this.literalTree.length;
+for (o = 0; o < h; o++) this.distanceTree[o] = new cc.Codec.GZip.HufNode();
 var d = new Array();
-for (o = a; o < u.length; o++) d[o - a] = u[o];
-if (this.CreateTree(this.distanceTree, p, d, 0)) {
+for (o = p; o < u.length; o++) d[o - p] = u[o];
+if (this.CreateTree(this.distanceTree, l, d, 0)) {
 this.flushBuffer();
 return 1;
 }
-for (;;) if ((i = this.DecodeValue(this.literalTree)) >= 256) {
-var c, h;
-if (0 === (i -= 256)) break;
-i--;
-c = this.readBits(cc.Codec.GZip.cplext[i]) + cc.Codec.GZip.cplens[i];
-i = this.DecodeValue(this.distanceTree);
-if (cc.Codec.GZip.cpdext[i] > 8) {
-h = this.readBits(8);
-h |= this.readBits(cc.Codec.GZip.cpdext[i] - 8) << 8;
-} else h = this.readBits(cc.Codec.GZip.cpdext[i]);
-h += cc.Codec.GZip.cpdist[i];
-for (;c--; ) {
-var f = this.buf32k[this.bIdx - h & 32767];
-this.addBuffer(f);
+for (;;) if (256 <= (n = this.DecodeValue(this.literalTree))) {
+var h, f;
+if (0 === (n -= 256)) break;
+n--;
+h = this.readBits(cc.Codec.GZip.cplext[n]) + cc.Codec.GZip.cplens[n];
+n = this.DecodeValue(this.distanceTree);
+if (8 < cc.Codec.GZip.cpdext[n]) {
+f = this.readBits(8);
+f |= this.readBits(cc.Codec.GZip.cpdext[n] - 8) << 8;
+} else f = this.readBits(cc.Codec.GZip.cpdext[n]);
+f += cc.Codec.GZip.cpdist[n];
+for (;h--; ) {
+i = this.buf32k[this.bIdx - f & 32767];
+this.addBuffer(i);
 }
-} else this.addBuffer(i);
+} else this.addBuffer(n);
 }
 } while (!e);
 this.flushBuffer();
@@ -16239,9 +18695,10 @@ var t = new s.BinaryReader(e), o = new proto.BINInitializeRequest();
 return proto.BINInitializeRequest.deserializeBinaryFromReader(o, t);
 };
 proto.BINInitializeRequest.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readString();
+var o = t.readString();
 e.setCp(o);
 break;
 
@@ -16281,12 +18738,13 @@ e.setLiteversion(o);
 break;
 
 case 9:
-var o = t.readString();
+o = t.readString();
 e.setReferencecode(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -16460,9 +18918,10 @@ var t = new s.BinaryReader(e), o = new proto.BINInitializeResponse();
 return proto.BINInitializeResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINInitializeResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
@@ -16557,12 +19016,13 @@ e.addEnablegameids(o);
 break;
 
 case 20:
-var o = t.readString();
+o = t.readString();
 e.setResetpwsmssyntax(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -16591,10 +19051,10 @@ null != (t = s.Message.getField(this, 12)) && e.writeBool(12, t);
 null != (t = s.Message.getField(this, 13)) && e.writeBool(13, t);
 null != (t = s.Message.getField(this, 14)) && e.writeBool(14, t);
 null != (t = s.Message.getField(this, 15)) && e.writeInt32(15, t);
-(t = this.getHotlinesList()).length > 0 && e.writeRepeatedString(16, t);
+0 < (t = this.getHotlinesList()).length && e.writeRepeatedString(16, t);
 null != (t = s.Message.getField(this, 17)) && e.writeString(17, t);
 null != (t = s.Message.getField(this, 18)) && e.writeString(18, t);
-(t = this.getEnablegameidsList()).length > 0 && e.writeRepeatedInt32(19, t);
+0 < (t = this.getEnablegameidsList()).length && e.writeRepeatedInt32(19, t);
 null != (t = s.Message.getField(this, 20)) && e.writeString(20, t);
 };
 proto.BINInitializeResponse.prototype.getResponsecode = function() {
@@ -16877,9 +19337,10 @@ var t = new s.BinaryReader(e), o = new proto.BINInstantMessageRequest();
 return proto.BINInstantMessageRequest.deserializeBinaryFromReader(o, t);
 };
 proto.BINInstantMessageRequest.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readInt32();
+var o = t.readInt32();
 e.setScope(o);
 break;
 
@@ -16899,12 +19360,13 @@ e.setReceiveruserid(o);
 break;
 
 case 5:
-var o = t.readInt32();
+o = t.readInt32();
 e.setTextemoticonid(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -17018,9 +19480,10 @@ var t = new s.BinaryReader(e), o = new proto.BINInstantMessageResponse();
 return proto.BINInstantMessageResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINInstantMessageResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
@@ -17080,12 +19543,13 @@ e.setTextemoticonid(o);
 break;
 
 case 13:
-var o = t.readString();
+o = t.readString();
 e.setColorcode(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -17298,9 +19762,10 @@ var t = new s.BinaryReader(e), o = new proto.BINInstantMessage();
 return proto.BINInstantMessage.deserializeBinaryFromReader(o, t);
 };
 proto.BINInstantMessage.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readString();
+var o = t.readString();
 e.setSendername(o);
 break;
 
@@ -17335,12 +19800,13 @@ e.setTextemoticonid(o);
 break;
 
 case 8:
-var o = t.readString();
+o = t.readString();
 e.setColorcode(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -17481,7 +19947,8 @@ var t = new s.BinaryReader(e), o = new proto.BINInstantMessageHistoryRequest();
 return proto.BINInstantMessageHistoryRequest.deserializeBinaryFromReader(o, t);
 };
 proto.BINInstantMessageHistoryRequest.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
 var o = t.readInt32();
 e.setScope(o);
@@ -17489,6 +19956,7 @@ break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -17501,7 +19969,7 @@ this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINInstantMessageHistoryRequest.prototype.serializeBinaryToWriter = function(e) {
-var t = void 0;
+var t;
 null != (t = s.Message.getField(this, 1)) && e.writeInt32(1, t);
 };
 proto.BINInstantMessageHistoryRequest.prototype.getScope = function() {
@@ -17544,9 +20012,10 @@ var t = new s.BinaryReader(e), o = new proto.BINInstantMessageHistoryResponse();
 return proto.BINInstantMessageHistoryResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINInstantMessageHistoryResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
@@ -17571,13 +20040,14 @@ e.setRoomindex(o);
 break;
 
 case 6:
-var o = new proto.BINInstantMessage();
+o = new proto.BINInstantMessage();
 t.readMessage(o, proto.BINInstantMessage.deserializeBinaryFromReader);
 e.addInstantmessages(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -17596,7 +20066,7 @@ null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
 null != (t = s.Message.getField(this, 3)) && e.writeInt32(3, t);
 null != (t = s.Message.getField(this, 4)) && e.writeInt32(4, t);
 null != (t = s.Message.getField(this, 5)) && e.writeInt32(5, t);
-(t = this.getInstantmessagesList()).length > 0 && e.writeRepeatedMessage(6, t, proto.BINInstantMessage.serializeBinaryToWriter);
+0 < (t = this.getInstantmessagesList()).length && e.writeRepeatedMessage(6, t, proto.BINInstantMessage.serializeBinaryToWriter);
 };
 proto.BINInstantMessageHistoryResponse.prototype.getResponsecode = function() {
 return s.Message.getFieldWithDefault(this, 1, !1);
@@ -17707,9 +20177,10 @@ var t = new s.BinaryReader(e), o = new proto.BINJarRequest();
 return proto.BINJarRequest.deserializeBinaryFromReader(o, t);
 };
 proto.BINJarRequest.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readInt32();
+var o = t.readInt32();
 e.setZoneid(o);
 break;
 
@@ -17719,13 +20190,14 @@ e.setJartype(o);
 break;
 
 case 3:
-var o = new n.BINMapFieldEntry();
+o = new n.BINMapFieldEntry();
 t.readMessage(o, n.BINMapFieldEntry.deserializeBinaryFromReader);
 e.addArgs(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -17741,7 +20213,7 @@ proto.BINJarRequest.prototype.serializeBinaryToWriter = function(e) {
 var t = void 0;
 null != (t = s.Message.getField(this, 1)) && e.writeInt32(1, t);
 null != (t = s.Message.getField(this, 2)) && e.writeInt32(2, t);
-(t = this.getArgsList()).length > 0 && e.writeRepeatedMessage(3, t, n.BINMapFieldEntry.serializeBinaryToWriter);
+0 < (t = this.getArgsList()).length && e.writeRepeatedMessage(3, t, n.BINMapFieldEntry.serializeBinaryToWriter);
 };
 proto.BINJarRequest.prototype.getZoneid = function() {
 return s.Message.getFieldWithDefault(this, 1, 0);
@@ -17806,9 +20278,10 @@ var t = new s.BinaryReader(e), o = new proto.BINJarResponse();
 return proto.BINJarResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINJarResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
@@ -17829,13 +20302,14 @@ e.addArgs(o);
 break;
 
 case 5:
-var o = new proto.BINJarInfo();
+o = new proto.BINJarInfo();
 t.readMessage(o, proto.BINJarInfo.deserializeBinaryFromReader);
 e.addJarinfo(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -17852,8 +20326,8 @@ var t = void 0;
 null != (t = s.Message.getField(this, 1)) && e.writeBool(1, t);
 null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
 null != (t = s.Message.getField(this, 3)) && e.writeInt64(3, t);
-(t = this.getArgsList()).length > 0 && e.writeRepeatedMessage(4, t, n.BINMapFieldEntry.serializeBinaryToWriter);
-(t = this.getJarinfoList()).length > 0 && e.writeRepeatedMessage(5, t, proto.BINJarInfo.serializeBinaryToWriter);
+0 < (t = this.getArgsList()).length && e.writeRepeatedMessage(4, t, n.BINMapFieldEntry.serializeBinaryToWriter);
+0 < (t = this.getJarinfoList()).length && e.writeRepeatedMessage(5, t, proto.BINJarInfo.serializeBinaryToWriter);
 };
 proto.BINJarResponse.prototype.getResponsecode = function() {
 return s.Message.getFieldWithDefault(this, 1, !1);
@@ -17939,9 +20413,10 @@ var t = new s.BinaryReader(e), o = new proto.BINJarInfo();
 return proto.BINJarInfo.deserializeBinaryFromReader(o, t);
 };
 proto.BINJarInfo.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readInt64();
+var o = t.readInt64();
 e.setGameid(o);
 break;
 
@@ -17951,12 +20426,13 @@ e.setValue(o);
 break;
 
 case 3:
-var o = t.readInt32();
+o = t.readInt32();
 e.setJartype(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -18042,22 +20518,22 @@ var a = i.getChildByName("item2").getComponent(cc.Label);
 a.string = "";
 var p = i.getChildByName("item3").getComponent(cc.Label);
 p.string = "";
-var l = this.node.getChildByName("fourItem"), u = l.getChildByName("item1").getComponent(cc.Label);
-u.string = "";
-var g = l.getChildByName("item2").getComponent(cc.Label);
+var l = this.node.getChildByName("fourItem"), g = l.getChildByName("item1").getComponent(cc.Label);
 g.string = "";
-var d = l.getChildByName("item3").getComponent(cc.Label);
-d.string = "";
-var c = l.getChildByName("item4").getComponent(cc.Label);
+var u = l.getChildByName("item2").getComponent(cc.Label);
+u.string = "";
+var c = l.getChildByName("item3").getComponent(cc.Label);
 c.string = "";
+var d = l.getChildByName("item4").getComponent(cc.Label);
+d.string = "";
 this.node_card = l.getChildByName("item4").getChildByName("card");
 this.node_card.removeAllChildren();
 this.list_text = [];
 if (4 == e) {
-this.list_text.push(u);
 this.list_text.push(g);
-this.list_text.push(d);
+this.list_text.push(u);
 this.list_text.push(c);
+this.list_text.push(d);
 } else if (3 == e) {
 this.list_text.push(n);
 this.list_text.push(a);
@@ -18076,24 +20552,24 @@ delete r.date_time;
 cc.log("data : ", r);
 var i = Object.keys(r).length;
 this.resetCell(i, e);
-if (this.list_text.length == i) for (var n = /[,]/g, a = -1 !== r[Object.keys(r)[i - 1]].toString().search(n) ? r[Object.keys(r)[i - 1]].split(",") : [], p = 0; p < i; p++) {
-var l = r[Object.keys(r)[p]].toString();
-4 == i && 0 == p && 0 != e && (l = "#" + l);
-if (p == i - 1 && 0 != e) if (a.length > 1) for (var u = 0; u < a.length; u++) {
-var g = cc.instantiate(this.prefabData).getComponent("CardItem"), d = a[u];
+if (this.list_text.length == i) for (var n = -1 !== r[Object.keys(r)[i - 1]].toString().search(/[,]/g) ? r[Object.keys(r)[i - 1]].split(",") : [], a = 0; a < i; a++) {
+var p = r[Object.keys(r)[a]].toString();
+4 == i && 0 == a && 0 != e && (p = "#" + p);
+if (a == i - 1 && 0 != e) if (1 < n.length) for (var l = 0; l < n.length; l++) {
+var g = cc.instantiate(this.prefabData).getComponent("CardItem"), u = n[l];
 g.node.setScale(.225, .225);
-var c = (u - a.length / 2 + .5) * g.node.getContentSize().width * .1;
-g.replaceCard(d);
+var c = (l - n.length / 2 + .5) * g.node.getContentSize().width * .1;
+g.replaceCard(u);
 g.setBg(!1);
 g.node.setPositionY(0);
 g.node.setPositionX(c);
 this.node_card.addChild(g.node);
 } else {
-this.list_text[p].string = l;
-this.list_text[p].node.color = cc.color(94, 60, 17, 255);
+this.list_text[a].string = p;
+this.list_text[a].node.color = cc.color(94, 60, 17, 255);
 } else {
-this.list_text[p].string = l;
-this.list_text[p].node.color = 0 == e ? cc.color(255, 248, 198, 255) : cc.color(94, 60, 17, 255);
+this.list_text[a].string = p;
+this.list_text[a].node.color = 0 == e ? cc.color(255, 248, 198, 255) : cc.color(94, 60, 17, 255);
 }
 }
 }
@@ -18124,22 +20600,22 @@ var a = i.getChildByName("item2").getComponent(cc.Label);
 a.string = "";
 var p = i.getChildByName("item3").getComponent(cc.Label);
 p.string = "";
-var l = this.node.getChildByName("fourItem"), u = l.getChildByName("item1").getComponent(cc.Label);
-u.string = "";
-var g = l.getChildByName("item2").getComponent(cc.Label);
+var l = this.node.getChildByName("fourItem"), g = l.getChildByName("item1").getComponent(cc.Label);
 g.string = "";
-var d = l.getChildByName("item3").getComponent(cc.Label);
-d.string = "";
-var c = l.getChildByName("item4").getComponent(cc.Label);
+var u = l.getChildByName("item2").getComponent(cc.Label);
+u.string = "";
+var c = l.getChildByName("item3").getComponent(cc.Label);
 c.string = "";
+var d = l.getChildByName("item4").getComponent(cc.Label);
+d.string = "";
 this.node_card = l.getChildByName("item4").getChildByName("card");
 this.node_card.removeAllChildren();
 this.list_text = [];
 if (4 == e) {
-this.list_text.push(u);
 this.list_text.push(g);
-this.list_text.push(d);
+this.list_text.push(u);
 this.list_text.push(c);
+this.list_text.push(d);
 } else if (3 == e) {
 this.list_text.push(n);
 this.list_text.push(a);
@@ -18158,24 +20634,24 @@ delete r.date_time;
 cc.log("data : ", r);
 var i = Object.keys(r).length;
 this.resetCell(i, e);
-if (this.list_text.length == i) for (var n = /[,]/g, a = -1 !== r[Object.keys(r)[i - 1]].toString().search(n) ? r[Object.keys(r)[i - 1]].split(",") : [], p = 0; p < i; p++) {
-var l = r[Object.keys(r)[p]].toString();
-4 == i && 0 == p && 0 != e && (l = "#" + l);
-if (p == i - 1 && 0 != e) if (a.length > 1) for (var u = 0; u < a.length; u++) {
-var g = cc.instantiate(this.prefabData).getComponent("CardItem"), d = a[u];
+if (this.list_text.length == i) for (var n = -1 !== r[Object.keys(r)[i - 1]].toString().search(/[,]/g) ? r[Object.keys(r)[i - 1]].split(",") : [], a = 0; a < i; a++) {
+var p = r[Object.keys(r)[a]].toString();
+4 == i && 0 == a && 0 != e && (p = "#" + p);
+if (a == i - 1 && 0 != e) if (1 < n.length) for (var l = 0; l < n.length; l++) {
+var g = cc.instantiate(this.prefabData).getComponent("CardItem"), u = n[l];
 g.node.setScale(.225, .225);
-var c = (u - a.length / 2 + .5) * g.node.getContentSize().width * .1;
-g.replaceCard(d);
+var c = (l - n.length / 2 + .5) * g.node.getContentSize().width * .1;
+g.replaceCard(u);
 g.setBg(!1);
 g.node.setPositionY(0);
 g.node.setPositionX(c);
 this.node_card.addChild(g.node);
 } else {
-this.list_text[p].string = l;
-this.list_text[p].node.color = cc.color(94, 60, 17, 255);
+this.list_text[a].string = p;
+this.list_text[a].node.color = cc.color(94, 60, 17, 255);
 } else {
-this.list_text[p].string = l;
-this.list_text[p].node.color = 0 == e ? cc.color(255, 248, 198, 255) : cc.color(94, 60, 17, 255);
+this.list_text[a].string = p;
+this.list_text[a].node.color = 0 == e ? cc.color(255, 248, 198, 255) : cc.color(94, 60, 17, 255);
 }
 }
 }
@@ -18187,41 +20663,42 @@ viewCell: "viewCell"
 level_pb: [ function(e, t, o) {
 "use strict";
 cc._RF.push(t, "75a1bT9U15IjJHi+1BPFhOu", "level_pb");
-var s = e("google-protobuf"), r = s, i = Function("return this")();
-r.exportSymbol("proto.BINLevel", null, i);
-r.exportSymbol("proto.BINLevelUpResponse", null, i);
-r.exportSymbol("proto.BINMedal", null, i);
-r.exportSymbol("proto.BINMedalUpResponse", null, i);
-r.exportSymbol("proto.BINVipLevel", null, i);
+var r = e("google-protobuf"), s = r, i = Function("return this")();
+s.exportSymbol("proto.BINLevel", null, i);
+s.exportSymbol("proto.BINLevelUpResponse", null, i);
+s.exportSymbol("proto.BINMedal", null, i);
+s.exportSymbol("proto.BINMedalUpResponse", null, i);
+s.exportSymbol("proto.BINVipLevel", null, i);
 proto.BINLevel = function(e) {
-s.Message.initialize(this, e, 0, -1, null, null);
+r.Message.initialize(this, e, 0, -1, null, null);
 };
-r.inherits(proto.BINLevel, s.Message);
-r.DEBUG && !COMPILED && (proto.BINLevel.displayName = "proto.BINLevel");
-if (s.Message.GENERATE_TO_OBJECT) {
+s.inherits(proto.BINLevel, r.Message);
+s.DEBUG && !COMPILED && (proto.BINLevel.displayName = "proto.BINLevel");
+if (r.Message.GENERATE_TO_OBJECT) {
 proto.BINLevel.prototype.toObject = function(e) {
 return proto.BINLevel.toObject(e, this);
 };
 proto.BINLevel.toObject = function(e, t) {
 var o = {
-level: s.Message.getField(t, 1),
-name: s.Message.getField(t, 2),
-cashgift: s.Message.getField(t, 3),
-goldgift: s.Message.getField(t, 4),
-maxexp: s.Message.getField(t, 5)
+level: r.Message.getField(t, 1),
+name: r.Message.getField(t, 2),
+cashgift: r.Message.getField(t, 3),
+goldgift: r.Message.getField(t, 4),
+maxexp: r.Message.getField(t, 5)
 };
 e && (o.$jspbMessageInstance = t);
 return o;
 };
 }
 proto.BINLevel.deserializeBinary = function(e) {
-var t = new s.BinaryReader(e), o = new proto.BINLevel();
+var t = new r.BinaryReader(e), o = new proto.BINLevel();
 return proto.BINLevel.deserializeBinaryFromReader(o, t);
 };
 proto.BINLevel.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readInt32();
+var o = t.readInt32();
 e.setLevel(o);
 break;
 
@@ -18241,12 +20718,13 @@ e.setGoldgift(o);
 break;
 
 case 5:
-var o = t.readInt64();
+o = t.readInt64();
 e.setMaxexp(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -18254,105 +20732,106 @@ proto.BINLevel.serializeBinaryToWriter = function(e, t) {
 e.serializeBinaryToWriter(t);
 };
 proto.BINLevel.prototype.serializeBinary = function() {
-var e = new s.BinaryWriter();
+var e = new r.BinaryWriter();
 this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINLevel.prototype.serializeBinaryToWriter = function(e) {
 var t = void 0;
-null != (t = s.Message.getField(this, 1)) && e.writeInt32(1, t);
-null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
-null != (t = s.Message.getField(this, 3)) && e.writeInt64(3, t);
-null != (t = s.Message.getField(this, 4)) && e.writeInt64(4, t);
-null != (t = s.Message.getField(this, 5)) && e.writeInt64(5, t);
+null != (t = r.Message.getField(this, 1)) && e.writeInt32(1, t);
+null != (t = r.Message.getField(this, 2)) && e.writeString(2, t);
+null != (t = r.Message.getField(this, 3)) && e.writeInt64(3, t);
+null != (t = r.Message.getField(this, 4)) && e.writeInt64(4, t);
+null != (t = r.Message.getField(this, 5)) && e.writeInt64(5, t);
 };
 proto.BINLevel.prototype.getLevel = function() {
-return s.Message.getFieldWithDefault(this, 1, 0);
+return r.Message.getFieldWithDefault(this, 1, 0);
 };
 proto.BINLevel.prototype.setLevel = function(e) {
-s.Message.setField(this, 1, e);
+r.Message.setField(this, 1, e);
 };
 proto.BINLevel.prototype.clearLevel = function() {
-s.Message.setField(this, 1, void 0);
+r.Message.setField(this, 1, void 0);
 };
 proto.BINLevel.prototype.hasLevel = function() {
-return null != s.Message.getField(this, 1);
+return null != r.Message.getField(this, 1);
 };
 proto.BINLevel.prototype.getName = function() {
-return s.Message.getFieldWithDefault(this, 2, "");
+return r.Message.getFieldWithDefault(this, 2, "");
 };
 proto.BINLevel.prototype.setName = function(e) {
-s.Message.setField(this, 2, e);
+r.Message.setField(this, 2, e);
 };
 proto.BINLevel.prototype.clearName = function() {
-s.Message.setField(this, 2, void 0);
+r.Message.setField(this, 2, void 0);
 };
 proto.BINLevel.prototype.hasName = function() {
-return null != s.Message.getField(this, 2);
+return null != r.Message.getField(this, 2);
 };
 proto.BINLevel.prototype.getCashgift = function() {
-return s.Message.getFieldWithDefault(this, 3, 0);
+return r.Message.getFieldWithDefault(this, 3, 0);
 };
 proto.BINLevel.prototype.setCashgift = function(e) {
-s.Message.setField(this, 3, e);
+r.Message.setField(this, 3, e);
 };
 proto.BINLevel.prototype.clearCashgift = function() {
-s.Message.setField(this, 3, void 0);
+r.Message.setField(this, 3, void 0);
 };
 proto.BINLevel.prototype.hasCashgift = function() {
-return null != s.Message.getField(this, 3);
+return null != r.Message.getField(this, 3);
 };
 proto.BINLevel.prototype.getGoldgift = function() {
-return s.Message.getFieldWithDefault(this, 4, 0);
+return r.Message.getFieldWithDefault(this, 4, 0);
 };
 proto.BINLevel.prototype.setGoldgift = function(e) {
-s.Message.setField(this, 4, e);
+r.Message.setField(this, 4, e);
 };
 proto.BINLevel.prototype.clearGoldgift = function() {
-s.Message.setField(this, 4, void 0);
+r.Message.setField(this, 4, void 0);
 };
 proto.BINLevel.prototype.hasGoldgift = function() {
-return null != s.Message.getField(this, 4);
+return null != r.Message.getField(this, 4);
 };
 proto.BINLevel.prototype.getMaxexp = function() {
-return s.Message.getFieldWithDefault(this, 5, 0);
+return r.Message.getFieldWithDefault(this, 5, 0);
 };
 proto.BINLevel.prototype.setMaxexp = function(e) {
-s.Message.setField(this, 5, e);
+r.Message.setField(this, 5, e);
 };
 proto.BINLevel.prototype.clearMaxexp = function() {
-s.Message.setField(this, 5, void 0);
+r.Message.setField(this, 5, void 0);
 };
 proto.BINLevel.prototype.hasMaxexp = function() {
-return null != s.Message.getField(this, 5);
+return null != r.Message.getField(this, 5);
 };
 proto.BINMedal = function(e) {
-s.Message.initialize(this, e, 0, -1, null, null);
+r.Message.initialize(this, e, 0, -1, null, null);
 };
-r.inherits(proto.BINMedal, s.Message);
-r.DEBUG && !COMPILED && (proto.BINMedal.displayName = "proto.BINMedal");
-if (s.Message.GENERATE_TO_OBJECT) {
+s.inherits(proto.BINMedal, r.Message);
+s.DEBUG && !COMPILED && (proto.BINMedal.displayName = "proto.BINMedal");
+if (r.Message.GENERATE_TO_OBJECT) {
 proto.BINMedal.prototype.toObject = function(e) {
 return proto.BINMedal.toObject(e, this);
 };
 proto.BINMedal.toObject = function(e, t) {
 var o = {
-medal: s.Message.getField(t, 1),
-name: s.Message.getField(t, 2),
-maxlevel: s.Message.getField(t, 3)
+medal: r.Message.getField(t, 1),
+name: r.Message.getField(t, 2),
+maxlevel: r.Message.getField(t, 3)
 };
 e && (o.$jspbMessageInstance = t);
 return o;
 };
 }
 proto.BINMedal.deserializeBinary = function(e) {
-var t = new s.BinaryReader(e), o = new proto.BINMedal();
+var t = new r.BinaryReader(e), o = new proto.BINMedal();
 return proto.BINMedal.deserializeBinaryFromReader(o, t);
 };
 proto.BINMedal.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readInt32();
+var o = t.readInt32();
 e.setMedal(o);
 break;
 
@@ -18362,12 +20841,13 @@ e.setName(o);
 break;
 
 case 3:
-var o = t.readInt32();
+o = t.readInt32();
 e.setMaxlevel(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -18375,85 +20855,86 @@ proto.BINMedal.serializeBinaryToWriter = function(e, t) {
 e.serializeBinaryToWriter(t);
 };
 proto.BINMedal.prototype.serializeBinary = function() {
-var e = new s.BinaryWriter();
+var e = new r.BinaryWriter();
 this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINMedal.prototype.serializeBinaryToWriter = function(e) {
 var t = void 0;
-null != (t = s.Message.getField(this, 1)) && e.writeInt32(1, t);
-null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
-null != (t = s.Message.getField(this, 3)) && e.writeInt32(3, t);
+null != (t = r.Message.getField(this, 1)) && e.writeInt32(1, t);
+null != (t = r.Message.getField(this, 2)) && e.writeString(2, t);
+null != (t = r.Message.getField(this, 3)) && e.writeInt32(3, t);
 };
 proto.BINMedal.prototype.getMedal = function() {
-return s.Message.getFieldWithDefault(this, 1, 0);
+return r.Message.getFieldWithDefault(this, 1, 0);
 };
 proto.BINMedal.prototype.setMedal = function(e) {
-s.Message.setField(this, 1, e);
+r.Message.setField(this, 1, e);
 };
 proto.BINMedal.prototype.clearMedal = function() {
-s.Message.setField(this, 1, void 0);
+r.Message.setField(this, 1, void 0);
 };
 proto.BINMedal.prototype.hasMedal = function() {
-return null != s.Message.getField(this, 1);
+return null != r.Message.getField(this, 1);
 };
 proto.BINMedal.prototype.getName = function() {
-return s.Message.getFieldWithDefault(this, 2, "");
+return r.Message.getFieldWithDefault(this, 2, "");
 };
 proto.BINMedal.prototype.setName = function(e) {
-s.Message.setField(this, 2, e);
+r.Message.setField(this, 2, e);
 };
 proto.BINMedal.prototype.clearName = function() {
-s.Message.setField(this, 2, void 0);
+r.Message.setField(this, 2, void 0);
 };
 proto.BINMedal.prototype.hasName = function() {
-return null != s.Message.getField(this, 2);
+return null != r.Message.getField(this, 2);
 };
 proto.BINMedal.prototype.getMaxlevel = function() {
-return s.Message.getFieldWithDefault(this, 3, 0);
+return r.Message.getFieldWithDefault(this, 3, 0);
 };
 proto.BINMedal.prototype.setMaxlevel = function(e) {
-s.Message.setField(this, 3, e);
+r.Message.setField(this, 3, e);
 };
 proto.BINMedal.prototype.clearMaxlevel = function() {
-s.Message.setField(this, 3, void 0);
+r.Message.setField(this, 3, void 0);
 };
 proto.BINMedal.prototype.hasMaxlevel = function() {
-return null != s.Message.getField(this, 3);
+return null != r.Message.getField(this, 3);
 };
 proto.BINVipLevel = function(e) {
-s.Message.initialize(this, e, 0, -1, null, null);
+r.Message.initialize(this, e, 0, -1, null, null);
 };
-r.inherits(proto.BINVipLevel, s.Message);
-r.DEBUG && !COMPILED && (proto.BINVipLevel.displayName = "proto.BINVipLevel");
-if (s.Message.GENERATE_TO_OBJECT) {
+s.inherits(proto.BINVipLevel, r.Message);
+s.DEBUG && !COMPILED && (proto.BINVipLevel.displayName = "proto.BINVipLevel");
+if (r.Message.GENERATE_TO_OBJECT) {
 proto.BINVipLevel.prototype.toObject = function(e) {
 return proto.BINVipLevel.toObject(e, this);
 };
 proto.BINVipLevel.toObject = function(e, t) {
 var o = {
-vip: s.Message.getField(t, 1),
-name: s.Message.getField(t, 2),
-maxpoint: s.Message.getField(t, 3),
-totalcashpurchase: s.Message.getField(t, 4),
-maxpartopup: s.Message.getField(t, 5),
-maxturntopup: s.Message.getField(t, 6),
-minbalanceaftertopup: s.Message.getField(t, 7),
-cashtransfertax: s.Message.getField(t, 8),
-cashreceived: s.Message.getField(t, 9)
+vip: r.Message.getField(t, 1),
+name: r.Message.getField(t, 2),
+maxpoint: r.Message.getField(t, 3),
+totalcashpurchase: r.Message.getField(t, 4),
+maxpartopup: r.Message.getField(t, 5),
+maxturntopup: r.Message.getField(t, 6),
+minbalanceaftertopup: r.Message.getField(t, 7),
+cashtransfertax: r.Message.getField(t, 8),
+cashreceived: r.Message.getField(t, 9)
 };
 e && (o.$jspbMessageInstance = t);
 return o;
 };
 }
 proto.BINVipLevel.deserializeBinary = function(e) {
-var t = new s.BinaryReader(e), o = new proto.BINVipLevel();
+var t = new r.BinaryReader(e), o = new proto.BINVipLevel();
 return proto.BINVipLevel.deserializeBinaryFromReader(o, t);
 };
 proto.BINVipLevel.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readInt32();
+var o = t.readInt32();
 e.setVip(o);
 break;
 
@@ -18493,12 +20974,13 @@ e.setCashtransfertax(o);
 break;
 
 case 9:
-var o = t.readInt32();
+o = t.readInt32();
 e.setCashreceived(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -18506,159 +20988,160 @@ proto.BINVipLevel.serializeBinaryToWriter = function(e, t) {
 e.serializeBinaryToWriter(t);
 };
 proto.BINVipLevel.prototype.serializeBinary = function() {
-var e = new s.BinaryWriter();
+var e = new r.BinaryWriter();
 this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINVipLevel.prototype.serializeBinaryToWriter = function(e) {
 var t = void 0;
-null != (t = s.Message.getField(this, 1)) && e.writeInt32(1, t);
-null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
-null != (t = s.Message.getField(this, 3)) && e.writeInt64(3, t);
-null != (t = s.Message.getField(this, 4)) && e.writeInt64(4, t);
-null != (t = s.Message.getField(this, 5)) && e.writeInt32(5, t);
-null != (t = s.Message.getField(this, 6)) && e.writeInt32(6, t);
-null != (t = s.Message.getField(this, 7)) && e.writeInt32(7, t);
-null != (t = s.Message.getField(this, 8)) && e.writeInt32(8, t);
-null != (t = s.Message.getField(this, 9)) && e.writeInt32(9, t);
+null != (t = r.Message.getField(this, 1)) && e.writeInt32(1, t);
+null != (t = r.Message.getField(this, 2)) && e.writeString(2, t);
+null != (t = r.Message.getField(this, 3)) && e.writeInt64(3, t);
+null != (t = r.Message.getField(this, 4)) && e.writeInt64(4, t);
+null != (t = r.Message.getField(this, 5)) && e.writeInt32(5, t);
+null != (t = r.Message.getField(this, 6)) && e.writeInt32(6, t);
+null != (t = r.Message.getField(this, 7)) && e.writeInt32(7, t);
+null != (t = r.Message.getField(this, 8)) && e.writeInt32(8, t);
+null != (t = r.Message.getField(this, 9)) && e.writeInt32(9, t);
 };
 proto.BINVipLevel.prototype.getVip = function() {
-return s.Message.getFieldWithDefault(this, 1, 0);
+return r.Message.getFieldWithDefault(this, 1, 0);
 };
 proto.BINVipLevel.prototype.setVip = function(e) {
-s.Message.setField(this, 1, e);
+r.Message.setField(this, 1, e);
 };
 proto.BINVipLevel.prototype.clearVip = function() {
-s.Message.setField(this, 1, void 0);
+r.Message.setField(this, 1, void 0);
 };
 proto.BINVipLevel.prototype.hasVip = function() {
-return null != s.Message.getField(this, 1);
+return null != r.Message.getField(this, 1);
 };
 proto.BINVipLevel.prototype.getName = function() {
-return s.Message.getFieldWithDefault(this, 2, "");
+return r.Message.getFieldWithDefault(this, 2, "");
 };
 proto.BINVipLevel.prototype.setName = function(e) {
-s.Message.setField(this, 2, e);
+r.Message.setField(this, 2, e);
 };
 proto.BINVipLevel.prototype.clearName = function() {
-s.Message.setField(this, 2, void 0);
+r.Message.setField(this, 2, void 0);
 };
 proto.BINVipLevel.prototype.hasName = function() {
-return null != s.Message.getField(this, 2);
+return null != r.Message.getField(this, 2);
 };
 proto.BINVipLevel.prototype.getMaxpoint = function() {
-return s.Message.getFieldWithDefault(this, 3, 0);
+return r.Message.getFieldWithDefault(this, 3, 0);
 };
 proto.BINVipLevel.prototype.setMaxpoint = function(e) {
-s.Message.setField(this, 3, e);
+r.Message.setField(this, 3, e);
 };
 proto.BINVipLevel.prototype.clearMaxpoint = function() {
-s.Message.setField(this, 3, void 0);
+r.Message.setField(this, 3, void 0);
 };
 proto.BINVipLevel.prototype.hasMaxpoint = function() {
-return null != s.Message.getField(this, 3);
+return null != r.Message.getField(this, 3);
 };
 proto.BINVipLevel.prototype.getTotalcashpurchase = function() {
-return s.Message.getFieldWithDefault(this, 4, 0);
+return r.Message.getFieldWithDefault(this, 4, 0);
 };
 proto.BINVipLevel.prototype.setTotalcashpurchase = function(e) {
-s.Message.setField(this, 4, e);
+r.Message.setField(this, 4, e);
 };
 proto.BINVipLevel.prototype.clearTotalcashpurchase = function() {
-s.Message.setField(this, 4, void 0);
+r.Message.setField(this, 4, void 0);
 };
 proto.BINVipLevel.prototype.hasTotalcashpurchase = function() {
-return null != s.Message.getField(this, 4);
+return null != r.Message.getField(this, 4);
 };
 proto.BINVipLevel.prototype.getMaxpartopup = function() {
-return s.Message.getFieldWithDefault(this, 5, 0);
+return r.Message.getFieldWithDefault(this, 5, 0);
 };
 proto.BINVipLevel.prototype.setMaxpartopup = function(e) {
-s.Message.setField(this, 5, e);
+r.Message.setField(this, 5, e);
 };
 proto.BINVipLevel.prototype.clearMaxpartopup = function() {
-s.Message.setField(this, 5, void 0);
+r.Message.setField(this, 5, void 0);
 };
 proto.BINVipLevel.prototype.hasMaxpartopup = function() {
-return null != s.Message.getField(this, 5);
+return null != r.Message.getField(this, 5);
 };
 proto.BINVipLevel.prototype.getMaxturntopup = function() {
-return s.Message.getFieldWithDefault(this, 6, 0);
+return r.Message.getFieldWithDefault(this, 6, 0);
 };
 proto.BINVipLevel.prototype.setMaxturntopup = function(e) {
-s.Message.setField(this, 6, e);
+r.Message.setField(this, 6, e);
 };
 proto.BINVipLevel.prototype.clearMaxturntopup = function() {
-s.Message.setField(this, 6, void 0);
+r.Message.setField(this, 6, void 0);
 };
 proto.BINVipLevel.prototype.hasMaxturntopup = function() {
-return null != s.Message.getField(this, 6);
+return null != r.Message.getField(this, 6);
 };
 proto.BINVipLevel.prototype.getMinbalanceaftertopup = function() {
-return s.Message.getFieldWithDefault(this, 7, 0);
+return r.Message.getFieldWithDefault(this, 7, 0);
 };
 proto.BINVipLevel.prototype.setMinbalanceaftertopup = function(e) {
-s.Message.setField(this, 7, e);
+r.Message.setField(this, 7, e);
 };
 proto.BINVipLevel.prototype.clearMinbalanceaftertopup = function() {
-s.Message.setField(this, 7, void 0);
+r.Message.setField(this, 7, void 0);
 };
 proto.BINVipLevel.prototype.hasMinbalanceaftertopup = function() {
-return null != s.Message.getField(this, 7);
+return null != r.Message.getField(this, 7);
 };
 proto.BINVipLevel.prototype.getCashtransfertax = function() {
-return s.Message.getFieldWithDefault(this, 8, 0);
+return r.Message.getFieldWithDefault(this, 8, 0);
 };
 proto.BINVipLevel.prototype.setCashtransfertax = function(e) {
-s.Message.setField(this, 8, e);
+r.Message.setField(this, 8, e);
 };
 proto.BINVipLevel.prototype.clearCashtransfertax = function() {
-s.Message.setField(this, 8, void 0);
+r.Message.setField(this, 8, void 0);
 };
 proto.BINVipLevel.prototype.hasCashtransfertax = function() {
-return null != s.Message.getField(this, 8);
+return null != r.Message.getField(this, 8);
 };
 proto.BINVipLevel.prototype.getCashreceived = function() {
-return s.Message.getFieldWithDefault(this, 9, 0);
+return r.Message.getFieldWithDefault(this, 9, 0);
 };
 proto.BINVipLevel.prototype.setCashreceived = function(e) {
-s.Message.setField(this, 9, e);
+r.Message.setField(this, 9, e);
 };
 proto.BINVipLevel.prototype.clearCashreceived = function() {
-s.Message.setField(this, 9, void 0);
+r.Message.setField(this, 9, void 0);
 };
 proto.BINVipLevel.prototype.hasCashreceived = function() {
-return null != s.Message.getField(this, 9);
+return null != r.Message.getField(this, 9);
 };
 proto.BINLevelUpResponse = function(e) {
-s.Message.initialize(this, e, 0, -1, null, null);
+r.Message.initialize(this, e, 0, -1, null, null);
 };
-r.inherits(proto.BINLevelUpResponse, s.Message);
-r.DEBUG && !COMPILED && (proto.BINLevelUpResponse.displayName = "proto.BINLevelUpResponse");
-if (s.Message.GENERATE_TO_OBJECT) {
+s.inherits(proto.BINLevelUpResponse, r.Message);
+s.DEBUG && !COMPILED && (proto.BINLevelUpResponse.displayName = "proto.BINLevelUpResponse");
+if (r.Message.GENERATE_TO_OBJECT) {
 proto.BINLevelUpResponse.prototype.toObject = function(e) {
 return proto.BINLevelUpResponse.toObject(e, this);
 };
 proto.BINLevelUpResponse.toObject = function(e, t) {
-var o, r = {
-responsecode: s.Message.getField(t, 1),
-message: s.Message.getField(t, 2),
-currentexp: s.Message.getField(t, 3),
-levelup: s.Message.getField(t, 4),
+var o, s = {
+responsecode: r.Message.getField(t, 1),
+message: r.Message.getField(t, 2),
+currentexp: r.Message.getField(t, 3),
+levelup: r.Message.getField(t, 4),
 newlevel: (o = t.getNewlevel()) && proto.BINLevel.toObject(e, o)
 };
-e && (r.$jspbMessageInstance = t);
-return r;
+e && (s.$jspbMessageInstance = t);
+return s;
 };
 }
 proto.BINLevelUpResponse.deserializeBinary = function(e) {
-var t = new s.BinaryReader(e), o = new proto.BINLevelUpResponse();
+var t = new r.BinaryReader(e), o = new proto.BINLevelUpResponse();
 return proto.BINLevelUpResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINLevelUpResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
@@ -18678,7 +21161,7 @@ e.setLevelup(o);
 break;
 
 case 5:
-var o = new proto.BINLevel();
+o = new proto.BINLevel();
 t.readMessage(o, proto.BINLevel.deserializeBinaryFromReader);
 e.setNewlevel(o);
 break;
@@ -18686,112 +21169,114 @@ break;
 default:
 t.skipField();
 }
+}
 return e;
 };
 proto.BINLevelUpResponse.serializeBinaryToWriter = function(e, t) {
 e.serializeBinaryToWriter(t);
 };
 proto.BINLevelUpResponse.prototype.serializeBinary = function() {
-var e = new s.BinaryWriter();
+var e = new r.BinaryWriter();
 this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINLevelUpResponse.prototype.serializeBinaryToWriter = function(e) {
 var t = void 0;
-null != (t = s.Message.getField(this, 1)) && e.writeBool(1, t);
-null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
-null != (t = s.Message.getField(this, 3)) && e.writeInt64(3, t);
-null != (t = s.Message.getField(this, 4)) && e.writeBool(4, t);
+null != (t = r.Message.getField(this, 1)) && e.writeBool(1, t);
+null != (t = r.Message.getField(this, 2)) && e.writeString(2, t);
+null != (t = r.Message.getField(this, 3)) && e.writeInt64(3, t);
+null != (t = r.Message.getField(this, 4)) && e.writeBool(4, t);
 null != (t = this.getNewlevel()) && e.writeMessage(5, t, proto.BINLevel.serializeBinaryToWriter);
 };
 proto.BINLevelUpResponse.prototype.getResponsecode = function() {
-return s.Message.getFieldWithDefault(this, 1, !1);
+return r.Message.getFieldWithDefault(this, 1, !1);
 };
 proto.BINLevelUpResponse.prototype.setResponsecode = function(e) {
-s.Message.setField(this, 1, e);
+r.Message.setField(this, 1, e);
 };
 proto.BINLevelUpResponse.prototype.clearResponsecode = function() {
-s.Message.setField(this, 1, void 0);
+r.Message.setField(this, 1, void 0);
 };
 proto.BINLevelUpResponse.prototype.hasResponsecode = function() {
-return null != s.Message.getField(this, 1);
+return null != r.Message.getField(this, 1);
 };
 proto.BINLevelUpResponse.prototype.getMessage = function() {
-return s.Message.getFieldWithDefault(this, 2, "");
+return r.Message.getFieldWithDefault(this, 2, "");
 };
 proto.BINLevelUpResponse.prototype.setMessage = function(e) {
-s.Message.setField(this, 2, e);
+r.Message.setField(this, 2, e);
 };
 proto.BINLevelUpResponse.prototype.clearMessage = function() {
-s.Message.setField(this, 2, void 0);
+r.Message.setField(this, 2, void 0);
 };
 proto.BINLevelUpResponse.prototype.hasMessage = function() {
-return null != s.Message.getField(this, 2);
+return null != r.Message.getField(this, 2);
 };
 proto.BINLevelUpResponse.prototype.getCurrentexp = function() {
-return s.Message.getFieldWithDefault(this, 3, 0);
+return r.Message.getFieldWithDefault(this, 3, 0);
 };
 proto.BINLevelUpResponse.prototype.setCurrentexp = function(e) {
-s.Message.setField(this, 3, e);
+r.Message.setField(this, 3, e);
 };
 proto.BINLevelUpResponse.prototype.clearCurrentexp = function() {
-s.Message.setField(this, 3, void 0);
+r.Message.setField(this, 3, void 0);
 };
 proto.BINLevelUpResponse.prototype.hasCurrentexp = function() {
-return null != s.Message.getField(this, 3);
+return null != r.Message.getField(this, 3);
 };
 proto.BINLevelUpResponse.prototype.getLevelup = function() {
-return s.Message.getFieldWithDefault(this, 4, !1);
+return r.Message.getFieldWithDefault(this, 4, !1);
 };
 proto.BINLevelUpResponse.prototype.setLevelup = function(e) {
-s.Message.setField(this, 4, e);
+r.Message.setField(this, 4, e);
 };
 proto.BINLevelUpResponse.prototype.clearLevelup = function() {
-s.Message.setField(this, 4, void 0);
+r.Message.setField(this, 4, void 0);
 };
 proto.BINLevelUpResponse.prototype.hasLevelup = function() {
-return null != s.Message.getField(this, 4);
+return null != r.Message.getField(this, 4);
 };
 proto.BINLevelUpResponse.prototype.getNewlevel = function() {
-return s.Message.getWrapperField(this, proto.BINLevel, 5);
+return r.Message.getWrapperField(this, proto.BINLevel, 5);
 };
 proto.BINLevelUpResponse.prototype.setNewlevel = function(e) {
-s.Message.setWrapperField(this, 5, e);
+r.Message.setWrapperField(this, 5, e);
 };
 proto.BINLevelUpResponse.prototype.clearNewlevel = function() {
 this.setNewlevel(void 0);
 };
 proto.BINLevelUpResponse.prototype.hasNewlevel = function() {
-return null != s.Message.getField(this, 5);
+return null != r.Message.getField(this, 5);
 };
 proto.BINMedalUpResponse = function(e) {
-s.Message.initialize(this, e, 0, -1, null, null);
+r.Message.initialize(this, e, 0, -1, null, null);
 };
-r.inherits(proto.BINMedalUpResponse, s.Message);
-r.DEBUG && !COMPILED && (proto.BINMedalUpResponse.displayName = "proto.BINMedalUpResponse");
-if (s.Message.GENERATE_TO_OBJECT) {
+s.inherits(proto.BINMedalUpResponse, r.Message);
+s.DEBUG && !COMPILED && (proto.BINMedalUpResponse.displayName = "proto.BINMedalUpResponse");
+if (r.Message.GENERATE_TO_OBJECT) {
 proto.BINMedalUpResponse.prototype.toObject = function(e) {
 return proto.BINMedalUpResponse.toObject(e, this);
 };
 proto.BINMedalUpResponse.toObject = function(e, t) {
-var o, r = {
-responsecode: s.Message.getField(t, 1),
-message: s.Message.getField(t, 2),
+var o, s = {
+responsecode: r.Message.getField(t, 1),
+message: r.Message.getField(t, 2),
 newmedal: (o = t.getNewmedal()) && proto.BINMedal.toObject(e, o),
-currentlevel: s.Message.getField(t, 4)
+currentlevel: r.Message.getField(t, 4)
 };
-e && (r.$jspbMessageInstance = t);
-return r;
+e && (s.$jspbMessageInstance = t);
+return s;
 };
 }
 proto.BINMedalUpResponse.deserializeBinary = function(e) {
-var t = new s.BinaryReader(e), o = new proto.BINMedalUpResponse();
+var t = new r.BinaryReader(e), o = new proto.BINMedalUpResponse();
 return proto.BINMedalUpResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINMedalUpResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
@@ -18807,12 +21292,13 @@ e.setNewmedal(o);
 break;
 
 case 4:
-var o = t.readInt32();
+o = t.readInt32();
 e.setCurrentlevel(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -18820,66 +21306,66 @@ proto.BINMedalUpResponse.serializeBinaryToWriter = function(e, t) {
 e.serializeBinaryToWriter(t);
 };
 proto.BINMedalUpResponse.prototype.serializeBinary = function() {
-var e = new s.BinaryWriter();
+var e = new r.BinaryWriter();
 this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINMedalUpResponse.prototype.serializeBinaryToWriter = function(e) {
 var t = void 0;
-null != (t = s.Message.getField(this, 1)) && e.writeBool(1, t);
-null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
+null != (t = r.Message.getField(this, 1)) && e.writeBool(1, t);
+null != (t = r.Message.getField(this, 2)) && e.writeString(2, t);
 null != (t = this.getNewmedal()) && e.writeMessage(3, t, proto.BINMedal.serializeBinaryToWriter);
-null != (t = s.Message.getField(this, 4)) && e.writeInt32(4, t);
+null != (t = r.Message.getField(this, 4)) && e.writeInt32(4, t);
 };
 proto.BINMedalUpResponse.prototype.getResponsecode = function() {
-return s.Message.getFieldWithDefault(this, 1, !1);
+return r.Message.getFieldWithDefault(this, 1, !1);
 };
 proto.BINMedalUpResponse.prototype.setResponsecode = function(e) {
-s.Message.setField(this, 1, e);
+r.Message.setField(this, 1, e);
 };
 proto.BINMedalUpResponse.prototype.clearResponsecode = function() {
-s.Message.setField(this, 1, void 0);
+r.Message.setField(this, 1, void 0);
 };
 proto.BINMedalUpResponse.prototype.hasResponsecode = function() {
-return null != s.Message.getField(this, 1);
+return null != r.Message.getField(this, 1);
 };
 proto.BINMedalUpResponse.prototype.getMessage = function() {
-return s.Message.getFieldWithDefault(this, 2, "");
+return r.Message.getFieldWithDefault(this, 2, "");
 };
 proto.BINMedalUpResponse.prototype.setMessage = function(e) {
-s.Message.setField(this, 2, e);
+r.Message.setField(this, 2, e);
 };
 proto.BINMedalUpResponse.prototype.clearMessage = function() {
-s.Message.setField(this, 2, void 0);
+r.Message.setField(this, 2, void 0);
 };
 proto.BINMedalUpResponse.prototype.hasMessage = function() {
-return null != s.Message.getField(this, 2);
+return null != r.Message.getField(this, 2);
 };
 proto.BINMedalUpResponse.prototype.getNewmedal = function() {
-return s.Message.getWrapperField(this, proto.BINMedal, 3);
+return r.Message.getWrapperField(this, proto.BINMedal, 3);
 };
 proto.BINMedalUpResponse.prototype.setNewmedal = function(e) {
-s.Message.setWrapperField(this, 3, e);
+r.Message.setWrapperField(this, 3, e);
 };
 proto.BINMedalUpResponse.prototype.clearNewmedal = function() {
 this.setNewmedal(void 0);
 };
 proto.BINMedalUpResponse.prototype.hasNewmedal = function() {
-return null != s.Message.getField(this, 3);
+return null != r.Message.getField(this, 3);
 };
 proto.BINMedalUpResponse.prototype.getCurrentlevel = function() {
-return s.Message.getFieldWithDefault(this, 4, 0);
+return r.Message.getFieldWithDefault(this, 4, 0);
 };
 proto.BINMedalUpResponse.prototype.setCurrentlevel = function(e) {
-s.Message.setField(this, 4, e);
+r.Message.setField(this, 4, e);
 };
 proto.BINMedalUpResponse.prototype.clearCurrentlevel = function() {
-s.Message.setField(this, 4, void 0);
+r.Message.setField(this, 4, void 0);
 };
 proto.BINMedalUpResponse.prototype.hasCurrentlevel = function() {
-return null != s.Message.getField(this, 4);
+return null != r.Message.getField(this, 4);
 };
-r.object.extend(o, proto);
+s.object.extend(o, proto);
 cc._RF.pop();
 }, {
 "google-protobuf": "google-protobuf"
@@ -18887,45 +21373,47 @@ cc._RF.pop();
 login_pb: [ function(e, t, o) {
 "use strict";
 cc._RF.push(t, "c7660hPv/tMKLWGZpK+b1aY", "login_pb");
-var s = e("google-protobuf"), r = s, i = Function("return this")(), n = e("./user_info_pb.js");
-r.exportSymbol("proto.BINLoginRequest", null, i);
-r.exportSymbol("proto.BINLoginResponse", null, i);
+var r = e("google-protobuf"), s = r, i = Function("return this")(), n = e("./user_info_pb.js");
+s.exportSymbol("proto.BINLoginRequest", null, i);
+s.exportSymbol("proto.BINLoginResponse", null, i);
 proto.BINLoginRequest = function(e) {
-s.Message.initialize(this, e, 0, -1, null, null);
+r.Message.initialize(this, e, 0, -1, null, null);
 };
-r.inherits(proto.BINLoginRequest, s.Message);
-r.DEBUG && !COMPILED && (proto.BINLoginRequest.displayName = "proto.BINLoginRequest");
-if (s.Message.GENERATE_TO_OBJECT) {
+s.inherits(proto.BINLoginRequest, r.Message);
+s.DEBUG && !COMPILED && (proto.BINLoginRequest.displayName = "proto.BINLoginRequest");
+if (r.Message.GENERATE_TO_OBJECT) {
 proto.BINLoginRequest.prototype.toObject = function(e) {
 return proto.BINLoginRequest.toObject(e, this);
 };
 proto.BINLoginRequest.toObject = function(e, t) {
 var o = {
-username: s.Message.getField(t, 1),
-password: s.Message.getField(t, 2)
+username: r.Message.getField(t, 1),
+password: r.Message.getField(t, 2)
 };
 e && (o.$jspbMessageInstance = t);
 return o;
 };
 }
 proto.BINLoginRequest.deserializeBinary = function(e) {
-var t = new s.BinaryReader(e), o = new proto.BINLoginRequest();
+var t = new r.BinaryReader(e), o = new proto.BINLoginRequest();
 return proto.BINLoginRequest.deserializeBinaryFromReader(o, t);
 };
 proto.BINLoginRequest.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readString();
+var o = t.readString();
 e.setUsername(o);
 break;
 
 case 2:
-var o = t.readString();
+o = t.readString();
 e.setPassword(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -18933,74 +21421,75 @@ proto.BINLoginRequest.serializeBinaryToWriter = function(e, t) {
 e.serializeBinaryToWriter(t);
 };
 proto.BINLoginRequest.prototype.serializeBinary = function() {
-var e = new s.BinaryWriter();
+var e = new r.BinaryWriter();
 this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINLoginRequest.prototype.serializeBinaryToWriter = function(e) {
 var t = void 0;
-null != (t = s.Message.getField(this, 1)) && e.writeString(1, t);
-null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
+null != (t = r.Message.getField(this, 1)) && e.writeString(1, t);
+null != (t = r.Message.getField(this, 2)) && e.writeString(2, t);
 };
 proto.BINLoginRequest.prototype.getUsername = function() {
-return s.Message.getFieldWithDefault(this, 1, "");
+return r.Message.getFieldWithDefault(this, 1, "");
 };
 proto.BINLoginRequest.prototype.setUsername = function(e) {
-s.Message.setField(this, 1, e);
+r.Message.setField(this, 1, e);
 };
 proto.BINLoginRequest.prototype.clearUsername = function() {
-s.Message.setField(this, 1, void 0);
+r.Message.setField(this, 1, void 0);
 };
 proto.BINLoginRequest.prototype.hasUsername = function() {
-return null != s.Message.getField(this, 1);
+return null != r.Message.getField(this, 1);
 };
 proto.BINLoginRequest.prototype.getPassword = function() {
-return s.Message.getFieldWithDefault(this, 2, "");
+return r.Message.getFieldWithDefault(this, 2, "");
 };
 proto.BINLoginRequest.prototype.setPassword = function(e) {
-s.Message.setField(this, 2, e);
+r.Message.setField(this, 2, e);
 };
 proto.BINLoginRequest.prototype.clearPassword = function() {
-s.Message.setField(this, 2, void 0);
+r.Message.setField(this, 2, void 0);
 };
 proto.BINLoginRequest.prototype.hasPassword = function() {
-return null != s.Message.getField(this, 2);
+return null != r.Message.getField(this, 2);
 };
 proto.BINLoginResponse = function(e) {
-s.Message.initialize(this, e, 0, -1, null, null);
+r.Message.initialize(this, e, 0, -1, null, null);
 };
-r.inherits(proto.BINLoginResponse, s.Message);
-r.DEBUG && !COMPILED && (proto.BINLoginResponse.displayName = "proto.BINLoginResponse");
-if (s.Message.GENERATE_TO_OBJECT) {
+s.inherits(proto.BINLoginResponse, r.Message);
+s.DEBUG && !COMPILED && (proto.BINLoginResponse.displayName = "proto.BINLoginResponse");
+if (r.Message.GENERATE_TO_OBJECT) {
 proto.BINLoginResponse.prototype.toObject = function(e) {
 return proto.BINLoginResponse.toObject(e, this);
 };
 proto.BINLoginResponse.toObject = function(e, t) {
-var o, r = {
-responsecode: s.Message.getField(t, 1),
-message: s.Message.getField(t, 2),
+var o, s = {
+responsecode: r.Message.getField(t, 1),
+message: r.Message.getField(t, 2),
 userinfo: (o = t.getUserinfo()) && n.BINUserInfo.toObject(e, o),
 usersetting: (o = t.getUsersetting()) && n.BINUserSetting.toObject(e, o),
-sessionid: s.Message.getField(t, 5),
-hasplayingmatch: s.Message.getField(t, 6),
-enabledebuglag: s.Message.getField(t, 7),
-enableevent: s.Message.getField(t, 8),
-enablenotification: s.Message.getField(t, 9),
-enabletx: s.Message.getField(t, 10),
-noticetext: s.Message.getField(t, 11)
+sessionid: r.Message.getField(t, 5),
+hasplayingmatch: r.Message.getField(t, 6),
+enabledebuglag: r.Message.getField(t, 7),
+enableevent: r.Message.getField(t, 8),
+enablenotification: r.Message.getField(t, 9),
+enabletx: r.Message.getField(t, 10),
+noticetext: r.Message.getField(t, 11)
 };
-e && (r.$jspbMessageInstance = t);
-return r;
+e && (s.$jspbMessageInstance = t);
+return s;
 };
 }
 proto.BINLoginResponse.deserializeBinary = function(e) {
-var t = new s.BinaryReader(e), o = new proto.BINLoginResponse();
+var t = new r.BinaryReader(e), o = new proto.BINLoginResponse();
 return proto.BINLoginResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINLoginResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
@@ -19052,12 +21541,13 @@ e.setEnabletx(o);
 break;
 
 case 11:
-var o = t.readString();
+o = t.readString();
 e.setNoticetext(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -19065,157 +21555,157 @@ proto.BINLoginResponse.serializeBinaryToWriter = function(e, t) {
 e.serializeBinaryToWriter(t);
 };
 proto.BINLoginResponse.prototype.serializeBinary = function() {
-var e = new s.BinaryWriter();
+var e = new r.BinaryWriter();
 this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINLoginResponse.prototype.serializeBinaryToWriter = function(e) {
 var t = void 0;
-null != (t = s.Message.getField(this, 1)) && e.writeBool(1, t);
-null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
+null != (t = r.Message.getField(this, 1)) && e.writeBool(1, t);
+null != (t = r.Message.getField(this, 2)) && e.writeString(2, t);
 null != (t = this.getUserinfo()) && e.writeMessage(3, t, n.BINUserInfo.serializeBinaryToWriter);
 null != (t = this.getUsersetting()) && e.writeMessage(4, t, n.BINUserSetting.serializeBinaryToWriter);
-null != (t = s.Message.getField(this, 5)) && e.writeString(5, t);
-null != (t = s.Message.getField(this, 6)) && e.writeBool(6, t);
-null != (t = s.Message.getField(this, 7)) && e.writeBool(7, t);
-null != (t = s.Message.getField(this, 8)) && e.writeBool(8, t);
-null != (t = s.Message.getField(this, 9)) && e.writeBool(9, t);
-null != (t = s.Message.getField(this, 10)) && e.writeBool(10, t);
-null != (t = s.Message.getField(this, 11)) && e.writeString(11, t);
+null != (t = r.Message.getField(this, 5)) && e.writeString(5, t);
+null != (t = r.Message.getField(this, 6)) && e.writeBool(6, t);
+null != (t = r.Message.getField(this, 7)) && e.writeBool(7, t);
+null != (t = r.Message.getField(this, 8)) && e.writeBool(8, t);
+null != (t = r.Message.getField(this, 9)) && e.writeBool(9, t);
+null != (t = r.Message.getField(this, 10)) && e.writeBool(10, t);
+null != (t = r.Message.getField(this, 11)) && e.writeString(11, t);
 };
 proto.BINLoginResponse.prototype.getResponsecode = function() {
-return s.Message.getFieldWithDefault(this, 1, !1);
+return r.Message.getFieldWithDefault(this, 1, !1);
 };
 proto.BINLoginResponse.prototype.setResponsecode = function(e) {
-s.Message.setField(this, 1, e);
+r.Message.setField(this, 1, e);
 };
 proto.BINLoginResponse.prototype.clearResponsecode = function() {
-s.Message.setField(this, 1, void 0);
+r.Message.setField(this, 1, void 0);
 };
 proto.BINLoginResponse.prototype.hasResponsecode = function() {
-return null != s.Message.getField(this, 1);
+return null != r.Message.getField(this, 1);
 };
 proto.BINLoginResponse.prototype.getMessage = function() {
-return s.Message.getFieldWithDefault(this, 2, "");
+return r.Message.getFieldWithDefault(this, 2, "");
 };
 proto.BINLoginResponse.prototype.setMessage = function(e) {
-s.Message.setField(this, 2, e);
+r.Message.setField(this, 2, e);
 };
 proto.BINLoginResponse.prototype.clearMessage = function() {
-s.Message.setField(this, 2, void 0);
+r.Message.setField(this, 2, void 0);
 };
 proto.BINLoginResponse.prototype.hasMessage = function() {
-return null != s.Message.getField(this, 2);
+return null != r.Message.getField(this, 2);
 };
 proto.BINLoginResponse.prototype.getUserinfo = function() {
-return s.Message.getWrapperField(this, n.BINUserInfo, 3);
+return r.Message.getWrapperField(this, n.BINUserInfo, 3);
 };
 proto.BINLoginResponse.prototype.setUserinfo = function(e) {
-s.Message.setWrapperField(this, 3, e);
+r.Message.setWrapperField(this, 3, e);
 };
 proto.BINLoginResponse.prototype.clearUserinfo = function() {
 this.setUserinfo(void 0);
 };
 proto.BINLoginResponse.prototype.hasUserinfo = function() {
-return null != s.Message.getField(this, 3);
+return null != r.Message.getField(this, 3);
 };
 proto.BINLoginResponse.prototype.getUsersetting = function() {
-return s.Message.getWrapperField(this, n.BINUserSetting, 4);
+return r.Message.getWrapperField(this, n.BINUserSetting, 4);
 };
 proto.BINLoginResponse.prototype.setUsersetting = function(e) {
-s.Message.setWrapperField(this, 4, e);
+r.Message.setWrapperField(this, 4, e);
 };
 proto.BINLoginResponse.prototype.clearUsersetting = function() {
 this.setUsersetting(void 0);
 };
 proto.BINLoginResponse.prototype.hasUsersetting = function() {
-return null != s.Message.getField(this, 4);
+return null != r.Message.getField(this, 4);
 };
 proto.BINLoginResponse.prototype.getSessionid = function() {
-return s.Message.getFieldWithDefault(this, 5, "");
+return r.Message.getFieldWithDefault(this, 5, "");
 };
 proto.BINLoginResponse.prototype.setSessionid = function(e) {
-s.Message.setField(this, 5, e);
+r.Message.setField(this, 5, e);
 };
 proto.BINLoginResponse.prototype.clearSessionid = function() {
-s.Message.setField(this, 5, void 0);
+r.Message.setField(this, 5, void 0);
 };
 proto.BINLoginResponse.prototype.hasSessionid = function() {
-return null != s.Message.getField(this, 5);
+return null != r.Message.getField(this, 5);
 };
 proto.BINLoginResponse.prototype.getHasplayingmatch = function() {
-return s.Message.getFieldWithDefault(this, 6, !1);
+return r.Message.getFieldWithDefault(this, 6, !1);
 };
 proto.BINLoginResponse.prototype.setHasplayingmatch = function(e) {
-s.Message.setField(this, 6, e);
+r.Message.setField(this, 6, e);
 };
 proto.BINLoginResponse.prototype.clearHasplayingmatch = function() {
-s.Message.setField(this, 6, void 0);
+r.Message.setField(this, 6, void 0);
 };
 proto.BINLoginResponse.prototype.hasHasplayingmatch = function() {
-return null != s.Message.getField(this, 6);
+return null != r.Message.getField(this, 6);
 };
 proto.BINLoginResponse.prototype.getEnabledebuglag = function() {
-return s.Message.getFieldWithDefault(this, 7, !1);
+return r.Message.getFieldWithDefault(this, 7, !1);
 };
 proto.BINLoginResponse.prototype.setEnabledebuglag = function(e) {
-s.Message.setField(this, 7, e);
+r.Message.setField(this, 7, e);
 };
 proto.BINLoginResponse.prototype.clearEnabledebuglag = function() {
-s.Message.setField(this, 7, void 0);
+r.Message.setField(this, 7, void 0);
 };
 proto.BINLoginResponse.prototype.hasEnabledebuglag = function() {
-return null != s.Message.getField(this, 7);
+return null != r.Message.getField(this, 7);
 };
 proto.BINLoginResponse.prototype.getEnableevent = function() {
-return s.Message.getFieldWithDefault(this, 8, !1);
+return r.Message.getFieldWithDefault(this, 8, !1);
 };
 proto.BINLoginResponse.prototype.setEnableevent = function(e) {
-s.Message.setField(this, 8, e);
+r.Message.setField(this, 8, e);
 };
 proto.BINLoginResponse.prototype.clearEnableevent = function() {
-s.Message.setField(this, 8, void 0);
+r.Message.setField(this, 8, void 0);
 };
 proto.BINLoginResponse.prototype.hasEnableevent = function() {
-return null != s.Message.getField(this, 8);
+return null != r.Message.getField(this, 8);
 };
 proto.BINLoginResponse.prototype.getEnablenotification = function() {
-return s.Message.getFieldWithDefault(this, 9, !1);
+return r.Message.getFieldWithDefault(this, 9, !1);
 };
 proto.BINLoginResponse.prototype.setEnablenotification = function(e) {
-s.Message.setField(this, 9, e);
+r.Message.setField(this, 9, e);
 };
 proto.BINLoginResponse.prototype.clearEnablenotification = function() {
-s.Message.setField(this, 9, void 0);
+r.Message.setField(this, 9, void 0);
 };
 proto.BINLoginResponse.prototype.hasEnablenotification = function() {
-return null != s.Message.getField(this, 9);
+return null != r.Message.getField(this, 9);
 };
 proto.BINLoginResponse.prototype.getEnabletx = function() {
-return s.Message.getFieldWithDefault(this, 10, !1);
+return r.Message.getFieldWithDefault(this, 10, !1);
 };
 proto.BINLoginResponse.prototype.setEnabletx = function(e) {
-s.Message.setField(this, 10, e);
+r.Message.setField(this, 10, e);
 };
 proto.BINLoginResponse.prototype.clearEnabletx = function() {
-s.Message.setField(this, 10, void 0);
+r.Message.setField(this, 10, void 0);
 };
 proto.BINLoginResponse.prototype.hasEnabletx = function() {
-return null != s.Message.getField(this, 10);
+return null != r.Message.getField(this, 10);
 };
 proto.BINLoginResponse.prototype.getNoticetext = function() {
-return s.Message.getFieldWithDefault(this, 11, "");
+return r.Message.getFieldWithDefault(this, 11, "");
 };
 proto.BINLoginResponse.prototype.setNoticetext = function(e) {
-s.Message.setField(this, 11, e);
+r.Message.setField(this, 11, e);
 };
 proto.BINLoginResponse.prototype.clearNoticetext = function() {
-s.Message.setField(this, 11, void 0);
+r.Message.setField(this, 11, void 0);
 };
 proto.BINLoginResponse.prototype.hasNoticetext = function() {
-return null != s.Message.getField(this, 11);
+return null != r.Message.getField(this, 11);
 };
-r.object.extend(o, proto);
+s.object.extend(o, proto);
 cc._RF.pop();
 }, {
 "./user_info_pb.js": "user_info_pb",
@@ -19249,7 +21739,8 @@ var t = new s.BinaryReader(e), o = new proto.BINLogoutRequest();
 return proto.BINLogoutRequest.deserializeBinaryFromReader(o, t);
 };
 proto.BINLogoutRequest.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
 var o = t.readBool();
 e.setDologout(o);
@@ -19257,6 +21748,7 @@ break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -19269,7 +21761,7 @@ this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINLogoutRequest.prototype.serializeBinaryToWriter = function(e) {
-var t = void 0;
+var t;
 null != (t = s.Message.getField(this, 1)) && e.writeBool(1, t);
 };
 proto.BINLogoutRequest.prototype.getDologout = function() {
@@ -19307,19 +21799,21 @@ var t = new s.BinaryReader(e), o = new proto.BINLogoutResponse();
 return proto.BINLogoutResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINLogoutResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
 case 2:
-var o = t.readString();
+o = t.readString();
 e.setMessage(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -19399,9 +21893,10 @@ var t = new s.BinaryReader(e), o = new proto.BINLookUpGameHistoryRequest();
 return proto.BINLookUpGameHistoryRequest.deserializeBinaryFromReader(o, t);
 };
 proto.BINLookUpGameHistoryRequest.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readInt32();
+var o = t.readInt32();
 e.setFirstresult(o);
 break;
 
@@ -19421,13 +21916,14 @@ e.setAsc(o);
 break;
 
 case 5:
-var o = new n.BINMapFieldEntry();
+o = new n.BINMapFieldEntry();
 t.readMessage(o, n.BINMapFieldEntry.deserializeBinaryFromReader);
 e.addArgs(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -19445,7 +21941,7 @@ null != (t = s.Message.getField(this, 1)) && e.writeInt32(1, t);
 null != (t = s.Message.getField(this, 2)) && e.writeInt32(2, t);
 null != (t = s.Message.getField(this, 3)) && e.writeInt32(3, t);
 null != (t = s.Message.getField(this, 4)) && e.writeBool(4, t);
-(t = this.getArgsList()).length > 0 && e.writeRepeatedMessage(5, t, n.BINMapFieldEntry.serializeBinaryToWriter);
+0 < (t = this.getArgsList()).length && e.writeRepeatedMessage(5, t, n.BINMapFieldEntry.serializeBinaryToWriter);
 };
 proto.BINLookUpGameHistoryRequest.prototype.getFirstresult = function() {
 return s.Message.getFieldWithDefault(this, 1, 0);
@@ -19538,9 +22034,10 @@ var t = new s.BinaryReader(e), o = new proto.BINGameHistory();
 return proto.BINGameHistory.deserializeBinaryFromReader(o, t);
 };
 proto.BINGameHistory.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readString();
+var o = t.readString();
 e.setFirst(o);
 break;
 
@@ -19585,12 +22082,13 @@ e.setNinth(o);
 break;
 
 case 10:
-var o = t.readString();
+o = t.readString();
 e.setTenth(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -19761,9 +22259,10 @@ var t = new s.BinaryReader(e), o = new proto.BINLookUpGameHistoryResponse();
 return proto.BINLookUpGameHistoryResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINLookUpGameHistoryResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
@@ -19779,13 +22278,14 @@ e.addHistories(o);
 break;
 
 case 4:
-var o = new n.BINMapFieldEntry();
+o = new n.BINMapFieldEntry();
 t.readMessage(o, n.BINMapFieldEntry.deserializeBinaryFromReader);
 e.addArgs(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -19801,8 +22301,8 @@ proto.BINLookUpGameHistoryResponse.prototype.serializeBinaryToWriter = function(
 var t = void 0;
 null != (t = s.Message.getField(this, 1)) && e.writeBool(1, t);
 null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
-(t = this.getHistoriesList()).length > 0 && e.writeRepeatedMessage(3, t, proto.BINGameHistory.serializeBinaryToWriter);
-(t = this.getArgsList()).length > 0 && e.writeRepeatedMessage(4, t, n.BINMapFieldEntry.serializeBinaryToWriter);
+0 < (t = this.getHistoriesList()).length && e.writeRepeatedMessage(3, t, proto.BINGameHistory.serializeBinaryToWriter);
+0 < (t = this.getArgsList()).length && e.writeRepeatedMessage(4, t, n.BINMapFieldEntry.serializeBinaryToWriter);
 };
 proto.BINLookUpGameHistoryResponse.prototype.getResponsecode = function() {
 return s.Message.getFieldWithDefault(this, 1, !1);
@@ -19895,9 +22395,10 @@ var t = new s.BinaryReader(e), o = new proto.BINLookUpMoneyHistoryRequest();
 return proto.BINLookUpMoneyHistoryRequest.deserializeBinaryFromReader(o, t);
 };
 proto.BINLookUpMoneyHistoryRequest.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readInt32();
+var o = t.readInt32();
 e.setFirstresult(o);
 break;
 
@@ -19907,12 +22408,13 @@ e.setMaxresult(o);
 break;
 
 case 3:
-var o = t.readInt32();
+o = t.readInt32();
 e.setFiltertype(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -19997,9 +22499,10 @@ var t = new s.BinaryReader(e), o = new proto.BINMoneyLog();
 return proto.BINMoneyLog.deserializeBinaryFromReader(o, t);
 };
 proto.BINMoneyLog.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readInt64();
+var o = t.readInt64();
 e.setLogid(o);
 break;
 
@@ -20044,12 +22547,13 @@ e.setTransactiontype(o);
 break;
 
 case 10:
-var o = t.readString();
+o = t.readString();
 e.setDescription(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -20219,9 +22723,10 @@ var t = new s.BinaryReader(e), o = new proto.BINLookUpMoneyHistoryResponse();
 return proto.BINLookUpMoneyHistoryResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINLookUpMoneyHistoryResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
@@ -20231,13 +22736,14 @@ e.setMessage(o);
 break;
 
 case 3:
-var o = new proto.BINMoneyLog();
+o = new proto.BINMoneyLog();
 t.readMessage(o, proto.BINMoneyLog.deserializeBinaryFromReader);
 e.addMoneylogs(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -20253,7 +22759,7 @@ proto.BINLookUpMoneyHistoryResponse.prototype.serializeBinaryToWriter = function
 var t = void 0;
 null != (t = s.Message.getField(this, 1)) && e.writeBool(1, t);
 null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
-(t = this.getMoneylogsList()).length > 0 && e.writeRepeatedMessage(3, t, proto.BINMoneyLog.serializeBinaryToWriter);
+0 < (t = this.getMoneylogsList()).length && e.writeRepeatedMessage(3, t, proto.BINMoneyLog.serializeBinaryToWriter);
 };
 proto.BINLookUpMoneyHistoryResponse.prototype.getResponsecode = function() {
 return s.Message.getFieldWithDefault(this, 1, !1);
@@ -20314,19 +22820,21 @@ var t = new s.BinaryReader(e), o = new proto.BINPurchaseCashHistoryRequest();
 return proto.BINPurchaseCashHistoryRequest.deserializeBinaryFromReader(o, t);
 };
 proto.BINPurchaseCashHistoryRequest.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readInt32();
+var o = t.readInt32();
 e.setFirstresult(o);
 break;
 
 case 2:
-var o = t.readInt32();
+o = t.readInt32();
 e.setMaxresult(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -20394,9 +22902,10 @@ var t = new s.BinaryReader(e), o = new proto.BINPurchaseCashHistory();
 return proto.BINPurchaseCashHistory.deserializeBinaryFromReader(o, t);
 };
 proto.BINPurchaseCashHistory.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readInt64();
+var o = t.readInt64();
 e.setLogid(o);
 break;
 
@@ -20421,12 +22930,13 @@ e.setCurrentcash(o);
 break;
 
 case 6:
-var o = t.readInt64();
+o = t.readInt64();
 e.setPurchasedtime(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -20544,9 +23054,10 @@ var t = new s.BinaryReader(e), o = new proto.BINPurchaseCashHistoryResponse();
 return proto.BINPurchaseCashHistoryResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINPurchaseCashHistoryResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
@@ -20556,13 +23067,14 @@ e.setMessage(o);
 break;
 
 case 3:
-var o = new proto.BINPurchaseCashHistory();
+o = new proto.BINPurchaseCashHistory();
 t.readMessage(o, proto.BINPurchaseCashHistory.deserializeBinaryFromReader);
 e.addPurchasehistories(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -20578,7 +23090,7 @@ proto.BINPurchaseCashHistoryResponse.prototype.serializeBinaryToWriter = functio
 var t = void 0;
 null != (t = s.Message.getField(this, 1)) && e.writeBool(1, t);
 null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
-(t = this.getPurchasehistoriesList()).length > 0 && e.writeRepeatedMessage(3, t, proto.BINPurchaseCashHistory.serializeBinaryToWriter);
+0 < (t = this.getPurchasehistoriesList()).length && e.writeRepeatedMessage(3, t, proto.BINPurchaseCashHistory.serializeBinaryToWriter);
 };
 proto.BINPurchaseCashHistoryResponse.prototype.getResponsecode = function() {
 return s.Message.getFieldWithDefault(this, 1, !1);
@@ -20639,19 +23151,21 @@ var t = new s.BinaryReader(e), o = new proto.BINExchangeGoldHistoryRequest();
 return proto.BINExchangeGoldHistoryRequest.deserializeBinaryFromReader(o, t);
 };
 proto.BINExchangeGoldHistoryRequest.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readInt32();
+var o = t.readInt32();
 e.setFirstresult(o);
 break;
 
 case 2:
-var o = t.readInt32();
+o = t.readInt32();
 e.setMaxresult(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -20719,9 +23233,10 @@ var t = new s.BinaryReader(e), o = new proto.BINExchangeGoldHistory();
 return proto.BINExchangeGoldHistory.deserializeBinaryFromReader(o, t);
 };
 proto.BINExchangeGoldHistory.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readInt64();
+var o = t.readInt64();
 e.setLogid(o);
 break;
 
@@ -20746,12 +23261,13 @@ e.setGoldvalue(o);
 break;
 
 case 6:
-var o = t.readInt64();
+o = t.readInt64();
 e.setExchangedtime(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -20869,9 +23385,10 @@ var t = new s.BinaryReader(e), o = new proto.BINExchangeGoldHistoryResponse();
 return proto.BINExchangeGoldHistoryResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINExchangeGoldHistoryResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
@@ -20881,13 +23398,14 @@ e.setMessage(o);
 break;
 
 case 3:
-var o = new proto.BINExchangeGoldHistory();
+o = new proto.BINExchangeGoldHistory();
 t.readMessage(o, proto.BINExchangeGoldHistory.deserializeBinaryFromReader);
 e.addExchangehistories(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -20903,7 +23421,7 @@ proto.BINExchangeGoldHistoryResponse.prototype.serializeBinaryToWriter = functio
 var t = void 0;
 null != (t = s.Message.getField(this, 1)) && e.writeBool(1, t);
 null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
-(t = this.getExchangehistoriesList()).length > 0 && e.writeRepeatedMessage(3, t, proto.BINExchangeGoldHistory.serializeBinaryToWriter);
+0 < (t = this.getExchangehistoriesList()).length && e.writeRepeatedMessage(3, t, proto.BINExchangeGoldHistory.serializeBinaryToWriter);
 };
 proto.BINExchangeGoldHistoryResponse.prototype.getResponsecode = function() {
 return s.Message.getFieldWithDefault(this, 1, !1);
@@ -20981,9 +23499,10 @@ var t = new s.BinaryReader(e), o = new proto.BINLookUpRoomRequest();
 return proto.BINLookUpRoomRequest.deserializeBinaryFromReader(o, t);
 };
 proto.BINLookUpRoomRequest.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readInt32();
+var o = t.readInt32();
 e.setZoneid(o);
 break;
 
@@ -21013,12 +23532,13 @@ e.setAsc(o);
 break;
 
 case 7:
-var o = t.readInt32();
+o = t.readInt32();
 e.setRoomgroup(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -21152,9 +23672,10 @@ var t = new s.BinaryReader(e), o = new proto.BINRoomInfo();
 return proto.BINRoomInfo.deserializeBinaryFromReader(o, t);
 };
 proto.BINRoomInfo.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readInt32();
+var o = t.readInt32();
 e.setRoomindex(o);
 break;
 
@@ -21184,12 +23705,13 @@ e.setIsplaying(o);
 break;
 
 case 7:
-var o = t.readString();
+o = t.readString();
 e.setRoomconfig(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -21320,9 +23842,10 @@ var t = new s.BinaryReader(e), o = new proto.BINLookUpRoomResponse();
 return proto.BINLookUpRoomResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINLookUpRoomResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
@@ -21332,13 +23855,14 @@ e.setMessage(o);
 break;
 
 case 3:
-var o = new proto.BINRoomInfo();
+o = new proto.BINRoomInfo();
 t.readMessage(o, proto.BINRoomInfo.deserializeBinaryFromReader);
 e.addRoominfos(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -21354,7 +23878,7 @@ proto.BINLookUpRoomResponse.prototype.serializeBinaryToWriter = function(e) {
 var t = void 0;
 null != (t = s.Message.getField(this, 1)) && e.writeBool(1, t);
 null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
-(t = this.getRoominfosList()).length > 0 && e.writeRepeatedMessage(3, t, proto.BINRoomInfo.serializeBinaryToWriter);
+0 < (t = this.getRoominfosList()).length && e.writeRepeatedMessage(3, t, proto.BINRoomInfo.serializeBinaryToWriter);
 };
 proto.BINLookUpRoomResponse.prototype.getResponsecode = function() {
 return s.Message.getFieldWithDefault(this, 1, !1);
@@ -21400,55 +23924,56 @@ cc._RF.pop();
 mail_pb: [ function(e, t, o) {
 "use strict";
 cc._RF.push(t, "5f4cdBwZXRBZaSmwoJx7UmM", "mail_pb");
-var s = e("google-protobuf"), r = s, i = Function("return this")();
-r.exportSymbol("proto.BINClaimAttachItemRequest", null, i);
-r.exportSymbol("proto.BINClaimAttachItemResponse", null, i);
-r.exportSymbol("proto.BINDeleteMailRequest", null, i);
-r.exportSymbol("proto.BINDeleteMailResponse", null, i);
-r.exportSymbol("proto.BINFilterMailRequest", null, i);
-r.exportSymbol("proto.BINFilterMailResponse", null, i);
-r.exportSymbol("proto.BINMail", null, i);
-r.exportSymbol("proto.BINReadedMailRequest", null, i);
-r.exportSymbol("proto.BINReadedMailResponse", null, i);
-r.exportSymbol("proto.BINSendMailRequest", null, i);
-r.exportSymbol("proto.BINSendMailResponse", null, i);
+var r = e("google-protobuf"), s = r, i = Function("return this")();
+s.exportSymbol("proto.BINClaimAttachItemRequest", null, i);
+s.exportSymbol("proto.BINClaimAttachItemResponse", null, i);
+s.exportSymbol("proto.BINDeleteMailRequest", null, i);
+s.exportSymbol("proto.BINDeleteMailResponse", null, i);
+s.exportSymbol("proto.BINFilterMailRequest", null, i);
+s.exportSymbol("proto.BINFilterMailResponse", null, i);
+s.exportSymbol("proto.BINMail", null, i);
+s.exportSymbol("proto.BINReadedMailRequest", null, i);
+s.exportSymbol("proto.BINReadedMailResponse", null, i);
+s.exportSymbol("proto.BINSendMailRequest", null, i);
+s.exportSymbol("proto.BINSendMailResponse", null, i);
 proto.BINMail = function(e) {
-s.Message.initialize(this, e, 0, -1, null, null);
+r.Message.initialize(this, e, 0, -1, null, null);
 };
-r.inherits(proto.BINMail, s.Message);
-r.DEBUG && !COMPILED && (proto.BINMail.displayName = "proto.BINMail");
-if (s.Message.GENERATE_TO_OBJECT) {
+s.inherits(proto.BINMail, r.Message);
+s.DEBUG && !COMPILED && (proto.BINMail.displayName = "proto.BINMail");
+if (r.Message.GENERATE_TO_OBJECT) {
 proto.BINMail.prototype.toObject = function(e) {
 return proto.BINMail.toObject(e, this);
 };
 proto.BINMail.toObject = function(e, t) {
 var o = {
-mailid: s.Message.getField(t, 1),
-senderuserid: s.Message.getField(t, 2),
-senderusername: s.Message.getField(t, 3),
-recipientuserid: s.Message.getField(t, 4),
-recipientusername: s.Message.getField(t, 5),
-title: s.Message.getField(t, 6),
-body: s.Message.getField(t, 7),
-senttime: s.Message.getField(t, 8),
-readed: s.Message.getField(t, 9),
-attachitemid: s.Message.getField(t, 10),
-attachitemquatity: s.Message.getField(t, 11),
-expiredtime: s.Message.getField(t, 12),
-expandeddata: s.Message.getField(t, 13)
+mailid: r.Message.getField(t, 1),
+senderuserid: r.Message.getField(t, 2),
+senderusername: r.Message.getField(t, 3),
+recipientuserid: r.Message.getField(t, 4),
+recipientusername: r.Message.getField(t, 5),
+title: r.Message.getField(t, 6),
+body: r.Message.getField(t, 7),
+senttime: r.Message.getField(t, 8),
+readed: r.Message.getField(t, 9),
+attachitemid: r.Message.getField(t, 10),
+attachitemquatity: r.Message.getField(t, 11),
+expiredtime: r.Message.getField(t, 12),
+expandeddata: r.Message.getField(t, 13)
 };
 e && (o.$jspbMessageInstance = t);
 return o;
 };
 }
 proto.BINMail.deserializeBinary = function(e) {
-var t = new s.BinaryReader(e), o = new proto.BINMail();
+var t = new r.BinaryReader(e), o = new proto.BINMail();
 return proto.BINMail.deserializeBinaryFromReader(o, t);
 };
 proto.BINMail.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readInt64();
+var o = t.readInt64();
 e.setMailid(o);
 break;
 
@@ -21508,12 +24033,13 @@ e.setExpiredtime(o);
 break;
 
 case 13:
-var o = t.readString();
+o = t.readString();
 e.setExpandeddata(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -21521,210 +24047,211 @@ proto.BINMail.serializeBinaryToWriter = function(e, t) {
 e.serializeBinaryToWriter(t);
 };
 proto.BINMail.prototype.serializeBinary = function() {
-var e = new s.BinaryWriter();
+var e = new r.BinaryWriter();
 this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINMail.prototype.serializeBinaryToWriter = function(e) {
 var t = void 0;
-null != (t = s.Message.getField(this, 1)) && e.writeInt64(1, t);
-null != (t = s.Message.getField(this, 2)) && e.writeInt64(2, t);
-null != (t = s.Message.getField(this, 3)) && e.writeString(3, t);
-null != (t = s.Message.getField(this, 4)) && e.writeInt64(4, t);
-null != (t = s.Message.getField(this, 5)) && e.writeString(5, t);
-null != (t = s.Message.getField(this, 6)) && e.writeString(6, t);
-null != (t = s.Message.getField(this, 7)) && e.writeString(7, t);
-null != (t = s.Message.getField(this, 8)) && e.writeInt64(8, t);
-null != (t = s.Message.getField(this, 9)) && e.writeBool(9, t);
-null != (t = s.Message.getField(this, 10)) && e.writeInt32(10, t);
-null != (t = s.Message.getField(this, 11)) && e.writeInt64(11, t);
-null != (t = s.Message.getField(this, 12)) && e.writeInt64(12, t);
-null != (t = s.Message.getField(this, 13)) && e.writeString(13, t);
+null != (t = r.Message.getField(this, 1)) && e.writeInt64(1, t);
+null != (t = r.Message.getField(this, 2)) && e.writeInt64(2, t);
+null != (t = r.Message.getField(this, 3)) && e.writeString(3, t);
+null != (t = r.Message.getField(this, 4)) && e.writeInt64(4, t);
+null != (t = r.Message.getField(this, 5)) && e.writeString(5, t);
+null != (t = r.Message.getField(this, 6)) && e.writeString(6, t);
+null != (t = r.Message.getField(this, 7)) && e.writeString(7, t);
+null != (t = r.Message.getField(this, 8)) && e.writeInt64(8, t);
+null != (t = r.Message.getField(this, 9)) && e.writeBool(9, t);
+null != (t = r.Message.getField(this, 10)) && e.writeInt32(10, t);
+null != (t = r.Message.getField(this, 11)) && e.writeInt64(11, t);
+null != (t = r.Message.getField(this, 12)) && e.writeInt64(12, t);
+null != (t = r.Message.getField(this, 13)) && e.writeString(13, t);
 };
 proto.BINMail.prototype.getMailid = function() {
-return s.Message.getFieldWithDefault(this, 1, 0);
+return r.Message.getFieldWithDefault(this, 1, 0);
 };
 proto.BINMail.prototype.setMailid = function(e) {
-s.Message.setField(this, 1, e);
+r.Message.setField(this, 1, e);
 };
 proto.BINMail.prototype.clearMailid = function() {
-s.Message.setField(this, 1, void 0);
+r.Message.setField(this, 1, void 0);
 };
 proto.BINMail.prototype.hasMailid = function() {
-return null != s.Message.getField(this, 1);
+return null != r.Message.getField(this, 1);
 };
 proto.BINMail.prototype.getSenderuserid = function() {
-return s.Message.getFieldWithDefault(this, 2, 0);
+return r.Message.getFieldWithDefault(this, 2, 0);
 };
 proto.BINMail.prototype.setSenderuserid = function(e) {
-s.Message.setField(this, 2, e);
+r.Message.setField(this, 2, e);
 };
 proto.BINMail.prototype.clearSenderuserid = function() {
-s.Message.setField(this, 2, void 0);
+r.Message.setField(this, 2, void 0);
 };
 proto.BINMail.prototype.hasSenderuserid = function() {
-return null != s.Message.getField(this, 2);
+return null != r.Message.getField(this, 2);
 };
 proto.BINMail.prototype.getSenderusername = function() {
-return s.Message.getFieldWithDefault(this, 3, "");
+return r.Message.getFieldWithDefault(this, 3, "");
 };
 proto.BINMail.prototype.setSenderusername = function(e) {
-s.Message.setField(this, 3, e);
+r.Message.setField(this, 3, e);
 };
 proto.BINMail.prototype.clearSenderusername = function() {
-s.Message.setField(this, 3, void 0);
+r.Message.setField(this, 3, void 0);
 };
 proto.BINMail.prototype.hasSenderusername = function() {
-return null != s.Message.getField(this, 3);
+return null != r.Message.getField(this, 3);
 };
 proto.BINMail.prototype.getRecipientuserid = function() {
-return s.Message.getFieldWithDefault(this, 4, 0);
+return r.Message.getFieldWithDefault(this, 4, 0);
 };
 proto.BINMail.prototype.setRecipientuserid = function(e) {
-s.Message.setField(this, 4, e);
+r.Message.setField(this, 4, e);
 };
 proto.BINMail.prototype.clearRecipientuserid = function() {
-s.Message.setField(this, 4, void 0);
+r.Message.setField(this, 4, void 0);
 };
 proto.BINMail.prototype.hasRecipientuserid = function() {
-return null != s.Message.getField(this, 4);
+return null != r.Message.getField(this, 4);
 };
 proto.BINMail.prototype.getRecipientusername = function() {
-return s.Message.getFieldWithDefault(this, 5, "");
+return r.Message.getFieldWithDefault(this, 5, "");
 };
 proto.BINMail.prototype.setRecipientusername = function(e) {
-s.Message.setField(this, 5, e);
+r.Message.setField(this, 5, e);
 };
 proto.BINMail.prototype.clearRecipientusername = function() {
-s.Message.setField(this, 5, void 0);
+r.Message.setField(this, 5, void 0);
 };
 proto.BINMail.prototype.hasRecipientusername = function() {
-return null != s.Message.getField(this, 5);
+return null != r.Message.getField(this, 5);
 };
 proto.BINMail.prototype.getTitle = function() {
-return s.Message.getFieldWithDefault(this, 6, "");
+return r.Message.getFieldWithDefault(this, 6, "");
 };
 proto.BINMail.prototype.setTitle = function(e) {
-s.Message.setField(this, 6, e);
+r.Message.setField(this, 6, e);
 };
 proto.BINMail.prototype.clearTitle = function() {
-s.Message.setField(this, 6, void 0);
+r.Message.setField(this, 6, void 0);
 };
 proto.BINMail.prototype.hasTitle = function() {
-return null != s.Message.getField(this, 6);
+return null != r.Message.getField(this, 6);
 };
 proto.BINMail.prototype.getBody = function() {
-return s.Message.getFieldWithDefault(this, 7, "");
+return r.Message.getFieldWithDefault(this, 7, "");
 };
 proto.BINMail.prototype.setBody = function(e) {
-s.Message.setField(this, 7, e);
+r.Message.setField(this, 7, e);
 };
 proto.BINMail.prototype.clearBody = function() {
-s.Message.setField(this, 7, void 0);
+r.Message.setField(this, 7, void 0);
 };
 proto.BINMail.prototype.hasBody = function() {
-return null != s.Message.getField(this, 7);
+return null != r.Message.getField(this, 7);
 };
 proto.BINMail.prototype.getSenttime = function() {
-return s.Message.getFieldWithDefault(this, 8, 0);
+return r.Message.getFieldWithDefault(this, 8, 0);
 };
 proto.BINMail.prototype.setSenttime = function(e) {
-s.Message.setField(this, 8, e);
+r.Message.setField(this, 8, e);
 };
 proto.BINMail.prototype.clearSenttime = function() {
-s.Message.setField(this, 8, void 0);
+r.Message.setField(this, 8, void 0);
 };
 proto.BINMail.prototype.hasSenttime = function() {
-return null != s.Message.getField(this, 8);
+return null != r.Message.getField(this, 8);
 };
 proto.BINMail.prototype.getReaded = function() {
-return s.Message.getFieldWithDefault(this, 9, !1);
+return r.Message.getFieldWithDefault(this, 9, !1);
 };
 proto.BINMail.prototype.setReaded = function(e) {
-s.Message.setField(this, 9, e);
+r.Message.setField(this, 9, e);
 };
 proto.BINMail.prototype.clearReaded = function() {
-s.Message.setField(this, 9, void 0);
+r.Message.setField(this, 9, void 0);
 };
 proto.BINMail.prototype.hasReaded = function() {
-return null != s.Message.getField(this, 9);
+return null != r.Message.getField(this, 9);
 };
 proto.BINMail.prototype.getAttachitemid = function() {
-return s.Message.getFieldWithDefault(this, 10, 0);
+return r.Message.getFieldWithDefault(this, 10, 0);
 };
 proto.BINMail.prototype.setAttachitemid = function(e) {
-s.Message.setField(this, 10, e);
+r.Message.setField(this, 10, e);
 };
 proto.BINMail.prototype.clearAttachitemid = function() {
-s.Message.setField(this, 10, void 0);
+r.Message.setField(this, 10, void 0);
 };
 proto.BINMail.prototype.hasAttachitemid = function() {
-return null != s.Message.getField(this, 10);
+return null != r.Message.getField(this, 10);
 };
 proto.BINMail.prototype.getAttachitemquatity = function() {
-return s.Message.getFieldWithDefault(this, 11, 0);
+return r.Message.getFieldWithDefault(this, 11, 0);
 };
 proto.BINMail.prototype.setAttachitemquatity = function(e) {
-s.Message.setField(this, 11, e);
+r.Message.setField(this, 11, e);
 };
 proto.BINMail.prototype.clearAttachitemquatity = function() {
-s.Message.setField(this, 11, void 0);
+r.Message.setField(this, 11, void 0);
 };
 proto.BINMail.prototype.hasAttachitemquatity = function() {
-return null != s.Message.getField(this, 11);
+return null != r.Message.getField(this, 11);
 };
 proto.BINMail.prototype.getExpiredtime = function() {
-return s.Message.getFieldWithDefault(this, 12, 0);
+return r.Message.getFieldWithDefault(this, 12, 0);
 };
 proto.BINMail.prototype.setExpiredtime = function(e) {
-s.Message.setField(this, 12, e);
+r.Message.setField(this, 12, e);
 };
 proto.BINMail.prototype.clearExpiredtime = function() {
-s.Message.setField(this, 12, void 0);
+r.Message.setField(this, 12, void 0);
 };
 proto.BINMail.prototype.hasExpiredtime = function() {
-return null != s.Message.getField(this, 12);
+return null != r.Message.getField(this, 12);
 };
 proto.BINMail.prototype.getExpandeddata = function() {
-return s.Message.getFieldWithDefault(this, 13, "");
+return r.Message.getFieldWithDefault(this, 13, "");
 };
 proto.BINMail.prototype.setExpandeddata = function(e) {
-s.Message.setField(this, 13, e);
+r.Message.setField(this, 13, e);
 };
 proto.BINMail.prototype.clearExpandeddata = function() {
-s.Message.setField(this, 13, void 0);
+r.Message.setField(this, 13, void 0);
 };
 proto.BINMail.prototype.hasExpandeddata = function() {
-return null != s.Message.getField(this, 13);
+return null != r.Message.getField(this, 13);
 };
 proto.BINFilterMailRequest = function(e) {
-s.Message.initialize(this, e, 0, -1, null, null);
+r.Message.initialize(this, e, 0, -1, null, null);
 };
-r.inherits(proto.BINFilterMailRequest, s.Message);
-r.DEBUG && !COMPILED && (proto.BINFilterMailRequest.displayName = "proto.BINFilterMailRequest");
-if (s.Message.GENERATE_TO_OBJECT) {
+s.inherits(proto.BINFilterMailRequest, r.Message);
+s.DEBUG && !COMPILED && (proto.BINFilterMailRequest.displayName = "proto.BINFilterMailRequest");
+if (r.Message.GENERATE_TO_OBJECT) {
 proto.BINFilterMailRequest.prototype.toObject = function(e) {
 return proto.BINFilterMailRequest.toObject(e, this);
 };
 proto.BINFilterMailRequest.toObject = function(e, t) {
 var o = {
-firstresult: s.Message.getField(t, 1),
-maxresult: s.Message.getField(t, 2),
-lastrequesttime: s.Message.getField(t, 3),
-sentmail: s.Message.getField(t, 4)
+firstresult: r.Message.getField(t, 1),
+maxresult: r.Message.getField(t, 2),
+lastrequesttime: r.Message.getField(t, 3),
+sentmail: r.Message.getField(t, 4)
 };
 e && (o.$jspbMessageInstance = t);
 return o;
 };
 }
 proto.BINFilterMailRequest.deserializeBinary = function(e) {
-var t = new s.BinaryReader(e), o = new proto.BINFilterMailRequest();
+var t = new r.BinaryReader(e), o = new proto.BINFilterMailRequest();
 return proto.BINFilterMailRequest.deserializeBinaryFromReader(o, t);
 };
 proto.BINFilterMailRequest.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readInt32();
+var o = t.readInt32();
 e.setFirstresult(o);
 break;
 
@@ -21739,12 +24266,13 @@ e.setLastrequesttime(o);
 break;
 
 case 4:
-var o = t.readBool();
+o = t.readBool();
 e.setSentmail(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -21752,96 +24280,97 @@ proto.BINFilterMailRequest.serializeBinaryToWriter = function(e, t) {
 e.serializeBinaryToWriter(t);
 };
 proto.BINFilterMailRequest.prototype.serializeBinary = function() {
-var e = new s.BinaryWriter();
+var e = new r.BinaryWriter();
 this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINFilterMailRequest.prototype.serializeBinaryToWriter = function(e) {
 var t = void 0;
-null != (t = s.Message.getField(this, 1)) && e.writeInt32(1, t);
-null != (t = s.Message.getField(this, 2)) && e.writeInt32(2, t);
-null != (t = s.Message.getField(this, 3)) && e.writeInt64(3, t);
-null != (t = s.Message.getField(this, 4)) && e.writeBool(4, t);
+null != (t = r.Message.getField(this, 1)) && e.writeInt32(1, t);
+null != (t = r.Message.getField(this, 2)) && e.writeInt32(2, t);
+null != (t = r.Message.getField(this, 3)) && e.writeInt64(3, t);
+null != (t = r.Message.getField(this, 4)) && e.writeBool(4, t);
 };
 proto.BINFilterMailRequest.prototype.getFirstresult = function() {
-return s.Message.getFieldWithDefault(this, 1, 0);
+return r.Message.getFieldWithDefault(this, 1, 0);
 };
 proto.BINFilterMailRequest.prototype.setFirstresult = function(e) {
-s.Message.setField(this, 1, e);
+r.Message.setField(this, 1, e);
 };
 proto.BINFilterMailRequest.prototype.clearFirstresult = function() {
-s.Message.setField(this, 1, void 0);
+r.Message.setField(this, 1, void 0);
 };
 proto.BINFilterMailRequest.prototype.hasFirstresult = function() {
-return null != s.Message.getField(this, 1);
+return null != r.Message.getField(this, 1);
 };
 proto.BINFilterMailRequest.prototype.getMaxresult = function() {
-return s.Message.getFieldWithDefault(this, 2, 0);
+return r.Message.getFieldWithDefault(this, 2, 0);
 };
 proto.BINFilterMailRequest.prototype.setMaxresult = function(e) {
-s.Message.setField(this, 2, e);
+r.Message.setField(this, 2, e);
 };
 proto.BINFilterMailRequest.prototype.clearMaxresult = function() {
-s.Message.setField(this, 2, void 0);
+r.Message.setField(this, 2, void 0);
 };
 proto.BINFilterMailRequest.prototype.hasMaxresult = function() {
-return null != s.Message.getField(this, 2);
+return null != r.Message.getField(this, 2);
 };
 proto.BINFilterMailRequest.prototype.getLastrequesttime = function() {
-return s.Message.getFieldWithDefault(this, 3, 0);
+return r.Message.getFieldWithDefault(this, 3, 0);
 };
 proto.BINFilterMailRequest.prototype.setLastrequesttime = function(e) {
-s.Message.setField(this, 3, e);
+r.Message.setField(this, 3, e);
 };
 proto.BINFilterMailRequest.prototype.clearLastrequesttime = function() {
-s.Message.setField(this, 3, void 0);
+r.Message.setField(this, 3, void 0);
 };
 proto.BINFilterMailRequest.prototype.hasLastrequesttime = function() {
-return null != s.Message.getField(this, 3);
+return null != r.Message.getField(this, 3);
 };
 proto.BINFilterMailRequest.prototype.getSentmail = function() {
-return s.Message.getFieldWithDefault(this, 4, !1);
+return r.Message.getFieldWithDefault(this, 4, !1);
 };
 proto.BINFilterMailRequest.prototype.setSentmail = function(e) {
-s.Message.setField(this, 4, e);
+r.Message.setField(this, 4, e);
 };
 proto.BINFilterMailRequest.prototype.clearSentmail = function() {
-s.Message.setField(this, 4, void 0);
+r.Message.setField(this, 4, void 0);
 };
 proto.BINFilterMailRequest.prototype.hasSentmail = function() {
-return null != s.Message.getField(this, 4);
+return null != r.Message.getField(this, 4);
 };
 proto.BINFilterMailResponse = function(e) {
-s.Message.initialize(this, e, 0, -1, proto.BINFilterMailResponse.repeatedFields_, null);
+r.Message.initialize(this, e, 0, -1, proto.BINFilterMailResponse.repeatedFields_, null);
 };
-r.inherits(proto.BINFilterMailResponse, s.Message);
-r.DEBUG && !COMPILED && (proto.BINFilterMailResponse.displayName = "proto.BINFilterMailResponse");
+s.inherits(proto.BINFilterMailResponse, r.Message);
+s.DEBUG && !COMPILED && (proto.BINFilterMailResponse.displayName = "proto.BINFilterMailResponse");
 proto.BINFilterMailResponse.repeatedFields_ = [ 3 ];
-if (s.Message.GENERATE_TO_OBJECT) {
+if (r.Message.GENERATE_TO_OBJECT) {
 proto.BINFilterMailResponse.prototype.toObject = function(e) {
 return proto.BINFilterMailResponse.toObject(e, this);
 };
 proto.BINFilterMailResponse.toObject = function(e, t) {
 var o = {
-responsecode: s.Message.getField(t, 1),
-message: s.Message.getField(t, 2),
-mailsList: s.Message.toObjectList(t.getMailsList(), proto.BINMail.toObject, e),
-count: s.Message.getField(t, 4),
-lastrequesttime: s.Message.getField(t, 5),
-sentmail: s.Message.getField(t, 6)
+responsecode: r.Message.getField(t, 1),
+message: r.Message.getField(t, 2),
+mailsList: r.Message.toObjectList(t.getMailsList(), proto.BINMail.toObject, e),
+count: r.Message.getField(t, 4),
+lastrequesttime: r.Message.getField(t, 5),
+sentmail: r.Message.getField(t, 6)
 };
 e && (o.$jspbMessageInstance = t);
 return o;
 };
 }
 proto.BINFilterMailResponse.deserializeBinary = function(e) {
-var t = new s.BinaryReader(e), o = new proto.BINFilterMailResponse();
+var t = new r.BinaryReader(e), o = new proto.BINFilterMailResponse();
 return proto.BINFilterMailResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINFilterMailResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
@@ -21867,12 +24396,13 @@ e.setLastrequesttime(o);
 break;
 
 case 6:
-var o = t.readBool();
+o = t.readBool();
 e.setSentmail(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -21880,119 +24410,120 @@ proto.BINFilterMailResponse.serializeBinaryToWriter = function(e, t) {
 e.serializeBinaryToWriter(t);
 };
 proto.BINFilterMailResponse.prototype.serializeBinary = function() {
-var e = new s.BinaryWriter();
+var e = new r.BinaryWriter();
 this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINFilterMailResponse.prototype.serializeBinaryToWriter = function(e) {
 var t = void 0;
-null != (t = s.Message.getField(this, 1)) && e.writeBool(1, t);
-null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
-(t = this.getMailsList()).length > 0 && e.writeRepeatedMessage(3, t, proto.BINMail.serializeBinaryToWriter);
-null != (t = s.Message.getField(this, 4)) && e.writeInt32(4, t);
-null != (t = s.Message.getField(this, 5)) && e.writeInt64(5, t);
-null != (t = s.Message.getField(this, 6)) && e.writeBool(6, t);
+null != (t = r.Message.getField(this, 1)) && e.writeBool(1, t);
+null != (t = r.Message.getField(this, 2)) && e.writeString(2, t);
+0 < (t = this.getMailsList()).length && e.writeRepeatedMessage(3, t, proto.BINMail.serializeBinaryToWriter);
+null != (t = r.Message.getField(this, 4)) && e.writeInt32(4, t);
+null != (t = r.Message.getField(this, 5)) && e.writeInt64(5, t);
+null != (t = r.Message.getField(this, 6)) && e.writeBool(6, t);
 };
 proto.BINFilterMailResponse.prototype.getResponsecode = function() {
-return s.Message.getFieldWithDefault(this, 1, !1);
+return r.Message.getFieldWithDefault(this, 1, !1);
 };
 proto.BINFilterMailResponse.prototype.setResponsecode = function(e) {
-s.Message.setField(this, 1, e);
+r.Message.setField(this, 1, e);
 };
 proto.BINFilterMailResponse.prototype.clearResponsecode = function() {
-s.Message.setField(this, 1, void 0);
+r.Message.setField(this, 1, void 0);
 };
 proto.BINFilterMailResponse.prototype.hasResponsecode = function() {
-return null != s.Message.getField(this, 1);
+return null != r.Message.getField(this, 1);
 };
 proto.BINFilterMailResponse.prototype.getMessage = function() {
-return s.Message.getFieldWithDefault(this, 2, "");
+return r.Message.getFieldWithDefault(this, 2, "");
 };
 proto.BINFilterMailResponse.prototype.setMessage = function(e) {
-s.Message.setField(this, 2, e);
+r.Message.setField(this, 2, e);
 };
 proto.BINFilterMailResponse.prototype.clearMessage = function() {
-s.Message.setField(this, 2, void 0);
+r.Message.setField(this, 2, void 0);
 };
 proto.BINFilterMailResponse.prototype.hasMessage = function() {
-return null != s.Message.getField(this, 2);
+return null != r.Message.getField(this, 2);
 };
 proto.BINFilterMailResponse.prototype.getMailsList = function() {
-return s.Message.getRepeatedWrapperField(this, proto.BINMail, 3);
+return r.Message.getRepeatedWrapperField(this, proto.BINMail, 3);
 };
 proto.BINFilterMailResponse.prototype.setMailsList = function(e) {
-s.Message.setRepeatedWrapperField(this, 3, e);
+r.Message.setRepeatedWrapperField(this, 3, e);
 };
 proto.BINFilterMailResponse.prototype.addMails = function(e, t) {
-return s.Message.addToRepeatedWrapperField(this, 3, e, proto.BINMail, t);
+return r.Message.addToRepeatedWrapperField(this, 3, e, proto.BINMail, t);
 };
 proto.BINFilterMailResponse.prototype.clearMailsList = function() {
 this.setMailsList([]);
 };
 proto.BINFilterMailResponse.prototype.getCount = function() {
-return s.Message.getFieldWithDefault(this, 4, 0);
+return r.Message.getFieldWithDefault(this, 4, 0);
 };
 proto.BINFilterMailResponse.prototype.setCount = function(e) {
-s.Message.setField(this, 4, e);
+r.Message.setField(this, 4, e);
 };
 proto.BINFilterMailResponse.prototype.clearCount = function() {
-s.Message.setField(this, 4, void 0);
+r.Message.setField(this, 4, void 0);
 };
 proto.BINFilterMailResponse.prototype.hasCount = function() {
-return null != s.Message.getField(this, 4);
+return null != r.Message.getField(this, 4);
 };
 proto.BINFilterMailResponse.prototype.getLastrequesttime = function() {
-return s.Message.getFieldWithDefault(this, 5, 0);
+return r.Message.getFieldWithDefault(this, 5, 0);
 };
 proto.BINFilterMailResponse.prototype.setLastrequesttime = function(e) {
-s.Message.setField(this, 5, e);
+r.Message.setField(this, 5, e);
 };
 proto.BINFilterMailResponse.prototype.clearLastrequesttime = function() {
-s.Message.setField(this, 5, void 0);
+r.Message.setField(this, 5, void 0);
 };
 proto.BINFilterMailResponse.prototype.hasLastrequesttime = function() {
-return null != s.Message.getField(this, 5);
+return null != r.Message.getField(this, 5);
 };
 proto.BINFilterMailResponse.prototype.getSentmail = function() {
-return s.Message.getFieldWithDefault(this, 6, !1);
+return r.Message.getFieldWithDefault(this, 6, !1);
 };
 proto.BINFilterMailResponse.prototype.setSentmail = function(e) {
-s.Message.setField(this, 6, e);
+r.Message.setField(this, 6, e);
 };
 proto.BINFilterMailResponse.prototype.clearSentmail = function() {
-s.Message.setField(this, 6, void 0);
+r.Message.setField(this, 6, void 0);
 };
 proto.BINFilterMailResponse.prototype.hasSentmail = function() {
-return null != s.Message.getField(this, 6);
+return null != r.Message.getField(this, 6);
 };
 proto.BINSendMailRequest = function(e) {
-s.Message.initialize(this, e, 0, -1, null, null);
+r.Message.initialize(this, e, 0, -1, null, null);
 };
-r.inherits(proto.BINSendMailRequest, s.Message);
-r.DEBUG && !COMPILED && (proto.BINSendMailRequest.displayName = "proto.BINSendMailRequest");
-if (s.Message.GENERATE_TO_OBJECT) {
+s.inherits(proto.BINSendMailRequest, r.Message);
+s.DEBUG && !COMPILED && (proto.BINSendMailRequest.displayName = "proto.BINSendMailRequest");
+if (r.Message.GENERATE_TO_OBJECT) {
 proto.BINSendMailRequest.prototype.toObject = function(e) {
 return proto.BINSendMailRequest.toObject(e, this);
 };
 proto.BINSendMailRequest.toObject = function(e, t) {
 var o = {
-recipientuserid: s.Message.getField(t, 1),
-title: s.Message.getField(t, 2),
-body: s.Message.getField(t, 3),
-parentid: s.Message.getField(t, 4)
+recipientuserid: r.Message.getField(t, 1),
+title: r.Message.getField(t, 2),
+body: r.Message.getField(t, 3),
+parentid: r.Message.getField(t, 4)
 };
 e && (o.$jspbMessageInstance = t);
 return o;
 };
 }
 proto.BINSendMailRequest.deserializeBinary = function(e) {
-var t = new s.BinaryReader(e), o = new proto.BINSendMailRequest();
+var t = new r.BinaryReader(e), o = new proto.BINSendMailRequest();
 return proto.BINSendMailRequest.deserializeBinaryFromReader(o, t);
 };
 proto.BINSendMailRequest.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readInt64();
+var o = t.readInt64();
 e.setRecipientuserid(o);
 break;
 
@@ -22007,12 +24538,13 @@ e.setBody(o);
 break;
 
 case 4:
-var o = t.readInt64();
+o = t.readInt64();
 e.setParentid(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -22020,101 +24552,103 @@ proto.BINSendMailRequest.serializeBinaryToWriter = function(e, t) {
 e.serializeBinaryToWriter(t);
 };
 proto.BINSendMailRequest.prototype.serializeBinary = function() {
-var e = new s.BinaryWriter();
+var e = new r.BinaryWriter();
 this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINSendMailRequest.prototype.serializeBinaryToWriter = function(e) {
 var t = void 0;
-null != (t = s.Message.getField(this, 1)) && e.writeInt64(1, t);
-null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
-null != (t = s.Message.getField(this, 3)) && e.writeString(3, t);
-null != (t = s.Message.getField(this, 4)) && e.writeInt64(4, t);
+null != (t = r.Message.getField(this, 1)) && e.writeInt64(1, t);
+null != (t = r.Message.getField(this, 2)) && e.writeString(2, t);
+null != (t = r.Message.getField(this, 3)) && e.writeString(3, t);
+null != (t = r.Message.getField(this, 4)) && e.writeInt64(4, t);
 };
 proto.BINSendMailRequest.prototype.getRecipientuserid = function() {
-return s.Message.getFieldWithDefault(this, 1, 0);
+return r.Message.getFieldWithDefault(this, 1, 0);
 };
 proto.BINSendMailRequest.prototype.setRecipientuserid = function(e) {
-s.Message.setField(this, 1, e);
+r.Message.setField(this, 1, e);
 };
 proto.BINSendMailRequest.prototype.clearRecipientuserid = function() {
-s.Message.setField(this, 1, void 0);
+r.Message.setField(this, 1, void 0);
 };
 proto.BINSendMailRequest.prototype.hasRecipientuserid = function() {
-return null != s.Message.getField(this, 1);
+return null != r.Message.getField(this, 1);
 };
 proto.BINSendMailRequest.prototype.getTitle = function() {
-return s.Message.getFieldWithDefault(this, 2, "");
+return r.Message.getFieldWithDefault(this, 2, "");
 };
 proto.BINSendMailRequest.prototype.setTitle = function(e) {
-s.Message.setField(this, 2, e);
+r.Message.setField(this, 2, e);
 };
 proto.BINSendMailRequest.prototype.clearTitle = function() {
-s.Message.setField(this, 2, void 0);
+r.Message.setField(this, 2, void 0);
 };
 proto.BINSendMailRequest.prototype.hasTitle = function() {
-return null != s.Message.getField(this, 2);
+return null != r.Message.getField(this, 2);
 };
 proto.BINSendMailRequest.prototype.getBody = function() {
-return s.Message.getFieldWithDefault(this, 3, "");
+return r.Message.getFieldWithDefault(this, 3, "");
 };
 proto.BINSendMailRequest.prototype.setBody = function(e) {
-s.Message.setField(this, 3, e);
+r.Message.setField(this, 3, e);
 };
 proto.BINSendMailRequest.prototype.clearBody = function() {
-s.Message.setField(this, 3, void 0);
+r.Message.setField(this, 3, void 0);
 };
 proto.BINSendMailRequest.prototype.hasBody = function() {
-return null != s.Message.getField(this, 3);
+return null != r.Message.getField(this, 3);
 };
 proto.BINSendMailRequest.prototype.getParentid = function() {
-return s.Message.getFieldWithDefault(this, 4, 0);
+return r.Message.getFieldWithDefault(this, 4, 0);
 };
 proto.BINSendMailRequest.prototype.setParentid = function(e) {
-s.Message.setField(this, 4, e);
+r.Message.setField(this, 4, e);
 };
 proto.BINSendMailRequest.prototype.clearParentid = function() {
-s.Message.setField(this, 4, void 0);
+r.Message.setField(this, 4, void 0);
 };
 proto.BINSendMailRequest.prototype.hasParentid = function() {
-return null != s.Message.getField(this, 4);
+return null != r.Message.getField(this, 4);
 };
 proto.BINSendMailResponse = function(e) {
-s.Message.initialize(this, e, 0, -1, null, null);
+r.Message.initialize(this, e, 0, -1, null, null);
 };
-r.inherits(proto.BINSendMailResponse, s.Message);
-r.DEBUG && !COMPILED && (proto.BINSendMailResponse.displayName = "proto.BINSendMailResponse");
-if (s.Message.GENERATE_TO_OBJECT) {
+s.inherits(proto.BINSendMailResponse, r.Message);
+s.DEBUG && !COMPILED && (proto.BINSendMailResponse.displayName = "proto.BINSendMailResponse");
+if (r.Message.GENERATE_TO_OBJECT) {
 proto.BINSendMailResponse.prototype.toObject = function(e) {
 return proto.BINSendMailResponse.toObject(e, this);
 };
 proto.BINSendMailResponse.toObject = function(e, t) {
 var o = {
-responsecode: s.Message.getField(t, 1),
-message: s.Message.getField(t, 2)
+responsecode: r.Message.getField(t, 1),
+message: r.Message.getField(t, 2)
 };
 e && (o.$jspbMessageInstance = t);
 return o;
 };
 }
 proto.BINSendMailResponse.deserializeBinary = function(e) {
-var t = new s.BinaryReader(e), o = new proto.BINSendMailResponse();
+var t = new r.BinaryReader(e), o = new proto.BINSendMailResponse();
 return proto.BINSendMailResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINSendMailResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
 case 2:
-var o = t.readString();
+o = t.readString();
 e.setMessage(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -22122,63 +24656,64 @@ proto.BINSendMailResponse.serializeBinaryToWriter = function(e, t) {
 e.serializeBinaryToWriter(t);
 };
 proto.BINSendMailResponse.prototype.serializeBinary = function() {
-var e = new s.BinaryWriter();
+var e = new r.BinaryWriter();
 this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINSendMailResponse.prototype.serializeBinaryToWriter = function(e) {
 var t = void 0;
-null != (t = s.Message.getField(this, 1)) && e.writeBool(1, t);
-null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
+null != (t = r.Message.getField(this, 1)) && e.writeBool(1, t);
+null != (t = r.Message.getField(this, 2)) && e.writeString(2, t);
 };
 proto.BINSendMailResponse.prototype.getResponsecode = function() {
-return s.Message.getFieldWithDefault(this, 1, !1);
+return r.Message.getFieldWithDefault(this, 1, !1);
 };
 proto.BINSendMailResponse.prototype.setResponsecode = function(e) {
-s.Message.setField(this, 1, e);
+r.Message.setField(this, 1, e);
 };
 proto.BINSendMailResponse.prototype.clearResponsecode = function() {
-s.Message.setField(this, 1, void 0);
+r.Message.setField(this, 1, void 0);
 };
 proto.BINSendMailResponse.prototype.hasResponsecode = function() {
-return null != s.Message.getField(this, 1);
+return null != r.Message.getField(this, 1);
 };
 proto.BINSendMailResponse.prototype.getMessage = function() {
-return s.Message.getFieldWithDefault(this, 2, "");
+return r.Message.getFieldWithDefault(this, 2, "");
 };
 proto.BINSendMailResponse.prototype.setMessage = function(e) {
-s.Message.setField(this, 2, e);
+r.Message.setField(this, 2, e);
 };
 proto.BINSendMailResponse.prototype.clearMessage = function() {
-s.Message.setField(this, 2, void 0);
+r.Message.setField(this, 2, void 0);
 };
 proto.BINSendMailResponse.prototype.hasMessage = function() {
-return null != s.Message.getField(this, 2);
+return null != r.Message.getField(this, 2);
 };
 proto.BINDeleteMailRequest = function(e) {
-s.Message.initialize(this, e, 0, -1, proto.BINDeleteMailRequest.repeatedFields_, null);
+r.Message.initialize(this, e, 0, -1, proto.BINDeleteMailRequest.repeatedFields_, null);
 };
-r.inherits(proto.BINDeleteMailRequest, s.Message);
-r.DEBUG && !COMPILED && (proto.BINDeleteMailRequest.displayName = "proto.BINDeleteMailRequest");
+s.inherits(proto.BINDeleteMailRequest, r.Message);
+s.DEBUG && !COMPILED && (proto.BINDeleteMailRequest.displayName = "proto.BINDeleteMailRequest");
 proto.BINDeleteMailRequest.repeatedFields_ = [ 1 ];
-if (s.Message.GENERATE_TO_OBJECT) {
+if (r.Message.GENERATE_TO_OBJECT) {
 proto.BINDeleteMailRequest.prototype.toObject = function(e) {
 return proto.BINDeleteMailRequest.toObject(e, this);
 };
 proto.BINDeleteMailRequest.toObject = function(e, t) {
 var o = {
-selectedmailidsList: s.Message.getField(t, 1)
+selectedmailidsList: r.Message.getField(t, 1)
 };
 e && (o.$jspbMessageInstance = t);
 return o;
 };
 }
 proto.BINDeleteMailRequest.deserializeBinary = function(e) {
-var t = new s.BinaryReader(e), o = new proto.BINDeleteMailRequest();
+var t = new r.BinaryReader(e), o = new proto.BINDeleteMailRequest();
 return proto.BINDeleteMailRequest.deserializeBinaryFromReader(o, t);
 };
 proto.BINDeleteMailRequest.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
 var o = t.readInt64();
 e.addSelectedmailids(o);
@@ -22187,60 +24722,62 @@ break;
 default:
 t.skipField();
 }
+}
 return e;
 };
 proto.BINDeleteMailRequest.serializeBinaryToWriter = function(e, t) {
 e.serializeBinaryToWriter(t);
 };
 proto.BINDeleteMailRequest.prototype.serializeBinary = function() {
-var e = new s.BinaryWriter();
+var e = new r.BinaryWriter();
 this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINDeleteMailRequest.prototype.serializeBinaryToWriter = function(e) {
-var t = void 0;
-(t = this.getSelectedmailidsList()).length > 0 && e.writeRepeatedInt64(1, t);
+var t;
+0 < (t = this.getSelectedmailidsList()).length && e.writeRepeatedInt64(1, t);
 };
 proto.BINDeleteMailRequest.prototype.getSelectedmailidsList = function() {
-return s.Message.getField(this, 1);
+return r.Message.getField(this, 1);
 };
 proto.BINDeleteMailRequest.prototype.setSelectedmailidsList = function(e) {
-s.Message.setField(this, 1, e || []);
+r.Message.setField(this, 1, e || []);
 };
 proto.BINDeleteMailRequest.prototype.addSelectedmailids = function(e, t) {
-s.Message.addToRepeatedField(this, 1, e, t);
+r.Message.addToRepeatedField(this, 1, e, t);
 };
 proto.BINDeleteMailRequest.prototype.clearSelectedmailidsList = function() {
 this.setSelectedmailidsList([]);
 };
 proto.BINDeleteMailResponse = function(e) {
-s.Message.initialize(this, e, 0, -1, proto.BINDeleteMailResponse.repeatedFields_, null);
+r.Message.initialize(this, e, 0, -1, proto.BINDeleteMailResponse.repeatedFields_, null);
 };
-r.inherits(proto.BINDeleteMailResponse, s.Message);
-r.DEBUG && !COMPILED && (proto.BINDeleteMailResponse.displayName = "proto.BINDeleteMailResponse");
+s.inherits(proto.BINDeleteMailResponse, r.Message);
+s.DEBUG && !COMPILED && (proto.BINDeleteMailResponse.displayName = "proto.BINDeleteMailResponse");
 proto.BINDeleteMailResponse.repeatedFields_ = [ 3 ];
-if (s.Message.GENERATE_TO_OBJECT) {
+if (r.Message.GENERATE_TO_OBJECT) {
 proto.BINDeleteMailResponse.prototype.toObject = function(e) {
 return proto.BINDeleteMailResponse.toObject(e, this);
 };
 proto.BINDeleteMailResponse.toObject = function(e, t) {
 var o = {
-responsecode: s.Message.getField(t, 1),
-message: s.Message.getField(t, 2),
-deletedmailidsList: s.Message.getField(t, 3)
+responsecode: r.Message.getField(t, 1),
+message: r.Message.getField(t, 2),
+deletedmailidsList: r.Message.getField(t, 3)
 };
 e && (o.$jspbMessageInstance = t);
 return o;
 };
 }
 proto.BINDeleteMailResponse.deserializeBinary = function(e) {
-var t = new s.BinaryReader(e), o = new proto.BINDeleteMailResponse();
+var t = new r.BinaryReader(e), o = new proto.BINDeleteMailResponse();
 return proto.BINDeleteMailResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINDeleteMailResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
@@ -22250,12 +24787,13 @@ e.setMessage(o);
 break;
 
 case 3:
-var o = t.readInt64();
+o = t.readInt64();
 e.addDeletedmailids(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -22263,88 +24801,90 @@ proto.BINDeleteMailResponse.serializeBinaryToWriter = function(e, t) {
 e.serializeBinaryToWriter(t);
 };
 proto.BINDeleteMailResponse.prototype.serializeBinary = function() {
-var e = new s.BinaryWriter();
+var e = new r.BinaryWriter();
 this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINDeleteMailResponse.prototype.serializeBinaryToWriter = function(e) {
 var t = void 0;
-null != (t = s.Message.getField(this, 1)) && e.writeBool(1, t);
-null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
-(t = this.getDeletedmailidsList()).length > 0 && e.writeRepeatedInt64(3, t);
+null != (t = r.Message.getField(this, 1)) && e.writeBool(1, t);
+null != (t = r.Message.getField(this, 2)) && e.writeString(2, t);
+0 < (t = this.getDeletedmailidsList()).length && e.writeRepeatedInt64(3, t);
 };
 proto.BINDeleteMailResponse.prototype.getResponsecode = function() {
-return s.Message.getFieldWithDefault(this, 1, !1);
+return r.Message.getFieldWithDefault(this, 1, !1);
 };
 proto.BINDeleteMailResponse.prototype.setResponsecode = function(e) {
-s.Message.setField(this, 1, e);
+r.Message.setField(this, 1, e);
 };
 proto.BINDeleteMailResponse.prototype.clearResponsecode = function() {
-s.Message.setField(this, 1, void 0);
+r.Message.setField(this, 1, void 0);
 };
 proto.BINDeleteMailResponse.prototype.hasResponsecode = function() {
-return null != s.Message.getField(this, 1);
+return null != r.Message.getField(this, 1);
 };
 proto.BINDeleteMailResponse.prototype.getMessage = function() {
-return s.Message.getFieldWithDefault(this, 2, "");
+return r.Message.getFieldWithDefault(this, 2, "");
 };
 proto.BINDeleteMailResponse.prototype.setMessage = function(e) {
-s.Message.setField(this, 2, e);
+r.Message.setField(this, 2, e);
 };
 proto.BINDeleteMailResponse.prototype.clearMessage = function() {
-s.Message.setField(this, 2, void 0);
+r.Message.setField(this, 2, void 0);
 };
 proto.BINDeleteMailResponse.prototype.hasMessage = function() {
-return null != s.Message.getField(this, 2);
+return null != r.Message.getField(this, 2);
 };
 proto.BINDeleteMailResponse.prototype.getDeletedmailidsList = function() {
-return s.Message.getField(this, 3);
+return r.Message.getField(this, 3);
 };
 proto.BINDeleteMailResponse.prototype.setDeletedmailidsList = function(e) {
-s.Message.setField(this, 3, e || []);
+r.Message.setField(this, 3, e || []);
 };
 proto.BINDeleteMailResponse.prototype.addDeletedmailids = function(e, t) {
-s.Message.addToRepeatedField(this, 3, e, t);
+r.Message.addToRepeatedField(this, 3, e, t);
 };
 proto.BINDeleteMailResponse.prototype.clearDeletedmailidsList = function() {
 this.setDeletedmailidsList([]);
 };
 proto.BINReadedMailRequest = function(e) {
-s.Message.initialize(this, e, 0, -1, null, null);
+r.Message.initialize(this, e, 0, -1, null, null);
 };
-r.inherits(proto.BINReadedMailRequest, s.Message);
-r.DEBUG && !COMPILED && (proto.BINReadedMailRequest.displayName = "proto.BINReadedMailRequest");
-if (s.Message.GENERATE_TO_OBJECT) {
+s.inherits(proto.BINReadedMailRequest, r.Message);
+s.DEBUG && !COMPILED && (proto.BINReadedMailRequest.displayName = "proto.BINReadedMailRequest");
+if (r.Message.GENERATE_TO_OBJECT) {
 proto.BINReadedMailRequest.prototype.toObject = function(e) {
 return proto.BINReadedMailRequest.toObject(e, this);
 };
 proto.BINReadedMailRequest.toObject = function(e, t) {
 var o = {
-readedmailid: s.Message.getField(t, 1),
-getcontent: s.Message.getField(t, 2)
+readedmailid: r.Message.getField(t, 1),
+getcontent: r.Message.getField(t, 2)
 };
 e && (o.$jspbMessageInstance = t);
 return o;
 };
 }
 proto.BINReadedMailRequest.deserializeBinary = function(e) {
-var t = new s.BinaryReader(e), o = new proto.BINReadedMailRequest();
+var t = new r.BinaryReader(e), o = new proto.BINReadedMailRequest();
 return proto.BINReadedMailRequest.deserializeBinaryFromReader(o, t);
 };
 proto.BINReadedMailRequest.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readInt64();
+var o = t.readInt64();
 e.setReadedmailid(o);
 break;
 
 case 2:
-var o = t.readBool();
+o = t.readBool();
 e.setGetcontent(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -22352,66 +24892,67 @@ proto.BINReadedMailRequest.serializeBinaryToWriter = function(e, t) {
 e.serializeBinaryToWriter(t);
 };
 proto.BINReadedMailRequest.prototype.serializeBinary = function() {
-var e = new s.BinaryWriter();
+var e = new r.BinaryWriter();
 this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINReadedMailRequest.prototype.serializeBinaryToWriter = function(e) {
 var t = void 0;
-null != (t = s.Message.getField(this, 1)) && e.writeInt64(1, t);
-null != (t = s.Message.getField(this, 2)) && e.writeBool(2, t);
+null != (t = r.Message.getField(this, 1)) && e.writeInt64(1, t);
+null != (t = r.Message.getField(this, 2)) && e.writeBool(2, t);
 };
 proto.BINReadedMailRequest.prototype.getReadedmailid = function() {
-return s.Message.getFieldWithDefault(this, 1, 0);
+return r.Message.getFieldWithDefault(this, 1, 0);
 };
 proto.BINReadedMailRequest.prototype.setReadedmailid = function(e) {
-s.Message.setField(this, 1, e);
+r.Message.setField(this, 1, e);
 };
 proto.BINReadedMailRequest.prototype.clearReadedmailid = function() {
-s.Message.setField(this, 1, void 0);
+r.Message.setField(this, 1, void 0);
 };
 proto.BINReadedMailRequest.prototype.hasReadedmailid = function() {
-return null != s.Message.getField(this, 1);
+return null != r.Message.getField(this, 1);
 };
 proto.BINReadedMailRequest.prototype.getGetcontent = function() {
-return s.Message.getFieldWithDefault(this, 2, !1);
+return r.Message.getFieldWithDefault(this, 2, !1);
 };
 proto.BINReadedMailRequest.prototype.setGetcontent = function(e) {
-s.Message.setField(this, 2, e);
+r.Message.setField(this, 2, e);
 };
 proto.BINReadedMailRequest.prototype.clearGetcontent = function() {
-s.Message.setField(this, 2, void 0);
+r.Message.setField(this, 2, void 0);
 };
 proto.BINReadedMailRequest.prototype.hasGetcontent = function() {
-return null != s.Message.getField(this, 2);
+return null != r.Message.getField(this, 2);
 };
 proto.BINReadedMailResponse = function(e) {
-s.Message.initialize(this, e, 0, -1, null, null);
+r.Message.initialize(this, e, 0, -1, null, null);
 };
-r.inherits(proto.BINReadedMailResponse, s.Message);
-r.DEBUG && !COMPILED && (proto.BINReadedMailResponse.displayName = "proto.BINReadedMailResponse");
-if (s.Message.GENERATE_TO_OBJECT) {
+s.inherits(proto.BINReadedMailResponse, r.Message);
+s.DEBUG && !COMPILED && (proto.BINReadedMailResponse.displayName = "proto.BINReadedMailResponse");
+if (r.Message.GENERATE_TO_OBJECT) {
 proto.BINReadedMailResponse.prototype.toObject = function(e) {
 return proto.BINReadedMailResponse.toObject(e, this);
 };
 proto.BINReadedMailResponse.toObject = function(e, t) {
-var o, r = {
-responsecode: s.Message.getField(t, 1),
-message: s.Message.getField(t, 2),
+var o, s = {
+responsecode: r.Message.getField(t, 1),
+message: r.Message.getField(t, 2),
 mail: (o = t.getMail()) && proto.BINMail.toObject(e, o)
 };
-e && (r.$jspbMessageInstance = t);
-return r;
+e && (s.$jspbMessageInstance = t);
+return s;
 };
 }
 proto.BINReadedMailResponse.deserializeBinary = function(e) {
-var t = new s.BinaryReader(e), o = new proto.BINReadedMailResponse();
+var t = new r.BinaryReader(e), o = new proto.BINReadedMailResponse();
 return proto.BINReadedMailResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINReadedMailResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
@@ -22421,7 +24962,7 @@ e.setMessage(o);
 break;
 
 case 3:
-var o = new proto.BINMail();
+o = new proto.BINMail();
 t.readMessage(o, proto.BINMail.deserializeBinaryFromReader);
 e.setMail(o);
 break;
@@ -22429,94 +24970,97 @@ break;
 default:
 t.skipField();
 }
+}
 return e;
 };
 proto.BINReadedMailResponse.serializeBinaryToWriter = function(e, t) {
 e.serializeBinaryToWriter(t);
 };
 proto.BINReadedMailResponse.prototype.serializeBinary = function() {
-var e = new s.BinaryWriter();
+var e = new r.BinaryWriter();
 this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINReadedMailResponse.prototype.serializeBinaryToWriter = function(e) {
 var t = void 0;
-null != (t = s.Message.getField(this, 1)) && e.writeBool(1, t);
-null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
+null != (t = r.Message.getField(this, 1)) && e.writeBool(1, t);
+null != (t = r.Message.getField(this, 2)) && e.writeString(2, t);
 null != (t = this.getMail()) && e.writeMessage(3, t, proto.BINMail.serializeBinaryToWriter);
 };
 proto.BINReadedMailResponse.prototype.getResponsecode = function() {
-return s.Message.getFieldWithDefault(this, 1, !1);
+return r.Message.getFieldWithDefault(this, 1, !1);
 };
 proto.BINReadedMailResponse.prototype.setResponsecode = function(e) {
-s.Message.setField(this, 1, e);
+r.Message.setField(this, 1, e);
 };
 proto.BINReadedMailResponse.prototype.clearResponsecode = function() {
-s.Message.setField(this, 1, void 0);
+r.Message.setField(this, 1, void 0);
 };
 proto.BINReadedMailResponse.prototype.hasResponsecode = function() {
-return null != s.Message.getField(this, 1);
+return null != r.Message.getField(this, 1);
 };
 proto.BINReadedMailResponse.prototype.getMessage = function() {
-return s.Message.getFieldWithDefault(this, 2, "");
+return r.Message.getFieldWithDefault(this, 2, "");
 };
 proto.BINReadedMailResponse.prototype.setMessage = function(e) {
-s.Message.setField(this, 2, e);
+r.Message.setField(this, 2, e);
 };
 proto.BINReadedMailResponse.prototype.clearMessage = function() {
-s.Message.setField(this, 2, void 0);
+r.Message.setField(this, 2, void 0);
 };
 proto.BINReadedMailResponse.prototype.hasMessage = function() {
-return null != s.Message.getField(this, 2);
+return null != r.Message.getField(this, 2);
 };
 proto.BINReadedMailResponse.prototype.getMail = function() {
-return s.Message.getWrapperField(this, proto.BINMail, 3);
+return r.Message.getWrapperField(this, proto.BINMail, 3);
 };
 proto.BINReadedMailResponse.prototype.setMail = function(e) {
-s.Message.setWrapperField(this, 3, e);
+r.Message.setWrapperField(this, 3, e);
 };
 proto.BINReadedMailResponse.prototype.clearMail = function() {
 this.setMail(void 0);
 };
 proto.BINReadedMailResponse.prototype.hasMail = function() {
-return null != s.Message.getField(this, 3);
+return null != r.Message.getField(this, 3);
 };
 proto.BINClaimAttachItemRequest = function(e) {
-s.Message.initialize(this, e, 0, -1, null, null);
+r.Message.initialize(this, e, 0, -1, null, null);
 };
-r.inherits(proto.BINClaimAttachItemRequest, s.Message);
-r.DEBUG && !COMPILED && (proto.BINClaimAttachItemRequest.displayName = "proto.BINClaimAttachItemRequest");
-if (s.Message.GENERATE_TO_OBJECT) {
+s.inherits(proto.BINClaimAttachItemRequest, r.Message);
+s.DEBUG && !COMPILED && (proto.BINClaimAttachItemRequest.displayName = "proto.BINClaimAttachItemRequest");
+if (r.Message.GENERATE_TO_OBJECT) {
 proto.BINClaimAttachItemRequest.prototype.toObject = function(e) {
 return proto.BINClaimAttachItemRequest.toObject(e, this);
 };
 proto.BINClaimAttachItemRequest.toObject = function(e, t) {
 var o = {
-mailid: s.Message.getField(t, 1),
-captchaanswers: s.Message.getField(t, 2)
+mailid: r.Message.getField(t, 1),
+captchaanswers: r.Message.getField(t, 2)
 };
 e && (o.$jspbMessageInstance = t);
 return o;
 };
 }
 proto.BINClaimAttachItemRequest.deserializeBinary = function(e) {
-var t = new s.BinaryReader(e), o = new proto.BINClaimAttachItemRequest();
+var t = new r.BinaryReader(e), o = new proto.BINClaimAttachItemRequest();
 return proto.BINClaimAttachItemRequest.deserializeBinaryFromReader(o, t);
 };
 proto.BINClaimAttachItemRequest.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readInt64();
+var o = t.readInt64();
 e.setMailid(o);
 break;
 
 case 2:
-var o = t.readString();
+o = t.readString();
 e.setCaptchaanswers(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -22524,75 +25068,77 @@ proto.BINClaimAttachItemRequest.serializeBinaryToWriter = function(e, t) {
 e.serializeBinaryToWriter(t);
 };
 proto.BINClaimAttachItemRequest.prototype.serializeBinary = function() {
-var e = new s.BinaryWriter();
+var e = new r.BinaryWriter();
 this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINClaimAttachItemRequest.prototype.serializeBinaryToWriter = function(e) {
 var t = void 0;
-null != (t = s.Message.getField(this, 1)) && e.writeInt64(1, t);
-null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
+null != (t = r.Message.getField(this, 1)) && e.writeInt64(1, t);
+null != (t = r.Message.getField(this, 2)) && e.writeString(2, t);
 };
 proto.BINClaimAttachItemRequest.prototype.getMailid = function() {
-return s.Message.getFieldWithDefault(this, 1, 0);
+return r.Message.getFieldWithDefault(this, 1, 0);
 };
 proto.BINClaimAttachItemRequest.prototype.setMailid = function(e) {
-s.Message.setField(this, 1, e);
+r.Message.setField(this, 1, e);
 };
 proto.BINClaimAttachItemRequest.prototype.clearMailid = function() {
-s.Message.setField(this, 1, void 0);
+r.Message.setField(this, 1, void 0);
 };
 proto.BINClaimAttachItemRequest.prototype.hasMailid = function() {
-return null != s.Message.getField(this, 1);
+return null != r.Message.getField(this, 1);
 };
 proto.BINClaimAttachItemRequest.prototype.getCaptchaanswers = function() {
-return s.Message.getFieldWithDefault(this, 2, "");
+return r.Message.getFieldWithDefault(this, 2, "");
 };
 proto.BINClaimAttachItemRequest.prototype.setCaptchaanswers = function(e) {
-s.Message.setField(this, 2, e);
+r.Message.setField(this, 2, e);
 };
 proto.BINClaimAttachItemRequest.prototype.clearCaptchaanswers = function() {
-s.Message.setField(this, 2, void 0);
+r.Message.setField(this, 2, void 0);
 };
 proto.BINClaimAttachItemRequest.prototype.hasCaptchaanswers = function() {
-return null != s.Message.getField(this, 2);
+return null != r.Message.getField(this, 2);
 };
 proto.BINClaimAttachItemResponse = function(e) {
-s.Message.initialize(this, e, 0, -1, null, null);
+r.Message.initialize(this, e, 0, -1, null, null);
 };
-r.inherits(proto.BINClaimAttachItemResponse, s.Message);
-r.DEBUG && !COMPILED && (proto.BINClaimAttachItemResponse.displayName = "proto.BINClaimAttachItemResponse");
-if (s.Message.GENERATE_TO_OBJECT) {
+s.inherits(proto.BINClaimAttachItemResponse, r.Message);
+s.DEBUG && !COMPILED && (proto.BINClaimAttachItemResponse.displayName = "proto.BINClaimAttachItemResponse");
+if (r.Message.GENERATE_TO_OBJECT) {
 proto.BINClaimAttachItemResponse.prototype.toObject = function(e) {
 return proto.BINClaimAttachItemResponse.toObject(e, this);
 };
 proto.BINClaimAttachItemResponse.toObject = function(e, t) {
 var o = {
-responsecode: s.Message.getField(t, 1),
-message: s.Message.getField(t, 2)
+responsecode: r.Message.getField(t, 1),
+message: r.Message.getField(t, 2)
 };
 e && (o.$jspbMessageInstance = t);
 return o;
 };
 }
 proto.BINClaimAttachItemResponse.deserializeBinary = function(e) {
-var t = new s.BinaryReader(e), o = new proto.BINClaimAttachItemResponse();
+var t = new r.BinaryReader(e), o = new proto.BINClaimAttachItemResponse();
 return proto.BINClaimAttachItemResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINClaimAttachItemResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
 case 2:
-var o = t.readString();
+o = t.readString();
 e.setMessage(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -22600,40 +25146,40 @@ proto.BINClaimAttachItemResponse.serializeBinaryToWriter = function(e, t) {
 e.serializeBinaryToWriter(t);
 };
 proto.BINClaimAttachItemResponse.prototype.serializeBinary = function() {
-var e = new s.BinaryWriter();
+var e = new r.BinaryWriter();
 this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINClaimAttachItemResponse.prototype.serializeBinaryToWriter = function(e) {
 var t = void 0;
-null != (t = s.Message.getField(this, 1)) && e.writeBool(1, t);
-null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
+null != (t = r.Message.getField(this, 1)) && e.writeBool(1, t);
+null != (t = r.Message.getField(this, 2)) && e.writeString(2, t);
 };
 proto.BINClaimAttachItemResponse.prototype.getResponsecode = function() {
-return s.Message.getFieldWithDefault(this, 1, !1);
+return r.Message.getFieldWithDefault(this, 1, !1);
 };
 proto.BINClaimAttachItemResponse.prototype.setResponsecode = function(e) {
-s.Message.setField(this, 1, e);
+r.Message.setField(this, 1, e);
 };
 proto.BINClaimAttachItemResponse.prototype.clearResponsecode = function() {
-s.Message.setField(this, 1, void 0);
+r.Message.setField(this, 1, void 0);
 };
 proto.BINClaimAttachItemResponse.prototype.hasResponsecode = function() {
-return null != s.Message.getField(this, 1);
+return null != r.Message.getField(this, 1);
 };
 proto.BINClaimAttachItemResponse.prototype.getMessage = function() {
-return s.Message.getFieldWithDefault(this, 2, "");
+return r.Message.getFieldWithDefault(this, 2, "");
 };
 proto.BINClaimAttachItemResponse.prototype.setMessage = function(e) {
-s.Message.setField(this, 2, e);
+r.Message.setField(this, 2, e);
 };
 proto.BINClaimAttachItemResponse.prototype.clearMessage = function() {
-s.Message.setField(this, 2, void 0);
+r.Message.setField(this, 2, void 0);
 };
 proto.BINClaimAttachItemResponse.prototype.hasMessage = function() {
-return null != s.Message.getField(this, 2);
+return null != r.Message.getField(this, 2);
 };
-r.object.extend(o, proto);
+s.object.extend(o, proto);
 cc._RF.pop();
 }, {
 "google-protobuf": "google-protobuf"
@@ -22666,19 +25212,21 @@ var t = new s.BinaryReader(e), o = new proto.BINMapFieldEntry();
 return proto.BINMapFieldEntry.deserializeBinaryFromReader(o, t);
 };
 proto.BINMapFieldEntry.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readString();
+var o = t.readString();
 e.setKey(o);
 break;
 
 case 2:
-var o = t.readString();
+o = t.readString();
 e.setValue(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -22752,7 +25300,8 @@ var t = new s.BinaryReader(e), o = new proto.BINMatchBeginRequest();
 return proto.BINMatchBeginRequest.deserializeBinaryFromReader(o, t);
 };
 proto.BINMatchBeginRequest.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
 var o = t.readInt32();
 e.setRoomindex(o);
@@ -22760,6 +25309,7 @@ break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -22772,7 +25322,7 @@ this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINMatchBeginRequest.prototype.serializeBinaryToWriter = function(e) {
-var t = void 0;
+var t;
 null != (t = s.Message.getField(this, 1)) && e.writeInt32(1, t);
 };
 proto.BINMatchBeginRequest.prototype.getRoomindex = function() {
@@ -22812,9 +25362,10 @@ var t = new s.BinaryReader(e), o = new proto.BINMatchBeginResponse();
 return proto.BINMatchBeginResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINMatchBeginResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
@@ -22829,12 +25380,13 @@ e.setCountdowntimer(o);
 break;
 
 case 4:
-var o = t.readInt32();
+o = t.readInt32();
 e.setZoneid(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -22934,7 +25486,8 @@ var t = new s.BinaryReader(e), o = new proto.BINMatchEndRequest();
 return proto.BINMatchEndRequest.deserializeBinaryFromReader(o, t);
 };
 proto.BINMatchEndRequest.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
 var o = t.readInt32();
 e.setRoomindex(o);
@@ -22942,6 +25495,7 @@ break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -22954,7 +25508,7 @@ this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINMatchEndRequest.prototype.serializeBinaryToWriter = function(e) {
-var t = void 0;
+var t;
 null != (t = s.Message.getField(this, 1)) && e.writeInt32(1, t);
 };
 proto.BINMatchEndRequest.prototype.getRoomindex = function() {
@@ -23000,9 +25554,10 @@ var t = new s.BinaryReader(e), o = new proto.BINMatchEndResponse();
 return proto.BINMatchEndResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINMatchEndResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
@@ -23044,12 +25599,13 @@ e.addArgs(o);
 break;
 
 case 9:
-var o = t.readInt32();
+o = t.readInt32();
 e.setZoneid(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -23065,12 +25621,12 @@ proto.BINMatchEndResponse.prototype.serializeBinaryToWriter = function(e) {
 var t = void 0;
 null != (t = s.Message.getField(this, 1)) && e.writeBool(1, t);
 null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
-(t = this.getWinninguseridsList()).length > 0 && e.writeRepeatedInt64(3, t);
-(t = this.getLosinguseridsList()).length > 0 && e.writeRepeatedInt64(4, t);
-(t = this.getDrawuseridsList()).length > 0 && e.writeRepeatedInt64(5, t);
-(t = this.getTextemoticonsList()).length > 0 && e.writeRepeatedMessage(6, t, a.BINTextEmoticon.serializeBinaryToWriter);
+0 < (t = this.getWinninguseridsList()).length && e.writeRepeatedInt64(3, t);
+0 < (t = this.getLosinguseridsList()).length && e.writeRepeatedInt64(4, t);
+0 < (t = this.getDrawuseridsList()).length && e.writeRepeatedInt64(5, t);
+0 < (t = this.getTextemoticonsList()).length && e.writeRepeatedMessage(6, t, a.BINTextEmoticon.serializeBinaryToWriter);
 null != (t = s.Message.getField(this, 7)) && e.writeInt32(7, t);
-(t = this.getArgsList()).length > 0 && e.writeRepeatedMessage(8, t, n.BINMapFieldEntry.serializeBinaryToWriter);
+0 < (t = this.getArgsList()).length && e.writeRepeatedMessage(8, t, n.BINMapFieldEntry.serializeBinaryToWriter);
 null != (t = s.Message.getField(this, 9)) && e.writeInt32(9, t);
 };
 proto.BINMatchEndResponse.prototype.getResponsecode = function() {
@@ -23191,8 +25747,8 @@ cc._RF.pop();
 minipoker: [ function(e, t, o) {
 "use strict";
 cc._RF.push(t, "7f5dawAnnVIOKHZvkmp4wmM", "minipoker");
-var s = e("NetworkManager"), r = e("BaseScene"), i = cc.Class({
-extends: r,
+var r = e("NetworkManager"), s = e("BaseScene"), i = cc.Class({
+extends: s,
 properties: {
 cardView: cc.Mask,
 cardPrefab: cc.Prefab,
@@ -23222,7 +25778,7 @@ statics: {
 instance: null
 },
 exitRoom: function() {
-s.requestExitRoomMessage(0);
+r.requestExitRoomMessage(0);
 },
 handleAutoSpin: function() {
 if (this.autoSpinToggle.isChecked && !this.isRun && this.isFinishSpin) {
@@ -23230,7 +25786,7 @@ this.time_move = this.fastSpinToggle.isChecked ? .4 : 1;
 this.isRun = !0;
 var e = Common.getCash(), t = this.getBetMoney();
 cc.log("betMoney =", t);
-if (t > e) {
+if (e < t) {
 Common.showToast("Bạn không có đủ tiền!", 2);
 this.autoSpinToggle.isChecked = !1;
 return;
@@ -23256,9 +25812,9 @@ this.handleAutoSpin();
 this.onGameEvent();
 },
 onGameEvent: function() {
-var e = this;
-s.checkEvent(function(t) {
-return e.handleMessage(t);
+var t = this;
+r.checkEvent(function(e) {
+return t.handleMessage(e);
 });
 },
 getFastSpin: function() {
@@ -23277,7 +25833,7 @@ requestJar: function() {
 if (!this.isRequestJar) {
 cc.log("request jar:", this.betType + 1);
 this.isRequestJar = !1;
-s.getJarRequest(Common.getZoneId(), this.betType + 1);
+r.getJarRequest(Common.getZoneId(), this.betType + 1);
 }
 },
 getTurnMiniPokerRequest: function(e) {
@@ -23285,7 +25841,7 @@ var t = [], o = new proto.BINMapFieldEntry();
 o.setKey("turnSlotType");
 o.setValue(e.toString());
 t.push(o);
-s.getTurnMessageFromServer(0, t);
+r.getTurnMessageFromServer(0, t);
 },
 getBetMoney: function() {
 var e = this.getEnterRoomResponse().getArgsList()[0], t = null;
@@ -23320,7 +25876,7 @@ this.init(t);
 init: function(e) {
 var t = e.getRoomplay();
 this.roomIndex = t.getRoomindex();
-if (e.getArgsList().length > 0) {
+if (0 < e.getArgsList().length) {
 var o = e.getArgsList()[0];
 "initValue" === o.getKey() && this.initValue(o.getValue());
 }
@@ -23365,8 +25921,7 @@ onDestroy: function() {
 this.unscheduleAllCallbacks();
 },
 onLoad: function() {
-i.instance = this;
-this.userMoney.string = Common.numberFormatWithCommas(Common.getCash());
+(i.instance = this).userMoney.string = Common.numberFormatWithCommas(Common.getCash());
 this.betType = 0;
 this.initFirstCard();
 var e = this;
@@ -23377,11 +25932,11 @@ Common.setMiniPokerSceneInstance(cc.director.getScene());
 },
 ongamestatus: function(e) {
 if (null !== e.data || "undefined" !== e.data) {
-var t = s.parseFrom(e.data, e.data.byteLength);
+var t = r.parseFrom(e.data, e.data.byteLength);
 cc.log("list message size:" + t.length);
-if (t.length > 0) for (var o = 0; o < t.length; o++) {
-var r = t[o];
-this.handleMessage(r);
+if (0 < t.length) for (var o = 0; o < t.length; o++) {
+var s = t[o];
+this.handleMessage(s);
 }
 }
 },
@@ -23398,44 +25953,44 @@ this.isBreakJar = !1;
 }, this);
 e.node.runAction(cc.sequence(cc.delayTime(2), o, cc.delayTime(1), cc.fadeOut(1), cc.removeSelf(), null));
 },
-handleRanking: function(e, t, o) {
+handleRanking: function(e, t, n) {
 if (54 !== e) if (72 !== e) {
 this.isUpdateMoney = !1;
 cc.log("mess =", t);
-var s = new cc.Node(t);
-s.parent = this.node;
-var r = s.addComponent(cc.Label);
-r.string = t;
-r.node.color = cc.color(248, 213, 82, 255);
-r.fontSize = 60;
-r.lineHeight = 70;
-var i = s.addComponent(cc.LabelOutline);
-i.color = new cc.Color(.5, .3, .7, 1);
-i.width = 3;
-var n = cc.fadeOut(1), a = cc.callFunc(function() {
-for (var e = 0; e < o.getMoneyboxesList().length; e++) {
+var o = new cc.Node(t);
+o.parent = this.node;
+var s = o.addComponent(cc.Label);
+s.string = t;
+s.node.color = cc.color(248, 213, 82, 255);
+s.fontSize = 60;
+s.lineHeight = 70;
+var r = o.addComponent(cc.LabelOutline);
+r.color = new cc.Color(.5, .3, .7, 1);
+r.width = 3;
+var i = cc.fadeOut(1), a = cc.callFunc(function() {
+for (var e = 0; e < n.getMoneyboxesList().length; e++) {
 var t = new cc.Node();
 t.parent = this.node;
-var s = o.getMoneyboxesList()[e];
-if (s.getDisplaychangemoney() > 0) {
+var o = n.getMoneyboxesList()[e];
+if (0 < o.getDisplaychangemoney()) {
 this.isUpdateMoney = !0;
-var r = t.addComponent(cc.Label);
-r.string = "+" + s.getDisplaychangemoney().toString();
-r.node.color = cc.color(248, 213, 82, 255);
-r.fontSize = 60;
-r.lineHeight = 70;
-var i = t.addComponent(cc.LabelOutline);
-i.color = new cc.Color(.5, .3, .7, 1);
-i.width = 3;
-var n = cc.fadeOut(1.5);
-r.node.runAction(cc.sequence(cc.moveBy(.5, cc.p(0, 20)), cc.delayTime(.25), cc.spawn(cc.moveBy(1, cc.p(0, 20)), n, null), cc.removeSelf(), null));
+var s = t.addComponent(cc.Label);
+s.string = "+" + o.getDisplaychangemoney().toString();
+s.node.color = cc.color(248, 213, 82, 255);
+s.fontSize = 60;
+s.lineHeight = 70;
+var r = t.addComponent(cc.LabelOutline);
+r.color = new cc.Color(.5, .3, .7, 1);
+r.width = 3;
+var i = cc.fadeOut(1.5);
+s.node.runAction(cc.sequence(cc.moveBy(.5, cc.p(0, 20)), cc.delayTime(.25), cc.spawn(cc.moveBy(1, cc.p(0, 20)), i, null), cc.removeSelf(), null));
 }
 }
 }, this), p = cc.callFunc(function() {
 this.isUpdateMoney && this.setOriginMoney();
 this.isRun = !1;
 }, this);
-r.node.runAction(cc.sequence(cc.moveBy(.5, cc.p(0, 50)), a, cc.spawn(cc.moveBy(1, cc.p(0, 50)), n, null), p, cc.removeSelf(), null));
+s.node.runAction(cc.sequence(cc.moveBy(.5, cc.p(0, 50)), a, cc.spawn(cc.moveBy(1, cc.p(0, 50)), i, null), p, cc.removeSelf(), null));
 } else {
 this.setOriginMoney();
 this.isRun = !1;
@@ -23460,7 +26015,7 @@ setOriginMoney: function() {
 var e = this.getBINUpdateMoneyResponse();
 if (0 !== e) for (var t = 0; t < e.getMoneyboxesList().length; t++) {
 var o = e.getMoneyboxesList()[t];
-if (o.getDisplaychangemoney() > 0) {
+if (0 < o.getDisplaychangemoney()) {
 var s = Common.getUserInfo();
 if (o.getUserid() === s.userid) {
 var r = o.getCurrentmoney();
@@ -23479,37 +26034,38 @@ this.isBreakJar = 54 === o.getEmoticonid();
 var s = Common.genRandomCardNumber(e, this.stepCard, this.number), r = Common.genArrayToMultiArray(s, this.stepCard, this.number);
 r[this.stepCard - 2] = e;
 if (r.length * this.number == this.list_item.length) {
-for (g = 0; g < this.list_item.length; g++) {
-var i = parseInt(g / this.number), n = parseInt(g % this.number);
-if (g < 3 * this.number) {
-var a = this.stepCard - (3 - i), p = n;
-this.list_item[g].getComponent("CardItem").replaceCard(this.list_recent_value[a][p]);
+for (var i = 0; i < this.list_item.length; i++) {
+var n = parseInt(i / this.number), a = parseInt(i % this.number);
+if (i < 3 * this.number) {
+var p = this.stepCard - (3 - n), l = a;
+this.list_item[i].getComponent("CardItem").replaceCard(this.list_recent_value[p][l]);
 }
-var l = (n - 2) * this.list_item[g].getContentSize().width * .75, u = (i - 1) * this.list_item[g].getContentSize().height;
-this.list_item[g].setPositionX(l);
-this.list_item[g].setPositionY(u);
+var g = (a - 2) * this.list_item[i].getContentSize().width * .75, u = (n - 1) * this.list_item[i].getContentSize().height;
+this.list_item[i].setPositionX(g);
+this.list_item[i].setPositionY(u);
 }
 this.list_recent_value = r;
-for (var g = 0; g < this.list_item.length; g++) {
-var i = parseInt(g / this.number), n = parseInt(g % this.number), d = this.list_item[g], c = r[i][n];
-g >= 3 * this.number && d.getComponent("CardItem").replaceCard(c);
-var h = d.getContentSize().height, f = cc.moveBy(.2, cc.p(0, .25 * h)), y = cc.moveBy(.15, cc.p(0, .25 * h)), B = cc.moveBy(this.time_move, cc.p(0, -(this.stepCard - 3) * h - .5 * h)), I = cc.delayTime(.3 * n);
-if (g === this.list_item.length - 1) {
+for (i = 0; i < this.list_item.length; i++) {
+n = parseInt(i / this.number), a = parseInt(i % this.number);
+var c = this.list_item[i], d = r[n][a];
+i >= 3 * this.number && c.getComponent("CardItem").replaceCard(d);
+var h = c.getContentSize().height, f = cc.moveBy(.2, cc.p(0, .25 * h)), y = cc.moveBy(.15, cc.p(0, .25 * h)), B = cc.moveBy(this.time_move, cc.p(0, -(this.stepCard - 3) * h - .5 * h)), I = cc.delayTime(.3 * a);
+if (i === this.list_item.length - 1) {
 var M = t.getTextemoticonsList()[0], R = M.getEmoticonid(), N = M.getMessage(), m = this.getBINUpdateMoneyResponse(), F = this, b = cc.callFunc(function() {
 cc.log("FINISH!!!!");
 F.handleRanking(R, N, m);
-}, this), _ = cc.callFunc(function() {
+}, this), E = cc.callFunc(function() {
 cc.log("auto spin");
 this.isBreakJar || (this.isFinishSpin = !0);
 }, this);
-d.runAction(cc.sequence(I, f, B, y, b, cc.delayTime(2), _, null));
-} else d.runAction(cc.sequence(I, f, B, y));
+c.runAction(cc.sequence(I, f, B, y, b, cc.delayTime(2), E, null));
+} else c.runAction(cc.sequence(I, f, B, y));
 }
 }
 },
 matchEndResponseHandler: function(e) {
 cc.log("match end response handler:", e.toObject());
-if (e.getResponsecode() && e.getArgsList().length > 0) for (var t = 0; t < e.getArgsList().length; t++) if ("currentCards" === e.getArgsList()[t].getKey()) {
+if (e.getResponsecode() && 0 < e.getArgsList().length) for (var t = 0; t < e.getArgsList().length; t++) if ("currentCards" === e.getArgsList()[t].getKey()) {
 var o = e.getArgsList()[t].getValue().split(",").map(Number);
 this.implementSpinMiniPokerCards(o, e);
 }
@@ -23533,7 +26089,7 @@ cc.log("jar response handler:", e.toObject());
 if (e.getResponsecode()) {
 var t = 0, o = this.jarValue;
 this.jarValue = e.getJarvalue();
-if (e.getArgsList().length > 0) {
+if (0 < e.getArgsList().length) {
 var s = e.getArgsList()[0];
 "jarType" === s.getKey() && (t = parseInt(s.getValue().toString()));
 }
@@ -23548,27 +26104,27 @@ var t = this._super(e);
 if (t) return !0;
 t = !0;
 switch (e.message_id) {
-case s.MESSAGE_ID.UPDATE_MONEY:
-o = e.response;
+case r.MESSAGE_ID.UPDATE_MONEY:
+var o = e.response;
 this.updateMoneyMessageResponseHandler(o);
 break;
 
-case s.MESSAGE_ID.MATCH_END:
+case r.MESSAGE_ID.MATCH_END:
 this.matchEndResponseHandler(e.response);
 break;
 
-case s.MESSAGE_ID.EXIT_ROOM:
+case r.MESSAGE_ID.EXIT_ROOM:
 o = e.response;
 this.exitRoomResponseHandler(o);
 break;
 
-case s.MESSAGE_ID.EXIT_ZONE:
+case r.MESSAGE_ID.EXIT_ZONE:
 o = e.response;
 this.exitZoneResponseHandler(o);
 break;
 
-case s.MESSAGE_ID.JAR:
-var o = e.response;
+case r.MESSAGE_ID.JAR:
+o = e.response;
 this.jarResponseHandler(o);
 break;
 
@@ -23581,17 +26137,17 @@ calculateTurnType: function() {
 return this.getKeyBet() + 1;
 },
 showSpin: function() {
-var e = [ "Lịch sử quay", "Lịch sử nổ hũ", "Top cao thủ" ];
-Common.showPopup(Config.name.POPUP_HISTORY, function(t) {
-t.addTabs(e, 1);
-t.appear();
+var t = [ "Lịch sử quay", "Lịch sử nổ hũ", "Top cao thủ" ];
+Common.showPopup(Config.name.POPUP_HISTORY, function(e) {
+e.addTabs(t, 1);
+e.appear();
 });
 },
 showTopUser: function() {
-var e = [ "Lịch sử quay", "Lịch sử nổ hũ", "Top cao thủ" ];
-Common.showPopup(Config.name.POPUP_HISTORY, function(t) {
-t.addTabs(e, 3);
-t.appear();
+var t = [ "Lịch sử quay", "Lịch sử nổ hũ", "Top cao thủ" ];
+Common.showPopup(Config.name.POPUP_HISTORY, function(e) {
+e.addTabs(t, 3);
+e.appear();
 });
 },
 openRulesPopup: function() {
@@ -23635,9 +26191,10 @@ var t = new s.BinaryReader(e), o = new proto.BINNews();
 return proto.BINNews.deserializeBinaryFromReader(o, t);
 };
 proto.BINNews.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readString();
+var o = t.readString();
 e.setTag(o);
 break;
 
@@ -23652,12 +26209,13 @@ e.setAction(o);
 break;
 
 case 4:
-var o = t.readString();
+o = t.readString();
 e.setSubject(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -23749,9 +26307,10 @@ var t = new s.BinaryReader(e), o = new proto.BINHeadlineResponse();
 return proto.BINHeadlineResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINHeadlineResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
@@ -23761,13 +26320,14 @@ e.setMessage(o);
 break;
 
 case 3:
-var o = new proto.BINNews();
+o = new proto.BINNews();
 t.readMessage(o, proto.BINNews.deserializeBinaryFromReader);
 e.addHeadlines(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -23783,7 +26343,7 @@ proto.BINHeadlineResponse.prototype.serializeBinaryToWriter = function(e) {
 var t = void 0;
 null != (t = s.Message.getField(this, 1)) && e.writeBool(1, t);
 null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
-(t = this.getHeadlinesList()).length > 0 && e.writeRepeatedMessage(3, t, proto.BINNews.serializeBinaryToWriter);
+0 < (t = this.getHeadlinesList()).length && e.writeRepeatedMessage(3, t, proto.BINNews.serializeBinaryToWriter);
 };
 proto.BINHeadlineResponse.prototype.getResponsecode = function() {
 return s.Message.getFieldWithDefault(this, 1, !1);
@@ -23847,9 +26407,10 @@ var t = new s.BinaryReader(e), o = new proto.BINEmergencyNotificationResponse();
 return proto.BINEmergencyNotificationResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINEmergencyNotificationResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
@@ -23864,13 +26425,14 @@ e.addNotifications(o);
 break;
 
 case 4:
-var o = new proto.BINNews();
+o = new proto.BINNews();
 t.readMessage(o, proto.BINNews.deserializeBinaryFromReader);
 e.addHeadlines(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -23886,8 +26448,8 @@ proto.BINEmergencyNotificationResponse.prototype.serializeBinaryToWriter = funct
 var t = void 0;
 null != (t = s.Message.getField(this, 1)) && e.writeBool(1, t);
 null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
-(t = this.getNotificationsList()).length > 0 && e.writeRepeatedString(3, t);
-(t = this.getHeadlinesList()).length > 0 && e.writeRepeatedMessage(4, t, proto.BINNews.serializeBinaryToWriter);
+0 < (t = this.getNotificationsList()).length && e.writeRepeatedString(3, t);
+0 < (t = this.getHeadlinesList()).length && e.writeRepeatedMessage(4, t, proto.BINNews.serializeBinaryToWriter);
 };
 proto.BINEmergencyNotificationResponse.prototype.getResponsecode = function() {
 return s.Message.getFieldWithDefault(this, 1, !1);
@@ -23975,9 +26537,10 @@ var t = new s.BinaryReader(e), o = new proto.BINOpenIdLoginRequest();
 return proto.BINOpenIdLoginRequest.deserializeBinaryFromReader(o, t);
 };
 proto.BINOpenIdLoginRequest.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readInt32();
+var o = t.readInt32();
 e.setChannel(o);
 break;
 
@@ -23997,12 +26560,13 @@ e.setLastname(o);
 break;
 
 case 5:
-var o = t.readString();
+o = t.readString();
 e.setEmail(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -24105,19 +26669,21 @@ var t = new s.BinaryReader(e), o = new proto.BINOpenIdConnectRequest();
 return proto.BINOpenIdConnectRequest.deserializeBinaryFromReader(o, t);
 };
 proto.BINOpenIdConnectRequest.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readInt32();
+var o = t.readInt32();
 e.setChannel(o);
 break;
 
 case 2:
-var o = t.readString();
+o = t.readString();
 e.setOpenid(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -24181,19 +26747,21 @@ var t = new s.BinaryReader(e), o = new proto.BINOpenIdConnectResponse();
 return proto.BINOpenIdConnectResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINOpenIdConnectResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
 case 2:
-var o = t.readString();
+o = t.readString();
 e.setMessage(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -24267,7 +26835,8 @@ var t = new s.BinaryReader(e), o = new proto.BINPingRequest();
 return proto.BINPingRequest.deserializeBinaryFromReader(o, t);
 };
 proto.BINPingRequest.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
 var o = t.readInt32();
 e.setDisconecttime(o);
@@ -24275,6 +26844,7 @@ break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -24287,7 +26857,7 @@ this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINPingRequest.prototype.serializeBinaryToWriter = function(e) {
-var t = void 0;
+var t;
 null != (t = s.Message.getField(this, 1)) && e.writeInt32(1, t);
 };
 proto.BINPingRequest.prototype.getDisconecttime = function() {
@@ -24326,9 +26896,10 @@ var t = new s.BinaryReader(e), o = new proto.BINPingResponse();
 return proto.BINPingResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINPingResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
@@ -24338,12 +26909,13 @@ e.setMessage(o);
 break;
 
 case 3:
-var o = t.readBool();
+o = t.readBool();
 e.setDisconnect(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -24440,9 +27012,10 @@ var t = new s.BinaryReader(e), o = new proto.BINPlayer();
 return proto.BINPlayer.deserializeBinaryFromReader(o, t);
 };
 proto.BINPlayer.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readInt64();
+var o = t.readInt64();
 e.setUserid(o);
 break;
 
@@ -24492,13 +27065,14 @@ e.setTableindex(o);
 break;
 
 case 11:
-var o = new n.BINMapFieldEntry();
+o = new n.BINMapFieldEntry();
 t.readMessage(o, n.BINMapFieldEntry.deserializeBinaryFromReader);
 e.addArgs(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -24522,7 +27096,7 @@ null != (t = s.Message.getField(this, 7)) && e.writeInt64(7, t);
 null != (t = s.Message.getField(this, 8)) && e.writeBool(8, t);
 null != (t = s.Message.getField(this, 9)) && e.writeBool(9, t);
 null != (t = s.Message.getField(this, 10)) && e.writeInt32(10, t);
-(t = this.getArgsList()).length > 0 && e.writeRepeatedMessage(11, t, n.BINMapFieldEntry.serializeBinaryToWriter);
+0 < (t = this.getArgsList()).length && e.writeRepeatedMessage(11, t, n.BINMapFieldEntry.serializeBinaryToWriter);
 };
 proto.BINPlayer.prototype.getUserid = function() {
 return s.Message.getFieldWithDefault(this, 1, 0);
@@ -24704,7 +27278,8 @@ var t = new s.BinaryReader(e), o = new proto.BINCardConfigRequest();
 return proto.BINCardConfigRequest.deserializeBinaryFromReader(o, t);
 };
 proto.BINCardConfigRequest.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
 var o = t.readInt32();
 e.setType(o);
@@ -24712,6 +27287,7 @@ break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -24724,7 +27300,7 @@ this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINCardConfigRequest.prototype.serializeBinaryToWriter = function(e) {
-var t = void 0;
+var t;
 null != (t = s.Message.getField(this, 1)) && e.writeInt32(1, t);
 };
 proto.BINCardConfigRequest.prototype.getType = function() {
@@ -24765,9 +27341,10 @@ var t = new s.BinaryReader(e), o = new proto.BINCardProduct();
 return proto.BINCardProduct.deserializeBinaryFromReader(o, t);
 };
 proto.BINCardProduct.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readInt32();
+var o = t.readInt32();
 e.setProductid(o);
 break;
 
@@ -24787,12 +27364,13 @@ e.setDescription(o);
 break;
 
 case 5:
-var o = t.readInt32();
+o = t.readInt32();
 e.setPromotion(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -24898,9 +27476,10 @@ var t = new s.BinaryReader(e), o = new proto.BINCardProvider();
 return proto.BINCardProvider.deserializeBinaryFromReader(o, t);
 };
 proto.BINCardProvider.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readInt32();
+var o = t.readInt32();
 e.setProviderid(o);
 break;
 
@@ -24915,13 +27494,14 @@ e.setProvidername(o);
 break;
 
 case 4:
-var o = new proto.BINCardProduct();
+o = new proto.BINCardProduct();
 t.readMessage(o, proto.BINCardProduct.deserializeBinaryFromReader);
 e.addProducts(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -24938,7 +27518,7 @@ var t = void 0;
 null != (t = s.Message.getField(this, 1)) && e.writeInt32(1, t);
 null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
 null != (t = s.Message.getField(this, 3)) && e.writeString(3, t);
-(t = this.getProductsList()).length > 0 && e.writeRepeatedMessage(4, t, proto.BINCardProduct.serializeBinaryToWriter);
+0 < (t = this.getProductsList()).length && e.writeRepeatedMessage(4, t, proto.BINCardProduct.serializeBinaryToWriter);
 };
 proto.BINCardProvider.prototype.getProviderid = function() {
 return s.Message.getFieldWithDefault(this, 1, 0);
@@ -25014,9 +27594,10 @@ var t = new s.BinaryReader(e), o = new proto.BINCardConfigResponse();
 return proto.BINCardConfigResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINCardConfigResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
@@ -25032,12 +27613,13 @@ e.addProviders(o);
 break;
 
 case 4:
-var o = t.readBool();
+o = t.readBool();
 e.setEnablesecuritycheck(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -25053,7 +27635,7 @@ proto.BINCardConfigResponse.prototype.serializeBinaryToWriter = function(e) {
 var t = void 0;
 null != (t = s.Message.getField(this, 1)) && e.writeBool(1, t);
 null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
-(t = this.getProvidersList()).length > 0 && e.writeRepeatedMessage(3, t, proto.BINCardProvider.serializeBinaryToWriter);
+0 < (t = this.getProvidersList()).length && e.writeRepeatedMessage(3, t, proto.BINCardProvider.serializeBinaryToWriter);
 null != (t = s.Message.getField(this, 4)) && e.writeBool(4, t);
 };
 proto.BINCardConfigResponse.prototype.getResponsecode = function() {
@@ -25131,9 +27713,10 @@ var t = new s.BinaryReader(e), o = new proto.BINPurchaseMoneyRequest();
 return proto.BINPurchaseMoneyRequest.deserializeBinaryFromReader(o, t);
 };
 proto.BINPurchaseMoneyRequest.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readString();
+var o = t.readString();
 e.setProvider(o);
 break;
 
@@ -25158,12 +27741,13 @@ e.setCaptcha(o);
 break;
 
 case 6:
-var o = t.readBool();
+o = t.readBool();
 e.setTocash(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -25279,19 +27863,21 @@ var t = new s.BinaryReader(e), o = new proto.BINPurchaseMoneyResponse();
 return proto.BINPurchaseMoneyResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINPurchaseMoneyResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
 case 2:
-var o = t.readString();
+o = t.readString();
 e.setMessage(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -25354,7 +27940,8 @@ var t = new s.BinaryReader(e), o = new proto.BINSmsConfigRequest();
 return proto.BINSmsConfigRequest.deserializeBinaryFromReader(o, t);
 };
 proto.BINSmsConfigRequest.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
 var o = t.readInt32();
 e.setType(o);
@@ -25362,6 +27949,7 @@ break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -25374,7 +27962,7 @@ this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINSmsConfigRequest.prototype.serializeBinaryToWriter = function(e) {
-var t = void 0;
+var t;
 null != (t = s.Message.getField(this, 1)) && e.writeInt32(1, t);
 };
 proto.BINSmsConfigRequest.prototype.getType = function() {
@@ -25417,9 +28005,10 @@ var t = new s.BinaryReader(e), o = new proto.BINSmsSyntax();
 return proto.BINSmsSyntax.deserializeBinaryFromReader(o, t);
 };
 proto.BINSmsSyntax.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readInt32();
+var o = t.readInt32();
 e.setSyntaxid(o);
 break;
 
@@ -25449,12 +28038,13 @@ e.setDescription(o);
 break;
 
 case 7:
-var o = t.readInt32();
+o = t.readInt32();
 e.setPromotion(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -25586,9 +28176,10 @@ var t = new s.BinaryReader(e), o = new proto.BINSmsProvider();
 return proto.BINSmsProvider.deserializeBinaryFromReader(o, t);
 };
 proto.BINSmsProvider.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readInt32();
+var o = t.readInt32();
 e.setProviderid(o);
 break;
 
@@ -25603,13 +28194,14 @@ e.setProvidername(o);
 break;
 
 case 4:
-var o = new proto.BINSmsSyntax();
+o = new proto.BINSmsSyntax();
 t.readMessage(o, proto.BINSmsSyntax.deserializeBinaryFromReader);
 e.addSyntaxes(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -25626,7 +28218,7 @@ var t = void 0;
 null != (t = s.Message.getField(this, 1)) && e.writeInt32(1, t);
 null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
 null != (t = s.Message.getField(this, 3)) && e.writeString(3, t);
-(t = this.getSyntaxesList()).length > 0 && e.writeRepeatedMessage(4, t, proto.BINSmsSyntax.serializeBinaryToWriter);
+0 < (t = this.getSyntaxesList()).length && e.writeRepeatedMessage(4, t, proto.BINSmsSyntax.serializeBinaryToWriter);
 };
 proto.BINSmsProvider.prototype.getProviderid = function() {
 return s.Message.getFieldWithDefault(this, 1, 0);
@@ -25702,9 +28294,10 @@ var t = new s.BinaryReader(e), o = new proto.BINSmsNumber();
 return proto.BINSmsNumber.deserializeBinaryFromReader(o, t);
 };
 proto.BINSmsNumber.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readString();
+var o = t.readString();
 e.setNumber(o);
 break;
 
@@ -25719,13 +28312,14 @@ e.setDayquota(o);
 break;
 
 case 4:
-var o = new proto.BINSmsProvider();
+o = new proto.BINSmsProvider();
 t.readMessage(o, proto.BINSmsProvider.deserializeBinaryFromReader);
 e.addProviders(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -25742,7 +28336,7 @@ var t = void 0;
 null != (t = s.Message.getField(this, 1)) && e.writeString(1, t);
 null != (t = s.Message.getField(this, 2)) && e.writeBool(2, t);
 null != (t = s.Message.getField(this, 3)) && e.writeInt32(3, t);
-(t = this.getProvidersList()).length > 0 && e.writeRepeatedMessage(4, t, proto.BINSmsProvider.serializeBinaryToWriter);
+0 < (t = this.getProvidersList()).length && e.writeRepeatedMessage(4, t, proto.BINSmsProvider.serializeBinaryToWriter);
 };
 proto.BINSmsNumber.prototype.getNumber = function() {
 return s.Message.getFieldWithDefault(this, 1, "");
@@ -25817,9 +28411,10 @@ var t = new s.BinaryReader(e), o = new proto.BINSmsConfigResponse();
 return proto.BINSmsConfigResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINSmsConfigResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
@@ -25829,13 +28424,14 @@ e.setMessage(o);
 break;
 
 case 3:
-var o = new proto.BINSmsNumber();
+o = new proto.BINSmsNumber();
 t.readMessage(o, proto.BINSmsNumber.deserializeBinaryFromReader);
 e.addNumbers(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -25851,7 +28447,7 @@ proto.BINSmsConfigResponse.prototype.serializeBinaryToWriter = function(e) {
 var t = void 0;
 null != (t = s.Message.getField(this, 1)) && e.writeBool(1, t);
 null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
-(t = this.getNumbersList()).length > 0 && e.writeRepeatedMessage(3, t, proto.BINSmsNumber.serializeBinaryToWriter);
+0 < (t = this.getNumbersList()).length && e.writeRepeatedMessage(3, t, proto.BINSmsNumber.serializeBinaryToWriter);
 };
 proto.BINSmsConfigResponse.prototype.getResponsecode = function() {
 return s.Message.getFieldWithDefault(this, 1, !1);
@@ -25914,9 +28510,10 @@ var t = new s.BinaryReader(e), o = new proto.BINGoldProduct();
 return proto.BINGoldProduct.deserializeBinaryFromReader(o, t);
 };
 proto.BINGoldProduct.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readInt32();
+var o = t.readInt32();
 e.setProductid(o);
 break;
 
@@ -25931,12 +28528,13 @@ e.setGoldvalue(o);
 break;
 
 case 4:
-var o = t.readInt32();
+o = t.readInt32();
 e.setPromotion(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -26025,7 +28623,8 @@ var t = new s.BinaryReader(e), o = new proto.BINGoldConfigRequest();
 return proto.BINGoldConfigRequest.deserializeBinaryFromReader(o, t);
 };
 proto.BINGoldConfigRequest.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
 var o = t.readInt32();
 e.setType(o);
@@ -26033,6 +28632,7 @@ break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -26045,7 +28645,7 @@ this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINGoldConfigRequest.prototype.serializeBinaryToWriter = function(e) {
-var t = void 0;
+var t;
 null != (t = s.Message.getField(this, 1)) && e.writeInt32(1, t);
 };
 proto.BINGoldConfigRequest.prototype.getType = function() {
@@ -26085,9 +28685,10 @@ var t = new s.BinaryReader(e), o = new proto.BINGoldConfigResponse();
 return proto.BINGoldConfigResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINGoldConfigResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
@@ -26097,13 +28698,14 @@ e.setMessage(o);
 break;
 
 case 3:
-var o = new proto.BINGoldProduct();
+o = new proto.BINGoldProduct();
 t.readMessage(o, proto.BINGoldProduct.deserializeBinaryFromReader);
 e.addGoldproducts(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -26119,7 +28721,7 @@ proto.BINGoldConfigResponse.prototype.serializeBinaryToWriter = function(e) {
 var t = void 0;
 null != (t = s.Message.getField(this, 1)) && e.writeBool(1, t);
 null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
-(t = this.getGoldproductsList()).length > 0 && e.writeRepeatedMessage(3, t, proto.BINGoldProduct.serializeBinaryToWriter);
+0 < (t = this.getGoldproductsList()).length && e.writeRepeatedMessage(3, t, proto.BINGoldProduct.serializeBinaryToWriter);
 };
 proto.BINGoldConfigResponse.prototype.getResponsecode = function() {
 return s.Message.getFieldWithDefault(this, 1, !1);
@@ -26179,7 +28781,8 @@ var t = new s.BinaryReader(e), o = new proto.BINPurchaseGoldRequest();
 return proto.BINPurchaseGoldRequest.deserializeBinaryFromReader(o, t);
 };
 proto.BINPurchaseGoldRequest.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
 var o = t.readInt32();
 e.setProductid(o);
@@ -26187,6 +28790,7 @@ break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -26199,7 +28803,7 @@ this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINPurchaseGoldRequest.prototype.serializeBinaryToWriter = function(e) {
-var t = void 0;
+var t;
 null != (t = s.Message.getField(this, 1)) && e.writeInt32(1, t);
 };
 proto.BINPurchaseGoldRequest.prototype.getProductid = function() {
@@ -26237,19 +28841,21 @@ var t = new s.BinaryReader(e), o = new proto.BINPurchaseGoldResponse();
 return proto.BINPurchaseGoldResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINPurchaseGoldResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
 case 2:
-var o = t.readString();
+o = t.readString();
 e.setMessage(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -26327,9 +28933,10 @@ var t = new s.BinaryReader(e), o = new proto.BINRegisterRequest();
 return proto.BINRegisterRequest.deserializeBinaryFromReader(o, t);
 };
 proto.BINRegisterRequest.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readString();
+var o = t.readString();
 e.setUsername(o);
 break;
 
@@ -26349,12 +28956,13 @@ e.setDisplayname(o);
 break;
 
 case 5:
-var o = t.readString();
+o = t.readString();
 e.setMobile(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -26457,19 +29065,21 @@ var t = new s.BinaryReader(e), o = new proto.BINRegisterResponse();
 return proto.BINRegisterResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINRegisterResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
 case 2:
-var o = t.readString();
+o = t.readString();
 e.setMessage(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -26543,7 +29153,8 @@ var t = new s.BinaryReader(e), o = new proto.BINStartMatchRequest();
 return proto.BINStartMatchRequest.deserializeBinaryFromReader(o, t);
 };
 proto.BINStartMatchRequest.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
 var o = t.readInt32();
 e.setRoomindex(o);
@@ -26551,6 +29162,7 @@ break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -26563,7 +29175,7 @@ this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINStartMatchRequest.prototype.serializeBinaryToWriter = function(e) {
-var t = void 0;
+var t;
 null != (t = s.Message.getField(this, 1)) && e.writeInt32(1, t);
 };
 proto.BINStartMatchRequest.prototype.getRoomindex = function() {
@@ -26606,9 +29218,10 @@ var t = new s.BinaryReader(e), o = new proto.BINStartMatchResponse();
 return proto.BINStartMatchResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINStartMatchResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
@@ -26634,12 +29247,13 @@ e.addArgs(o);
 break;
 
 case 6:
-var o = t.readInt32();
+o = t.readInt32();
 e.setZoneid(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -26657,7 +29271,7 @@ null != (t = s.Message.getField(this, 1)) && e.writeBool(1, t);
 null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
 null != (t = s.Message.getField(this, 3)) && e.writeInt32(3, t);
 null != (t = s.Message.getField(this, 4)) && e.writeInt64(4, t);
-(t = this.getArgsList()).length > 0 && e.writeRepeatedMessage(5, t, n.BINMapFieldEntry.serializeBinaryToWriter);
+0 < (t = this.getArgsList()).length && e.writeRepeatedMessage(5, t, n.BINMapFieldEntry.serializeBinaryToWriter);
 null != (t = s.Message.getField(this, 6)) && e.writeInt32(6, t);
 };
 proto.BINStartMatchResponse.prototype.getResponsecode = function() {
@@ -26740,13 +29354,8 @@ cc._RF.pop();
 } ],
 tableView: [ function(e, t, o) {
 "use strict";
-function s(e, t) {
-if (e.length <= 1) return e;
-for (var o = Math.floor(e.length / 2), r = e[o], i = [], n = [], a = 0; a < e.length; a++) a !== o && (t ? t(e[a], r) ? i.push(e[a]) : n.push(e[a]) : e[a] <= r ? i.push(e[a]) : n.push(e[a]));
-return s(i, t).concat([ r ], s(n, t));
-}
 cc._RF.push(t, "1d15atdx51ExJ6u0pe1cxvK", "tableView");
-var r = cc.Enum({
+var n = cc.Enum({
 Horizontal: 0,
 Vertical: 1
 }), i = cc.Enum({
@@ -26755,20 +29364,14 @@ Up: 1,
 Down: 2,
 Left: 3,
 Rigth: 4
-}), n = cc.Enum({
+}), a = cc.Enum({
 LEFT_TO_RIGHT__TOP_TO_BOTTOM: 0,
 TOP_TO_BOTTOM__LEFT_TO_RIGHT: 1
-}), a = cc.Enum({
+}), p = cc.Enum({
 Scroll: 0,
 Flip: 1
-}), p = function(e) {
-var t = cc.Mask;
-if (t) for (var o = 0, s = e; s && cc.Node.isNode(s); s = s._parent, ++o) if (s.getComponent(t)) return {
-index: o,
-node: s
-};
-return null;
-}, l = cc.Class({
+});
+var s = cc.Class({
 extends: cc.ScrollView,
 editor: !1,
 properties: {
@@ -26796,9 +29399,9 @@ notify: function(e) {}
 },
 ScrollModel: {
 default: 0,
-type: r,
+type: n,
 notify: function(e) {
-if (this.ScrollModel === r.Horizontal) {
+if (this.ScrollModel === n.Horizontal) {
 this.horizontal = !0;
 this.vertical = !1;
 this.verticalScrollBar = null;
@@ -26812,9 +29415,9 @@ tooltip: "横向纵向滑动"
 },
 ViewType: {
 default: 0,
-type: a,
+type: p,
 notify: function(e) {
-this.ViewType === a.Flip ? this.inertia = !1 : this.inertia = !0;
+this.ViewType === p.Flip ? this.inertia = !1 : this.inertia = !0;
 },
 tooltip: "为Scroll时,不做解释\n为Flipw时，在Scroll的基础上增加翻页的行为"
 },
@@ -26824,7 +29427,7 @@ tooltip: "当节点不能铺满一页时，选择isFill为true会填充节点铺
 },
 Direction: {
 default: 0,
-type: n,
+type: a,
 tooltip: "规定cell的排列方向"
 },
 pageChangeEvents: {
@@ -26837,9 +29440,8 @@ statics: {
 _cellPoolCache: {}
 },
 onLoad: function() {
-window.s = this;
-var e = this;
-l._tableView.push(this);
+var e = window.s = this;
+s._tableView.push(this);
 var t = this.node.destroy;
 this.node.destroy = function() {
 e.clear();
@@ -26854,11 +29456,11 @@ o.call(e.node);
 onDestroy: function() {
 cc.eventManager.removeListener(this._touchListener);
 this._touchListener.release();
-for (var e in l._tableView) {
+for (var e in s._tableView) {
 cc.log("key =", e);
-if (l._tableView[e] === this) {
-l._tableView.splice(e);
-cc.log("_tableView =", l._tableView);
+if (s._tableView[e] === this) {
+s._tableView.splice(e);
+cc.log("_tableView =", s._tableView);
 return;
 }
 }
@@ -26876,25 +29478,32 @@ e.left = 0;
 e.right = 0;
 e.isAlignOnce = !1;
 this._touchLayer.parent = this._view;
-var t = this;
+var s = this;
 this._touchListener = cc.EventListener.create({
 event: cc.EventListener.TOUCH_ONE_BY_ONE,
 swallowTouches: !1,
 ower: this._touchLayer,
-mask: p(this._touchLayer),
-onTouchBegan: function(e, o) {
-var s = e.getLocation();
-if (this.ower._hitTest(s, this)) {
-t._touchstart(e);
+mask: function(e) {
+var t = cc.Mask;
+if (t) for (var o = 0, s = e; s && cc.Node.isNode(s); s = s._parent, ++o) if (s.getComponent(t)) return {
+index: o,
+node: s
+};
+return null;
+}(this._touchLayer),
+onTouchBegan: function(e, t) {
+var o = e.getLocation();
+if (this.ower._hitTest(o, this)) {
+s._touchstart(e);
 return !0;
 }
 return !1;
 },
-onTouchMoved: function(e, o) {
-t._touchmove(e);
+onTouchMoved: function(e, t) {
+s._touchmove(e);
 },
-onTouchEnded: function(e, o) {
-t._touchend(e);
+onTouchEnded: function(e, t) {
+s._touchend(e);
 }
 });
 this._touchListener.retain();
@@ -26915,26 +29524,29 @@ e.stopPropagation();
 });
 },
 _initCell: function(e, t) {
-if (this.ScrollModel === r.Horizontal && this.Direction === n.TOP_TO_BOTTOM__LEFT_TO_RIGHT || this.ScrollModel === r.Vertical && this.Direction === n.LEFT_TO_RIGHT__TOP_TO_BOTTOM) {
-for (var o = e.tag * e.childrenCount, s = 0; s < e.childrenCount; ++s) if (l = (p = e.children[s]).getComponent("viewCell")) {
-l._cellInit_(this);
-l.init(o + s, this._data, t, [ e.tag, s ]);
+if (this.ScrollModel === n.Horizontal && this.Direction === a.TOP_TO_BOTTOM__LEFT_TO_RIGHT || this.ScrollModel === n.Vertical && this.Direction === a.LEFT_TO_RIGHT__TOP_TO_BOTTOM) for (var o = e.tag * e.childrenCount, s = 0; s < e.childrenCount; ++s) {
+if (i = e.children[s].getComponent("viewCell")) {
+i._cellInit_(this);
+i.init(o + s, this._data, t, [ e.tag, s ]);
 }
-} else if (this.ViewType === a.Flip) {
-for (var i = (o = Math.floor(e.tag / this._showCellCount)) * this._showCellCount * e.childrenCount, s = 0; s < e.childrenCount; ++s) if (l = (p = e.children[s]).getComponent("viewCell")) {
-l._cellInit_(this);
-l.init(this._showCellCount * s + e.tag % this._showCellCount + i, this._data, t, [ s + o * e.childrenCount, s ]);
+} else if (this.ViewType === p.Flip) {
+var r = (o = Math.floor(e.tag / this._showCellCount)) * this._showCellCount * e.childrenCount;
+for (s = 0; s < e.childrenCount; ++s) {
+if (i = e.children[s].getComponent("viewCell")) {
+i._cellInit_(this);
+i.init(this._showCellCount * s + e.tag % this._showCellCount + r, this._data, t, [ s + o * e.childrenCount, s ]);
+}
 }
 } else for (s = 0; s < e.childrenCount; ++s) {
-var p = e.children[s], l = p.getComponent("viewCell");
-if (l) {
-l._cellInit_(this);
-l.init(s * this._count + e.tag, this._data, t, [ s, s ]);
+var i;
+if (i = e.children[s].getComponent("viewCell")) {
+i._cellInit_(this);
+i.init(s * this._count + e.tag, this._data, t, [ s, s ]);
 }
 }
 },
 _setCellPosition: function(e, t) {
-if (this.ScrollModel === r.Horizontal) {
+if (this.ScrollModel === n.Horizontal) {
 e.x = 0 === t ? -this.content.width * this.content.anchorX + e.width * e.anchorX : this.content.getChildByTag(t - 1).x + e.width;
 e.y = (e.anchorY - this.content.anchorY) * e.height;
 } else {
@@ -26962,11 +29574,11 @@ var e = cc.instantiate(this.cell), t = new cc.Node();
 t.anchorX = .5;
 t.anchorY = .5;
 var o = 0;
-if (this.ScrollModel === r.Horizontal) {
+if (this.ScrollModel === n.Horizontal) {
 t.width = e.width;
-s = Math.floor(this.content.height / e.height);
+var s = Math.floor(this.content.height / e.height);
 t.height = this.content.height;
-for (i = 0; i < s; ++i) {
+for (var r = 0; r < s; ++r) {
 e || (e = cc.instantiate(this.cell));
 e.x = (e.anchorX - .5) * e.width;
 e.y = t.height / 2 - e.height * (1 - e.anchorY) - o;
@@ -26976,9 +29588,9 @@ e = null;
 }
 } else {
 t.height = e.height;
-var s = Math.floor(this.content.width / e.width);
+s = Math.floor(this.content.width / e.width);
 t.width = this.content.width;
-for (var i = 0; i < s; ++i) {
+for (r = 0; r < s; ++r) {
 e || (e = cc.instantiate(this.cell));
 e.y = (e.anchorY - .5) * e.height;
 e.x = -t.width / 2 + e.width * e.anchorX + o;
@@ -27002,31 +29614,31 @@ this._cellPool.put(e);
 return t;
 },
 clear: function() {
-for (var e = this.content.childrenCount - 1; e >= 0; --e) this._cellPool.put(this.content.children[e]);
+for (var e = this.content.childrenCount - 1; 0 <= e; --e) this._cellPool.put(this.content.children[e]);
 this._cellCount = 0;
 this._showCellCount = 0;
 },
 reload: function(e) {
 void 0 !== e && (this._data = e);
-for (var t = this.content.childrenCount - 1; t >= 0; --t) this._initCell(this.content.children[t], !0);
+for (var t = this.content.childrenCount - 1; 0 <= t; --t) this._initCell(this.content.children[t], !0);
 },
 _getCellPoolCacheName: function() {
-return this.ScrollModel === r.Horizontal ? this.cell.name + "h" + this.content.height : this.cell.name + "w" + this.content.width;
+return this.ScrollModel === n.Horizontal ? this.cell.name + "h" + this.content.height : this.cell.name + "w" + this.content.width;
 },
 _initTableView: function() {
 this._scheduleInit = !1;
 this._cellPool && this.clear();
 var e = this._getCellPoolCacheName();
-l._cellPoolCache[e] || (l._cellPoolCache[e] = new cc.NodePool("viewCell"));
-this._cellPool = l._cellPoolCache[e];
+s._cellPoolCache[e] || (s._cellPoolCache[e] = new cc.NodePool("viewCell"));
+this._cellPool = s._cellPoolCache[e];
 this._cellSize = this._getCellSize();
 this._groupCellCount = this._getGroupCellCount();
 this._count = Math.ceil(this._paramCount / this._groupCellCount);
-if (this.ScrollModel === r.Horizontal) {
+if (this.ScrollModel === n.Horizontal) {
 this._view.width = this.node.width;
 this._view.x = (this._view.anchorX - this.node.anchorX) * this._view.width;
 this._cellCount = Math.ceil(this._view.width / this._cellSize.width) + 1;
-if (this.ViewType === a.Flip) if (this._cellCount > this._count) {
+if (this.ViewType === p.Flip) if (this._cellCount > this._count) {
 this.isFill ? this._cellCount = Math.floor(this._view.width / this._cellSize.width) : this._cellCount = this._count;
 this._showCellCount = this._cellCount;
 this._pageTotal = 1;
@@ -27045,7 +29657,7 @@ this.scrollToLeft();
 this._view.height = this.node.height;
 this._view.y = (this._view.anchorY - this.node.anchorY) * this._view.height;
 this._cellCount = Math.ceil(this._view.height / this._cellSize.height) + 1;
-if (this.ViewType === a.Flip) if (this._cellCount > this._count) {
+if (this.ViewType === p.Flip) if (this._cellCount > this._count) {
 this.isFill ? this._cellCount = Math.floor(this._view.height / this._cellSize.height) : this._cellCount = this._count;
 this._showCellCount = this._cellCount;
 this._pageTotal = 1;
@@ -27072,7 +29684,7 @@ initTableView: function(e, t) {
 this._paramCount = e;
 this._data = t;
 if (this._loadSuccess) this._scheduleInit || this._initTableView(); else {
-if (this.ScrollModel === r.Horizontal) {
+if (this.ScrollModel === n.Horizontal) {
 this.horizontal = !0;
 this.vertical = !1;
 } else {
@@ -27139,8 +29751,8 @@ scrollToOffset: function(e, t, o) {
 if (this._scheduleInit) this.scheduleOnce(function() {
 this.scrollToOffset(e, t, o);
 }); else {
-var s = this.getScrollOffset(), n = cc.pSub(e, s);
-this.ScrollModel === r.Horizontal ? n.x > 0 ? this._scrollDirection = i.Left : n.x < 0 && (this._scrollDirection = i.Rigth) : n.y > 0 ? this._scrollDirection = i.Up : n.y < 0 && (this._scrollDirection = i.Down);
+var s = this.getScrollOffset(), r = cc.pSub(e, s);
+this.ScrollModel === n.Horizontal ? 0 < r.x ? this._scrollDirection = i.Left : r.x < 0 && (this._scrollDirection = i.Rigth) : 0 < r.y ? this._scrollDirection = i.Up : r.y < 0 && (this._scrollDirection = i.Down);
 this._super(e, t, o);
 }
 },
@@ -27152,9 +29764,11 @@ s.handler = o;
 this.scrollEvents.push(s);
 },
 removeScrollEvent: function(e) {
-for (var t in this.scrollEvents) if (this.scrollEvents[t].target === e) {
+for (var t in this.scrollEvents) {
+if (this.scrollEvents[t].target === e) {
 this.scrollEvents.splice(t, 1);
 return;
+}
 }
 },
 clearScrollEvent: function() {
@@ -27168,9 +29782,11 @@ s.handler = o;
 this.pageChangeEvents.push(s);
 },
 removePageEvent: function(e) {
-for (var t in this.pageChangeEvents) if (this.pageChangeEvents[t].target === e) {
+for (var t in this.pageChangeEvents) {
+if (this.pageChangeEvents[t].target === e) {
 this.pageChangeEvents.splice(t, 1);
 return;
+}
 }
 },
 clearPageEvent: function() {
@@ -27183,94 +29799,100 @@ scrollToLastPage: function() {
 this.scrollToPage(this._page - 1);
 },
 scrollToPage: function(e) {
-if (this.ViewType === a.Flip && e !== this._page && !(e < 1 || e > this._pageTotal)) {
-var t = .3 * Math.abs(e - this._page);
+if (this.ViewType === p.Flip && e !== this._page && !(e < 1 || e > this._pageTotal)) {
+var o = .3 * Math.abs(e - this._page);
 this._changePageNum(e - this._page);
 if (this._initSuccess) {
-var o = this._view.width, s = this._view.height;
-o = (this._page - 1) * o;
+var t = this._view.width, s = this._view.height;
+t = (this._page - 1) * t;
 s = (this._page - 1) * s;
 this.scrollToOffset({
-x: o,
+x: t,
 y: s
-}, t);
+}, o);
 } else this.scheduleOnce(function() {
-var e = this._view.width, o = this._view.height;
+var e = this._view.width, t = this._view.height;
 e = (this._page - 1) * e;
-o = (this._page - 1) * o;
+t = (this._page - 1) * t;
 this.scrollToOffset({
 x: e,
-y: o
-}, t);
+y: t
+}, o);
 });
 }
 },
-getCells: function(e) {
-var t = this, o = function() {
-var o = [], r = s(t.content.children, function(e, t) {
+getCells: function(i) {
+var n = this, e = function() {
+var e = [], t = function e(t, o) {
+if (t.length <= 1) return t;
+for (var s = Math.floor(t.length / 2), r = t[s], i = [], n = [], a = 0; a < t.length; a++) a !== s && (o ? o(t[a], r) ? i.push(t[a]) : n.push(t[a]) : t[a] <= r ? i.push(t[a]) : n.push(t[a]));
+return e(i, o).concat([ r ], e(n, o));
+}(n.content.children, function(e, t) {
 return e.tag < t.tag;
 });
-for (var i in r) {
-var n = r[i];
-for (var a in n.children) o.push(n.children[a]);
+for (var o in t) {
+var s = t[o];
+for (var r in s.children) e.push(s.children[r]);
 }
-e(o);
+i(e);
 };
-this._initSuccess ? o() : this.scheduleOnce(o);
+this._initSuccess ? e() : this.scheduleOnce(e);
 },
 getData: function() {
 return this._data;
 },
-getGroupsRange: function(e) {
-var t = this, o = function() {
-for (var o = [], s = t._minCellIndex; s <= t._maxCellIndex; s++) o.push(s);
-e(o);
+getGroupsRange: function(o) {
+var s = this, e = function() {
+for (var e = [], t = s._minCellIndex; t <= s._maxCellIndex; t++) e.push(t);
+o(e);
 };
-this._initSuccess ? o() : this.scheduleOnce(o);
+this._initSuccess ? e() : this.scheduleOnce(e);
 },
 _changePageNum: function(e) {
 this._page += e;
 this._page <= 0 ? this._page = 1 : this._page > this._pageTotal && (this._page = this._pageTotal);
-for (var t in this.pageChangeEvents) this.pageChangeEvents[t].emit([ this._page, this._pageTotal ]);
+for (var t in this.pageChangeEvents) {
+this.pageChangeEvents[t].emit([ this._page, this._pageTotal ]);
+}
 },
 _touchstart: function(e) {
-this.ScrollModel === r.Horizontal ? this.horizontal = !1 : this.vertical = !1;
+this.ScrollModel === n.Horizontal ? this.horizontal = !1 : this.vertical = !1;
 },
 _touchmove: function(e) {
 if (this.horizontal === this.vertical) {
 var t = e.getStartLocation(), o = e.getLocation();
-if (this.ScrollModel === r.Horizontal) {
+if (this.ScrollModel === n.Horizontal) {
 if (Math.abs(o.x - t.x) <= 7) return;
 } else if (Math.abs(o.y - t.y) <= 7) return;
-this.ScrollModel === r.Horizontal ? this.horizontal = !0 : this.vertical = !0;
+this.ScrollModel === n.Horizontal ? this.horizontal = !0 : this.vertical = !0;
 }
 },
 _touchend: function(e) {
-this.ScrollModel === r.Horizontal ? this.horizontal = !0 : this.vertical = !0;
-this.ViewType === a.Flip && this._pageTotal > 1 && this._pageMove(e);
+this.ScrollModel === n.Horizontal ? this.horizontal = !0 : this.vertical = !0;
+this.ViewType === p.Flip && 1 < this._pageTotal && this._pageMove(e);
 },
 _pageMove: function(e) {
 var t = this._view.width, o = this._view.height;
-if (this.ViewType === a.Flip) {
-var s = this.getScrollOffset(), n = this.getMaxScrollOffset();
-if (this.ScrollModel === r.Horizontal) {
-if (s.x >= 0 || s.x <= -n.x) return;
+if (this.ViewType === p.Flip) {
+var s = this.getScrollOffset(), r = this.getMaxScrollOffset();
+if (this.ScrollModel === n.Horizontal) {
+if (0 <= s.x || s.x <= -r.x) return;
 o = 0;
 if (Math.abs(e.getLocation().x - e.getStartLocation().x) > this._view.width / 4) if (this._scrollDirection === i.Left) {
 if (!(this._page < this._pageTotal)) return;
 this._changePageNum(1);
 } else if (this._scrollDirection === i.Rigth) {
-if (!(this._page > 1)) return;
+if (!(1 < this._page)) return;
 this._changePageNum(-1);
 }
 } else {
-if (s.y >= n.y || s.y <= 0) return;
+if (s.y >= r.y || s.y <= 0) return;
 t = 0;
 if (Math.abs(e.getLocation().y - e.getStartLocation().y) > this._view.height / 4) if (this._scrollDirection === i.Up) {
 if (!(this._page < this._pageTotal)) return;
 this._changePageNum(1);
 } else if (this._scrollDirection === i.Down) {
-if (!(this._page > 1)) return;
+if (!(1 < this._page)) return;
 this._changePageNum(-1);
 }
 }
@@ -27287,12 +29909,12 @@ var t = e.convertToWorldSpace(cc.p(0, 0));
 return cc.rect(t.x, t.y, e.width, e.height);
 },
 _updateCells: function() {
-if (this.ScrollModel === r.Horizontal) {
+if (this.ScrollModel === n.Horizontal) {
 if (this._scrollDirection === i.Left) {
 if (this._maxCellIndex < this._count - 1) {
-e = this._getBoundingBoxToWorld(this._view);
+var e = this._getBoundingBoxToWorld(this._view);
 do {
-t = this.content.getChildByTag(this._minCellIndex);
+var t = this.content.getChildByTag(this._minCellIndex);
 if (!((o = this._getBoundingBoxToWorld(t)).xMax <= e.xMin)) break;
 t.x = this.content.getChildByTag(this._maxCellIndex).x + t.width;
 this._minCellIndex++;
@@ -27303,7 +29925,7 @@ this._initCell(t);
 }
 } while (this._maxCellIndex !== this._count - 1);
 }
-} else if (this._scrollDirection === i.Rigth && this._minCellIndex > 0) {
+} else if (this._scrollDirection === i.Rigth && 0 < this._minCellIndex) {
 e = this._getBoundingBoxToWorld(this._view);
 do {
 t = this.content.getChildByTag(this._maxCellIndex);
@@ -27332,11 +29954,12 @@ this._initCell(t);
 }
 } while (this._maxCellIndex !== this._count - 1);
 }
-} else if (this._scrollDirection === i.Down && this._minCellIndex > 0) {
-var e = this._getBoundingBoxToWorld(this._view);
+} else if (this._scrollDirection === i.Down && 0 < this._minCellIndex) {
+e = this._getBoundingBoxToWorld(this._view);
 do {
-var t = this.content.getChildByTag(this._maxCellIndex), o = this._getBoundingBoxToWorld(t);
-if (!(o.yMax <= e.yMin)) break;
+var o;
+t = this.content.getChildByTag(this._maxCellIndex);
+if (!((o = this._getBoundingBoxToWorld(t)).yMax <= e.yMin)) break;
 t.y = this.content.getChildByTag(this._minCellIndex).y + t.height;
 this._minCellIndex--;
 this._maxCellIndex--;
@@ -27351,7 +29974,7 @@ _getScrollDirection: function() {
 var e = this.getScrollOffset(), t = this._lastOffset;
 this._lastOffset = e;
 e = cc.pSub(e, t);
-this.ScrollModel === r.Horizontal ? e.x > 0 ? this._scrollDirection = i.Rigth : e.x < 0 ? this._scrollDirection = i.Left : this._scrollDirection = i.None : e.y < 0 ? this._scrollDirection = i.Down : e.y > 0 ? this._scrollDirection = i.Up : this._scrollDirection = i.None;
+this.ScrollModel === n.Horizontal ? 0 < e.x ? this._scrollDirection = i.Rigth : e.x < 0 ? this._scrollDirection = i.Left : this._scrollDirection = i.None : e.y < 0 ? this._scrollDirection = i.Down : 0 < e.y ? this._scrollDirection = i.Up : this._scrollDirection = i.None;
 },
 update: function(e) {
 this._super(e);
@@ -27361,14 +29984,14 @@ this._updateCells();
 }
 }
 });
-l._tableView = [];
-l.reload = function() {
-for (var e in l._tableView) l._tableView[e].reload();
+s._tableView = [];
+s.reload = function() {
+for (var e in s._tableView) s._tableView[e].reload();
 };
-l.clear = function() {
-for (var e in l._tableView) l._tableView[e].clear();
+s.clear = function() {
+for (var e in s._tableView) s._tableView[e].clear();
 };
-cc.tableView = t.export = l;
+cc.tableView = t.export = s;
 cc._RF.pop();
 }, {} ],
 text_emoticon_pb: [ function(e, t, o) {
@@ -27400,9 +30023,10 @@ var t = new s.BinaryReader(e), o = new proto.BINTextEmoticon();
 return proto.BINTextEmoticon.deserializeBinaryFromReader(o, t);
 };
 proto.BINTextEmoticon.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readInt64();
+var o = t.readInt64();
 e.setUserid(o);
 break;
 
@@ -27412,12 +30036,13 @@ e.setEmoticonid(o);
 break;
 
 case 3:
-var o = t.readString();
+o = t.readString();
 e.setMessage(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -27506,20 +30131,22 @@ var t = new s.BinaryReader(e), o = new proto.BINTurnRequest();
 return proto.BINTurnRequest.deserializeBinaryFromReader(o, t);
 };
 proto.BINTurnRequest.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readInt32();
+var o = t.readInt32();
 e.setRoomindex(o);
 break;
 
 case 2:
-var o = new n.BINMapFieldEntry();
+o = new n.BINMapFieldEntry();
 t.readMessage(o, n.BINMapFieldEntry.deserializeBinaryFromReader);
 e.addArgs(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -27534,7 +30161,7 @@ return e.getResultBuffer();
 proto.BINTurnRequest.prototype.serializeBinaryToWriter = function(e) {
 var t = void 0;
 null != (t = s.Message.getField(this, 1)) && e.writeInt32(1, t);
-(t = this.getArgsList()).length > 0 && e.writeRepeatedMessage(2, t, n.BINMapFieldEntry.serializeBinaryToWriter);
+0 < (t = this.getArgsList()).length && e.writeRepeatedMessage(2, t, n.BINMapFieldEntry.serializeBinaryToWriter);
 };
 proto.BINTurnRequest.prototype.getRoomindex = function() {
 return s.Message.getFieldWithDefault(this, 1, 0);
@@ -27590,9 +30217,10 @@ var t = new s.BinaryReader(e), o = new proto.BINTurnResponse();
 return proto.BINTurnResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINTurnResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
@@ -27628,12 +30256,13 @@ e.addArgs(o);
 break;
 
 case 8:
-var o = t.readInt32();
+o = t.readInt32();
 e.setZoneid(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -27653,7 +30282,7 @@ null != (t = s.Message.getField(this, 3)) && e.writeInt64(3, t);
 null != (t = s.Message.getField(this, 4)) && e.writeInt64(4, t);
 null != (t = s.Message.getField(this, 5)) && e.writeBool(5, t);
 null != (t = s.Message.getField(this, 6)) && e.writeInt32(6, t);
-(t = this.getArgsList()).length > 0 && e.writeRepeatedMessage(7, t, n.BINMapFieldEntry.serializeBinaryToWriter);
+0 < (t = this.getArgsList()).length && e.writeRepeatedMessage(7, t, n.BINMapFieldEntry.serializeBinaryToWriter);
 null != (t = s.Message.getField(this, 8)) && e.writeInt32(8, t);
 };
 proto.BINTurnResponse.prototype.getResponsecode = function() {
@@ -27791,9 +30420,10 @@ var t = new s.BinaryReader(e), o = new proto.BINMoneyBox();
 return proto.BINMoneyBox.deserializeBinaryFromReader(o, t);
 };
 proto.BINMoneyBox.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readInt64();
+var o = t.readInt64();
 e.setUserid(o);
 break;
 
@@ -27818,12 +30448,13 @@ e.setDisplaychangemoney(o);
 break;
 
 case 6:
-var o = t.readString();
+o = t.readString();
 e.setReason(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -27942,9 +30573,10 @@ var t = new s.BinaryReader(e), o = new proto.BINUpdateMoneyResponse();
 return proto.BINUpdateMoneyResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINUpdateMoneyResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
@@ -27960,12 +30592,13 @@ e.addMoneyboxes(o);
 break;
 
 case 4:
-var o = t.readInt32();
+o = t.readInt32();
 e.setZoneid(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -27981,7 +30614,7 @@ proto.BINUpdateMoneyResponse.prototype.serializeBinaryToWriter = function(e) {
 var t = void 0;
 null != (t = s.Message.getField(this, 1)) && e.writeBool(1, t);
 null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
-(t = this.getMoneyboxesList()).length > 0 && e.writeRepeatedMessage(3, t, proto.BINMoneyBox.serializeBinaryToWriter);
+0 < (t = this.getMoneyboxesList()).length && e.writeRepeatedMessage(3, t, proto.BINMoneyBox.serializeBinaryToWriter);
 null != (t = s.Message.getField(this, 4)) && e.writeInt32(4, t);
 };
 proto.BINUpdateMoneyResponse.prototype.getResponsecode = function() {
@@ -28069,9 +30702,10 @@ var t = new s.BinaryReader(e), o = new proto.BINEditingInfo();
 return proto.BINEditingInfo.deserializeBinaryFromReader(o, t);
 };
 proto.BINEditingInfo.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readInt32();
+var o = t.readInt32();
 e.setInfofield(o);
 break;
 
@@ -28086,12 +30720,13 @@ e.setNewvalue(o);
 break;
 
 case 4:
-var o = t.readString();
+o = t.readString();
 e.setConfirmvalue(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -28181,7 +30816,8 @@ var t = new s.BinaryReader(e), o = new proto.BINUpdateUserInfoRequest();
 return proto.BINUpdateUserInfoRequest.deserializeBinaryFromReader(o, t);
 };
 proto.BINUpdateUserInfoRequest.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
 var o = new proto.BINEditingInfo();
 t.readMessage(o, proto.BINEditingInfo.deserializeBinaryFromReader);
@@ -28190,6 +30826,7 @@ break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -28202,8 +30839,8 @@ this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINUpdateUserInfoRequest.prototype.serializeBinaryToWriter = function(e) {
-var t = void 0;
-(t = this.getUserinfosList()).length > 0 && e.writeRepeatedMessage(1, t, proto.BINEditingInfo.serializeBinaryToWriter);
+var t;
+0 < (t = this.getUserinfosList()).length && e.writeRepeatedMessage(1, t, proto.BINEditingInfo.serializeBinaryToWriter);
 };
 proto.BINUpdateUserInfoRequest.prototype.getUserinfosList = function() {
 return s.Message.getRepeatedWrapperField(this, proto.BINEditingInfo, 1);
@@ -28240,19 +30877,21 @@ var t = new s.BinaryReader(e), o = new proto.BINUpdateUserInfoResponse();
 return proto.BINUpdateUserInfoResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINUpdateUserInfoResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
 case 2:
-var o = t.readString();
+o = t.readString();
 e.setMessage(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -28301,64 +30940,65 @@ cc._RF.pop();
 user_info_pb: [ function(e, t, o) {
 "use strict";
 cc._RF.push(t, "f09aep2cblFwYv5I9oyg6+t", "user_info_pb");
-var s = e("google-protobuf"), r = s, i = Function("return this")(), n = e("./level_pb.js");
-r.exportSymbol("proto.BINUserInfo", null, i);
-r.exportSymbol("proto.BINUserSetting", null, i);
+var r = e("google-protobuf"), s = r, i = Function("return this")(), n = e("./level_pb.js");
+s.exportSymbol("proto.BINUserInfo", null, i);
+s.exportSymbol("proto.BINUserSetting", null, i);
 proto.BINUserInfo = function(e) {
-s.Message.initialize(this, e, 0, -1, null, null);
+r.Message.initialize(this, e, 0, -1, null, null);
 };
-r.inherits(proto.BINUserInfo, s.Message);
-r.DEBUG && !COMPILED && (proto.BINUserInfo.displayName = "proto.BINUserInfo");
-if (s.Message.GENERATE_TO_OBJECT) {
+s.inherits(proto.BINUserInfo, r.Message);
+s.DEBUG && !COMPILED && (proto.BINUserInfo.displayName = "proto.BINUserInfo");
+if (r.Message.GENERATE_TO_OBJECT) {
 proto.BINUserInfo.prototype.toObject = function(e) {
 return proto.BINUserInfo.toObject(e, this);
 };
 proto.BINUserInfo.toObject = function(e, t) {
-var o, r = {
-userid: s.Message.getField(t, 1),
-username: s.Message.getField(t, 2),
-displayname: s.Message.getField(t, 3),
-avatarid: s.Message.getField(t, 4),
-sex: s.Message.getField(t, 5),
-age: s.Message.getField(t, 6),
+var o, s = {
+userid: r.Message.getField(t, 1),
+username: r.Message.getField(t, 2),
+displayname: r.Message.getField(t, 3),
+avatarid: r.Message.getField(t, 4),
+sex: r.Message.getField(t, 5),
+age: r.Message.getField(t, 6),
 level: (o = t.getLevel()) && n.BINLevel.toObject(e, o),
 medal: (o = t.getMedal()) && n.BINMedal.toObject(e, o),
-trustedindex: s.Message.getField(t, 9),
-exp: s.Message.getField(t, 10),
-cash: s.Message.getField(t, 11),
-gold: s.Message.getField(t, 12),
-totalmatch: s.Message.getField(t, 13),
-totalwin: s.Message.getField(t, 14),
-totalcashexchanged: s.Message.getField(t, 15),
-totalmoneyexchanged: s.Message.getField(t, 16),
-totalmoneycharged: s.Message.getField(t, 17),
-lastlogintime: s.Message.getField(t, 18),
-isonline: s.Message.getField(t, 19),
-usertype: s.Message.getField(t, 20),
-email: s.Message.getField(t, 21),
-mobile: s.Message.getField(t, 22),
-identity: s.Message.getField(t, 23),
-accountverified: s.Message.getField(t, 24),
-disablecashtransaction: s.Message.getField(t, 25),
-securitykeyset: s.Message.getField(t, 26),
-cashlock: s.Message.getField(t, 27),
-goldlock: s.Message.getField(t, 28),
+trustedindex: r.Message.getField(t, 9),
+exp: r.Message.getField(t, 10),
+cash: r.Message.getField(t, 11),
+gold: r.Message.getField(t, 12),
+totalmatch: r.Message.getField(t, 13),
+totalwin: r.Message.getField(t, 14),
+totalcashexchanged: r.Message.getField(t, 15),
+totalmoneyexchanged: r.Message.getField(t, 16),
+totalmoneycharged: r.Message.getField(t, 17),
+lastlogintime: r.Message.getField(t, 18),
+isonline: r.Message.getField(t, 19),
+usertype: r.Message.getField(t, 20),
+email: r.Message.getField(t, 21),
+mobile: r.Message.getField(t, 22),
+identity: r.Message.getField(t, 23),
+accountverified: r.Message.getField(t, 24),
+disablecashtransaction: r.Message.getField(t, 25),
+securitykeyset: r.Message.getField(t, 26),
+cashlock: r.Message.getField(t, 27),
+goldlock: r.Message.getField(t, 28),
 viplevel: (o = t.getViplevel()) && n.BINVipLevel.toObject(e, o),
-vippoint: s.Message.getField(t, 30),
-remoteip: s.Message.getField(t, 31)
+vippoint: r.Message.getField(t, 30),
+remoteip: r.Message.getField(t, 31)
 };
-e && (r.$jspbMessageInstance = t);
-return r;
+e && (s.$jspbMessageInstance = t);
+return s;
 };
 }
 proto.BINUserInfo.deserializeBinary = function(e) {
-var t = new s.BinaryReader(e), o = new proto.BINUserInfo();
+var t = new r.BinaryReader(e), o = new proto.BINUserInfo();
 return proto.BINUserInfo.deserializeBinaryFromReader(o, t);
 };
 proto.BINUserInfo.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readInt64();
+var o = t.readInt64();
 e.setUserid(o);
 break;
 
@@ -28511,12 +31151,13 @@ e.setVippoint(o);
 break;
 
 case 31:
-var o = t.readString();
+o = t.readString();
 e.setRemoteip(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -28524,443 +31165,444 @@ proto.BINUserInfo.serializeBinaryToWriter = function(e, t) {
 e.serializeBinaryToWriter(t);
 };
 proto.BINUserInfo.prototype.serializeBinary = function() {
-var e = new s.BinaryWriter();
+var e = new r.BinaryWriter();
 this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINUserInfo.prototype.serializeBinaryToWriter = function(e) {
 var t = void 0;
-null != (t = s.Message.getField(this, 1)) && e.writeInt64(1, t);
-null != (t = s.Message.getField(this, 2)) && e.writeString(2, t);
-null != (t = s.Message.getField(this, 3)) && e.writeString(3, t);
-null != (t = s.Message.getField(this, 4)) && e.writeInt32(4, t);
-null != (t = s.Message.getField(this, 5)) && e.writeInt32(5, t);
-null != (t = s.Message.getField(this, 6)) && e.writeInt32(6, t);
+null != (t = r.Message.getField(this, 1)) && e.writeInt64(1, t);
+null != (t = r.Message.getField(this, 2)) && e.writeString(2, t);
+null != (t = r.Message.getField(this, 3)) && e.writeString(3, t);
+null != (t = r.Message.getField(this, 4)) && e.writeInt32(4, t);
+null != (t = r.Message.getField(this, 5)) && e.writeInt32(5, t);
+null != (t = r.Message.getField(this, 6)) && e.writeInt32(6, t);
 null != (t = this.getLevel()) && e.writeMessage(7, t, n.BINLevel.serializeBinaryToWriter);
 null != (t = this.getMedal()) && e.writeMessage(8, t, n.BINMedal.serializeBinaryToWriter);
-null != (t = s.Message.getField(this, 9)) && e.writeInt64(9, t);
-null != (t = s.Message.getField(this, 10)) && e.writeInt64(10, t);
-null != (t = s.Message.getField(this, 11)) && e.writeInt64(11, t);
-null != (t = s.Message.getField(this, 12)) && e.writeInt64(12, t);
-null != (t = s.Message.getField(this, 13)) && e.writeInt32(13, t);
-null != (t = s.Message.getField(this, 14)) && e.writeInt32(14, t);
-null != (t = s.Message.getField(this, 15)) && e.writeInt64(15, t);
-null != (t = s.Message.getField(this, 16)) && e.writeInt64(16, t);
-null != (t = s.Message.getField(this, 17)) && e.writeInt64(17, t);
-null != (t = s.Message.getField(this, 18)) && e.writeInt64(18, t);
-null != (t = s.Message.getField(this, 19)) && e.writeBool(19, t);
-null != (t = s.Message.getField(this, 20)) && e.writeInt32(20, t);
-null != (t = s.Message.getField(this, 21)) && e.writeString(21, t);
-null != (t = s.Message.getField(this, 22)) && e.writeString(22, t);
-null != (t = s.Message.getField(this, 23)) && e.writeString(23, t);
-null != (t = s.Message.getField(this, 24)) && e.writeBool(24, t);
-null != (t = s.Message.getField(this, 25)) && e.writeBool(25, t);
-null != (t = s.Message.getField(this, 26)) && e.writeBool(26, t);
-null != (t = s.Message.getField(this, 27)) && e.writeInt64(27, t);
-null != (t = s.Message.getField(this, 28)) && e.writeInt64(28, t);
+null != (t = r.Message.getField(this, 9)) && e.writeInt64(9, t);
+null != (t = r.Message.getField(this, 10)) && e.writeInt64(10, t);
+null != (t = r.Message.getField(this, 11)) && e.writeInt64(11, t);
+null != (t = r.Message.getField(this, 12)) && e.writeInt64(12, t);
+null != (t = r.Message.getField(this, 13)) && e.writeInt32(13, t);
+null != (t = r.Message.getField(this, 14)) && e.writeInt32(14, t);
+null != (t = r.Message.getField(this, 15)) && e.writeInt64(15, t);
+null != (t = r.Message.getField(this, 16)) && e.writeInt64(16, t);
+null != (t = r.Message.getField(this, 17)) && e.writeInt64(17, t);
+null != (t = r.Message.getField(this, 18)) && e.writeInt64(18, t);
+null != (t = r.Message.getField(this, 19)) && e.writeBool(19, t);
+null != (t = r.Message.getField(this, 20)) && e.writeInt32(20, t);
+null != (t = r.Message.getField(this, 21)) && e.writeString(21, t);
+null != (t = r.Message.getField(this, 22)) && e.writeString(22, t);
+null != (t = r.Message.getField(this, 23)) && e.writeString(23, t);
+null != (t = r.Message.getField(this, 24)) && e.writeBool(24, t);
+null != (t = r.Message.getField(this, 25)) && e.writeBool(25, t);
+null != (t = r.Message.getField(this, 26)) && e.writeBool(26, t);
+null != (t = r.Message.getField(this, 27)) && e.writeInt64(27, t);
+null != (t = r.Message.getField(this, 28)) && e.writeInt64(28, t);
 null != (t = this.getViplevel()) && e.writeMessage(29, t, n.BINVipLevel.serializeBinaryToWriter);
-null != (t = s.Message.getField(this, 30)) && e.writeInt64(30, t);
-null != (t = s.Message.getField(this, 31)) && e.writeString(31, t);
+null != (t = r.Message.getField(this, 30)) && e.writeInt64(30, t);
+null != (t = r.Message.getField(this, 31)) && e.writeString(31, t);
 };
 proto.BINUserInfo.prototype.getUserid = function() {
-return s.Message.getFieldWithDefault(this, 1, 0);
+return r.Message.getFieldWithDefault(this, 1, 0);
 };
 proto.BINUserInfo.prototype.setUserid = function(e) {
-s.Message.setField(this, 1, e);
+r.Message.setField(this, 1, e);
 };
 proto.BINUserInfo.prototype.clearUserid = function() {
-s.Message.setField(this, 1, void 0);
+r.Message.setField(this, 1, void 0);
 };
 proto.BINUserInfo.prototype.hasUserid = function() {
-return null != s.Message.getField(this, 1);
+return null != r.Message.getField(this, 1);
 };
 proto.BINUserInfo.prototype.getUsername = function() {
-return s.Message.getFieldWithDefault(this, 2, "");
+return r.Message.getFieldWithDefault(this, 2, "");
 };
 proto.BINUserInfo.prototype.setUsername = function(e) {
-s.Message.setField(this, 2, e);
+r.Message.setField(this, 2, e);
 };
 proto.BINUserInfo.prototype.clearUsername = function() {
-s.Message.setField(this, 2, void 0);
+r.Message.setField(this, 2, void 0);
 };
 proto.BINUserInfo.prototype.hasUsername = function() {
-return null != s.Message.getField(this, 2);
+return null != r.Message.getField(this, 2);
 };
 proto.BINUserInfo.prototype.getDisplayname = function() {
-return s.Message.getFieldWithDefault(this, 3, "");
+return r.Message.getFieldWithDefault(this, 3, "");
 };
 proto.BINUserInfo.prototype.setDisplayname = function(e) {
-s.Message.setField(this, 3, e);
+r.Message.setField(this, 3, e);
 };
 proto.BINUserInfo.prototype.clearDisplayname = function() {
-s.Message.setField(this, 3, void 0);
+r.Message.setField(this, 3, void 0);
 };
 proto.BINUserInfo.prototype.hasDisplayname = function() {
-return null != s.Message.getField(this, 3);
+return null != r.Message.getField(this, 3);
 };
 proto.BINUserInfo.prototype.getAvatarid = function() {
-return s.Message.getFieldWithDefault(this, 4, 0);
+return r.Message.getFieldWithDefault(this, 4, 0);
 };
 proto.BINUserInfo.prototype.setAvatarid = function(e) {
-s.Message.setField(this, 4, e);
+r.Message.setField(this, 4, e);
 };
 proto.BINUserInfo.prototype.clearAvatarid = function() {
-s.Message.setField(this, 4, void 0);
+r.Message.setField(this, 4, void 0);
 };
 proto.BINUserInfo.prototype.hasAvatarid = function() {
-return null != s.Message.getField(this, 4);
+return null != r.Message.getField(this, 4);
 };
 proto.BINUserInfo.prototype.getSex = function() {
-return s.Message.getFieldWithDefault(this, 5, 0);
+return r.Message.getFieldWithDefault(this, 5, 0);
 };
 proto.BINUserInfo.prototype.setSex = function(e) {
-s.Message.setField(this, 5, e);
+r.Message.setField(this, 5, e);
 };
 proto.BINUserInfo.prototype.clearSex = function() {
-s.Message.setField(this, 5, void 0);
+r.Message.setField(this, 5, void 0);
 };
 proto.BINUserInfo.prototype.hasSex = function() {
-return null != s.Message.getField(this, 5);
+return null != r.Message.getField(this, 5);
 };
 proto.BINUserInfo.prototype.getAge = function() {
-return s.Message.getFieldWithDefault(this, 6, 0);
+return r.Message.getFieldWithDefault(this, 6, 0);
 };
 proto.BINUserInfo.prototype.setAge = function(e) {
-s.Message.setField(this, 6, e);
+r.Message.setField(this, 6, e);
 };
 proto.BINUserInfo.prototype.clearAge = function() {
-s.Message.setField(this, 6, void 0);
+r.Message.setField(this, 6, void 0);
 };
 proto.BINUserInfo.prototype.hasAge = function() {
-return null != s.Message.getField(this, 6);
+return null != r.Message.getField(this, 6);
 };
 proto.BINUserInfo.prototype.getLevel = function() {
-return s.Message.getWrapperField(this, n.BINLevel, 7);
+return r.Message.getWrapperField(this, n.BINLevel, 7);
 };
 proto.BINUserInfo.prototype.setLevel = function(e) {
-s.Message.setWrapperField(this, 7, e);
+r.Message.setWrapperField(this, 7, e);
 };
 proto.BINUserInfo.prototype.clearLevel = function() {
 this.setLevel(void 0);
 };
 proto.BINUserInfo.prototype.hasLevel = function() {
-return null != s.Message.getField(this, 7);
+return null != r.Message.getField(this, 7);
 };
 proto.BINUserInfo.prototype.getMedal = function() {
-return s.Message.getWrapperField(this, n.BINMedal, 8);
+return r.Message.getWrapperField(this, n.BINMedal, 8);
 };
 proto.BINUserInfo.prototype.setMedal = function(e) {
-s.Message.setWrapperField(this, 8, e);
+r.Message.setWrapperField(this, 8, e);
 };
 proto.BINUserInfo.prototype.clearMedal = function() {
 this.setMedal(void 0);
 };
 proto.BINUserInfo.prototype.hasMedal = function() {
-return null != s.Message.getField(this, 8);
+return null != r.Message.getField(this, 8);
 };
 proto.BINUserInfo.prototype.getTrustedindex = function() {
-return s.Message.getFieldWithDefault(this, 9, 0);
+return r.Message.getFieldWithDefault(this, 9, 0);
 };
 proto.BINUserInfo.prototype.setTrustedindex = function(e) {
-s.Message.setField(this, 9, e);
+r.Message.setField(this, 9, e);
 };
 proto.BINUserInfo.prototype.clearTrustedindex = function() {
-s.Message.setField(this, 9, void 0);
+r.Message.setField(this, 9, void 0);
 };
 proto.BINUserInfo.prototype.hasTrustedindex = function() {
-return null != s.Message.getField(this, 9);
+return null != r.Message.getField(this, 9);
 };
 proto.BINUserInfo.prototype.getExp = function() {
-return s.Message.getFieldWithDefault(this, 10, 0);
+return r.Message.getFieldWithDefault(this, 10, 0);
 };
 proto.BINUserInfo.prototype.setExp = function(e) {
-s.Message.setField(this, 10, e);
+r.Message.setField(this, 10, e);
 };
 proto.BINUserInfo.prototype.clearExp = function() {
-s.Message.setField(this, 10, void 0);
+r.Message.setField(this, 10, void 0);
 };
 proto.BINUserInfo.prototype.hasExp = function() {
-return null != s.Message.getField(this, 10);
+return null != r.Message.getField(this, 10);
 };
 proto.BINUserInfo.prototype.getCash = function() {
-return s.Message.getFieldWithDefault(this, 11, 0);
+return r.Message.getFieldWithDefault(this, 11, 0);
 };
 proto.BINUserInfo.prototype.setCash = function(e) {
-s.Message.setField(this, 11, e);
+r.Message.setField(this, 11, e);
 };
 proto.BINUserInfo.prototype.clearCash = function() {
-s.Message.setField(this, 11, void 0);
+r.Message.setField(this, 11, void 0);
 };
 proto.BINUserInfo.prototype.hasCash = function() {
-return null != s.Message.getField(this, 11);
+return null != r.Message.getField(this, 11);
 };
 proto.BINUserInfo.prototype.getGold = function() {
-return s.Message.getFieldWithDefault(this, 12, 0);
+return r.Message.getFieldWithDefault(this, 12, 0);
 };
 proto.BINUserInfo.prototype.setGold = function(e) {
-s.Message.setField(this, 12, e);
+r.Message.setField(this, 12, e);
 };
 proto.BINUserInfo.prototype.clearGold = function() {
-s.Message.setField(this, 12, void 0);
+r.Message.setField(this, 12, void 0);
 };
 proto.BINUserInfo.prototype.hasGold = function() {
-return null != s.Message.getField(this, 12);
+return null != r.Message.getField(this, 12);
 };
 proto.BINUserInfo.prototype.getTotalmatch = function() {
-return s.Message.getFieldWithDefault(this, 13, 0);
+return r.Message.getFieldWithDefault(this, 13, 0);
 };
 proto.BINUserInfo.prototype.setTotalmatch = function(e) {
-s.Message.setField(this, 13, e);
+r.Message.setField(this, 13, e);
 };
 proto.BINUserInfo.prototype.clearTotalmatch = function() {
-s.Message.setField(this, 13, void 0);
+r.Message.setField(this, 13, void 0);
 };
 proto.BINUserInfo.prototype.hasTotalmatch = function() {
-return null != s.Message.getField(this, 13);
+return null != r.Message.getField(this, 13);
 };
 proto.BINUserInfo.prototype.getTotalwin = function() {
-return s.Message.getFieldWithDefault(this, 14, 0);
+return r.Message.getFieldWithDefault(this, 14, 0);
 };
 proto.BINUserInfo.prototype.setTotalwin = function(e) {
-s.Message.setField(this, 14, e);
+r.Message.setField(this, 14, e);
 };
 proto.BINUserInfo.prototype.clearTotalwin = function() {
-s.Message.setField(this, 14, void 0);
+r.Message.setField(this, 14, void 0);
 };
 proto.BINUserInfo.prototype.hasTotalwin = function() {
-return null != s.Message.getField(this, 14);
+return null != r.Message.getField(this, 14);
 };
 proto.BINUserInfo.prototype.getTotalcashexchanged = function() {
-return s.Message.getFieldWithDefault(this, 15, 0);
+return r.Message.getFieldWithDefault(this, 15, 0);
 };
 proto.BINUserInfo.prototype.setTotalcashexchanged = function(e) {
-s.Message.setField(this, 15, e);
+r.Message.setField(this, 15, e);
 };
 proto.BINUserInfo.prototype.clearTotalcashexchanged = function() {
-s.Message.setField(this, 15, void 0);
+r.Message.setField(this, 15, void 0);
 };
 proto.BINUserInfo.prototype.hasTotalcashexchanged = function() {
-return null != s.Message.getField(this, 15);
+return null != r.Message.getField(this, 15);
 };
 proto.BINUserInfo.prototype.getTotalmoneyexchanged = function() {
-return s.Message.getFieldWithDefault(this, 16, 0);
+return r.Message.getFieldWithDefault(this, 16, 0);
 };
 proto.BINUserInfo.prototype.setTotalmoneyexchanged = function(e) {
-s.Message.setField(this, 16, e);
+r.Message.setField(this, 16, e);
 };
 proto.BINUserInfo.prototype.clearTotalmoneyexchanged = function() {
-s.Message.setField(this, 16, void 0);
+r.Message.setField(this, 16, void 0);
 };
 proto.BINUserInfo.prototype.hasTotalmoneyexchanged = function() {
-return null != s.Message.getField(this, 16);
+return null != r.Message.getField(this, 16);
 };
 proto.BINUserInfo.prototype.getTotalmoneycharged = function() {
-return s.Message.getFieldWithDefault(this, 17, 0);
+return r.Message.getFieldWithDefault(this, 17, 0);
 };
 proto.BINUserInfo.prototype.setTotalmoneycharged = function(e) {
-s.Message.setField(this, 17, e);
+r.Message.setField(this, 17, e);
 };
 proto.BINUserInfo.prototype.clearTotalmoneycharged = function() {
-s.Message.setField(this, 17, void 0);
+r.Message.setField(this, 17, void 0);
 };
 proto.BINUserInfo.prototype.hasTotalmoneycharged = function() {
-return null != s.Message.getField(this, 17);
+return null != r.Message.getField(this, 17);
 };
 proto.BINUserInfo.prototype.getLastlogintime = function() {
-return s.Message.getFieldWithDefault(this, 18, 0);
+return r.Message.getFieldWithDefault(this, 18, 0);
 };
 proto.BINUserInfo.prototype.setLastlogintime = function(e) {
-s.Message.setField(this, 18, e);
+r.Message.setField(this, 18, e);
 };
 proto.BINUserInfo.prototype.clearLastlogintime = function() {
-s.Message.setField(this, 18, void 0);
+r.Message.setField(this, 18, void 0);
 };
 proto.BINUserInfo.prototype.hasLastlogintime = function() {
-return null != s.Message.getField(this, 18);
+return null != r.Message.getField(this, 18);
 };
 proto.BINUserInfo.prototype.getIsonline = function() {
-return s.Message.getFieldWithDefault(this, 19, !1);
+return r.Message.getFieldWithDefault(this, 19, !1);
 };
 proto.BINUserInfo.prototype.setIsonline = function(e) {
-s.Message.setField(this, 19, e);
+r.Message.setField(this, 19, e);
 };
 proto.BINUserInfo.prototype.clearIsonline = function() {
-s.Message.setField(this, 19, void 0);
+r.Message.setField(this, 19, void 0);
 };
 proto.BINUserInfo.prototype.hasIsonline = function() {
-return null != s.Message.getField(this, 19);
+return null != r.Message.getField(this, 19);
 };
 proto.BINUserInfo.prototype.getUsertype = function() {
-return s.Message.getFieldWithDefault(this, 20, 0);
+return r.Message.getFieldWithDefault(this, 20, 0);
 };
 proto.BINUserInfo.prototype.setUsertype = function(e) {
-s.Message.setField(this, 20, e);
+r.Message.setField(this, 20, e);
 };
 proto.BINUserInfo.prototype.clearUsertype = function() {
-s.Message.setField(this, 20, void 0);
+r.Message.setField(this, 20, void 0);
 };
 proto.BINUserInfo.prototype.hasUsertype = function() {
-return null != s.Message.getField(this, 20);
+return null != r.Message.getField(this, 20);
 };
 proto.BINUserInfo.prototype.getEmail = function() {
-return s.Message.getFieldWithDefault(this, 21, "");
+return r.Message.getFieldWithDefault(this, 21, "");
 };
 proto.BINUserInfo.prototype.setEmail = function(e) {
-s.Message.setField(this, 21, e);
+r.Message.setField(this, 21, e);
 };
 proto.BINUserInfo.prototype.clearEmail = function() {
-s.Message.setField(this, 21, void 0);
+r.Message.setField(this, 21, void 0);
 };
 proto.BINUserInfo.prototype.hasEmail = function() {
-return null != s.Message.getField(this, 21);
+return null != r.Message.getField(this, 21);
 };
 proto.BINUserInfo.prototype.getMobile = function() {
-return s.Message.getFieldWithDefault(this, 22, "");
+return r.Message.getFieldWithDefault(this, 22, "");
 };
 proto.BINUserInfo.prototype.setMobile = function(e) {
-s.Message.setField(this, 22, e);
+r.Message.setField(this, 22, e);
 };
 proto.BINUserInfo.prototype.clearMobile = function() {
-s.Message.setField(this, 22, void 0);
+r.Message.setField(this, 22, void 0);
 };
 proto.BINUserInfo.prototype.hasMobile = function() {
-return null != s.Message.getField(this, 22);
+return null != r.Message.getField(this, 22);
 };
 proto.BINUserInfo.prototype.getIdentity = function() {
-return s.Message.getFieldWithDefault(this, 23, "");
+return r.Message.getFieldWithDefault(this, 23, "");
 };
 proto.BINUserInfo.prototype.setIdentity = function(e) {
-s.Message.setField(this, 23, e);
+r.Message.setField(this, 23, e);
 };
 proto.BINUserInfo.prototype.clearIdentity = function() {
-s.Message.setField(this, 23, void 0);
+r.Message.setField(this, 23, void 0);
 };
 proto.BINUserInfo.prototype.hasIdentity = function() {
-return null != s.Message.getField(this, 23);
+return null != r.Message.getField(this, 23);
 };
 proto.BINUserInfo.prototype.getAccountverified = function() {
-return s.Message.getFieldWithDefault(this, 24, !1);
+return r.Message.getFieldWithDefault(this, 24, !1);
 };
 proto.BINUserInfo.prototype.setAccountverified = function(e) {
-s.Message.setField(this, 24, e);
+r.Message.setField(this, 24, e);
 };
 proto.BINUserInfo.prototype.clearAccountverified = function() {
-s.Message.setField(this, 24, void 0);
+r.Message.setField(this, 24, void 0);
 };
 proto.BINUserInfo.prototype.hasAccountverified = function() {
-return null != s.Message.getField(this, 24);
+return null != r.Message.getField(this, 24);
 };
 proto.BINUserInfo.prototype.getDisablecashtransaction = function() {
-return s.Message.getFieldWithDefault(this, 25, !1);
+return r.Message.getFieldWithDefault(this, 25, !1);
 };
 proto.BINUserInfo.prototype.setDisablecashtransaction = function(e) {
-s.Message.setField(this, 25, e);
+r.Message.setField(this, 25, e);
 };
 proto.BINUserInfo.prototype.clearDisablecashtransaction = function() {
-s.Message.setField(this, 25, void 0);
+r.Message.setField(this, 25, void 0);
 };
 proto.BINUserInfo.prototype.hasDisablecashtransaction = function() {
-return null != s.Message.getField(this, 25);
+return null != r.Message.getField(this, 25);
 };
 proto.BINUserInfo.prototype.getSecuritykeyset = function() {
-return s.Message.getFieldWithDefault(this, 26, !1);
+return r.Message.getFieldWithDefault(this, 26, !1);
 };
 proto.BINUserInfo.prototype.setSecuritykeyset = function(e) {
-s.Message.setField(this, 26, e);
+r.Message.setField(this, 26, e);
 };
 proto.BINUserInfo.prototype.clearSecuritykeyset = function() {
-s.Message.setField(this, 26, void 0);
+r.Message.setField(this, 26, void 0);
 };
 proto.BINUserInfo.prototype.hasSecuritykeyset = function() {
-return null != s.Message.getField(this, 26);
+return null != r.Message.getField(this, 26);
 };
 proto.BINUserInfo.prototype.getCashlock = function() {
-return s.Message.getFieldWithDefault(this, 27, 0);
+return r.Message.getFieldWithDefault(this, 27, 0);
 };
 proto.BINUserInfo.prototype.setCashlock = function(e) {
-s.Message.setField(this, 27, e);
+r.Message.setField(this, 27, e);
 };
 proto.BINUserInfo.prototype.clearCashlock = function() {
-s.Message.setField(this, 27, void 0);
+r.Message.setField(this, 27, void 0);
 };
 proto.BINUserInfo.prototype.hasCashlock = function() {
-return null != s.Message.getField(this, 27);
+return null != r.Message.getField(this, 27);
 };
 proto.BINUserInfo.prototype.getGoldlock = function() {
-return s.Message.getFieldWithDefault(this, 28, 0);
+return r.Message.getFieldWithDefault(this, 28, 0);
 };
 proto.BINUserInfo.prototype.setGoldlock = function(e) {
-s.Message.setField(this, 28, e);
+r.Message.setField(this, 28, e);
 };
 proto.BINUserInfo.prototype.clearGoldlock = function() {
-s.Message.setField(this, 28, void 0);
+r.Message.setField(this, 28, void 0);
 };
 proto.BINUserInfo.prototype.hasGoldlock = function() {
-return null != s.Message.getField(this, 28);
+return null != r.Message.getField(this, 28);
 };
 proto.BINUserInfo.prototype.getViplevel = function() {
-return s.Message.getWrapperField(this, n.BINVipLevel, 29);
+return r.Message.getWrapperField(this, n.BINVipLevel, 29);
 };
 proto.BINUserInfo.prototype.setViplevel = function(e) {
-s.Message.setWrapperField(this, 29, e);
+r.Message.setWrapperField(this, 29, e);
 };
 proto.BINUserInfo.prototype.clearViplevel = function() {
 this.setViplevel(void 0);
 };
 proto.BINUserInfo.prototype.hasViplevel = function() {
-return null != s.Message.getField(this, 29);
+return null != r.Message.getField(this, 29);
 };
 proto.BINUserInfo.prototype.getVippoint = function() {
-return s.Message.getFieldWithDefault(this, 30, 0);
+return r.Message.getFieldWithDefault(this, 30, 0);
 };
 proto.BINUserInfo.prototype.setVippoint = function(e) {
-s.Message.setField(this, 30, e);
+r.Message.setField(this, 30, e);
 };
 proto.BINUserInfo.prototype.clearVippoint = function() {
-s.Message.setField(this, 30, void 0);
+r.Message.setField(this, 30, void 0);
 };
 proto.BINUserInfo.prototype.hasVippoint = function() {
-return null != s.Message.getField(this, 30);
+return null != r.Message.getField(this, 30);
 };
 proto.BINUserInfo.prototype.getRemoteip = function() {
-return s.Message.getFieldWithDefault(this, 31, "");
+return r.Message.getFieldWithDefault(this, 31, "");
 };
 proto.BINUserInfo.prototype.setRemoteip = function(e) {
-s.Message.setField(this, 31, e);
+r.Message.setField(this, 31, e);
 };
 proto.BINUserInfo.prototype.clearRemoteip = function() {
-s.Message.setField(this, 31, void 0);
+r.Message.setField(this, 31, void 0);
 };
 proto.BINUserInfo.prototype.hasRemoteip = function() {
-return null != s.Message.getField(this, 31);
+return null != r.Message.getField(this, 31);
 };
 proto.BINUserSetting = function(e) {
-s.Message.initialize(this, e, 0, -1, null, null);
+r.Message.initialize(this, e, 0, -1, null, null);
 };
-r.inherits(proto.BINUserSetting, s.Message);
-r.DEBUG && !COMPILED && (proto.BINUserSetting.displayName = "proto.BINUserSetting");
-if (s.Message.GENERATE_TO_OBJECT) {
+s.inherits(proto.BINUserSetting, r.Message);
+s.DEBUG && !COMPILED && (proto.BINUserSetting.displayName = "proto.BINUserSetting");
+if (r.Message.GENERATE_TO_OBJECT) {
 proto.BINUserSetting.prototype.toObject = function(e) {
 return proto.BINUserSetting.toObject(e, this);
 };
 proto.BINUserSetting.toObject = function(e, t) {
 var o = {
-userid: s.Message.getField(t, 1),
-autoready: s.Message.getField(t, 2),
-autodenyinvitation: s.Message.getField(t, 3)
+userid: r.Message.getField(t, 1),
+autoready: r.Message.getField(t, 2),
+autodenyinvitation: r.Message.getField(t, 3)
 };
 e && (o.$jspbMessageInstance = t);
 return o;
 };
 }
 proto.BINUserSetting.deserializeBinary = function(e) {
-var t = new s.BinaryReader(e), o = new proto.BINUserSetting();
+var t = new r.BinaryReader(e), o = new proto.BINUserSetting();
 return proto.BINUserSetting.deserializeBinaryFromReader(o, t);
 };
 proto.BINUserSetting.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readInt64();
+var o = t.readInt64();
 e.setUserid(o);
 break;
 
@@ -28970,12 +31612,13 @@ e.setAutoready(o);
 break;
 
 case 3:
-var o = t.readBool();
+o = t.readBool();
 e.setAutodenyinvitation(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -28983,53 +31626,53 @@ proto.BINUserSetting.serializeBinaryToWriter = function(e, t) {
 e.serializeBinaryToWriter(t);
 };
 proto.BINUserSetting.prototype.serializeBinary = function() {
-var e = new s.BinaryWriter();
+var e = new r.BinaryWriter();
 this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINUserSetting.prototype.serializeBinaryToWriter = function(e) {
 var t = void 0;
-null != (t = s.Message.getField(this, 1)) && e.writeInt64(1, t);
-null != (t = s.Message.getField(this, 2)) && e.writeBool(2, t);
-null != (t = s.Message.getField(this, 3)) && e.writeBool(3, t);
+null != (t = r.Message.getField(this, 1)) && e.writeInt64(1, t);
+null != (t = r.Message.getField(this, 2)) && e.writeBool(2, t);
+null != (t = r.Message.getField(this, 3)) && e.writeBool(3, t);
 };
 proto.BINUserSetting.prototype.getUserid = function() {
-return s.Message.getFieldWithDefault(this, 1, 0);
+return r.Message.getFieldWithDefault(this, 1, 0);
 };
 proto.BINUserSetting.prototype.setUserid = function(e) {
-s.Message.setField(this, 1, e);
+r.Message.setField(this, 1, e);
 };
 proto.BINUserSetting.prototype.clearUserid = function() {
-s.Message.setField(this, 1, void 0);
+r.Message.setField(this, 1, void 0);
 };
 proto.BINUserSetting.prototype.hasUserid = function() {
-return null != s.Message.getField(this, 1);
+return null != r.Message.getField(this, 1);
 };
 proto.BINUserSetting.prototype.getAutoready = function() {
-return s.Message.getFieldWithDefault(this, 2, !1);
+return r.Message.getFieldWithDefault(this, 2, !1);
 };
 proto.BINUserSetting.prototype.setAutoready = function(e) {
-s.Message.setField(this, 2, e);
+r.Message.setField(this, 2, e);
 };
 proto.BINUserSetting.prototype.clearAutoready = function() {
-s.Message.setField(this, 2, void 0);
+r.Message.setField(this, 2, void 0);
 };
 proto.BINUserSetting.prototype.hasAutoready = function() {
-return null != s.Message.getField(this, 2);
+return null != r.Message.getField(this, 2);
 };
 proto.BINUserSetting.prototype.getAutodenyinvitation = function() {
-return s.Message.getFieldWithDefault(this, 3, !1);
+return r.Message.getFieldWithDefault(this, 3, !1);
 };
 proto.BINUserSetting.prototype.setAutodenyinvitation = function(e) {
-s.Message.setField(this, 3, e);
+r.Message.setField(this, 3, e);
 };
 proto.BINUserSetting.prototype.clearAutodenyinvitation = function() {
-s.Message.setField(this, 3, void 0);
+r.Message.setField(this, 3, void 0);
 };
 proto.BINUserSetting.prototype.hasAutodenyinvitation = function() {
-return null != s.Message.getField(this, 3);
+return null != r.Message.getField(this, 3);
 };
-r.object.extend(o, proto);
+s.object.extend(o, proto);
 cc._RF.pop();
 }, {
 "./level_pb.js": "level_pb",
@@ -29065,7 +31708,8 @@ var t = new s.BinaryReader(e), o = new proto.BINUserVerifyConfigRequest();
 return proto.BINUserVerifyConfigRequest.deserializeBinaryFromReader(o, t);
 };
 proto.BINUserVerifyConfigRequest.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
 var o = t.readInt32();
 e.setType(o);
@@ -29073,6 +31717,7 @@ break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -29085,7 +31730,7 @@ this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINUserVerifyConfigRequest.prototype.serializeBinaryToWriter = function(e) {
-var t = void 0;
+var t;
 null != (t = s.Message.getField(this, 1)) && e.writeInt32(1, t);
 };
 proto.BINUserVerifyConfigRequest.prototype.getType = function() {
@@ -29133,9 +31778,10 @@ var t = new s.BinaryReader(e), o = new proto.BINUserVerifyConfigResponse();
 return proto.BINUserVerifyConfigResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINUserVerifyConfigResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
@@ -29190,12 +31836,13 @@ e.setUnverifysmsnumber(o);
 break;
 
 case 12:
-var o = t.readInt32();
+o = t.readInt32();
 e.setUnverifiedsmscost(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -29388,7 +32035,8 @@ var t = new s.BinaryReader(e), o = new proto.BINUserVerifyRequest();
 return proto.BINUserVerifyRequest.deserializeBinaryFromReader(o, t);
 };
 proto.BINUserVerifyRequest.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
 var o = t.readString();
 e.setOtp(o);
@@ -29396,6 +32044,7 @@ break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -29408,7 +32057,7 @@ this.serializeBinaryToWriter(e);
 return e.getResultBuffer();
 };
 proto.BINUserVerifyRequest.prototype.serializeBinaryToWriter = function(e) {
-var t = void 0;
+var t;
 null != (t = s.Message.getField(this, 1)) && e.writeString(1, t);
 };
 proto.BINUserVerifyRequest.prototype.getOtp = function() {
@@ -29449,9 +32098,10 @@ var t = new s.BinaryReader(e), o = new proto.BINUserVerifyResponse();
 return proto.BINUserVerifyResponse.deserializeBinaryFromReader(o, t);
 };
 proto.BINUserVerifyResponse.deserializeBinaryFromReader = function(e, t) {
-for (;t.nextField() && !t.isEndGroup(); ) switch (t.getFieldNumber()) {
+for (;t.nextField() && !t.isEndGroup(); ) {
+switch (t.getFieldNumber()) {
 case 1:
-o = t.readBool();
+var o = t.readBool();
 e.setResponsecode(o);
 break;
 
@@ -29471,12 +32121,13 @@ e.setVerifiedphone(o);
 break;
 
 case 5:
-var o = t.readString();
+o = t.readString();
 e.setVerifiedemail(o);
 break;
 
 default:
 t.skipField();
+}
 }
 return e;
 };
@@ -29627,4 +32278,4 @@ cc.log("data =", t);
 });
 cc._RF.pop();
 }, {} ]
-}, {}, [ "Nohu", "Card", "CardItem", "Types", "ZipUtils", "base64", "bet_pb", "enter_room_pb", "enter_zone_pb", "exit_room_pb", "filter_room_pb", "friend_pb", "gift_pb", "google-protobuf", "gzip", "initialize_pb", "instant_message_pb", "jar_pb", "level_pb", "login_pb", "logout_pb", "lookup_game_history_pb", "lookup_money_history_pb", "lookup_room_pb", "mail_pb", "map_field_entry_pb", "match_begin_pb", "match_end_pb", "notification_pb", "open_id_login_pb", "ping_pb", "player_pb", "purchase_money_pb", "register_pb", "start_match_pb", "text_emoticon_pb", "turn_pb", "update_money_pb", "update_user_info_pb", "user_info_pb", "verify_pb", "AvatarItem", "AvatarSprite", "ButtonSelectLines", "ChargeItem", "ChatObject", "GameList", "Gate", "HistoryItem", "ItemPrefab", "LineResult", "LobbyGameItem", "MailCell", "ProviderItem", "TXMatch", "TaiXiuResult", "UserInfo", "cellBetHistory", "cellPromotion", "cellSmall", "labelCell", "labelCellProvider", "tableView", "viewCell", "CommonPopup", "NodeHeadLine", "PopupCaptcha", "PopupChangeAvatar", "PopupChangeInfo", "PopupChangePass", "PopupCharging", "PopupGift", "PopupHistory", "PopupIngame", "PopupMail", "PopupMessageBox", "PopupSelectLine", "PopupSetting", "PopupTaiXiuResultList", "PopupTaiXiuTop", "PopupTaixiuBetHistory", "PopupThreeCardHistory", "PopupUserInfo", "PopupWebview", "ItemChat", "ItemEmotion", "ItemIAP", "ItemSelectLine", "SmsItem", "NodeIAP", "NodeMail", "NodeNapSMS", "NodeNapThe", "TabItem", "UITab", "UITabLeft", "BaseScene", "Intro", "Lobby", "UILobby", "Login", "minipoker", "PopupTaiXiu", "ThreeCard", "Treasure", "Loading", "MButton", "MEditbox", "Popup", "Toast", "ToastScripts", "NetworkManager" ]);
+}, {}, [ "Nohu", "CardItem", "ZipUtils", "base64", "bet_pb", "enter_room_pb", "enter_zone_pb", "exchange_pb", "exit_room_pb", "filter_room_pb", "friend_pb", "gift_pb", "google-protobuf", "gzip", "initialize_pb", "instant_message_pb", "jar_pb", "level_pb", "login_pb", "logout_pb", "lookup_game_history_pb", "lookup_money_history_pb", "lookup_room_pb", "mail_pb", "map_field_entry_pb", "match_begin_pb", "match_end_pb", "notification_pb", "open_id_login_pb", "ping_pb", "player_pb", "purchase_money_pb", "register_pb", "start_match_pb", "text_emoticon_pb", "turn_pb", "update_money_pb", "update_user_info_pb", "user_info_pb", "verify_pb", "AvatarItem", "AvatarSprite", "ButtonSelectLines", "ChargeItem", "ChatObject", "GameList", "Gate", "HistoryItem", "ItemPrefab", "LineResult", "LobbyGameItem", "MailCell", "ProviderItem", "TXMatch", "TaiXiuResult", "TaixiuSprite", "UserInfo", "cellBetHistory", "cellPromotion", "cellSmall", "labelCell", "labelCellProvider", "tableView", "viewCell", "CommonPopup", "CommonSessionPopup", "NodeDoiThuong", "NodeHeadLine", "PopupCaptcha", "PopupChangeAvatar", "PopupChangeInfo", "PopupChangePass", "PopupCharging", "PopupExchange", "PopupGift", "PopupHistory", "PopupIngame", "PopupMail", "PopupMessageBox", "PopupSelectLine", "PopupSetting", "PopupTaiXiuResultList", "PopupTaiXiuTop", "PopupTaixiuBetHistory", "PopupTaixiuSession", "PopupTaixiuStatis", "PopupThreeCardHistory", "PopupUserInfo", "PopupWebview", "ExchangeItem", "ItemChat", "ItemEmotion", "ItemIAP", "ItemSelectLine", "SmsItem", "NodeIAP", "NodeMail", "NodeNapSMS", "NodeNapThe", "TabItem", "TabItemTaixiu", "UITab", "UITabLeft", "UITabTaixiu", "BaseScene", "Intro", "Lobby", "UILobby", "Login", "minipoker", "PopupTaiXiu", "ThreeCard", "Treasure", "Loading", "MButton", "MEditbox", "Popup", "Toast", "ToastScripts", "NetworkManager" ]);

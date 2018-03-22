@@ -43,6 +43,7 @@ POPUP_HISTORY: "PopupHistory",
 POPUP_THREECARD_HISTORY: "PopupThreeCardHistory",
 POPUP_USERINFO: "PopupUserInfo",
 POPUP_CHARGING: "PopupCharging",
+POPUP_EXCHANGE: "PopupExchange",
 POPUP_WEBVIEW: "PopupWebview",
 POPUP_MAIL: "PopupMail",
 POPUP_GIFT: "PopupGift",
@@ -53,7 +54,9 @@ POPUP_CHANGE_AVATAR: "PopupChangeAvatar",
 POPUP_CHANGE_INFO: "PopupChangeInfo",
 POPUP_CAPTCHA: "PopupCaptcha",
 POPUP_TAIXIU_BET_HISTORY: "PopupTaixiuBetHistory",
-POPUP_SELECT_LINE: "PopupSelectLine"
+POPUP_SELECT_LINE: "PopupSelectLine",
+POPUP_TAIXIU_SESSION_HISTORY: "PopupTaixiuSession",
+POPUP_TAIXIU_STATIS: "PopupTaixiuStatis"
 },
 ON_EVENT: {
 EVENT_SELECT_LINE_BY_TYPE: 1,

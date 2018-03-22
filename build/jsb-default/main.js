@@ -54,6 +54,19 @@
             canvas = document.getElementById('GameCanvas');
         }
 
+        if (cc.sys.platform === cc.sys.QQ_PLAY) {
+            if (settings.orientation === 'landscape left') {
+                BK.Director.screenMode = 2;
+            }
+            else if (settings.orientation === 'landscape right') {
+                BK.Director.screenMode = 3;
+            }
+            else if (settings.orientation === 'portrait') {
+                BK.Director.screenMode = 1;
+            }
+            initAdapter();
+        }
+
         function setLoadingDisplay () {
             // Loading splash scene
             var splash = document.getElementById('splash');
@@ -75,7 +88,7 @@
         var onStart = function () {
             cc.view.resizeWithBrowserSize(true);
 
-            if (!false) {
+            if (!false && !false) {
                 // UC browser on many android devices have performance issue with retina display
                 if (cc.sys.os !== cc.sys.OS_ANDROID || cc.sys.browserType !== cc.sys.BROWSER_TYPE_UC) {
                     cc.view.enableRetina(true);
@@ -91,12 +104,12 @@
                     else if (settings.orientation === 'portrait') {
                         cc.view.setOrientation(cc.macro.ORIENTATION_PORTRAIT);
                     }
-                    // qq, wechat, baidu
-                    cc.view.enableAutoFullScreen(
-                        cc.sys.browserType !== cc.sys.BROWSER_TYPE_BAIDU &&
-                        cc.sys.browserType !== cc.sys.BROWSER_TYPE_WECHAT &&
-                        cc.sys.browserType !== cc.sys.BROWSER_TYPE_MOBILE_QQ
-                    );
+                    cc.view.enableAutoFullScreen([
+                        cc.sys.BROWSER_TYPE_BAIDU,
+                        cc.sys.BROWSER_TYPE_WECHAT,
+                        cc.sys.BROWSER_TYPE_MOBILE_QQ,
+                        cc.sys.BROWSER_TYPE_MIUI,
+                    ].indexOf(cc.sys.browserType) < 0);
                 }
                 
                 // Limit downloading max concurrent task to 2,
@@ -158,29 +171,49 @@
             id: 'GameCanvas',
             scenes: settings.scenes,
             debugMode: settings.debug ? cc.DebugMode.INFO : cc.DebugMode.ERROR,
-            showFPS: !false && settings.debug,
+            showFPS: (!false && !false) && settings.debug,
             frameRate: 60,
             jsList: jsList,
             groupList: settings.groupList,
             collisionMatrix: settings.collisionMatrix,
             renderMode: 0
-        };
+        }
 
         cc.game.run(option, onStart);
+    }
+
+    if (false) {
+        (function () {
+            var require = function (url) {
+                BK.Script.loadlib('GameRes://' + url);
+            };
+            require('libs/qqplay-adapter.js');
+            require('src/settings.js');
+            require(window._CCSettings.debug ? 'cocos2d-js.js' : 'cocos2d-js-min.js');
+            require('libs/qqplay-downloader.js');
+            var prevPipe = cc.loader.md5Pipe || cc.loader.assetLoader;
+            cc.loader.insertPipeAfter(prevPipe, qqPlayDownloader);
+            boot();
+        })();
+        return;
+    }
+
+    if (false) {
+        require(window._CCSettings.debug ? 'cocos2d-js.js' : 'cocos2d-js-min.js');
+        var prevPipe = cc.loader.md5Pipe || cc.loader.assetLoader;
+        cc.loader.insertPipeAfter(prevPipe, wxDownloader);
+        boot();
+        return;
     }
 
     if (window.jsb) {
         require('src/settings.js');
         require('src/jsb_polyfill.js');
         boot();
+        return;
     }
-    else if (false) {
-        require(window._CCSettings.debug ? 'cocos2d-js.js' : 'cocos2d-js-min.js');
-        var prevPipe = cc.loader.md5Pipe || cc.loader.assetLoader;
-        cc.loader.insertPipeAfter(prevPipe, wxDownloader);
-        boot();
-    }
-    else if (window.document) {
+
+    if (window.document) {
         var splash = document.getElementById('splash');
         splash.style.display = 'block';
 
