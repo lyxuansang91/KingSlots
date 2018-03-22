@@ -9,15 +9,17 @@ cc.Class({
     },
 
     onLoad: function () {
-        /*function onTouchDown (event) {
+        function onTouchDown (event) {
             return true;
         }
 
-        this.node.on('touchstart', onTouchDown, this.darkSprite);*/
+        this.node.on('touchstart', onTouchDown, this.darkSprite);
         this.show();
     },
 
     show: function () {
+
+        this.node.active = true;
         this.deltaTime = 0;
         this.enable = false;
         this.darkSprite.node.setOpacity(0);
@@ -32,10 +34,12 @@ cc.Class({
         this.darkSprite.node.setOpacity(0);
         this.loading.node.setOpacity(0);
         this.loading.node.stopAllActions();
+
+        this.node.active = false;
     },
     
     update : function (dt) {
-        if(this.deltaTime > 3.0) {
+        if(this.deltaTime > 1.0) {
             if(!this.enable) {
                 this.enable = true;
 
