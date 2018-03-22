@@ -201,7 +201,6 @@ cc.Class({
             Common.showToast(resp.getMessage());
         }
     },
-
     handleMessage: function(buffer) {
         var isDone = true;
         var resp = buffer.response;

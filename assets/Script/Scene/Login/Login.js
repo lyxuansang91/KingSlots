@@ -22,6 +22,8 @@ cc.Class({
         window.loginSuccess = false;
         Common.setFingerprint();
         this.isLoadScene = false;
+        if(cc.sys.isNative)
+            sdkbox.PluginFacebook.init();
     },
 
     start : function () {
@@ -148,6 +150,19 @@ cc.Class({
             }
         }
     },
+    paymentStatusResponseHandler: function(resp) {
+        cc.log("payment status response handler:", resp.toObject());
+        if(resp.getResponsecode()) {
+            Common.setEnableCashToGold(resp.getEnablecashtogold());
+            Common.setEnableCashTransfer(resp.getEnablecashtransfer());
+            Common.setEnableGiftCode(resp.getEnablegiftcode());
+            Common.setEnablePurchaseCash(resp.getEnablepurchasecash());
+            Common.setEnableTopup(resp.getEnabletopup());
+        }
+        if(resp.hasMessage() && resp.getMessage() !== "") {
+            Common.showToast(resp.hasMessage(), 2);
+        }
+    },
     handleMessage: function(e) {
         const buffer = e;
         var isDone = this._super(buffer);
@@ -174,6 +189,9 @@ cc.Class({
                 break;
             case NetworkManager.MESSAGE_ID.JAR:
                 this.jarResponseHandler(msg);
+                break;
+            case NetworkManager.MESSAGE_ID.PAYMENT_STATUS:
+                this.paymentStatusResponseHandler(msg);
                 break;
             default:
                 isDone = false;
@@ -354,7 +372,7 @@ cc.Class({
     },
     loginFacebook: function() {
         if(cc.sys.platform === cc.sys.isNative) {
-
+            sdkbox.PluginFacebook.login();
         }else if(cc.sys.isBrowser){
             window.loginFb(["public_profile"], function(code, response){
                 if(code === 0){

@@ -3,8 +3,9 @@
   "appSecret": "",
   "encryptJs": true,
   "excludeScenes": [],
+  "fb-instant-games": {},
   "includeAnySDK": false,
-  "includeSDKBox": false,
+  "includeSDKBox": true,
   "inlineSpriteFrames": true,
   "inlineSpriteFrames_native": true,
   "jailbreakPlatform": false,
@@ -20,6 +21,9 @@
   },
   "packageName": "org.cocos2d.helloworld",
   "privateKey": "",
+  "qqplay": {
+    "orientation": "portrait"
+  },
   "renderMode": "0",
   "startScene": "ecbfea9f-2853-4c6e-9f9e-f95d5fe180be",
   "title": "KingSlots",
@@ -29,9 +33,5 @@
     "orientation": "portrait"
   },
   "xxteaKey": "2295a8ba-6bf2-4c",
-  "zipCompressJs": true,
-  "qqplay": {
-    "orientation": "portrait"
-  },
-  "fb-instant-games": {}
+  "zipCompressJs": true
 }

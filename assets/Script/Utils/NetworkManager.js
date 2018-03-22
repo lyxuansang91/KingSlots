@@ -412,6 +412,9 @@ var NetworkManager = {
             case NetworkManager.MESSAGE_ID.ASSET_CONFIG:
                 msg = proto.BINAssetConfigResponse.deserializeBinary(bytes);
                 break;
+            case NetworkManager.MESSAGE_ID.PAYMENT_STATUS:
+                msg = proto.BINPaymentStatusResponse.deserializeBinary(bytes);
+                break;
             default:
                 break;
         }

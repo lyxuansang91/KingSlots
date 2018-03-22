@@ -22,7 +22,7 @@ cc.Class({
         if(window.loginMessage !== null) {
             Common.showPopup(Config.name.POPUP_MESSAGE_BOX,function(message_box) {
                 message_box.init(window.loginMessage, Config.COMMON_POPUP_TYPE.MESSAGE_BOX.CONFIRM_TYPE, function() {
-
+                    window.loginMessage = null;
                 });
                 message_box.appear();
             });

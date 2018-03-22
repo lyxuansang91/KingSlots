@@ -1,4 +1,3 @@
-
 const BaseScene = require('BaseScene');
 const NetworkManager = require('NetworkManager');
 const Gate = require('Gate');
@@ -216,6 +215,10 @@ cc.Class({
     },
     setBetMoney: function(event, data) {
         cc.log("data:", Common.getCash());
+        if(parseInt(data) > Common.getCash()) {
+            Common.showToast("Bạn không đủ tiền để đặt cược!");
+            return;
+        }
         this.currentBet = 0;
         if(data === "all") {
             this.currentBet = Common.getCash();
@@ -234,6 +237,7 @@ cc.Class({
     setBetMoneyNumber: function(event, data) {
         cc.log("data:", data);
         this.currentBet = 0;
+
         if(data === "delete") {
             this.currentBet = 0;
         } else if (data === "000") {
@@ -245,6 +249,8 @@ cc.Class({
             var addMoney = parseInt(data);
             if (this.currentBet * 10 + addMoney <= Common.getCash()) {
                 this.currentBet = this.currentBet * 10 + addMoney;
+            } else {
+                Common.showToast("Bạn không đủ tiền để đặt cược với số tiền này!");
             }
         }
 

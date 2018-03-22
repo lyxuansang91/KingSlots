@@ -20,6 +20,7 @@ declare module sdkbox {     module FBGraphUser {        export function FBGrap
         /**        * Set listener to listen for facebook events        */        export function setListener(listener : object) : object;
         /**        * Get the listener        */        export function getListener() : object;
         /**        * Remove the listener, and can't listen to events anymore        */        export function removeListener() : object;
+        /**        * @brief login        *        */        export function setLoginBehavior(loginBehavior : number) : object;
         /**        * @brief log in        *        * This method calls login with a single permission: sdkbox::FB_PERM_READ_PUBLIC_PROFILE        */        export function login() : object;
         export function login(permissions : object) : object;
         /**        * @brief log in with specific read permissions, conflict with publish permissions        * https://developers.facebook.com/docs/facebook-login/permissions        *        * @param read permissions        */        export function requestReadPermissions(permissions : object) : object;

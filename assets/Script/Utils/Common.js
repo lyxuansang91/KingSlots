@@ -44,6 +44,43 @@ var Common = {
         });
     },
 
+    enableCashToGold: false,
+    isEnableCashToGold: function() {
+        return this.enableCashToGold;
+    },
+    setEnableCashToGold: function(e) {
+        this.enableCashToGold = e;
+    },
+
+    enableCashTransfer: false,
+    isEnableCashTransfer: function() {
+        return this.enableCashTransfer;
+    },
+    setEnableCashTransfer: function(e) {
+        this.enableCashTransfer = e;
+    },
+
+    enableGiftCode: false,
+    isEnableGiftCode: function() {
+        return this.enableGiftCode;
+    },
+    setEnableGiftCode: function(e) {
+        this.enableGiftCode = e;
+    },
+    enablePurchaseCash: false,
+    isEnablePurchaseCash: function() {
+        return this.enablePurchaseCash;
+    },
+    setEnablePurchaseCash: function(e) {
+        this.enablePurchaseCash = e;
+    },
+    enableTopUp: false,
+    isEnableTopup: function() {
+        return this.enableTopUp;
+    },
+    setEnableTopup: function(e) {
+        this.enableTopUp = e;
+    },
     isExistTaiXiu: function() {
         return this._existTaiXiu;
     },
