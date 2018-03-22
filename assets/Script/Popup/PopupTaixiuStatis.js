@@ -74,12 +74,18 @@ cc.Class({
                         this.analyticResultHis.push(input);
                     }
                     this.getListAnalytic();
+
                     this.displayAnalyticResultHis.reverse();
                     this.updateBottomTable(this.analyticResultHis);
                     this.updateTopTable(this.displayAnalyticResultHis);
                 }
             }
         }
+    },
+
+    isTai : function (index) {
+        return this.analyticResultHis[index][1]
+        + this.analyticResultHis[index][2] + this.analyticResultHis[index][3] > 10;
     },
 
     getListAnalytic: function() {
@@ -92,19 +98,19 @@ cc.Class({
         this.displayAnalyticResultHis = [];
         this.displayAnalyticResultHis.push(this.analyticResultHis[0]);
         for (var i = 1; i < this.analyticResultHis.length; i++) {
-            if (this.analyticResultHis[i].length === 4 && isTai === this.analyticResultHis[i][1]
-                + this.analyticResultHis[i][2] + this.analyticResultHis[i][3] > 10) {
+            if (this.analyticResultHis[i].length == 4 &&
+                isTai == this.analyticResultHis[i][1] + this.analyticResultHis[i][2] + this.analyticResultHis[i][3] > 10) {
                 column++;
                 if (column > 5) {
                     column = column - 6;
                     row++;
                 }
-            }
-            else {
+            }else {
                 isTai = !isTai;
                 row++;
                 column = 0;
             }
+
             if (row < 20) {
                 this.displayAnalyticResultHis.push(this.analyticResultHis[i]);
             }
@@ -112,34 +118,42 @@ cc.Class({
                 break;
             }
         }
+
     },
 
     updateTopTable: function(historyList) {
+        cc.log("historyList =", historyList);
         var taiCount = 0;
         var xiuCount = 0;
         var display = [];
-        for (var i = historyList.length - 1; i >= 0; i--) {
+        for (var i = 0; i < historyList.length; i++) {
             historyList[i][1] + historyList[i][2] + historyList[i][3] > 10 ? taiCount++ : xiuCount++;
             display.push(historyList[i]);
         }
+
         this.top_tai.string = taiCount;
         this.top_xiu.string = xiuCount;
         var originX = this.contentTop.getContentSize().width / 40;
         var originY = this.contentTop.getContentSize().height / 12;
         var row = 0;
         var column = 0;
+        // var length = display.length;
         var check = display[0][1] + display[0][2] + display[0][3] > 10;
-        // path = check ? TXN_TAI_SO : TXN_XIU_SO;
-        // var firstSp = MSprite::create(path);
-        // firstSp->setPosition(Vec2(originX, 11 * originY));
-        // firstSp->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-        // secondResult->addChild(firstSp);
+
+        var nodeWidth = this.contentTop.getContentSize().width/2;
+        var nodeHeight = this.contentTop.getContentSize().height/2;
+
+        var item0 = cc.instantiate(this.taixiuSpritePrefab);
+        item0.getComponent('TaixiuSprite').init(display[0][1] + display[0][2] + display[0][3]);
+
+        item0.setPositionX(originX - nodeWidth);
+        item0.setPositionY(11 * originY - nodeHeight);
+        this.contentTop.addChild(item0);
 
         for (var i = 1; i < display.length; i++) {
-
-            check = display[i][1] + display[i][2] + display[i][3];
-
-            if (check > 10) {
+            var sum = display[i][1] + display[i][2] + display[i][3];
+            cc.log("sessId =", display[i][0]);
+            if (check == display[i][1] + display[i][2] + display[i][3] > 10) {
                 column++;
                 if (column > 5) {
                     column = column - 6;
@@ -150,19 +164,18 @@ cc.Class({
                 row++;
                 column = 0;
             }
-
             if (row < 20) {
-                var x = originX * (row * 2 + 1) - this.contentTop.getContentSize().width/2;
-                var y = originY * (11 - column * 2) - this.contentTop.getContentSize().height/2;
+                var x = parseInt(originX * (row * 2 + 1)) - nodeWidth;
+                var y = parseInt(originY * (11 - column * 2)) - nodeHeight;
 
                 var item = cc.instantiate(this.taixiuSpritePrefab);
-                item.getComponent('TaixiuSprite').init(check);
+                item.getComponent('TaixiuSprite').init(sum);
 
                 item.setPositionX(x);
                 item.setPositionY(y);
                 this.contentTop.addChild(item);
-            }
 
+            }
 
         }
 
@@ -190,8 +203,8 @@ cc.Class({
 
             var row = parseInt(i / 6);
             var column = parseInt(i % 6);
-            var x = originX * (row * 2 + 1) - this.contentBottom.getContentSize().width/2;
-            var y = originY * (11 - column * 2) - this.contentBottom.getContentSize().height /2;
+            var x = parseInt(originX * (row * 2 + 1)) - this.contentBottom.getContentSize().width/2;
+            var y = parseInt(originY * (11 - column * 2)) - this.contentBottom.getContentSize().height /2;
 
             item.setPositionX(x);
             item.setPositionY(y);

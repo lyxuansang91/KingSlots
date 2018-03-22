@@ -29,14 +29,15 @@ height: cc.director.getWinSize().height,
 origin: cc.director.getVisibleOrigin(),
 introScene: null,
 _existTaiXiu: !1,
-providerLists: [],
-smsConfigLists: [],
+providerLists: null,
+smsConfigLists: null,
+assetsConfigList: null,
 initLanguage: function() {
-var e = this, n = cc.url.raw("resources/vi2.json");
-cc.loader.load(n, function(n, t) {
-if (null === n) {
-var i = JSON.stringify(t);
-e.KEYTEXT = JSON.parse(i);
+var i = this, e = cc.url.raw("resources/vi2.json");
+cc.loader.load(e, function(e, n) {
+if (null === e) {
+var t = JSON.stringify(n);
+i.KEYTEXT = JSON.parse(t);
 }
 });
 },
@@ -91,10 +92,10 @@ for (var n = new Array(e), t = 0; t < e; t++) n[t] = [];
 return n;
 },
 updateMoney: function(e, n, t, i) {
-if (e instanceof cc.Label) if (t >= i) e.string = Common.numberFormatWithCommas(i); else {
+if (e instanceof cc.Label) if (i <= t) e.string = Common.numberFormatWithCommas(i); else {
 var o = Math.floor((i - n) / 30);
 setTimeout(function() {
-(t += o) >= i && (t = i);
+i <= (t += o) && (t = i);
 e.string = Common.numberFormatWithCommas(t);
 this.updateMoney(e, n, t, i);
 }.bind(this), 30);
@@ -138,12 +139,12 @@ cc.sys.localStorage.setItem("fingerprint", e);
 this.fingerprint = e;
 console.log("component:", n);
 }); else if (cc.sys.isNative) if (cc.sys.platform == cc.sys.ANDROID) {
-n = "xxxxx";
+var n = "xxxxx";
 console.log("result:", n);
 cc.sys.localStorage.setItem("fingerprint", n);
 this.fingerprint = n;
 } else if (cc.sys.platform == cc.sys.IPHONE || cc.sys.platform == cc.sys.IPAD) {
-var n = "xxxxx";
+n = "xxxxx";
 console.log("result:", n);
 cc.sys.localStorage.setItem("fingerprint", n);
 this.fingerprint = n;
@@ -297,7 +298,7 @@ setAvatarId: function(e) {
 this.avatarId = e;
 },
 getAvatarId: function() {
-return this.avatarId < 1e5 || this.avatarId > 100021 ? 1e5 : this.avatarId;
+return this.avatarId < 1e5 || 100021 < this.avatarId ? 1e5 : this.avatarId;
 },
 getPackageName: function() {
 if (!cc.sys.isNative) return "com.gamebai.tienlen";
@@ -386,6 +387,13 @@ return this.noticeText;
 numberFormatWithCommas: function(e) {
 return e.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 },
+convertIntToMoneyView: function(e) {
+for (var n = 0; 1e3 <= e; ) {
+e /= 1e3;
+n++;
+}
+return e + [ "", "K", "M", "B" ][n];
+},
 enterZone: [],
 setEnterZone: function(e) {
 this.enterZone = e;
@@ -416,37 +424,41 @@ timestampToDate: function(e) {
 var n = new Date(Number(e)), t = n.getDate(), i = n.getMonth() + 1, o = n.getFullYear();
 return n.getHours() + ":" + n.getMinutes() + " " + ((t <= 9 ? "0" + t : t) + "/" + (i <= 9 ? "0" + i : i) + "/" + o);
 },
+timeToDate: function(e) {
+var n = new Date(Number(e)), t = n.getDate(), i = n.getMonth() + 1;
+return (t <= 9 ? "0" + t : t) + "/" + (i <= 9 ? "0" + i : i) + "/" + n.getFullYear();
+},
 closePopup: function(e) {
 var n = cc.director.getScene();
 cc.isValid(n) && cc.isValid(n.getChildByName(e)) && n.getChildByName(e).destroy();
 },
-showPopup: function(e, n) {
-var t = cc.director.getScene();
-cc.isValid(t) && !cc.isValid(t.getChildByName(e)) && cc.loader.loadRes("prefabs/" + e, function(i, o) {
-if (i) cc.log("Lỗi load popup,thêm popup vào resources."); else {
-var r = cc.instantiate(o);
-if (cc.isValid(r)) {
-r.x = Common.width / 2;
-r.y = Common.height / 2;
-if (n) {
-var s = r.getComponent(e);
-s.setNamePopup(e);
-n(s);
-t.addChild(r, Config.index.POPUP);
+showPopup: function(o, r) {
+var s = cc.director.getScene();
+cc.isValid(s) && !cc.isValid(s.getChildByName(o)) && cc.loader.loadRes("prefabs/" + o, function(e, n) {
+if (e) cc.log("Lỗi load popup,thêm popup vào resources."); else {
+var t = cc.instantiate(n);
+if (cc.isValid(t)) {
+t.x = Common.width / 2;
+t.y = Common.height / 2;
+if (r) {
+var i = t.getComponent(o);
+i.setNamePopup(o);
+r(i);
+s.addChild(t, Config.index.POPUP);
 }
 }
 }
 });
 },
-countNumberAnim: function(e, n, t, i, o, r) {
+countNumberAnim: function(t, e, n, r, i, o) {
 for (var s = {
 useEasing: !0,
 useGrouping: !0,
 separator: ".",
 decimal: ","
-}, a = null, c = 0, u = null, f = [ "webkit", "moz", "ms", "o" ], l = 0; l < f.length && !window.requestAnimationFrame; ++l) {
-window.requestAnimationFrame = window[f[l] + "RequestAnimationFrame"];
-window.cancelAnimationFrame = window[f[l] + "CancelAnimationFrame"] || window[f[l] + "CancelRequestAnimationFrame"];
+}, a = null, c = 0, u = [ "webkit", "moz", "ms", "o" ], f = 0; f < u.length && !window.requestAnimationFrame; ++f) {
+window.requestAnimationFrame = window[u[f] + "RequestAnimationFrame"];
+window.cancelAnimationFrame = window[u[f] + "CancelAnimationFrame"] || window[u[f] + "CancelRequestAnimationFrame"];
 }
 window.requestAnimationFrame || (window.requestAnimationFrame = function(e, n) {
 var t = new Date().getTime(), i = Math.max(0, 16 - (t - c)), o = window.setTimeout(function() {
@@ -458,59 +470,58 @@ return o;
 window.cancelAnimationFrame || (window.cancelAnimationFrame = function(e) {
 clearTimeout(e);
 });
-var h = function(e) {
+var l = function(e) {
 a || (a = e);
 var n = (e = e) - a;
-T = s.useEasing ? y ? I - E(n, 0, I - p, o) : E(n, I, p - I, o) : y ? I - n / o * (I - p) : I + n / o * (p - I);
-T = y ? T < p ? p : T : T > p ? p : T;
-T = Math.round(T * N) / N;
-A(T);
-n < o && (u = requestAnimationFrame(h));
+p = s.useEasing ? I ? g - E(n, 0, g - d, i) : E(n, g, d - g, i) : I ? g - n / i * (g - d) : g + n / i * (d - g);
+p = I ? p < d ? d : p : d < p ? d : p;
+p = Math.round(p * y) / y;
+T(p);
+n < i && requestAnimationFrame(l);
 }, m = function(e) {
-e = e.toFixed(i);
-var n, t = (e += "").split(".");
-n = t[0];
-var o = t.length > 1 ? s.decimal + t[1] : "", r = /(\d+)(\d{3})/;
-if (s.useGrouping) for (;r.test(n); ) n = n.replace(r, "$1" + s.separator + "$2");
-return s.prefix + n + o + s.suffix;
-}, g = function(e) {
-for (var n = (e += "").split(","), t = n[0], i = n.length > 1 ? "," + n[1] : "", o = /(\d+)(\d{3})/; o.test(t); ) t = t.replace(o, "$1.$2");
+for (var n = (e += "").split(","), t = n[0], i = 1 < n.length ? "," + n[1] : "", o = /(\d+)(\d{3})/; o.test(t); ) t = t.replace(o, "$1.$2");
 return t + i;
 };
-for (var d in s) s.hasOwnProperty(d) && (s[d] = s[d]);
+for (var h in s) s.hasOwnProperty(h) && (s[h] = s[h]);
 "" === s.separator && (s.useGrouping = !1);
 s.prefix || (s.prefix = "");
 s.suffix || (s.suffix = "");
-var I = Number(n), p = Number(t), y = I > p, T = I, i = Math.max(0, i || 0), N = Math.pow(10, i), o = 1e3 * Number(o) || 2e3, A = function(n) {
-var t = isNaN(n) ? "0" : m(n);
-e.string = null != r && "" != r ? r + g(t) : g(t);
-}, E = function(e, n, t, i) {
+var g = Number(e), d = Number(n), I = d < g, p = g, y = (r = Math.max(0, r || 0), 
+Math.pow(10, r)), T = (i = 1e3 * Number(i) || 2e3, function(e) {
+var n = isNaN(e) ? "0" : function(e) {
+e = e.toFixed(r);
+var n, t = (e += "").split(".");
+n = t[0];
+var i = 1 < t.length ? s.decimal + t[1] : "", o = /(\d+)(\d{3})/;
+if (s.useGrouping) for (;o.test(n); ) n = n.replace(o, "$1" + s.separator + "$2");
+return s.prefix + n + i + s.suffix;
+}(e);
+t.string = null != o && "" != o ? o + m(n) : m(n);
+}), E = function(e, n, t, i) {
 return t * (1 - Math.pow(2, -10 * e / i)) * 1024 / 1023 + n;
 };
-!function() {
-u = requestAnimationFrame(h);
-}();
+void requestAnimationFrame(l);
 },
 convertAlias: function(e) {
 var n = e;
 return n = (n = (n = (n = (n = (n = (n = (n = (n = (n = (n = (n = (n = (n = (n = (n = (n = n.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a")).replace(/À|Á|Ạ|Ả|Ã|Â|Ầ|Ấ|Ậ|Ẩ|Ẫ|Ă|Ằ|Ắ|Ặ|Ẳ|Ẵ/g, "A")).replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e")).replace(/È|É|Ẹ|Ẻ|Ẽ|Ê|Ề|Ế|Ệ|Ể|Ễ/g, "E")).replace(/ì|í|ị|ỉ|ĩ/g, "i")).replace(/Ì|Í|Ị|Ỉ|Ĩ/g, "I")).replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o")).replace(/Ò|Ó|Ọ|Ỏ|Õ|Ô|Ồ|Ố|Ộ|Ổ|Ỗ|Ơ|Ờ|Ớ|Ợ|Ở|Ỡ/g, "Ơ")).replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u")).replace(/Ù|Ú|Ụ|Ủ|Ũ|Ư|Ừ|Ứ|Ự|Ử|Ữ/g, "U")).replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y")).replace(/Ỳ|Ý|Ỵ|Ỷ|Ỹ/g, "Y")).replace(/đ/g, "d")).replace(/Đ/g, "D")).replace(/!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\;|\'|\"|\&|\#|\[|\]|~|\$|`|-|{|}|\||\\/g, " ")).replace(/ + /g, " ")).trim();
 },
 wordWrap: function(e, n) {
-var t = !1, i = "";
+var t = "\n", i = !1, o = "";
 do {
-for (var o = !1, r = n - 1; r >= 0; r--) if (this.testWhite(e.charAt(r))) {
-i += [ e.slice(0, r), "\n" ].join("");
-e = e.slice(r + 1);
-o = !0;
+for (var r = !1, s = n - 1; 0 <= s; s--) if (this.testWhite(e.charAt(s))) {
+o += [ e.slice(0, s), t ].join("");
+e = e.slice(s + 1);
+r = !0;
 break;
 }
-if (!o) {
-i += [ e.slice(0, n), "\n" ].join("");
+if (!r) {
+o += [ e.slice(0, n), t ].join("");
 e = e.slice(n);
 }
-e.length < n && (t = !0);
-} while (!t);
-return i + e;
+e.length < n && (i = !0);
+} while (!i);
+return o + e;
 },
 testWhite: function(e) {
 return new RegExp(/^\s$/).test(e.charAt(0));
@@ -528,37 +539,37 @@ return "<color=" + this.rgbToHex(n.r, n.g, n.b) + ">" + e + "</color> ";
 getHeadHistory: function(e) {
 switch (this.getZoneId()) {
 case Config.TAG_GAME_ITEM.MINI_BACAY:
+case Config.TAG_GAME_ITEM.MINI_POKER:
+case Config.TAG_GAME_ITEM.TREASURE:
 return 1 === e ? [ "Thời gian", "Phiên", "Đặt", "Thắng", "Chi tiết" ] : [ "Thời gian", "Tên", "Đặt", "Thắng", "Chi tiết" ];
 
-case Config.TAG_GAME_ITEM.MINI_POKER:
-return n = [ "Thời gian", "Tên", "Đặt", "Thắng", "Chi tiết" ];
-
 case Config.TAG_GAME_ITEM.TAIXIU:
-var n = [ "Phiên", "Thời gian", "Đặt tài", "Đặt xỉu", "Hoàn tài", "Hoàn xỉu", "Kết quả", "Tiền thắng" ];
-return n;
+return 1 === e ? [ "Phiên", "Thời gian", "Đặt tài", "Đặt xỉu", "Hoàn tài", "Hoàn xỉu", "Kết quả", "Tiền thắng" ] : [ "Thời gian", "Tên", "Đặt tài", "Đặt xỉu", "Hoàn tài", "Hoàn xỉu", "Tiền thắng" ];
 }
 },
-showToast: function(e, n) {
-if ("" != e) {
-var t = void 0 !== n ? n : 2, i = cc.director.getScene();
-cc.isValid(i) && (cc.isValid(i.getChildByName("Toast")) ? i.getChildByName("Toast").getComponent("Toast").loadMessage(e, t) : cc.loader.loadRes("prefabs/Toast", function(n, o) {
-if (!n) {
-var r = cc.instantiate(o);
-if (cc.isValid(r)) {
-r.x = Common.width / 2;
-r.y = Common.height / 2;
-r.getComponent("Toast").loadMessage(e, t);
-i.addChild(r, Config.index.LOADING);
+showToast: function(i, e) {
+if ("" != i) {
+var o = void 0 !== e ? e : 2, r = cc.director.getScene();
+if (cc.isValid(r)) if (cc.isValid(r.getChildByName("Toast"))) {
+r.getChildByName("Toast").getComponent("Toast").loadMessage(i, o);
+} else cc.loader.loadRes("prefabs/Toast", function(e, n) {
+if (!e) {
+var t = cc.instantiate(n);
+if (cc.isValid(t)) {
+t.x = Common.width / 2;
+t.y = Common.height / 2;
+t.getComponent("Toast").loadMessage(i, o);
+r.addChild(t, Config.index.LOADING);
 }
 }
-}));
+});
 }
 },
 openRules: function() {
-var e = [ "Mini Poker", "Mini Ba Cây", "Tài xỉu", "Treasure" ];
-Common.showPopup(Config.name.POPUP_WEBVIEW, function(n) {
-n.addTabs(e, 1);
-n.appear();
+var n = [ "Mini Poker", "Mini Ba Cây", "Tài xỉu", "Treasure" ];
+Common.showPopup(Config.name.POPUP_WEBVIEW, function(e) {
+e.addTabs(n, 1);
+e.appear();
 });
 },
 new_phone: "",
@@ -567,5 +578,55 @@ return this.new_phone;
 },
 setNewPhone: function(e) {
 this.new_phone = e;
+},
+getPointName: function(e, n) {
+var t = "NAN,A,2,3,4,5,6,7,8,9,10,J,Q,K".split(",");
+n === Config.TAG_GAME_ITEM.MINI_POKER && (t = "NAN,2,3,4,5,6,7,8,9,10,J,Q,K,A".split(","));
+return t[e];
+},
+getSuitName: function(e, n) {
+var t = cc.Enum({
+Spade: 1,
+Heart: 3,
+Club: 2,
+Diamond: 0
+});
+n === Config.TAG_GAME_ITEM.MINI_POKER && (t = cc.Enum({
+Spade: 1,
+Heart: 0,
+Club: 2,
+Diamond: 3
+}));
+return t[e];
+},
+isBlackSuit: function(e, n) {
+var t = cc.Enum({
+Spade: 1,
+Heart: 3,
+Club: 2,
+Diamond: 0
+});
+n === Config.TAG_GAME_ITEM.MINI_POKER && (t = cc.Enum({
+Spade: 1,
+Heart: 0,
+Club: 2,
+Diamond: 3
+}));
+return e === t.Spade || e === t.Club;
+},
+isRedSuit: function(e, n) {
+var t = cc.Enum({
+Spade: 1,
+Heart: 3,
+Club: 2,
+Diamond: 0
+});
+n === Config.TAG_GAME_ITEM.MINI_POKER && (t = cc.Enum({
+Spade: 1,
+Heart: 0,
+Club: 2,
+Diamond: 3
+}));
+return e === t.Heart || e === t.Diamond;
 }
 };
