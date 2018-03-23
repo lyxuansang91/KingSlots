@@ -145,7 +145,11 @@ cc.Class({
                 var self = this;
                 var duration = parseInt(value/1000);
                 this.countDownTimer = duration;
+                this.timer.string = "";
                 this.timer.node.active = true;
+
+                // clear timeout
+                this.unscheduleAllCallbacks();
                 this.schedule(function () {
                     self.addCountDownTimer();
                 },1);
@@ -576,7 +580,10 @@ cc.Class({
 
             this.bat.node.active = true;
             this.countDownTimer = parseInt(resp.getCountdowntimer()/1000);
+            this.timer.string = "";
             this.timer.node.active = true;
+
+            this.unscheduleAllCallbacks();
             self.schedule(function () {
                 self.addCountDownTimer();
             },1);
