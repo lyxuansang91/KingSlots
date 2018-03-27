@@ -21,6 +21,9 @@ var PopupMail = cc.Class({
     },
     onLoad: function () {
         PopupMail.instance = this;
+        this.tableView.active = true;
+        this.nodeSendAdmin.active = false;
+        this.nodeMailContent.active = false;
     },
 
     start: function () {
