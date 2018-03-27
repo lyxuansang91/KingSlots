@@ -698,10 +698,6 @@ cc.Class({
         });
     },
 
-    openResultList: function() {
-        Common.showPopup(Config.name.POPUP_TAIXIU_RESULT_LIST, function(popup){});
-    },
-
     openSessionHistoryPopup: function () {
         var self = this;
         cc.log("crrSession =", this.currentSession);
@@ -717,6 +713,8 @@ cc.Class({
     },
 
     openStatis: function() {
-        Common.showPopup(Config.name.POPUP_TAIXIU_STATIS, function(popup){});
+        Common.showPopup(Config.name.POPUP_TAIXIU_STATIS, function(popup){
+            popup.appear();
+        });
     },
 });

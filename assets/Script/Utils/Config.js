@@ -54,7 +54,6 @@ var Config = {
         POPUP_MAIL : "PopupMail",
         POPUP_GIFT : "PopupGift",
         POPUP_TAIXIU_TOP : "PopupTaiXiuTop",
-        POPUP_TAIXIU_RESULT_LIST: "PopupTaiXiuResultList",
         POPUP_CHANGE_PASS : "PopupChangePass",
         POPUP_CHANGE_AVATAR : "PopupChangeAvatar",
         POPUP_CHANGE_INFO : "PopupChangeInfo",
