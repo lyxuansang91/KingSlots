@@ -19,7 +19,6 @@ cc.Class({
             var item = cc.instantiate(this.avatarPrefab);
             item.setTag(i + 100000);
             item.getComponent('AvatarItem').init(i, function(index){
-                cc.log("index =", index);
                 self.setAvatarId(index);
             });
 

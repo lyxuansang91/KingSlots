@@ -24,6 +24,8 @@ var Common = {
         EGG: 22,
         TREASURE: 23
     },
+    FACEBOOK_CHANNEL : 1,
+    GOOGLE_CHANNEL : 2,
     width : cc.director.getWinSize().width,
     height : cc.director.getWinSize().height,
     origin : cc.director.getVisibleOrigin(),
@@ -926,4 +928,43 @@ var Common = {
         }
         return suit === Suit.Heart || suit === Suit.Diamond;
     },
+    openIdConnectRequest: function(channel) {
+        switch (channel) {
+            case Common.FACEBOOK_CHANNEL:
+                this.loginFacebook();
+                break;
+            case Common.GOOGLE_CHANNEL:
+                this.loginGoogle();
+                break;
+            default:
+                break;
+        }
+    },
+    loginFacebook: function() {
+
+        if(cc.sys.platform === cc.sys.isNative) {
+            sdkbox.PluginFacebook.login();
+        }else if(cc.sys.isBrowser){
+            window.loginFb(["public_profile"], function(code, response){
+                if(code === 0){
+                    cc.log("login succeeded", response);
+                    var userID = response.userID;
+                    var accessToken = response.accessToken;
+                    console.log(userID,accessToken);
+
+                    if (accessToken !== null) {
+                        NetworkManager.getOpenIdLoginMessageFromServer(
+                            1, userID + ";" + accessToken, "", "");
+
+                    }else {
+                        this.loginFacebook();
+                    }
+
+                } else {
+                    cc.log("Login failed, error #" + code + ": " + response);
+                }
+            });
+        }
+
+    }
 };
