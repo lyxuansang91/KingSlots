@@ -49,8 +49,9 @@ cc.Class({
         for (var i = 0; i < this.content.children.length; i++){
             if(i !== index){
                 var item = this.content.children[i].getComponent('AvatarItem');
-                item.node.setLocalZOrder(1);
-                item.node.setScale(1,1);
+                item.visibleDark();
+                // item.node.setLocalZOrder(1);
+                // item.node.setScale(1,1);
             }
         }
         this.avatarId = 100000 + index;
