@@ -18,7 +18,7 @@ cc.Class({
         for (var i = 0; i < 22; ++i) {
             var item = cc.instantiate(this.avatarPrefab);
             item.setTag(i + 100000);
-            item.getComponent('AvatarItem').init(i, function(index){
+            item.getComponent('AvatarItem').init(i, Common.getAvatarId(), function(index){
                 self.setAvatarId(index);
             });
 
@@ -43,6 +43,16 @@ cc.Class({
     },
 
     setAvatarId: function (index) {
+        cc.log("index =", index);
+        this.content = this.scrollView.content;
+
+        for (var i = 0; i < this.content.children.length; i++){
+            if(i !== index){
+                var item = this.content.children[i].getComponent('AvatarItem');
+                item.node.setLocalZOrder(1);
+                item.node.setScale(1,1);
+            }
+        }
         this.avatarId = 100000 + index;
     },
 
