@@ -598,6 +598,16 @@ var Common = {
         }
     },
 
+    setPrefs: function (key,value) {
+        cc.log("key =", key);
+        cc.log("value =", value);
+        cc.sys.localStorage.setItem(key,value);
+    },
+
+    getPrefs: function (key) {
+        return cc.sys.localStorage.getItem(key);
+    },
+
     countNumberAnim: function(target, startValue, endValue, decimals, duration, chartoption) {
         var options = {
             useEasing: true,

@@ -415,6 +415,9 @@ var NetworkManager = {
             case NetworkManager.MESSAGE_ID.PAYMENT_STATUS:
                 msg = proto.BINPaymentStatusResponse.deserializeBinary(bytes);
                 break;
+            case NetworkManager.MESSAGE_ID.LOGOUT:
+                msg = proto.BINLogoutResponse.deserializeBinary(bytes);
+                break;
             default:
                 break;
         }
@@ -897,6 +900,17 @@ var NetworkManager = {
 
         return request;
 
+    },
+    getLogoutMessageFromServer: function(doLogout)
+    {
+        var request = this.initLogoutMessage(doLogout);
+        this.callNetwork(this.initData(request.serializeBinary(), Common.getOS(),
+            NetworkManager.MESSAGE_ID.LOGOUT, Common.getSessionId()));
+    },
+    initLogoutMessage: function(doLogout) {
+        var request = new proto.BINLogoutRequest();
+        request.setDologout(doLogout);
+        return request;
     },
     initInstantMessage: function(scope, instantMessage, receiverUsername, receiverUserId, textEmotionId) {
         if (scope > 0 && scope < 4) {

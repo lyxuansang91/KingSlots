@@ -41,6 +41,13 @@ var Config = {
         SMALL : 1,
         LARGE : 2
     },
+
+    prefKey: {
+        MUSIC : "music",
+        SOUND: "sound",
+        VIBARTE: "vibrate"
+    },
+
     name : {
         COMMON_POPUP : "CommonPopup",
         POPUP_MESSAGE_BOX : "PopupMessageBox",

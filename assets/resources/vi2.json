@@ -629,15 +629,19 @@
 "GAME_MASTER"              : "Game Master",
 "CAPTURE_IMG_SUCCESS"			  :	"Lưu ảnh thành công",
 "CAPTURE_IMG_FAIL"			  :	"Có sự cố, vui lòng thử lại",
-    "TXT_MARIO_LINE"              :    "Dòng",
-    "TXT_MARIO_TITLE_POPUP_SELECT_LINE"              :    "CHỌN DÒNG",
-    "TXT_MARIO_SELECT_LINE_CHAN"              :    "Dòng chẵn",
-    "TXT_MARIO_SELECT_LINE_LE"              :    "Dòng lẻ",
-    "TXT_MARIO_SELECT_LINE_ALL"              :    "Tất cả",
-    "TXT_MARIO_SELECT_LINE_CHONLAI"              :    "Chọn lại",
-    "TXT_YOU_NOT_CHOOSE_LINE"              :    "Bạn phải chọn dòng trước khi quay",
-    "LINE_SELECTED"              :    "Số Dòng Chọn",
-    "LINE_WIN"              :    "Số Dòng Thắng",
-    "TXT_DETAIL"              :    "Chi Tiết"
+"TXT_MARIO_LINE"              :    "Dòng",
+"TXT_MARIO_TITLE_POPUP_SELECT_LINE"              :    "CHỌN DÒNG",
+"TXT_MARIO_SELECT_LINE_CHAN"              :    "Dòng chẵn",
+"TXT_MARIO_SELECT_LINE_LE"              :    "Dòng lẻ",
+"TXT_MARIO_SELECT_LINE_ALL"              :    "Tất cả",
+"TXT_MARIO_SELECT_LINE_CHONLAI"              :    "Chọn lại",
+"TXT_YOU_NOT_CHOOSE_LINE"              :    "Bạn phải chọn dòng trước khi quay",
+"LINE_SELECTED"              :    "Số Dòng Chọn",
+"LINE_WIN"              :    "Số Dòng Thắng",
+"TXT_DETAIL"              :    "Chi Tiết",
+"BAT"				  :	"BẬT",
+"TAT"				  :	"TẮT"
 }
+
+
 
