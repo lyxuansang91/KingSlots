@@ -574,6 +574,38 @@ var Common = {
             scene.getChildByName(name_popup).destroy();
         }
     },
+    showPopupMessageBox: function() {
+        var scene = cc.director.getScene();
+        if(cc.isValid(scene)){
+            if(!cc.isValid(scene.getChildByName(Config.name.POPUP_MESSAGE_BOX))) {
+                cc.loader.loadRes("prefabs/" + Config.name.POPUP_MESSAGE_BOX, function (error, prefab) {
+                    if (!error) {
+                        var popup = cc.instantiate(prefab);
+                        if (cc.isValid(popup)) {
+                            popup.x = Common.width / 2;
+                            popup.y = Common.height / 2;
+
+                            var component = popup.getComponent(Config.name.POPUP_MESSAGE_BOX);
+                            component.setNamePopup(Config.name.POPUP_MESSAGE_BOX);
+                            scene.addChild(popup, Config.index.POPUP);
+                            this.message_box = component;
+                            message_box.init("Bạn bị đứt kết nối, bạn có muốn kết nối lại không?", Config.COMMON_POPUP_TYPE.MESSAGE_BOX.CONFIRM_TYPE, function() {
+                                cc.director.loadScene('IntroScene');
+                                Common.tryReconnect = false;
+                            });
+                            this.message_box.appear();
+
+                        }
+                    } else {
+                        cc.log("Lỗi load popup,thêm popup vào resources.");
+                    }
+                })
+            } else {
+                cc.log("đéo cần làm gì");
+
+            }
+        }
+    },
 
     showPopup: function (name_popup, cb) {
         var scene = cc.director.getScene();

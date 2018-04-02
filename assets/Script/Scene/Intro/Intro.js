@@ -21,6 +21,7 @@ cc.Class({
         cc.log('intro load');
         this._super();
         var self = this;
+
         cc.director.preloadScene('Login', function () {
             cc.log('Next scene preloaded');
             self.scheduleOnce(self.goGame, self.timeSchedule);

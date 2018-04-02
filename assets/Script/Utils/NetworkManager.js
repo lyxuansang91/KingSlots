@@ -235,11 +235,17 @@ var NetworkManager = {
     SERVER_DEBUG: "192.168.0.200",
     URL: "ws://" + "150.95.111.59" + ":1280" + "/megajackpot",
     sessionId: "",
+    tryReconnect: false,
     getSessionId: function() {
         return NetworkManager.sessionId;
     },
     checkEvent: function (checkMessage) {
         if(window.listMessage !== null && typeof(window.listMessage) !== 'undefined'  && window.listMessage.length > 0) {
+            if(window.listMessage.length > 7 && !this.tryReconnect) {
+                NetworkManager.showPopupReconnect();
+                this.tryReconnect = true;
+                return;
+            }
             var buffer = window.listMessage[0];
             var result = checkMessage(buffer);
             if(result) {
@@ -252,7 +258,6 @@ var NetworkManager = {
                     NetworkManager.isLagged = true;
                 }
                 if(Date.now() - NetworkManager.lagTime >= NetworkManager.MAX_KILL_MSG) {
-                    cc.log("kill message:", buffer.message_id);
                     window.listMessage.shift();
                     NetworkManager.hideLoading();
                     NetworkManager.isLagged = false;
@@ -414,9 +419,6 @@ var NetworkManager = {
                 break;
             case NetworkManager.MESSAGE_ID.PAYMENT_STATUS:
                 msg = proto.BINPaymentStatusResponse.deserializeBinary(bytes);
-                break;
-            case NetworkManager.MESSAGE_ID.LOGOUT:
-                msg = proto.BINLogoutResponse.deserializeBinary(bytes);
                 break;
             default:
                 break;
@@ -964,10 +966,6 @@ var NetworkManager = {
         if(event.data!==null || typeof(event.data) !== 'undefined') {
             var lstMessage = NetworkManager.parseFrom(event.data, event.data.byteLength);
             for(var i = 0; i < lstMessage.length; i++) {
-                cc.log(" message id:", lstMessage[i].message_id);
-                if(lstMessage[i].message_id === 1202) {
-                    cc.log("done");
-                }
                 window.listMessage.push(lstMessage[i]);
             }
         }
@@ -997,7 +995,6 @@ var NetworkManager = {
          else {
             if(window.ws.readyState === WebSocket.OPEN) {
                 //== show loading
-                cc.log("is loading:", isLoading);
                 if(typeof mid !== 'undefined' && mid !== NetworkManager.MESSAGE_ID.INITIALIZE &&
                     mid !== NetworkManager.MESSAGE_ID.PING && mid !== NetworkManager.MESSAGE_ID.JAR
                     && mid !== NetworkManager.MESSAGE_ID.CHANGE_HOST && mid !== NetworkManager.MESSAGE_ID.TURN
@@ -1014,6 +1011,11 @@ var NetworkManager = {
                 window.ws.send(ackBuf);
             }
         }
+    },
+
+    showPopupReconnect: function() {
+        NetworkManager.closeConnection();
+        Common.showPopupMessageBox();
     },
 
     showLoading: function (){
