@@ -933,28 +933,35 @@ var NetworkManager = {
     },
     connectNetwork: function() {
         if(window.ws === null || typeof(window.ws) === 'undefined' || window.ws.readyState === WebSocket.CLOSED) {
-            window.ws = new WebSocket(NetworkManager.URL);
-            window.listMessage = [];
-            window.ws.binaryType = "arraybuffer";
+            try {
+                window.ws = new WebSocket(NetworkManager.URL);
+                window.listMessage = [];
+                window.ws.binaryType = "arraybuffer";
 
-            window.ws.onopen = function (event) {
-                console.log("on web socket");
-                // NetworkManager.requestInitializeMessage("24", "15","xxxxx","xxxxx", "vn", "vi", "com.gamebai.tienlen", false, "");
-                NetworkManager.requestInitializeMessage(Common.getCp(), Common.getVersionCode(), Common.getFingerprint(),
-                    Common.getDeviceInfo(), "vn", "vi", Common.getPackageName(), false, "");
-                setTimeout(function() {
-                    window.myInterval = setInterval(function() {
-                        NetworkManager.requestPingMessage(0);
-                    }, 15000);
-                }, 1);
+                window.ws.onopen = function (event) {
+                    console.log("on web socket");
+                    // NetworkManager.requestInitializeMessage("24", "15","xxxxx","xxxxx", "vn", "vi", "com.gamebai.tienlen", false, "");
+                    NetworkManager.requestInitializeMessage(Common.getCp(), Common.getVersionCode(), Common.getFingerprint(),
+                        Common.getDeviceInfo(), "vn", "vi", Common.getPackageName(), false, "");
+                    setTimeout(function() {
+                        window.myInterval = setInterval(function() {
+                            NetworkManager.requestPingMessage(0);
+                        }, 15000);
+                    }, 1);
 
-            };
-            window.ws.onclose = function () {
-                console.log("Websocket instance was closed");
-                clearInterval(window.myInterval);
-            };
+                };
+                window.ws.onclose = function () {
+                    console.log("Websocket instance was closed");
+                    clearInterval(window.myInterval);
+                    NetworkManager.showPopupReconnect();
+                };
 
-            window.ws.onmessage = this.onGameStatus.bind(this);
+                window.ws.onmessage = this.onGameStatus.bind(this);
+            } catch(err) {
+                cc.log("err:", err);
+                NetworkManager.showPopupReconnect();
+            }
+
         }
     },
     closeConnection: function() {
@@ -978,19 +985,24 @@ var NetworkManager = {
 
         if(window.ws === null || typeof(window.ws) === 'undefined' || window.ws.readyState === WebSocket.CLOSED) {
 
-            window.ws = new WebSocket(NetworkManager.URL);
-            window.listMessage = [];
-            window.ws.binaryType = "arraybuffer";
+            try {
+                window.ws = new WebSocket(NetworkManager.URL);
+                window.listMessage = [];
+                window.ws.binaryType = "arraybuffer";
 
-            window.ws.onopen = function () {
-                cc.log("on web socket");
-                setTimeout(function(){
-                    window.ws.send(ackBuf);
-                }, 0.5);
-            };
-            window.ws.onclose = function () {
-                console.log("Websocket instance was closed");
-            };
+                window.ws.onopen = function () {
+                    cc.log("on web socket");
+                    setTimeout(function(){
+                        window.ws.send(ackBuf);
+                    }, 0.5);
+                };
+                window.ws.onclose = function () {
+                    console.log("Websocket instance was closed");
+                };
+            } catch(err) {
+                cc.log("err:", err);
+                NetworkManager.showPopupReconnect();
+            }
         }
          else {
             if(window.ws.readyState === WebSocket.OPEN) {
@@ -1008,7 +1020,10 @@ var NetworkManager = {
 
                     self.showLoading();
                 }
-                window.ws.send(ackBuf);
+                window.ws.send(ackBuf, function(err) {
+                    cc.log("send message err:", err);
+                    NetworkManager.showPopupReconnect();
+                });
             }
         }
     },
