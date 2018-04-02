@@ -2,7 +2,7 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        list_frame: [cc.SpriteFrame]
+        list_frame: [cc.SpriteFrame],
     },
 
     init: function (index) {

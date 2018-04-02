@@ -233,7 +233,7 @@ var NetworkManager = {
     MAX_KILL_MSG: 10000,
     SERVER_TEST: "139.162.63.66",
     SERVER_DEBUG: "192.168.0.200",
-    URL: "ws://" + "139.162.63.66" + ":1280" + "/megajackpot",
+    URL: "ws://" + "150.95.111.59" + ":1280" + "/megajackpot",
     sessionId: "",
     getSessionId: function() {
         return NetworkManager.sessionId;
@@ -414,6 +414,9 @@ var NetworkManager = {
                 break;
             case NetworkManager.MESSAGE_ID.PAYMENT_STATUS:
                 msg = proto.BINPaymentStatusResponse.deserializeBinary(bytes);
+                break;
+            case NetworkManager.MESSAGE_ID.LOGOUT:
+                msg = proto.BINLogoutResponse.deserializeBinary(bytes);
                 break;
             default:
                 break;
@@ -898,6 +901,17 @@ var NetworkManager = {
         return request;
 
     },
+    getLogoutMessageFromServer: function(doLogout)
+    {
+        var request = this.initLogoutMessage(doLogout);
+        this.callNetwork(this.initData(request.serializeBinary(), Common.getOS(),
+            NetworkManager.MESSAGE_ID.LOGOUT, Common.getSessionId()));
+    },
+    initLogoutMessage: function(doLogout) {
+        var request = new proto.BINLogoutRequest();
+        request.setDologout(doLogout);
+        return request;
+    },
     initInstantMessage: function(scope, instantMessage, receiverUsername, receiverUserId, textEmotionId) {
         if (scope > 0 && scope < 4) {
             var request = new proto.BINInstantMessageRequest();
@@ -989,7 +1003,8 @@ var NetworkManager = {
                     && mid !== NetworkManager.MESSAGE_ID.CHANGE_HOST && mid !== NetworkManager.MESSAGE_ID.TURN
                     && mid !== NetworkManager.MESSAGE_ID.INSTANT_MESSAGE && mid !== NetworkManager.MESSAGE_ID.CARD_CONFIG
                     && mid !== NetworkManager.MESSAGE_ID.LOOK_UP_MONEY_HISTORY && mid !== NetworkManager.MESSAGE_ID.SMS_CONFIG
-                    && mid !== NetworkManager.MESSAGE_ID.ASSET_CONFIG && mid !== NetworkManager.MESSAGE_ID.ENTER_ZONE && mid && mid !== NetworkManager.MESSAGE_ID.ENTER_ROOM
+                    && mid !== NetworkManager.MESSAGE_ID.ASSET_CONFIG && mid !== NetworkManager.MESSAGE_ID.ENTER_ROOM
+                    && mid !== NetworkManager.MESSAGE_ID.ENTER_ZONE
                     && mid !== NetworkManager.MESSAGE_ID.FILTER_FRIEND && mid !== NetworkManager.MESSAGE_ID.BET
                     && mid !== NetworkManager.MESSAGE_ID.EXTRA_BET && mid !== NetworkManager.MESSAGE_ID.ZONE_STATUS
                     && mid !== NetworkManager.MESSAGE_ID.FILTER_ROOM && mid !== NetworkManager.MESSAGE_ID.LOOK_UP_GAME_HISTORY ){

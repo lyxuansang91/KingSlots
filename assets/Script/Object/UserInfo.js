@@ -72,6 +72,10 @@ cc.Class({
         Common.showPopup(Config.name.POPUP_CHANGE_INFO,function(popup) {
             popup.appear();
         });
+    },
+
+    connectFacebook: function () {
+        Common.openIdConnectRequest(Common.FACEBOOK_CHANNEL);
     }
 
 });

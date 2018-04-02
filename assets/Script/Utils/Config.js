@@ -41,6 +41,13 @@ var Config = {
         SMALL : 1,
         LARGE : 2
     },
+
+    prefKey: {
+        MUSIC : "music",
+        SOUND: "sound",
+        VIBARTE: "vibrate"
+    },
+
     name : {
         COMMON_POPUP : "CommonPopup",
         POPUP_MESSAGE_BOX : "PopupMessageBox",
@@ -54,7 +61,6 @@ var Config = {
         POPUP_MAIL : "PopupMail",
         POPUP_GIFT : "PopupGift",
         POPUP_TAIXIU_TOP : "PopupTaiXiuTop",
-        POPUP_TAIXIU_RESULT_LIST: "PopupTaiXiuResultList",
         POPUP_CHANGE_PASS : "PopupChangePass",
         POPUP_CHANGE_AVATAR : "PopupChangeAvatar",
         POPUP_CHANGE_INFO : "PopupChangeInfo",

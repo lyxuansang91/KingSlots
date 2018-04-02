@@ -49,8 +49,13 @@ cc.Class({
     logOutMessageResponseHandler: function(resp) {
         cc.log("log out message:", resp.toObject());
         if(resp.getResponsecode()) {
-            cc.director.loadScene('Intro');
+            Common.setSessionId("-1");
+            NetworkManager.closeConnection();
+            cc.director.loadScene('IntroScene');
+        } else {
+            Common.showToast(resp.getMessage());
         }
+
     },
     initialMessageResponseHandler: function(initialMessage) {
         cc.log("initialMessage", initialMessage);

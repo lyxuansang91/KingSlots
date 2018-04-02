@@ -113,7 +113,6 @@
     </div>
   </div>
 </div>
-<img id=imageid src=https://www.google.de/images/srpr/logo11w.png>
 <script src="src/settings.js" charset="utf-8"></script>
 
 <script src="main.js" charset="utf-8"></script>
@@ -126,7 +125,9 @@
               appId      : '725733317632381',//'725733317632381', // FB App ID
               cookie     : true,  // enable cookies to allow the server to access the session
               xfbml      : true,  // parse social plugins on this page
-              version    : 'v2.11' // use graph api version 2.8
+              version    : 'v2.11', // use graph api version 2.8
+              oauth      : true,
+              status     : true,
           });
       };
       // Load the JavaScript SDK asynchronously
