@@ -589,7 +589,7 @@ var Common = {
                             component.setNamePopup(Config.name.POPUP_MESSAGE_BOX);
                             scene.addChild(popup, Config.index.POPUP);
                             this.message_box = component;
-                            message_box.init("Bạn bị đứt kết nối, bạn có muốn kết nối lại không?", Config.COMMON_POPUP_TYPE.MESSAGE_BOX.CONFIRM_TYPE, function() {
+                            this.message_box.init("Bạn bị đứt kết nối, bạn có muốn kết nối lại không?", Config.COMMON_POPUP_TYPE.MESSAGE_BOX.CONFIRM_TYPE, function() {
                                 cc.director.loadScene('IntroScene');
                                 Common.tryReconnect = false;
                             });
@@ -601,8 +601,7 @@ var Common = {
                     }
                 })
             } else {
-                cc.log("đéo cần làm gì");
-
+                this.message_box.appear();
             }
         }
     },

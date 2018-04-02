@@ -951,9 +951,10 @@ var NetworkManager = {
 
                 };
                 window.ws.onclose = function () {
+                    NetworkManager.showPopupReconnect();
                     console.log("Websocket instance was closed");
                     clearInterval(window.myInterval);
-                    NetworkManager.showPopupReconnect();
+
                 };
 
                 window.ws.onmessage = this.onGameStatus.bind(this);
