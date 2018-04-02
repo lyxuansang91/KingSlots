@@ -383,7 +383,7 @@ var Common = {
         this.displayName = displayName;
     },
     getDisplayName: function() {
-        if (this.displayName.empty()){
+        if (this.displayName === ""){
             return getUserName();
         }
         return this.displayName;
