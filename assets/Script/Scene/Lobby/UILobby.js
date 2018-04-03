@@ -74,7 +74,7 @@ cc.Class({
 
     },
     setUserInfo: function() {
-        this.userName.string = Common.getUserName();
+        this.userName.string = Common.getDisplayName();
         this.userGold.string = Common.numberFormatWithCommas(Common.getCash());
         this.userId.string = Common.getUserId();
 
