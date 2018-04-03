@@ -577,16 +577,16 @@ var Common = {
     showPopupMessageBox: function() {
         var scene = cc.director.getScene();
         if(cc.isValid(scene)){
-            if(!cc.isValid(scene.getChildByName(Config.name.POPUP_MESSAGE_BOX))) {
-                cc.loader.loadRes("prefabs/" + Config.name.POPUP_MESSAGE_BOX, function (error, prefab) {
+            if(!cc.isValid(scene.getChildByName(Config.name.POPUP_MESSAGE_RECONNECT))) {
+                cc.loader.loadRes("prefabs/" + Config.name.POPUP_MESSAGE_RECONNECT, function (error, prefab) {
                     if (!error) {
                         var popup = cc.instantiate(prefab);
-                        if (cc.isValid(popup)) {
+                        if (cc.isValid(popup) && cc.isValid(scene)) {
                             popup.x = Common.width / 2;
                             popup.y = Common.height / 2;
-
-                            var component = popup.getComponent(Config.name.POPUP_MESSAGE_BOX);
-                            component.setNamePopup(Config.name.POPUP_MESSAGE_BOX);
+                            var namePopup = Config.name.POPUP_MESSAGE_RECONNECT.toString();
+                            var component = popup.getComponent(namePopup);
+                            component.setNamePopup(Config.name.POPUP_MESSAGE_RECONNECT);
                             scene.addChild(popup, Config.index.POPUP);
                             this.message_box = component;
                             this.message_box.init("Bạn bị đứt kết nối, bạn có muốn kết nối lại không?", Config.COMMON_POPUP_TYPE.MESSAGE_BOX.CONFIRM_TYPE, function() {
@@ -611,15 +611,15 @@ var Common = {
         if(cc.isValid(scene) && !cc.isValid(scene.getChildByName(name_popup))){
             cc.loader.loadRes("prefabs/" + name_popup,function(error, prefab) {
                 if(!error){
-                    var popup = cc.instantiate(prefab);
-                    if(cc.isValid(popup)){
-                        popup.x = Common.width / 2;
-                        popup.y = Common.height / 2;
+                    var popupSet = cc.instantiate(prefab);
+                    if(cc.isValid(popupSet) && cc.isValid(scene)){
+                        popupSet.x = Common.width / 2;
+                        popupSet.y = Common.height / 2;
                         if(cb) {
-                            var component = popup.getComponent(name_popup);
-                            component.setNamePopup(name_popup);
-                            cb(component);
-                            scene.addChild(popup,Config.index.POPUP);
+                            var compSet = popupSet.getComponent(name_popup);
+                            compSet.setNamePopup(name_popup);
+                            cb(compSet);
+                            scene.addChild(popupSet,Config.index.POPUP);
                         }
                     }
                 }else{
