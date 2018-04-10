@@ -1009,6 +1009,7 @@ var NetworkManager = {
 
                     self.showLoading();
                 }
+
                 cc.log("send request");
                 window.ws.send(ackBuf);
             }
@@ -1016,6 +1017,7 @@ var NetworkManager = {
     },
 
     showPopupReconnect: function() {
+        cc.log("showPopupReconnect");
         NetworkManager.closeConnection();
         Common.showPopupMessageBox();
     },
