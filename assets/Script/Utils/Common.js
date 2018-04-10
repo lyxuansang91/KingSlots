@@ -210,20 +210,17 @@ var Common = {
                     this.fingerprint = result;
                     console.log("component:", components); // an array of FP components
                 });
-            } else if(cc.sys.isNative) {
-                if(cc.sys.platform == cc.sys.ANDROID){
-                    var deviceId = "xxxxx";//jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getDeviceId", "()Ljava/lang/String;");
+            } else
+                if(cc.sys.platform === cc.sys.ANDROID){
+                    var deviceId = jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getDeviceId", "()Ljava/lang/String;");
                     console.log("result:", deviceId); //a hash, representing your device fingerprint
                     cc.sys.localStorage.setItem("fingerprint", deviceId);
                     this.fingerprint = deviceId;
-                }else if(cc.sys.platform == cc.sys.IPHONE || cc.sys.platform == cc.sys.IPAD){
+                }else if(cc.sys.platform === cc.sys.IPHONE || cc.sys.platform === cc.sys.IPAD){
                     var deviceId = "xxxxx";//jsb.reflection.callStaticMethod("NativeUtility", "getDeviceID");
-                    console.log("result:", deviceId); //a hash, representing your device fingerprint
                     cc.sys.localStorage.setItem("fingerprint", deviceId);
                     this.fingerprint = deviceId;
                 }
-
-            }
         } else {
             this.fingerprint = fp;
         }
@@ -239,9 +236,9 @@ var Common = {
 
     getDeviceInfo: function() {
         if(cc.sys.isNative) {
-            if(cc.sys.platform == cc.sys.ANDROID){
+            if(cc.sys.platform === cc.sys.ANDROID){
                 return "xxxxx";//jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getDeviceInfo", "()Ljava/lang/String;");
-            }else if(cc.sys.platform == cc.sys.IPHONE || cc.sys.platform == cc.sys.IPAD){
+            }else if(cc.sys.platform === cc.sys.IPHONE || cc.sys.platform === cc.sys.IPAD){
                 return jsb.reflection.callStaticMethod("NativeUtility", "getDeviceID");
             }
 
@@ -928,7 +925,6 @@ var Common = {
                 Club: 2,
                 Diamond: 3,
             });
-
         }
 
         return Suit[suit];
@@ -982,7 +978,6 @@ var Common = {
         }
     },
     loginFacebook: function() {
-
         if(cc.sys.platform === cc.sys.isNative) {
             sdkbox.PluginFacebook.login();
         }else if(cc.sys.isBrowser){
