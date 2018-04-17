@@ -1,6 +1,8 @@
 /**
  * @fileoverview
  * @enhanceable
+ * @suppress {messageConventions} JS Compiler reports an error if a variable or
+ *     field starts with 'MSG_' and isn't a translatable message.
  * @public
  */
 // GENERATED CODE -- DO NOT EDIT!
@@ -13,6 +15,8 @@ goog.exportSymbol('proto.BINLevel', null, global);
 goog.exportSymbol('proto.BINLevelUpResponse', null, global);
 goog.exportSymbol('proto.BINMedal', null, global);
 goog.exportSymbol('proto.BINMedalUpResponse', null, global);
+goog.exportSymbol('proto.BINVipDetailRequest', null, global);
+goog.exportSymbol('proto.BINVipDetailResponse', null, global);
 goog.exportSymbol('proto.BINVipLevel', null, global);
 
 /**
@@ -57,6 +61,7 @@ proto.BINLevel.prototype.toObject = function(opt_includeInstance) {
  *     http://goto/soy-param-migration
  * @param {!proto.BINLevel} msg The msg instance to transform.
  * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.BINLevel.toObject = function(includeInstance, msg) {
   var f, obj = {
@@ -131,63 +136,54 @@ proto.BINLevel.deserializeBinaryFromReader = function(msg, reader) {
 
 
 /**
- * Class method variant: serializes the given message to binary data
- * (in protobuf wire format), writing to the given BinaryWriter.
- * @param {!proto.BINLevel} message
- * @param {!jspb.BinaryWriter} writer
- */
-proto.BINLevel.serializeBinaryToWriter = function(message, writer) {
-  message.serializeBinaryToWriter(writer);
-};
-
-
-/**
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
 proto.BINLevel.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  this.serializeBinaryToWriter(writer);
+  proto.BINLevel.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
 
 /**
- * Serializes the message to binary data (in protobuf wire format),
- * writing to the given BinaryWriter.
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.BINLevel} message
  * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.BINLevel.prototype.serializeBinaryToWriter = function (writer) {
+proto.BINLevel.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = /** @type {number} */ (jspb.Message.getField(this, 1));
+  f = /** @type {number} */ (jspb.Message.getField(message, 1));
   if (f != null) {
     writer.writeInt32(
       1,
       f
     );
   }
-  f = /** @type {string} */ (jspb.Message.getField(this, 2));
+  f = /** @type {string} */ (jspb.Message.getField(message, 2));
   if (f != null) {
     writer.writeString(
       2,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 3));
+  f = /** @type {number} */ (jspb.Message.getField(message, 3));
   if (f != null) {
     writer.writeInt64(
       3,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 4));
+  f = /** @type {number} */ (jspb.Message.getField(message, 4));
   if (f != null) {
     writer.writeInt64(
       4,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 5));
+  f = /** @type {number} */ (jspb.Message.getField(message, 5));
   if (f != null) {
     writer.writeInt64(
       5,
@@ -385,6 +381,7 @@ proto.BINMedal.prototype.toObject = function(opt_includeInstance) {
  *     http://goto/soy-param-migration
  * @param {!proto.BINMedal} msg The msg instance to transform.
  * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.BINMedal.toObject = function(includeInstance, msg) {
   var f, obj = {
@@ -449,49 +446,40 @@ proto.BINMedal.deserializeBinaryFromReader = function(msg, reader) {
 
 
 /**
- * Class method variant: serializes the given message to binary data
- * (in protobuf wire format), writing to the given BinaryWriter.
- * @param {!proto.BINMedal} message
- * @param {!jspb.BinaryWriter} writer
- */
-proto.BINMedal.serializeBinaryToWriter = function(message, writer) {
-  message.serializeBinaryToWriter(writer);
-};
-
-
-/**
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
 proto.BINMedal.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  this.serializeBinaryToWriter(writer);
+  proto.BINMedal.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
 
 /**
- * Serializes the message to binary data (in protobuf wire format),
- * writing to the given BinaryWriter.
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.BINMedal} message
  * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.BINMedal.prototype.serializeBinaryToWriter = function (writer) {
+proto.BINMedal.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = /** @type {number} */ (jspb.Message.getField(this, 1));
+  f = /** @type {number} */ (jspb.Message.getField(message, 1));
   if (f != null) {
     writer.writeInt32(
       1,
       f
     );
   }
-  f = /** @type {string} */ (jspb.Message.getField(this, 2));
+  f = /** @type {string} */ (jspb.Message.getField(message, 2));
   if (f != null) {
     writer.writeString(
       2,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 3));
+  f = /** @type {number} */ (jspb.Message.getField(message, 3));
   if (f != null) {
     writer.writeInt32(
       3,
@@ -631,6 +619,7 @@ proto.BINVipLevel.prototype.toObject = function(opt_includeInstance) {
  *     http://goto/soy-param-migration
  * @param {!proto.BINVipLevel} msg The msg instance to transform.
  * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.BINVipLevel.toObject = function(includeInstance, msg) {
   var f, obj = {
@@ -642,7 +631,11 @@ proto.BINVipLevel.toObject = function(includeInstance, msg) {
     maxturntopup: jspb.Message.getField(msg, 6),
     minbalanceaftertopup: jspb.Message.getField(msg, 7),
     cashtransfertax: jspb.Message.getField(msg, 8),
-    cashreceived: jspb.Message.getField(msg, 9)
+    cashreceived: jspb.Message.getField(msg, 9),
+    colorcode: jspb.Message.getField(msg, 10),
+    cashlevelupbonus: jspb.Message.getField(msg, 11),
+    questrewardbonus: jspb.Message.getField(msg, 12),
+    vqmmdailybonus: jspb.Message.getField(msg, 13)
   };
 
   if (includeInstance) {
@@ -715,6 +708,22 @@ proto.BINVipLevel.deserializeBinaryFromReader = function(msg, reader) {
       var value = /** @type {number} */ (reader.readInt32());
       msg.setCashreceived(value);
       break;
+    case 10:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setColorcode(value);
+      break;
+    case 11:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setCashlevelupbonus(value);
+      break;
+    case 12:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setQuestrewardbonus(value);
+      break;
+    case 13:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setVqmmdailybonus(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -725,94 +734,113 @@ proto.BINVipLevel.deserializeBinaryFromReader = function(msg, reader) {
 
 
 /**
- * Class method variant: serializes the given message to binary data
- * (in protobuf wire format), writing to the given BinaryWriter.
- * @param {!proto.BINVipLevel} message
- * @param {!jspb.BinaryWriter} writer
- */
-proto.BINVipLevel.serializeBinaryToWriter = function(message, writer) {
-  message.serializeBinaryToWriter(writer);
-};
-
-
-/**
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
 proto.BINVipLevel.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  this.serializeBinaryToWriter(writer);
+  proto.BINVipLevel.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
 
 /**
- * Serializes the message to binary data (in protobuf wire format),
- * writing to the given BinaryWriter.
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.BINVipLevel} message
  * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.BINVipLevel.prototype.serializeBinaryToWriter = function (writer) {
+proto.BINVipLevel.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = /** @type {number} */ (jspb.Message.getField(this, 1));
+  f = /** @type {number} */ (jspb.Message.getField(message, 1));
   if (f != null) {
     writer.writeInt32(
       1,
       f
     );
   }
-  f = /** @type {string} */ (jspb.Message.getField(this, 2));
+  f = /** @type {string} */ (jspb.Message.getField(message, 2));
   if (f != null) {
     writer.writeString(
       2,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 3));
+  f = /** @type {number} */ (jspb.Message.getField(message, 3));
   if (f != null) {
     writer.writeInt64(
       3,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 4));
+  f = /** @type {number} */ (jspb.Message.getField(message, 4));
   if (f != null) {
     writer.writeInt64(
       4,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 5));
+  f = /** @type {number} */ (jspb.Message.getField(message, 5));
   if (f != null) {
     writer.writeInt32(
       5,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 6));
+  f = /** @type {number} */ (jspb.Message.getField(message, 6));
   if (f != null) {
     writer.writeInt32(
       6,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 7));
+  f = /** @type {number} */ (jspb.Message.getField(message, 7));
   if (f != null) {
     writer.writeInt32(
       7,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 8));
+  f = /** @type {number} */ (jspb.Message.getField(message, 8));
   if (f != null) {
     writer.writeInt32(
       8,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 9));
+  f = /** @type {number} */ (jspb.Message.getField(message, 9));
   if (f != null) {
     writer.writeInt32(
       9,
+      f
+    );
+  }
+  f = /** @type {string} */ (jspb.Message.getField(message, 10));
+  if (f != null) {
+    writer.writeString(
+      10,
+      f
+    );
+  }
+  f = /** @type {number} */ (jspb.Message.getField(message, 11));
+  if (f != null) {
+    writer.writeInt32(
+      11,
+      f
+    );
+  }
+  f = /** @type {number} */ (jspb.Message.getField(message, 12));
+  if (f != null) {
+    writer.writeInt32(
+      12,
+      f
+    );
+  }
+  f = /** @type {number} */ (jspb.Message.getField(message, 13));
+  if (f != null) {
+    writer.writeInt32(
+      13,
       f
     );
   }
@@ -1080,6 +1108,122 @@ proto.BINVipLevel.prototype.hasCashreceived = function() {
 };
 
 
+/**
+ * optional string colorCode = 10;
+ * @return {string}
+ */
+proto.BINVipLevel.prototype.getColorcode = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 10, ""));
+};
+
+
+/** @param {string} value */
+proto.BINVipLevel.prototype.setColorcode = function(value) {
+  jspb.Message.setField(this, 10, value);
+};
+
+
+proto.BINVipLevel.prototype.clearColorcode = function() {
+  jspb.Message.setField(this, 10, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINVipLevel.prototype.hasColorcode = function() {
+  return jspb.Message.getField(this, 10) != null;
+};
+
+
+/**
+ * optional int32 cashLevelUpBonus = 11;
+ * @return {number}
+ */
+proto.BINVipLevel.prototype.getCashlevelupbonus = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 11, 0));
+};
+
+
+/** @param {number} value */
+proto.BINVipLevel.prototype.setCashlevelupbonus = function(value) {
+  jspb.Message.setField(this, 11, value);
+};
+
+
+proto.BINVipLevel.prototype.clearCashlevelupbonus = function() {
+  jspb.Message.setField(this, 11, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINVipLevel.prototype.hasCashlevelupbonus = function() {
+  return jspb.Message.getField(this, 11) != null;
+};
+
+
+/**
+ * optional int32 questRewardBonus = 12;
+ * @return {number}
+ */
+proto.BINVipLevel.prototype.getQuestrewardbonus = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 12, 0));
+};
+
+
+/** @param {number} value */
+proto.BINVipLevel.prototype.setQuestrewardbonus = function(value) {
+  jspb.Message.setField(this, 12, value);
+};
+
+
+proto.BINVipLevel.prototype.clearQuestrewardbonus = function() {
+  jspb.Message.setField(this, 12, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINVipLevel.prototype.hasQuestrewardbonus = function() {
+  return jspb.Message.getField(this, 12) != null;
+};
+
+
+/**
+ * optional int32 vqmmDailyBonus = 13;
+ * @return {number}
+ */
+proto.BINVipLevel.prototype.getVqmmdailybonus = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 13, 0));
+};
+
+
+/** @param {number} value */
+proto.BINVipLevel.prototype.setVqmmdailybonus = function(value) {
+  jspb.Message.setField(this, 13, value);
+};
+
+
+proto.BINVipLevel.prototype.clearVqmmdailybonus = function() {
+  jspb.Message.setField(this, 13, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINVipLevel.prototype.hasVqmmdailybonus = function() {
+  return jspb.Message.getField(this, 13) != null;
+};
+
+
 
 /**
  * Generated by JsPbCodeGenerator.
@@ -1123,6 +1267,7 @@ proto.BINLevelUpResponse.prototype.toObject = function(opt_includeInstance) {
  *     http://goto/soy-param-migration
  * @param {!proto.BINLevelUpResponse} msg The msg instance to transform.
  * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.BINLevelUpResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
@@ -1198,63 +1343,54 @@ proto.BINLevelUpResponse.deserializeBinaryFromReader = function(msg, reader) {
 
 
 /**
- * Class method variant: serializes the given message to binary data
- * (in protobuf wire format), writing to the given BinaryWriter.
- * @param {!proto.BINLevelUpResponse} message
- * @param {!jspb.BinaryWriter} writer
- */
-proto.BINLevelUpResponse.serializeBinaryToWriter = function(message, writer) {
-  message.serializeBinaryToWriter(writer);
-};
-
-
-/**
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
 proto.BINLevelUpResponse.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  this.serializeBinaryToWriter(writer);
+  proto.BINLevelUpResponse.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
 
 /**
- * Serializes the message to binary data (in protobuf wire format),
- * writing to the given BinaryWriter.
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.BINLevelUpResponse} message
  * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.BINLevelUpResponse.prototype.serializeBinaryToWriter = function (writer) {
+proto.BINLevelUpResponse.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = /** @type {boolean} */ (jspb.Message.getField(this, 1));
+  f = /** @type {boolean} */ (jspb.Message.getField(message, 1));
   if (f != null) {
     writer.writeBool(
       1,
       f
     );
   }
-  f = /** @type {string} */ (jspb.Message.getField(this, 2));
+  f = /** @type {string} */ (jspb.Message.getField(message, 2));
   if (f != null) {
     writer.writeString(
       2,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 3));
+  f = /** @type {number} */ (jspb.Message.getField(message, 3));
   if (f != null) {
     writer.writeInt64(
       3,
       f
     );
   }
-  f = /** @type {boolean} */ (jspb.Message.getField(this, 4));
+  f = /** @type {boolean} */ (jspb.Message.getField(message, 4));
   if (f != null) {
     writer.writeBool(
       4,
       f
     );
   }
-  f = this.getNewlevel();
+  f = message.getNewlevel();
   if (f != null) {
     writer.writeMessage(
       5,
@@ -1458,6 +1594,7 @@ proto.BINMedalUpResponse.prototype.toObject = function(opt_includeInstance) {
  *     http://goto/soy-param-migration
  * @param {!proto.BINMedalUpResponse} msg The msg instance to transform.
  * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.BINMedalUpResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
@@ -1528,49 +1665,40 @@ proto.BINMedalUpResponse.deserializeBinaryFromReader = function(msg, reader) {
 
 
 /**
- * Class method variant: serializes the given message to binary data
- * (in protobuf wire format), writing to the given BinaryWriter.
- * @param {!proto.BINMedalUpResponse} message
- * @param {!jspb.BinaryWriter} writer
- */
-proto.BINMedalUpResponse.serializeBinaryToWriter = function(message, writer) {
-  message.serializeBinaryToWriter(writer);
-};
-
-
-/**
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
 proto.BINMedalUpResponse.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  this.serializeBinaryToWriter(writer);
+  proto.BINMedalUpResponse.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
 
 /**
- * Serializes the message to binary data (in protobuf wire format),
- * writing to the given BinaryWriter.
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.BINMedalUpResponse} message
  * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.BINMedalUpResponse.prototype.serializeBinaryToWriter = function (writer) {
+proto.BINMedalUpResponse.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = /** @type {boolean} */ (jspb.Message.getField(this, 1));
+  f = /** @type {boolean} */ (jspb.Message.getField(message, 1));
   if (f != null) {
     writer.writeBool(
       1,
       f
     );
   }
-  f = /** @type {string} */ (jspb.Message.getField(this, 2));
+  f = /** @type {string} */ (jspb.Message.getField(message, 2));
   if (f != null) {
     writer.writeString(
       2,
       f
     );
   }
-  f = this.getNewmedal();
+  f = message.getNewmedal();
   if (f != null) {
     writer.writeMessage(
       3,
@@ -1578,7 +1706,7 @@ proto.BINMedalUpResponse.prototype.serializeBinaryToWriter = function (writer) {
       proto.BINMedal.serializeBinaryToWriter
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 4));
+  f = /** @type {number} */ (jspb.Message.getField(message, 4));
   if (f != null) {
     writer.writeInt32(
       4,
@@ -1704,6 +1832,496 @@ proto.BINMedalUpResponse.prototype.clearCurrentlevel = function() {
  */
 proto.BINMedalUpResponse.prototype.hasCurrentlevel = function() {
   return jspb.Message.getField(this, 4) != null;
+};
+
+
+
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.BINVipDetailRequest = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.BINVipDetailRequest, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  proto.BINVipDetailRequest.displayName = 'proto.BINVipDetailRequest';
+}
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto suitable for use in Soy templates.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     com.google.apps.jspb.JsClassTemplate.JS_RESERVED_WORDS.
+ * @param {boolean=} opt_includeInstance Whether to include the JSPB instance
+ *     for transitional soy proto support: http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.BINVipDetailRequest.prototype.toObject = function(opt_includeInstance) {
+  return proto.BINVipDetailRequest.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Whether to include the JSPB
+ *     instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.BINVipDetailRequest} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.BINVipDetailRequest.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    viplevel: jspb.Message.getField(msg, 1)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.BINVipDetailRequest}
+ */
+proto.BINVipDetailRequest.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.BINVipDetailRequest;
+  return proto.BINVipDetailRequest.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.BINVipDetailRequest} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.BINVipDetailRequest}
+ */
+proto.BINVipDetailRequest.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setViplevel(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.BINVipDetailRequest.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.BINVipDetailRequest.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.BINVipDetailRequest} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.BINVipDetailRequest.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = /** @type {number} */ (jspb.Message.getField(message, 1));
+  if (f != null) {
+    writer.writeInt32(
+      1,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional int32 vipLevel = 1;
+ * @return {number}
+ */
+proto.BINVipDetailRequest.prototype.getViplevel = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+};
+
+
+/** @param {number} value */
+proto.BINVipDetailRequest.prototype.setViplevel = function(value) {
+  jspb.Message.setField(this, 1, value);
+};
+
+
+proto.BINVipDetailRequest.prototype.clearViplevel = function() {
+  jspb.Message.setField(this, 1, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINVipDetailRequest.prototype.hasViplevel = function() {
+  return jspb.Message.getField(this, 1) != null;
+};
+
+
+
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.BINVipDetailResponse = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, proto.BINVipDetailResponse.repeatedFields_, null);
+};
+goog.inherits(proto.BINVipDetailResponse, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  proto.BINVipDetailResponse.displayName = 'proto.BINVipDetailResponse';
+}
+/**
+ * List of repeated fields within this message type.
+ * @private {!Array<number>}
+ * @const
+ */
+proto.BINVipDetailResponse.repeatedFields_ = [5];
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto suitable for use in Soy templates.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     com.google.apps.jspb.JsClassTemplate.JS_RESERVED_WORDS.
+ * @param {boolean=} opt_includeInstance Whether to include the JSPB instance
+ *     for transitional soy proto support: http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.BINVipDetailResponse.prototype.toObject = function(opt_includeInstance) {
+  return proto.BINVipDetailResponse.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Whether to include the JSPB
+ *     instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.BINVipDetailResponse} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.BINVipDetailResponse.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    responsecode: jspb.Message.getField(msg, 1),
+    message: jspb.Message.getField(msg, 2),
+    currentuserviplevel: jspb.Message.getField(msg, 3),
+    currentuservippoint: jspb.Message.getField(msg, 4),
+    viplevelsList: jspb.Message.toObjectList(msg.getViplevelsList(),
+    proto.BINVipLevel.toObject, includeInstance)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.BINVipDetailResponse}
+ */
+proto.BINVipDetailResponse.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.BINVipDetailResponse;
+  return proto.BINVipDetailResponse.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.BINVipDetailResponse} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.BINVipDetailResponse}
+ */
+proto.BINVipDetailResponse.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setResponsecode(value);
+      break;
+    case 2:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setMessage(value);
+      break;
+    case 3:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setCurrentuserviplevel(value);
+      break;
+    case 4:
+      var value = /** @type {number} */ (reader.readInt64());
+      msg.setCurrentuservippoint(value);
+      break;
+    case 5:
+      var value = new proto.BINVipLevel;
+      reader.readMessage(value,proto.BINVipLevel.deserializeBinaryFromReader);
+      msg.addViplevels(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.BINVipDetailResponse.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.BINVipDetailResponse.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.BINVipDetailResponse} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.BINVipDetailResponse.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = /** @type {boolean} */ (jspb.Message.getField(message, 1));
+  if (f != null) {
+    writer.writeBool(
+      1,
+      f
+    );
+  }
+  f = /** @type {string} */ (jspb.Message.getField(message, 2));
+  if (f != null) {
+    writer.writeString(
+      2,
+      f
+    );
+  }
+  f = /** @type {number} */ (jspb.Message.getField(message, 3));
+  if (f != null) {
+    writer.writeInt32(
+      3,
+      f
+    );
+  }
+  f = /** @type {number} */ (jspb.Message.getField(message, 4));
+  if (f != null) {
+    writer.writeInt64(
+      4,
+      f
+    );
+  }
+  f = message.getViplevelsList();
+  if (f.length > 0) {
+    writer.writeRepeatedMessage(
+      5,
+      f,
+      proto.BINVipLevel.serializeBinaryToWriter
+    );
+  }
+};
+
+
+/**
+ * required bool responseCode = 1;
+ * Note that Boolean fields may be set to 0/1 when serialized from a Java server.
+ * You should avoid comparisons like {@code val === true/false} in those cases.
+ * @return {boolean}
+ */
+proto.BINVipDetailResponse.prototype.getResponsecode = function() {
+  return /** @type {boolean} */ (jspb.Message.getFieldWithDefault(this, 1, false));
+};
+
+
+/** @param {boolean} value */
+proto.BINVipDetailResponse.prototype.setResponsecode = function(value) {
+  jspb.Message.setField(this, 1, value);
+};
+
+
+proto.BINVipDetailResponse.prototype.clearResponsecode = function() {
+  jspb.Message.setField(this, 1, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINVipDetailResponse.prototype.hasResponsecode = function() {
+  return jspb.Message.getField(this, 1) != null;
+};
+
+
+/**
+ * optional string message = 2;
+ * @return {string}
+ */
+proto.BINVipDetailResponse.prototype.getMessage = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
+};
+
+
+/** @param {string} value */
+proto.BINVipDetailResponse.prototype.setMessage = function(value) {
+  jspb.Message.setField(this, 2, value);
+};
+
+
+proto.BINVipDetailResponse.prototype.clearMessage = function() {
+  jspb.Message.setField(this, 2, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINVipDetailResponse.prototype.hasMessage = function() {
+  return jspb.Message.getField(this, 2) != null;
+};
+
+
+/**
+ * optional int32 currentUserVipLevel = 3;
+ * @return {number}
+ */
+proto.BINVipDetailResponse.prototype.getCurrentuserviplevel = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
+};
+
+
+/** @param {number} value */
+proto.BINVipDetailResponse.prototype.setCurrentuserviplevel = function(value) {
+  jspb.Message.setField(this, 3, value);
+};
+
+
+proto.BINVipDetailResponse.prototype.clearCurrentuserviplevel = function() {
+  jspb.Message.setField(this, 3, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINVipDetailResponse.prototype.hasCurrentuserviplevel = function() {
+  return jspb.Message.getField(this, 3) != null;
+};
+
+
+/**
+ * optional int64 currentUserVipPoint = 4;
+ * @return {number}
+ */
+proto.BINVipDetailResponse.prototype.getCurrentuservippoint = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 4, 0));
+};
+
+
+/** @param {number} value */
+proto.BINVipDetailResponse.prototype.setCurrentuservippoint = function(value) {
+  jspb.Message.setField(this, 4, value);
+};
+
+
+proto.BINVipDetailResponse.prototype.clearCurrentuservippoint = function() {
+  jspb.Message.setField(this, 4, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINVipDetailResponse.prototype.hasCurrentuservippoint = function() {
+  return jspb.Message.getField(this, 4) != null;
+};
+
+
+/**
+ * repeated BINVipLevel vipLevels = 5;
+ * @return {!Array.<!proto.BINVipLevel>}
+ */
+proto.BINVipDetailResponse.prototype.getViplevelsList = function() {
+  return /** @type{!Array.<!proto.BINVipLevel>} */ (
+    jspb.Message.getRepeatedWrapperField(this, proto.BINVipLevel, 5));
+};
+
+
+/** @param {!Array.<!proto.BINVipLevel>} value */
+proto.BINVipDetailResponse.prototype.setViplevelsList = function(value) {
+  jspb.Message.setRepeatedWrapperField(this, 5, value);
+};
+
+
+/**
+ * @param {!proto.BINVipLevel=} opt_value
+ * @param {number=} opt_index
+ * @return {!proto.BINVipLevel}
+ */
+proto.BINVipDetailResponse.prototype.addViplevels = function(opt_value, opt_index) {
+  return jspb.Message.addToRepeatedWrapperField(this, 5, opt_value, proto.BINVipLevel, opt_index);
+};
+
+
+proto.BINVipDetailResponse.prototype.clearViplevelsList = function() {
+  this.setViplevelsList([]);
 };
 
 

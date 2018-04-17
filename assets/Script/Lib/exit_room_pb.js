@@ -1,6 +1,8 @@
 /**
  * @fileoverview
  * @enhanceable
+ * @suppress {messageConventions} JS Compiler reports an error if a variable or
+ *     field starts with 'MSG_' and isn't a translatable message.
  * @public
  */
 // GENERATED CODE -- DO NOT EDIT!
@@ -58,10 +60,12 @@ proto.BINExitRoomRequest.prototype.toObject = function(opt_includeInstance) {
  *     http://goto/soy-param-migration
  * @param {!proto.BINExitRoomRequest} msg The msg instance to transform.
  * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.BINExitRoomRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    roomindex: jspb.Message.getField(msg, 1)
+    zoneid: jspb.Message.getField(msg, 1),
+    roomindex: jspb.Message.getField(msg, 2)
   };
 
   if (includeInstance) {
@@ -100,6 +104,10 @@ proto.BINExitRoomRequest.deserializeBinaryFromReader = function(msg, reader) {
     switch (field) {
     case 1:
       var value = /** @type {number} */ (reader.readInt32());
+      msg.setZoneid(value);
+      break;
+    case 2:
+      var value = /** @type {number} */ (reader.readInt32());
       msg.setRoomindex(value);
       break;
     default:
@@ -112,38 +120,36 @@ proto.BINExitRoomRequest.deserializeBinaryFromReader = function(msg, reader) {
 
 
 /**
- * Class method variant: serializes the given message to binary data
- * (in protobuf wire format), writing to the given BinaryWriter.
- * @param {!proto.BINExitRoomRequest} message
- * @param {!jspb.BinaryWriter} writer
- */
-proto.BINExitRoomRequest.serializeBinaryToWriter = function(message, writer) {
-  message.serializeBinaryToWriter(writer);
-};
-
-
-/**
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
 proto.BINExitRoomRequest.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  this.serializeBinaryToWriter(writer);
+  proto.BINExitRoomRequest.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
 
 /**
- * Serializes the message to binary data (in protobuf wire format),
- * writing to the given BinaryWriter.
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.BINExitRoomRequest} message
  * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.BINExitRoomRequest.prototype.serializeBinaryToWriter = function (writer) {
+proto.BINExitRoomRequest.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = /** @type {number} */ (jspb.Message.getField(this, 1));
+  f = /** @type {number} */ (jspb.Message.getField(message, 1));
   if (f != null) {
     writer.writeInt32(
       1,
+      f
+    );
+  }
+  f = /** @type {number} */ (jspb.Message.getField(message, 2));
+  if (f != null) {
+    writer.writeInt32(
+      2,
       f
     );
   }
@@ -151,21 +157,21 @@ proto.BINExitRoomRequest.prototype.serializeBinaryToWriter = function (writer) {
 
 
 /**
- * required int32 roomIndex = 1;
+ * required int32 zoneId = 1;
  * @return {number}
  */
-proto.BINExitRoomRequest.prototype.getRoomindex = function() {
+proto.BINExitRoomRequest.prototype.getZoneid = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
 };
 
 
 /** @param {number} value */
-proto.BINExitRoomRequest.prototype.setRoomindex = function(value) {
+proto.BINExitRoomRequest.prototype.setZoneid = function(value) {
   jspb.Message.setField(this, 1, value);
 };
 
 
-proto.BINExitRoomRequest.prototype.clearRoomindex = function() {
+proto.BINExitRoomRequest.prototype.clearZoneid = function() {
   jspb.Message.setField(this, 1, undefined);
 };
 
@@ -174,8 +180,37 @@ proto.BINExitRoomRequest.prototype.clearRoomindex = function() {
  * Returns whether this field is set.
  * @return {!boolean}
  */
-proto.BINExitRoomRequest.prototype.hasRoomindex = function() {
+proto.BINExitRoomRequest.prototype.hasZoneid = function() {
   return jspb.Message.getField(this, 1) != null;
+};
+
+
+/**
+ * required int32 roomIndex = 2;
+ * @return {number}
+ */
+proto.BINExitRoomRequest.prototype.getRoomindex = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+};
+
+
+/** @param {number} value */
+proto.BINExitRoomRequest.prototype.setRoomindex = function(value) {
+  jspb.Message.setField(this, 2, value);
+};
+
+
+proto.BINExitRoomRequest.prototype.clearRoomindex = function() {
+  jspb.Message.setField(this, 2, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINExitRoomRequest.prototype.hasRoomindex = function() {
+  return jspb.Message.getField(this, 2) != null;
 };
 
 
@@ -222,14 +257,15 @@ proto.BINExitRoomResponse.prototype.toObject = function(opt_includeInstance) {
  *     http://goto/soy-param-migration
  * @param {!proto.BINExitRoomResponse} msg The msg instance to transform.
  * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.BINExitRoomResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
     responsecode: jspb.Message.getField(msg, 1),
     message: jspb.Message.getField(msg, 2),
-    exitaftermatchend: jspb.Message.getField(msg, 3),
-    notenoughmoney: jspb.Message.getField(msg, 4),
-    zoneid: jspb.Message.getField(msg, 5)
+    zoneid: jspb.Message.getField(msg, 3),
+    exitaftermatchend: jspb.Message.getField(msg, 4),
+    notenoughmoney: jspb.Message.getField(msg, 5)
   };
 
   if (includeInstance) {
@@ -275,16 +311,16 @@ proto.BINExitRoomResponse.deserializeBinaryFromReader = function(msg, reader) {
       msg.setMessage(value);
       break;
     case 3:
-      var value = /** @type {boolean} */ (reader.readBool());
-      msg.setExitaftermatchend(value);
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setZoneid(value);
       break;
     case 4:
       var value = /** @type {boolean} */ (reader.readBool());
-      msg.setNotenoughmoney(value);
+      msg.setExitaftermatchend(value);
       break;
     case 5:
-      var value = /** @type {number} */ (reader.readInt32());
-      msg.setZoneid(value);
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setNotenoughmoney(value);
       break;
     default:
       reader.skipField();
@@ -296,65 +332,56 @@ proto.BINExitRoomResponse.deserializeBinaryFromReader = function(msg, reader) {
 
 
 /**
- * Class method variant: serializes the given message to binary data
- * (in protobuf wire format), writing to the given BinaryWriter.
- * @param {!proto.BINExitRoomResponse} message
- * @param {!jspb.BinaryWriter} writer
- */
-proto.BINExitRoomResponse.serializeBinaryToWriter = function(message, writer) {
-  message.serializeBinaryToWriter(writer);
-};
-
-
-/**
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
 proto.BINExitRoomResponse.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  this.serializeBinaryToWriter(writer);
+  proto.BINExitRoomResponse.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
 
 /**
- * Serializes the message to binary data (in protobuf wire format),
- * writing to the given BinaryWriter.
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.BINExitRoomResponse} message
  * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.BINExitRoomResponse.prototype.serializeBinaryToWriter = function (writer) {
+proto.BINExitRoomResponse.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = /** @type {boolean} */ (jspb.Message.getField(this, 1));
+  f = /** @type {boolean} */ (jspb.Message.getField(message, 1));
   if (f != null) {
     writer.writeBool(
       1,
       f
     );
   }
-  f = /** @type {string} */ (jspb.Message.getField(this, 2));
+  f = /** @type {string} */ (jspb.Message.getField(message, 2));
   if (f != null) {
     writer.writeString(
       2,
       f
     );
   }
-  f = /** @type {boolean} */ (jspb.Message.getField(this, 3));
+  f = /** @type {number} */ (jspb.Message.getField(message, 3));
   if (f != null) {
-    writer.writeBool(
+    writer.writeInt32(
       3,
       f
     );
   }
-  f = /** @type {boolean} */ (jspb.Message.getField(this, 4));
+  f = /** @type {boolean} */ (jspb.Message.getField(message, 4));
   if (f != null) {
     writer.writeBool(
       4,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 5));
+  f = /** @type {boolean} */ (jspb.Message.getField(message, 5));
   if (f != null) {
-    writer.writeInt32(
+    writer.writeBool(
       5,
       f
     );
@@ -423,23 +450,21 @@ proto.BINExitRoomResponse.prototype.hasMessage = function() {
 
 
 /**
- * optional bool exitAfterMatchEnd = 3;
- * Note that Boolean fields may be set to 0/1 when serialized from a Java server.
- * You should avoid comparisons like {@code val === true/false} in those cases.
- * @return {boolean}
+ * optional int32 zoneId = 3;
+ * @return {number}
  */
-proto.BINExitRoomResponse.prototype.getExitaftermatchend = function() {
-  return /** @type {boolean} */ (jspb.Message.getFieldWithDefault(this, 3, false));
+proto.BINExitRoomResponse.prototype.getZoneid = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
 };
 
 
-/** @param {boolean} value */
-proto.BINExitRoomResponse.prototype.setExitaftermatchend = function(value) {
+/** @param {number} value */
+proto.BINExitRoomResponse.prototype.setZoneid = function(value) {
   jspb.Message.setField(this, 3, value);
 };
 
 
-proto.BINExitRoomResponse.prototype.clearExitaftermatchend = function() {
+proto.BINExitRoomResponse.prototype.clearZoneid = function() {
   jspb.Message.setField(this, 3, undefined);
 };
 
@@ -448,29 +473,29 @@ proto.BINExitRoomResponse.prototype.clearExitaftermatchend = function() {
  * Returns whether this field is set.
  * @return {!boolean}
  */
-proto.BINExitRoomResponse.prototype.hasExitaftermatchend = function() {
+proto.BINExitRoomResponse.prototype.hasZoneid = function() {
   return jspb.Message.getField(this, 3) != null;
 };
 
 
 /**
- * optional bool notEnoughMoney = 4;
+ * optional bool exitAfterMatchEnd = 4;
  * Note that Boolean fields may be set to 0/1 when serialized from a Java server.
  * You should avoid comparisons like {@code val === true/false} in those cases.
  * @return {boolean}
  */
-proto.BINExitRoomResponse.prototype.getNotenoughmoney = function() {
+proto.BINExitRoomResponse.prototype.getExitaftermatchend = function() {
   return /** @type {boolean} */ (jspb.Message.getFieldWithDefault(this, 4, false));
 };
 
 
 /** @param {boolean} value */
-proto.BINExitRoomResponse.prototype.setNotenoughmoney = function(value) {
+proto.BINExitRoomResponse.prototype.setExitaftermatchend = function(value) {
   jspb.Message.setField(this, 4, value);
 };
 
 
-proto.BINExitRoomResponse.prototype.clearNotenoughmoney = function() {
+proto.BINExitRoomResponse.prototype.clearExitaftermatchend = function() {
   jspb.Message.setField(this, 4, undefined);
 };
 
@@ -479,27 +504,29 @@ proto.BINExitRoomResponse.prototype.clearNotenoughmoney = function() {
  * Returns whether this field is set.
  * @return {!boolean}
  */
-proto.BINExitRoomResponse.prototype.hasNotenoughmoney = function() {
+proto.BINExitRoomResponse.prototype.hasExitaftermatchend = function() {
   return jspb.Message.getField(this, 4) != null;
 };
 
 
 /**
- * optional int32 zoneId = 5;
- * @return {number}
+ * optional bool notEnoughMoney = 5;
+ * Note that Boolean fields may be set to 0/1 when serialized from a Java server.
+ * You should avoid comparisons like {@code val === true/false} in those cases.
+ * @return {boolean}
  */
-proto.BINExitRoomResponse.prototype.getZoneid = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
+proto.BINExitRoomResponse.prototype.getNotenoughmoney = function() {
+  return /** @type {boolean} */ (jspb.Message.getFieldWithDefault(this, 5, false));
 };
 
 
-/** @param {number} value */
-proto.BINExitRoomResponse.prototype.setZoneid = function(value) {
+/** @param {boolean} value */
+proto.BINExitRoomResponse.prototype.setNotenoughmoney = function(value) {
   jspb.Message.setField(this, 5, value);
 };
 
 
-proto.BINExitRoomResponse.prototype.clearZoneid = function() {
+proto.BINExitRoomResponse.prototype.clearNotenoughmoney = function() {
   jspb.Message.setField(this, 5, undefined);
 };
 
@@ -508,7 +535,7 @@ proto.BINExitRoomResponse.prototype.clearZoneid = function() {
  * Returns whether this field is set.
  * @return {!boolean}
  */
-proto.BINExitRoomResponse.prototype.hasZoneid = function() {
+proto.BINExitRoomResponse.prototype.hasNotenoughmoney = function() {
   return jspb.Message.getField(this, 5) != null;
 };
 
@@ -556,6 +583,7 @@ proto.BINPlayerExitAfterMatchEndResponse.prototype.toObject = function(opt_inclu
  *     http://goto/soy-param-migration
  * @param {!proto.BINPlayerExitAfterMatchEndResponse} msg The msg instance to transform.
  * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.BINPlayerExitAfterMatchEndResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
@@ -620,49 +648,40 @@ proto.BINPlayerExitAfterMatchEndResponse.deserializeBinaryFromReader = function(
 
 
 /**
- * Class method variant: serializes the given message to binary data
- * (in protobuf wire format), writing to the given BinaryWriter.
- * @param {!proto.BINPlayerExitAfterMatchEndResponse} message
- * @param {!jspb.BinaryWriter} writer
- */
-proto.BINPlayerExitAfterMatchEndResponse.serializeBinaryToWriter = function(message, writer) {
-  message.serializeBinaryToWriter(writer);
-};
-
-
-/**
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
 proto.BINPlayerExitAfterMatchEndResponse.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  this.serializeBinaryToWriter(writer);
+  proto.BINPlayerExitAfterMatchEndResponse.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
 
 /**
- * Serializes the message to binary data (in protobuf wire format),
- * writing to the given BinaryWriter.
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.BINPlayerExitAfterMatchEndResponse} message
  * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.BINPlayerExitAfterMatchEndResponse.prototype.serializeBinaryToWriter = function (writer) {
+proto.BINPlayerExitAfterMatchEndResponse.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = /** @type {boolean} */ (jspb.Message.getField(this, 1));
+  f = /** @type {boolean} */ (jspb.Message.getField(message, 1));
   if (f != null) {
     writer.writeBool(
       1,
       f
     );
   }
-  f = /** @type {string} */ (jspb.Message.getField(this, 2));
+  f = /** @type {string} */ (jspb.Message.getField(message, 2));
   if (f != null) {
     writer.writeString(
       2,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 3));
+  f = /** @type {number} */ (jspb.Message.getField(message, 3));
   if (f != null) {
     writer.writeInt64(
       3,
@@ -804,6 +823,7 @@ proto.BINPlayerExitRoomResponse.prototype.toObject = function(opt_includeInstanc
  *     http://goto/soy-param-migration
  * @param {!proto.BINPlayerExitRoomResponse} msg The msg instance to transform.
  * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.BINPlayerExitRoomResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
@@ -878,63 +898,54 @@ proto.BINPlayerExitRoomResponse.deserializeBinaryFromReader = function(msg, read
 
 
 /**
- * Class method variant: serializes the given message to binary data
- * (in protobuf wire format), writing to the given BinaryWriter.
- * @param {!proto.BINPlayerExitRoomResponse} message
- * @param {!jspb.BinaryWriter} writer
- */
-proto.BINPlayerExitRoomResponse.serializeBinaryToWriter = function(message, writer) {
-  message.serializeBinaryToWriter(writer);
-};
-
-
-/**
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
 proto.BINPlayerExitRoomResponse.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  this.serializeBinaryToWriter(writer);
+  proto.BINPlayerExitRoomResponse.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
 
 /**
- * Serializes the message to binary data (in protobuf wire format),
- * writing to the given BinaryWriter.
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.BINPlayerExitRoomResponse} message
  * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.BINPlayerExitRoomResponse.prototype.serializeBinaryToWriter = function (writer) {
+proto.BINPlayerExitRoomResponse.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = /** @type {boolean} */ (jspb.Message.getField(this, 1));
+  f = /** @type {boolean} */ (jspb.Message.getField(message, 1));
   if (f != null) {
     writer.writeBool(
       1,
       f
     );
   }
-  f = /** @type {string} */ (jspb.Message.getField(this, 2));
+  f = /** @type {string} */ (jspb.Message.getField(message, 2));
   if (f != null) {
     writer.writeString(
       2,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 3));
+  f = /** @type {number} */ (jspb.Message.getField(message, 3));
   if (f != null) {
     writer.writeInt64(
       3,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 4));
+  f = /** @type {number} */ (jspb.Message.getField(message, 4));
   if (f != null) {
     writer.writeInt64(
       4,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 5));
+  f = /** @type {number} */ (jspb.Message.getField(message, 5));
   if (f != null) {
     writer.writeInt32(
       5,
@@ -1134,10 +1145,12 @@ proto.BINCancelExitAfterMatchEndRequest.prototype.toObject = function(opt_includ
  *     http://goto/soy-param-migration
  * @param {!proto.BINCancelExitAfterMatchEndRequest} msg The msg instance to transform.
  * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.BINCancelExitAfterMatchEndRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    roomindex: jspb.Message.getField(msg, 1)
+    zoneid: jspb.Message.getField(msg, 1),
+    roomindex: jspb.Message.getField(msg, 2)
   };
 
   if (includeInstance) {
@@ -1176,6 +1189,10 @@ proto.BINCancelExitAfterMatchEndRequest.deserializeBinaryFromReader = function(m
     switch (field) {
     case 1:
       var value = /** @type {number} */ (reader.readInt32());
+      msg.setZoneid(value);
+      break;
+    case 2:
+      var value = /** @type {number} */ (reader.readInt32());
       msg.setRoomindex(value);
       break;
     default:
@@ -1188,38 +1205,36 @@ proto.BINCancelExitAfterMatchEndRequest.deserializeBinaryFromReader = function(m
 
 
 /**
- * Class method variant: serializes the given message to binary data
- * (in protobuf wire format), writing to the given BinaryWriter.
- * @param {!proto.BINCancelExitAfterMatchEndRequest} message
- * @param {!jspb.BinaryWriter} writer
- */
-proto.BINCancelExitAfterMatchEndRequest.serializeBinaryToWriter = function(message, writer) {
-  message.serializeBinaryToWriter(writer);
-};
-
-
-/**
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
 proto.BINCancelExitAfterMatchEndRequest.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  this.serializeBinaryToWriter(writer);
+  proto.BINCancelExitAfterMatchEndRequest.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
 
 /**
- * Serializes the message to binary data (in protobuf wire format),
- * writing to the given BinaryWriter.
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.BINCancelExitAfterMatchEndRequest} message
  * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.BINCancelExitAfterMatchEndRequest.prototype.serializeBinaryToWriter = function (writer) {
+proto.BINCancelExitAfterMatchEndRequest.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = /** @type {number} */ (jspb.Message.getField(this, 1));
+  f = /** @type {number} */ (jspb.Message.getField(message, 1));
   if (f != null) {
     writer.writeInt32(
       1,
+      f
+    );
+  }
+  f = /** @type {number} */ (jspb.Message.getField(message, 2));
+  if (f != null) {
+    writer.writeInt32(
+      2,
       f
     );
   }
@@ -1227,21 +1242,21 @@ proto.BINCancelExitAfterMatchEndRequest.prototype.serializeBinaryToWriter = func
 
 
 /**
- * required int32 roomIndex = 1;
+ * required int32 zoneId = 1;
  * @return {number}
  */
-proto.BINCancelExitAfterMatchEndRequest.prototype.getRoomindex = function() {
+proto.BINCancelExitAfterMatchEndRequest.prototype.getZoneid = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
 };
 
 
 /** @param {number} value */
-proto.BINCancelExitAfterMatchEndRequest.prototype.setRoomindex = function(value) {
+proto.BINCancelExitAfterMatchEndRequest.prototype.setZoneid = function(value) {
   jspb.Message.setField(this, 1, value);
 };
 
 
-proto.BINCancelExitAfterMatchEndRequest.prototype.clearRoomindex = function() {
+proto.BINCancelExitAfterMatchEndRequest.prototype.clearZoneid = function() {
   jspb.Message.setField(this, 1, undefined);
 };
 
@@ -1250,8 +1265,37 @@ proto.BINCancelExitAfterMatchEndRequest.prototype.clearRoomindex = function() {
  * Returns whether this field is set.
  * @return {!boolean}
  */
-proto.BINCancelExitAfterMatchEndRequest.prototype.hasRoomindex = function() {
+proto.BINCancelExitAfterMatchEndRequest.prototype.hasZoneid = function() {
   return jspb.Message.getField(this, 1) != null;
+};
+
+
+/**
+ * required int32 roomIndex = 2;
+ * @return {number}
+ */
+proto.BINCancelExitAfterMatchEndRequest.prototype.getRoomindex = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+};
+
+
+/** @param {number} value */
+proto.BINCancelExitAfterMatchEndRequest.prototype.setRoomindex = function(value) {
+  jspb.Message.setField(this, 2, value);
+};
+
+
+proto.BINCancelExitAfterMatchEndRequest.prototype.clearRoomindex = function() {
+  jspb.Message.setField(this, 2, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINCancelExitAfterMatchEndRequest.prototype.hasRoomindex = function() {
+  return jspb.Message.getField(this, 2) != null;
 };
 
 
@@ -1298,6 +1342,7 @@ proto.BINCancelExitAfterMatchEndResponse.prototype.toObject = function(opt_inclu
  *     http://goto/soy-param-migration
  * @param {!proto.BINCancelExitAfterMatchEndResponse} msg The msg instance to transform.
  * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.BINCancelExitAfterMatchEndResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
@@ -1362,49 +1407,40 @@ proto.BINCancelExitAfterMatchEndResponse.deserializeBinaryFromReader = function(
 
 
 /**
- * Class method variant: serializes the given message to binary data
- * (in protobuf wire format), writing to the given BinaryWriter.
- * @param {!proto.BINCancelExitAfterMatchEndResponse} message
- * @param {!jspb.BinaryWriter} writer
- */
-proto.BINCancelExitAfterMatchEndResponse.serializeBinaryToWriter = function(message, writer) {
-  message.serializeBinaryToWriter(writer);
-};
-
-
-/**
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
 proto.BINCancelExitAfterMatchEndResponse.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  this.serializeBinaryToWriter(writer);
+  proto.BINCancelExitAfterMatchEndResponse.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
 
 /**
- * Serializes the message to binary data (in protobuf wire format),
- * writing to the given BinaryWriter.
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.BINCancelExitAfterMatchEndResponse} message
  * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.BINCancelExitAfterMatchEndResponse.prototype.serializeBinaryToWriter = function (writer) {
+proto.BINCancelExitAfterMatchEndResponse.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = /** @type {boolean} */ (jspb.Message.getField(this, 1));
+  f = /** @type {boolean} */ (jspb.Message.getField(message, 1));
   if (f != null) {
     writer.writeBool(
       1,
       f
     );
   }
-  f = /** @type {string} */ (jspb.Message.getField(this, 2));
+  f = /** @type {string} */ (jspb.Message.getField(message, 2));
   if (f != null) {
     writer.writeString(
       2,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 3));
+  f = /** @type {number} */ (jspb.Message.getField(message, 3));
   if (f != null) {
     writer.writeInt64(
       3,

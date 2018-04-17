@@ -49,7 +49,7 @@ cc.Class({
         var value = isCash ? "true" : "false";
         entry1.setValue(value);
         entries.push(entry1);
-        NetworkManager.getLookUpGameHistoryRequest(firstResult, maxResult, entries);
+        NetworkManager.getLookUpGameHistoryRequest(Common.ZONE_ID.TAIXIU, firstResult, maxResult, entries);
     },
 
     onGameEvent: function() {
@@ -88,7 +88,7 @@ cc.Class({
                 cc.log("rank =", historiesList.getFirst());
                 var topUsers = [];
                 for (var i = 0; i < rs.getHistoriesList().length - 2; i++) {
-                        topUsers.push(rs.getHistoriesList()[i]);
+                    topUsers.push(rs.getHistoriesList()[i]);
                 }
                 var number = rs.getHistoriesList().length;
                 var currentUserRank = rs.getHistoriesList()[number - 2].getFirst() != -1 ? rs.getHistoriesList()[number - 2].getFirst() : "";

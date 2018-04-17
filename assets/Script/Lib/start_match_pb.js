@@ -1,6 +1,8 @@
 /**
  * @fileoverview
  * @enhanceable
+ * @suppress {messageConventions} JS Compiler reports an error if a variable or
+ *     field starts with 'MSG_' and isn't a translatable message.
  * @public
  */
 // GENERATED CODE -- DO NOT EDIT!
@@ -55,10 +57,12 @@ proto.BINStartMatchRequest.prototype.toObject = function(opt_includeInstance) {
  *     http://goto/soy-param-migration
  * @param {!proto.BINStartMatchRequest} msg The msg instance to transform.
  * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.BINStartMatchRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    roomindex: jspb.Message.getField(msg, 1)
+    zoneid: jspb.Message.getField(msg, 1),
+    roomindex: jspb.Message.getField(msg, 2)
   };
 
   if (includeInstance) {
@@ -97,6 +101,10 @@ proto.BINStartMatchRequest.deserializeBinaryFromReader = function(msg, reader) {
     switch (field) {
     case 1:
       var value = /** @type {number} */ (reader.readInt32());
+      msg.setZoneid(value);
+      break;
+    case 2:
+      var value = /** @type {number} */ (reader.readInt32());
       msg.setRoomindex(value);
       break;
     default:
@@ -109,38 +117,36 @@ proto.BINStartMatchRequest.deserializeBinaryFromReader = function(msg, reader) {
 
 
 /**
- * Class method variant: serializes the given message to binary data
- * (in protobuf wire format), writing to the given BinaryWriter.
- * @param {!proto.BINStartMatchRequest} message
- * @param {!jspb.BinaryWriter} writer
- */
-proto.BINStartMatchRequest.serializeBinaryToWriter = function(message, writer) {
-  message.serializeBinaryToWriter(writer);
-};
-
-
-/**
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
 proto.BINStartMatchRequest.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  this.serializeBinaryToWriter(writer);
+  proto.BINStartMatchRequest.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
 
 /**
- * Serializes the message to binary data (in protobuf wire format),
- * writing to the given BinaryWriter.
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.BINStartMatchRequest} message
  * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.BINStartMatchRequest.prototype.serializeBinaryToWriter = function (writer) {
+proto.BINStartMatchRequest.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = /** @type {number} */ (jspb.Message.getField(this, 1));
+  f = /** @type {number} */ (jspb.Message.getField(message, 1));
   if (f != null) {
     writer.writeInt32(
       1,
+      f
+    );
+  }
+  f = /** @type {number} */ (jspb.Message.getField(message, 2));
+  if (f != null) {
+    writer.writeInt32(
+      2,
       f
     );
   }
@@ -148,21 +154,21 @@ proto.BINStartMatchRequest.prototype.serializeBinaryToWriter = function (writer)
 
 
 /**
- * required int32 roomIndex = 1;
+ * required int32 zoneId = 1;
  * @return {number}
  */
-proto.BINStartMatchRequest.prototype.getRoomindex = function() {
+proto.BINStartMatchRequest.prototype.getZoneid = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
 };
 
 
 /** @param {number} value */
-proto.BINStartMatchRequest.prototype.setRoomindex = function(value) {
+proto.BINStartMatchRequest.prototype.setZoneid = function(value) {
   jspb.Message.setField(this, 1, value);
 };
 
 
-proto.BINStartMatchRequest.prototype.clearRoomindex = function() {
+proto.BINStartMatchRequest.prototype.clearZoneid = function() {
   jspb.Message.setField(this, 1, undefined);
 };
 
@@ -171,8 +177,37 @@ proto.BINStartMatchRequest.prototype.clearRoomindex = function() {
  * Returns whether this field is set.
  * @return {!boolean}
  */
-proto.BINStartMatchRequest.prototype.hasRoomindex = function() {
+proto.BINStartMatchRequest.prototype.hasZoneid = function() {
   return jspb.Message.getField(this, 1) != null;
+};
+
+
+/**
+ * required int32 roomIndex = 2;
+ * @return {number}
+ */
+proto.BINStartMatchRequest.prototype.getRoomindex = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+};
+
+
+/** @param {number} value */
+proto.BINStartMatchRequest.prototype.setRoomindex = function(value) {
+  jspb.Message.setField(this, 2, value);
+};
+
+
+proto.BINStartMatchRequest.prototype.clearRoomindex = function() {
+  jspb.Message.setField(this, 2, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINStartMatchRequest.prototype.hasRoomindex = function() {
+  return jspb.Message.getField(this, 2) != null;
 };
 
 
@@ -199,7 +234,7 @@ if (goog.DEBUG && !COMPILED) {
  * @private {!Array<number>}
  * @const
  */
-proto.BINStartMatchResponse.repeatedFields_ = [5];
+proto.BINStartMatchResponse.repeatedFields_ = [6];
 
 
 
@@ -226,16 +261,17 @@ proto.BINStartMatchResponse.prototype.toObject = function(opt_includeInstance) {
  *     http://goto/soy-param-migration
  * @param {!proto.BINStartMatchResponse} msg The msg instance to transform.
  * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.BINStartMatchResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
     responsecode: jspb.Message.getField(msg, 1),
     message: jspb.Message.getField(msg, 2),
-    countdowntimer: jspb.Message.getField(msg, 3),
-    firstturnuserid: jspb.Message.getField(msg, 4),
+    zoneid: jspb.Message.getField(msg, 3),
+    countdowntimer: jspb.Message.getField(msg, 4),
+    firstturnuserid: jspb.Message.getField(msg, 5),
     argsList: jspb.Message.toObjectList(msg.getArgsList(),
-    map_field_entry_pb.BINMapFieldEntry.toObject, includeInstance),
-    zoneid: jspb.Message.getField(msg, 6)
+    map_field_entry_pb.BINMapFieldEntry.toObject, includeInstance)
   };
 
   if (includeInstance) {
@@ -282,20 +318,20 @@ proto.BINStartMatchResponse.deserializeBinaryFromReader = function(msg, reader) 
       break;
     case 3:
       var value = /** @type {number} */ (reader.readInt32());
-      msg.setCountdowntimer(value);
+      msg.setZoneid(value);
       break;
     case 4:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setCountdowntimer(value);
+      break;
+    case 5:
       var value = /** @type {number} */ (reader.readInt64());
       msg.setFirstturnuserid(value);
       break;
-    case 5:
+    case 6:
       var value = new map_field_entry_pb.BINMapFieldEntry;
       reader.readMessage(value,map_field_entry_pb.BINMapFieldEntry.deserializeBinaryFromReader);
       msg.addArgs(value);
-      break;
-    case 6:
-      var value = /** @type {number} */ (reader.readInt32());
-      msg.setZoneid(value);
       break;
     default:
       reader.skipField();
@@ -307,75 +343,66 @@ proto.BINStartMatchResponse.deserializeBinaryFromReader = function(msg, reader) 
 
 
 /**
- * Class method variant: serializes the given message to binary data
- * (in protobuf wire format), writing to the given BinaryWriter.
- * @param {!proto.BINStartMatchResponse} message
- * @param {!jspb.BinaryWriter} writer
- */
-proto.BINStartMatchResponse.serializeBinaryToWriter = function(message, writer) {
-  message.serializeBinaryToWriter(writer);
-};
-
-
-/**
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
 proto.BINStartMatchResponse.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  this.serializeBinaryToWriter(writer);
+  proto.BINStartMatchResponse.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
 
 /**
- * Serializes the message to binary data (in protobuf wire format),
- * writing to the given BinaryWriter.
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.BINStartMatchResponse} message
  * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.BINStartMatchResponse.prototype.serializeBinaryToWriter = function (writer) {
+proto.BINStartMatchResponse.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = /** @type {boolean} */ (jspb.Message.getField(this, 1));
+  f = /** @type {boolean} */ (jspb.Message.getField(message, 1));
   if (f != null) {
     writer.writeBool(
       1,
       f
     );
   }
-  f = /** @type {string} */ (jspb.Message.getField(this, 2));
+  f = /** @type {string} */ (jspb.Message.getField(message, 2));
   if (f != null) {
     writer.writeString(
       2,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 3));
+  f = /** @type {number} */ (jspb.Message.getField(message, 3));
   if (f != null) {
     writer.writeInt32(
       3,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 4));
+  f = /** @type {number} */ (jspb.Message.getField(message, 4));
   if (f != null) {
-    writer.writeInt64(
+    writer.writeInt32(
       4,
       f
     );
   }
-  f = this.getArgsList();
-  if (f.length > 0) {
-    writer.writeRepeatedMessage(
+  f = /** @type {number} */ (jspb.Message.getField(message, 5));
+  if (f != null) {
+    writer.writeInt64(
       5,
-      f,
-      map_field_entry_pb.BINMapFieldEntry.serializeBinaryToWriter
+      f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 6));
-  if (f != null) {
-    writer.writeInt32(
+  f = message.getArgsList();
+  if (f.length > 0) {
+    writer.writeRepeatedMessage(
       6,
-      f
+      f,
+      map_field_entry_pb.BINMapFieldEntry.serializeBinaryToWriter
     );
   }
 };
@@ -442,21 +469,21 @@ proto.BINStartMatchResponse.prototype.hasMessage = function() {
 
 
 /**
- * optional int32 countDownTimer = 3;
+ * optional int32 zoneId = 3;
  * @return {number}
  */
-proto.BINStartMatchResponse.prototype.getCountdowntimer = function() {
+proto.BINStartMatchResponse.prototype.getZoneid = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
 };
 
 
 /** @param {number} value */
-proto.BINStartMatchResponse.prototype.setCountdowntimer = function(value) {
+proto.BINStartMatchResponse.prototype.setZoneid = function(value) {
   jspb.Message.setField(this, 3, value);
 };
 
 
-proto.BINStartMatchResponse.prototype.clearCountdowntimer = function() {
+proto.BINStartMatchResponse.prototype.clearZoneid = function() {
   jspb.Message.setField(this, 3, undefined);
 };
 
@@ -465,27 +492,27 @@ proto.BINStartMatchResponse.prototype.clearCountdowntimer = function() {
  * Returns whether this field is set.
  * @return {!boolean}
  */
-proto.BINStartMatchResponse.prototype.hasCountdowntimer = function() {
+proto.BINStartMatchResponse.prototype.hasZoneid = function() {
   return jspb.Message.getField(this, 3) != null;
 };
 
 
 /**
- * optional int64 firstTurnUserId = 4;
+ * optional int32 countDownTimer = 4;
  * @return {number}
  */
-proto.BINStartMatchResponse.prototype.getFirstturnuserid = function() {
+proto.BINStartMatchResponse.prototype.getCountdowntimer = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 4, 0));
 };
 
 
 /** @param {number} value */
-proto.BINStartMatchResponse.prototype.setFirstturnuserid = function(value) {
+proto.BINStartMatchResponse.prototype.setCountdowntimer = function(value) {
   jspb.Message.setField(this, 4, value);
 };
 
 
-proto.BINStartMatchResponse.prototype.clearFirstturnuserid = function() {
+proto.BINStartMatchResponse.prototype.clearCountdowntimer = function() {
   jspb.Message.setField(this, 4, undefined);
 };
 
@@ -494,26 +521,53 @@ proto.BINStartMatchResponse.prototype.clearFirstturnuserid = function() {
  * Returns whether this field is set.
  * @return {!boolean}
  */
-proto.BINStartMatchResponse.prototype.hasFirstturnuserid = function() {
+proto.BINStartMatchResponse.prototype.hasCountdowntimer = function() {
   return jspb.Message.getField(this, 4) != null;
 };
 
 
 /**
- * repeated BINMapFieldEntry args = 5;
- * If you change this array by adding, removing or replacing elements, or if you
- * replace the array itself, then you must call the setter to update it.
+ * optional int64 firstTurnUserId = 5;
+ * @return {number}
+ */
+proto.BINStartMatchResponse.prototype.getFirstturnuserid = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
+};
+
+
+/** @param {number} value */
+proto.BINStartMatchResponse.prototype.setFirstturnuserid = function(value) {
+  jspb.Message.setField(this, 5, value);
+};
+
+
+proto.BINStartMatchResponse.prototype.clearFirstturnuserid = function() {
+  jspb.Message.setField(this, 5, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINStartMatchResponse.prototype.hasFirstturnuserid = function() {
+  return jspb.Message.getField(this, 5) != null;
+};
+
+
+/**
+ * repeated BINMapFieldEntry args = 6;
  * @return {!Array.<!proto.BINMapFieldEntry>}
  */
 proto.BINStartMatchResponse.prototype.getArgsList = function() {
   return /** @type{!Array.<!proto.BINMapFieldEntry>} */ (
-    jspb.Message.getRepeatedWrapperField(this, map_field_entry_pb.BINMapFieldEntry, 5));
+    jspb.Message.getRepeatedWrapperField(this, map_field_entry_pb.BINMapFieldEntry, 6));
 };
 
 
 /** @param {!Array.<!proto.BINMapFieldEntry>} value */
 proto.BINStartMatchResponse.prototype.setArgsList = function(value) {
-  jspb.Message.setRepeatedWrapperField(this, 5, value);
+  jspb.Message.setRepeatedWrapperField(this, 6, value);
 };
 
 
@@ -523,41 +577,12 @@ proto.BINStartMatchResponse.prototype.setArgsList = function(value) {
  * @return {!proto.BINMapFieldEntry}
  */
 proto.BINStartMatchResponse.prototype.addArgs = function(opt_value, opt_index) {
-  return jspb.Message.addToRepeatedWrapperField(this, 5, opt_value, proto.BINMapFieldEntry, opt_index);
+  return jspb.Message.addToRepeatedWrapperField(this, 6, opt_value, proto.BINMapFieldEntry, opt_index);
 };
 
 
 proto.BINStartMatchResponse.prototype.clearArgsList = function() {
   this.setArgsList([]);
-};
-
-
-/**
- * optional int32 zoneId = 6;
- * @return {number}
- */
-proto.BINStartMatchResponse.prototype.getZoneid = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 6, 0));
-};
-
-
-/** @param {number} value */
-proto.BINStartMatchResponse.prototype.setZoneid = function(value) {
-  jspb.Message.setField(this, 6, value);
-};
-
-
-proto.BINStartMatchResponse.prototype.clearZoneid = function() {
-  jspb.Message.setField(this, 6, undefined);
-};
-
-
-/**
- * Returns whether this field is set.
- * @return {!boolean}
- */
-proto.BINStartMatchResponse.prototype.hasZoneid = function() {
-  return jspb.Message.getField(this, 6) != null;
 };
 
 

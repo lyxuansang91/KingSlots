@@ -1,6 +1,8 @@
 /**
  * @fileoverview
  * @enhanceable
+ * @suppress {messageConventions} JS Compiler reports an error if a variable or
+ *     field starts with 'MSG_' and isn't a translatable message.
  * @public
  */
 // GENERATED CODE -- DO NOT EDIT!
@@ -57,14 +59,16 @@ proto.BINInstantMessageRequest.prototype.toObject = function(opt_includeInstance
  *     http://goto/soy-param-migration
  * @param {!proto.BINInstantMessageRequest} msg The msg instance to transform.
  * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.BINInstantMessageRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
     scope: jspb.Message.getField(msg, 1),
-    instantmessage: jspb.Message.getField(msg, 2),
-    receiverusername: jspb.Message.getField(msg, 3),
-    receiveruserid: jspb.Message.getField(msg, 4),
-    textemoticonid: jspb.Message.getField(msg, 5)
+    zoneid: jspb.Message.getField(msg, 2),
+    instantmessage: jspb.Message.getField(msg, 3),
+    receiverusername: jspb.Message.getField(msg, 4),
+    receiveruserid: jspb.Message.getField(msg, 5),
+    textemoticonid: jspb.Message.getField(msg, 6)
   };
 
   if (includeInstance) {
@@ -106,18 +110,22 @@ proto.BINInstantMessageRequest.deserializeBinaryFromReader = function(msg, reade
       msg.setScope(value);
       break;
     case 2:
-      var value = /** @type {string} */ (reader.readString());
-      msg.setInstantmessage(value);
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setZoneid(value);
       break;
     case 3:
       var value = /** @type {string} */ (reader.readString());
-      msg.setReceiverusername(value);
+      msg.setInstantmessage(value);
       break;
     case 4:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setReceiverusername(value);
+      break;
+    case 5:
       var value = /** @type {number} */ (reader.readInt64());
       msg.setReceiveruserid(value);
       break;
-    case 5:
+    case 6:
       var value = /** @type {number} */ (reader.readInt32());
       msg.setTextemoticonid(value);
       break;
@@ -131,66 +139,64 @@ proto.BINInstantMessageRequest.deserializeBinaryFromReader = function(msg, reade
 
 
 /**
- * Class method variant: serializes the given message to binary data
- * (in protobuf wire format), writing to the given BinaryWriter.
- * @param {!proto.BINInstantMessageRequest} message
- * @param {!jspb.BinaryWriter} writer
- */
-proto.BINInstantMessageRequest.serializeBinaryToWriter = function(message, writer) {
-  message.serializeBinaryToWriter(writer);
-};
-
-
-/**
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
 proto.BINInstantMessageRequest.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  this.serializeBinaryToWriter(writer);
+  proto.BINInstantMessageRequest.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
 
 /**
- * Serializes the message to binary data (in protobuf wire format),
- * writing to the given BinaryWriter.
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.BINInstantMessageRequest} message
  * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.BINInstantMessageRequest.prototype.serializeBinaryToWriter = function (writer) {
+proto.BINInstantMessageRequest.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = /** @type {number} */ (jspb.Message.getField(this, 1));
+  f = /** @type {number} */ (jspb.Message.getField(message, 1));
   if (f != null) {
     writer.writeInt32(
       1,
       f
     );
   }
-  f = /** @type {string} */ (jspb.Message.getField(this, 2));
+  f = /** @type {number} */ (jspb.Message.getField(message, 2));
   if (f != null) {
-    writer.writeString(
+    writer.writeInt32(
       2,
       f
     );
   }
-  f = /** @type {string} */ (jspb.Message.getField(this, 3));
+  f = /** @type {string} */ (jspb.Message.getField(message, 3));
   if (f != null) {
     writer.writeString(
       3,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 4));
+  f = /** @type {string} */ (jspb.Message.getField(message, 4));
   if (f != null) {
-    writer.writeInt64(
+    writer.writeString(
       4,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 5));
+  f = /** @type {number} */ (jspb.Message.getField(message, 5));
+  if (f != null) {
+    writer.writeInt64(
+      5,
+      f
+    );
+  }
+  f = /** @type {number} */ (jspb.Message.getField(message, 6));
   if (f != null) {
     writer.writeInt32(
-      5,
+      6,
       f
     );
   }
@@ -227,21 +233,21 @@ proto.BINInstantMessageRequest.prototype.hasScope = function() {
 
 
 /**
- * required string instantMessage = 2;
- * @return {string}
+ * optional int32 zoneId = 2;
+ * @return {number}
  */
-proto.BINInstantMessageRequest.prototype.getInstantmessage = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
+proto.BINInstantMessageRequest.prototype.getZoneid = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
 };
 
 
-/** @param {string} value */
-proto.BINInstantMessageRequest.prototype.setInstantmessage = function(value) {
+/** @param {number} value */
+proto.BINInstantMessageRequest.prototype.setZoneid = function(value) {
   jspb.Message.setField(this, 2, value);
 };
 
 
-proto.BINInstantMessageRequest.prototype.clearInstantmessage = function() {
+proto.BINInstantMessageRequest.prototype.clearZoneid = function() {
   jspb.Message.setField(this, 2, undefined);
 };
 
@@ -250,27 +256,27 @@ proto.BINInstantMessageRequest.prototype.clearInstantmessage = function() {
  * Returns whether this field is set.
  * @return {!boolean}
  */
-proto.BINInstantMessageRequest.prototype.hasInstantmessage = function() {
+proto.BINInstantMessageRequest.prototype.hasZoneid = function() {
   return jspb.Message.getField(this, 2) != null;
 };
 
 
 /**
- * optional string receiverUserName = 3;
+ * required string instantMessage = 3;
  * @return {string}
  */
-proto.BINInstantMessageRequest.prototype.getReceiverusername = function() {
+proto.BINInstantMessageRequest.prototype.getInstantmessage = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
 };
 
 
 /** @param {string} value */
-proto.BINInstantMessageRequest.prototype.setReceiverusername = function(value) {
+proto.BINInstantMessageRequest.prototype.setInstantmessage = function(value) {
   jspb.Message.setField(this, 3, value);
 };
 
 
-proto.BINInstantMessageRequest.prototype.clearReceiverusername = function() {
+proto.BINInstantMessageRequest.prototype.clearInstantmessage = function() {
   jspb.Message.setField(this, 3, undefined);
 };
 
@@ -279,27 +285,27 @@ proto.BINInstantMessageRequest.prototype.clearReceiverusername = function() {
  * Returns whether this field is set.
  * @return {!boolean}
  */
-proto.BINInstantMessageRequest.prototype.hasReceiverusername = function() {
+proto.BINInstantMessageRequest.prototype.hasInstantmessage = function() {
   return jspb.Message.getField(this, 3) != null;
 };
 
 
 /**
- * optional int64 receiverUserId = 4;
- * @return {number}
+ * optional string receiverUserName = 4;
+ * @return {string}
  */
-proto.BINInstantMessageRequest.prototype.getReceiveruserid = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 4, 0));
+proto.BINInstantMessageRequest.prototype.getReceiverusername = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
 };
 
 
-/** @param {number} value */
-proto.BINInstantMessageRequest.prototype.setReceiveruserid = function(value) {
+/** @param {string} value */
+proto.BINInstantMessageRequest.prototype.setReceiverusername = function(value) {
   jspb.Message.setField(this, 4, value);
 };
 
 
-proto.BINInstantMessageRequest.prototype.clearReceiveruserid = function() {
+proto.BINInstantMessageRequest.prototype.clearReceiverusername = function() {
   jspb.Message.setField(this, 4, undefined);
 };
 
@@ -308,27 +314,27 @@ proto.BINInstantMessageRequest.prototype.clearReceiveruserid = function() {
  * Returns whether this field is set.
  * @return {!boolean}
  */
-proto.BINInstantMessageRequest.prototype.hasReceiveruserid = function() {
+proto.BINInstantMessageRequest.prototype.hasReceiverusername = function() {
   return jspb.Message.getField(this, 4) != null;
 };
 
 
 /**
- * optional int32 textEmoticonId = 5;
+ * optional int64 receiverUserId = 5;
  * @return {number}
  */
-proto.BINInstantMessageRequest.prototype.getTextemoticonid = function() {
+proto.BINInstantMessageRequest.prototype.getReceiveruserid = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
 };
 
 
 /** @param {number} value */
-proto.BINInstantMessageRequest.prototype.setTextemoticonid = function(value) {
+proto.BINInstantMessageRequest.prototype.setReceiveruserid = function(value) {
   jspb.Message.setField(this, 5, value);
 };
 
 
-proto.BINInstantMessageRequest.prototype.clearTextemoticonid = function() {
+proto.BINInstantMessageRequest.prototype.clearReceiveruserid = function() {
   jspb.Message.setField(this, 5, undefined);
 };
 
@@ -337,8 +343,37 @@ proto.BINInstantMessageRequest.prototype.clearTextemoticonid = function() {
  * Returns whether this field is set.
  * @return {!boolean}
  */
-proto.BINInstantMessageRequest.prototype.hasTextemoticonid = function() {
+proto.BINInstantMessageRequest.prototype.hasReceiveruserid = function() {
   return jspb.Message.getField(this, 5) != null;
+};
+
+
+/**
+ * optional int32 textEmoticonId = 6;
+ * @return {number}
+ */
+proto.BINInstantMessageRequest.prototype.getTextemoticonid = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 6, 0));
+};
+
+
+/** @param {number} value */
+proto.BINInstantMessageRequest.prototype.setTextemoticonid = function(value) {
+  jspb.Message.setField(this, 6, value);
+};
+
+
+proto.BINInstantMessageRequest.prototype.clearTextemoticonid = function() {
+  jspb.Message.setField(this, 6, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINInstantMessageRequest.prototype.hasTextemoticonid = function() {
+  return jspb.Message.getField(this, 6) != null;
 };
 
 
@@ -385,6 +420,7 @@ proto.BINInstantMessageResponse.prototype.toObject = function(opt_includeInstanc
  *     http://goto/soy-param-migration
  * @param {!proto.BINInstantMessageResponse} msg The msg instance to transform.
  * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.BINInstantMessageResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
@@ -499,119 +535,110 @@ proto.BINInstantMessageResponse.deserializeBinaryFromReader = function(msg, read
 
 
 /**
- * Class method variant: serializes the given message to binary data
- * (in protobuf wire format), writing to the given BinaryWriter.
- * @param {!proto.BINInstantMessageResponse} message
- * @param {!jspb.BinaryWriter} writer
- */
-proto.BINInstantMessageResponse.serializeBinaryToWriter = function(message, writer) {
-  message.serializeBinaryToWriter(writer);
-};
-
-
-/**
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
 proto.BINInstantMessageResponse.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  this.serializeBinaryToWriter(writer);
+  proto.BINInstantMessageResponse.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
 
 /**
- * Serializes the message to binary data (in protobuf wire format),
- * writing to the given BinaryWriter.
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.BINInstantMessageResponse} message
  * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.BINInstantMessageResponse.prototype.serializeBinaryToWriter = function (writer) {
+proto.BINInstantMessageResponse.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = /** @type {boolean} */ (jspb.Message.getField(this, 1));
+  f = /** @type {boolean} */ (jspb.Message.getField(message, 1));
   if (f != null) {
     writer.writeBool(
       1,
       f
     );
   }
-  f = /** @type {string} */ (jspb.Message.getField(this, 2));
+  f = /** @type {string} */ (jspb.Message.getField(message, 2));
   if (f != null) {
     writer.writeString(
       2,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 3));
+  f = /** @type {number} */ (jspb.Message.getField(message, 3));
   if (f != null) {
     writer.writeInt32(
       3,
       f
     );
   }
-  f = /** @type {string} */ (jspb.Message.getField(this, 4));
+  f = /** @type {string} */ (jspb.Message.getField(message, 4));
   if (f != null) {
     writer.writeString(
       4,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 5));
+  f = /** @type {number} */ (jspb.Message.getField(message, 5));
   if (f != null) {
     writer.writeInt64(
       5,
       f
     );
   }
-  f = /** @type {string} */ (jspb.Message.getField(this, 6));
+  f = /** @type {string} */ (jspb.Message.getField(message, 6));
   if (f != null) {
     writer.writeString(
       6,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 7));
+  f = /** @type {number} */ (jspb.Message.getField(message, 7));
   if (f != null) {
     writer.writeInt64(
       7,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 8));
+  f = /** @type {number} */ (jspb.Message.getField(message, 8));
   if (f != null) {
     writer.writeInt32(
       8,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 9));
+  f = /** @type {number} */ (jspb.Message.getField(message, 9));
   if (f != null) {
     writer.writeInt32(
       9,
       f
     );
   }
-  f = /** @type {string} */ (jspb.Message.getField(this, 10));
+  f = /** @type {string} */ (jspb.Message.getField(message, 10));
   if (f != null) {
     writer.writeString(
       10,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 11));
+  f = /** @type {number} */ (jspb.Message.getField(message, 11));
   if (f != null) {
     writer.writeInt64(
       11,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 12));
+  f = /** @type {number} */ (jspb.Message.getField(message, 12));
   if (f != null) {
     writer.writeInt32(
       12,
       f
     );
   }
-  f = /** @type {string} */ (jspb.Message.getField(this, 13));
+  f = /** @type {string} */ (jspb.Message.getField(message, 13));
   if (f != null) {
     writer.writeString(
       13,
@@ -1043,6 +1070,7 @@ proto.BINInstantMessage.prototype.toObject = function(opt_includeInstance) {
  *     http://goto/soy-param-migration
  * @param {!proto.BINInstantMessage} msg The msg instance to transform.
  * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.BINInstantMessage.toObject = function(includeInstance, msg) {
   var f, obj = {
@@ -1132,84 +1160,75 @@ proto.BINInstantMessage.deserializeBinaryFromReader = function(msg, reader) {
 
 
 /**
- * Class method variant: serializes the given message to binary data
- * (in protobuf wire format), writing to the given BinaryWriter.
- * @param {!proto.BINInstantMessage} message
- * @param {!jspb.BinaryWriter} writer
- */
-proto.BINInstantMessage.serializeBinaryToWriter = function(message, writer) {
-  message.serializeBinaryToWriter(writer);
-};
-
-
-/**
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
 proto.BINInstantMessage.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  this.serializeBinaryToWriter(writer);
+  proto.BINInstantMessage.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
 
 /**
- * Serializes the message to binary data (in protobuf wire format),
- * writing to the given BinaryWriter.
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.BINInstantMessage} message
  * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.BINInstantMessage.prototype.serializeBinaryToWriter = function (writer) {
+proto.BINInstantMessage.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = /** @type {string} */ (jspb.Message.getField(this, 1));
+  f = /** @type {string} */ (jspb.Message.getField(message, 1));
   if (f != null) {
     writer.writeString(
       1,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 2));
+  f = /** @type {number} */ (jspb.Message.getField(message, 2));
   if (f != null) {
     writer.writeInt64(
       2,
       f
     );
   }
-  f = /** @type {string} */ (jspb.Message.getField(this, 3));
+  f = /** @type {string} */ (jspb.Message.getField(message, 3));
   if (f != null) {
     writer.writeString(
       3,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 4));
+  f = /** @type {number} */ (jspb.Message.getField(message, 4));
   if (f != null) {
     writer.writeInt64(
       4,
       f
     );
   }
-  f = /** @type {string} */ (jspb.Message.getField(this, 5));
+  f = /** @type {string} */ (jspb.Message.getField(message, 5));
   if (f != null) {
     writer.writeString(
       5,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 6));
+  f = /** @type {number} */ (jspb.Message.getField(message, 6));
   if (f != null) {
     writer.writeInt64(
       6,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 7));
+  f = /** @type {number} */ (jspb.Message.getField(message, 7));
   if (f != null) {
     writer.writeInt32(
       7,
       f
     );
   }
-  f = /** @type {string} */ (jspb.Message.getField(this, 8));
+  f = /** @type {string} */ (jspb.Message.getField(message, 8));
   if (f != null) {
     writer.writeString(
       8,
@@ -1494,10 +1513,12 @@ proto.BINInstantMessageHistoryRequest.prototype.toObject = function(opt_includeI
  *     http://goto/soy-param-migration
  * @param {!proto.BINInstantMessageHistoryRequest} msg The msg instance to transform.
  * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.BINInstantMessageHistoryRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    scope: jspb.Message.getField(msg, 1)
+    scope: jspb.Message.getField(msg, 1),
+    zoneid: jspb.Message.getField(msg, 2)
   };
 
   if (includeInstance) {
@@ -1538,6 +1559,10 @@ proto.BINInstantMessageHistoryRequest.deserializeBinaryFromReader = function(msg
       var value = /** @type {number} */ (reader.readInt32());
       msg.setScope(value);
       break;
+    case 2:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setZoneid(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -1548,38 +1573,36 @@ proto.BINInstantMessageHistoryRequest.deserializeBinaryFromReader = function(msg
 
 
 /**
- * Class method variant: serializes the given message to binary data
- * (in protobuf wire format), writing to the given BinaryWriter.
- * @param {!proto.BINInstantMessageHistoryRequest} message
- * @param {!jspb.BinaryWriter} writer
- */
-proto.BINInstantMessageHistoryRequest.serializeBinaryToWriter = function(message, writer) {
-  message.serializeBinaryToWriter(writer);
-};
-
-
-/**
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
 proto.BINInstantMessageHistoryRequest.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  this.serializeBinaryToWriter(writer);
+  proto.BINInstantMessageHistoryRequest.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
 
 /**
- * Serializes the message to binary data (in protobuf wire format),
- * writing to the given BinaryWriter.
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.BINInstantMessageHistoryRequest} message
  * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.BINInstantMessageHistoryRequest.prototype.serializeBinaryToWriter = function (writer) {
+proto.BINInstantMessageHistoryRequest.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = /** @type {number} */ (jspb.Message.getField(this, 1));
+  f = /** @type {number} */ (jspb.Message.getField(message, 1));
   if (f != null) {
     writer.writeInt32(
       1,
+      f
+    );
+  }
+  f = /** @type {number} */ (jspb.Message.getField(message, 2));
+  if (f != null) {
+    writer.writeInt32(
+      2,
       f
     );
   }
@@ -1612,6 +1635,35 @@ proto.BINInstantMessageHistoryRequest.prototype.clearScope = function() {
  */
 proto.BINInstantMessageHistoryRequest.prototype.hasScope = function() {
   return jspb.Message.getField(this, 1) != null;
+};
+
+
+/**
+ * optional int32 zoneId = 2;
+ * @return {number}
+ */
+proto.BINInstantMessageHistoryRequest.prototype.getZoneid = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+};
+
+
+/** @param {number} value */
+proto.BINInstantMessageHistoryRequest.prototype.setZoneid = function(value) {
+  jspb.Message.setField(this, 2, value);
+};
+
+
+proto.BINInstantMessageHistoryRequest.prototype.clearZoneid = function() {
+  jspb.Message.setField(this, 2, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINInstantMessageHistoryRequest.prototype.hasZoneid = function() {
+  return jspb.Message.getField(this, 2) != null;
 };
 
 
@@ -1665,6 +1717,7 @@ proto.BINInstantMessageHistoryResponse.prototype.toObject = function(opt_include
  *     http://goto/soy-param-migration
  * @param {!proto.BINInstantMessageHistoryResponse} msg The msg instance to transform.
  * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.BINInstantMessageHistoryResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
@@ -1746,70 +1799,61 @@ proto.BINInstantMessageHistoryResponse.deserializeBinaryFromReader = function(ms
 
 
 /**
- * Class method variant: serializes the given message to binary data
- * (in protobuf wire format), writing to the given BinaryWriter.
- * @param {!proto.BINInstantMessageHistoryResponse} message
- * @param {!jspb.BinaryWriter} writer
- */
-proto.BINInstantMessageHistoryResponse.serializeBinaryToWriter = function(message, writer) {
-  message.serializeBinaryToWriter(writer);
-};
-
-
-/**
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
 proto.BINInstantMessageHistoryResponse.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  this.serializeBinaryToWriter(writer);
+  proto.BINInstantMessageHistoryResponse.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
 
 /**
- * Serializes the message to binary data (in protobuf wire format),
- * writing to the given BinaryWriter.
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.BINInstantMessageHistoryResponse} message
  * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.BINInstantMessageHistoryResponse.prototype.serializeBinaryToWriter = function (writer) {
+proto.BINInstantMessageHistoryResponse.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = /** @type {boolean} */ (jspb.Message.getField(this, 1));
+  f = /** @type {boolean} */ (jspb.Message.getField(message, 1));
   if (f != null) {
     writer.writeBool(
       1,
       f
     );
   }
-  f = /** @type {string} */ (jspb.Message.getField(this, 2));
+  f = /** @type {string} */ (jspb.Message.getField(message, 2));
   if (f != null) {
     writer.writeString(
       2,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 3));
+  f = /** @type {number} */ (jspb.Message.getField(message, 3));
   if (f != null) {
     writer.writeInt32(
       3,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 4));
+  f = /** @type {number} */ (jspb.Message.getField(message, 4));
   if (f != null) {
     writer.writeInt32(
       4,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 5));
+  f = /** @type {number} */ (jspb.Message.getField(message, 5));
   if (f != null) {
     writer.writeInt32(
       5,
       f
     );
   }
-  f = this.getInstantmessagesList();
+  f = message.getInstantmessagesList();
   if (f.length > 0) {
     writer.writeRepeatedMessage(
       6,
@@ -1969,8 +2013,6 @@ proto.BINInstantMessageHistoryResponse.prototype.hasRoomindex = function() {
 
 /**
  * repeated BINInstantMessage instantMessages = 6;
- * If you change this array by adding, removing or replacing elements, or if you
- * replace the array itself, then you must call the setter to update it.
  * @return {!Array.<!proto.BINInstantMessage>}
  */
 proto.BINInstantMessageHistoryResponse.prototype.getInstantmessagesList = function() {

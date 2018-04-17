@@ -33,13 +33,17 @@ import org.cocos2dx.javascript.SDKWrapper;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.telephony.TelephonyManager;
 import android.provider.Settings.Secure;
 
 public class AppActivity extends Cocos2dxActivity {
 
+    private static AppActivity app = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        app = this;
         // Workaround in https://stackoverflow.com/questions/16283079/re-launch-of-activity-on-home-button-but-only-the-first-time/16447508
         if (!isTaskRoot()) {
             // Android launched another instance of the root activity into an existing task
@@ -65,12 +69,34 @@ public class AppActivity extends Cocos2dxActivity {
         }
     }
 
-    private static AppActivity app = null;
-
     public static String getDeviceId() {
-        String androidDeviceId = Secure.getString(app.getContentResolver(),
-                    Secure.ANDROID_ID);
-        return androidDeviceId;
+
+          String deviceId = "";
+          try {
+            TelephonyManager tManager = (TelephonyManager) app.getSystemService(app.TELEPHONY_SERVICE);
+            if (tManager != null) {
+              String uid = tManager.getDeviceId();
+              if (uid == null || uid.isEmpty()) {
+                deviceId = Secure.getString(app.getContentResolver(), Secure.ANDROID_ID);
+              }else{
+                deviceId = uid;
+              }
+            }
+          } catch (Exception e) {
+          }
+
+          return deviceId;
+
+    }
+
+    public static String getPackageNameJNI() {
+        String packageName = "";
+        try {
+            packageName = app.getPackageName();
+        } catch (Exception e) {
+            packageName = "";
+        }
+        return packageName;
     }
 
     public static String getDeviceInfo() {

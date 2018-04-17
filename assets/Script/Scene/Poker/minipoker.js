@@ -32,11 +32,11 @@ var MiniPoker = cc.Class({
         updateMoneyResponse: null
     },
     statics: {
-      instance: null
+        instance: null
     },
     exitRoom: function() {
         // cc.director.loadScene("Table");
-        NetworkManager.requestExitRoomMessage(0);
+        NetworkManager.requestExitRoomMessage(Common.ZONE_ID.MINI_POKER, 0);
     },
     handleAutoSpin: function() {
         if (this.autoSpinToggle.isChecked && !this.isRun && this.isFinishSpin) {
@@ -86,7 +86,7 @@ var MiniPoker = cc.Class({
     },
 
     setKeyBet: function(key) {
-      this.betType = key;
+        this.betType = key;
     },
     getKeyBet: function() {
         return this.betType;
@@ -105,7 +105,7 @@ var MiniPoker = cc.Class({
         entry.setKey("turnSlotType");
         entry.setValue(turnType.toString());
         entries.push(entry);
-        NetworkManager.getTurnMessageFromServer(0, entries);
+        NetworkManager.getTurnMessageFromServer(Common.ZONE_ID.MINI_POKER, 0, entries);
     },
 
     getBetMoney: function() {
@@ -208,7 +208,7 @@ var MiniPoker = cc.Class({
         this.list_recent_value = items_value;
     },
     onDestroy: function() {
-      this.unscheduleAllCallbacks();
+        this.unscheduleAllCallbacks();
     },
 
     // use this for initialization
@@ -457,7 +457,7 @@ var MiniPoker = cc.Class({
     },
 
     matchEndResponseHandler: function(response) {
-      cc.log("match end response handler:", response.toObject());
+        cc.log("match end response handler:", response.toObject());
         if (response.getResponsecode()) {
             if (response.getArgsList().length > 0) {
                 for (var i = 0; i < response.getArgsList().length; i++) {
@@ -477,9 +477,9 @@ var MiniPoker = cc.Class({
             //
         }
 
-      if(response.hasMessage() && response.getMessage() !== "") {
-        Common.showToast(response.getMessage(), 2);
-      }
+        if(response.hasMessage() && response.getMessage() !== "") {
+            Common.showToast(response.getMessage(), 2);
+        }
     },
     exitRoomResponseHandler: function(resp) {
         cc.log("exit room response handler:", resp.toObject());
@@ -528,7 +528,7 @@ var MiniPoker = cc.Class({
         }
     },
     handleMessage: function(buffer) {
-      //  cc.log("buffer =", buffer.message_id);
+        //  cc.log("buffer =", buffer.message_id);
         var isDone = this._super(buffer);
         if(isDone) {
             return true;
