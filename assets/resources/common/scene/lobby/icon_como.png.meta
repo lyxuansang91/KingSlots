@@ -1,14 +1,14 @@
 {
   "ver": "1.0.0",
-  "uuid": "24f18cb1-5814-479a-b351-03e728613f5b",
+  "uuid": "4fb6aa3a-4c5d-44a6-a859-8d86a0c27c40",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
   "subMetas": {
-    "item_background": {
+    "icon_como": {
       "ver": "1.0.3",
-      "uuid": "52d56973-7578-4e85-87d0-b34b739def32",
-      "rawTextureUuid": "24f18cb1-5814-479a-b351-03e728613f5b",
+      "uuid": "035a20f3-871b-4178-9015-02ba3fd7767a",
+      "rawTextureUuid": "4fb6aa3a-4c5d-44a6-a859-8d86a0c27c40",
       "trimType": "custom",
       "trimThreshold": 1,
       "rotated": false,
@@ -16,10 +16,10 @@
       "offsetY": 0,
       "trimX": 0,
       "trimY": 0,
-      "width": 156,
-      "height": 156,
-      "rawWidth": 156,
-      "rawHeight": 156,
+      "width": 249,
+      "height": 445,
+      "rawWidth": 249,
+      "rawHeight": 445,
       "borderTop": 0,
       "borderBottom": 0,
       "borderLeft": 0,
