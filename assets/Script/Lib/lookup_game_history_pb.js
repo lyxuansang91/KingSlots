@@ -1,6 +1,8 @@
 /**
  * @fileoverview
  * @enhanceable
+ * @suppress {messageConventions} JS Compiler reports an error if a variable or
+ *     field starts with 'MSG_' and isn't a translatable message.
  * @public
  */
 // GENERATED CODE -- DO NOT EDIT!
@@ -11,6 +13,7 @@ var global = Function('return this')();
 
 var map_field_entry_pb = require('./map_field_entry_pb.js');
 goog.exportSymbol('proto.BINGameHistory', null, global);
+goog.exportSymbol('proto.BINGameHistoryDetail', null, global);
 goog.exportSymbol('proto.BINLookUpGameHistoryRequest', null, global);
 goog.exportSymbol('proto.BINLookUpGameHistoryResponse', null, global);
 
@@ -36,7 +39,7 @@ if (goog.DEBUG && !COMPILED) {
  * @private {!Array<number>}
  * @const
  */
-proto.BINLookUpGameHistoryRequest.repeatedFields_ = [5];
+proto.BINLookUpGameHistoryRequest.repeatedFields_ = [6];
 
 
 
@@ -63,13 +66,15 @@ proto.BINLookUpGameHistoryRequest.prototype.toObject = function(opt_includeInsta
  *     http://goto/soy-param-migration
  * @param {!proto.BINLookUpGameHistoryRequest} msg The msg instance to transform.
  * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.BINLookUpGameHistoryRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    firstresult: jspb.Message.getField(msg, 1),
-    maxresult: jspb.Message.getField(msg, 2),
-    orderbyfield: jspb.Message.getField(msg, 3),
-    asc: jspb.Message.getField(msg, 4),
+    zoneid: jspb.Message.getField(msg, 1),
+    firstresult: jspb.Message.getField(msg, 2),
+    maxresult: jspb.Message.getField(msg, 3),
+    orderbyfield: jspb.Message.getField(msg, 4),
+    asc: jspb.Message.getField(msg, 5),
     argsList: jspb.Message.toObjectList(msg.getArgsList(),
     map_field_entry_pb.BINMapFieldEntry.toObject, includeInstance)
   };
@@ -110,21 +115,25 @@ proto.BINLookUpGameHistoryRequest.deserializeBinaryFromReader = function(msg, re
     switch (field) {
     case 1:
       var value = /** @type {number} */ (reader.readInt32());
-      msg.setFirstresult(value);
+      msg.setZoneid(value);
       break;
     case 2:
       var value = /** @type {number} */ (reader.readInt32());
-      msg.setMaxresult(value);
+      msg.setFirstresult(value);
       break;
     case 3:
       var value = /** @type {number} */ (reader.readInt32());
-      msg.setOrderbyfield(value);
+      msg.setMaxresult(value);
       break;
     case 4:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setOrderbyfield(value);
+      break;
+    case 5:
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setAsc(value);
       break;
-    case 5:
+    case 6:
       var value = new map_field_entry_pb.BINMapFieldEntry;
       reader.readMessage(value,map_field_entry_pb.BINMapFieldEntry.deserializeBinaryFromReader);
       msg.addArgs(value);
@@ -139,66 +148,64 @@ proto.BINLookUpGameHistoryRequest.deserializeBinaryFromReader = function(msg, re
 
 
 /**
- * Class method variant: serializes the given message to binary data
- * (in protobuf wire format), writing to the given BinaryWriter.
- * @param {!proto.BINLookUpGameHistoryRequest} message
- * @param {!jspb.BinaryWriter} writer
- */
-proto.BINLookUpGameHistoryRequest.serializeBinaryToWriter = function(message, writer) {
-  message.serializeBinaryToWriter(writer);
-};
-
-
-/**
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
 proto.BINLookUpGameHistoryRequest.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  this.serializeBinaryToWriter(writer);
+  proto.BINLookUpGameHistoryRequest.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
 
 /**
- * Serializes the message to binary data (in protobuf wire format),
- * writing to the given BinaryWriter.
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.BINLookUpGameHistoryRequest} message
  * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.BINLookUpGameHistoryRequest.prototype.serializeBinaryToWriter = function (writer) {
+proto.BINLookUpGameHistoryRequest.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = /** @type {number} */ (jspb.Message.getField(this, 1));
+  f = /** @type {number} */ (jspb.Message.getField(message, 1));
   if (f != null) {
     writer.writeInt32(
       1,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 2));
+  f = /** @type {number} */ (jspb.Message.getField(message, 2));
   if (f != null) {
     writer.writeInt32(
       2,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 3));
+  f = /** @type {number} */ (jspb.Message.getField(message, 3));
   if (f != null) {
     writer.writeInt32(
       3,
       f
     );
   }
-  f = /** @type {boolean} */ (jspb.Message.getField(this, 4));
+  f = /** @type {number} */ (jspb.Message.getField(message, 4));
   if (f != null) {
-    writer.writeBool(
+    writer.writeInt32(
       4,
       f
     );
   }
-  f = this.getArgsList();
+  f = /** @type {boolean} */ (jspb.Message.getField(message, 5));
+  if (f != null) {
+    writer.writeBool(
+      5,
+      f
+    );
+  }
+  f = message.getArgsList();
   if (f.length > 0) {
     writer.writeRepeatedMessage(
-      5,
+      6,
       f,
       map_field_entry_pb.BINMapFieldEntry.serializeBinaryToWriter
     );
@@ -207,21 +214,21 @@ proto.BINLookUpGameHistoryRequest.prototype.serializeBinaryToWriter = function (
 
 
 /**
- * required int32 firstResult = 1;
+ * required int32 zoneId = 1;
  * @return {number}
  */
-proto.BINLookUpGameHistoryRequest.prototype.getFirstresult = function() {
+proto.BINLookUpGameHistoryRequest.prototype.getZoneid = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
 };
 
 
 /** @param {number} value */
-proto.BINLookUpGameHistoryRequest.prototype.setFirstresult = function(value) {
+proto.BINLookUpGameHistoryRequest.prototype.setZoneid = function(value) {
   jspb.Message.setField(this, 1, value);
 };
 
 
-proto.BINLookUpGameHistoryRequest.prototype.clearFirstresult = function() {
+proto.BINLookUpGameHistoryRequest.prototype.clearZoneid = function() {
   jspb.Message.setField(this, 1, undefined);
 };
 
@@ -230,27 +237,27 @@ proto.BINLookUpGameHistoryRequest.prototype.clearFirstresult = function() {
  * Returns whether this field is set.
  * @return {!boolean}
  */
-proto.BINLookUpGameHistoryRequest.prototype.hasFirstresult = function() {
+proto.BINLookUpGameHistoryRequest.prototype.hasZoneid = function() {
   return jspb.Message.getField(this, 1) != null;
 };
 
 
 /**
- * required int32 maxResult = 2;
+ * required int32 firstResult = 2;
  * @return {number}
  */
-proto.BINLookUpGameHistoryRequest.prototype.getMaxresult = function() {
+proto.BINLookUpGameHistoryRequest.prototype.getFirstresult = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
 };
 
 
 /** @param {number} value */
-proto.BINLookUpGameHistoryRequest.prototype.setMaxresult = function(value) {
+proto.BINLookUpGameHistoryRequest.prototype.setFirstresult = function(value) {
   jspb.Message.setField(this, 2, value);
 };
 
 
-proto.BINLookUpGameHistoryRequest.prototype.clearMaxresult = function() {
+proto.BINLookUpGameHistoryRequest.prototype.clearFirstresult = function() {
   jspb.Message.setField(this, 2, undefined);
 };
 
@@ -259,27 +266,27 @@ proto.BINLookUpGameHistoryRequest.prototype.clearMaxresult = function() {
  * Returns whether this field is set.
  * @return {!boolean}
  */
-proto.BINLookUpGameHistoryRequest.prototype.hasMaxresult = function() {
+proto.BINLookUpGameHistoryRequest.prototype.hasFirstresult = function() {
   return jspb.Message.getField(this, 2) != null;
 };
 
 
 /**
- * optional int32 orderByField = 3;
+ * required int32 maxResult = 3;
  * @return {number}
  */
-proto.BINLookUpGameHistoryRequest.prototype.getOrderbyfield = function() {
+proto.BINLookUpGameHistoryRequest.prototype.getMaxresult = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
 };
 
 
 /** @param {number} value */
-proto.BINLookUpGameHistoryRequest.prototype.setOrderbyfield = function(value) {
+proto.BINLookUpGameHistoryRequest.prototype.setMaxresult = function(value) {
   jspb.Message.setField(this, 3, value);
 };
 
 
-proto.BINLookUpGameHistoryRequest.prototype.clearOrderbyfield = function() {
+proto.BINLookUpGameHistoryRequest.prototype.clearMaxresult = function() {
   jspb.Message.setField(this, 3, undefined);
 };
 
@@ -288,29 +295,27 @@ proto.BINLookUpGameHistoryRequest.prototype.clearOrderbyfield = function() {
  * Returns whether this field is set.
  * @return {!boolean}
  */
-proto.BINLookUpGameHistoryRequest.prototype.hasOrderbyfield = function() {
+proto.BINLookUpGameHistoryRequest.prototype.hasMaxresult = function() {
   return jspb.Message.getField(this, 3) != null;
 };
 
 
 /**
- * optional bool asc = 4;
- * Note that Boolean fields may be set to 0/1 when serialized from a Java server.
- * You should avoid comparisons like {@code val === true/false} in those cases.
- * @return {boolean}
+ * optional int32 orderByField = 4;
+ * @return {number}
  */
-proto.BINLookUpGameHistoryRequest.prototype.getAsc = function() {
-  return /** @type {boolean} */ (jspb.Message.getFieldWithDefault(this, 4, false));
+proto.BINLookUpGameHistoryRequest.prototype.getOrderbyfield = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 4, 0));
 };
 
 
-/** @param {boolean} value */
-proto.BINLookUpGameHistoryRequest.prototype.setAsc = function(value) {
+/** @param {number} value */
+proto.BINLookUpGameHistoryRequest.prototype.setOrderbyfield = function(value) {
   jspb.Message.setField(this, 4, value);
 };
 
 
-proto.BINLookUpGameHistoryRequest.prototype.clearAsc = function() {
+proto.BINLookUpGameHistoryRequest.prototype.clearOrderbyfield = function() {
   jspb.Message.setField(this, 4, undefined);
 };
 
@@ -319,26 +324,55 @@ proto.BINLookUpGameHistoryRequest.prototype.clearAsc = function() {
  * Returns whether this field is set.
  * @return {!boolean}
  */
-proto.BINLookUpGameHistoryRequest.prototype.hasAsc = function() {
+proto.BINLookUpGameHistoryRequest.prototype.hasOrderbyfield = function() {
   return jspb.Message.getField(this, 4) != null;
 };
 
 
 /**
- * repeated BINMapFieldEntry args = 5;
- * If you change this array by adding, removing or replacing elements, or if you
- * replace the array itself, then you must call the setter to update it.
+ * optional bool asc = 5;
+ * Note that Boolean fields may be set to 0/1 when serialized from a Java server.
+ * You should avoid comparisons like {@code val === true/false} in those cases.
+ * @return {boolean}
+ */
+proto.BINLookUpGameHistoryRequest.prototype.getAsc = function() {
+  return /** @type {boolean} */ (jspb.Message.getFieldWithDefault(this, 5, false));
+};
+
+
+/** @param {boolean} value */
+proto.BINLookUpGameHistoryRequest.prototype.setAsc = function(value) {
+  jspb.Message.setField(this, 5, value);
+};
+
+
+proto.BINLookUpGameHistoryRequest.prototype.clearAsc = function() {
+  jspb.Message.setField(this, 5, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINLookUpGameHistoryRequest.prototype.hasAsc = function() {
+  return jspb.Message.getField(this, 5) != null;
+};
+
+
+/**
+ * repeated BINMapFieldEntry args = 6;
  * @return {!Array.<!proto.BINMapFieldEntry>}
  */
 proto.BINLookUpGameHistoryRequest.prototype.getArgsList = function() {
   return /** @type{!Array.<!proto.BINMapFieldEntry>} */ (
-    jspb.Message.getRepeatedWrapperField(this, map_field_entry_pb.BINMapFieldEntry, 5));
+    jspb.Message.getRepeatedWrapperField(this, map_field_entry_pb.BINMapFieldEntry, 6));
 };
 
 
 /** @param {!Array.<!proto.BINMapFieldEntry>} value */
 proto.BINLookUpGameHistoryRequest.prototype.setArgsList = function(value) {
-  jspb.Message.setRepeatedWrapperField(this, 5, value);
+  jspb.Message.setRepeatedWrapperField(this, 6, value);
 };
 
 
@@ -348,7 +382,7 @@ proto.BINLookUpGameHistoryRequest.prototype.setArgsList = function(value) {
  * @return {!proto.BINMapFieldEntry}
  */
 proto.BINLookUpGameHistoryRequest.prototype.addArgs = function(opt_value, opt_index) {
-  return jspb.Message.addToRepeatedWrapperField(this, 5, opt_value, proto.BINMapFieldEntry, opt_index);
+  return jspb.Message.addToRepeatedWrapperField(this, 6, opt_value, proto.BINMapFieldEntry, opt_index);
 };
 
 
@@ -400,6 +434,7 @@ proto.BINGameHistory.prototype.toObject = function(opt_includeInstance) {
  *     http://goto/soy-param-migration
  * @param {!proto.BINGameHistory} msg The msg instance to transform.
  * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.BINGameHistory.toObject = function(includeInstance, msg) {
   var f, obj = {
@@ -499,98 +534,89 @@ proto.BINGameHistory.deserializeBinaryFromReader = function(msg, reader) {
 
 
 /**
- * Class method variant: serializes the given message to binary data
- * (in protobuf wire format), writing to the given BinaryWriter.
- * @param {!proto.BINGameHistory} message
- * @param {!jspb.BinaryWriter} writer
- */
-proto.BINGameHistory.serializeBinaryToWriter = function(message, writer) {
-  message.serializeBinaryToWriter(writer);
-};
-
-
-/**
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
 proto.BINGameHistory.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  this.serializeBinaryToWriter(writer);
+  proto.BINGameHistory.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
 
 /**
- * Serializes the message to binary data (in protobuf wire format),
- * writing to the given BinaryWriter.
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.BINGameHistory} message
  * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.BINGameHistory.prototype.serializeBinaryToWriter = function (writer) {
+proto.BINGameHistory.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = /** @type {string} */ (jspb.Message.getField(this, 1));
+  f = /** @type {string} */ (jspb.Message.getField(message, 1));
   if (f != null) {
     writer.writeString(
       1,
       f
     );
   }
-  f = /** @type {string} */ (jspb.Message.getField(this, 2));
+  f = /** @type {string} */ (jspb.Message.getField(message, 2));
   if (f != null) {
     writer.writeString(
       2,
       f
     );
   }
-  f = /** @type {string} */ (jspb.Message.getField(this, 3));
+  f = /** @type {string} */ (jspb.Message.getField(message, 3));
   if (f != null) {
     writer.writeString(
       3,
       f
     );
   }
-  f = /** @type {string} */ (jspb.Message.getField(this, 4));
+  f = /** @type {string} */ (jspb.Message.getField(message, 4));
   if (f != null) {
     writer.writeString(
       4,
       f
     );
   }
-  f = /** @type {string} */ (jspb.Message.getField(this, 5));
+  f = /** @type {string} */ (jspb.Message.getField(message, 5));
   if (f != null) {
     writer.writeString(
       5,
       f
     );
   }
-  f = /** @type {string} */ (jspb.Message.getField(this, 6));
+  f = /** @type {string} */ (jspb.Message.getField(message, 6));
   if (f != null) {
     writer.writeString(
       6,
       f
     );
   }
-  f = /** @type {string} */ (jspb.Message.getField(this, 7));
+  f = /** @type {string} */ (jspb.Message.getField(message, 7));
   if (f != null) {
     writer.writeString(
       7,
       f
     );
   }
-  f = /** @type {string} */ (jspb.Message.getField(this, 8));
+  f = /** @type {string} */ (jspb.Message.getField(message, 8));
   if (f != null) {
     writer.writeString(
       8,
       f
     );
   }
-  f = /** @type {string} */ (jspb.Message.getField(this, 9));
+  f = /** @type {string} */ (jspb.Message.getField(message, 9));
   if (f != null) {
     writer.writeString(
       9,
       f
     );
   }
-  f = /** @type {string} */ (jspb.Message.getField(this, 10));
+  f = /** @type {string} */ (jspb.Message.getField(message, 10));
   if (f != null) {
     writer.writeString(
       10,
@@ -901,6 +927,531 @@ proto.BINGameHistory.prototype.hasTenth = function() {
  * @extends {jspb.Message}
  * @constructor
  */
+proto.BINGameHistoryDetail = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.BINGameHistoryDetail, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  proto.BINGameHistoryDetail.displayName = 'proto.BINGameHistoryDetail';
+}
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto suitable for use in Soy templates.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     com.google.apps.jspb.JsClassTemplate.JS_RESERVED_WORDS.
+ * @param {boolean=} opt_includeInstance Whether to include the JSPB instance
+ *     for transitional soy proto support: http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.BINGameHistoryDetail.prototype.toObject = function(opt_includeInstance) {
+  return proto.BINGameHistoryDetail.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Whether to include the JSPB
+ *     instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.BINGameHistoryDetail} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.BINGameHistoryDetail.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    first: jspb.Message.getField(msg, 1),
+    second: jspb.Message.getField(msg, 2),
+    third: jspb.Message.getField(msg, 3),
+    fourth: jspb.Message.getField(msg, 4),
+    fifth: jspb.Message.getField(msg, 5),
+    sixth: jspb.Message.getField(msg, 6),
+    seventh: jspb.Message.getField(msg, 7),
+    eighth: jspb.Message.getField(msg, 8),
+    ninth: jspb.Message.getField(msg, 9),
+    tenth: jspb.Message.getField(msg, 10)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.BINGameHistoryDetail}
+ */
+proto.BINGameHistoryDetail.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.BINGameHistoryDetail;
+  return proto.BINGameHistoryDetail.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.BINGameHistoryDetail} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.BINGameHistoryDetail}
+ */
+proto.BINGameHistoryDetail.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setFirst(value);
+      break;
+    case 2:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setSecond(value);
+      break;
+    case 3:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setThird(value);
+      break;
+    case 4:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setFourth(value);
+      break;
+    case 5:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setFifth(value);
+      break;
+    case 6:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setSixth(value);
+      break;
+    case 7:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setSeventh(value);
+      break;
+    case 8:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setEighth(value);
+      break;
+    case 9:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setNinth(value);
+      break;
+    case 10:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setTenth(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.BINGameHistoryDetail.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.BINGameHistoryDetail.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.BINGameHistoryDetail} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.BINGameHistoryDetail.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = /** @type {string} */ (jspb.Message.getField(message, 1));
+  if (f != null) {
+    writer.writeString(
+      1,
+      f
+    );
+  }
+  f = /** @type {string} */ (jspb.Message.getField(message, 2));
+  if (f != null) {
+    writer.writeString(
+      2,
+      f
+    );
+  }
+  f = /** @type {string} */ (jspb.Message.getField(message, 3));
+  if (f != null) {
+    writer.writeString(
+      3,
+      f
+    );
+  }
+  f = /** @type {string} */ (jspb.Message.getField(message, 4));
+  if (f != null) {
+    writer.writeString(
+      4,
+      f
+    );
+  }
+  f = /** @type {string} */ (jspb.Message.getField(message, 5));
+  if (f != null) {
+    writer.writeString(
+      5,
+      f
+    );
+  }
+  f = /** @type {string} */ (jspb.Message.getField(message, 6));
+  if (f != null) {
+    writer.writeString(
+      6,
+      f
+    );
+  }
+  f = /** @type {string} */ (jspb.Message.getField(message, 7));
+  if (f != null) {
+    writer.writeString(
+      7,
+      f
+    );
+  }
+  f = /** @type {string} */ (jspb.Message.getField(message, 8));
+  if (f != null) {
+    writer.writeString(
+      8,
+      f
+    );
+  }
+  f = /** @type {string} */ (jspb.Message.getField(message, 9));
+  if (f != null) {
+    writer.writeString(
+      9,
+      f
+    );
+  }
+  f = /** @type {string} */ (jspb.Message.getField(message, 10));
+  if (f != null) {
+    writer.writeString(
+      10,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional string first = 1;
+ * @return {string}
+ */
+proto.BINGameHistoryDetail.prototype.getFirst = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
+};
+
+
+/** @param {string} value */
+proto.BINGameHistoryDetail.prototype.setFirst = function(value) {
+  jspb.Message.setField(this, 1, value);
+};
+
+
+proto.BINGameHistoryDetail.prototype.clearFirst = function() {
+  jspb.Message.setField(this, 1, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINGameHistoryDetail.prototype.hasFirst = function() {
+  return jspb.Message.getField(this, 1) != null;
+};
+
+
+/**
+ * optional string second = 2;
+ * @return {string}
+ */
+proto.BINGameHistoryDetail.prototype.getSecond = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
+};
+
+
+/** @param {string} value */
+proto.BINGameHistoryDetail.prototype.setSecond = function(value) {
+  jspb.Message.setField(this, 2, value);
+};
+
+
+proto.BINGameHistoryDetail.prototype.clearSecond = function() {
+  jspb.Message.setField(this, 2, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINGameHistoryDetail.prototype.hasSecond = function() {
+  return jspb.Message.getField(this, 2) != null;
+};
+
+
+/**
+ * optional string third = 3;
+ * @return {string}
+ */
+proto.BINGameHistoryDetail.prototype.getThird = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
+};
+
+
+/** @param {string} value */
+proto.BINGameHistoryDetail.prototype.setThird = function(value) {
+  jspb.Message.setField(this, 3, value);
+};
+
+
+proto.BINGameHistoryDetail.prototype.clearThird = function() {
+  jspb.Message.setField(this, 3, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINGameHistoryDetail.prototype.hasThird = function() {
+  return jspb.Message.getField(this, 3) != null;
+};
+
+
+/**
+ * optional string fourth = 4;
+ * @return {string}
+ */
+proto.BINGameHistoryDetail.prototype.getFourth = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
+};
+
+
+/** @param {string} value */
+proto.BINGameHistoryDetail.prototype.setFourth = function(value) {
+  jspb.Message.setField(this, 4, value);
+};
+
+
+proto.BINGameHistoryDetail.prototype.clearFourth = function() {
+  jspb.Message.setField(this, 4, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINGameHistoryDetail.prototype.hasFourth = function() {
+  return jspb.Message.getField(this, 4) != null;
+};
+
+
+/**
+ * optional string fifth = 5;
+ * @return {string}
+ */
+proto.BINGameHistoryDetail.prototype.getFifth = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
+};
+
+
+/** @param {string} value */
+proto.BINGameHistoryDetail.prototype.setFifth = function(value) {
+  jspb.Message.setField(this, 5, value);
+};
+
+
+proto.BINGameHistoryDetail.prototype.clearFifth = function() {
+  jspb.Message.setField(this, 5, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINGameHistoryDetail.prototype.hasFifth = function() {
+  return jspb.Message.getField(this, 5) != null;
+};
+
+
+/**
+ * optional string sixth = 6;
+ * @return {string}
+ */
+proto.BINGameHistoryDetail.prototype.getSixth = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 6, ""));
+};
+
+
+/** @param {string} value */
+proto.BINGameHistoryDetail.prototype.setSixth = function(value) {
+  jspb.Message.setField(this, 6, value);
+};
+
+
+proto.BINGameHistoryDetail.prototype.clearSixth = function() {
+  jspb.Message.setField(this, 6, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINGameHistoryDetail.prototype.hasSixth = function() {
+  return jspb.Message.getField(this, 6) != null;
+};
+
+
+/**
+ * optional string seventh = 7;
+ * @return {string}
+ */
+proto.BINGameHistoryDetail.prototype.getSeventh = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 7, ""));
+};
+
+
+/** @param {string} value */
+proto.BINGameHistoryDetail.prototype.setSeventh = function(value) {
+  jspb.Message.setField(this, 7, value);
+};
+
+
+proto.BINGameHistoryDetail.prototype.clearSeventh = function() {
+  jspb.Message.setField(this, 7, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINGameHistoryDetail.prototype.hasSeventh = function() {
+  return jspb.Message.getField(this, 7) != null;
+};
+
+
+/**
+ * optional string eighth = 8;
+ * @return {string}
+ */
+proto.BINGameHistoryDetail.prototype.getEighth = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 8, ""));
+};
+
+
+/** @param {string} value */
+proto.BINGameHistoryDetail.prototype.setEighth = function(value) {
+  jspb.Message.setField(this, 8, value);
+};
+
+
+proto.BINGameHistoryDetail.prototype.clearEighth = function() {
+  jspb.Message.setField(this, 8, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINGameHistoryDetail.prototype.hasEighth = function() {
+  return jspb.Message.getField(this, 8) != null;
+};
+
+
+/**
+ * optional string ninth = 9;
+ * @return {string}
+ */
+proto.BINGameHistoryDetail.prototype.getNinth = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 9, ""));
+};
+
+
+/** @param {string} value */
+proto.BINGameHistoryDetail.prototype.setNinth = function(value) {
+  jspb.Message.setField(this, 9, value);
+};
+
+
+proto.BINGameHistoryDetail.prototype.clearNinth = function() {
+  jspb.Message.setField(this, 9, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINGameHistoryDetail.prototype.hasNinth = function() {
+  return jspb.Message.getField(this, 9) != null;
+};
+
+
+/**
+ * optional string tenth = 10;
+ * @return {string}
+ */
+proto.BINGameHistoryDetail.prototype.getTenth = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 10, ""));
+};
+
+
+/** @param {string} value */
+proto.BINGameHistoryDetail.prototype.setTenth = function(value) {
+  jspb.Message.setField(this, 10, value);
+};
+
+
+proto.BINGameHistoryDetail.prototype.clearTenth = function() {
+  jspb.Message.setField(this, 10, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINGameHistoryDetail.prototype.hasTenth = function() {
+  return jspb.Message.getField(this, 10) != null;
+};
+
+
+
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
 proto.BINLookUpGameHistoryResponse = function(opt_data) {
   jspb.Message.initialize(this, opt_data, 0, -1, proto.BINLookUpGameHistoryResponse.repeatedFields_, null);
 };
@@ -913,7 +1464,7 @@ if (goog.DEBUG && !COMPILED) {
  * @private {!Array<number>}
  * @const
  */
-proto.BINLookUpGameHistoryResponse.repeatedFields_ = [3,4];
+proto.BINLookUpGameHistoryResponse.repeatedFields_ = [4,5,6];
 
 
 
@@ -940,15 +1491,19 @@ proto.BINLookUpGameHistoryResponse.prototype.toObject = function(opt_includeInst
  *     http://goto/soy-param-migration
  * @param {!proto.BINLookUpGameHistoryResponse} msg The msg instance to transform.
  * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.BINLookUpGameHistoryResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
     responsecode: jspb.Message.getField(msg, 1),
     message: jspb.Message.getField(msg, 2),
+    zoneid: jspb.Message.getField(msg, 3),
     historiesList: jspb.Message.toObjectList(msg.getHistoriesList(),
     proto.BINGameHistory.toObject, includeInstance),
     argsList: jspb.Message.toObjectList(msg.getArgsList(),
-    map_field_entry_pb.BINMapFieldEntry.toObject, includeInstance)
+    map_field_entry_pb.BINMapFieldEntry.toObject, includeInstance),
+    historiesdetailList: jspb.Message.toObjectList(msg.getHistoriesdetailList(),
+    proto.BINGameHistoryDetail.toObject, includeInstance)
   };
 
   if (includeInstance) {
@@ -994,14 +1549,23 @@ proto.BINLookUpGameHistoryResponse.deserializeBinaryFromReader = function(msg, r
       msg.setMessage(value);
       break;
     case 3:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setZoneid(value);
+      break;
+    case 4:
       var value = new proto.BINGameHistory;
       reader.readMessage(value,proto.BINGameHistory.deserializeBinaryFromReader);
       msg.addHistories(value);
       break;
-    case 4:
+    case 5:
       var value = new map_field_entry_pb.BINMapFieldEntry;
       reader.readMessage(value,map_field_entry_pb.BINMapFieldEntry.deserializeBinaryFromReader);
       msg.addArgs(value);
+      break;
+    case 6:
+      var value = new proto.BINGameHistoryDetail;
+      reader.readMessage(value,proto.BINGameHistoryDetail.deserializeBinaryFromReader);
+      msg.addHistoriesdetail(value);
       break;
     default:
       reader.skipField();
@@ -1013,62 +1577,68 @@ proto.BINLookUpGameHistoryResponse.deserializeBinaryFromReader = function(msg, r
 
 
 /**
- * Class method variant: serializes the given message to binary data
- * (in protobuf wire format), writing to the given BinaryWriter.
- * @param {!proto.BINLookUpGameHistoryResponse} message
- * @param {!jspb.BinaryWriter} writer
- */
-proto.BINLookUpGameHistoryResponse.serializeBinaryToWriter = function(message, writer) {
-  message.serializeBinaryToWriter(writer);
-};
-
-
-/**
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
 proto.BINLookUpGameHistoryResponse.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  this.serializeBinaryToWriter(writer);
+  proto.BINLookUpGameHistoryResponse.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
 
 /**
- * Serializes the message to binary data (in protobuf wire format),
- * writing to the given BinaryWriter.
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.BINLookUpGameHistoryResponse} message
  * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.BINLookUpGameHistoryResponse.prototype.serializeBinaryToWriter = function (writer) {
+proto.BINLookUpGameHistoryResponse.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = /** @type {boolean} */ (jspb.Message.getField(this, 1));
+  f = /** @type {boolean} */ (jspb.Message.getField(message, 1));
   if (f != null) {
     writer.writeBool(
       1,
       f
     );
   }
-  f = /** @type {string} */ (jspb.Message.getField(this, 2));
+  f = /** @type {string} */ (jspb.Message.getField(message, 2));
   if (f != null) {
     writer.writeString(
       2,
       f
     );
   }
-  f = this.getHistoriesList();
-  if (f.length > 0) {
-    writer.writeRepeatedMessage(
+  f = /** @type {number} */ (jspb.Message.getField(message, 3));
+  if (f != null) {
+    writer.writeInt32(
       3,
-      f,
-      proto.BINGameHistory.serializeBinaryToWriter
+      f
     );
   }
-  f = this.getArgsList();
+  f = message.getHistoriesList();
   if (f.length > 0) {
     writer.writeRepeatedMessage(
       4,
       f,
+      proto.BINGameHistory.serializeBinaryToWriter
+    );
+  }
+  f = message.getArgsList();
+  if (f.length > 0) {
+    writer.writeRepeatedMessage(
+      5,
+      f,
       map_field_entry_pb.BINMapFieldEntry.serializeBinaryToWriter
+    );
+  }
+  f = message.getHistoriesdetailList();
+  if (f.length > 0) {
+    writer.writeRepeatedMessage(
+      6,
+      f,
+      proto.BINGameHistoryDetail.serializeBinaryToWriter
     );
   }
 };
@@ -1135,20 +1705,47 @@ proto.BINLookUpGameHistoryResponse.prototype.hasMessage = function() {
 
 
 /**
- * repeated BINGameHistory histories = 3;
- * If you change this array by adding, removing or replacing elements, or if you
- * replace the array itself, then you must call the setter to update it.
+ * optional int32 zoneId = 3;
+ * @return {number}
+ */
+proto.BINLookUpGameHistoryResponse.prototype.getZoneid = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
+};
+
+
+/** @param {number} value */
+proto.BINLookUpGameHistoryResponse.prototype.setZoneid = function(value) {
+  jspb.Message.setField(this, 3, value);
+};
+
+
+proto.BINLookUpGameHistoryResponse.prototype.clearZoneid = function() {
+  jspb.Message.setField(this, 3, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINLookUpGameHistoryResponse.prototype.hasZoneid = function() {
+  return jspb.Message.getField(this, 3) != null;
+};
+
+
+/**
+ * repeated BINGameHistory histories = 4;
  * @return {!Array.<!proto.BINGameHistory>}
  */
 proto.BINLookUpGameHistoryResponse.prototype.getHistoriesList = function() {
   return /** @type{!Array.<!proto.BINGameHistory>} */ (
-    jspb.Message.getRepeatedWrapperField(this, proto.BINGameHistory, 3));
+    jspb.Message.getRepeatedWrapperField(this, proto.BINGameHistory, 4));
 };
 
 
 /** @param {!Array.<!proto.BINGameHistory>} value */
 proto.BINLookUpGameHistoryResponse.prototype.setHistoriesList = function(value) {
-  jspb.Message.setRepeatedWrapperField(this, 3, value);
+  jspb.Message.setRepeatedWrapperField(this, 4, value);
 };
 
 
@@ -1158,7 +1755,7 @@ proto.BINLookUpGameHistoryResponse.prototype.setHistoriesList = function(value) 
  * @return {!proto.BINGameHistory}
  */
 proto.BINLookUpGameHistoryResponse.prototype.addHistories = function(opt_value, opt_index) {
-  return jspb.Message.addToRepeatedWrapperField(this, 3, opt_value, proto.BINGameHistory, opt_index);
+  return jspb.Message.addToRepeatedWrapperField(this, 4, opt_value, proto.BINGameHistory, opt_index);
 };
 
 
@@ -1168,20 +1765,18 @@ proto.BINLookUpGameHistoryResponse.prototype.clearHistoriesList = function() {
 
 
 /**
- * repeated BINMapFieldEntry args = 4;
- * If you change this array by adding, removing or replacing elements, or if you
- * replace the array itself, then you must call the setter to update it.
+ * repeated BINMapFieldEntry args = 5;
  * @return {!Array.<!proto.BINMapFieldEntry>}
  */
 proto.BINLookUpGameHistoryResponse.prototype.getArgsList = function() {
   return /** @type{!Array.<!proto.BINMapFieldEntry>} */ (
-    jspb.Message.getRepeatedWrapperField(this, map_field_entry_pb.BINMapFieldEntry, 4));
+    jspb.Message.getRepeatedWrapperField(this, map_field_entry_pb.BINMapFieldEntry, 5));
 };
 
 
 /** @param {!Array.<!proto.BINMapFieldEntry>} value */
 proto.BINLookUpGameHistoryResponse.prototype.setArgsList = function(value) {
-  jspb.Message.setRepeatedWrapperField(this, 4, value);
+  jspb.Message.setRepeatedWrapperField(this, 5, value);
 };
 
 
@@ -1191,12 +1786,43 @@ proto.BINLookUpGameHistoryResponse.prototype.setArgsList = function(value) {
  * @return {!proto.BINMapFieldEntry}
  */
 proto.BINLookUpGameHistoryResponse.prototype.addArgs = function(opt_value, opt_index) {
-  return jspb.Message.addToRepeatedWrapperField(this, 4, opt_value, proto.BINMapFieldEntry, opt_index);
+  return jspb.Message.addToRepeatedWrapperField(this, 5, opt_value, proto.BINMapFieldEntry, opt_index);
 };
 
 
 proto.BINLookUpGameHistoryResponse.prototype.clearArgsList = function() {
   this.setArgsList([]);
+};
+
+
+/**
+ * repeated BINGameHistoryDetail historiesDetail = 6;
+ * @return {!Array.<!proto.BINGameHistoryDetail>}
+ */
+proto.BINLookUpGameHistoryResponse.prototype.getHistoriesdetailList = function() {
+  return /** @type{!Array.<!proto.BINGameHistoryDetail>} */ (
+    jspb.Message.getRepeatedWrapperField(this, proto.BINGameHistoryDetail, 6));
+};
+
+
+/** @param {!Array.<!proto.BINGameHistoryDetail>} value */
+proto.BINLookUpGameHistoryResponse.prototype.setHistoriesdetailList = function(value) {
+  jspb.Message.setRepeatedWrapperField(this, 6, value);
+};
+
+
+/**
+ * @param {!proto.BINGameHistoryDetail=} opt_value
+ * @param {number=} opt_index
+ * @return {!proto.BINGameHistoryDetail}
+ */
+proto.BINLookUpGameHistoryResponse.prototype.addHistoriesdetail = function(opt_value, opt_index) {
+  return jspb.Message.addToRepeatedWrapperField(this, 6, opt_value, proto.BINGameHistoryDetail, opt_index);
+};
+
+
+proto.BINLookUpGameHistoryResponse.prototype.clearHistoriesdetailList = function() {
+  this.setHistoriesdetailList([]);
 };
 
 

@@ -165,8 +165,8 @@ var Treasure = cc.Class({
             }
 
             line_number.setPosition(cc.p((parseInt(i / 10) == 0) ?
-                        (-size_board.width/2 + size_line.width/2) :
-                        (size_board.width/2 - size_line.width/2),
+                (-size_board.width/2 + size_line.width/2) :
+                (size_board.width/2 - size_line.width/2),
                 pos_line_top - size_line.height * ((i % 10) * 0.93 + 1)));
             this.board_null_line.addChild(line_number,2);
 
@@ -350,11 +350,11 @@ var Treasure = cc.Class({
         entryLine.setKey("lineSelected");
         entryLine.setValue(result);
         entries.push(entryLine);
-        NetworkManager.getTurnMessageFromServer(0, entries);
+        NetworkManager.getTurnMessageFromServer(Common.ZONE_ID.TREASURE, 0, entries);
     },
 
     exitRoom: function() {
-        NetworkManager.requestExitRoomMessage(this.roomIndex);
+        NetworkManager.requestExitRoomMessage(Common.ZONE_ID.TREASURE, this.roomIndex);
     },
     getKeyBet: function() {
         return this.betType;
@@ -442,7 +442,7 @@ var Treasure = cc.Class({
         }
 
         if(resp.hasMessage() && resp.getMessage() !== "") {
-
+            Common.showToast(resp.getMessage());
         }
     },
 

@@ -59,7 +59,8 @@ proto.BINMatchEndRequest.prototype.toObject = function(opt_includeInstance) {
  */
 proto.BINMatchEndRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    roomindex: jspb.Message.getField(msg, 1)
+    zoneid: jspb.Message.getField(msg, 1),
+    roomindex: jspb.Message.getField(msg, 2)
   };
 
   if (includeInstance) {
@@ -97,6 +98,10 @@ proto.BINMatchEndRequest.deserializeBinaryFromReader = function(msg, reader) {
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setZoneid(value);
+      break;
+    case 2:
       var value = /** @type {number} */ (reader.readInt32());
       msg.setRoomindex(value);
       break;
@@ -145,25 +150,32 @@ proto.BINMatchEndRequest.prototype.serializeBinaryToWriter = function (writer) {
       f
     );
   }
+  f = /** @type {number} */ (jspb.Message.getField(this, 2));
+  if (f != null) {
+    writer.writeInt32(
+      2,
+      f
+    );
+  }
 };
 
 
 /**
- * required int32 roomIndex = 1;
+ * required int32 zoneId = 1;
  * @return {number}
  */
-proto.BINMatchEndRequest.prototype.getRoomindex = function() {
+proto.BINMatchEndRequest.prototype.getZoneid = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
 };
 
 
 /** @param {number} value */
-proto.BINMatchEndRequest.prototype.setRoomindex = function(value) {
+proto.BINMatchEndRequest.prototype.setZoneid = function(value) {
   jspb.Message.setField(this, 1, value);
 };
 
 
-proto.BINMatchEndRequest.prototype.clearRoomindex = function() {
+proto.BINMatchEndRequest.prototype.clearZoneid = function() {
   jspb.Message.setField(this, 1, undefined);
 };
 
@@ -172,8 +184,37 @@ proto.BINMatchEndRequest.prototype.clearRoomindex = function() {
  * Returns whether this field is set.
  * @return {!boolean}
  */
-proto.BINMatchEndRequest.prototype.hasRoomindex = function() {
+proto.BINMatchEndRequest.prototype.hasZoneid = function() {
   return jspb.Message.getField(this, 1) != null;
+};
+
+
+/**
+ * required int32 roomIndex = 2;
+ * @return {number}
+ */
+proto.BINMatchEndRequest.prototype.getRoomindex = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+};
+
+
+/** @param {number} value */
+proto.BINMatchEndRequest.prototype.setRoomindex = function(value) {
+  jspb.Message.setField(this, 2, value);
+};
+
+
+proto.BINMatchEndRequest.prototype.clearRoomindex = function() {
+  jspb.Message.setField(this, 2, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINMatchEndRequest.prototype.hasRoomindex = function() {
+  return jspb.Message.getField(this, 2) != null;
 };
 
 
@@ -200,7 +241,7 @@ if (goog.DEBUG && !COMPILED) {
  * @private {!Array<number>}
  * @const
  */
-proto.BINMatchEndResponse.repeatedFields_ = [3,4,5,6,8];
+proto.BINMatchEndResponse.repeatedFields_ = [4,5,6,7,9];
 
 
 
@@ -232,15 +273,15 @@ proto.BINMatchEndResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
     responsecode: jspb.Message.getField(msg, 1),
     message: jspb.Message.getField(msg, 2),
-    winninguseridsList: jspb.Message.getField(msg, 3),
-    losinguseridsList: jspb.Message.getField(msg, 4),
-    drawuseridsList: jspb.Message.getField(msg, 5),
+    zoneid: jspb.Message.getField(msg, 3),
+    winninguseridsList: jspb.Message.getField(msg, 4),
+    losinguseridsList: jspb.Message.getField(msg, 5),
+    drawuseridsList: jspb.Message.getField(msg, 6),
     textemoticonsList: jspb.Message.toObjectList(msg.getTextemoticonsList(),
     text_emoticon_pb.BINTextEmoticon.toObject, includeInstance),
-    countdowntimer: jspb.Message.getField(msg, 7),
+    countdowntimer: jspb.Message.getField(msg, 8),
     argsList: jspb.Message.toObjectList(msg.getArgsList(),
-    map_field_entry_pb.BINMapFieldEntry.toObject, includeInstance),
-    zoneid: jspb.Message.getField(msg, 9)
+    map_field_entry_pb.BINMapFieldEntry.toObject, includeInstance)
   };
 
   if (includeInstance) {
@@ -286,34 +327,34 @@ proto.BINMatchEndResponse.deserializeBinaryFromReader = function(msg, reader) {
       msg.setMessage(value);
       break;
     case 3:
-      var value = /** @type {number} */ (reader.readInt64());
-      msg.addWinninguserids(value);
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setZoneid(value);
       break;
     case 4:
       var value = /** @type {number} */ (reader.readInt64());
-      msg.addLosinguserids(value);
+      msg.addWinninguserids(value);
       break;
     case 5:
       var value = /** @type {number} */ (reader.readInt64());
-      msg.addDrawuserids(value);
+      msg.addLosinguserids(value);
       break;
     case 6:
+      var value = /** @type {number} */ (reader.readInt64());
+      msg.addDrawuserids(value);
+      break;
+    case 7:
       var value = new text_emoticon_pb.BINTextEmoticon;
       reader.readMessage(value,text_emoticon_pb.BINTextEmoticon.deserializeBinaryFromReader);
       msg.addTextemoticons(value);
       break;
-    case 7:
+    case 8:
       var value = /** @type {number} */ (reader.readInt32());
       msg.setCountdowntimer(value);
       break;
-    case 8:
+    case 9:
       var value = new map_field_entry_pb.BINMapFieldEntry;
       reader.readMessage(value,map_field_entry_pb.BINMapFieldEntry.deserializeBinaryFromReader);
       msg.addArgs(value);
-      break;
-    case 9:
-      var value = /** @type {number} */ (reader.readInt32());
-      msg.setZoneid(value);
       break;
     default:
       reader.skipField();
@@ -367,55 +408,55 @@ proto.BINMatchEndResponse.prototype.serializeBinaryToWriter = function (writer) 
       f
     );
   }
-  f = this.getWinninguseridsList();
-  if (f.length > 0) {
-    writer.writeRepeatedInt64(
+  f = /** @type {number} */ (jspb.Message.getField(this, 3));
+  if (f != null) {
+    writer.writeInt32(
       3,
       f
     );
   }
-  f = this.getLosinguseridsList();
+  f = this.getWinninguseridsList();
   if (f.length > 0) {
     writer.writeRepeatedInt64(
       4,
       f
     );
   }
-  f = this.getDrawuseridsList();
+  f = this.getLosinguseridsList();
   if (f.length > 0) {
     writer.writeRepeatedInt64(
       5,
       f
     );
   }
+  f = this.getDrawuseridsList();
+  if (f.length > 0) {
+    writer.writeRepeatedInt64(
+      6,
+      f
+    );
+  }
   f = this.getTextemoticonsList();
   if (f.length > 0) {
     writer.writeRepeatedMessage(
-      6,
+      7,
       f,
       text_emoticon_pb.BINTextEmoticon.serializeBinaryToWriter
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 7));
+  f = /** @type {number} */ (jspb.Message.getField(this, 8));
   if (f != null) {
     writer.writeInt32(
-      7,
+      8,
       f
     );
   }
   f = this.getArgsList();
   if (f.length > 0) {
     writer.writeRepeatedMessage(
-      8,
+      9,
       f,
       map_field_entry_pb.BINMapFieldEntry.serializeBinaryToWriter
-    );
-  }
-  f = /** @type {number} */ (jspb.Message.getField(this, 9));
-  if (f != null) {
-    writer.writeInt32(
-      9,
-      f
     );
   }
 };
@@ -482,19 +523,48 @@ proto.BINMatchEndResponse.prototype.hasMessage = function() {
 
 
 /**
- * repeated int64 winningUserIds = 3;
+ * optional int32 zoneId = 3;
+ * @return {number}
+ */
+proto.BINMatchEndResponse.prototype.getZoneid = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
+};
+
+
+/** @param {number} value */
+proto.BINMatchEndResponse.prototype.setZoneid = function(value) {
+  jspb.Message.setField(this, 3, value);
+};
+
+
+proto.BINMatchEndResponse.prototype.clearZoneid = function() {
+  jspb.Message.setField(this, 3, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINMatchEndResponse.prototype.hasZoneid = function() {
+  return jspb.Message.getField(this, 3) != null;
+};
+
+
+/**
+ * repeated int64 winningUserIds = 4;
  * If you change this array by adding, removing or replacing elements, or if you
  * replace the array itself, then you must call the setter to update it.
  * @return {!Array.<number>}
  */
 proto.BINMatchEndResponse.prototype.getWinninguseridsList = function() {
-  return /** @type {!Array.<number>} */ (jspb.Message.getField(this, 3));
+  return /** @type {!Array.<number>} */ (jspb.Message.getField(this, 4));
 };
 
 
 /** @param {!Array.<number>} value */
 proto.BINMatchEndResponse.prototype.setWinninguseridsList = function(value) {
-  jspb.Message.setField(this, 3, value || []);
+  jspb.Message.setField(this, 4, value || []);
 };
 
 
@@ -503,7 +573,7 @@ proto.BINMatchEndResponse.prototype.setWinninguseridsList = function(value) {
  * @param {number=} opt_index
  */
 proto.BINMatchEndResponse.prototype.addWinninguserids = function(value, opt_index) {
-  jspb.Message.addToRepeatedField(this, 3, value, opt_index);
+  jspb.Message.addToRepeatedField(this, 4, value, opt_index);
 };
 
 
@@ -513,19 +583,19 @@ proto.BINMatchEndResponse.prototype.clearWinninguseridsList = function() {
 
 
 /**
- * repeated int64 losingUserIds = 4;
+ * repeated int64 losingUserIds = 5;
  * If you change this array by adding, removing or replacing elements, or if you
  * replace the array itself, then you must call the setter to update it.
  * @return {!Array.<number>}
  */
 proto.BINMatchEndResponse.prototype.getLosinguseridsList = function() {
-  return /** @type {!Array.<number>} */ (jspb.Message.getField(this, 4));
+  return /** @type {!Array.<number>} */ (jspb.Message.getField(this, 5));
 };
 
 
 /** @param {!Array.<number>} value */
 proto.BINMatchEndResponse.prototype.setLosinguseridsList = function(value) {
-  jspb.Message.setField(this, 4, value || []);
+  jspb.Message.setField(this, 5, value || []);
 };
 
 
@@ -534,7 +604,7 @@ proto.BINMatchEndResponse.prototype.setLosinguseridsList = function(value) {
  * @param {number=} opt_index
  */
 proto.BINMatchEndResponse.prototype.addLosinguserids = function(value, opt_index) {
-  jspb.Message.addToRepeatedField(this, 4, value, opt_index);
+  jspb.Message.addToRepeatedField(this, 5, value, opt_index);
 };
 
 
@@ -544,19 +614,19 @@ proto.BINMatchEndResponse.prototype.clearLosinguseridsList = function() {
 
 
 /**
- * repeated int64 drawUserIds = 5;
+ * repeated int64 drawUserIds = 6;
  * If you change this array by adding, removing or replacing elements, or if you
  * replace the array itself, then you must call the setter to update it.
  * @return {!Array.<number>}
  */
 proto.BINMatchEndResponse.prototype.getDrawuseridsList = function() {
-  return /** @type {!Array.<number>} */ (jspb.Message.getField(this, 5));
+  return /** @type {!Array.<number>} */ (jspb.Message.getField(this, 6));
 };
 
 
 /** @param {!Array.<number>} value */
 proto.BINMatchEndResponse.prototype.setDrawuseridsList = function(value) {
-  jspb.Message.setField(this, 5, value || []);
+  jspb.Message.setField(this, 6, value || []);
 };
 
 
@@ -565,7 +635,7 @@ proto.BINMatchEndResponse.prototype.setDrawuseridsList = function(value) {
  * @param {number=} opt_index
  */
 proto.BINMatchEndResponse.prototype.addDrawuserids = function(value, opt_index) {
-  jspb.Message.addToRepeatedField(this, 5, value, opt_index);
+  jspb.Message.addToRepeatedField(this, 6, value, opt_index);
 };
 
 
@@ -575,20 +645,20 @@ proto.BINMatchEndResponse.prototype.clearDrawuseridsList = function() {
 
 
 /**
- * repeated BINTextEmoticon textEmoticons = 6;
+ * repeated BINTextEmoticon textEmoticons = 7;
  * If you change this array by adding, removing or replacing elements, or if you
  * replace the array itself, then you must call the setter to update it.
  * @return {!Array.<!proto.BINTextEmoticon>}
  */
 proto.BINMatchEndResponse.prototype.getTextemoticonsList = function() {
   return /** @type{!Array.<!proto.BINTextEmoticon>} */ (
-    jspb.Message.getRepeatedWrapperField(this, text_emoticon_pb.BINTextEmoticon, 6));
+    jspb.Message.getRepeatedWrapperField(this, text_emoticon_pb.BINTextEmoticon, 7));
 };
 
 
 /** @param {!Array.<!proto.BINTextEmoticon>} value */
 proto.BINMatchEndResponse.prototype.setTextemoticonsList = function(value) {
-  jspb.Message.setRepeatedWrapperField(this, 6, value);
+  jspb.Message.setRepeatedWrapperField(this, 7, value);
 };
 
 
@@ -598,7 +668,7 @@ proto.BINMatchEndResponse.prototype.setTextemoticonsList = function(value) {
  * @return {!proto.BINTextEmoticon}
  */
 proto.BINMatchEndResponse.prototype.addTextemoticons = function(opt_value, opt_index) {
-  return jspb.Message.addToRepeatedWrapperField(this, 6, opt_value, proto.BINTextEmoticon, opt_index);
+  return jspb.Message.addToRepeatedWrapperField(this, 7, opt_value, proto.BINTextEmoticon, opt_index);
 };
 
 
@@ -608,22 +678,22 @@ proto.BINMatchEndResponse.prototype.clearTextemoticonsList = function() {
 
 
 /**
- * optional int32 countDownTimer = 7;
+ * optional int32 countDownTimer = 8;
  * @return {number}
  */
 proto.BINMatchEndResponse.prototype.getCountdowntimer = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 7, 0));
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 8, 0));
 };
 
 
 /** @param {number} value */
 proto.BINMatchEndResponse.prototype.setCountdowntimer = function(value) {
-  jspb.Message.setField(this, 7, value);
+  jspb.Message.setField(this, 8, value);
 };
 
 
 proto.BINMatchEndResponse.prototype.clearCountdowntimer = function() {
-  jspb.Message.setField(this, 7, undefined);
+  jspb.Message.setField(this, 8, undefined);
 };
 
 
@@ -632,25 +702,25 @@ proto.BINMatchEndResponse.prototype.clearCountdowntimer = function() {
  * @return {!boolean}
  */
 proto.BINMatchEndResponse.prototype.hasCountdowntimer = function() {
-  return jspb.Message.getField(this, 7) != null;
+  return jspb.Message.getField(this, 8) != null;
 };
 
 
 /**
- * repeated BINMapFieldEntry args = 8;
+ * repeated BINMapFieldEntry args = 9;
  * If you change this array by adding, removing or replacing elements, or if you
  * replace the array itself, then you must call the setter to update it.
  * @return {!Array.<!proto.BINMapFieldEntry>}
  */
 proto.BINMatchEndResponse.prototype.getArgsList = function() {
   return /** @type{!Array.<!proto.BINMapFieldEntry>} */ (
-    jspb.Message.getRepeatedWrapperField(this, map_field_entry_pb.BINMapFieldEntry, 8));
+    jspb.Message.getRepeatedWrapperField(this, map_field_entry_pb.BINMapFieldEntry, 9));
 };
 
 
 /** @param {!Array.<!proto.BINMapFieldEntry>} value */
 proto.BINMatchEndResponse.prototype.setArgsList = function(value) {
-  jspb.Message.setRepeatedWrapperField(this, 8, value);
+  jspb.Message.setRepeatedWrapperField(this, 9, value);
 };
 
 
@@ -660,41 +730,12 @@ proto.BINMatchEndResponse.prototype.setArgsList = function(value) {
  * @return {!proto.BINMapFieldEntry}
  */
 proto.BINMatchEndResponse.prototype.addArgs = function(opt_value, opt_index) {
-  return jspb.Message.addToRepeatedWrapperField(this, 8, opt_value, proto.BINMapFieldEntry, opt_index);
+  return jspb.Message.addToRepeatedWrapperField(this, 9, opt_value, proto.BINMapFieldEntry, opt_index);
 };
 
 
 proto.BINMatchEndResponse.prototype.clearArgsList = function() {
   this.setArgsList([]);
-};
-
-
-/**
- * optional int32 zoneId = 9;
- * @return {number}
- */
-proto.BINMatchEndResponse.prototype.getZoneid = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 9, 0));
-};
-
-
-/** @param {number} value */
-proto.BINMatchEndResponse.prototype.setZoneid = function(value) {
-  jspb.Message.setField(this, 9, value);
-};
-
-
-proto.BINMatchEndResponse.prototype.clearZoneid = function() {
-  jspb.Message.setField(this, 9, undefined);
-};
-
-
-/**
- * Returns whether this field is set.
- * @return {!boolean}
- */
-proto.BINMatchEndResponse.prototype.hasZoneid = function() {
-  return jspb.Message.getField(this, 9) != null;
 };
 
 

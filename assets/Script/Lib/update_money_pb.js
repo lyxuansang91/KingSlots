@@ -1,6 +1,8 @@
 /**
  * @fileoverview
  * @enhanceable
+ * @suppress {messageConventions} JS Compiler reports an error if a variable or
+ *     field starts with 'MSG_' and isn't a translatable message.
  * @public
  */
 // GENERATED CODE -- DO NOT EDIT!
@@ -54,6 +56,7 @@ proto.BINMoneyBox.prototype.toObject = function(opt_includeInstance) {
  *     http://goto/soy-param-migration
  * @param {!proto.BINMoneyBox} msg The msg instance to transform.
  * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.BINMoneyBox.toObject = function(includeInstance, msg) {
   var f, obj = {
@@ -133,70 +136,61 @@ proto.BINMoneyBox.deserializeBinaryFromReader = function(msg, reader) {
 
 
 /**
- * Class method variant: serializes the given message to binary data
- * (in protobuf wire format), writing to the given BinaryWriter.
- * @param {!proto.BINMoneyBox} message
- * @param {!jspb.BinaryWriter} writer
- */
-proto.BINMoneyBox.serializeBinaryToWriter = function(message, writer) {
-  message.serializeBinaryToWriter(writer);
-};
-
-
-/**
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
 proto.BINMoneyBox.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  this.serializeBinaryToWriter(writer);
+  proto.BINMoneyBox.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
 
 /**
- * Serializes the message to binary data (in protobuf wire format),
- * writing to the given BinaryWriter.
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.BINMoneyBox} message
  * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.BINMoneyBox.prototype.serializeBinaryToWriter = function (writer) {
+proto.BINMoneyBox.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = /** @type {number} */ (jspb.Message.getField(this, 1));
+  f = /** @type {number} */ (jspb.Message.getField(message, 1));
   if (f != null) {
     writer.writeInt64(
       1,
       f
     );
   }
-  f = /** @type {boolean} */ (jspb.Message.getField(this, 2));
+  f = /** @type {boolean} */ (jspb.Message.getField(message, 2));
   if (f != null) {
     writer.writeBool(
       2,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 3));
+  f = /** @type {number} */ (jspb.Message.getField(message, 3));
   if (f != null) {
     writer.writeInt64(
       3,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 4));
+  f = /** @type {number} */ (jspb.Message.getField(message, 4));
   if (f != null) {
     writer.writeInt64(
       4,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 5));
+  f = /** @type {number} */ (jspb.Message.getField(message, 5));
   if (f != null) {
     writer.writeInt64(
       5,
       f
     );
   }
-  f = /** @type {string} */ (jspb.Message.getField(this, 6));
+  f = /** @type {string} */ (jspb.Message.getField(message, 6));
   if (f != null) {
     writer.writeString(
       6,
@@ -405,7 +399,7 @@ if (goog.DEBUG && !COMPILED) {
  * @private {!Array<number>}
  * @const
  */
-proto.BINUpdateMoneyResponse.repeatedFields_ = [3];
+proto.BINUpdateMoneyResponse.repeatedFields_ = [4];
 
 
 
@@ -432,14 +426,15 @@ proto.BINUpdateMoneyResponse.prototype.toObject = function(opt_includeInstance) 
  *     http://goto/soy-param-migration
  * @param {!proto.BINUpdateMoneyResponse} msg The msg instance to transform.
  * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.BINUpdateMoneyResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
     responsecode: jspb.Message.getField(msg, 1),
     message: jspb.Message.getField(msg, 2),
+    zoneid: jspb.Message.getField(msg, 3),
     moneyboxesList: jspb.Message.toObjectList(msg.getMoneyboxesList(),
-    proto.BINMoneyBox.toObject, includeInstance),
-    zoneid: jspb.Message.getField(msg, 4)
+    proto.BINMoneyBox.toObject, includeInstance)
   };
 
   if (includeInstance) {
@@ -485,13 +480,13 @@ proto.BINUpdateMoneyResponse.deserializeBinaryFromReader = function(msg, reader)
       msg.setMessage(value);
       break;
     case 3:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setZoneid(value);
+      break;
+    case 4:
       var value = new proto.BINMoneyBox;
       reader.readMessage(value,proto.BINMoneyBox.deserializeBinaryFromReader);
       msg.addMoneyboxes(value);
-      break;
-    case 4:
-      var value = /** @type {number} */ (reader.readInt32());
-      msg.setZoneid(value);
       break;
     default:
       reader.skipField();
@@ -503,61 +498,52 @@ proto.BINUpdateMoneyResponse.deserializeBinaryFromReader = function(msg, reader)
 
 
 /**
- * Class method variant: serializes the given message to binary data
- * (in protobuf wire format), writing to the given BinaryWriter.
- * @param {!proto.BINUpdateMoneyResponse} message
- * @param {!jspb.BinaryWriter} writer
- */
-proto.BINUpdateMoneyResponse.serializeBinaryToWriter = function(message, writer) {
-  message.serializeBinaryToWriter(writer);
-};
-
-
-/**
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
 proto.BINUpdateMoneyResponse.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  this.serializeBinaryToWriter(writer);
+  proto.BINUpdateMoneyResponse.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
 
 /**
- * Serializes the message to binary data (in protobuf wire format),
- * writing to the given BinaryWriter.
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.BINUpdateMoneyResponse} message
  * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.BINUpdateMoneyResponse.prototype.serializeBinaryToWriter = function (writer) {
+proto.BINUpdateMoneyResponse.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = /** @type {boolean} */ (jspb.Message.getField(this, 1));
+  f = /** @type {boolean} */ (jspb.Message.getField(message, 1));
   if (f != null) {
     writer.writeBool(
       1,
       f
     );
   }
-  f = /** @type {string} */ (jspb.Message.getField(this, 2));
+  f = /** @type {string} */ (jspb.Message.getField(message, 2));
   if (f != null) {
     writer.writeString(
       2,
       f
     );
   }
-  f = this.getMoneyboxesList();
-  if (f.length > 0) {
-    writer.writeRepeatedMessage(
-      3,
-      f,
-      proto.BINMoneyBox.serializeBinaryToWriter
-    );
-  }
-  f = /** @type {number} */ (jspb.Message.getField(this, 4));
+  f = /** @type {number} */ (jspb.Message.getField(message, 3));
   if (f != null) {
     writer.writeInt32(
-      4,
+      3,
       f
+    );
+  }
+  f = message.getMoneyboxesList();
+  if (f.length > 0) {
+    writer.writeRepeatedMessage(
+      4,
+      f,
+      proto.BINMoneyBox.serializeBinaryToWriter
     );
   }
 };
@@ -624,20 +610,47 @@ proto.BINUpdateMoneyResponse.prototype.hasMessage = function() {
 
 
 /**
- * repeated BINMoneyBox moneyBoxes = 3;
- * If you change this array by adding, removing or replacing elements, or if you
- * replace the array itself, then you must call the setter to update it.
+ * optional int32 zoneId = 3;
+ * @return {number}
+ */
+proto.BINUpdateMoneyResponse.prototype.getZoneid = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
+};
+
+
+/** @param {number} value */
+proto.BINUpdateMoneyResponse.prototype.setZoneid = function(value) {
+  jspb.Message.setField(this, 3, value);
+};
+
+
+proto.BINUpdateMoneyResponse.prototype.clearZoneid = function() {
+  jspb.Message.setField(this, 3, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINUpdateMoneyResponse.prototype.hasZoneid = function() {
+  return jspb.Message.getField(this, 3) != null;
+};
+
+
+/**
+ * repeated BINMoneyBox moneyBoxes = 4;
  * @return {!Array.<!proto.BINMoneyBox>}
  */
 proto.BINUpdateMoneyResponse.prototype.getMoneyboxesList = function() {
   return /** @type{!Array.<!proto.BINMoneyBox>} */ (
-    jspb.Message.getRepeatedWrapperField(this, proto.BINMoneyBox, 3));
+    jspb.Message.getRepeatedWrapperField(this, proto.BINMoneyBox, 4));
 };
 
 
 /** @param {!Array.<!proto.BINMoneyBox>} value */
 proto.BINUpdateMoneyResponse.prototype.setMoneyboxesList = function(value) {
-  jspb.Message.setRepeatedWrapperField(this, 3, value);
+  jspb.Message.setRepeatedWrapperField(this, 4, value);
 };
 
 
@@ -647,41 +660,12 @@ proto.BINUpdateMoneyResponse.prototype.setMoneyboxesList = function(value) {
  * @return {!proto.BINMoneyBox}
  */
 proto.BINUpdateMoneyResponse.prototype.addMoneyboxes = function(opt_value, opt_index) {
-  return jspb.Message.addToRepeatedWrapperField(this, 3, opt_value, proto.BINMoneyBox, opt_index);
+  return jspb.Message.addToRepeatedWrapperField(this, 4, opt_value, proto.BINMoneyBox, opt_index);
 };
 
 
 proto.BINUpdateMoneyResponse.prototype.clearMoneyboxesList = function() {
   this.setMoneyboxesList([]);
-};
-
-
-/**
- * optional int32 zoneId = 4;
- * @return {number}
- */
-proto.BINUpdateMoneyResponse.prototype.getZoneid = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 4, 0));
-};
-
-
-/** @param {number} value */
-proto.BINUpdateMoneyResponse.prototype.setZoneid = function(value) {
-  jspb.Message.setField(this, 4, value);
-};
-
-
-proto.BINUpdateMoneyResponse.prototype.clearZoneid = function() {
-  jspb.Message.setField(this, 4, undefined);
-};
-
-
-/**
- * Returns whether this field is set.
- * @return {!boolean}
- */
-proto.BINUpdateMoneyResponse.prototype.hasZoneid = function() {
-  return jspb.Message.getField(this, 4) != null;
 };
 
 

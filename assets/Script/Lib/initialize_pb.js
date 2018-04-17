@@ -528,7 +528,7 @@ if (goog.DEBUG && !COMPILED) {
  * @private {!Array<number>}
  * @const
  */
-proto.BINInitializeResponse.repeatedFields_ = [16,19];
+proto.BINInitializeResponse.repeatedFields_ = [19,22];
 
 
 
@@ -568,16 +568,19 @@ proto.BINInitializeResponse.toObject = function(includeInstance, msg) {
     enablequickplay: jspb.Message.getField(msg, 8),
     enablecashsystem: jspb.Message.getField(msg, 9),
     enablepurchasecash: jspb.Message.getField(msg, 10),
-    enabletopup: jspb.Message.getField(msg, 11),
-    enablecashtogold: jspb.Message.getField(msg, 12),
-    enablecashtransfer: jspb.Message.getField(msg, 13),
-    enablegiftcode: jspb.Message.getField(msg, 14),
-    cashtogoldratio: jspb.Message.getField(msg, 15),
-    hotlinesList: jspb.Message.getField(msg, 16),
-    fanpageurl: jspb.Message.getField(msg, 17),
-    websiteurl: jspb.Message.getField(msg, 18),
-    enablegameidsList: jspb.Message.getField(msg, 19),
-    resetpwsmssyntax: jspb.Message.getField(msg, 20)
+    enablepurchasecard: jspb.Message.getField(msg, 11),
+    enablepurchasesms: jspb.Message.getField(msg, 12),
+    enablepurchaseiap: jspb.Message.getField(msg, 13),
+    enabletopup: jspb.Message.getField(msg, 14),
+    enablecashtogold: jspb.Message.getField(msg, 15),
+    enablecashtransfer: jspb.Message.getField(msg, 16),
+    enablegiftcode: jspb.Message.getField(msg, 17),
+    cashtogoldratio: jspb.Message.getField(msg, 18),
+    hotlinesList: jspb.Message.getField(msg, 19),
+    fanpageurl: jspb.Message.getField(msg, 20),
+    websiteurl: jspb.Message.getField(msg, 21),
+    enablegameidsList: jspb.Message.getField(msg, 22),
+    resetpwsmssyntax: jspb.Message.getField(msg, 23)
   };
 
   if (includeInstance) {
@@ -656,41 +659,53 @@ proto.BINInitializeResponse.deserializeBinaryFromReader = function(msg, reader) 
       break;
     case 11:
       var value = /** @type {boolean} */ (reader.readBool());
-      msg.setEnabletopup(value);
+      msg.setEnablepurchasecard(value);
       break;
     case 12:
       var value = /** @type {boolean} */ (reader.readBool());
-      msg.setEnablecashtogold(value);
+      msg.setEnablepurchasesms(value);
       break;
     case 13:
       var value = /** @type {boolean} */ (reader.readBool());
-      msg.setEnablecashtransfer(value);
+      msg.setEnablepurchaseiap(value);
       break;
     case 14:
       var value = /** @type {boolean} */ (reader.readBool());
-      msg.setEnablegiftcode(value);
+      msg.setEnabletopup(value);
       break;
     case 15:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setEnablecashtogold(value);
+      break;
+    case 16:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setEnablecashtransfer(value);
+      break;
+    case 17:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setEnablegiftcode(value);
+      break;
+    case 18:
       var value = /** @type {number} */ (reader.readInt32());
       msg.setCashtogoldratio(value);
       break;
-    case 16:
+    case 19:
       var value = /** @type {string} */ (reader.readString());
       msg.addHotlines(value);
       break;
-    case 17:
+    case 20:
       var value = /** @type {string} */ (reader.readString());
       msg.setFanpageurl(value);
       break;
-    case 18:
+    case 21:
       var value = /** @type {string} */ (reader.readString());
       msg.setWebsiteurl(value);
       break;
-    case 19:
+    case 22:
       var value = /** @type {number} */ (reader.readInt32());
       msg.addEnablegameids(value);
       break;
-    case 20:
+    case 23:
       var value = /** @type {string} */ (reader.readString());
       msg.setResetpwsmssyntax(value);
       break;
@@ -830,37 +845,37 @@ proto.BINInitializeResponse.prototype.serializeBinaryToWriter = function (writer
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 15));
+  f = /** @type {boolean} */ (jspb.Message.getField(this, 15));
+  if (f != null) {
+    writer.writeBool(
+      15,
+      f
+    );
+  }
+  f = /** @type {boolean} */ (jspb.Message.getField(this, 16));
+  if (f != null) {
+    writer.writeBool(
+      16,
+      f
+    );
+  }
+  f = /** @type {boolean} */ (jspb.Message.getField(this, 17));
+  if (f != null) {
+    writer.writeBool(
+      17,
+      f
+    );
+  }
+  f = /** @type {number} */ (jspb.Message.getField(this, 18));
   if (f != null) {
     writer.writeInt32(
-      15,
+      18,
       f
     );
   }
   f = this.getHotlinesList();
   if (f.length > 0) {
     writer.writeRepeatedString(
-      16,
-      f
-    );
-  }
-  f = /** @type {string} */ (jspb.Message.getField(this, 17));
-  if (f != null) {
-    writer.writeString(
-      17,
-      f
-    );
-  }
-  f = /** @type {string} */ (jspb.Message.getField(this, 18));
-  if (f != null) {
-    writer.writeString(
-      18,
-      f
-    );
-  }
-  f = this.getEnablegameidsList();
-  if (f.length > 0) {
-    writer.writeRepeatedInt32(
       19,
       f
     );
@@ -869,6 +884,27 @@ proto.BINInitializeResponse.prototype.serializeBinaryToWriter = function (writer
   if (f != null) {
     writer.writeString(
       20,
+      f
+    );
+  }
+  f = /** @type {string} */ (jspb.Message.getField(this, 21));
+  if (f != null) {
+    writer.writeString(
+      21,
+      f
+    );
+  }
+  f = this.getEnablegameidsList();
+  if (f.length > 0) {
+    writer.writeRepeatedInt32(
+      22,
+      f
+    );
+  }
+  f = /** @type {string} */ (jspb.Message.getField(this, 23));
+  if (f != null) {
+    writer.writeString(
+      23,
       f
     );
   }
@@ -1176,23 +1212,23 @@ proto.BINInitializeResponse.prototype.hasEnablepurchasecash = function() {
 
 
 /**
- * optional bool enableTopup = 11;
+ * optional bool enablePurchaseCard = 11;
  * Note that Boolean fields may be set to 0/1 when serialized from a Java server.
  * You should avoid comparisons like {@code val === true/false} in those cases.
  * @return {boolean}
  */
-proto.BINInitializeResponse.prototype.getEnabletopup = function() {
+proto.BINInitializeResponse.prototype.getEnablepurchasecard = function() {
   return /** @type {boolean} */ (jspb.Message.getFieldWithDefault(this, 11, false));
 };
 
 
 /** @param {boolean} value */
-proto.BINInitializeResponse.prototype.setEnabletopup = function(value) {
+proto.BINInitializeResponse.prototype.setEnablepurchasecard = function(value) {
   jspb.Message.setField(this, 11, value);
 };
 
 
-proto.BINInitializeResponse.prototype.clearEnabletopup = function() {
+proto.BINInitializeResponse.prototype.clearEnablepurchasecard = function() {
   jspb.Message.setField(this, 11, undefined);
 };
 
@@ -1201,29 +1237,29 @@ proto.BINInitializeResponse.prototype.clearEnabletopup = function() {
  * Returns whether this field is set.
  * @return {!boolean}
  */
-proto.BINInitializeResponse.prototype.hasEnabletopup = function() {
+proto.BINInitializeResponse.prototype.hasEnablepurchasecard = function() {
   return jspb.Message.getField(this, 11) != null;
 };
 
 
 /**
- * optional bool enableCashToGold = 12;
+ * optional bool enablePurchaseSms = 12;
  * Note that Boolean fields may be set to 0/1 when serialized from a Java server.
  * You should avoid comparisons like {@code val === true/false} in those cases.
  * @return {boolean}
  */
-proto.BINInitializeResponse.prototype.getEnablecashtogold = function() {
+proto.BINInitializeResponse.prototype.getEnablepurchasesms = function() {
   return /** @type {boolean} */ (jspb.Message.getFieldWithDefault(this, 12, false));
 };
 
 
 /** @param {boolean} value */
-proto.BINInitializeResponse.prototype.setEnablecashtogold = function(value) {
+proto.BINInitializeResponse.prototype.setEnablepurchasesms = function(value) {
   jspb.Message.setField(this, 12, value);
 };
 
 
-proto.BINInitializeResponse.prototype.clearEnablecashtogold = function() {
+proto.BINInitializeResponse.prototype.clearEnablepurchasesms = function() {
   jspb.Message.setField(this, 12, undefined);
 };
 
@@ -1232,29 +1268,29 @@ proto.BINInitializeResponse.prototype.clearEnablecashtogold = function() {
  * Returns whether this field is set.
  * @return {!boolean}
  */
-proto.BINInitializeResponse.prototype.hasEnablecashtogold = function() {
+proto.BINInitializeResponse.prototype.hasEnablepurchasesms = function() {
   return jspb.Message.getField(this, 12) != null;
 };
 
 
 /**
- * optional bool enableCashTransfer = 13;
+ * optional bool enablePurchaseIap = 13;
  * Note that Boolean fields may be set to 0/1 when serialized from a Java server.
  * You should avoid comparisons like {@code val === true/false} in those cases.
  * @return {boolean}
  */
-proto.BINInitializeResponse.prototype.getEnablecashtransfer = function() {
+proto.BINInitializeResponse.prototype.getEnablepurchaseiap = function() {
   return /** @type {boolean} */ (jspb.Message.getFieldWithDefault(this, 13, false));
 };
 
 
 /** @param {boolean} value */
-proto.BINInitializeResponse.prototype.setEnablecashtransfer = function(value) {
+proto.BINInitializeResponse.prototype.setEnablepurchaseiap = function(value) {
   jspb.Message.setField(this, 13, value);
 };
 
 
-proto.BINInitializeResponse.prototype.clearEnablecashtransfer = function() {
+proto.BINInitializeResponse.prototype.clearEnablepurchaseiap = function() {
   jspb.Message.setField(this, 13, undefined);
 };
 
@@ -1263,29 +1299,29 @@ proto.BINInitializeResponse.prototype.clearEnablecashtransfer = function() {
  * Returns whether this field is set.
  * @return {!boolean}
  */
-proto.BINInitializeResponse.prototype.hasEnablecashtransfer = function() {
+proto.BINInitializeResponse.prototype.hasEnablepurchaseiap = function() {
   return jspb.Message.getField(this, 13) != null;
 };
 
 
 /**
- * optional bool enableGiftCode = 14;
+ * optional bool enableTopup = 14;
  * Note that Boolean fields may be set to 0/1 when serialized from a Java server.
  * You should avoid comparisons like {@code val === true/false} in those cases.
  * @return {boolean}
  */
-proto.BINInitializeResponse.prototype.getEnablegiftcode = function() {
+proto.BINInitializeResponse.prototype.getEnabletopup = function() {
   return /** @type {boolean} */ (jspb.Message.getFieldWithDefault(this, 14, false));
 };
 
 
 /** @param {boolean} value */
-proto.BINInitializeResponse.prototype.setEnablegiftcode = function(value) {
+proto.BINInitializeResponse.prototype.setEnabletopup = function(value) {
   jspb.Message.setField(this, 14, value);
 };
 
 
-proto.BINInitializeResponse.prototype.clearEnablegiftcode = function() {
+proto.BINInitializeResponse.prototype.clearEnabletopup = function() {
   jspb.Message.setField(this, 14, undefined);
 };
 
@@ -1294,27 +1330,29 @@ proto.BINInitializeResponse.prototype.clearEnablegiftcode = function() {
  * Returns whether this field is set.
  * @return {!boolean}
  */
-proto.BINInitializeResponse.prototype.hasEnablegiftcode = function() {
+proto.BINInitializeResponse.prototype.hasEnabletopup = function() {
   return jspb.Message.getField(this, 14) != null;
 };
 
 
 /**
- * optional int32 cashToGoldRatio = 15;
- * @return {number}
+ * optional bool enableCashToGold = 15;
+ * Note that Boolean fields may be set to 0/1 when serialized from a Java server.
+ * You should avoid comparisons like {@code val === true/false} in those cases.
+ * @return {boolean}
  */
-proto.BINInitializeResponse.prototype.getCashtogoldratio = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 15, 0));
+proto.BINInitializeResponse.prototype.getEnablecashtogold = function() {
+  return /** @type {boolean} */ (jspb.Message.getFieldWithDefault(this, 15, false));
 };
 
 
-/** @param {number} value */
-proto.BINInitializeResponse.prototype.setCashtogoldratio = function(value) {
+/** @param {boolean} value */
+proto.BINInitializeResponse.prototype.setEnablecashtogold = function(value) {
   jspb.Message.setField(this, 15, value);
 };
 
 
-proto.BINInitializeResponse.prototype.clearCashtogoldratio = function() {
+proto.BINInitializeResponse.prototype.clearEnablecashtogold = function() {
   jspb.Message.setField(this, 15, undefined);
 };
 
@@ -1323,25 +1361,116 @@ proto.BINInitializeResponse.prototype.clearCashtogoldratio = function() {
  * Returns whether this field is set.
  * @return {!boolean}
  */
-proto.BINInitializeResponse.prototype.hasCashtogoldratio = function() {
+proto.BINInitializeResponse.prototype.hasEnablecashtogold = function() {
   return jspb.Message.getField(this, 15) != null;
 };
 
 
 /**
- * repeated string hotlines = 16;
+ * optional bool enableCashTransfer = 16;
+ * Note that Boolean fields may be set to 0/1 when serialized from a Java server.
+ * You should avoid comparisons like {@code val === true/false} in those cases.
+ * @return {boolean}
+ */
+proto.BINInitializeResponse.prototype.getEnablecashtransfer = function() {
+  return /** @type {boolean} */ (jspb.Message.getFieldWithDefault(this, 16, false));
+};
+
+
+/** @param {boolean} value */
+proto.BINInitializeResponse.prototype.setEnablecashtransfer = function(value) {
+  jspb.Message.setField(this, 16, value);
+};
+
+
+proto.BINInitializeResponse.prototype.clearEnablecashtransfer = function() {
+  jspb.Message.setField(this, 16, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINInitializeResponse.prototype.hasEnablecashtransfer = function() {
+  return jspb.Message.getField(this, 16) != null;
+};
+
+
+/**
+ * optional bool enableGiftCode = 17;
+ * Note that Boolean fields may be set to 0/1 when serialized from a Java server.
+ * You should avoid comparisons like {@code val === true/false} in those cases.
+ * @return {boolean}
+ */
+proto.BINInitializeResponse.prototype.getEnablegiftcode = function() {
+  return /** @type {boolean} */ (jspb.Message.getFieldWithDefault(this, 17, false));
+};
+
+
+/** @param {boolean} value */
+proto.BINInitializeResponse.prototype.setEnablegiftcode = function(value) {
+  jspb.Message.setField(this, 17, value);
+};
+
+
+proto.BINInitializeResponse.prototype.clearEnablegiftcode = function() {
+  jspb.Message.setField(this, 17, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINInitializeResponse.prototype.hasEnablegiftcode = function() {
+  return jspb.Message.getField(this, 17) != null;
+};
+
+
+/**
+ * optional int32 cashToGoldRatio = 18;
+ * @return {number}
+ */
+proto.BINInitializeResponse.prototype.getCashtogoldratio = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 18, 0));
+};
+
+
+/** @param {number} value */
+proto.BINInitializeResponse.prototype.setCashtogoldratio = function(value) {
+  jspb.Message.setField(this, 18, value);
+};
+
+
+proto.BINInitializeResponse.prototype.clearCashtogoldratio = function() {
+  jspb.Message.setField(this, 18, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.BINInitializeResponse.prototype.hasCashtogoldratio = function() {
+  return jspb.Message.getField(this, 18) != null;
+};
+
+
+/**
+ * repeated string hotlines = 19;
  * If you change this array by adding, removing or replacing elements, or if you
  * replace the array itself, then you must call the setter to update it.
  * @return {!Array.<string>}
  */
 proto.BINInitializeResponse.prototype.getHotlinesList = function() {
-  return /** @type {!Array.<string>} */ (jspb.Message.getField(this, 16));
+  return /** @type {!Array.<string>} */ (jspb.Message.getField(this, 19));
 };
 
 
 /** @param {!Array.<string>} value */
 proto.BINInitializeResponse.prototype.setHotlinesList = function(value) {
-  jspb.Message.setField(this, 16, value || []);
+  jspb.Message.setField(this, 19, value || []);
 };
 
 
@@ -1350,7 +1479,7 @@ proto.BINInitializeResponse.prototype.setHotlinesList = function(value) {
  * @param {number=} opt_index
  */
 proto.BINInitializeResponse.prototype.addHotlines = function(value, opt_index) {
-  jspb.Message.addToRepeatedField(this, 16, value, opt_index);
+  jspb.Message.addToRepeatedField(this, 19, value, opt_index);
 };
 
 
@@ -1360,22 +1489,22 @@ proto.BINInitializeResponse.prototype.clearHotlinesList = function() {
 
 
 /**
- * optional string fanpageUrl = 17;
+ * optional string fanpageUrl = 20;
  * @return {string}
  */
 proto.BINInitializeResponse.prototype.getFanpageurl = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 17, ""));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 20, ""));
 };
 
 
 /** @param {string} value */
 proto.BINInitializeResponse.prototype.setFanpageurl = function(value) {
-  jspb.Message.setField(this, 17, value);
+  jspb.Message.setField(this, 20, value);
 };
 
 
 proto.BINInitializeResponse.prototype.clearFanpageurl = function() {
-  jspb.Message.setField(this, 17, undefined);
+  jspb.Message.setField(this, 20, undefined);
 };
 
 
@@ -1384,27 +1513,27 @@ proto.BINInitializeResponse.prototype.clearFanpageurl = function() {
  * @return {!boolean}
  */
 proto.BINInitializeResponse.prototype.hasFanpageurl = function() {
-  return jspb.Message.getField(this, 17) != null;
+  return jspb.Message.getField(this, 20) != null;
 };
 
 
 /**
- * optional string websiteUrl = 18;
+ * optional string websiteUrl = 21;
  * @return {string}
  */
 proto.BINInitializeResponse.prototype.getWebsiteurl = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 18, ""));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 21, ""));
 };
 
 
 /** @param {string} value */
 proto.BINInitializeResponse.prototype.setWebsiteurl = function(value) {
-  jspb.Message.setField(this, 18, value);
+  jspb.Message.setField(this, 21, value);
 };
 
 
 proto.BINInitializeResponse.prototype.clearWebsiteurl = function() {
-  jspb.Message.setField(this, 18, undefined);
+  jspb.Message.setField(this, 21, undefined);
 };
 
 
@@ -1413,24 +1542,24 @@ proto.BINInitializeResponse.prototype.clearWebsiteurl = function() {
  * @return {!boolean}
  */
 proto.BINInitializeResponse.prototype.hasWebsiteurl = function() {
-  return jspb.Message.getField(this, 18) != null;
+  return jspb.Message.getField(this, 21) != null;
 };
 
 
 /**
- * repeated int32 enableGameIds = 19;
+ * repeated int32 enableGameIds = 22;
  * If you change this array by adding, removing or replacing elements, or if you
  * replace the array itself, then you must call the setter to update it.
  * @return {!Array.<number>}
  */
 proto.BINInitializeResponse.prototype.getEnablegameidsList = function() {
-  return /** @type {!Array.<number>} */ (jspb.Message.getField(this, 19));
+  return /** @type {!Array.<number>} */ (jspb.Message.getField(this, 22));
 };
 
 
 /** @param {!Array.<number>} value */
 proto.BINInitializeResponse.prototype.setEnablegameidsList = function(value) {
-  jspb.Message.setField(this, 19, value || []);
+  jspb.Message.setField(this, 22, value || []);
 };
 
 
@@ -1439,7 +1568,7 @@ proto.BINInitializeResponse.prototype.setEnablegameidsList = function(value) {
  * @param {number=} opt_index
  */
 proto.BINInitializeResponse.prototype.addEnablegameids = function(value, opt_index) {
-  jspb.Message.addToRepeatedField(this, 19, value, opt_index);
+  jspb.Message.addToRepeatedField(this, 22, value, opt_index);
 };
 
 
@@ -1449,22 +1578,22 @@ proto.BINInitializeResponse.prototype.clearEnablegameidsList = function() {
 
 
 /**
- * optional string resetPwSmsSyntax = 20;
+ * optional string resetPwSmsSyntax = 23;
  * @return {string}
  */
 proto.BINInitializeResponse.prototype.getResetpwsmssyntax = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 20, ""));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 23, ""));
 };
 
 
 /** @param {string} value */
 proto.BINInitializeResponse.prototype.setResetpwsmssyntax = function(value) {
-  jspb.Message.setField(this, 20, value);
+  jspb.Message.setField(this, 23, value);
 };
 
 
 proto.BINInitializeResponse.prototype.clearResetpwsmssyntax = function() {
-  jspb.Message.setField(this, 20, undefined);
+  jspb.Message.setField(this, 23, undefined);
 };
 
 
@@ -1473,7 +1602,7 @@ proto.BINInitializeResponse.prototype.clearResetpwsmssyntax = function() {
  * @return {!boolean}
  */
 proto.BINInitializeResponse.prototype.hasResetpwsmssyntax = function() {
-  return jspb.Message.getField(this, 20) != null;
+  return jspb.Message.getField(this, 23) != null;
 };
 
 

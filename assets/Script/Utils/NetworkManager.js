@@ -30,175 +30,175 @@ var NetworkManager = {
         PREPARE_NEW_MATCH: 1019,
         CANCEL_EXIT_AFTER_MATCH_END: 1020,
         READY_TO_PLAY: 1021,
-/** The Constant LOCK_ROOM. */
+        /** The Constant LOCK_ROOM. */
         LOCK_ROOM: 1022,
-/** The Constant KICK_PLAYER_OUT. */
+        /** The Constant KICK_PLAYER_OUT. */
         KICK_PLAYER_OUT: 1023,
-/** The Constant CHANGE_RULE. */
+        /** The Constant CHANGE_RULE. */
         CHANGE_RULE: 1024,
-/** The Constant SEND_TEXT_EMOTICON. */
+        /** The Constant SEND_TEXT_EMOTICON. */
         SEND_TEXT_EMOTICON: 1025,
-/** The Constant ENTER_ROOM_GROUP. */
+        /** The Constant ENTER_ROOM_GROUP. */
         ENTER_ROOM_GROUP: 1026,
-/** The Constant LOOK_UP_USER_TO_INVITE. */
+        /** The Constant LOOK_UP_USER_TO_INVITE. */
         LOOK_UP_USER_TO_INVITE: 1027,
-/** The Constant INVITE_TO_ROOM. */
+        /** The Constant INVITE_TO_ROOM. */
         INVITE_TO_ROOM: 1028,
-/** The Constant RELY_INVITATION. */
+        /** The Constant RELY_INVITATION. */
         RELY_INVITATION: 1029,
-/** The Constant CANCEL_INVITATION. */
+        /** The Constant CANCEL_INVITATION. */
         CANCEL_INVITATION: 1030,
-/** The Constant BET. */
+        /** The Constant BET. */
         BET: 1031,
         EXIT_ZONE: 1032,
-/** The Constant CHANGE_HOST. */
+        /** The Constant CHANGE_HOST. */
         CHANGE_HOST: 1033,
-/** The Constant EXTRA_BET. */
+        /** The Constant EXTRA_BET. */
         EXTRA_BET: 1034,
-/** The Constant HOST_REGISTRATION. */
+        /** The Constant HOST_REGISTRATION. */
         HOST_REGISTRATION: 1035,
-/** The Constant LOOK_UP_GAME_HISTORY. */
+        /** The Constant LOOK_UP_GAME_HISTORY. */
         LOOK_UP_GAME_HISTORY: 1036,
         LOOK_UP_ROOM: 1037,
 
-/** The Constant UPDATE_USER_INFO. */
+        /** The Constant UPDATE_USER_INFO. */
 // Other Message from 1200
         UPDATE_USER_INFO: 1200,
-/** The Constant FILTER_TOP_USER. */
+        /** The Constant FILTER_TOP_USER. */
         FILTER_TOP_USER: 1201,
-/** The Constant FILTER_MAIL. */
+        /** The Constant FILTER_MAIL. */
         FILTER_MAIL: 1202,
-/** The Constant SEND_MAIL. */
+        /** The Constant SEND_MAIL. */
         SEND_MAIL: 1203,
-/** The Constant DELETE_MAIL. */
+        /** The Constant DELETE_MAIL. */
         DELETE_MAIL: 1204,
-/** The Constant READED_MAIL. */
+        /** The Constant READED_MAIL. */
         READED_MAIL: 1205,
-/** The Constant CLAIM_ATTACH_ITEM. */
+        /** The Constant CLAIM_ATTACH_ITEM. */
         CLAIM_ATTACH_ITEM: 1206,
-/** The Constant FILTER_FRIEND. */
+        /** The Constant FILTER_FRIEND. */
         FILTER_FRIEND: 1207,
-/** The Constant ADD_FRIEND. */
+        /** The Constant ADD_FRIEND. */
         ADD_FRIEND: 1208,
-/** The Constant FILTER_ADD_FRIEND. */
+        /** The Constant FILTER_ADD_FRIEND. */
         FILTER_ADD_FRIEND: 1209,
-/** The Constant APPROVE_ADD_FRIEND. */
+        /** The Constant APPROVE_ADD_FRIEND. */
         APPROVE_ADD_FRIEND: 1210,
-/** The Constant FIND_USER. */
+        /** The Constant FIND_USER. */
         FIND_USER: 1211,
-/** The Constant VIEW_USER_INFO. */
+        /** The Constant VIEW_USER_INFO. */
         VIEW_USER_INFO: 1212,
-/** The Constant REMOVE_FRIEND. */
+        /** The Constant REMOVE_FRIEND. */
         REMOVE_FRIEND: 1213,
-/** The Constant LOOK_UP_MONEY_HISTORY. */
+        /** The Constant LOOK_UP_MONEY_HISTORY. */
         LOOK_UP_MONEY_HISTORY: 1214,
-/** The Constant INSTANT_MESSAGE. */
+        /** The Constant INSTANT_MESSAGE. */
         INSTANT_MESSAGE: 1215,
-/** The Constant UPDATE_USER_SETTING. */
+        /** The Constant UPDATE_USER_SETTING. */
         UPDATE_USER_SETTING: 1216,
-/** The Constant PURCHASE_MONEY. */
+        /** The Constant PURCHASE_MONEY. */
         PURCHASE_MONEY: 1217,
-/** The Constant FILTER_AVATAR. */
+        /** The Constant FILTER_AVATAR. */
         FILTER_AVATAR: 1218,
-/** The Constant LEVEL_UP. */
+        /** The Constant LEVEL_UP. */
         LEVEL_UP: 1219,
-/** The Constant MEDAL_UP. */
+        /** The Constant MEDAL_UP. */
         MEDAL_UP: 1220,
-/** The Constant REDEEM_GIFT_CODE. */
+        /** The Constant REDEEM_GIFT_CODE. */
         REDEEM_GIFT_CODE: 1221,
-/** The Constant REDEEM_GIFT_CODE_HISTORY. */
+        /** The Constant REDEEM_GIFT_CODE_HISTORY. */
         REDEEM_GIFT_CODE_HISTORY: 1222,
-/** The Constant ASSET_CONFIG. */
+        /** The Constant ASSET_CONFIG. */
         ASSET_CONFIG: 1223,
-/** The Constant EXCHANGE_ASSET. */
+        /** The Constant EXCHANGE_ASSET. */
         EXCHANGE_ASSET: 1224,
-/** The Constant EXCHANGE_CASH_TO_GOLD. */
+        /** The Constant EXCHANGE_CASH_TO_GOLD. */
         EXCHANGE_CASH_TO_GOLD: 1225,
-/** The Constant EXCHANGE_ASSET_HISTORY. */
+        /** The Constant EXCHANGE_ASSET_HISTORY. */
         EXCHANGE_ASSET_HISTORY: 1226,
-/** The Constant PURCHASE_CASH_HISTORY. */
+        /** The Constant PURCHASE_CASH_HISTORY. */
         PURCHASE_CASH_HISTORY: 1227,
-/** The Constant EXCHANGE_GOLD_HISTORY. */
+        /** The Constant EXCHANGE_GOLD_HISTORY. */
         EXCHANGE_GOLD_HISTORY: 1228,
-/** The Constant SMS_CONFIG. */
+        /** The Constant SMS_CONFIG. */
         SMS_CONFIG: 1229,
-/** The Constant CARD_CONFIG. */
+        /** The Constant CARD_CONFIG. */
         CARD_CONFIG: 1230,
-/** The Constant USER_VERIFY_CONFIG. */
+        /** The Constant USER_VERIFY_CONFIG. */
         USER_VERIFY_CONFIG: 1231,
-/** The Constant USER_VERIFY. */
+        /** The Constant USER_VERIFY. */
         USER_VERIFY: 1232,
-/** The Constant FIND_USER_BY_ID. */
+        /** The Constant FIND_USER_BY_ID. */
         FIND_USER_BY_ID: 1233,
-/** The Constant CASH_TRANSFER_CONFIG. */
+        /** The Constant CASH_TRANSFER_CONFIG. */
         CASH_TRANSFER_CONFIG: 1234,
-/** The Constant CASH_TRANSFER. */
+        /** The Constant CASH_TRANSFER. */
         CASH_TRANSFER: 1235,
-/** The Constant EXCHANGE_C2G_CONFIG. */
+        /** The Constant EXCHANGE_C2G_CONFIG. */
         EXCHANGE_C2G_CONFIG: 1236,
-/** The Constant LUCKY_WHEEL_CONFIG. */
+        /** The Constant LUCKY_WHEEL_CONFIG. */
         LUCKY_WHEEL_CONFIG: 1237,
-/** The Constant BUY_TURN. */
+        /** The Constant BUY_TURN. */
         BUY_TURN: 1238,
-/** The Constant JAR. */
+        /** The Constant JAR. */
         JAR: 1239,
-/** The Constant BUY_CHIP. */
+        /** The Constant BUY_CHIP. */
         BUY_CHIP: 1240,
 
-/** The Constant IAP_CONFIG. */
+        /** The Constant IAP_CONFIG. */
         IAP_CONFIG: 1241,
 
-/** The Constant COMPLETE_IAP. */
+        /** The Constant COMPLETE_IAP. */
         COMPLETE_IAP: 1242,
 
-/** The Constant GOLD_CONFIG. */
+        /** The Constant GOLD_CONFIG. */
         GOLD_CONFIG: 1243,
 
-/** The Constant PURCHASE_GOLD. */
+        /** The Constant PURCHASE_GOLD. */
         PURCHASE_GOLD: 1244,
 
-/** The Constant USER_STATUS. */
+        /** The Constant USER_STATUS. */
         USER_STATUS: 1245,
 
-/** The Constant AGENT. */
+        /** The Constant AGENT. */
         AGENT: 1246,
 
-/** The Constant ADS_BONUS_CONFIG. */
+        /** The Constant ADS_BONUS_CONFIG. */
         ADS_BONUS_CONFIG: 1247,
 
-/** The Constant ADS_BONUS. */
+        /** The Constant ADS_BONUS. */
         ADS_BONUS: 1248,
 
-/** The Constant ZONE_STATUS. */
+        /** The Constant ZONE_STATUS. */
         ZONE_STATUS: 1249,
 
-/** The Constant LOCK_MONEY. */
+        /** The Constant LOCK_MONEY. */
         LOCK_MONEY: 1250,
 
-/** The Constant UNLOCK_MONEY. */
+        /** The Constant UNLOCK_MONEY. */
         UNLOCK_MONEY: 1251,
 
-/** The Constant QUEST_INFO. */
+        /** The Constant QUEST_INFO. */
         QUEST_INFO: 1252,
 
-/** The Constant CLAIM_QUEST_BONUS. */
+        /** The Constant CLAIM_QUEST_BONUS. */
         CLAIM_QUEST_BONUS: 1253,
 
-/** The Constant OPEN_ID_CONNECT. */
+        /** The Constant OPEN_ID_CONNECT. */
         OPEN_ID_CONNECT: 1254,
 
-/** The Constant INSTANT_MESSAGE_HISTORY. */
+        /** The Constant INSTANT_MESSAGE_HISTORY. */
         INSTANT_MESSAGE_HISTORY: 1255,
 
         QUEST_NOTIFICATION: 1256,
 
         PAYMENT_STATUS: 1257,
 //
-/** The Constant KILL_ROOM. */
+        /** The Constant KILL_ROOM. */
 // admin message
         KILL_ROOM: 1300,
 
-/** The Constant APPROVE_EXCHANGE_ASSET. */
+        /** The Constant APPROVE_EXCHANGE_ASSET. */
         APPROVE_EXCHANGE_ASSET: 1301,
 
         CHARGING_DEVICE_REGISTRATION: 1302,
@@ -208,24 +208,24 @@ var NetworkManager = {
         CHARGING_RESULT: 1304,
 
         AGENT_ACCOUNT_BALANCE: 1305,
-/** The Constant INITIALIZE. */
+        /** The Constant INITIALIZE. */
 // special message
         INITIALIZE: 1111,
-/** The Constant HEAD_LINE. */
+        /** The Constant HEAD_LINE. */
         HEAD_LINE: 2222,
-/** The Constant EMERGENCY_NOTIFICATION. */
+        /** The Constant EMERGENCY_NOTIFICATION. */
         EMERGENCY_NOTIFICATION: 3333,
-/** The Constant COUNT_DOWN. */
+        /** The Constant COUNT_DOWN. */
         COUNT_DOWN: 4444,
-/** The Constant CAPTCHA. */
+        /** The Constant CAPTCHA. */
         CAPTCHA: 5555,
-/** The Constant CLOSE_CONNECTION. */
+        /** The Constant CLOSE_CONNECTION. */
         CLOSE_CONNECTION: 6666,
-/** The Constant RESET_PASSWORD. */
+        /** The Constant RESET_PASSWORD. */
         RESET_PASSWORD: 7777,
-/** The Constant PING. */
+        /** The Constant PING. */
         PING: 8888,
-/** The Constant EXPIRED_SESSION. */
+        /** The Constant EXPIRED_SESSION. */
         EXPIRED_SESSION: 9999
     },
     lagTime: 0,
@@ -233,7 +233,7 @@ var NetworkManager = {
     MAX_KILL_MSG: 10000,
     SERVER_TEST: "139.162.63.66",
     SERVER_DEBUG: "192.168.0.200",
-    URL: "ws://150.95.111.59:1280/megajackpot",
+    URL: "ws://118.70.118.135:2280/megajackpot",
     sessionId: "",
     tryReconnect: false,
     getSessionId: function() {
@@ -271,7 +271,7 @@ var NetworkManager = {
     requestMessage: function(request, os, message_id, session_id, isLoading) {
         var ackBuf = NetworkManager.initData(request, os, message_id, session_id);
         NetworkManager.callNetwork(ackBuf, message_id, isLoading);
-    }, 
+    },
     initData: function(request, os, messid, _session) {
         var lenSession = 0;
         if(_session != null) {
@@ -608,7 +608,7 @@ var NetworkManager = {
 
     // init message
     initInitializeMessage: function(cp, appVersion, deviceId, deviceInfo, country, language, packageName,
-                                       liteVersion, referenceCode) {
+                                    liteVersion, referenceCode) {
         var message = new proto.BINInitializeRequest();
         message.setCp(cp);
         message.setAppversion(appVersion);
@@ -651,13 +651,14 @@ var NetworkManager = {
         return message;
     },
     /* Exit room */
-    initExitRoomMessage: function(roomIndex) {
+    initExitRoomMessage: function(zoneId, roomIndex) {
         var message = new proto.BINExitRoomRequest();
+        message.setZoneid(zoneId);
         message.setRoomindex(roomIndex);
         return message;
     },
-    requestExitRoomMessage: function(roomIndex) {
-        var message = this.initExitRoomMessage(roomIndex);
+    requestExitRoomMessage: function(zoneId, roomIndex) {
+        var message = this.initExitRoomMessage(zoneId, roomIndex);
         this.requestMessage(message.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.EXIT_ROOM, Common.getSessionId());
     },
     requestEnterZoneMessage: function(zoneId) {
@@ -705,19 +706,21 @@ var NetworkManager = {
         var message = this.initLookUpRoomRequest(zoneId, type, firstResult, maxResult, orderByField, asc, roomGroup);
         this.requestMessage(message.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.LOOK_UP_ROOM, Common.getSessionId());
     },
-    getEnterRoomMessageFromServer: function(room_index, password) {
-        var request = this.initEnterRoomMessage(room_index, password);
+    getEnterRoomMessageFromServer: function(zoneId, room_index, password) {
+        var request = this.initEnterRoomMessage(zoneId, room_index, password);
         this.requestMessage(request.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.ENTER_ROOM, Common.getSessionId());
     },
-    initEnterRoomMessage: function(room_index, password) {
+    initEnterRoomMessage: function(zoneId, room_index, password) {
         var request = new proto.BINEnterRoomRequest();
+        request.setZoneid(zoneId);
         request.setRoomindex(room_index);
         request.setPassword(password);
         return request;
     },
-    initTurnMessage: function(room_index, entries) {
+    initTurnMessage: function(zoneId, room_index, entries) {
         cc.log("entries =", entries);
         var request = new proto.BINTurnRequest();
+        request.setZoneid(zoneId);
         request.setRoomindex(room_index);
         request.setArgsList(entries);
         // for (var i = 0; i < entries.length; i++) {
@@ -729,8 +732,8 @@ var NetworkManager = {
         cc.log("request =", request);
         return request;
     },
-    getTurnMessageFromServer: function(room_index, entries) {
-        var request = this.initTurnMessage(room_index, entries);
+    getTurnMessageFromServer: function(zoneId, room_index, entries) {
+        var request = this.initTurnMessage(zoneId, room_index, entries);
         this.requestMessage(request.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.TURN, Common.getSessionId());
     },
     getJarRequest: function(zone_id, jarType, isLoading) {
@@ -745,8 +748,9 @@ var NetworkManager = {
         }
         return request;
     },
-    getLookUpGameHistoryRequest: function(firstResult, maxResult, entries, orderByField, asc) {
+    getLookUpGameHistoryRequest: function(zoneId, firstResult, maxResult, entries, orderByField, asc) {
         var request = new proto.BINLookUpGameHistoryRequest();
+        request.setZoneid(zoneId);
         request.setFirstresult(firstResult);
         request.setMaxresult(maxResult);
         request.setArgsList(entries);
@@ -777,7 +781,7 @@ var NetworkManager = {
         request.setOpenid(openId);
         request.setFirstname(firstname);
         request.setLastname(lastname);
-    
+
         return request;
     },
     getFilterMailFromServer: function(firstResult, maxResult, lastRequestTime, sent){
@@ -794,8 +798,9 @@ var NetworkManager = {
         request.setTargetuserid(targetUserId);
         this.callNetwork(this.initData(request.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.VIEW_USER_INFO, Common.getSessionId()));
     },
-    sendBet: function(roomIndex, betMoney, betType) {
+    sendBet: function(zoneId, roomIndex, betMoney, betType) {
         var request = new proto.BINBetRequest();
+        request.setZoneid(zoneId);
         request.setRoomindex(roomIndex);
         request.setBetmoney(betMoney);
         request.setBettype(betType);
@@ -879,8 +884,8 @@ var NetworkManager = {
         request.setGiftcode(giftcode);
         return request;
     },
-    getInstantMessage: function(scope, instantMessage, receiverUsername, receiverUserId, textEmotionId) {
-        var request = this.initInstantMessage(scope, instantMessage, receiverUsername, receiverUserId, textEmotionId);
+    getInstantMessage: function(zoneId, scope, instantMessage, receiverUsername, receiverUserId, textEmotionId) {
+        var request = this.initInstantMessage(zoneId, scope, instantMessage, receiverUsername, receiverUserId, textEmotionId);
         this.callNetwork(this.initData(request.serializeBinary(), Common.getOS(),
             NetworkManager.MESSAGE_ID.INSTANT_MESSAGE, Common.getSessionId()));
     },
@@ -893,11 +898,11 @@ var NetworkManager = {
         cc.log("user_infos =", user_infos);
         var request = new proto.BINUpdateUserInfoRequest();
         // for (var i = 0; i < n; i++) {
-            var edit_info = request.addUserinfos();
-            edit_info.setInfofield(user_infos.getInfofield());
-            edit_info.setOldvalue(user_infos.getOldvalue());
-            edit_info.setNewvalue(user_infos.getNewvalue());
-            edit_info.setConfirmvalue(user_infos.getConfirmvalue());
+        var edit_info = request.addUserinfos();
+        edit_info.setInfofield(user_infos.getInfofield());
+        edit_info.setOldvalue(user_infos.getOldvalue());
+        edit_info.setNewvalue(user_infos.getNewvalue());
+        edit_info.setConfirmvalue(user_infos.getConfirmvalue());
         // }
 
         return request;
@@ -914,9 +919,10 @@ var NetworkManager = {
         request.setDologout(doLogout);
         return request;
     },
-    initInstantMessage: function(scope, instantMessage, receiverUsername, receiverUserId, textEmotionId) {
+    initInstantMessage: function(zoneId, scope, instantMessage, receiverUsername, receiverUserId, textEmotionId) {
         if (scope > 0 && scope < 4) {
             var request = new proto.BINInstantMessageRequest();
+            request.setZoneid(zoneId);
             request.setScope(scope);
             if(textEmotionId !== null)
                 request.setTextemoticonid(textEmotionId);
@@ -993,7 +999,7 @@ var NetworkManager = {
                 console.log("Websocket instance was closed");
             };
         }
-         else {
+        else {
             if(window.ws.readyState === WebSocket.OPEN) {
                 //== show loading
                 if(typeof mid !== 'undefined' && mid !== NetworkManager.MESSAGE_ID.INITIALIZE &&
@@ -1043,7 +1049,7 @@ var NetworkManager = {
             }
         }
     },
-    
+
     hideLoading: function () {
         var scene = cc.director.getScene();
 

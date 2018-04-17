@@ -27,7 +27,7 @@ cc.Class({
         entry1.setKey("isCash");
         entry1.setValue(isCash ? "true" : "false");
         entries.push(entry1);
-        NetworkManager.getLookUpGameHistoryRequest(firstResult, maxResult, entries, orderByField, asc);
+        NetworkManager.getLookUpGameHistoryRequest(Common.ZONE_ID.TAIXIU, firstResult, maxResult, entries, orderByField, asc);
     },
 
     onGameEvent: function() {

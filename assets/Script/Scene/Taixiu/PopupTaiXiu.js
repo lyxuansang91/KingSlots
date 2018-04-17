@@ -106,7 +106,7 @@ cc.Class({
     },
 
     onClose: function() {
-        NetworkManager.requestExitRoomMessage(0);
+        NetworkManager.requestExitRoomMessage(Common.ZONE_ID.TAIXIU, 0);
     },
 
     onGameStatus: function(event) {
@@ -126,7 +126,7 @@ cc.Class({
     },
     accept: function() {
         if (this.getTableStage() === TABLE_STATE.BET) {
-            NetworkManager.sendBet(this.roomIndex, this.currentBet, this.betState);
+            NetworkManager.sendBet(Common.ZONE_ID.TAIXIU, this.roomIndex, this.currentBet, this.betState);
         } else {
             Common.showToast("Chờ ván sau đi nhé");
         }
@@ -210,12 +210,12 @@ cc.Class({
     },
     sendMessageTaiXiu: function(message) {
         cc.log("message",message.string);
-        NetworkManager.getInstantMessage(Config.SCOPE_CHAT.CHAT_ROOM, message.string, null, null, null);
+        NetworkManager.getInstantMessage(Common.ZONE_ID.TAIXIU, Config.SCOPE_CHAT.CHAT_ROOM, message.string, null, null, null);
         message.string = "";
     },
     sendEmotionTaixiu: function(emotionId) {
         cc.log("emotionId",emotionId);
-        NetworkManager.getInstantMessage(Config.SCOPE_CHAT.CHAT_ROOM, "", null, null, emotionId);
+        NetworkManager.getInstantMessage(Common.ZONE_ID.TAIXIU, Config.SCOPE_CHAT.CHAT_ROOM, "", null, null, emotionId);
     },
     setBetMoney: function(event, data) {
         cc.log("data:", Common.getCash());
@@ -248,7 +248,7 @@ cc.Class({
             if (this.currentBet * 1000 <= Common.getCash()) {
                 this.currentBet = this.currentBet * 1000;
             }
-            
+
         } else {
             var addMoney = parseInt(data);
             if (this.currentBet * 10 + addMoney <= Common.getCash()) {
@@ -289,7 +289,7 @@ cc.Class({
         this.number_keyboard.active = this.isNumber;
         this.money_keyboard.active = !this.isNumber;
         this.isNumber = !this.isNumber;
-     },
+    },
     onDestroy: function() {
         cc.log("on destroy tai xiu");
         Common.setExistTaiXiu(false);
@@ -480,7 +480,7 @@ cc.Class({
                         }
 
                         default:
-                        break;
+                            break;
                     }
                 }
             }
@@ -621,7 +621,7 @@ cc.Class({
                 }
 
                 default:
-                break;
+                    break;
             }
         }
     },
@@ -642,7 +642,7 @@ cc.Class({
                 }
 
                 default:
-                break;
+                    break;
             }
         }
     },
@@ -665,15 +665,15 @@ cc.Class({
                 taixiu_result_component.initResult(this.lstMatch[j].sum() >= 11);
             }
 
-                // if (this.lstMatch[j].sum() < 11) {
-                //     cc.log("xiu");
-                //     //set texture xiu cho sprite
-                //     taixiu_result_component.initResult(false);
-                // } else {
-                //     cc.log("tai");
-                //     taixiu_result_component.initResult(true);
-                //     //set texture tai cho sprite
-                // }
+            // if (this.lstMatch[j].sum() < 11) {
+            //     cc.log("xiu");
+            //     //set texture xiu cho sprite
+            //     taixiu_result_component.initResult(false);
+            // } else {
+            //     cc.log("tai");
+            //     taixiu_result_component.initResult(true);
+            //     //set texture tai cho sprite
+            // }
             // } else {
             //     sprite.active = false;
             // }

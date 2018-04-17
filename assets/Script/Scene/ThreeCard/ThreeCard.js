@@ -41,7 +41,7 @@ var ThreeCard = cc.Class({
         instance: null
     },
     exitRoom: function() {
-        NetworkManager.requestExitRoomMessage(0);
+        NetworkManager.requestExitRoomMessage(Common.ZONE_ID.MINI_BACAY, 0);
     },
 
     // use this for initialization
@@ -149,7 +149,7 @@ var ThreeCard = cc.Class({
         entry.setKey("turnSlotType");
         entry.setValue(turnType.toString());
         entries.push(entry);
-        NetworkManager.getTurnMessageFromServer(0, entries);
+        NetworkManager.getTurnMessageFromServer(Common.ZONE_ID.MINI_BACAY, 0, entries);
     },
 
 
@@ -445,8 +445,8 @@ var ThreeCard = cc.Class({
             }, this);
 
             lbl_text.node.runAction(cc.sequence(cc.moveBy(0.5, cc.p(0, 50)),
-            callFunc, cc.spawn(cc.moveBy(1.0, cc.p(0, 50)), fadeout, null),
-            callFuncUpdateMoney, cc.removeSelf(), null));
+                callFunc, cc.spawn(cc.moveBy(1.0, cc.p(0, 50)), fadeout, null),
+                callFuncUpdateMoney, cc.removeSelf(), null));
             // this.cardView.node.addChild(this.label_text);
         }
         else {

@@ -210,7 +210,7 @@ var Common = {
                     this.fingerprint = result;
                     console.log("component:", components); // an array of FP components
                 });
-            } else
+            } else {
                 if(cc.sys.platform === cc.sys.ANDROID){
                     var deviceId = jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getDeviceId", "()Ljava/lang/String;");
                     console.log("result:", deviceId); //a hash, representing your device fingerprint
@@ -221,6 +221,8 @@ var Common = {
                     cc.sys.localStorage.setItem("fingerprint", deviceId);
                     this.fingerprint = deviceId;
                 }
+            }
+
         } else {
             this.fingerprint = fp;
         }
@@ -407,22 +409,24 @@ var Common = {
     },
     getPackageName: function() {
         if(cc.sys.isNative) {
+            cc.log("getPackageName");
             if(cc.sys.platform == cc.sys.ANDROID){
-                return "com.gamebai.tienlen";//jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getPackageNameJNI", "()Ljava/lang/String;");
+                cc.log("getPackageName ANDROID");
+                return "com.moniclub.gamedanhbai";//jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getPackageNameJNI", "()Ljava/lang/String;");
             }else if(cc.sys.platform == cc.sys.IPHONE || cc.sys.platform == cc.sys.IPAD){
                 console.log("PACKAGE : com.gamebai.tienlen");
-                return "com.gamebai.tienlen";//jsb.reflection.callStaticMethod("NativeUtility", "getPackage");
+                return "com.moniclub.gamedanhbai";//jsb.reflection.callStaticMethod("NativeUtility", "getPackage");
             }
         } else {
-            return "com.gamebai.tienlen";
+            return "com.moniclub.gamedanhbai";
         }
 
     },
     getCp: function() {
-        return "24";
+        return "10";
     },
     getVersionCode: function() {
-        return "15";
+        return "20";
     },
     phoneNumber: "",
     setPhoneNunber: function(phoneNumber){

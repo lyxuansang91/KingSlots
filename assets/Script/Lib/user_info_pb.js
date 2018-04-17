@@ -1,6 +1,8 @@
 /**
  * @fileoverview
  * @enhanceable
+ * @suppress {messageConventions} JS Compiler reports an error if a variable or
+ *     field starts with 'MSG_' and isn't a translatable message.
  * @public
  */
 // GENERATED CODE -- DO NOT EDIT!
@@ -55,6 +57,7 @@ proto.BINUserInfo.prototype.toObject = function(opt_includeInstance) {
  *     http://goto/soy-param-migration
  * @param {!proto.BINUserInfo} msg The msg instance to transform.
  * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.BINUserInfo.toObject = function(includeInstance, msg) {
   var f, obj = {
@@ -262,77 +265,68 @@ proto.BINUserInfo.deserializeBinaryFromReader = function(msg, reader) {
 
 
 /**
- * Class method variant: serializes the given message to binary data
- * (in protobuf wire format), writing to the given BinaryWriter.
- * @param {!proto.BINUserInfo} message
- * @param {!jspb.BinaryWriter} writer
- */
-proto.BINUserInfo.serializeBinaryToWriter = function(message, writer) {
-  message.serializeBinaryToWriter(writer);
-};
-
-
-/**
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
 proto.BINUserInfo.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  this.serializeBinaryToWriter(writer);
+  proto.BINUserInfo.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
 
 /**
- * Serializes the message to binary data (in protobuf wire format),
- * writing to the given BinaryWriter.
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.BINUserInfo} message
  * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.BINUserInfo.prototype.serializeBinaryToWriter = function (writer) {
+proto.BINUserInfo.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = /** @type {number} */ (jspb.Message.getField(this, 1));
+  f = /** @type {number} */ (jspb.Message.getField(message, 1));
   if (f != null) {
     writer.writeInt64(
       1,
       f
     );
   }
-  f = /** @type {string} */ (jspb.Message.getField(this, 2));
+  f = /** @type {string} */ (jspb.Message.getField(message, 2));
   if (f != null) {
     writer.writeString(
       2,
       f
     );
   }
-  f = /** @type {string} */ (jspb.Message.getField(this, 3));
+  f = /** @type {string} */ (jspb.Message.getField(message, 3));
   if (f != null) {
     writer.writeString(
       3,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 4));
+  f = /** @type {number} */ (jspb.Message.getField(message, 4));
   if (f != null) {
     writer.writeInt32(
       4,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 5));
+  f = /** @type {number} */ (jspb.Message.getField(message, 5));
   if (f != null) {
     writer.writeInt32(
       5,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 6));
+  f = /** @type {number} */ (jspb.Message.getField(message, 6));
   if (f != null) {
     writer.writeInt32(
       6,
       f
     );
   }
-  f = this.getLevel();
+  f = message.getLevel();
   if (f != null) {
     writer.writeMessage(
       7,
@@ -340,7 +334,7 @@ proto.BINUserInfo.prototype.serializeBinaryToWriter = function (writer) {
       level_pb.BINLevel.serializeBinaryToWriter
     );
   }
-  f = this.getMedal();
+  f = message.getMedal();
   if (f != null) {
     writer.writeMessage(
       8,
@@ -348,147 +342,147 @@ proto.BINUserInfo.prototype.serializeBinaryToWriter = function (writer) {
       level_pb.BINMedal.serializeBinaryToWriter
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 9));
+  f = /** @type {number} */ (jspb.Message.getField(message, 9));
   if (f != null) {
     writer.writeInt64(
       9,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 10));
+  f = /** @type {number} */ (jspb.Message.getField(message, 10));
   if (f != null) {
     writer.writeInt64(
       10,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 11));
+  f = /** @type {number} */ (jspb.Message.getField(message, 11));
   if (f != null) {
     writer.writeInt64(
       11,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 12));
+  f = /** @type {number} */ (jspb.Message.getField(message, 12));
   if (f != null) {
     writer.writeInt64(
       12,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 13));
+  f = /** @type {number} */ (jspb.Message.getField(message, 13));
   if (f != null) {
     writer.writeInt32(
       13,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 14));
+  f = /** @type {number} */ (jspb.Message.getField(message, 14));
   if (f != null) {
     writer.writeInt32(
       14,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 15));
+  f = /** @type {number} */ (jspb.Message.getField(message, 15));
   if (f != null) {
     writer.writeInt64(
       15,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 16));
+  f = /** @type {number} */ (jspb.Message.getField(message, 16));
   if (f != null) {
     writer.writeInt64(
       16,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 17));
+  f = /** @type {number} */ (jspb.Message.getField(message, 17));
   if (f != null) {
     writer.writeInt64(
       17,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 18));
+  f = /** @type {number} */ (jspb.Message.getField(message, 18));
   if (f != null) {
     writer.writeInt64(
       18,
       f
     );
   }
-  f = /** @type {boolean} */ (jspb.Message.getField(this, 19));
+  f = /** @type {boolean} */ (jspb.Message.getField(message, 19));
   if (f != null) {
     writer.writeBool(
       19,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 20));
+  f = /** @type {number} */ (jspb.Message.getField(message, 20));
   if (f != null) {
     writer.writeInt32(
       20,
       f
     );
   }
-  f = /** @type {string} */ (jspb.Message.getField(this, 21));
+  f = /** @type {string} */ (jspb.Message.getField(message, 21));
   if (f != null) {
     writer.writeString(
       21,
       f
     );
   }
-  f = /** @type {string} */ (jspb.Message.getField(this, 22));
+  f = /** @type {string} */ (jspb.Message.getField(message, 22));
   if (f != null) {
     writer.writeString(
       22,
       f
     );
   }
-  f = /** @type {string} */ (jspb.Message.getField(this, 23));
+  f = /** @type {string} */ (jspb.Message.getField(message, 23));
   if (f != null) {
     writer.writeString(
       23,
       f
     );
   }
-  f = /** @type {boolean} */ (jspb.Message.getField(this, 24));
+  f = /** @type {boolean} */ (jspb.Message.getField(message, 24));
   if (f != null) {
     writer.writeBool(
       24,
       f
     );
   }
-  f = /** @type {boolean} */ (jspb.Message.getField(this, 25));
+  f = /** @type {boolean} */ (jspb.Message.getField(message, 25));
   if (f != null) {
     writer.writeBool(
       25,
       f
     );
   }
-  f = /** @type {boolean} */ (jspb.Message.getField(this, 26));
+  f = /** @type {boolean} */ (jspb.Message.getField(message, 26));
   if (f != null) {
     writer.writeBool(
       26,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 27));
+  f = /** @type {number} */ (jspb.Message.getField(message, 27));
   if (f != null) {
     writer.writeInt64(
       27,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 28));
+  f = /** @type {number} */ (jspb.Message.getField(message, 28));
   if (f != null) {
     writer.writeInt64(
       28,
       f
     );
   }
-  f = this.getViplevel();
+  f = message.getViplevel();
   if (f != null) {
     writer.writeMessage(
       29,
@@ -496,14 +490,14 @@ proto.BINUserInfo.prototype.serializeBinaryToWriter = function (writer) {
       level_pb.BINVipLevel.serializeBinaryToWriter
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(this, 30));
+  f = /** @type {number} */ (jspb.Message.getField(message, 30));
   if (f != null) {
     writer.writeInt64(
       30,
       f
     );
   }
-  f = /** @type {string} */ (jspb.Message.getField(this, 31));
+  f = /** @type {string} */ (jspb.Message.getField(message, 31));
   if (f != null) {
     writer.writeString(
       31,
@@ -1466,6 +1460,7 @@ proto.BINUserSetting.prototype.toObject = function(opt_includeInstance) {
  *     http://goto/soy-param-migration
  * @param {!proto.BINUserSetting} msg The msg instance to transform.
  * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.BINUserSetting.toObject = function(includeInstance, msg) {
   var f, obj = {
@@ -1530,49 +1525,40 @@ proto.BINUserSetting.deserializeBinaryFromReader = function(msg, reader) {
 
 
 /**
- * Class method variant: serializes the given message to binary data
- * (in protobuf wire format), writing to the given BinaryWriter.
- * @param {!proto.BINUserSetting} message
- * @param {!jspb.BinaryWriter} writer
- */
-proto.BINUserSetting.serializeBinaryToWriter = function(message, writer) {
-  message.serializeBinaryToWriter(writer);
-};
-
-
-/**
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
 proto.BINUserSetting.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  this.serializeBinaryToWriter(writer);
+  proto.BINUserSetting.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
 
 /**
- * Serializes the message to binary data (in protobuf wire format),
- * writing to the given BinaryWriter.
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.BINUserSetting} message
  * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.BINUserSetting.prototype.serializeBinaryToWriter = function (writer) {
+proto.BINUserSetting.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = /** @type {number} */ (jspb.Message.getField(this, 1));
+  f = /** @type {number} */ (jspb.Message.getField(message, 1));
   if (f != null) {
     writer.writeInt64(
       1,
       f
     );
   }
-  f = /** @type {boolean} */ (jspb.Message.getField(this, 2));
+  f = /** @type {boolean} */ (jspb.Message.getField(message, 2));
   if (f != null) {
     writer.writeBool(
       2,
       f
     );
   }
-  f = /** @type {boolean} */ (jspb.Message.getField(this, 3));
+  f = /** @type {boolean} */ (jspb.Message.getField(message, 3));
   if (f != null) {
     writer.writeBool(
       3,
