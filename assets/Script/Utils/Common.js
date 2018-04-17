@@ -414,7 +414,6 @@ var Common = {
                 cc.log("getPackageName ANDROID");
                 return "com.moniclub.gamedanhbai";//jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getPackageNameJNI", "()Ljava/lang/String;");
             }else if(cc.sys.platform == cc.sys.IPHONE || cc.sys.platform == cc.sys.IPAD){
-                console.log("PACKAGE : com.gamebai.tienlen");
                 return "com.moniclub.gamedanhbai";//jsb.reflection.callStaticMethod("NativeUtility", "getPackage");
             }
         } else {

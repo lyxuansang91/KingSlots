@@ -22,6 +22,7 @@ cc.Class({
         window.loginSuccess = false;
         Common.setFingerprint();
         this.isLoadScene = false;
+
         if(cc.sys.isNative)
             sdkbox.PluginFacebook.init();
     },
@@ -142,7 +143,6 @@ cc.Class({
     },
     jarResponseHandler: function(resp) {
         cc.log("jar response handler:", resp.toObject());
-
         if(resp.getResponsecode()) {
             if(resp.getJarinfoList().length > 0) {
                 // first time request
@@ -187,9 +187,9 @@ cc.Class({
             case NetworkManager.MESSAGE_ID.SMS_CONFIG:
                 this.smsConfigResponseHandler(msg);
                 break;
-            case NetworkManager.MESSAGE_ID.JAR:
-                this.jarResponseHandler(msg);
-                break;
+            // case NetworkManager.MESSAGE_ID.JAR:
+            //     this.jarResponseHandler(msg);
+            //     break;
             case NetworkManager.MESSAGE_ID.PAYMENT_STATUS:
                 this.paymentStatusResponseHandler(msg);
                 break;
@@ -294,7 +294,7 @@ cc.Class({
             if(Common.assetsConfigList === null) {
                 NetworkManager.requestAssetsConfigMessage(1);
             }
-            NetworkManager.getJarRequest(0, null);
+
             return;
         }
 

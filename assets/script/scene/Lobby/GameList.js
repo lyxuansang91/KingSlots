@@ -27,6 +27,8 @@ cc.Class({
         var self = this;
         this.content = this.scrollView.content;
         this.populateList();
+
+
     },
     onDestroy: function() {
         cc.log("on destroy");
