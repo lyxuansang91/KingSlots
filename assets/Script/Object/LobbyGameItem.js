@@ -31,7 +31,7 @@ cc.Class({
             this.box.node.active = false;
         }else if(playerInfo === Config.TAG_GAME_ITEM.VQMM){
             this.box.node.active = false;
-            this.box_vqmm.node.active = true;
+            this.box_vqmm.node.active = false;
         }
 
         this.background.getComponent(cc.Sprite).spriteFrame = this.list_frame[index];
