@@ -233,7 +233,7 @@ var NetworkManager = {
     MAX_KILL_MSG: 10000,
     SERVER_TEST: "139.162.63.66",
     SERVER_DEBUG: "192.168.0.200",
-    URL: "ws://118.70.118.135:2280/megajackpot",
+    URL: "ws://139.162.2.161:2280/megajackpot",
     sessionId: "",
     tryReconnect: false,
     getSessionId: function() {
