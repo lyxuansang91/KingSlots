@@ -738,7 +738,8 @@ var NetworkManager = {
     },
     getJarRequest: function(zone_id, jarType, isLoading) {
         var request = this.initJarRequest(zone_id, jarType);
-        this.requestMessage(request.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.JAR, Common.getSessionId(), isLoading);
+        this.requestMessage(request.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.JAR,
+            (zone_id === 0  ? "": Common.getSessionId()), isLoading);
     },
     initJarRequest: function(zone_id, jarType) {
         var request = new proto.BINJarRequest();
