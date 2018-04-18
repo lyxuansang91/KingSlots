@@ -52,7 +52,7 @@ cc.Class({
             var item = cc.instantiate(this.prefabGameItem);
             item.setTag(listGame[i] + 1000);
             item.getComponent('LobbyGameItem').init(i, listGame[i]);
-            item.setPositionY(this.content.getContentSize().height*0.06);
+            item.setPositionY(this.content.getContentSize().height*0.01);
             this.content.addChild(item);
             innerSize.width += item.getContentSize().width*1.1;
         }

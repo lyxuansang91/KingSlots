@@ -703,7 +703,7 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": -233,
+      "x": -243,
       "y": 3
     },
     "_skewX": 0,
@@ -946,18 +946,12 @@
     "edt_password": {
       "__id__": 35
     },
-    "edt_username_register": null,
-    "edt_pass_register": null,
-    "edt_repass_register": null,
-    "edt_displayname_register": null,
     "toastPrefab": {
       "__uuid__": "c19af3fa-7297-48f4-b2f0-c08d0184e7bf"
     },
     "messagePopup": {
       "__uuid__": "7e6edb77-dbf8-46dc-a384-65b7370eb2cf"
-    },
-    "popup_login": null,
-    "popup_register": null
+    }
   },
   {
     "__type__": "cc.EditBox",
@@ -1103,11 +1097,11 @@
     },
     "_rotationX": 0,
     "_rotationY": 0,
-    "_scaleX": 0.925,
+    "_scaleX": 1,
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": -102,
+      "x": -106.7,
       "y": 2
     },
     "_skewX": 0,
@@ -1376,11 +1370,11 @@
     },
     "_rotationX": 0,
     "_rotationY": 0,
-    "_scaleX": 0.925,
+    "_scaleX": 1,
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 92,
+      "x": 98.1,
       "y": 2
     },
     "_skewX": 0,
@@ -1557,7 +1551,7 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": -299,
+      "x": -307,
       "y": 3
     },
     "_skewX": 0,
@@ -1797,8 +1791,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 272.5,
-      "y": -2.1
+      "x": 283,
+      "y": -2
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -2037,8 +2031,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 431.2,
-      "y": -2.1
+      "x": 441,
+      "y": -2
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -2277,8 +2271,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 546.6,
-      "y": -2.1
+      "x": 551,
+      "y": -2
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -2498,7 +2492,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 252,
+      "width": 248,
       "height": 46
     },
     "_rotationX": 0,
