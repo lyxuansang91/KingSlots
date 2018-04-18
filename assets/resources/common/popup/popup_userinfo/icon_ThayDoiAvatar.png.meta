@@ -1,0 +1,30 @@
+{
+  "ver": "1.0.0",
+  "uuid": "7ab02f7e-39f7-447c-a6fb-9e904ab18efb",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "subMetas": {
+    "icon_ThayDoiAvatar": {
+      "ver": "1.0.3",
+      "uuid": "e7881ff3-ca47-44da-9b16-7ca7dbc1d1fc",
+      "rawTextureUuid": "7ab02f7e-39f7-447c-a6fb-9e904ab18efb",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 49,
+      "height": 49,
+      "rawWidth": 49,
+      "rawHeight": 49,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}
