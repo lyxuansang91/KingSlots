@@ -18,6 +18,7 @@ cc.Class({
 
     // use this for initialization
     onLoad: function () {
+        window.jarInfoList = null;
         cc.log('intro load');
         this._super();
         var self = this;
