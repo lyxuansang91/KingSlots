@@ -18,7 +18,7 @@ cc.Class({
     },
     // use this for initialization
     onLoad: function () {
-        window.jarInfoList = null;
+
         window.loginSuccess = false;
         Common.setFingerprint();
         this.isLoadScene = false;
@@ -326,7 +326,7 @@ cc.Class({
     },
 
     login: function() {
-
+        cc.log("do login");
         var username = this.edt_username.string;
         var password = this.edt_password.string;
 
