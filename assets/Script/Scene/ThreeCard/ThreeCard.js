@@ -353,7 +353,7 @@ var ThreeCard = cc.Class({
                 // var call_func = cc.callFunc(function () {
                 //     cc.log("FINISH!!!!");
                 // });
-                card.runAction(cc.sequence(delay,move1,move3,move2,callFunc, cc.delayTime(2), callFuncAutoSpin, null));
+                card.runAction(cc.sequence(delay,move1,move3,move2,callFunc, cc.delayTime(2), callFuncAutoSpin));
             }else{
                 card.runAction(cc.sequence(delay,move1,move3,move2));
             }
@@ -431,7 +431,7 @@ var ThreeCard = cc.Class({
                         // this.cardView.node.addChild(this.label_money);
                         var fadeout = cc.fadeOut(1.5);
                         label_money.node.runAction(cc.sequence(cc.moveBy(0.5, cc.p(0,20)),cc.delayTime(0.25),
-                            cc.spawn(cc.moveBy(1.0,cc.p(0,20)),fadeout,null), cc.removeSelf(),null));
+                            cc.spawn(cc.moveBy(1.0,cc.p(0,20)),fadeout), cc.removeSelf()));
 
                     }
                 }
@@ -445,8 +445,8 @@ var ThreeCard = cc.Class({
             }, this);
 
             lbl_text.node.runAction(cc.sequence(cc.moveBy(0.5, cc.p(0, 50)),
-                callFunc, cc.spawn(cc.moveBy(1.0, cc.p(0, 50)), fadeout, null),
-                callFuncUpdateMoney, cc.removeSelf(), null));
+                callFunc, cc.spawn(cc.moveBy(1.0, cc.p(0, 50)), fadeout),
+                callFuncUpdateMoney, cc.removeSelf()));
             // this.cardView.node.addChild(this.label_text);
         }
         else {
@@ -527,7 +527,7 @@ var ThreeCard = cc.Class({
         },this);
 
 
-        item.node.runAction(cc.sequence(cc.delayTime(2),callFunc2, cc.delayTime(1), cc.fadeOut(1), cc.removeSelf(), null));
+        item.node.runAction(cc.sequence(cc.delayTime(2),callFunc2, cc.delayTime(1), cc.fadeOut(1), cc.removeSelf()));
     },
     initValue: function(json) {
         var results = JSON.parse(json);
