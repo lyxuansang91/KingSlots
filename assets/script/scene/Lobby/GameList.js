@@ -90,7 +90,7 @@ cc.Class({
             if(isLoading)
                 NetworkManager.showLoading();
             this.isRequestJar = true;
-            NetworkManager.getJarRequest(0, null, isLoading);
+            NetworkManager.getJarRequest(-1, -1, isLoading);
         }
     },
     bindNetwork: function() {
