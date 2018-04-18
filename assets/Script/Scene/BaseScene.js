@@ -79,7 +79,7 @@ cc.Class({
                 cc.log("game id = ", _gameIds);
                 Common.setEnableGameIds(_gameIds);
                 // NetworkManager.hideLoading();
-                NetworkManager.getJarRequest(0, null);
+                NetworkManager.getJarRequest(-1, -1);
 
             }else {
                 Common.showToast(initialMessage.getMessage());

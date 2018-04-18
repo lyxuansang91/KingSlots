@@ -1,0 +1,30 @@
+{
+  "ver": "1.0.0",
+  "uuid": "cc6f7dc4-09bd-4568-8ddf-7ea603eb82d8",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "subMetas": {
+    "BG_Pop_DangKy_TK": {
+      "ver": "1.0.3",
+      "uuid": "e21ced8d-5395-4679-8ecb-2a4da6db604c",
+      "rawTextureUuid": "cc6f7dc4-09bd-4568-8ddf-7ea603eb82d8",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 1150,
+      "height": 645,
+      "rawWidth": 1150,
+      "rawHeight": 645,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

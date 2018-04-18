@@ -54,7 +54,7 @@ cc.Class({
         });
     },
     jarResponseHandler: function(resp) {
-        cc.log("jar response handler:", resp.toObject());
+        cc.log("jar response handler intro:", resp.toObject());
         if(resp.getResponsecode()) {
             if(resp.getJarinfoList().length > 0) {
                 // first time request
@@ -70,6 +70,7 @@ cc.Class({
         if(isDone) {
             return true;
         }
+        isDone = true;
         switch (buffer.message_id) {
             case NetworkManager.MESSAGE_ID.JAR:
                 this.jarResponseHandler(buffer.response);
