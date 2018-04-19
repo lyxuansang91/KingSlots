@@ -54,8 +54,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 800,
-      "height": 82
+      "width": 1150,
+      "height": 60
     },
     "_rotationX": 0,
     "_rotationY": 0,
@@ -108,8 +108,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 790,
-      "height": 74
+      "width": 1150,
+      "height": 57
     },
     "_rotationX": 0,
     "_rotationY": 0,
@@ -136,7 +136,7 @@
     },
     "_enabled": true,
     "_spriteFrame": {
-      "__uuid__": "725d0858-e68d-497d-a157-f066f0739bdd"
+      "__uuid__": "eb91c532-eddf-49de-8199-8f6f298c29e3"
     },
     "_type": 0,
     "_sizeMode": 0,
@@ -208,7 +208,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 800,
+      "width": 1150,
       "height": 78
     },
     "_rotationX": 0,
@@ -271,8 +271,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": -300,
-      "y": 0
+      "x": -400,
+      "y": -3
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -445,8 +445,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 100,
-      "y": 0
+      "x": 166,
+      "y": -2
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -536,8 +536,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 300,
-      "y": 0
+      "x": 406,
+      "y": -2
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -692,7 +692,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 800,
+      "width": 1150,
       "height": 78
     },
     "_rotationX": 0,
@@ -755,7 +755,7 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": -266,
+      "x": -300,
       "y": 0
     },
     "_skewX": 0,
@@ -929,7 +929,7 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 266,
+      "x": 318,
       "y": 0
     },
     "_skewX": 0,
@@ -1021,7 +1021,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 800,
+      "width": 1150,
       "height": 78
     },
     "_rotationX": 0,
@@ -1240,11 +1240,9 @@
       "__uuid__": "dca52e56-8667-4d34-ae00-cb3c30809a34"
     },
     "frame_title": {
-      "__uuid__": "28d24e09-5462-4ebd-9f83-4c95e879da26"
+      "__uuid__": "eb91c532-eddf-49de-8199-8f6f298c29e3"
     },
-    "frame_cell": {
-      "__uuid__": "725d0858-e68d-497d-a157-f066f0739bdd"
-    }
+    "frame_cell": null
   },
   {
     "__type__": "cc.PrefabInfo",
