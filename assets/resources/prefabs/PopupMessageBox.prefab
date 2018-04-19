@@ -25,14 +25,14 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 35
+        "__id__": 36
       },
       {
-        "__id__": 36
+        "__id__": 37
       }
     ],
     "_prefab": {
-      "__id__": 37
+      "__id__": 38
     },
     "_id": "",
     "_opacity": 255,
@@ -213,11 +213,11 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 33
+        "__id__": 34
       }
     ],
     "_prefab": {
-      "__id__": 34
+      "__id__": 35
     },
     "_id": "",
     "_opacity": 255,
@@ -236,8 +236,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 698,
-      "height": 407
+      "width": 440,
+      "height": 282
     },
     "_rotationX": 0,
     "_rotationY": 0,
@@ -396,8 +396,8 @@
     "_scaleY": 0.8,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": -66.2,
-      "y": -135.9
+      "x": -66,
+      "y": -58
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -662,8 +662,8 @@
     "_scaleY": 0.8,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 85.8,
-      "y": -135.7
+      "x": 86,
+      "y": -57
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -890,10 +890,13 @@
       },
       {
         "__id__": 30
+      },
+      {
+        "__id__": 32
       }
     ],
     "_prefab": {
-      "__id__": 32
+      "__id__": 33
     },
     "_id": "",
     "_opacity": 255,
@@ -921,8 +924,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 320.7,
-      "y": 187.4
+      "x": 187.5,
+      "y": 121.875
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -1023,6 +1026,32 @@
     "customEventData": ""
   },
   {
+    "__type__": "cc.Widget",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 28
+    },
+    "_enabled": true,
+    "isAlignOnce": true,
+    "_target": null,
+    "_alignFlags": 33,
+    "_left": 0,
+    "_right": -15.5,
+    "_top": -11.375,
+    "_bottom": 0,
+    "_verticalCenter": 0,
+    "_horizontalCenter": 0,
+    "_isAbsLeft": true,
+    "_isAbsRight": true,
+    "_isAbsTop": true,
+    "_isAbsBottom": true,
+    "_isAbsHorizontalCenter": true,
+    "_isAbsVerticalCenter": true,
+    "_originalWidth": 0,
+    "_originalHeight": 0
+  },
+  {
     "__type__": "cc.PrefabInfo",
     "root": {
       "__id__": 1
@@ -1082,7 +1111,7 @@
       "__id__": 3
     },
     "background": {
-      "__id__": 33
+      "__id__": 34
     },
     "exit": {
       "__id__": 24
