@@ -118,7 +118,6 @@ var ThreeCard = cc.Class({
     },
 
     quayEvent: function () {
-        var item = cc.instantiate(this.toastPrefab).getComponent("ToastScripts");
         // var valMoney = (isCash ? turnCashValue[indexCash] : turnGoldValue[indexCash]);
         var money = Common.getCash();
         var betMoney = this.getBetMoney();

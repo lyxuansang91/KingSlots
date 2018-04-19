@@ -84,14 +84,14 @@ cc.Class({
 
             if(i == lengthData && index != 0){
                 this.list_text[i].string = text;
-                this.list_text[i].node.color = cc.color(94,60,17,255);
+                // this.list_text[i].node.color = cc.color(94,60,17,255);
             }else{
                 this.list_text[i].string = text;
-                if(index == 0){
-                    this.list_text[i].node.color = cc.color(255,248,198,255);
-                }else{
-                    this.list_text[i].node.color = cc.color(94,60,17,255);
-                }
+                // if(index == 0){
+                //     this.list_text[i].node.color = cc.color(255,248,198,255);
+                // }else{
+                //     this.list_text[i].node.color = cc.color(94,60,17,255);
+                // }
             }
         }
     }
