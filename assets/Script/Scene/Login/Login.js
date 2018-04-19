@@ -171,9 +171,6 @@ cc.Class({
             case NetworkManager.MESSAGE_ID.LOGIN:
                 this.handleLoginResponseHandler(msg);
                 break;
-            case NetworkManager.MESSAGE_ID.REGISTER:
-                this.handleRegisterResponseHandler(msg);
-                break;
             case NetworkManager.MESSAGE_ID.ASSET_CONFIG:
                 this.assetConfigResponseHandler(msg);
                 break;
@@ -321,6 +318,12 @@ cc.Class({
         }
 
         NetworkManager.requestLoginMessage(username, password);
+    },
+
+    showPopupRegister: function () {
+        Common.showPopup(Config.name.POPUP_REGISTER,function(popup) {
+            popup.appear();
+        });
     },
 
     loginFacebook: function() {

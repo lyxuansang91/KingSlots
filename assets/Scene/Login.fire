@@ -1726,7 +1726,7 @@
     },
     "_children": [],
     "_tag": -1,
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 46
@@ -1781,7 +1781,7 @@
       "__uuid__": "0eecae0e-bc36-4495-8517-55c826bfa9a0"
     },
     "_type": 0,
-    "_sizeMode": 1,
+    "_sizeMode": 0,
     "_fillType": 0,
     "_fillCenter": {
       "__type__": "cc.Vec2",
@@ -1807,7 +1807,7 @@
       "__uuid__": "046fc60f-019a-4111-9821-3c86fa755abd"
     },
     "_type": 0,
-    "_sizeMode": 1,
+    "_sizeMode": 0,
     "_fillType": 0,
     "_fillCenter": {
       "__type__": "cc.Vec2",
@@ -3454,7 +3454,7 @@
       "__id__": 25
     },
     "component": "Login",
-    "handler": "switchLoginToRegister",
+    "handler": "showPopupRegister",
     "customEventData": ""
   },
   {

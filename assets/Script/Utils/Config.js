@@ -70,6 +70,7 @@ var Config = {
         POPUP_SELECT_LINE : "PopupSelectLine",
         POPUP_TAIXIU_SESSION_HISTORY : "PopupTaixiuSession",
         POPUP_TAIXIU_STATIS : "PopupTaixiuStatis",
+        POPUP_REGISTER : "PopupRegister",
     },
 
     ON_EVENT: {
