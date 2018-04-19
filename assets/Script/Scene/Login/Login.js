@@ -8,7 +8,9 @@ cc.Class({
         edt_username: cc.EditBox,
         edt_password: cc.EditBox,
         toastPrefab: cc.Prefab,
-        messagePopup: cc.Prefab
+        messagePopup: cc.Prefab,
+        bar_top_login : cc.Node,
+        bar_top_lobby : cc.Node,
     },
     // use this for initialization
     onLoad: function () {
@@ -205,7 +207,9 @@ cc.Class({
         });
         if(this.checkPurchaseList() && !this.isLoadScene) {
             this.isLoadScene = true;
-            cc.director.loadScene('Lobby');
+
+            this.bar_top_login.active = false;
+            this.bar_top_lobby.active = true;
         }
 
     },
