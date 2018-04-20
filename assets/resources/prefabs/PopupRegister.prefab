@@ -1409,9 +1409,11 @@
   },
   {
     "__type__": "cc.ClickEvent",
-    "target": null,
-    "component": "",
-    "handler": "",
+    "target": {
+      "__id__": 1
+    },
+    "component": "PopupRegister",
+    "handler": "register",
     "customEventData": ""
   },
   {
