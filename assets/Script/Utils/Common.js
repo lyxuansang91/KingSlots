@@ -575,6 +575,7 @@ var Common = {
         }
     },
     showPopupMessageBox: function() {
+        var self = this;
         var scene = cc.director.getScene();
         var self = this;
         if(cc.isValid(scene)){
