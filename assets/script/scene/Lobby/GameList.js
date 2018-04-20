@@ -85,7 +85,6 @@ cc.Class({
     },
 
     requestJar: function(isLoading) {
-        cc.log("request jar:", isLoading);
         if(!this.isRequestJar) {
             if(isLoading)
                 NetworkManager.showLoading();
@@ -113,15 +112,6 @@ cc.Class({
     },
 
     ongamestatus: function(event) {
-        // cc.log("on game status game list");
-        // NetworkManager.hideLoading();
-        // if(event.data!==null || event.data !== 'undefined') {
-        //     var lstMessage = NetworkManager.parseFrom(event.data, event.data.byteLength);
-        //     for(var i = 0; i < lstMessage.length; i++) {
-        //         var buffer = lstMessage[i];
-        //         this.handleMessage(buffer);
-        //     }
-        // }
     },
 
     jarResponseHandler: function(resp) {

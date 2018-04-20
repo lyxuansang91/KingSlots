@@ -493,8 +493,8 @@ var MiniPoker = cc.Class({
     exitZoneResponseHandler: function(resp) {
         cc.log("exit zone response handler:", resp.toObject());
         if(resp.getResponsecode()) {
-            cc.director.loadScene("Lobby");
             Common.setZoneId(-1);
+            cc.director.loadScene("Login");
         }
 
         if(resp.hasMessage() && resp.getMessage() !== "") {

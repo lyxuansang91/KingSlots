@@ -949,9 +949,7 @@
     "edt_password": {
       "__id__": 35
     },
-    "toastPrefab": {
-      "__uuid__": "c19af3fa-7297-48f4-b2f0-c08d0184e7bf"
-    },
+    "toastPrefab": null,
     "messagePopup": {
       "__uuid__": "7e6edb77-dbf8-46dc-a384-65b7370eb2cf"
     },

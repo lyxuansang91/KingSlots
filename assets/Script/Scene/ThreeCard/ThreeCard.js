@@ -167,7 +167,8 @@ var ThreeCard = cc.Class({
         cc.log("exit zone response handler:", resp.toObject());
         if(resp.getResponsecode()) {
             Common.setZoneId(-1);
-            cc.director.loadScene("Lobby");
+            // cc.director.loadScene("Lobby");
+            cc.director.loadScene("Login");
         }
 
         if(resp.hasMessage() && resp.getMessage() !== "") {

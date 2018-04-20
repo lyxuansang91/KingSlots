@@ -14,13 +14,18 @@ cc.Class({
     },
     // use this for initialization
     onLoad: function () {
-
-        window.loginSuccess = false;
         Common.setFingerprint();
         this.isLoadScene = false;
 
         if(cc.sys.isNative)
             sdkbox.PluginFacebook.init();
+        if(window.loginSuccess !== null && window.loginSuccess) {
+            this.bar_top_login.active = false;
+            this.bar_top_lobby.active = true;
+        } else {
+            this.bar_top_login.active = true;
+            this.bar_top_lobby.active = false;
+        }
     },
 
     start : function () {
@@ -261,8 +266,6 @@ cc.Class({
             if(Common.assetsConfigList === null) {
                 NetworkManager.requestAssetsConfigMessage(1);
             }
-
-            return;
         }
 
         if(res.hasMessage() && res.getMessage() !== "") {
@@ -275,19 +278,19 @@ cc.Class({
         }
     },
 
-    handlePingResponseHandler: function(res) {
-        cc.log("ping response handler:", res);
-        if(res.getResponsecode()) {
-            if(res.getDisconnect()) {
-                Common.setSessionId("-1");
-                if(res.hasMessage() && res.getMessage() !== "") {
-                    Common.showToast(res.getMessage());
-                }
-                NetworkManager.closeConnection();
-                this.scheduleOnce(this.goIntroScene, 2.0);
-            }
-        }
-    },
+    // handlePingResponseHandler: function(res) {
+    //     cc.log("ping response handler:", res);
+    //     if(res.getResponsecode()) {
+    //         if(res.getDisconnect()) {
+    //             Common.setSessionId("-1");
+    //             if(res.hasMessage() && res.getMessage() !== "") {
+    //                 Common.showToast(res.getMessage());
+    //             }
+    //             NetworkManager.closeConnection();
+    //             this.scheduleOnce(this.goIntroScene, 2.0);
+    //         }
+    //     }
+    // },
     goIntroScene: function(e) {
         cc.director.loadScene("Intro");
     },

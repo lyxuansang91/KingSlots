@@ -456,7 +456,7 @@ var Treasure = cc.Class({
         cc.log("exit zone response message:", resp.toObject());
         if(resp.getResponsecode()) {
             Common.setZoneId(-1);
-            cc.director.loadScene('Lobby');
+            cc.director.loadScene('Login');
         }
 
         if(resp.hasMessage() && resp.getMessage() !== "") {

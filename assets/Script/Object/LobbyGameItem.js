@@ -63,13 +63,17 @@ cc.Class({
     },
 
     buttonEvent: function () {
+        if(window.loginSuccess === null || !window.loginSuccess) {
+            Common.showToast("Bạn vui lòng đăng nhập để chơi game!");
+            return;
+        }
 
         var tag = this.tag;
-        cc.log("tag:", tag, ", vqmm:", Config.TAG_GAME_ITEM.VQMM);
         if(tag === Config.TAG_GAME_ITEM.VQMM) {
             Common.showToast("Game đang cập nhật vui lòng thử lại!");
             return;
         }
+
         Common.setGameTag(tag);
         var zoneId = Common.getZoneId();
         Common.setCurrentZoneId(zoneId);
