@@ -983,7 +983,7 @@
     "_N$returnType": 0,
     "_N$inputFlag": 5,
     "_N$inputMode": 6,
-    "_N$fontSize": 29,
+    "_N$fontSize": 20,
     "_N$lineHeight": 40,
     "_N$fontColor": {
       "__type__": "cc.Color",
@@ -1259,7 +1259,7 @@
     "_N$returnType": 0,
     "_N$inputFlag": 0,
     "_N$inputMode": 6,
-    "_N$fontSize": 29,
+    "_N$fontSize": 20,
     "_N$lineHeight": 40,
     "_N$fontColor": {
       "__type__": "cc.Color",
@@ -4552,7 +4552,7 @@
     },
     "_enabled": true,
     "_spriteFrame": {
-      "__uuid__": "9542b541-ae15-4005-b104-cc70c9219575"
+      "__uuid__": "658e8d56-f5fe-4bbf-ae46-eebffc5db46f"
     },
     "_type": 0,
     "_sizeMode": 1,
