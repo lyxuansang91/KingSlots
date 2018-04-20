@@ -5,7 +5,8 @@ cc.Class({
     properties: {
         prefabData: cc.Prefab,
         frame_title : cc.SpriteFrame,
-        frame_cell : cc.SpriteFrame
+        frame_cell : cc.SpriteFrame,
+        frame_separator: cc.SpriteFrame
     },
 
     // use this for initialization
@@ -130,8 +131,17 @@ cc.Class({
                 }
             }else{
                 this.list_text[i].string = text;
-                if(index == 0){
+                if(index == 0 && i != lengthData - 1){
                     // this.list_text[i].node.color = cc.color(255,248,198,255);
+                    var posPreSepa = i - 1 >= 0 ? this.list_text[i - 1].node.getPositionX() : - this.node.getContentSize().width/2;
+                    var posSeparotorX = this.list_text[i].node.getPositionX() + (this.list_text[i].node.getPositionX() - posPreSepa)/2;
+                    var node = new cc.Node();
+                    var sprite = node.addComponent(cc.Sprite);
+                    sprite.node.setPositionX(posSeparotorX);
+                    sprite.node.setPositionY(5);
+                    sprite.spriteFrame = this.frame_separator;
+                    node.parent = this.node;
+
                 }else{
                     // this.list_text[i].node.color = cc.color(94,60,17,255);
                 }
