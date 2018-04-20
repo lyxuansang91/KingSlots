@@ -79,7 +79,7 @@ cc.Class({
                 cc.log("game id = ", _gameIds);
                 Common.setEnableGameIds(_gameIds);
                 // NetworkManager.hideLoading();
-                cc.director.loadScene('Login');
+                NetworkManager.getJarRequest(-1, -1);
 
             }else {
                 Common.showToast(initialMessage.getMessage());
@@ -87,7 +87,6 @@ cc.Class({
         }
     },
     pingMessageResponseHandler: function(res) {
-        //cc.log("ping response handler:", res);
         if(res.getResponsecode()) {
             if(res.getDisconnect()) {
                 Common.setSessionId("-1");

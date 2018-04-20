@@ -27,6 +27,8 @@ cc.Class({
         var self = this;
         this.content = this.scrollView.content;
         this.populateList();
+
+
     },
     onDestroy: function() {
         cc.log("on destroy");
@@ -50,7 +52,7 @@ cc.Class({
             var item = cc.instantiate(this.prefabGameItem);
             item.setTag(listGame[i] + 1000);
             item.getComponent('LobbyGameItem').init(i, listGame[i]);
-            item.setPositionY(this.content.getContentSize().height*0.06);
+            item.setPositionY(this.content.getContentSize().height*0.01);
             this.content.addChild(item);
             innerSize.width += item.getContentSize().width*1.1;
         }
@@ -83,12 +85,11 @@ cc.Class({
     },
 
     requestJar: function(isLoading) {
-        cc.log("request jar:", isLoading);
         if(!this.isRequestJar) {
             if(isLoading)
                 NetworkManager.showLoading();
             this.isRequestJar = true;
-            NetworkManager.getJarRequest(0, null, isLoading);
+            NetworkManager.getJarRequest(-1, -1, isLoading);
         }
     },
     bindNetwork: function() {
@@ -111,15 +112,6 @@ cc.Class({
     },
 
     ongamestatus: function(event) {
-        // cc.log("on game status game list");
-        // NetworkManager.hideLoading();
-        // if(event.data!==null || event.data !== 'undefined') {
-        //     var lstMessage = NetworkManager.parseFrom(event.data, event.data.byteLength);
-        //     for(var i = 0; i < lstMessage.length; i++) {
-        //         var buffer = lstMessage[i];
-        //         this.handleMessage(buffer);
-        //     }
-        // }
     },
 
     jarResponseHandler: function(resp) {

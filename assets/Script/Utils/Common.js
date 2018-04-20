@@ -414,7 +414,6 @@ var Common = {
                 cc.log("getPackageName ANDROID");
                 return "com.moniclub.gamedanhbai";//jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getPackageNameJNI", "()Ljava/lang/String;");
             }else if(cc.sys.platform == cc.sys.IPHONE || cc.sys.platform == cc.sys.IPAD){
-                console.log("PACKAGE : com.gamebai.tienlen");
                 return "com.moniclub.gamedanhbai";//jsb.reflection.callStaticMethod("NativeUtility", "getPackage");
             }
         } else {
@@ -576,7 +575,9 @@ var Common = {
         }
     },
     showPopupMessageBox: function() {
+        var self = this;
         var scene = cc.director.getScene();
+        var self = this;
         if(cc.isValid(scene)){
             if(!cc.isValid(scene.getChildByName(Config.name.POPUP_MESSAGE_RECONNECT))) {
                 cc.loader.loadRes("prefabs/" + Config.name.POPUP_MESSAGE_RECONNECT, function (error, prefab) {
@@ -589,12 +590,12 @@ var Common = {
                             var component = popup.getComponent(namePopup);
                             component.setNamePopup(Config.name.POPUP_MESSAGE_RECONNECT);
                             scene.addChild(popup, Config.index.POPUP);
-                            this.message_box = component;
-                            this.message_box.init("Bạn bị đứt kết nối, bạn có muốn kết nối lại không?", Config.COMMON_POPUP_TYPE.MESSAGE_BOX.CONFIRM_TYPE, function() {
+                            self.message_box = component;
+                            self.message_box.init("Bạn bị đứt kết nối, bạn có muốn kết nối lại không?", Config.COMMON_POPUP_TYPE.MESSAGE_BOX.CONFIRM_TYPE, function() {
                                 cc.director.loadScene('IntroScene');
                                 Common.tryReconnect = false;
                             });
-                            this.message_box.appear();
+                            self.message_box.appear();
 
                         }
                     } else {
@@ -602,7 +603,7 @@ var Common = {
                     }
                 })
             } else {
-                this.message_box.appear();
+                self.message_box.appear();
             }
         }
     },

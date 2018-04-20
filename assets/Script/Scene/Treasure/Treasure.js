@@ -209,7 +209,7 @@ var Treasure = cc.Class({
         },this);
 
 
-        item.node.runAction(cc.sequence(cc.delayTime(2), callFunc2, cc.delayTime(1), cc.fadeOut(1), cc.removeSelf(), null));
+        item.node.runAction(cc.sequence(cc.delayTime(2), callFunc2, cc.delayTime(1), cc.fadeOut(1), cc.removeSelf()));
     },
 
     implementSpinTreasure: function (textEmotionId, listItem,listWin) {
@@ -456,7 +456,7 @@ var Treasure = cc.Class({
         cc.log("exit zone response message:", resp.toObject());
         if(resp.getResponsecode()) {
             Common.setZoneId(-1);
-            cc.director.loadScene('Lobby');
+            cc.director.loadScene('Login');
         }
 
         if(resp.hasMessage() && resp.getMessage() !== "") {

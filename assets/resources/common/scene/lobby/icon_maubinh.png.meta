@@ -1,0 +1,30 @@
+{
+  "ver": "1.0.0",
+  "uuid": "eb722169-95dd-468a-b36f-16237d69a99c",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "subMetas": {
+    "icon_maubinh": {
+      "ver": "1.0.3",
+      "uuid": "a8ca34cb-244a-4fa3-8df4-1d10cd2e4f94",
+      "rawTextureUuid": "eb722169-95dd-468a-b36f-16237d69a99c",
+      "trimType": "custom",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 249,
+      "height": 445,
+      "rawWidth": 249,
+      "rawHeight": 445,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

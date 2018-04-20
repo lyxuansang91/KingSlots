@@ -12,7 +12,8 @@ cc.Class({
         txt_sovanthang: cc.Label,
         txt_sovanthua: cc.Label,
         avatarSprite: cc.Prefab,
-        txt_money: cc.Label
+        txt_money: cc.Label,
+        avatarImage : cc.Sprite,
     },
 
     // use this for initialization
@@ -33,10 +34,11 @@ cc.Class({
         var avatarId = Common.getAvatarId() - 100000;
 
         var item = cc.instantiate(this.avatarSprite);
+
         var avaSprite = item.getComponent("AvatarSprite").init(avatarId);
 
         this.avatar.getComponent(cc.Sprite).spriteFrame = avaSprite;
-
+        this.avatar.node.setScale(2);
     },
 
     updateInfo: function (avatar, phone) {

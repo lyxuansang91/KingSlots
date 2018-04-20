@@ -7,23 +7,25 @@ cc.Class({
     properties: {
         edt_username: cc.EditBox,
         edt_password: cc.EditBox,
-        edt_username_register: cc.EditBox,
-        edt_pass_register: cc.EditBox,
-        edt_repass_register: cc.EditBox,
-        edt_displayname_register: cc.EditBox,
         toastPrefab: cc.Prefab,
         messagePopup: cc.Prefab,
-        popup_login : cc.Sprite,
-        popup_register : cc.Sprite
+        bar_top_login : cc.Node,
+        bar_top_lobby : cc.Node,
     },
     // use this for initialization
     onLoad: function () {
-        window.jarInfoList = null;
-        window.loginSuccess = false;
         Common.setFingerprint();
         this.isLoadScene = false;
+
         if(cc.sys.isNative)
             sdkbox.PluginFacebook.init();
+        if(window.loginSuccess !== null && window.loginSuccess) {
+            this.bar_top_login.active = false;
+            this.bar_top_lobby.active = true;
+        } else {
+            this.bar_top_login.active = true;
+            this.bar_top_lobby.active = false;
+        }
     },
 
     start : function () {
@@ -142,7 +144,6 @@ cc.Class({
     },
     jarResponseHandler: function(resp) {
         cc.log("jar response handler:", resp.toObject());
-
         if(resp.getResponsecode()) {
             if(resp.getJarinfoList().length > 0) {
                 // first time request
@@ -175,9 +176,6 @@ cc.Class({
             case NetworkManager.MESSAGE_ID.LOGIN:
                 this.handleLoginResponseHandler(msg);
                 break;
-            case NetworkManager.MESSAGE_ID.REGISTER:
-                this.handleRegisterResponseHandler(msg);
-                break;
             case NetworkManager.MESSAGE_ID.ASSET_CONFIG:
                 this.assetConfigResponseHandler(msg);
                 break;
@@ -187,9 +185,9 @@ cc.Class({
             case NetworkManager.MESSAGE_ID.SMS_CONFIG:
                 this.smsConfigResponseHandler(msg);
                 break;
-            case NetworkManager.MESSAGE_ID.JAR:
-                this.jarResponseHandler(msg);
-                break;
+            // case NetworkManager.MESSAGE_ID.JAR:
+            //     this.jarResponseHandler(msg);
+            //     break;
             case NetworkManager.MESSAGE_ID.PAYMENT_STATUS:
                 this.paymentStatusResponseHandler(msg);
                 break;
@@ -211,40 +209,14 @@ cc.Class({
         });
         if(this.checkPurchaseList() && !this.isLoadScene) {
             this.isLoadScene = true;
-            cc.director.loadScene('Lobby');
+
+            this.bar_top_login.active = false;
+            this.bar_top_lobby.active = true;
         }
 
     },
     update: function(dt) {
         this.onGameEvent();
-    },
-
-    switchLoginToRegister : function () {
-        var posXleft = -cc.director.getWinSize().width/2 - this.popup_login.node.getContentSize().width;
-
-        this.popup_login.node.runAction(cc.moveTo(0.5,cc.p(posXleft,0)).easing(cc.easeBackOut()));
-        this.popup_register.node.runAction(cc.moveTo(0.2,cc.p(0,0)).easing(cc.easeBackIn()));
-    },
-
-    switchRegisterToLogin : function () {
-        var posXright= cc.director.getWinSize().width/2 + this.popup_register.node.getContentSize().width;
-        this.popup_login.node.runAction(cc.moveTo(0.2,cc.p(0,0)).easing(cc.easeBackIn()));
-        this.popup_register.node.runAction(cc.moveTo(0.5,cc.p(posXright,0)).easing(cc.easeBackOut()));
-    },
-
-    handleRegisterResponseHandler: function(e) {
-        const buffer = e;
-        if(buffer.getResponsecode()) {
-            NetworkManager.requestLoginMessage(this.edt_username_register.string, this.edt_pass_register.string);
-        } else {
-
-            Common.showPopup(Config.name.POPUP_MESSAGE_BOX,function(message_box) {
-                message_box.init(buffer.getMessage(), Config.COMMON_POPUP_TYPE.MESSAGE_BOX.CONFIRM_TYPE, function() {
-                    cc.log("on callback");
-                });
-                message_box.appear();
-            });
-        }
     },
 
     handleLoginResponseHandler: function(res) {
@@ -294,8 +266,6 @@ cc.Class({
             if(Common.assetsConfigList === null) {
                 NetworkManager.requestAssetsConfigMessage(1);
             }
-            NetworkManager.getJarRequest(0, null);
-            return;
         }
 
         if(res.hasMessage() && res.getMessage() !== "") {
@@ -308,25 +278,25 @@ cc.Class({
         }
     },
 
-    handlePingResponseHandler: function(res) {
-        cc.log("ping response handler:", res);
-        if(res.getResponsecode()) {
-            if(res.getDisconnect()) {
-                Common.setSessionId("-1");
-                if(res.hasMessage() && res.getMessage() !== "") {
-                    Common.showToast(res.getMessage());
-                }
-                NetworkManager.closeConnection();
-                this.scheduleOnce(this.goIntroScene, 2.0);
-            }
-        }
-    },
+    // handlePingResponseHandler: function(res) {
+    //     cc.log("ping response handler:", res);
+    //     if(res.getResponsecode()) {
+    //         if(res.getDisconnect()) {
+    //             Common.setSessionId("-1");
+    //             if(res.hasMessage() && res.getMessage() !== "") {
+    //                 Common.showToast(res.getMessage());
+    //             }
+    //             NetworkManager.closeConnection();
+    //             this.scheduleOnce(this.goIntroScene, 2.0);
+    //         }
+    //     }
+    // },
     goIntroScene: function(e) {
         cc.director.loadScene("Intro");
     },
 
     login: function() {
-
+        cc.log("do login");
         var username = this.edt_username.string;
         var password = this.edt_password.string;
 
@@ -353,23 +323,12 @@ cc.Class({
         NetworkManager.requestLoginMessage(username, password);
     },
 
-    register: function() {
-        if(this.edt_username_register.string === "" || this.edt_pass_register.string === "" ||
-            this.edt_repass_register.string === "" || this.edt_displayname_register === "") {
-            Common.showToast("Dữ liệu không được để trống");
-            return;
-        }
-        if(this.edt_pass_register.string !== this.edt_repass_register.string) {
-            Common.showToast("Mật khẩu phải giống nhau!");
-            return;
-        }
-        NetworkManager.requestRegisterMessage(this.edt_username_register.string, this.edt_pass_register.string,
-            this.edt_repass_register.string, this.edt_displayname_register.string, "");
+    showPopupRegister: function () {
+        Common.showPopup(Config.name.POPUP_REGISTER,function(popup) {
+            popup.appear();
+        });
     },
 
-    moveToRegister: function() {
-        cc.director.loadScene('Register');
-    },
     loginFacebook: function() {
         if(cc.sys.platform === cc.sys.isNative) {
             sdkbox.PluginFacebook.login();
