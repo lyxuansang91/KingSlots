@@ -20,6 +20,7 @@ cc.Class({
     onLoad: function () {
         window.jarInfoList = null;
         window.loginSuccess = false;
+        window.isLogout = false;
         cc.log('intro load');
         this._super();
         var self = this;

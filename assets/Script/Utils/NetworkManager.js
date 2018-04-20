@@ -957,7 +957,11 @@ var NetworkManager = {
 
             };
             window.ws.onclose = function () {
-                NetworkManager.showPopupReconnect();
+                if(window.isLogout === null || window.isLogout) {
+                    window.isLogout = false;
+                    NetworkManager.showPopupReconnect();
+                }
+
                 console.log("Websocket instance was closed");
                 clearInterval(window.myInterval);
 

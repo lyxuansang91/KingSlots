@@ -87,8 +87,10 @@ cc.Class({
         }
     },
     pingMessageResponseHandler: function(res) {
+
         if(res.getResponsecode()) {
             if(res.getDisconnect()) {
+                cc.log("disconnected");
                 Common.setSessionId("-1");
                 if(res.hasMessage() && res.getMessage() !== "") {
                     Common.showToast(res.getMessage(), 2.0);

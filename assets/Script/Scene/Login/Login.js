@@ -259,6 +259,7 @@ cc.Class({
             cc.sys.localStorage.setItem("user_name",this.edt_username.string);
             cc.sys.localStorage.setItem("user_password",this.edt_password.string);
             window.loginSuccess = true;
+            window.isLogout = false;
 
             if (res.hasUserinfo()) {
                 this.saveUserInfo(res.getUserinfo());
@@ -370,7 +371,7 @@ cc.Class({
 
                     if (accessToken !== null) {
                         NetworkManager.getOpenIdLoginMessageFromServer(
-                            1, userID + ";" + accessToken, "", "");
+                            Common.FACEBOOK_CHANNEL, userID + ";" + accessToken, "", "");
 
                     }else {
                         this.loginFacebook();
@@ -448,6 +449,7 @@ cc.Class({
 
         Common.showPopup(Config.name.POPUP_MESSAGE_BOX,function(message_box) {
             message_box.init(Common.KEYTEXT.MSG_LOG_OUT, Config.COMMON_POPUP_TYPE.MESSAGE_BOX.MESSAGEBOX_TYPE, function() {
+                window.isLogout = true;
                 NetworkManager.getLogoutMessageFromServer(true);
             });
             message_box.appear();

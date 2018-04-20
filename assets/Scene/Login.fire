@@ -1007,8 +1007,8 @@
     "_N$returnType": 0,
     "_N$inputFlag": 5,
     "_N$inputMode": 6,
-    "_N$fontSize": 20,
-    "_N$lineHeight": 40,
+    "_N$fontSize": 18,
+    "_N$lineHeight": 20,
     "_N$fontColor": {
       "__type__": "cc.Color",
       "r": 213,
@@ -1017,7 +1017,7 @@
       "a": 255
     },
     "_N$placeholder": "Tài khoản",
-    "_N$placeholderFontSize": 20,
+    "_N$placeholderFontSize": 18,
     "_N$placeholderFontColor": {
       "__type__": "cc.Color",
       "r": 180,
@@ -1283,8 +1283,8 @@
     "_N$returnType": 0,
     "_N$inputFlag": 0,
     "_N$inputMode": 6,
-    "_N$fontSize": 20,
-    "_N$lineHeight": 40,
+    "_N$fontSize": 18,
+    "_N$lineHeight": 20,
     "_N$fontColor": {
       "__type__": "cc.Color",
       "r": 199,
@@ -1293,7 +1293,7 @@
       "a": 255
     },
     "_N$placeholder": "Mật khẩu",
-    "_N$placeholderFontSize": 20,
+    "_N$placeholderFontSize": 18,
     "_N$placeholderFontColor": {
       "__type__": "cc.Color",
       "r": 180,
@@ -1301,7 +1301,7 @@
       "b": 160,
       "a": 255
     },
-    "_N$maxLength": 12,
+    "_N$maxLength": 20,
     "_N$stayOnTop": false
   },
   {
