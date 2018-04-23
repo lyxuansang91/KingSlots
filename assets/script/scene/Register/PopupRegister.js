@@ -16,6 +16,7 @@ cc.Class({
     },
 
     register: function() {
+        cc.log("register");
         if(this.edt_username_register.string === "" || this.edt_pass_register.string === "" ||
             this.edt_repass_register.string === "" || this.edt_displayname_register === "") {
             Common.showToast("Dữ liệu không được để trống");
@@ -43,10 +44,6 @@ cc.Class({
     handleMessage: function(e) {
         const buffer = e;
         var isDone = true;
-        if(isDone) {
-            return true;
-        }
-        isDone = true;
         var msg = buffer.response;
         switch (buffer.message_id) {
             case NetworkManager.MESSAGE_ID.REGISTER:
@@ -62,6 +59,7 @@ cc.Class({
     handleRegisterResponseHandler: function(e) {
         const buffer = e;
         if(buffer.getResponsecode()) {
+            this.disappear();
             NetworkManager.requestLoginMessage(this.edt_username_register.string, this.edt_pass_register.string);
         } else {
 
