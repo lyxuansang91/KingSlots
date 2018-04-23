@@ -456,6 +456,8 @@ cc.Class({
         });
     },
 
+
+
     musicClick: function () {
         this.changeOnOffSetting(Config.prefKey.MUSIC);
     },
@@ -489,5 +491,34 @@ cc.Class({
                 this.vibrateBtn.getComponent(cc.Sprite).spriteFrame = this.list_frame[1];
             }
         }
-    }
+    },
+    openGiftPopup: function () {
+        if(window.loginSuccess) {
+            var tabString = ["Nhập giftcode", "Giftcode đã nhận"];
+
+            Common.showPopup(Config.name.POPUP_GIFT,function(popup) {
+                popup.addTabs(tabString, 1);
+                popup.appear();
+            });
+        } else {
+            Common.showToast("Bạn cần đăng nhập để thực hiện chức năng này", 2);
+        }
+
+    },
+
+    openChargePopup: function () {
+        if(window.loginSuccess) {
+            var tabString = ["Thẻ cào", "SMS"];
+
+            Common.showPopup(Config.name.POPUP_CHARGING, function (popup) {
+                popup.addTabs(tabString, 1);
+                popup.appear();
+            });
+        } else {
+            Common.showToast("Bạn cần đăng nhập để thực hiện chức năng này", 2);
+        }
+    },
+    openFriendPopup: function() {
+        Common.showToast("Chức năng này đang cập nhật, vui lòng thử lại!", 2);
+    },
 });

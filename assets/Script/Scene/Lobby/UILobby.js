@@ -61,8 +61,8 @@ cc.Class({
         Common.showPopup(Config.name.POPUP_SETTING,function(popup) {
             popup.appear();
         });
-
     },
+
     openGiftPopup: function () {
 
         var tabString = ["Nhập giftcode", "Giftcode đã nhận"];
@@ -71,8 +71,8 @@ cc.Class({
             popup.addTabs(tabString, 1);
             popup.appear();
         });
-
     },
+
     setUserInfo: function() {
         this.userName.string = Common.getDisplayName();
         this.userGold.string = Common.numberFormatWithCommas(Common.getCash());
