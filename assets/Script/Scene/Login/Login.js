@@ -508,10 +508,8 @@ cc.Class({
 
     openChargePopup: function () {
         if(window.loginSuccess) {
-            var tabString = ["Thẻ cào", "SMS"];
 
-            Common.showPopup(Config.name.POPUP_CHARGING, function (popup) {
-                popup.addTabs(tabString, 1);
+            Common.showPopup(Config.name.POPUP_NAPTIEN, function (popup) {
                 popup.appear();
             });
         } else {
