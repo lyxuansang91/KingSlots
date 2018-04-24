@@ -56,7 +56,7 @@ var Config = {
         POPUP_HISTORY : "PopupHistory",
         POPUP_THREECARD_HISTORY : "PopupThreeCardHistory",
         POPUP_USERINFO : "PopupUserInfo",
-        POPUP_CHARGING : "PopupCharging",
+        POPUP_NAPTIEN : "PopupNapTien",
         POPUP_EXCHANGE: "PopupExchange",
         POPUP_WEBVIEW : "PopupWebview",
         POPUP_MAIL : "PopupMail",
