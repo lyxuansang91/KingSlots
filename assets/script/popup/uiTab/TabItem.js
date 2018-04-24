@@ -3,7 +3,7 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        title : cc.Label
+        title : cc.Label,
     },
 
     init: function (text,tag,callback) {
