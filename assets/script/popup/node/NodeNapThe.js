@@ -6,9 +6,18 @@ cc.Class({
     properties: {
         edit_number : cc.EditBox,
         edit_serial : cc.EditBox,
-        table_view : cc.Node,
-        ui_left : cc.Node,
-        tabLeftPrefab: cc.Prefab,
+        scroll_view : cc.ScrollView,
+        itemProviderPrefab : cc.Prefab,
+
+        isValid_viettel : false,
+        isValid_mobifone : false,
+        isValid_vinaphone: false,
+
+        node_nm_viettel : cc.Node,
+        node_nm_vina : cc.Node,
+        node_nm_mobi : cc.Node,
+
+        nm_frames : [cc.SpriteFrame],
     },
     purchaseMoney: function() {
         if(this.providercode !== null) {
@@ -32,27 +41,98 @@ cc.Class({
             };
         });
 
-        cc.log("tabString:", this.tabInfo);
+        for(var i = 0; i < this.tabString.length; i++){
+            if(this.tabString[i] == "Viettel"){
+                this.isValid_viettel = true;
+            }else if(this.tabString[i] == "Vinaphone"){
+                this.isValid_vinaphone = true;
+            }else if(this.tabString[i] == "Mobifone"){
+                this.isValid_mobifone = true;
+            }
+        }
 
-        var item = cc.instantiate(this.tabLeftPrefab);
-        item.getComponent("UITabLeft").setTab(this.tabString, 1, function(index){
-            this.onLeftEvent(index-1);
-        }.bind(this));
-        this.ui_left.addChild(item);
+        this.resetButton();
+
+        this.onEventData("Vinaphone");
     },
 
     onLoad: function () {
         // this.initTabLeft();
     },
 
-    onLeftEvent: function(index) {
+    resetButton : function () {
+        this.node_nm_viettel.getComponent(cc.Sprite).spriteFrame = this.nm_frames[0];
+        this.node_nm_vina.getComponent(cc.Sprite).spriteFrame = this.nm_frames[0];
+        this.node_nm_mobi.getComponent(cc.Sprite).spriteFrame = this.nm_frames[0];
+    },
+
+    onEventData: function (data) {
+
+        if(data == "Viettel"){
+            if(!this.isValid_viettel){
+                Common.showToast("Nhà mạng Viettel hiện không nhận nạp thẻ.",2);
+                return;
+            }else{
+                this.resetButton();
+                this.node_nm_viettel.getComponent(cc.Sprite).spriteFrame = this.nm_frames[1];
+            }
+        }else if(data == "Mobifone"){
+            if(!this.isValid_mobifone){
+                Common.showToast("Nhà mạng Mobifone hiện không nhận nạp thẻ.",2);
+                return;
+            }else{
+                this.resetButton();
+                this.node_nm_mobi.getComponent(cc.Sprite).spriteFrame = this.nm_frames[1];
+            }
+        }else if(data == "Vinaphone"){
+            if(!this.isValid_vinaphone){
+                Common.showToast("Nhà mạng Vinaphone hiện không nhận nạp thẻ.",2);
+                return;
+            }else{
+                this.resetButton();
+                this.node_nm_vina.getComponent(cc.Sprite).spriteFrame = this.nm_frames[1];
+            }
+        }
+
+        var innerSize = cc.size(0,
+            this.scroll_view.content.getContentSize().height);
+
+        var index = null;
+        for(var i = 0; i < this.tabString.length; i++){
+            if(data == this.tabString[i]){
+                index = i;
+            }
+        }
+        if(index == null){
+            return;
+        }
+
         var productList = this.tabInfo[index].productsList;
         this.providercode = this.tabInfo[index].providercode;
         cc.log("provider code:", this.providercode);
         var num = productList.length;
-        var headerCell = ["Mệnh giá thẻ", "KM", "Số BIT"];
-        var data = this._getdata(productList, headerCell, num);
-        this.table_view.getComponent(cc.tableView).initTableView(data.length, { array: data, target: this });
+
+        this.scroll_view.content.removeAllChildren();
+        for(var i = 0; i < num; i++){
+            var item = cc.instantiate(this.itemProviderPrefab);
+            item.getComponent('ItemProvider').init(productList[i].parvalue,productList[i].cashvalue);
+            var size = item.getComponent('ItemProvider').node.getContentSize();
+
+            item.setPosition(cc.p(size.width*(i*1.0 + 0.5),0));
+
+            innerSize.width += size.width*1.0;
+
+            this.scroll_view.content.addChild(item);
+        }
+
+        this.scroll_view.content.setContentSize(innerSize);
+    },
+
+    onLeftEvent: function(event,data) {
+        console.log("data : ",data);
+
+        this.onEventData(data);
+
     },
 
     _getdata: function (val, headCell, num) {
