@@ -49,7 +49,7 @@ cc.Class({
 
         cc.log("entries =", entries);
 
-        NetworkManager.getLookUpGameHistoryRequest(firstResult, maxResult, entries, orderByField, asc);
+        NetworkManager.getLookUpGameHistoryRequest(Common.ZONE_ID.TAIXIU, firstResult, maxResult, entries, orderByField, asc);
     },
 
     onGameEvent: function() {
