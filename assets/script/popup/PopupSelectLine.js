@@ -33,7 +33,7 @@ cc.Class({
             var item_comp = item.getComponent("ItemSelectLine");
             item_comp.init(i + 1,function (index) {
 
-                this.callBack(Config.ON_EVENT.EVENT_SELECT_LINE,index);
+                this.callBack(Config.ON_EVENT.EVENT_SELECT_LINE, index);
             }.bind(this));
 
             item.setPosition(cc.p(pos.x, pos.y));
@@ -65,7 +65,7 @@ cc.Class({
 
             for(var j = 0; j < line_selected.length; j++){
                 var it_selected = line_selected[j];
-                if ((i + 1) == it_selected){
+                if ((i + 1) === it_selected){
                     selected = true;
                     break;
                 }

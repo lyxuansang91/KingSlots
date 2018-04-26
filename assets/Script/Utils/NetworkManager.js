@@ -945,25 +945,20 @@ var NetworkManager = {
             window.ws.binaryType = "arraybuffer";
 
             window.ws.onopen = function (event) {
-                console.log("on web socket");
+                cc.log("on web socket");
                 // NetworkManager.requestInitializeMessage("24", "15","xxxxx","xxxxx", "vn", "vi", "com.gamebai.tienlen", false, "");
                 NetworkManager.requestInitializeMessage(Common.getCp(), Common.getVersionCode(), Common.getFingerprint(),
                     Common.getFingerprint(), "vn", "vi", Common.getPackageName(), false, "");
-                setTimeout(function() {
-                    window.myInterval = setInterval(function() {
-                        NetworkManager.requestPingMessage(0);
-                    }, 15000);
-                }, 1);
 
             };
             window.ws.onclose = function () {
+                cc.log("Websocket instance was closed");
                 if(window.isLogout === null || window.isLogout) {
                     window.isLogout = false;
                     NetworkManager.showPopupReconnect();
                 }
 
-                console.log("Websocket instance was closed");
-                clearInterval(window.myInterval);
+                // clearInterval(window.myInterval);
 
             };
 
@@ -998,10 +993,14 @@ var NetworkManager = {
                 cc.log("on web socket");
                 setTimeout(function(){
                     window.ws.send(ackBuf);
-                }, 0.5);
+                }, 0.25);
             };
             window.ws.onclose = function () {
-                console.log("Websocket instance was closed");
+                cc.log("Websocket instance was closed");
+                if(window.isLogout === null || window.isLogout) {
+                    window.isLogout = false;
+                    NetworkManager.showPopupReconnect();
+                }
             };
         }
         else {
@@ -1020,8 +1019,6 @@ var NetworkManager = {
 
                     self.showLoading();
                 }
-
-                cc.log("send request");
                 window.ws.send(ackBuf);
             }
         }

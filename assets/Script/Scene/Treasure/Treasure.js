@@ -56,7 +56,7 @@ var Treasure = cc.Class({
 
         if (this.enterRoomResponse.getArgsList().length > 0) {
             var entry = this.enterRoomResponse.getArgsList()[0];
-            if (entry.getKey() == "initValue") {
+            if (entry.getKey() === "initValue") {
                 this.initValue(entry.getValue());
             }
         }
@@ -212,10 +212,10 @@ var Treasure = cc.Class({
         item.node.runAction(cc.sequence(cc.delayTime(2), callFunc2, cc.delayTime(1), cc.fadeOut(1), cc.removeSelf()));
     },
 
-    implementSpinTreasure: function (textEmotionId, listItem,listWin) {
+    implementSpinTreasure: function (textEmotionId, listItem, listWin) {
         this.resetLineResult();
         cc.log("lst_line_results : xxx ",this.lst_line_result);
-        if(listItem.length == 0){
+        if(listItem.length === 0){
             return;
         }
 
@@ -305,13 +305,14 @@ var Treasure = cc.Class({
     },
     implementDisplayChangeMoney: function(displayChangeMoney) {
         //TODO: hieu ung cong tien su dung bien displayChangeMoney
-
-        this.money_display.node.setPositionY(0);
-        this.money_display.string = "+" + displayChangeMoney;
-        this.money_display.node.runAction(cc.sequence(
-            cc.fadeIn(0.1),
-            cc.moveBy(1,cc.p(0,50)),
-            cc.fadeOut(0.5)));
+        if(this.money_display !== null) {
+            this.money_display.node.setPositionY(0);
+            this.money_display.string = "+" + displayChangeMoney;
+            this.money_display.node.runAction(cc.sequence(
+                cc.fadeIn(0.1),
+                cc.moveBy(1,cc.p(0,50)),
+                cc.fadeOut(0.5)));
+        }
     },
 
     resetLineResult: function () {
@@ -413,7 +414,7 @@ var Treasure = cc.Class({
                 var lineWin = null;
                 for(var i = 0; i < resp.getArgsList().length; i++) {
                     var entry = resp.getArgsList()[i];
-                    if(entry.getKey() == "listItem") {
+                    if(entry.getKey() === "listItem") {
                         listItem = entry.getValue().split(", ").map(function(item) {
                             item = parseInt(item);
                             return item;
@@ -430,13 +431,9 @@ var Treasure = cc.Class({
                     }
                 }
                 if(listItem !== null && lineWin !== null) {
-
-                    cc.log("list item:", listItem);
-                    cc.log("line win:", lineWin);
-
                     // TODO:
 
-                    this.implementSpinTreasure(textEmotionId, listItem,lineWin);
+                    this.implementSpinTreasure(textEmotionId, listItem, lineWin);
                 }
             }
         }
@@ -464,7 +461,6 @@ var Treasure = cc.Class({
         }
     },
     jarResponseHandler: function(resp) {
-        cc.log("jar response message:", resp.toObject());
         if(resp.getResponsecode()) {
             this.isRequestJar = false;
             var jar_type_response = 0;
@@ -578,6 +574,7 @@ var Treasure = cc.Class({
             var contain = false;
             for(var j = 0; j < this.lst_line_selected.length; j++){
                 if(this.lst_line_selected[j] == this.lst_line_selected_sprite[i].name){
+                    cc.log("index:", i, "name:", this.lst_line_selected_sprite[i].name);
                     contain = true;
                     break;
                 }
@@ -585,8 +582,9 @@ var Treasure = cc.Class({
 
             var line = this.lst_line_selected_sprite[i];
             if(contain){
+                cc.log("contain", contain);
                 line.initHighLight(true);
-                count ++;
+                count++;
             }else{
                 line.initHighLight(false);
             }
@@ -602,7 +600,6 @@ var Treasure = cc.Class({
     },
 
     resetLineSelected: function () {
-
         this.lst_line_selected.clear();
     },
 
