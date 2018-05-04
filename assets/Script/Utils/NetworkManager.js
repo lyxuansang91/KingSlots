@@ -957,14 +957,12 @@ var NetworkManager = {
                     window.isLogout = false;
                     NetworkManager.showPopupReconnect();
                 }
-
-                // clearInterval(window.myInterval);
-
             };
 
             window.ws.onmessage = this.onGameStatus.bind(this);
             window.ws.onerror = function(e) {
                 cc.log("on event:", e);
+                NetworkManager.showPopupReconnect();
             }
         } else {
             NetworkManager.showPopupReconnect();

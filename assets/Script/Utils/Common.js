@@ -412,20 +412,29 @@ var Common = {
             cc.log("getPackageName");
             if(cc.sys.platform == cc.sys.ANDROID){
                 cc.log("getPackageName ANDROID");
-                return "com.moniclub.gamedanhbai";//jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getPackageNameJNI", "()Ljava/lang/String;");
+
+                var packageName = jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getPackageNameJNI", "()Ljava/lang/String;");
+                cc.log("package name:", packageName);
+                return "com.moniclub.gamedanhbai";
             }else if(cc.sys.platform == cc.sys.IPHONE || cc.sys.platform == cc.sys.IPAD){
                 return "com.moniclub.gamedanhbai";//jsb.reflection.callStaticMethod("NativeUtility", "getPackage");
             }
         } else {
             return "com.moniclub.gamedanhbai";
         }
-
     },
     getCp: function() {
         return "10";
     },
     getVersionCode: function() {
+        if(cc.sys.isNative) {
+            if(cc.sys.platform == cc.sys.ANDROID) {
+                var versionCode = jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getVersionCodeJNI", "()Ljava/lang/String;");
+                return versionCode;
+            }
+        }
         return "20";
+
     },
     phoneNumber: "",
     setPhoneNunber: function(phoneNumber){
