@@ -523,6 +523,32 @@ var Common = {
     setMiniGameZoneId: function(miniGameZoneId) {
         this._miniGameZoneId = miniGameZoneId;
     },
+    _miniGameZoneIds: [],
+    openMinigame: function(miniGameZoneId){
+        if (!this._miniGameZoneIds.includes(miniGameZoneId)){
+            this._miniGameZoneIds.push(miniGameZoneId);
+        }
+    },
+
+    closeMinigame: function(miniGameZoneId){
+        if (this._miniGameZoneIds.length != 0){
+            for (var i = 0; i < this._miniGameZoneIds.length; i++){
+                if (this._miniGameZoneIds[i] == miniGameZoneId){
+                    this._miniGameZoneIds.splice(i, 1);
+                    // this._miniGameZoneIds.erase(_miniGameZoneIds.begin() + i);
+                    break;
+                }
+            }
+        }
+    },
+
+    getMiniGameZoneIds: function(){
+        return this._miniGameZoneIds;
+    },
+
+    clearMiniGame: function(){
+        this._miniGameZoneIds = [];
+    },
 
     setHeadLineEmergency: function (message) {
         this.headLineEmergency = message;
@@ -1007,5 +1033,9 @@ var Common = {
             });
         }
 
+    },
+    inMiniGame: function(zoneId) {
+        return (zoneId === Common.ZONE_ID.TAIXIU || zoneId === Common.ZONE_ID.MINI_POKER
+            || zoneId === Common.ZONE_ID.MINI_BACAY || zoneId === Common.ZONE_ID.TREASURE);
     }
 };

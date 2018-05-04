@@ -99,8 +99,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 667,
-      "y": 375
+      "x": 0,
+      "y": 0
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -571,9 +571,7 @@
     "cardPrefab": {
       "__uuid__": "dca52e56-8667-4d34-ae00-cb3c30809a34"
     },
-    "toastPrefab": {
-      "__uuid__": "c19af3fa-7297-48f4-b2f0-c08d0184e7bf"
-    },
+    "toastPrefab": null,
     "cardView": {
       "__id__": 14
     },

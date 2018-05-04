@@ -1,0 +1,30 @@
+{
+  "ver": "1.0.0",
+  "uuid": "8859c60b-2c8f-4ec4-8479-0fbf50cb5737",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "subMetas": {
+    "icon_nguoichoi": {
+      "ver": "1.0.3",
+      "uuid": "592d67eb-c036-44a8-a148-d1b9a1caf5c6",
+      "rawTextureUuid": "8859c60b-2c8f-4ec4-8479-0fbf50cb5737",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 18,
+      "height": 16,
+      "rawWidth": 18,
+      "rawHeight": 16,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

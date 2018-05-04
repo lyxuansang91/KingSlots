@@ -48,8 +48,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 28,
-      "height": 28
+      "width": 30,
+      "height": 38
     },
     "_rotationX": 0,
     "_rotationY": 0,
@@ -130,8 +130,8 @@
     },
     "_enabled": true,
     "_useOriginalSize": false,
-    "_actualFontSize": 20,
-    "_fontSize": 20,
+    "_actualFontSize": 16,
+    "_fontSize": 16,
     "_lineHeight": 20,
     "_enableWrapText": false,
     "_N$file": null,
@@ -163,7 +163,7 @@
     },
     "_enabled": true,
     "_spriteFrame": {
-      "__uuid__": "a32d549c-595f-4ded-ae4f-fd9df9bb0386"
+      "__uuid__": "7a7f1472-99dc-4a66-8dee-c4e065ed427e"
     },
     "_type": 0,
     "_sizeMode": 2,
@@ -190,10 +190,10 @@
     "_enabled": true,
     "list_frame": [
       {
-        "__uuid__": "a32d549c-595f-4ded-ae4f-fd9df9bb0386"
+        "__uuid__": "7a7f1472-99dc-4a66-8dee-c4e065ed427e"
       },
       {
-        "__uuid__": "93f2eb08-66ef-4332-92dc-7f343325d6b3"
+        "__uuid__": "6e66dc86-a275-4296-bab8-fdbf3fc8f07b"
       }
     ],
     "number": {

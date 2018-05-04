@@ -78,7 +78,8 @@ cc.Class({
             var tab = cc.instantiate(this.tab_deactive_item);
             tab.active = true;
             this.tab_deactive.addChild(tab);
-            var posX = (i + 1) * tab.getContentSize().width;
+            var distance = this.tab_size === 2 ? 1 : 0.5;
+            var posX = (i + distance) * tab.getContentSize().width;
             tab.setPosition(cc.p(posX,0));
         }
 
