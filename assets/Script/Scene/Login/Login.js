@@ -359,7 +359,8 @@ cc.Class({
     },
 
     loginFacebook: function() {
-        if(cc.sys.platform === cc.sys.isNative) {
+        if(cc.sys.platform == cc.sys.isNative) {
+            cc.log("login facebook native");
             sdkbox.PluginFacebook.login();
         }else if(cc.sys.isBrowser){
             window.loginFb(["public_profile"], function(code, response){

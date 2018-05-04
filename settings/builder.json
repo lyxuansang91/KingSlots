@@ -19,7 +19,7 @@
     "portrait": false,
     "upsideDown": false
   },
-  "packageName": "org.cocos2d.helloworld",
+  "packageName": "com.moniclub.gamedanhbai",
   "privateKey": "",
   "qqplay": {
     "orientation": "portrait"

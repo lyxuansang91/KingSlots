@@ -226,7 +226,6 @@ var Common = {
         } else {
             this.fingerprint = fp;
         }
-
     },
     getFingerprint: function() {
         if(this.fingerprint == "") {
@@ -412,10 +411,9 @@ var Common = {
             cc.log("getPackageName");
             if(cc.sys.platform == cc.sys.ANDROID){
                 cc.log("getPackageName ANDROID");
-
                 var packageName = jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getPackageNameJNI", "()Ljava/lang/String;");
                 cc.log("package name:", packageName);
-                return "com.moniclub.gamedanhbai";
+                return packageName;
             }else if(cc.sys.platform == cc.sys.IPHONE || cc.sys.platform == cc.sys.IPAD){
                 return "com.moniclub.gamedanhbai";//jsb.reflection.callStaticMethod("NativeUtility", "getPackage");
             }
@@ -430,6 +428,7 @@ var Common = {
         if(cc.sys.isNative) {
             if(cc.sys.platform == cc.sys.ANDROID) {
                 var versionCode = jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getVersionCodeJNI", "()Ljava/lang/String;");
+                cc.log("version Code:", versionCode);
                 return versionCode;
             }
         }
