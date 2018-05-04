@@ -963,6 +963,11 @@ var NetworkManager = {
             };
 
             window.ws.onmessage = this.onGameStatus.bind(this);
+            window.ws.onerror = function(e) {
+                cc.log("on event:", e);
+            }
+        } else {
+            NetworkManager.showPopupReconnect();
         }
     },
     closeConnection: function() {
@@ -985,23 +990,7 @@ var NetworkManager = {
         if (typeof(isLoading) === 'undefined' && isLoading !== null) isLoading = false;
 
         if(window.ws === null || typeof(window.ws) === 'undefined' || window.ws.readyState === WebSocket.CLOSED) {
-            window.ws = new WebSocket(NetworkManager.URL);
-            window.listMessage = [];
-            window.ws.binaryType = "arraybuffer";
-
-            window.ws.onopen = function () {
-                cc.log("on web socket");
-                setTimeout(function(){
-                    window.ws.send(ackBuf);
-                }, 0.25);
-            };
-            window.ws.onclose = function () {
-                cc.log("Websocket instance was closed");
-                if(window.isLogout === null || window.isLogout) {
-                    window.isLogout = false;
-                    NetworkManager.showPopupReconnect();
-                }
-            };
+            NetworkManager.showPopupReconnect();
         }
         else {
             if(window.ws.readyState === WebSocket.OPEN) {
