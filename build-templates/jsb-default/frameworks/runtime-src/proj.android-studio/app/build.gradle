@@ -7,10 +7,10 @@ android {
     buildToolsVersion '26.0.2'
 
     defaultConfig {
-        applicationId "com.moniclub.gamedanhbai"
+        applicationId "com.bigbingo.club.ultimate"
         minSdkVersion 15
         targetSdkVersion PROP_TARGET_SDK_VERSION
-        versionCode 22
+        versionCode 1
         versionName "1.0.1"
 
         externalNativeBuild {

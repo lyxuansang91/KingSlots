@@ -21,7 +21,7 @@
         </activity>
         <activity android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation" android:label="@string/app_name" android:name="com.facebook.FacebookActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id" />
-        <provider android:authorities="com.facebook.app.FacebookContentProvider725733317632381" android:exported="true" android:name="com.facebook.FacebookContentProvider" />
+        <provider android:authorities="com.facebook.app.FacebookContentProvider155360955118842" android:exported="true" android:name="com.facebook.FacebookContentProvider" />
     </application>
     <uses-permission android:name="com.android.vending.BILLING" />
 </manifest>

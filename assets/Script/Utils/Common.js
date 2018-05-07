@@ -422,7 +422,7 @@ var Common = {
         }
     },
     getCp: function() {
-        return "10";
+        return "11";
     },
     getVersionCode: function() {
         if(cc.sys.isNative) {

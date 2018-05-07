@@ -1,0 +1,3 @@
+password = bigbingo@123
+alias = bigbingo
+alias password = bigbingo@123
