@@ -495,6 +495,7 @@ cc.Class({
     },
     openGiftPopup: function () {
         if(window.loginSuccess) {
+            if(Common.enableGiftCode)
             var tabString = ["Nhập giftcode", "Giftcode đã nhận"];
 
             Common.showPopup(Config.name.POPUP_GIFT,function(popup) {
@@ -509,10 +510,13 @@ cc.Class({
 
     openChargePopup: function () {
         if(window.loginSuccess) {
-
-            Common.showPopup(Config.name.POPUP_NAPTIEN, function (popup) {
-                popup.appear();
-            });
+            if(Common.enablePurchaseCash) {
+                Common.showPopup(Config.name.POPUP_NAPTIEN, function (popup) {
+                    popup.appear();
+                });
+            } else {
+                Common.showToast("Chức năng này đang cập nhât, vui lòng thử lại!");
+            }
         } else {
             Common.showToast("Bạn cần đăng nhập để thực hiện chức năng này", 2);
         }

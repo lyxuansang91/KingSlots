@@ -286,7 +286,7 @@ var Common = {
     setGameTag: function(gameTag) {
         this.gameTag = gameTag;
     },
-    getGameTag: function() {
+    GameTag: function() {
         return this.gameTag;
     },
     _requestRoomType: -1,

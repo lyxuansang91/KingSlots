@@ -39,13 +39,14 @@ cc.Class({
     },
 
     openChargePopup: function () {
-        var tabString = ["Thẻ cào", "SMS"];
-
-        Common.showPopup(Config.name.POPUP_NAPTIEN,function(popup) {
-            //popup.addTabs(tabString, 1);
-            popup.appear();
-        });
-
+        if(Common.enablePurchaseCash) {
+            Common.showPopup(Config.name.POPUP_NAPTIEN, function(popup) {
+                //popup.addTabs(tabString, 1);
+                popup.appear();
+            });
+        } else {
+            Common.showToast("Chức năng này đang cập nhật, vui lòng thử lại");
+        }
     },
     openUserInfoPopup: function () {
 
@@ -64,13 +65,16 @@ cc.Class({
     },
 
     openGiftPopup: function () {
+        if(Common.enableGiftCode) {
+            var tabString = ["Nhập giftcode", "Giftcode đã nhận"];
 
-        var tabString = ["Nhập giftcode", "Giftcode đã nhận"];
-
-        Common.showPopup(Config.name.POPUP_GIFT,function(popup) {
-            popup.addTabs(tabString, 1);
-            popup.appear();
-        });
+            Common.showPopup(Config.name.POPUP_GIFT, function (popup) {
+                popup.addTabs(tabString, 1);
+                popup.appear();
+            });
+        } else {
+            Common.showToast("Chức năng này đang cập nhật, vui lòng thử lại");
+        }
     },
 
     setUserInfo: function() {
