@@ -30,6 +30,7 @@ cc.Class({
     loadTab : function (index) {
         var nodeNapThe = this.body.getChildByName("NodeNapThe");
         var nodeNapSms = this.body.getChildByName("NodeNapSMS");
+        var nodeNapIAP = this.body.getChildByName("NodeNapIAP");
         switch(index) {
             case 1:
                 if(Common.providerLists.length > 0) {
@@ -39,6 +40,7 @@ cc.Class({
 
                     nodeNapThe.active = true;
                     nodeNapSms.active = false;
+                    nodeNapIAP.active = false;
                     nodeNapThe.getComponent("NodeNapThe").initTabLeft();
                 } else {
                     Common.showToast("Kênh nạp thẻ đang bảo trì, vui lòng thử lại!");
@@ -52,12 +54,14 @@ cc.Class({
 
                     nodeNapThe.active = false;
                     nodeNapSms.active = true;
+                    nodeNapIAP.active = false;
                     nodeNapSms.getComponent("NodeNapSMS").initTabLeft();
                 } else {
                     Common.showToast("Kênh nạp SMS đang bảo trì, vui lòng thử lại!");
                 }
                 break;
             case 3:
+
                 break;
             default:
                 break;
