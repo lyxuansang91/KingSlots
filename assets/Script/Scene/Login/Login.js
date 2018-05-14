@@ -28,6 +28,9 @@ cc.Class({
         if(window.loginSuccess !== null && window.loginSuccess) {
             this.bar_top_login.active = false;
             this.bar_top_lobby.active = true;
+
+            //add Poker new version
+            NetworkManager.requestEnterZoneMessage(Common.ZONE_ID.POKER);
         } else {
             this.bar_top_login.active = true;
             this.bar_top_lobby.active = false;
@@ -213,9 +216,9 @@ cc.Class({
             case NetworkManager.MESSAGE_ID.SMS_CONFIG:
                 this.smsConfigResponseHandler(msg);
                 break;
-            // case NetworkManager.MESSAGE_ID.JAR:
-            //     this.jarResponseHandler(msg);
-            //     break;
+            case NetworkManager.MESSAGE_ID.ENTER_ZONE:
+                this.enterZoneMessageResponseHandler(msg);
+                break;
             case NetworkManager.MESSAGE_ID.PAYMENT_STATUS:
                 this.paymentStatusResponseHandler(msg);
                 break;
@@ -523,5 +526,44 @@ cc.Class({
     },
     openFriendPopup: function() {
         Common.showToast("Chức năng này đang cập nhật, vui lòng thử lại!", 2);
+    },
+
+    //add Poker new version
+    enterZoneMessageResponseHandler: function(enterZoneMessage) {
+        if (enterZoneMessage !== 0) {
+            cc.log("enter zone response:", enterZoneMessage.toObject());
+            if (enterZoneMessage.hasMessage() && enterZoneMessage.getMessage() !== ''){
+                Common.showToast(enterZoneMessage.getMessage());
+            }
+
+            if (enterZoneMessage.getResponsecode()) {
+                Common.setEnterZone(enterZoneMessage);
+                // Common.setRequestRoomType(enterZoneMessage.getDefaultroomtypeload());
+                // if (enterZoneMessage.hasEnabledisplayroomlist() && enterZoneMessage.getEnabledisplayroomlist()) {
+                //     /*
+                //     Sau này xử lý phần người chơi click vào một mức cược cụ thể không cần hiển thị danh sách phòng chơi
+                //     */
+                //     var cashRoomList = [];
+                //     // var goldRoomList = [];
+                //     if (enterZoneMessage.getCashroomconfigsList().length > 0) {
+                //         for (var i = 0; i < enterZoneMessage.getCashroomconfigsList().length; i++) {
+                //             cashRoomList.push(enterZoneMessage.getCashroomconfigsList()[i]);
+                //         }
+                //     }
+                //
+                //     Common.setCashRoomList(cashRoomList);
+                // }
+                //
+                // if (Common.getZoneId() !== -1) {
+                //
+                //     cc.log("game to");
+                // }
+            }
+            else {
+                Common.setRequestRoomType(-1);
+                Common.setZoneId(-1);  //reset zone id
+            }
+        }
+
     },
 });
