@@ -415,10 +415,10 @@ var Common = {
                 cc.log("package name:", packageName);
                 return packageName;
             }else if(cc.sys.platform == cc.sys.IPHONE || cc.sys.platform == cc.sys.IPAD){
-                return "com.moniclub.gamedanhbai";//jsb.reflection.callStaticMethod("NativeUtility", "getPackage");
+                return "com.bigbingo.club.ultimate";//jsb.reflection.callStaticMethod("NativeUtility", "getPackage");
             }
         } else {
-            return "com.moniclub.gamedanhbai";
+            return "com.bigbingo.club.ultimate";
         }
     },
     getCp: function() {
@@ -432,7 +432,7 @@ var Common = {
                 return versionCode;
             }
         }
-        return "20";
+        return "2";
 
     },
     phoneNumber: "",
@@ -1045,5 +1045,12 @@ var Common = {
     inMiniGame: function(zoneId) {
         return (zoneId === Common.ZONE_ID.TAIXIU || zoneId === Common.ZONE_ID.MINI_POKER
             || zoneId === Common.ZONE_ID.MINI_BACAY || zoneId === Common.ZONE_ID.TREASURE);
+    },
+    zIndex: 0,
+    setCurrentLocal: function (zIndex) {
+        this.zIndex = zIndex;
+    },
+    getCurrentLocal: function () {
+        return this.zIndex;
     }
 };

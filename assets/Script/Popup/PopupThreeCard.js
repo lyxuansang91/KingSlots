@@ -64,8 +64,12 @@ cc.Class({
                 self.touchOffset = cc.p(self.background.node.getPosition().x - touch_location.x,
                     self.background.node.getPosition().y - touch_location.y);
                 // this.node.reorderChild(self.background.node.getLocalZOrder());
-                this.node.setLocalZOrder(this.node.getLocalZOrder() + 1);
-                cc.log("zorder 3 cay =", this.node.getLocalZOrder());
+                var currentLocal = Common.getCurrentLocal() !== this.node.getLocalZOrder() ?  Common.getCurrentLocal() : this.node.getLocalZOrder() + 1;
+                cc.log("zorder 3 cay =", currentLocal);
+                Common.setCurrentLocal(currentLocal);
+                this.node.setLocalZOrder(currentLocal);
+
+
                 return true;
             }
 
@@ -95,7 +99,7 @@ cc.Class({
                 item.setScale(0.5, 0.5);
                 var posX = (j - 1) * item.getContentSize().width/2;
                 var posY = (i - 1) * item.getContentSize().height/2;
-                item.getComponent('CardItem').replaceCard(items_value[i][j]);
+                item.getComponent('CardItem').replaceCard(items_value[i][j], Common.ZONE_ID.MINI_BACAY);
                 item.setPositionY(posY);
                 item.setPositionX(posX);
 
@@ -374,7 +378,7 @@ cc.Class({
             if(i < 3*this.number){
                 var i1 = this.stepCard - (3 - x);
                 var j1 = y;
-                this.list_item[i].getComponent('CardItem').replaceCard(this.list_recent_value[i1][j1]);
+                this.list_item[i].getComponent('CardItem').replaceCard(this.list_recent_value[i1][j1], Common.ZONE_ID.MINI_BACAY);
             }
 
             var posX = (y - 1) * this.list_item[i].getContentSize().width / 2;
@@ -394,7 +398,7 @@ cc.Class({
 
             var card_value = items_value[x][y];
             if(i >= 3*this.number){
-                card.getComponent('CardItem').replaceCard(card_value);
+                card.getComponent('CardItem').replaceCard(card_value, Common.ZONE_ID.MINI_BACAY);
             }
 
             var h = card.getContentSize().height/2;

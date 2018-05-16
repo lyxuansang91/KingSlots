@@ -55,12 +55,15 @@ cc.Class({
             item.setTag(listGame[i] + 1000);
             item.getComponent('LobbyGameItem').init(i, listGame[i]);
             item.setPositionY(this.content.getContentSize().height*0.01);
+
+            item.setPositionX(cc.director.getWinSize().width/2 + (i - listGame.length/2 + 0.5)* item.width*1.1);
             this.content.addChild(item);
             innerSize.width += item.getContentSize().width*1.1;
         }
 
-        this.content.setContentSize(innerSize);
+        // this.content.setContentSize(innerSize);
         var resp = window.jarInfoList;
+
 
         if(resp != null) {
             for (var i = 0; i < resp.length; i++) {
