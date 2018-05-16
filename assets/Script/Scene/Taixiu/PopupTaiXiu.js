@@ -88,7 +88,9 @@ cc.Class({
                 var touch_location = touch.getLocation();
                 self.touchOffset = cc.p(self.background.node.getPosition().x - touch_location.x,
                     self.background.node.getPosition().y - touch_location.y);
-                this.node.setLocalZOrder(this.node.getLocalZOrder() + 1);
+                var currentLocal = Common.getCurrentLocal() !== this.node.getLocalZOrder() ?  Common.getCurrentLocal() : this.node.getLocalZOrder() + 1;
+                Common.setCurrentLocal(currentLocal);
+                this.node.setLocalZOrder(currentLocal);
                 return true;
             }
 
