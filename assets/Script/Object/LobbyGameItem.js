@@ -10,6 +10,17 @@ cc.Class({
         list_frame_item_clicked : [cc.SpriteFrame],
     },
 
+    // onGameEvent: function() {
+    //     var self = this;
+    //     NetworkManager.checkEvent(function(buffer) {
+    //         return self.handleMessage(buffer);
+    //     });
+    //
+    // },
+    // update: function(dt) {
+    //     this.onGameEvent();
+    // },
+
     init: function (index,callback) {
         this.index = index;
         this.item_normal.spriteFrame = this.list_frame_item[index];
@@ -38,6 +49,17 @@ cc.Class({
             Common.showToast("Bạn vui lòng đăng nhập để chơi game!");
             return;
         } else {
+            var cashList = Common.getCashRoomList();
+            cc.log("cashList =", cashList);
+            NetworkManager.getEnterRoomGroupFromServer(Common.ZONE_ID.POKER, cashList[0].getRoomgroupid(), cashList[0].getViproom());
+            // for(var i = 0; i < cashList.length; i++){
+            //     var roomGroupId = cashList[i].getRoomgroupid();
+            //     if(roomGroupId){
+            //         cc.log("cashList =", cashList[i].getRoomgroupid());
+            //         // NetworkManager.getEnterRoomMessageFromServer(Common.ZONE_ID.POKER, 1, false);
+            //         NetworkManager.getEnterRoomGroupFromServer(Common.ZONE_ID.POKER, roomGroupId, true);
+            //     }
+            // }
 
         }
         this.callback(this.index);

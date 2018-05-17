@@ -1,0 +1,30 @@
+{
+  "ver": "1.0.0",
+  "uuid": "17835efb-c65f-480b-88cf-4ee0f2203c29",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "subMetas": {
+    "btn_betcash": {
+      "ver": "1.0.3",
+      "uuid": "5fb37fa1-2064-4942-a86b-48e9eb60f7d7",
+      "rawTextureUuid": "17835efb-c65f-480b-88cf-4ee0f2203c29",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 104,
+      "height": 24,
+      "rawWidth": 104,
+      "rawHeight": 24,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

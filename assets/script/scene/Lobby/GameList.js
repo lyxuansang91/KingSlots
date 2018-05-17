@@ -1,9 +1,6 @@
 var NetworkManager = require('NetworkManager');
-var threecard = require('ThreeCard');
-var minipoker = require('minipoker');
+var poker = require('Poker');
 var BaseScene = require('BaseScene');
-var Treasure = require('Treasure');
-var UILobby = require('UILobby');
 
 cc.Class({
     extends: BaseScene,
