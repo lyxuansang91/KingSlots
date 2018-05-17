@@ -148,21 +148,6 @@ cc.Class({
             }
         }
 
-        // if (response !== 0) {
-        //
-        //     if (response.hasMessage() && response.getMessage().length !== '') {
-        //         Common.showToast(response.getMessage());
-        //     }
-        //
-        //     if (response.getResponsecode() && response.getJarinfoList().length > 0) {
-        //         for (var i = 0; i < response.getJarinfoList().length; i++){
-        //             var jarItem = response.getJarinfoList()[i];
-        //             if (Common.inMiniGame(jarItem.getGameid())){
-        //                 this.handlerMessageMiniGame(jarItem.getGameid(), response, NetworkManager.MESSAGE_ID.JAR);
-        //             }
-        //         }
-        //     }
-        // }
 
     },
 
@@ -265,21 +250,6 @@ cc.Class({
                     }
 
                     if (Common.getZoneId() !== -1) {
-                        // notify->onHideNotify();
-                        // this->unscheduleUpdate();
-
-                        // var miniGame = MiniGamePopUp::getInstance();
-                        // miniGame->hiddenInfoExtend(true);
-                        // miniGame->removeFromParentAndCleanup(true);
-                        //
-                        // //luu lai vi tri position của scrollview
-                        // pos_scrollview = scrollView->getInnerContainerPosition().x;
-                        //
-                        // Common::getInstance()->clearMiniGame();
-                        //
-                        // auto scene = SceneTable::createScene(enter_zone_response->enabledisplayroomlist(),
-                        //     enter_zone_response->defaultroomtypeload());
-                        // REPLACESCENE_NO_ACTION(scene);
 
                         cc.log("game to");
                     }
@@ -290,40 +260,6 @@ cc.Class({
                 }
             }
 
-            // if (enterZoneMessage.getResponsecode()) {
-            //     Common.setEnterZone(enterZoneMessage);
-            //     var zoneId = enterZoneMessage.getZoneid();
-            //     Common.setZoneId(zoneId);
-            //
-            //     Common.setRequestRoomType(enterZoneMessage.getDefaultroomtypeload());
-            //     if (enterZoneMessage.hasEnabledisplayroomlist() &&
-            //         enterZoneMessage.getEnabledisplayroomlist()) {
-            //         /*
-            //          Sau này xử lý phần người chơi click vào một mức cược cụ thể không cần hiển thị danh sách phòng chơi
-            //          */
-            //         var cashRoomList = [];
-            //         if (enterZoneMessage.getCashroomconfigsList().length > 0) {
-            //             for (var i = 0; i < enterZoneMessage.getCashroomconfigsList().length; i++) {
-            //                 cashRoomList.push(enterZoneMessage.getCashroomconfigsList()[i]);
-            //             }
-            //         }
-            //         Common.setCashRoomList(cashRoomList);
-            //     }
-            //
-            //     if (Common.getZoneId() !== -1) {
-            //         // notify->onHideNotify();
-            //         // this->unscheduleUpdate();
-            //
-            //         if(Common.getZoneId() === Common.ZONE_ID.TAIXIU) {
-            //             NetworkManager.getEnterRoomMessageFromServer(0, "");
-            //         }
-            //         //cc.director.loadScene('Table');
-            //     }
-            //
-            // }else {
-            //     // Common::getInstance()->setRequestRoomType(-1);
-            //     // Common::getInstance()->setZoneId(-1);  //reset zone id
-            // }
         }
 
     },

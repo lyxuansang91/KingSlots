@@ -165,72 +165,6 @@ cc.Class({
             Common.showToast(resp.getMessage());
         }
     },
-    updateMoneyResponseHandler: function(response) {
-        // cc.log("update money response handler: ", resp.toObject());
-        // if(resp.getResponsecode()) {
-        //     var zoneId = resp.getZoneid();
-        //     if(zoneId === Common.ZONE_ID.MINI_BACAY){
-        //         var scene = cc.director.getScene();
-        //         var threeCard = scene.getChildByName("PopupThreeCard");
-        //         threeCard.getComponent("PopupThreeCard").updateMoneyMessageResponseHandler(resp);
-        //     } else if(zoneId === Common.ZONE_ID.MINI_POKER){
-        //         var scene = cc.director.getScene();
-        //         var miniPoker = scene.getChildByName("PopupMiniPoker");
-        //         miniPoker.getComponent("PopupMiniPoker").updateMoneyMessageResponseHandler(resp);
-        //     } else {
-        //         if(resp.getMoneyboxesList().length > 0) {
-        //             var money_box = resp.getMoneyboxesList()[0];
-        //             if(money_box.getUserid() === Common.getUserId()) {
-        //                 Common.setCash(money_box.getCurrentmoney());
-        //                 this.setUserInfo();
-        //             }
-        //         }
-        //     }
-        //
-        // }
-        //
-        // if(resp.hasMessage() && resp.getMessage() !== "") {
-        //     Common.showToast(resp.getMessage());
-        // }
-
-        if (response !== 0) {
-
-            if (response.hasMessage() && response.getMessage() !== '') {
-                Common.showToast(response.getMessage());
-            }
-            if(response.hasZoneid()){
-                var zoneId = response.getZoneid();
-                if(zoneId <= 0 || zoneId === Common.ZONE_ID.TAIXIU ){
-                    if (response.getResponsecode()) {
-                        if (zoneId == Common.ZONE_ID.TAIXIU){
-                            this.handlerMessageMiniGame(zoneId, response, NetworkManager.MESSAGE_ID.UPDATE_MONEY);
-                        }
-                        if (response.getMoneyboxesList().length > 0){
-                            var moneyBox;
-                            var origin_money;
-                            var result = "";
-
-                            for (var i = 0; i < response.getMoneyboxesList().length; i++) {
-                                moneyBox = response.getMoneyboxesList()[i];
-                                var isCash = moneyBox.getIscash();
-                                if (moneyBox.getUserid() === Common.getUserId()){
-                                    origin_money = moneyBox.getCurrentmoney();
-                                    //set lai tien cho nguoi choi
-                                    if (isCash){
-                                        Common.setCash(origin_money);
-                                        this.setUserInfo();
-                                        // label_cash->setString(common->numberFormatWithCommas(common->getCash()));
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }else if(Common.inMiniGame(zoneId) && zoneId !== Common.ZONE_ID.TAIXIU){
-                    this.handlerMessageMiniGame(zoneId, response, NetworkManager.MESSAGE_ID.UPDATE_MONEY);
-                }
-            }
-        }
-    },
     assetConfigResponseHandler: function(resp) {
         cc.log("asset config response handler:", resp.toObject());
         Common.assetsConfigList = [];
@@ -264,9 +198,6 @@ cc.Class({
                 break;
             case NetworkManager.MESSAGE_ID.SMS_CONFIG:
                 this.smsConfigResponseHandler(resp);
-                break;
-            case NetworkManager.MESSAGE_ID.UPDATE_MONEY:
-                this.updateMoneyResponseHandler(resp);
                 break;
             case NetworkManager.MESSAGE_ID.ASSET_CONFIG:
                 this.assetConfigResponseHandler(resp);
