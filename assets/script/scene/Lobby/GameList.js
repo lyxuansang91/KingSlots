@@ -34,7 +34,7 @@ cc.Class({
     },
     onDestroy: function() {
         cc.log("on destroy");
-        this.unscheduleAllCallbacks();
+        clearInterval(this.jarInterval);
     },
     onEnable: function() {
         cc.log("on enable");
@@ -64,7 +64,6 @@ cc.Class({
         // this.content.setContentSize(innerSize);
         var resp = window.jarInfoList;
 
-
         if(resp != null) {
             for (var i = 0; i < resp.length; i++) {
                 var jarItem = resp[i];
@@ -77,9 +76,9 @@ cc.Class({
             }
         }
 
-        self.schedule(function() {
+        this.jarInterval = setInterval(function() {
             self.requestJar(false);
-        }, 5);
+        }, 5000);
     },
 
     scrollToLeft: function(){
@@ -116,9 +115,6 @@ cc.Class({
     goSceneTable: function() {
     },
 
-    ongamestatus: function(event) {
-    },
-
     jarResponseHandler: function(resp) {
         // cc.log("jar response handler:", resp.toObject());
         if(resp.getResponsecode()) {
@@ -133,11 +129,9 @@ cc.Class({
                     var value = jarItem.getValue();
                     var jarType = jarItem.getJartype();
                     if (Common.inMiniGame(gameid)){
-                        cc.log("inMiniGame");
                         this.handlerMessageMiniGame(gameid, resp, NetworkManager.MESSAGE_ID.JAR);
                     }
                     else {
-                        cc.log("lobby");
                         var item = this.content.getChildByTag(gameid + 1000);
                         if(item !== null && item.getName() === 'LobbyGameItem')
                             item.getComponent('LobbyGameItem').updateJarMoney(value, jarType);
@@ -250,8 +244,6 @@ cc.Class({
                     }
 
                     if (Common.getZoneId() !== -1) {
-
-                        cc.log("game to");
                     }
                 }
                 else {
@@ -395,8 +387,8 @@ cc.Class({
     },
 
     handlerMessageMiniGame: function(zoneId, response, typeMessage){
-        cc.log("handlerMessageMiniGame =");
-        cc.log("zoneId =", zoneId);
+        // cc.log("handlerMessageMiniGame =");
+        // cc.log("zoneId =", zoneId);
         var scene = cc.director.getScene();
         if (typeMessage === NetworkManager.MESSAGE_ID.ENTER_ROOM) {
             var enterroomresponse =  response;
@@ -534,7 +526,6 @@ cc.Class({
             }
         }
         else if (zoneId === Common.ZONE_ID.MINI_BACAY){
-            cc.log("MINI_BACAY");
             if (scene.getChildByName("PopupThreeCard")) {
                 var mini_threecards = scene.getChildByName("PopupThreeCard");
                 cc.log("mini_threecards =", mini_threecards);

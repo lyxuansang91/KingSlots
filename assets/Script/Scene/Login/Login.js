@@ -132,7 +132,6 @@ cc.Class({
     },
     smsConfigResponseHandler: function(resp) {
         cc.log("sms config response handler:", resp.toObject());
-
         if(resp.getResponsecode()) {
             Common.smsConfigLists = [];
             for(var i = 0; i < resp.getNumbersList().length; i++) {
@@ -237,7 +236,7 @@ cc.Class({
         });
         if(this.checkPurchaseList() && !this.isLoadScene) {
             this.isLoadScene = true;
-
+            cc.log("login time:", Date.now() - window.timeLogin);
             this.bar_top_login.active = false;
             this.bar_top_lobby.active = true;
         }
@@ -248,6 +247,7 @@ cc.Class({
     },
 
     handleLoginResponseHandler: function(res) {
+        cc.log("login time 2:", Date.now() - window.timeLogin);
         cc.log("login response handler:", res.toObject());
         window.loginMessage = null;
         if(res.getResponsecode()) {

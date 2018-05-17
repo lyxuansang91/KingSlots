@@ -68,7 +68,6 @@ cc.Class({
                 window.jarInfoList = resp.getJarinfoList();
                 cc.director.loadScene('Login');
             }
-
         }
     },
 

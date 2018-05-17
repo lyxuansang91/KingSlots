@@ -22,6 +22,7 @@ cc.Class({
         switch (buffer.message_id) {
             case NetworkManager.MESSAGE_ID.INITIALIZE:
                 var msg = buffer.response;
+                cc.log("end time init:", Date.now() - window.timeInit);
                 this.initialMessageResponseHandler(msg);
                 break;
             case NetworkManager.MESSAGE_ID.PING:
@@ -87,7 +88,7 @@ cc.Class({
         }
     },
     pingMessageResponseHandler: function(res) {
-
+        cc.log("ping response handler:", res.toObject());
         if(res.getResponsecode()) {
             if(res.getDisconnect()) {
                 cc.log("disconnected");

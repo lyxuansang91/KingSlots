@@ -233,7 +233,7 @@ var NetworkManager = {
     MAX_KILL_MSG: 10000,
     SERVER_TEST: "139.162.63.66",
     SERVER_DEBUG: "192.168.0.200",
-    URL: "wss://gamemoni.com:2280/megajackpot",
+    URL: "ws://192.168.0.32:2280/megajackpot",
     sessionId: "",
     tryReconnect: false,
     getSessionId: function() {
@@ -241,7 +241,7 @@ var NetworkManager = {
     },
     checkEvent: function (checkMessage) {
         if(window.listMessage !== null && typeof(window.listMessage) !== 'undefined'  && window.listMessage.length > 0) {
-            if(window.listMessage.length > 7 && !this.tryReconnect) {
+            if(window.listMessage.length > 20 && !this.tryReconnect) {
                 NetworkManager.showPopupReconnect();
                 this.tryReconnect = true;
                 return;
@@ -633,6 +633,7 @@ var NetworkManager = {
         return message;
     }, requestLoginMessage: function(userName, password){
         const message = NetworkManager.initInitializeMessage(userName, password);
+        window.timeLogin = Date.now();
         this.requestMessage(message.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.LOGIN, "");
     },
 
@@ -944,14 +945,19 @@ var NetworkManager = {
             window.listMessage = [];
             window.ws.binaryType = "arraybuffer";
 
+            var self = this;
+
             window.ws.onopen = function (event) {
                 cc.log("on web socket");
                 // NetworkManager.requestInitializeMessage("24", "15","xxxxx","xxxxx", "vn", "vi", "com.gamebai.tienlen", false, "");
                 NetworkManager.requestInitializeMessage(Common.getCp(), Common.getVersionCode(), Common.getFingerprint(),
                     Common.getFingerprint(), "vn", "vi", Common.getPackageName(), false, "");
-
+                self.myInterval = setInterval(function() {
+                    NetworkManager.requestPingMessage(0);
+                }, 15000);
             };
             window.ws.onclose = function () {
+                clearInterval(self.myInterval);
                 cc.log("Websocket instance was closed");
                 if(window.isLogout === null || window.isLogout) {
                     window.isLogout = false;
@@ -962,6 +968,7 @@ var NetworkManager = {
             window.ws.onmessage = this.onGameStatus.bind(this);
             window.ws.onerror = function(e) {
                 cc.log("on event:", e);
+                clearInterval(self.myInterval);
                 NetworkManager.showPopupReconnect();
             }
         } else {
@@ -975,6 +982,7 @@ var NetworkManager = {
     },
     onGameStatus: function(event) {
         if(event.data!==null || typeof(event.data) !== 'undefined') {
+            cc.log("event data length:", event.data.byteLength);
             var lstMessage = NetworkManager.parseFrom(event.data, event.data.byteLength);
             for(var i = 0; i < lstMessage.length; i++) {
                 window.listMessage.push(lstMessage[i]);
