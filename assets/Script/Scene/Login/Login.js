@@ -1,6 +1,6 @@
 var NetworkManager = require('NetworkManager');
 var BaseScene = require('BaseScene');
-
+var poker = require('Poker');
 cc.Class({
     extends: BaseScene,
 
@@ -29,8 +29,6 @@ cc.Class({
             this.bar_top_login.active = false;
             this.bar_top_lobby.active = true;
 
-            //add Poker new version
-            NetworkManager.requestEnterZoneMessage(Common.ZONE_ID.POKER);
         } else {
             this.bar_top_login.active = true;
             this.bar_top_lobby.active = false;
@@ -219,6 +217,9 @@ cc.Class({
             case NetworkManager.MESSAGE_ID.ENTER_ZONE:
                 this.enterZoneMessageResponseHandler(msg);
                 break;
+            case NetworkManager.MESSAGE_ID.ENTER_ROOM:
+                this.enterRoomResponseHandler(msg);
+                break;
             case NetworkManager.MESSAGE_ID.PAYMENT_STATUS:
                 this.paymentStatusResponseHandler(msg);
                 break;
@@ -298,6 +299,10 @@ cc.Class({
             if(Common.assetsConfigList === null) {
                 NetworkManager.requestAssetsConfigMessage(1);
             }
+
+            cc.log("requestEnterZoneMessage");
+            //add Poker new version
+            NetworkManager.requestEnterZoneMessage(Common.ZONE_ID.POKER);
         }
 
         if(res.hasMessage() && res.getMessage() !== "") {
@@ -530,32 +535,40 @@ cc.Class({
 
     //add Poker new version
     enterZoneMessageResponseHandler: function(enterZoneMessage) {
+        cc.log("enterZoneMessage =", enterZoneMessage);
         if (enterZoneMessage !== 0) {
-            cc.log("enter zone response:", enterZoneMessage.toObject());
             if (enterZoneMessage.hasMessage() && enterZoneMessage.getMessage() !== ''){
                 Common.showToast(enterZoneMessage.getMessage());
             }
 
             if (enterZoneMessage.getResponsecode()) {
                 Common.setEnterZone(enterZoneMessage);
-                // Common.setRequestRoomType(enterZoneMessage.getDefaultroomtypeload());
-                // if (enterZoneMessage.hasEnabledisplayroomlist() && enterZoneMessage.getEnabledisplayroomlist()) {
-                //     /*
-                //     Sau này xử lý phần người chơi click vào một mức cược cụ thể không cần hiển thị danh sách phòng chơi
-                //     */
-                //     var cashRoomList = [];
-                //     // var goldRoomList = [];
-                //     if (enterZoneMessage.getCashroomconfigsList().length > 0) {
-                //         for (var i = 0; i < enterZoneMessage.getCashroomconfigsList().length; i++) {
-                //             cashRoomList.push(enterZoneMessage.getCashroomconfigsList()[i]);
-                //         }
-                //     }
-                //
-                //     Common.setCashRoomList(cashRoomList);
-                // }
-                //
+                Common.setRequestRoomType(enterZoneMessage.getDefaultroomtypeload());
+                if (enterZoneMessage.hasEnabledisplayroomlist() && enterZoneMessage.getEnabledisplayroomlist()) {
+                    /*
+                    Sau này xử lý phần người chơi click vào một mức cược cụ thể không cần hiển thị danh sách phòng chơi
+                    */
+                    var cashRoomList = [];
+                    // var goldRoomList = [];
+                    if (enterZoneMessage.getCashroomconfigsList().length > 0) {
+                        for (var i = 0; i < enterZoneMessage.getCashroomconfigsList().length; i++) {
+                            cashRoomList.push(enterZoneMessage.getCashroomconfigsList()[i]);
+                        }
+                    }
+
+                    Common.setCashRoomList(cashRoomList);
+
+                    this.roomGroupId = enterZoneMessage.getCashroomconfigsList()[0].getRoomgroupid();
+                }
+
+                cc.log("cash room list =", enterZoneMessage.getCashroomconfigsList());
+                cc.log("room list =", enterZoneMessage.getEnabledisplayroomlist());
+                cc.log("room type =", enterZoneMessage.getDefaultroomtypeload());
+
                 // if (Common.getZoneId() !== -1) {
-                //
+                //     auto scene = SceneTable::createScene(enter_zone_response->enabledisplayroomlist(),
+                //         enter_zone_response->defaultroomtypeload());
+                //     REPLACESCENE_NO_ACTION(scene);
                 //     cc.log("game to");
                 // }
             }
@@ -566,4 +579,57 @@ cc.Class({
         }
 
     },
+
+    enterRoomResponseHandler: function(enterroomresponse){
+        cc.log("enterroomresponse =", enterroomresponse);
+        var playerList = [];
+        if (enterroomresponse !== 0) {
+            if (enterroomresponse.hasMessage() && enterroomresponse.getMessage() !== "") {
+                Common.showToast(enterroomresponse.getMessage());
+            }
+            if (enterroomresponse.getResponsecode()) {
+                var waitingPlayerList = [];
+                Common.setOwnerUserId(enterroomresponse.getOwneruserid());
+
+                for (var i = 0; i < enterroomresponse.getPlayingplayersList().length; i++) {
+                    playerList.push(enterroomresponse.getPlayingplayersList()[i]);
+                }
+                for (var i = 0; i < enterroomresponse.getWaitingplayersList().length; i++){
+                    waitingPlayerList.push(enterroomresponse.getWaitingplayersList()[i]);
+                }
+
+                if (enterroomresponse.hasRoomplay()){
+                    // this.unscheduleUpdate();
+
+                    var roomPlay = enterroomresponse.getRoomplay();
+                    cc.log("room index: %d", roomPlay.getRoomindex());
+
+                    // notify->onHideNotify();  //an thong bao di
+
+                    var is_create_room = (Common.getUserId() ===
+                        enterroomresponse.getOwneruserid()) ? true : false;
+
+                    cc.director.loadScene('Poker',function(){
+                        poker.instance.initDataFromLoading(roomPlay, playerList, waitingPlayerList,
+                            is_create_room, enterroomresponse);
+                    });
+
+                }
+            }
+            // else{
+            //     if (Common::getInstance()->isEnabledPurchaseCash() &&
+            //     !currentRoomTouch.passwordrequired() && !isEnoughEnterMoney()){
+            //         EnoughMoneyOnEventListener* b = new EnoughMoneyOnEventListener();
+            //         PopupMessageBox* popupMessage = new PopupMessageBox();
+            //         popupMessage->setEvent(b);
+            //         popupMessage->showPopup(enterroomresponse->message());
+            //     }
+            // else {
+            //         //showToast(enterroomresponse->message().c_str(), TIME_SHOW_TOAST);
+            //         /*PopupMessageBox* popupMessage = new PopupMessageBox();
+            //         popupMessage->showPopup(enterroomresponse->message());*/
+            //     }
+            // }
+        }
+    }
 });

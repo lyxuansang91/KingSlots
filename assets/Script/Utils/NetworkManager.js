@@ -233,7 +233,8 @@ var NetworkManager = {
     MAX_KILL_MSG: 10000,
     SERVER_TEST: "139.162.63.66",
     SERVER_DEBUG: "192.168.0.200",
-    URL: "ws://bigbingogame.club:2280/megajackpot",
+    URL: "wss://gamemoni.com:2280/megajackpot",
+    // URL: "ws://192.168.0.32:2280/megajackpot",
     sessionId: "",
     tryReconnect: false,
     getSessionId: function() {
@@ -707,6 +708,7 @@ var NetworkManager = {
         this.requestMessage(message.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.LOOK_UP_ROOM, Common.getSessionId());
     },
     getEnterRoomMessageFromServer: function(zoneId, room_index, password) {
+        cc.log("room_index =", room_index);
         var request = this.initEnterRoomMessage(zoneId, room_index, password);
         this.requestMessage(request.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.ENTER_ROOM, Common.getSessionId());
     },
@@ -716,6 +718,13 @@ var NetworkManager = {
         request.setRoomindex(room_index);
         request.setPassword(password);
         return request;
+    },
+    getEnterRoomGroupFromServer: function(zone_id, roomGroupId, vipRoom) {
+        var request = new proto.BINEnterRoomGroupRequest();
+        request.setZoneid(zone_id);
+        request.setRoomgroupid(roomGroupId);
+        request.setViproom(vipRoom);
+        this.requestMessage(request.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.ENTER_ROOM_GROUP, Common.getSessionId());
     },
     initTurnMessage: function(zoneId, room_index, entries) {
         cc.log("entries =", entries);

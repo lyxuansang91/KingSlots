@@ -6,6 +6,9 @@ var Config = {
         POPUP : 100,
         HEADLINE: 102,
         LOADING: 103,
+        AVATAR : 10,
+        TOAST : 22,
+        ANIMATION : 21
     },
 
     TAG_GAME_ITEM: {

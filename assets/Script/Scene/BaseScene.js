@@ -15,6 +15,7 @@ cc.Class({
 
     onDestroy: function() {
         this.unscheduleAllCallbacks();
+
     },
 
     handleMessage: function(buffer) {
