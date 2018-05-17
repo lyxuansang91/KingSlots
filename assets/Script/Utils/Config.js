@@ -55,7 +55,7 @@ var Config = {
         COMMON_POPUP : "CommonPopup",
         POPUP_MESSAGE_BOX : "PopupMessageBox",
         POPUP_MESSAGE_RECONNECT : "PopupMessageReconnect",
-        POPUP_SETTING : "PopupSetting",
+        POPUP_SETTING : "PopupSeting",
         POPUP_HISTORY : "PopupHistory",
         POPUP_THREECARD_HISTORY : "PopupThreeCardHistory",
         POPUP_USERINFO : "PopupUserInfo",
