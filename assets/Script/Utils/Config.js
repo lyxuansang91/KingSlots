@@ -35,6 +35,13 @@ var Config = {
         TAG : 1
     },
 
+    SCOPE_CHAT: {
+        CHAT_ZONE : 1,
+        CHAT_ROOM : 2,
+        CHAT_PRIVATE : 3,
+        CHAT_WORLD : 4
+    },
+
     TABLE_ORDERBY: {
         MIN_BET : 1,
         NUM_PLAYER : 2,
