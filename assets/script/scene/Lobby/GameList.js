@@ -116,7 +116,7 @@ cc.Class({
     },
 
     jarResponseHandler: function(resp) {
-        // cc.log("jar response handler:", resp.toObject());
+        cc.log("jar response handler:", resp.toObject());
         if(resp.getResponsecode()) {
             if(resp.getJarinfoList().length > 0) {
                 // bind data
@@ -128,13 +128,21 @@ cc.Class({
                     cc.log("gameid =", gameid);
                     var value = jarItem.getValue();
                     var jarType = jarItem.getJartype();
+
+                    var item = this.content.getChildByTag(gameid + 1000);
+                    if(item !== null && item.getName() === 'LobbyGameItem') {
+                        cc.log("lobby game item:", item);
+                        item.getComponent('LobbyGameItem').updateJarMoney(value, jarType);
+                    }
+
+
                     if (Common.inMiniGame(gameid)){
                         this.handlerMessageMiniGame(gameid, resp, NetworkManager.MESSAGE_ID.JAR);
                     }
                     else {
-                        var item = this.content.getChildByTag(gameid + 1000);
-                        if(item !== null && item.getName() === 'LobbyGameItem')
-                            item.getComponent('LobbyGameItem').updateJarMoney(value, jarType);
+                        // var item = this.content.getChildByTag(gameid + 1000);
+                        // if(item !== null && item.getName() === 'LobbyGameItem')
+                        //     item.getComponent('LobbyGameItem').updateJarMoney(value, jarType);
                     }
 
                 }
@@ -391,7 +399,7 @@ cc.Class({
         // cc.log("zoneId =", zoneId);
         var scene = cc.director.getScene();
         if (typeMessage === NetworkManager.MESSAGE_ID.ENTER_ROOM) {
-            var enterroomresponse =  response;
+            var enterroomresponse = response;
             if (zoneId !== 0 && enterroomresponse.getResponsecode()) {
                 Common.setMiniGameZoneId(zoneId);
 
