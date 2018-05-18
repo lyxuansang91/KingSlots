@@ -484,7 +484,7 @@ var Treasure = cc.Class({
         }
 
         if(resp.hasMessage() && resp.getMessage() !== "") {
-
+            Common.showToast(resp.getMessage(), 2);
         }
     },
 
@@ -511,12 +511,16 @@ var Treasure = cc.Class({
             this.txt_bet_money.string = Common.convertIntToMoneyView(this.turnCashValue[this.indexCash]);
             this.is_bet_select = false;
             this.popup_bet_select.active = this.is_bet_select;
+            this.betType = parseInt(this.indexCash);
+            // call jar request
+            this.isRequestJar = false;
+            this.requestJar();
+            // NetworkManager.getJarRequest(Common.getZoneId(), this.betType + 1);
 
             var money_bet = this.turnCashValue[this.indexCash]*this.lst_line_selected.length;
             if(money_bet >= 0){
                 this.txt_total_bet_money.string = Common.numberFormatWithCommas(money_bet);
             }
-
         }
     },
 
@@ -535,8 +539,6 @@ var Treasure = cc.Class({
                     break;
                 }
             }
-
-            cc.log("contain :",contain);
 
             if (!contain){
                 this.lst_line_selected.push(data);
@@ -611,23 +613,19 @@ var Treasure = cc.Class({
         isDone = true;
         switch (buffer.message_id) {
             case NetworkManager.MESSAGE_ID.UPDATE_MONEY:
-                var msg = buffer.response;
-                this.updateMoneyMessageResponseHandler(msg);
+                this.updateMoneyMessageResponseHandler(buffer.response);
                 break;
             case NetworkManager.MESSAGE_ID.MATCH_END:
                 this.matchEndResponseHandler(buffer.response);
                 break;
             case NetworkManager.MESSAGE_ID.EXIT_ROOM:
-                var msg = buffer.response;
-                this.exitRoomResponseHandler(msg);
+                this.exitRoomResponseHandler(buffer.response);
                 break;
             case NetworkManager.MESSAGE_ID.EXIT_ZONE:
-                var msg = buffer.response;
-                this.exitZoneResponseHandler(msg);
+                this.exitZoneResponseHandler(buffer.response);
                 break;
             case NetworkManager.MESSAGE_ID.JAR:
-                var msg = buffer.response;
-                this.jarResponseHandler(msg);
+                this.jarResponseHandler(buffer.response);
                 break;
             default:
                 isDone = false;

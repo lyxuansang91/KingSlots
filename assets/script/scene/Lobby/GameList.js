@@ -131,7 +131,6 @@ cc.Class({
 
                     var item = this.content.getChildByTag(gameid + 1000);
                     if(item !== null && item.getName() === 'LobbyGameItem') {
-                        cc.log("lobby game item:", item);
                         item.getComponent('LobbyGameItem').updateJarMoney(value, jarType);
                     }
 

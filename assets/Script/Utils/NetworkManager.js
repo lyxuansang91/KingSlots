@@ -233,7 +233,7 @@ var NetworkManager = {
     MAX_KILL_MSG: 10000,
     SERVER_TEST: "139.162.63.66",
     SERVER_DEBUG: "192.168.0.200",
-    URL: "ws://192.168.0.32:2280/megajackpot",
+    URL: "wss://gamemoni.com:2280/megajackpot",
     sessionId: "",
     tryReconnect: false,
     getSessionId: function() {
@@ -982,7 +982,6 @@ var NetworkManager = {
     },
     onGameStatus: function(event) {
         if(event.data!==null || typeof(event.data) !== 'undefined') {
-            cc.log("event data length:", event.data.byteLength);
             var lstMessage = NetworkManager.parseFrom(event.data, event.data.byteLength);
             for(var i = 0; i < lstMessage.length; i++) {
                 window.listMessage.push(lstMessage[i]);
