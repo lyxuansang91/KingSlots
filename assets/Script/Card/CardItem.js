@@ -15,14 +15,6 @@ cc.Class({
             default: [],
             type: cc.SpriteFrame
         },
-        texSuitBig: {
-            default: [],
-            type: cc.SpriteFrame
-        },
-        texSuitSmall: {
-            default: [],
-            type: cc.SpriteFrame
-        },
         texSuitBigPoker: {
             default: [],
             type: cc.SpriteFrame
@@ -35,9 +27,7 @@ cc.Class({
 
     // use this for initialization
     onLoad: function () {
-        if(Common.getZoneId() !== Config.TAG_GAME_ITEM.MINI_BACAY) {
-            this.node.getComponent(cc.Sprite).spriteFrame = null;
-        }
+
     },
 
     init: function () {
@@ -53,51 +43,28 @@ cc.Class({
         var suitValue = this.getSuit(cardValue);
 
         var isFaceCard = false;
-        if(Common.getZoneId() === Config.TAG_GAME_ITEM.MINI_POKER){
-            if(pointValue > 9 && pointValue <= 12){
-                isFaceCard = true;
-            }
-        } else {
-            if(pointValue > 10){
-                isFaceCard = true;
-            }
+        if(pointValue > 9 && pointValue <= 12){
+            isFaceCard = true;
         }
 
         if (isFaceCard) {
-            if(Common.getZoneId() === Config.TAG_GAME_ITEM.MINI_POKER){
-                this.mainPic.spriteFrame = this.texFaces[pointValue - 10];
-            } else {
-                this.mainPic.spriteFrame = this.texFaces[pointValue - 10 - 1];
-            }
+            this.mainPic.spriteFrame = this.texFaces[pointValue - 10];
         }
         else {
-            if(Common.getZoneId() === Config.TAG_GAME_ITEM.MINI_POKER){
-                this.mainPic.spriteFrame = this.texSuitBigPoker[suitValue];
-            } else {
-                this.mainPic.spriteFrame = this.texSuitBig[suitValue];
-            }
+            this.mainPic.spriteFrame = this.texSuitBigPoker[suitValue];
         }
 
         // for jsb
-        this.point.string = Common.getPointName(pointValue, Common.getZoneId());
+        this.point.string = Common.getPointName(pointValue);
 
-        if (Common.isRedSuit(suitValue, Common.getZoneId())) {
+        if (Common.isRedSuit(suitValue)) {
             this.point.node.color = this.redTextColor;
         }
         else {
             this.point.node.color = this.blackTextColor;
         }
-        if(Common.getZoneId() === Config.TAG_GAME_ITEM.MINI_POKER){
-            this.suit.spriteFrame = this.texSuitSmallPoker[suitValue];
-        } else {
-            this.suit.spriteFrame = this.texSuitSmall[suitValue];
-        }
+        this.suit.spriteFrame = this.texSuitSmallPoker[suitValue];
 
-    },
-    setBg: function (isBoolean) {
-        if(isBoolean === false){
-            this.node.getComponent(cc.Sprite).spriteFrame = null;
-        }
     },
     getPoint: function (cardValue) {
         var point = Math.ceil(cardValue / 4);
