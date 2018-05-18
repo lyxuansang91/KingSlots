@@ -504,6 +504,13 @@ var Treasure = cc.Class({
         this.popup_bet_select.active = this.is_bet_select;
     },
 
+    reloadJarRequest: function() {
+        this.unschedule(this.requestJar);
+        this.isRequestJar = false;
+        this.requestJar();
+        this.schedule(this.requestJar, 5);
+    },
+
     chonMucCuocEvent: function (event,data) {
         if(data < this.bets_select.length && data > -1){
             this.indexCash = data;
@@ -513,8 +520,7 @@ var Treasure = cc.Class({
             this.popup_bet_select.active = this.is_bet_select;
             this.betType = parseInt(this.indexCash);
             // call jar request
-            this.isRequestJar = false;
-            this.requestJar();
+            this.reloadJarRequest();
             // NetworkManager.getJarRequest(Common.getZoneId(), this.betType + 1);
 
             var money_bet = this.turnCashValue[this.indexCash]*this.lst_line_selected.length;
