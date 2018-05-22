@@ -421,6 +421,9 @@ var NetworkManager = {
             case NetworkManager.MESSAGE_ID.PAYMENT_STATUS:
                 msg = proto.BINPaymentStatusResponse.deserializeBinary(bytes);
                 break;
+            case NetworkManager.MESSAGE_ID.PLAYER_ENTER_ROOM:
+                msg = proto.BINPlayerEnterRoomResponse.deserializeBinary(bytes);
+                break;
             default:
                 break;
         }
@@ -946,6 +949,28 @@ var NetworkManager = {
         }
         cc.log("check lai scope di em");
         return null;
+    },
+    getExitRoomMessageFromServer(zone_id, roomIndex) {
+        var request = this.initExitRoomLoginMessage(zone_id, roomIndex);
+        this.callNetwork(this.initData(request.serializeBinary(), Common.getOS(),
+            NetworkManager.MESSAGE_ID.EXIT_ROOM, Common.getSessionId()));
+    },
+    initExitRoomLoginMessage(zone_id, room_index) {
+        var request = new proto.BINExitRoomRequest();
+        request.setZoneid(zone_id);
+        request.setRoomindex(room_index);
+        return request;
+    },
+    getCancelExitRoomMessageFromServer(zone_id, roomIndex) {
+        var request = this.initCancelExitRoomLoginMessage(zone_id, roomIndex);
+        this.callNetwork(this.initData(request.serializeBinary(), Common.getOS(),
+            NetworkManager.MESSAGE_ID.CANCEL_EXIT_AFTER_MATCH_END, Common.getSessionId()));
+    },
+    initCancelExitRoomLoginMessage(zone_id, room_index) {
+        var request = new proto.BINCancelExitAfterMatchEndRequest();
+        request.setZoneid(zone_id);
+        request.setRoomindex(room_index);
+        return request;
     },
     connectNetwork: function() {
         if(window.ws === null || typeof(window.ws) === 'undefined' || window.ws.readyState === WebSocket.CLOSED) {

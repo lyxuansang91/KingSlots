@@ -422,7 +422,7 @@ var Common = {
         }
     },
     getCp: function() {
-        return "11";
+        return "13";
     },
     getVersionCode: function() {
         if(cc.sys.isNative) {
@@ -1017,5 +1017,11 @@ var Common = {
     inMiniGame: function(zoneId) {
         return (zoneId === Common.ZONE_ID.TAIXIU || zoneId === Common.ZONE_ID.MINI_POKER
             || zoneId === Common.ZONE_ID.MINI_BACAY || zoneId === Common.ZONE_ID.TREASURE);
+    },
+    setFirstTurnUserId(_firstTurnUserId) {
+        this._firstTurnUserId = _firstTurnUserId;
+    },
+    getFirstTurnUserId() {
+        return this._firstTurnUserId;
     }
 };

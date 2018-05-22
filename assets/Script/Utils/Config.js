@@ -106,12 +106,6 @@ var Config = {
         PHONE : 3
     },
 
-    SCOPE_CHAT: {
-        CHAT_ZONE: 1,
-        CHAT_ROOM: 2,
-        CHAT_PRIVATE: 3,
-        CHAT_WORLD: 4
-    },
 
 
     LookupTypeRequest : {
@@ -156,6 +150,19 @@ var Config = {
         DONG_LE: 2,
         DONG_ALL: 3,
         CHON_LAI: 4
+    },
+
+    PlayerState: {
+        NOT_IN_ROOM: 0,
+        PLAYING: 1,
+        WAITING: 2,
+    },
+
+    TABLE_STATUS : {
+        NOT_PLAYING : 0,
+        START_MATCH : 1,
+        TURN : 2,
+        MATCH_END : 8
     }
 
 };
