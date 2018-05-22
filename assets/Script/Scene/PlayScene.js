@@ -33,7 +33,13 @@ cc.Class({
         });
     },
 
-    handleMessage: function(buffer) {
+    handleMessage: function(e) {
+        const buffer = e;
+        var isDone = this._super(buffer);
+        if(isDone) {
+            return true;
+        }
+        isDone = true;
         var msg = buffer.response;
         switch (buffer.message_id) {
             case NetworkManager.MESSAGE_ID.INSTANT_MESSAGE:
@@ -55,6 +61,7 @@ cc.Class({
                 this.exitRoomResponseHandler(msg);
                 break;
             default:
+                isDone = false;
                 break;
         }
         return isDone;
@@ -172,6 +179,92 @@ cc.Class({
                 }
             }
         }
+    },
+    //Tu atula
+    setRoomIndex(roomIndex){
+        cc.log("roomIndex =", roomIndex);
+        this.roomIndex = roomIndex;
+    },
+    getRoomIndex() {
+        return this.roomIndex;
+    },
+    setVipRoom(is_vip_room){
+        this.is_vip_room = is_vip_room;
+    },
+    isVipRoom(){
+        return this.is_vip_room;
+    },
+    setPassWordRequired(passwordRequired){
+        this.passwordRequired = passwordRequired;
+    },
+    getPassWordRequired() {
+            return this.passwordRequired;
+    },
+    setPlayerList(player_list){
+        this.player_list = player_list;
+    },
+    getPlayerList(){
+        return this.player_list;
+    },
+    setCreateRoom(is_create_room){
+        this.is_create_room = is_create_room;
+    },
+    isCreateRoom(){
+        return this.is_create_room;
+    },
+    setWaitingPlayerList(waiting_player_list){
+        this.waiting_player_list = waiting_player_list;
+    },
+    getWaitingPlayerList(){
+        return this.waiting_player_list;
+    },
+    setEnterRoomResponse(reEnterRoomResponse){
+        this.enter_room_response = reEnterRoomResponse;
+    },
+    getEnterRoomResponse(){
+        return this.enter_room_response;
+    },
+    setMinBet(minBet){
+        this.minBet = minBet;
+    },
+    getMinBet(){
+        return this.minBet;
+    },
+    // addCountDown(countDown, start){
+    //     auto background_countDown = MSprite::create(BGK_COUNTDOWN);
+    //     background_countDown->setPosition(MVec2(width / 2 + background_countDown->getWidth()*0.2f,
+    //     height*0.6 - background_countDown->getHeight() / 2));
+    //     background_countDown->setTag(TAG_TIME_COUNTDOWN);
+    //     this->addChild(background_countDown);
+    //
+    //     //string bg = !start ? CHANGE_OWNER : WAIT_NEXT_MATCH;
+    //     auto background_countDownLeft = MSprite::create(WAIT_NEXT_MATCH);
+    //     background_countDownLeft->setPosition(Vec2(-background_countDownLeft->getWidth(),
+    //         background_countDown->getHeight() / 2 -
+    //             background_countDownLeft->getHeight() / 2));
+    //     background_countDown->addChild(background_countDownLeft);
+    //
+    //     auto timerCountDown = MLabel::createCountDown(countDown);
+    //     timerCountDown->setPosition(Vec2(background_countDown->getWidth() / 2, background_countDown->getHeight()*0.5));
+    //     background_countDown->addChild(timerCountDown);
+    //
+    //     background_countDown->runAction(Sequence::create(DelayTime::create(countDown), RemoveSelf::create(), NULL));
+    // },
+    showValueMatch(value_match){
+        if (value_match.length != null){
+            // lb_value_match->setString(StringUtils::format("#%s", value_match.c_str()));
+        }
+    },
+
+    btnExitClick(){
+        if (!this.check_exit_room) {
+            NetworkManager.getExitRoomMessageFromServer(Common.getZoneId(), this.roomIndex);
+        }
+        else {
+            NetworkManager.getCancelExitRoomMessageFromServer(Common.getZoneId(), this.roomIndex);
+        }
+        this.check_exit_room = !this.check_exit_room;
     }
+
 });
 

@@ -544,7 +544,7 @@
     "_lineHeight": 30,
     "_enableWrapText": true,
     "_N$file": {
-      "__uuid__": "369ac9d1-d1b9-44fa-9bbd-5964059dfa54"
+      "__uuid__": "812627c0-a49d-4a40-9c67-d02c19e3799c"
     },
     "_isSystemFontUsed": false,
     "_spacingX": 0,
@@ -600,7 +600,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 110,
+      "width": 106,
       "height": 30
     },
     "_rotationX": 0,
@@ -633,7 +633,7 @@
     "_lineHeight": 30,
     "_enableWrapText": true,
     "_N$file": {
-      "__uuid__": "369ac9d1-d1b9-44fa-9bbd-5964059dfa54"
+      "__uuid__": "812627c0-a49d-4a40-9c67-d02c19e3799c"
     },
     "_isSystemFontUsed": false,
     "_spacingX": 0,
@@ -717,8 +717,8 @@
     },
     "_enabled": true,
     "_custom": true,
-    "_file": {
-      "__uuid__": "03799c72-883c-433d-a9c8-e69276f4ea1e"
+    "_texture": {
+      "__uuid__": "0275e94c-56a7-410f-bd1a-fc7483f7d14a"
     },
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 1,
@@ -873,9 +873,6 @@
     },
     "_enabled": true,
     "_custom": true,
-    "_file": {
-      "__uuid__": "03799c72-883c-433d-a9c8-e69276f4ea1e"
-    },
     "_texture": {
       "__uuid__": "a637c3f0-31b5-4843-8d89-2c21425d1199"
     },
@@ -1035,7 +1032,7 @@
     },
     "_children": [],
     "_tag": -1,
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 29
@@ -1126,7 +1123,7 @@
     },
     "_children": [],
     "_tag": -1,
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 32
@@ -1345,7 +1342,7 @@
     "_lineHeight": 18,
     "_enableWrapText": true,
     "_N$file": {
-      "__uuid__": "369ac9d1-d1b9-44fa-9bbd-5964059dfa54"
+      "__uuid__": "812627c0-a49d-4a40-9c67-d02c19e3799c"
     },
     "_isSystemFontUsed": false,
     "_spacingX": 0,
@@ -1363,7 +1360,7 @@
     "asset": {
       "__uuid__": "7432c214-f2e4-4d9c-9fed-23b8b44bf48c"
     },
-    "fileId": "d1cddH/doRNQ4Aodz8556bh",
+    "fileId": "83DFRjYDlOVrDfy8+DkwCj",
     "sync": false
   },
   {
@@ -1477,7 +1474,17 @@
     },
     "bet_money": {
       "__id__": 35
-    }
+    },
+    "username": {
+      "__id__": 19
+    },
+    "user_money": {
+      "__id__": 16
+    },
+    "bet_status": {
+      "__id__": 12
+    },
+    "playerId": 0
   },
   {
     "__type__": "cc.PrefabInfo",

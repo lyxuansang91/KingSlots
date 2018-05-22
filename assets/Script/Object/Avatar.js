@@ -10,6 +10,10 @@ cc.Class({
         light_follow : cc.ParticleSystem,
         cards : cc.Node,
         bet_money : cc.Node,
+        username: cc.Label,
+        user_money: cc.Label,
+        bet_status: cc.Node,
+        playerId: 0
     },
 
     onLoad : function () {
@@ -187,5 +191,45 @@ cc.Class({
         }
 
         return cc.p(point.x * size_table.width,point.y * size_table.height);
-    }
+    },
+
+    avatarInfomation(username, userMoney) {
+        this.username.string = username;
+        this.user_money.string = userMoney;
+    },
+
+    loadAvatar(image_index, id, _name,  _money, roomIndex, player) {
+
+        this.player = player;
+        this.roomIndex = roomIndex;
+
+        if (image_index > 100021){
+            image_index = 100000;
+        }
+
+        this.playerId = id;
+        this.username.string = _name;
+        this.user_money.string = _money;
+
+        //show trang thai nguoi choi, hay nguoi cho
+        // this.showPlayer(player);
+    },
+
+    showPlayer(player){
+        // if (player){
+        //     this.node.setO
+        // }
+        // else {
+        //     this->avatar->setOpacity(100);
+        // }
+    },
+
+    getPlayerId(){
+        return this.playerId;
+    },
+
+    isPlayer(){
+        return this.player;
+    },
+
 });
