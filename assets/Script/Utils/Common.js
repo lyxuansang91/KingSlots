@@ -1023,5 +1023,15 @@ var Common = {
     },
     getFirstTurnUserId() {
         return this._firstTurnUserId;
+    },
+    containInList(lst, value){
+        var isContain = false;
+        for (var i = 0; i < lst.length; i++){
+            if (lst[i] === value){
+                isContain = true;
+                break;
+            }
+        }
+        return isContain;
     }
 };

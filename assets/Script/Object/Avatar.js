@@ -17,6 +17,7 @@ cc.Class({
     },
 
     onLoad : function () {
+        this.cardCover = [];
         this.deltaTime = 0;
         this.duration = 0;
         this.isProgressing = false;
@@ -95,28 +96,28 @@ cc.Class({
 
             }else if(index == 1){
 
-                this.cards.setPosition(cc.p(-this.node.width*0.825,-this.node.height*0.2));
+                this.setCardCoverPosition(cc.p(-this.node.width*0.825,-this.node.height*0.2));
                 this.bet_money.setPosition(cc.p(-this.node.width*0.825,this.node.height*0.2));
 
                 point = cc.p(0.45,-0.25);
 
             }else if(index == 2){
 
-                this.cards.setPosition(cc.p(-this.node.width*0.65,-this.node.height*0.8));
+                this.setCardCoverPosition(cc.p(-this.node.width*0.65,-this.node.height*0.8));
                 this.bet_money.setPosition(cc.p(-this.node.width*0.65,-this.node.height*1.125));
 
                 point = cc.p(0.3,0.55);
 
             }else if(index == 3){
 
-                this.cards.setPosition(cc.p(this.node.width*0.65,-this.node.height*0.8));
+                this.setCardCoverPosition(cc.p(this.node.width*0.65,-this.node.height*0.8));
                 this.bet_money.setPosition(cc.p(this.node.width*0.65,-this.node.height*1.125));
 
                 point = cc.p(-0.3,0.55);
 
             }else if(index == 4){
 
-                this.cards.setPosition(cc.p(this.node.width*0.825,-this.node.height*0.2));
+                this.setCardCoverPosition(cc.p(this.node.width*0.825,-this.node.height*0.2));
                 this.bet_money.setPosition(cc.p(this.node.width*0.85,this.node.height*0.2));
 
                 point = cc.p(-0.45,-0.25);
@@ -131,49 +132,49 @@ cc.Class({
 
             }else if(index == 1){
 
-                this.cards.setPosition(cc.p(-this.node.width*0.525,this.node.height*0.6));
+                this.setCardCoverPosition(cc.p(-this.node.width*0.525,this.node.height*0.6));
                 this.bet_money.setPosition(cc.p(-this.node.width*0.525,this.node.height*0.95));
 
                 point = cc.p(0.35,-0.5);
             }else if(index == 2){
 
-                this.cards.setPosition(cc.p(-this.node.width*0.825,-this.node.height*0.1));
+                this.setCardCoverPosition(cc.p(-this.node.width*0.825,-this.node.height*0.1));
                 this.bet_money.setPosition(cc.p(-this.node.width*0.825,this.node.height*0.25));
 
                 point = cc.p(0.5,-0.15);
             }else if(index == 3){
 
-                this.cards.setPosition(cc.p(-this.node.width*0.755,-this.node.height*0.8));
+                this.setCardCoverPosition(cc.p(-this.node.width*0.755,-this.node.height*0.8));
                 this.bet_money.setPosition(cc.p(-this.node.width*0.755,-this.node.height*0.45));
 
                 point = cc.p(0.45,0.35);
             }else if(index == 4){
 
-                this.cards.setPosition(cc.p(0,-this.node.height*1.35));
+                this.setCardCoverPosition(cc.p(0,-this.node.height*1.35));
                 this.bet_money.setPosition(cc.p(0,-this.node.height*1.0));
 
                 point = cc.p(0.25,0.565);
             }else if(index == 5){
 
-                this.cards.setPosition(cc.p(0,-this.node.height*1.35));
+                this.setCardCoverPosition(cc.p(0,-this.node.height*1.35));
                 this.bet_money.setPosition(cc.p(0,-this.node.height*1.0));
 
                 point = cc.p(-0.25,0.565);
             }else if(index == 6){
 
-                this.cards.setPosition(cc.p(this.node.width*0.755,-this.node.height*0.8));
+                this.setCardCoverPosition(cc.p(this.node.width*0.755,-this.node.height*0.8));
                 this.bet_money.setPosition(cc.p(this.node.width*0.755,-this.node.height*0.45));
 
                 point = cc.p(-0.45,0.35);
             }else if(index == 7){
 
-                this.cards.setPosition(cc.p(this.node.width*0.825,-this.node.height*0.1));
+                this.setCardCoverPosition(cc.p(this.node.width*0.825,-this.node.height*0.1));
                 this.bet_money.setPosition(cc.p(this.node.width*0.825,this.node.height*0.25));
 
                 point = cc.p(-0.5,-0.15);
             }else if(index == 8){
 
-                this.cards.setPosition(cc.p(this.node.width*0.525,this.node.height*0.6));
+                this.setCardCoverPosition(cc.p(this.node.width*0.525,this.node.height*0.6));
                 this.bet_money.setPosition(cc.p(this.node.width*0.525,this.node.height*0.95));
 
                 point = cc.p(-0.35,-0.5);
@@ -192,14 +193,22 @@ cc.Class({
 
         return cc.p(point.x * size_table.width,point.y * size_table.height);
     },
+    
+    setCardCoverPosition(card_pos){
+        this.card_pos = card_pos;
+    },
+    
+    getCardCoverPosition(){
+        return this.card_pos;  
+    },
 
     avatarInfomation(username, userMoney) {
         this.username.string = username;
         this.user_money.string = userMoney;
     },
 
-    loadAvatar(image_index, id, _name,  _money, roomIndex, player) {
-
+    loadAvatar(image_index, position_index, id, _name,  _money, roomIndex, player) {
+        this.posIndex = position_index;
         this.player = player;
         this.roomIndex = roomIndex;
 
@@ -213,6 +222,10 @@ cc.Class({
 
         //show trang thai nguoi choi, hay nguoi cho
         // this.showPlayer(player);
+    },
+
+    addCardCover(card_cover){
+        this.cardCover.push(card_cover);
     },
 
     showPlayer(player){
@@ -231,5 +244,9 @@ cc.Class({
     isPlayer(){
         return this.player;
     },
+
+    getPositionIndex(){
+        return this.posIndex;
+    }
 
 });
