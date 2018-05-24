@@ -10,7 +10,8 @@ var Poker = cc.Class({
         lst_player: [],
         avatars: [],
         player_action: [],
-        countIncrease: 10
+        countIncrease: 10,
+        sprite_cover_card: cc.Node
 
     },
     statics: {
@@ -80,6 +81,9 @@ var Poker = cc.Class({
                 break;
             case NetworkManager.MESSAGE_ID.CANCEL_EXIT_AFTER_MATCH_END:
                 this.cancelExitAfterMatchEndResponseHandler(msg);
+                break;
+            case NetworkManager.MESSAGE_ID.TURN:
+                this.turnResponse(msg);
                 break;
             default:
                 isDone = false;
@@ -185,7 +189,7 @@ var Poker = cc.Class({
         var avatar = cc.instantiate(this.avatar_prefab);
         var avatar_comp = avatar.getComponent("Avatar");
         var pos = avatar_comp.avatarPosition(position_index,this.capacity,this.table.getContentSize());
-        avatar_comp.loadAvatar(image_index, user_id, user_name, cash, this.getRoomIndex(), player.isPlayer());
+        avatar_comp.loadAvatar(image_index, position_index, user_id, user_name, cash, this.getRoomIndex(), player.isPlayer());
         // avatar_comp.setPlayerId(user_id);
         avatar.setPosition(pos);
 
@@ -257,7 +261,11 @@ var Poker = cc.Class({
                                     var pair_card_other = [];
                                     pair_card_other[this.avatars[i].getComponent("Avatar").getPlayerId()] = temp;
                                     var vt_pair_card_other = [];
-                                    vt_pair_card_other.push(pair_card_other);
+                                    vt_pair_card_other.push({
+                                        player_id: this.avatars[i].getComponent("Avatar").getPlayerId(),
+                                        card_value: temp
+                                    });
+                                    // vt_pair_card_other.push(pair_card_other);
                                     this.distributeNextCard(vt_pair_card_other, false);
                                 }
                             }
@@ -288,12 +296,16 @@ var Poker = cc.Class({
                         var card_values = this.parseCardValue(json_val);
                         if (card_values != null) {
                             for (var j = 0; j < card_values.length; j++) {
-                                if (Common.getUserId() == card_values[j].getFirst()) {
+                                if (Common.getUserId() === card_values[j].getFirst()) {
                                     var avatar = this.findAvatarOfPlayer(card_values[j].getFirst());
                                     var my_pair_card = [];
                                     my_pair_card[avatar.getPlayerId()] = card_values[j].getSecond();
-                                    var my_vt_pair_card;
-                                    my_vt_pair_card.push(my_pair_card);
+                                    var my_vt_pair_card = [];
+                                    my_vt_pair_card.push({
+                                        player_id: avatar.getPlayerId(),
+                                        card_value: card_values[j].getSecond()
+                                    });
+                                    // my_vt_pair_card.push(my_pair_card);
                                     this.distributeNextCard(my_vt_pair_card);
                                 }
                             else if (table_status === Config.TABLE_STATUS.MATCH_END){
@@ -387,6 +399,7 @@ var Poker = cc.Class({
     },
 
     findAvatarOfPlayer(player_id){
+        cc.log("player id =", player_id);
         for (var i = 0; i < this.avatars.length; i++){
             cc.log("this.avatars =", this.avatars);
             if (this.avatars[i].getComponent("Avatar").getPlayerId() === player_id){
@@ -441,9 +454,16 @@ var Poker = cc.Class({
                         if (response.getArgsList()[i].getKey() === "currentCards" && this.findAvatarOfPlayer(Common.getUserId()) !== 0){
                             var current_card_values = response.getArgsList()[i].getValue().split(",");
                             var pair_card_current = [];
-                            pair_card_current[Common.getUserId()] = current_card_values;
+                            pair_card_current.push({
+                                player_id: Common.getUserId(),
+                                card_value: current_card_values
+                            });
+                            // pair_card_current[Common.getUserId()] = current_card_values;
                             var vt_pair_card_current = [];
-                            vt_pair_card_current.push(pair_card_current);
+                            vt_pair_card_current.push({
+                                player_id: Common.getUserId(),
+                                card_value: current_card_values
+                            });
                             cc.log("vt_pair_card_current =", vt_pair_card_current);
                             this.distributeNextCard(vt_pair_card_current);
                         }
@@ -477,7 +497,11 @@ var Poker = cc.Class({
                             var pair_card_other = [];
                             pair_card_other[this.avatars[i].getComponent("Avatar").getPlayerId()] = other_card;
                             var vt_pair_card_other = [];
-                            vt_pair_card_other.push(pair_card_other);
+                            vt_pair_card_other.push({
+                                player_id: this.avatars[i].getComponent("Avatar").getPlayerId(),
+                                card_value: other_card
+                            });
+                            // vt_pair_card_other.push(pair_card_other);
                             this.distributeNextCard(vt_pair_card_other);
                         }
                     }
@@ -487,6 +511,7 @@ var Poker = cc.Class({
     },
 
     playerEnterRoomResponseHandler(newplayerresponse){
+        cc.log("newplayerresponse =", newplayerresponse);
         if (newplayerresponse !== 0) {
             if (newplayerresponse.getResponsecode()) {
                 var player = this.convertFromBINPlayer(newplayerresponse.getPlayer());
@@ -529,6 +554,7 @@ var Poker = cc.Class({
     },
 
     playerExitRoomResponse(_player_exit_room_response){
+        cc.log("_player_exit_room_response =", _player_exit_room_response);
         if (_player_exit_room_response !== 0) {
             if (_player_exit_room_response.getResponsecode()) {
                 var leng = this.lst_player.length;
@@ -588,6 +614,7 @@ var Poker = cc.Class({
     },
 
     cancelExitAfterMatchEndResponseHandler(cancel_exit_room_response){
+        cc.log("cancel_exit_room_response =", cancel_exit_room_response);
         if (cancel_exit_room_response !== 0 && cancel_exit_room_response.getCancelexituserid()) {
             if (cancel_exit_room_response.getResponsecode()) {
 
@@ -611,6 +638,7 @@ var Poker = cc.Class({
     },
 
     playerExitAfterMatchEndResponse(exit_room_player_response){
+        cc.log("exit_room_player_response =", exit_room_player_response);
         if (exit_room_player_response !== 0) {
             if (exit_room_player_response.getResponsecode()) {
                 var leng = this.lst_player.length;
@@ -630,81 +658,80 @@ var Poker = cc.Class({
     },
 
     distributeNextCard(nextCards, animation){
-        // cc.log("nextCards =", nextCards);
-        // if (nextCards.length !== 0){
-        //     sprite_cover_card->setVisible(true);
-        //
-        //     auto call_hidden_cover_card_func = CallFunc::create([=]{
-        //         sprite_cover_card->setVisible(false);
-        //     });
-        //
-        //     float init_pos_card = sprite_cover_card->getContentSize().width;
-        //     float width_card_tags = 0;
-        //     for (var i = 0; i < nextCards.length; i++){
-        //         var pokerAvatar = this.findAvatarOfPlayer(nextCards[i].getFirst());
-        //         if (pokerAvatar !== 0){
-        //             Vec2 from = sprite_cover_card->getPosition();
-        //             Vec2 to;
-        //
-        //             if (nextCards[i].getFirst === Common.getUserId()){
-        //                 for (var j = 0; j < nextCards[i].getSecond().length; j++){
-        //                     float sizeCard = cardWidth();
-        //
-        //                     Card card;
-        //                     card.setValue(nextCards[i].second[j]);
-        //
-        //                     PokerCardSprite* card_cover = PokerCardSprite::createCard(card, cardWidth());
-        //                     this->addChild(card_cover, INDEX_CARD);
-        //
-        //                     to = Vec2(originX + visibleSize.width * paddingInitCard + card_tag.size() * cardWidth() * 0.5f
-        //                         , posYCard());
-        //                     if (animation){
-        //                         card_cover->setPosition(from);
-        //                         card_cover->runAction(Sequence::create(Spawn::create(MoveTo::create(0.4f + 0.4f * j, to), NULL)
-        //                     , call_hidden_cover_card_func, NULL));
-        //                     }
-        //                     else {
-        //                         card_cover->setPosition(to);
-        //                         sprite_cover_card->setVisible(false);
-        //                     }
-        //
-        //                     card_tag.push_back(card_cover);
-        //                 }
-        //             }
-        //         else {
-        //                 for (int j = 0; j < 2; j++){
-        //                     MSprite* card_cover = MSprite::createwithFrameName(SPRITE_CARD_COVER);
-        //                     card_cover->setScale(cardWidth() * scaleCard / card_cover->getWidth());
-        //                     this->addChild(card_cover);
-        //
-        //                     to = pokerAvatar->getPosition() - Vec2(pokerAvatar->getWidth() / 2, pokerAvatar->getHeight() / 2 + card_cover->getHeight() * card_cover->getScale() * 0.5f)
-        //                     + pokerAvatar->initPosCard(card_cover->getHeight() * card_cover->getScale() * 0.5f);
-        //
-        //                     if (pokerAvatar->getPositionIndex() == 3 || pokerAvatar->getPositionIndex() == 4){
-        //                         to += Vec2(card_cover->getWidth() * card_cover->getScale() * 0.5f * j, 0);
-        //                     }
-        //                 else {
-        //                         to -= Vec2(card_cover->getWidth() * card_cover->getScale() * ((1-j)*0.5f + 1), 0);
-        //                     }
-        //
-        //                     pokerAvatar->addCard(card_cover);
-        //
-        //                     if (animation){
-        //                         card_cover->setPosition(from);
-        //                         card_cover->runAction(Sequence::create(MoveTo::create(0.4f + 0.4f * j, to),
-        //                         call_hidden_cover_card_func, NULL));
-        //                     }
-        //                     else {
-        //                         card_cover->setPosition(to);
-        //                         sprite_cover_card->setVisible(false);
-        //                     }
-        //                 }
-        //
-        //                 pokerAvatar->showBetMoney();
-        //             }
-        //         }
-        //     }
-        // }
+
+        if (nextCards.length !== 0){
+            this.sprite_cover_card.active = true;
+
+            var call_hidden_cover_card_func = cc.callFunc(function () {
+                this.sprite_cover_card.active = false;
+            },this);
+
+            var init_pos_card = this.sprite_cover_card.getContentSize().width;
+            var width_card_tags = 0;
+            for (var i = 0; i < nextCards.length; i++){
+                var objNextCards = nextCards[i];
+                cc.log("objNextCards player id =", objNextCards.player_id);
+                cc.log("objNextCards value =", objNextCards.card_value);
+                var pokerAvatar = this.findAvatarOfPlayer(objNextCards.player_id);
+                var avatar = pokerAvatar.getComponent("Avatar");
+                cc.log("pokerAvatar =", pokerAvatar);
+                if (pokerAvatar !== null){
+                    var from = this.sprite_cover_card.getPosition();
+                    var to;
+
+                    if (objNextCards.player_id === Common.getUserId()){
+                        for (var j = 0; j < objNextCards.card_value.length; j++){
+                            cc.log("nguoi choi");
+                            // var sizeCard = cardWidth();
+                            //
+                            // Card card;
+                            // card.setValue(nextCards[i].second[j]);
+                            //
+                            // PokerCardSprite* card_cover = PokerCardSprite::createCard(card, cardWidth());
+                            // this->addChild(card_cover, INDEX_CARD);
+                            //
+                            // to = Vec2(originX + visibleSize.width * paddingInitCard + card_tag.size() * cardWidth() * 0.5f
+                            //     , posYCard());
+                            // if (animation){
+                            //     card_cover->setPosition(from);
+                            //     card_cover->runAction(Sequence::create(Spawn::create(MoveTo::create(0.4f + 0.4f * j, to), NULL)
+                            // , call_hidden_cover_card_func, NULL));
+                            // }
+                            // else {
+                            //     card_cover->setPosition(to);
+                            //     sprite_cover_card->setVisible(false);
+                            // }
+                            //
+                            // card_tag.push_back(card_cover);
+                        }
+                    }
+                else {
+                        for (var j = 0; j < 2; j++){
+                            var card_cover = cc.instantiate(this.sprite_cover_card);
+                            card_cover.active = true;
+                            var toPos = cc.p(pokerAvatar.getPositionX(), pokerAvatar.getPositionY()).addSelf(avatar.getCardCoverPosition());
+                            toPos.addSelf(cc.p(0.5*j*card_cover.width,0));
+
+                            console.log("width : ",card_cover.width);
+                            console.log("to : ",toPos);
+                            avatar.addCardCover(card_cover);
+
+                            card_cover.runAction(cc.moveTo(0.5 + j*0.5, toPos).easing(cc.easeCubicActionOut()));
+                            this.node.addChild(card_cover);
+                            //
+                            // if (animation){
+                            //ss
+                            // }else {
+                            //     card_cover.setPosition(to);
+                            //     card_cover.active = false;
+                            // }
+                        }
+
+                        // pokerAvatar->showBetMoney();
+                    }
+                }
+            }
+        }
     },
 
     parseNextPlayerAction(json_value){
@@ -729,6 +756,207 @@ var Poker = cc.Class({
         // lb_money_bet->setString(Common::getInstance()->numberFormat(moneyBet));
         // lb_money_bet->setVisible(true);
     },
+
+    raiseEvent(){
+        this.onEventTypeConfirm(1000, Config.PLAYER_ACTION.RAISE);
+    },
+
+    callEvent(){
+        this.onEventTypeConfirm(1000, Config.PLAYER_ACTION.CALL);
+    },
+
+    foldEvent(){
+        this.onEventTypeConfirm(1000, Config.PLAYER_ACTION.FOLD);
+    },
+
+    allInEvent(){
+        this.onEventTypeConfirm(1000, Config.PLAYER_ACTION.ALL_IN);
+    },
+
+    condescendEvent(){
+        this.onEventTypeConfirm(1000, Config.PLAYER_ACTION.CONDESCEND);
+    },
+
+    onEventTypeConfirm(enventType, turnType, raiseMoney){
+        // if (enventType == OnEvenConfirmRaise::EVENT_CONFIRM_OK){
+            var entries = [];
+
+            var entryTurnType = new proto.BINMapFieldEntry();
+            entryTurnType.setKey("turnPokerType");
+            entryTurnType.setValue(turnType.toString());
+            entries.push(entryTurnType);
+
+            if (turnType === Config.PLAYER_ACTION.RAISE){
+                var entryTurnMoney = new proto.BINMapFieldEntry();
+                entryTurnMoney.setKey("turnPokerMoney");
+                entryTurnMoney.setValue(raiseMoney);
+                entries.push(entryTurnMoney);
+            }
+            NetworkManager.getTurnMessageFromServer(Common.ZONE_ID.POKER, this.roomIndex, entries);
+        // }
+    },
+
+    turnResponse(turnresponse){
+        cc.log("turnresponse =", turnresponse);
+        if (turnresponse !== 0) {
+            if (turnresponse.hasMessage() && turnresponse.getMessage() !== "") {
+                Common.showToast(turnresponse.getMessage());
+            }
+            if(turnresponse.hasZoneid()){
+                var zoneId = turnresponse.getZoneid();
+                    if (turnresponse.getResponsecode()) {
+                        var current_turn_id = turnresponse.getCurrentturnuserid();
+                        var next_turn_id = turnresponse.getNextturnuserid();
+
+                        cc.log("current_turn_id =", current_turn_id);
+                        cc.log("next_turn_id =", next_turn_id);
+
+                        if (next_turn_id > 0){
+                            Common.setFirstTurnUserId(next_turn_id);
+                        }
+
+                        //neu la nguoi choi hien tai thi reset countdown
+                        var avatar_current_turn = this.findAvatarOfPlayer(current_turn_id);
+                        cc.log("avatar_current_turn =", avatar_current_turn);
+                        if (avatar_current_turn !== null){
+                            this.stopProcessCircleBar();
+                            avatar_current_turn.getComponent("Avatar").init(10);
+                            this.showBtnPlayerAction(false);
+
+                            // showRaise(false);
+                        }
+
+                        //neu chua ket thuc van choi
+                        if (!turnresponse.getMatchend()){
+                            //set countdown cho nguoi tiep theo
+                            var avatar_next_turn = this.findAvatarOfPlayer(next_turn_id);
+                            cc.log("avatar_next_turn =", avatar_next_turn);
+                            if (avatar_next_turn !== null){
+                                this.stopProcessCircleBar();
+                                avatar_next_turn.getComponent("Avatar").init(10);
+                                // avatar_next_turn.updateProgressCircleBar(100, turnresponse.getCountdowntimer());
+                            }
+                        }
+
+                        if (turnresponse.getArgsList().length > 0) {
+                            for (var i = 0; i < turnresponse.getArgsList().length; i++){
+                                var entry = turnresponse.getArgsList()[i];
+                                if (entry.getKey() === "nextPlayerAction" && next_turn_id === Common.getUserId()) {
+                                    var json_val = entry.getValue();
+                                    this.player_action = this.parseNextPlayerAction(json_val);
+                                    //hien thi cac action cua next turn
+                                    this.showBtnPlayerAction(this.player_action);
+                                }
+                            else if (entry.getKey() === "communityCard"){
+                                    var lst_card = entry.getValue().split(",");
+
+                                    this.prepareCommunityCard(lst_card);
+                                }
+                                else if (entry.getKey() === "totalMoneyBet"){  //tong cuoc tren ban
+                                    // auto callFuncSetTotalMoneyBet = CallFunc::create([=]{
+                                    //     //clear status theo, va to
+                                    //     for (PokerAvatar* xtAvatar : avatars){
+                                    //         if (xtAvatar->isPlayer()){
+                                    //             if (xtAvatar->getTurnType() == PLAYER_ACTION::CONDESCEND){
+                                    //                 hiddenPlayStatus(xtAvatar->getPlayerId());
+                                    //             }
+                                    //             if (xtAvatar->getTurnType() == PLAYER_ACTION::CALL
+                                    //                 || xtAvatar->getTurnType() == PLAYER_ACTION::RAISE){
+                                    //                 hiddenPlayStatus(xtAvatar->getPlayerId());
+                                    //                 throwMoney(xtAvatar, true);
+                                    //             }
+                                    //         else if (xtAvatar->getTurnType() == PLAYER_ACTION::ALL_IN && !xtAvatar->isAllIn()){
+                                    //                 throwMoney(xtAvatar, true);
+                                    //                 xtAvatar->setAllIn(true);
+                                    //             }
+                                    //             xtAvatar->setBetMoney(0);
+                                    //         }
+                                    //     }
+                                    //
+                                    //     //hien thi tong tien dat tren ban choi
+                                    //     //setMoneyBetTable(Common::getInstance()->convertStringToLongLong(entry.value()));
+                                    // });
+                                    //
+                                    // bkgTable->runAction(Sequence::create(DelayTime::create(0.6f), callFuncSetTotalMoneyBet, DelayTime::create(0.1f),
+                                    // CallFunc::create([=]{ setMoneyBetTable(Common::getInstance()->convertStringToLongLong(entry.value()));
+                                    // }), nullptr));
+                                }
+                                else if (entry.getKey() === "turnPokerType" && avatar_current_turn !== 0){
+                                    //hien thi tren avatar current turn trang thai tuong ung voi turnXiToType tra ve
+                                    var turnType = entry.getValue();
+                                    if (turnType > 0){
+                                        // avatar_current_turn->setPlayStatus(turnType);
+                                        // showPlayStatus(turnType, avatar_current_turn);
+
+                                        if (turnType === Config.PLAYER_ACTION.RAISE){  //neu to thi clear to va theo cua nhung thang khac
+                                            for (var i = 0; i < this.avatars.length; i++){
+                                                if (this.avatars[i] !== avatar_current_turn && this.avatars[i].getComponent("Avatar").isPlayer()
+                                                    && (this.avatars[i].getComponent("Avatar").getTurnType() === Config.PLAYER_ACTION.CALL
+                                                    || this.avatars[i].getComponent("Avatar").getTurnType() === Config.PLAYER_ACTION.RAISE
+                                                        || this.avatars[i].getComponent("Avatar").getTurnType() === Config.PLAYER_ACTION.CONDESCEND)){
+                                                    // hiddenPlayStatus(xtAvatar->getPlayerId());
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                else if (entry.getKey() === "currentMoneyBet" && avatar_current_turn !== 0){
+                                    var moneyTurn = entry.getValue();
+                                    // avatar_current_turn->setBetMoney(moneyTurn);
+                                }
+                            }
+
+                            // showCall(next_turn_id);
+
+                        }
+                    }
+
+            }
+        }
+    },
+
+    stopProcessCircleBar(){
+        for (var i = 0; i < this.avatars.length; i++){
+            this.avatars[i].getComponent("Avatar").stop();
+        }
+    },
+
+    prepareCommunityCard(lstCard){
+        var last_community;
+        if (this.card_community.length === 0){
+            last_community = lstCard;
+        }
+        else {
+            for (var i = 0; i < lstCard.length; i++){
+                if (!Common.containInList(this.card_community, lstCard[i])){
+                    last_community.push(lstCard[i]);
+                }
+            }
+        }
+
+        this.showCommunityCard(last_community);
+    },
+
+    showCommunityCard(lstCard){
+        // var sizeCard = cardWidth() * 0.75;
+        // var width_card_tags = 4 * sizeCard * 1.1;
+        // for (var i = 0; i < lstCard.length; i++){
+        //     PokerCardSprite* cardSprite = PokerCardSprite::createCard(Card(lstCard[i]), sizeCard);
+        //     cardSprite->setPosition(MVec2(visibleSize.width * 0.5f + width_card_tags * 0.5f + 0.5f * sizeCard,
+        //     visibleSize.height * 0.63f ));  //+ cardSprite->getHeight() / 2
+        //
+        //     auto moveTo = MoveTo::create(0.3f*(0.4f+i), MVec2(visibleSize.width * 0.5f - width_card_tags * 0.5f + (i + card_community.size()) * 1.1f * sizeCard,
+        //     visibleSize.height * 0.63f));
+        //
+        //     this->addChild(cardSprite);
+        //     cardSprite->runAction(moveTo);
+        //
+        //     card_community_tag.push_back(cardSprite);
+        // }
+        //
+        // this.card_community.insert(card_community.end(), lstCard.begin(), lstCard.end());
+    },
+
 
     initAvatar: function (capacity) {
 

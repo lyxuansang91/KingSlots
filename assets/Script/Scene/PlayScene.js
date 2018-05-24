@@ -9,6 +9,11 @@ cc.Class({
         btn_purchase : cc.Button,
         btn_message : cc.Button,
         btn_setting : cc.Button,
+        btn_raise: cc.Button,
+        btn_call: cc.Button,
+        btn_all_in: cc.Button,
+        btn_fold: cc.Button,
+        btn_condescend: cc.Button,
         //so nguoi choi toi da vao ban
         capacity_size : 5,
         room_index : 0
@@ -264,6 +269,26 @@ cc.Class({
             NetworkManager.getCancelExitRoomMessageFromServer(Common.getZoneId(), this.roomIndex);
         }
         this.check_exit_room = !this.check_exit_room;
+    },
+
+    showBtnPlayerAction(isShow) {
+        this.btn_raise.node.active = isShow;
+        this.btn_call.node.active = isShow;
+        this.btn_all_in.node.active = isShow;
+        this.btn_fold.node.active = isShow;
+        this.btn_condescend.node.active = isShow;
+
+        // if (isShow){
+        //     btn_raise->setEnabled(false);
+        //
+        //     btn_call->setEnabled(false);
+        //
+        //     btn_all_in->setEnabled(false);
+        //
+        //     btn_fold->setEnabled(false);
+        //
+        //     btn_condescend->setEnabled(false);
+        // }
     }
 
 });

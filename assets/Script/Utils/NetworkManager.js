@@ -424,6 +424,15 @@ var NetworkManager = {
             case NetworkManager.MESSAGE_ID.PLAYER_ENTER_ROOM:
                 msg = proto.BINPlayerEnterRoomResponse.deserializeBinary(bytes);
                 break;
+            case NetworkManager.MESSAGE_ID.PLAYER_EXIT_AFTER_MATCH_END:
+                msg = proto.BINPlayerExitAfterMatchEndResponse.deserializeBinary(bytes);
+                break;
+            case NetworkManager.MESSAGE_ID.PLAYER_EXIT_ROOM:
+                msg = proto.BINPlayerExitRoomResponse.deserializeBinary(bytes);
+                break;
+            case NetworkManager.MESSAGE_ID.CANCEL_EXIT_AFTER_MATCH_END:
+                msg = proto.BINCancelExitAfterMatchEndResponse.deserializeBinary(bytes);
+                break;
             default:
                 break;
         }
