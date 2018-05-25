@@ -234,7 +234,7 @@ var NetworkManager = {
     SERVER_TEST: "139.162.63.66",
     SERVER_DEBUG: "192.168.0.200",
     URL: "wss://gamemoni.com:2280/megajackpot",
-    // URL: "ws://192.168.0.32:2280/megajackpot",
+     //URL: "ws://192.168.0.200:2280/megajackpot",
     sessionId: "",
     tryReconnect: false,
     getSessionId: function() {

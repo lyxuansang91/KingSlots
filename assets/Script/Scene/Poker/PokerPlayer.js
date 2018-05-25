@@ -21,6 +21,7 @@ cc.Class({
         this.numberCard = number;
         this.position = pos;
         this.tableIndex = tableIndex;
+        this.player = true;
     },
     getName() {
         return this.name;

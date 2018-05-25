@@ -536,7 +536,7 @@ cc.Class({
     //add Poker new version
     enterZoneMessageResponseHandler: function(enterZoneMessage) {
         cc.log("enterZoneMessage =", enterZoneMessage);
-        if (enterZoneMessage !== 0) {
+        if (enterZoneMessage !== null) {
             if (enterZoneMessage.hasMessage() && enterZoneMessage.getMessage() !== ''){
                 Common.showToast(enterZoneMessage.getMessage());
             }
@@ -583,7 +583,7 @@ cc.Class({
     enterRoomResponseHandler: function(enterroomresponse){
         cc.log("enterroomresponse =", enterroomresponse);
         var playerList = [];
-        if (enterroomresponse !== 0) {
+        if (enterroomresponse !== null) {
             if (enterroomresponse.hasMessage() && enterroomresponse.getMessage() !== "") {
                 Common.showToast(enterroomresponse.getMessage());
             }

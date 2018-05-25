@@ -75,7 +75,7 @@ cc.Class({
     instantMessageResponseHandler: function(res){
         if(res != null){
             cc.log("chat room response: %s", res);
-            if (!res.getMessage().empty()){
+            if (res.getMessage() != null){
                 Common.showToast(res.getMessage());
             }
             if (res.getResponsecode() && res.getScope() == SCOPE_CHAT.CHAT_ROOM) {
@@ -111,7 +111,7 @@ cc.Class({
     instantMessageHistoryResponseHandler: function(res){
         if(res != null){
             cc.log("chat room response: %s", res);
-            if (!res.getMessage().empty()){
+            if (res.getMessage() != null){
                 Common.showToast(res.getMessage());
             }
             if (res.getResponsecode() && res.getScope() == SCOPE_CHAT.CHAT_ROOM) {
@@ -126,7 +126,7 @@ cc.Class({
             if (res.getResponsecode()){
                 //call popup user infor
             }
-            if (!res.getMessage().empty()){
+            if (res.getMessage() != null){
                 Common.showToast(res.getMessage());
             }
         }
@@ -147,7 +147,7 @@ cc.Class({
                 // }
             }
 
-            if (!res.getMessage().empty()){
+            if (res.getMessage() != null){
                 Common.showToast(res.getMessage());
             }
         }
@@ -156,16 +156,16 @@ cc.Class({
     replyToInviteResponseHandler: function(res){
         if (res != 0){
             cc.log("reply to invite response: %s", res);
-            if (!res.getMessage().empty()){
+            if (res.getMessage() != null){
                 Common.showToast(res.getMessage());
             }
         }
     },
 
     exitRoomResponseHandler: function(res) {
-        if (res != 0) {
-            cc.log("exit room response: %s", res);
-            if (!res.getMessage().empty()){
+        cc.log("exit room response: ", res);
+        if (res != null) {
+            if (res.getMessage() != null){
                 Common.showToast(res.getMessage());
             }
 
@@ -175,8 +175,8 @@ cc.Class({
                     //int default_room_type = Common::getInstance()->getRequestRoomType() !=
                  //-1 ? Common::getInstance()->getRequestRoomType() : ROOM_TYPE::XU;
 
-                 //this->notEnoughmoney = exit_room_response->notenoughmoney();
-                 //this->message = exit_room_response->has_message() ? exit_room_response->message() : "";
+                    this.notEnoughmoney = res.getNotenoughmoney();
+                    this.message = res.getMessage();
                     cc.director.loadScene('Login');
                 }
                 else {
@@ -263,10 +263,10 @@ cc.Class({
 
     btnExitClick(){
         if (!this.check_exit_room) {
-            NetworkManager.getExitRoomMessageFromServer(Common.getZoneId(), this.roomIndex);
+            NetworkManager.getExitRoomMessageFromServer(Common.ZONE_ID.POKER, this.roomIndex);
         }
         else {
-            NetworkManager.getCancelExitRoomMessageFromServer(Common.getZoneId(), this.roomIndex);
+            NetworkManager.getCancelExitRoomMessageFromServer(Common.ZONE_ID.POKER, this.roomIndex);
         }
         this.check_exit_room = !this.check_exit_room;
     },
