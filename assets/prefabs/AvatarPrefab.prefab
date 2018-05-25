@@ -1484,7 +1484,10 @@
     "bet_status": {
       "__id__": 12
     },
-    "playerId": 0
+    "playerId": 0,
+    "avatar": {
+      "__id__": 9
+    }
   },
   {
     "__type__": "cc.PrefabInfo",

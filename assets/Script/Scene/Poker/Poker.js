@@ -85,12 +85,16 @@ var Poker = cc.Class({
             case NetworkManager.MESSAGE_ID.TURN:
                 this.turnResponse(msg);
                 break;
+            case NetworkManager.MESSAGE_ID.READY_TO_PLAY:
+                this.readyToPlayResponse(msg);
+                break;
             default:
                 isDone = false;
                 break;
         }
         return isDone;
     },
+
 
     setListPlayerFromParams(player_list, waiting_player_list){
         if (this.lst_player.length != null) this.lst_player = [];
@@ -151,7 +155,6 @@ var Poker = cc.Class({
     },
 
     setPositionPlayer(player, position){
-        cc.log("player =", player);
         cc.log("position =", position);
         if (player.getTableIndex() < 0){
             return;
@@ -389,9 +392,17 @@ var Poker = cc.Class({
     },
 
     findPlayer(player_id){
-
         for (var i = 0; i < this.lst_player.length; i++){
             if (this.lst_player[i].isPlayer() && this.lst_player[i].getID() === player_id){
+                return this.lst_player[i];
+            }
+        }
+        return null;
+    },
+
+    findWaiting(player_id){
+        for (var i = 0; i < this.lst_player.length; i++){
+            if (!this.lst_player[i].isPlayer() && lst_player[i].getID() == player_id){
                 return this.lst_player[i];
             }
         }
@@ -428,8 +439,8 @@ var Poker = cc.Class({
     },
 
     startMatchResponseHandler(response){
-        cc.log("startMatchResponseHandler =", response);
         if (response !== 0) {
+            cc.log("startMatchResponseHandler =", response);
             if (response.hasMessage() && response.getMessage() != null){
                 Common.showToast(response.getMessage());
             }
@@ -511,8 +522,8 @@ var Poker = cc.Class({
     },
 
     playerEnterRoomResponseHandler(newplayerresponse){
-        cc.log("newplayerresponse =", newplayerresponse);
         if (newplayerresponse !== 0) {
+            cc.log("newplayerresponse =", newplayerresponse);
             if (newplayerresponse.getResponsecode()) {
                 var player = this.convertFromBINPlayer(newplayerresponse.getPlayer());
 
@@ -554,8 +565,8 @@ var Poker = cc.Class({
     },
 
     playerExitRoomResponse(_player_exit_room_response){
-        cc.log("_player_exit_room_response =", _player_exit_room_response);
         if (_player_exit_room_response !== 0) {
+            cc.log("_player_exit_room_response =", _player_exit_room_response);
             if (_player_exit_room_response.getResponsecode()) {
                 var leng = this.lst_player.length;
 
@@ -582,7 +593,7 @@ var Poker = cc.Class({
 
                         var avatar = this.findAvatarOfPlayer(_player_exit_room_response.getExituserid());
                         if (avatar !== 0){
-                            avatar = [];
+                            //avatar = [];
                             // hiddenPlayStatus(_player_exit_room_response.getExituserid());
                             // hiddenTextEmotion(_player_exit_room_response.getExituserid());
                             //xoa avatar khoi ban choi (khong hien thi nua)
@@ -610,7 +621,7 @@ var Poker = cc.Class({
     },
 
     removeOutTablePlay(avatar){
-        // this->removeChild(avatar, true);
+        avatar.removeFromParent(true);
     },
 
     cancelExitAfterMatchEndResponseHandler(cancel_exit_room_response){
@@ -794,6 +805,56 @@ var Poker = cc.Class({
             }
             NetworkManager.getTurnMessageFromServer(Common.ZONE_ID.POKER, this.roomIndex, entries);
         // }
+    },
+
+    resetDisplayAvatar(){
+        if (!avatars.empty()){
+         for (var i = 0; i < this.avatars.length; i++){
+             //avatars[i].clear();
+              //hiddenPlayStatus(avatars[i]->getPlayerId());
+              //hiddenTextEmotion(avatars[i]->getPlayerId());
+
+               if (avatars[i].getParent() != 0){
+                   avatars[i].removeFromParent(true);
+                }
+            }
+
+            this.avatars.cleanup();
+        }
+    },
+
+    readyToPlayResponse(msg){
+        cc.log("ready to play response =", msg);
+        if (msg !== 0) {
+            if (msg.getResponsecode()){
+                var ready_player_id = msg.getReadyuserid();
+                var table_index = msg.getTableindex();
+                var player = this.findWaiting(ready_player_id);
+
+                if (player != 0){
+                    //day vao lst playing
+                    player.setTableIndex(table_index);
+                    player.setPlayer(true);
+
+                    //remove avatar tren ban choi
+                    this.resetDisplayAvatar();
+                    //dat waiting player len ban choi
+                    displayInfoRemainCard(this.lst_player);
+
+                    var sizePlayer = getCurrentSizePlayers();
+                }
+
+                // int countDown = ready_to_play_response->countdowntimer() / 1000;
+                // if (this->getChildByTag(TAG_TIME_COUNTDOWN) != nullptr){
+                //     this->removeChildByTag(TAG_TIME_COUNTDOWN);
+                // }
+                //this.addCountDown(countDown, true);
+            }
+
+            if (msg.hasMessage()){
+                Common.showToast(msg.getMessage());
+            }
+        }
     },
 
     turnResponse(turnresponse){

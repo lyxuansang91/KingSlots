@@ -13,7 +13,8 @@ cc.Class({
         username: cc.Label,
         user_money: cc.Label,
         bet_status: cc.Node,
-        playerId: 0
+        playerId: 0,
+        avatar : cc.Node
     },
 
     onLoad : function () {
@@ -221,7 +222,8 @@ cc.Class({
         this.user_money.string = _money;
 
         //show trang thai nguoi choi, hay nguoi cho
-        // this.showPlayer(player);
+        cc.log("------------------------isPlayer ", player);
+        this.showPlayer(player);
     },
 
     addCardCover(card_cover){
@@ -229,12 +231,12 @@ cc.Class({
     },
 
     showPlayer(player){
-        // if (player){
-        //     this.node.setO
-        // }
-        // else {
-        //     this->avatar->setOpacity(100);
-        // }
+        if (player){
+            this.avatar.setOpacity(255);
+        }
+        else {
+            this.avatar.setOpacity(100);
+        }
     },
 
     getPlayerId(){
