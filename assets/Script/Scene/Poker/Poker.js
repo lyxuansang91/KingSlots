@@ -11,7 +11,9 @@ var Poker = cc.Class({
         avatars: [],
         player_action: [],
         countIncrease: 10,
-        sprite_cover_card: cc.Node
+        sprite_cover_card: cc.Node,
+        card_prefab: cc.Prefab,
+        lb_money_bet: cc.Label
 
     },
     statics: {
@@ -87,6 +89,15 @@ var Poker = cc.Class({
                 break;
             case NetworkManager.MESSAGE_ID.READY_TO_PLAY:
                 this.readyToPlayResponse(msg);
+                break;
+            case NetworkManager.MESSAGE_ID.BET:
+                this.betResponseHandler(msg);
+                break;
+            case NetworkManager.MESSAGE_ID.UPDATE_MONEY:
+                this.updateMoneyResponseHandler(msg);
+                break;
+            case NetworkManager.MESSAGE_ID.MATCH_END:
+                this.matchEndResponseHandler(msg);
                 break;
             default:
                 isDone = false;
@@ -261,8 +272,6 @@ var Poker = cc.Class({
                             for (var i = 0; i < this.avatars.length; i++) {
                                 if (this.avatars[i] !== 0 && this.avatars[i].getComponent("Avatar").isPlayer()
                                     && this.avatars[i].getComponent("Avatar").getPlayerId() !== Common.getUserId()){
-                                    var pair_card_other = [];
-                                    pair_card_other[this.avatars[i].getComponent("Avatar").getPlayerId()] = temp;
                                     var vt_pair_card_other = [];
                                     vt_pair_card_other.push({
                                         player_id: this.avatars[i].getComponent("Avatar").getPlayerId(),
@@ -287,8 +296,8 @@ var Poker = cc.Class({
                             else {
                                 var avatar = this.findAvatarOfPlayer(enter_room_response.getCurrentturnuserid());
                                 if (avatar !== 0){
-                                    // avatar->resetProcessCircleBar();
-                                    // avatar->updateProgressCircleBar(100, Common::getInstance()->convertStringToInt(entry.value()));
+                                    avatar.getComponent("Avatar").resetProcessCircleBar();
+                                    avatar.getComponent("Avatar").updateProgressCircleBar(entry.getValue());
                                 }
                             }
                         }
@@ -301,8 +310,6 @@ var Poker = cc.Class({
                             for (var j = 0; j < card_values.length; j++) {
                                 if (Common.getUserId() === card_values[j].getFirst()) {
                                     var avatar = this.findAvatarOfPlayer(card_values[j].getFirst());
-                                    var my_pair_card = [];
-                                    my_pair_card[avatar.getPlayerId()] = card_values[j].getSecond();
                                     var my_vt_pair_card = [];
                                     my_vt_pair_card.push({
                                         player_id: avatar.getPlayerId(),
@@ -320,17 +327,17 @@ var Poker = cc.Class({
                             }
                         }
                     }
-                    else if (entry.getKey() == "communityCard"){
+                    else if (entry.getKey() === "communityCard"){
                         var lst_card = entry.getValue().split(",");
 
                         prepareCommunityCard(lst_card);
                     }
-                    else if (entry.getKey() == "turnPokerType"){
+                    else if (entry.getKey() === "turnPokerType"){
                         //hien thi tren avatar current turn trang thai tuong ung voi turnPokerType tra ve
                         var json_val = entry.getValue();
                         turntype_values = parseTurnType(json_val);
                     }
-                    else if (entry.getKey() == "currentMoneyBet"){
+                    else if (entry.getKey() === "currentMoneyBet"){
                         var json_val = entry.getValue();
                         if (json_val != null){
                             var moneybet_values = parseTurnType(json_val);
@@ -338,21 +345,21 @@ var Poker = cc.Class({
                             for (var j = 0; j < moneybet_values.length; j++){
                                 var avatar = this.findAvatarOfPlayer(moneybet_values[j].getFirst());
                                 if (avatar != 0 && moneybet_values[j].getSecond > 0){
-                                    avatar.setBetMoney(moneybet_values[j].getSecond());
+                                    avatar.getComponent("Avatar").setBetMoney(moneybet_values[j].getSecond());
                                 }
                             }
                         }
                     }
-                    else if (entry.getKey() == "currentPlayerAction"){
+                    else if (entry.getKey() === "currentPlayerAction"){
                         var json_val = entry.getValue();
                         this.player_action = parseNextPlayerAction(json_val);
-                        showBtnPlayerAction(player_action);
+                        this.showBtnPlayerAction(player_action);
                     }
-                    else if (entry.getKey() == "totalMoneyBet"){
+                    else if (entry.getKey() === "totalMoneyBet"){
                         //hien thi tong tien dat tren ban choi
-                        setMoneyBetTable(entry.getValue());
+                        this.setMoneyBetTable(entry.getValue());
                     }
-                    else if (entry.getKey() == "limitBetRatio"){
+                    else if (entry.getKey() === "limitBetRatio"){
                         this.countIncrease = entry.getValue();
                     }
                 }
@@ -456,20 +463,15 @@ var Poker = cc.Class({
 
                 var avatar_first_turn = this.findAvatarOfPlayer(response.getFirstturnuserid());
                 if (avatar_first_turn !== 0 && response.getCountdowntimer() > 0) {
-                    // avatar_first_turn->resetProcessCircleBar();
-                    // avatar_first_turn->updateProgressCircleBar(100, response->countdowntimer());
+
+                    avatar_first_turn.getComponent("Avatar").resetProcessCircleBar();
+                    avatar_first_turn.getComponent("Avatar").updateProgressCircleBar(response.getCountdowntimer());
                 }
 
                 if (response.getArgsList().length > 0)  {  //truong hop da dat cuoc thi chia bai
                     for (var i = 0; i < response.getArgsList().length; i++){
                         if (response.getArgsList()[i].getKey() === "currentCards" && this.findAvatarOfPlayer(Common.getUserId()) !== 0){
                             var current_card_values = response.getArgsList()[i].getValue().split(",");
-                            var pair_card_current = [];
-                            pair_card_current.push({
-                                player_id: Common.getUserId(),
-                                card_value: current_card_values
-                            });
-                            // pair_card_current[Common.getUserId()] = current_card_values;
                             var vt_pair_card_current = [];
                             vt_pair_card_current.push({
                                 player_id: Common.getUserId(),
@@ -505,8 +507,6 @@ var Poker = cc.Class({
                     for (var i = 0; i < this.avatars.length; i++){
                         if (this.avatars[i].getComponent("Avatar").isPlayer()
                             && this.avatars[i].getComponent("Avatar").getPlayerId() !== Common.getUserId()){
-                            var pair_card_other = [];
-                            pair_card_other[this.avatars[i].getComponent("Avatar").getPlayerId()] = other_card;
                             var vt_pair_card_other = [];
                             vt_pair_card_other.push({
                                 player_id: this.avatars[i].getComponent("Avatar").getPlayerId(),
@@ -516,6 +516,32 @@ var Poker = cc.Class({
                             this.distributeNextCard(vt_pair_card_other);
                         }
                     }
+                }
+            }
+        }
+    },
+
+    matchBeginResponseHandler(matchbeginresponse){
+        if (matchbeginresponse !== null) {
+            if (matchbeginresponse.hasMessage() && matchbeginresponse.getMessage() !== "") {
+                Common.showToast(matchbeginresponse.getMessage());
+            }
+            if(matchbeginresponse.hasZoneid()){
+                if (matchbeginresponse.getResponsecode()) {
+                    var first_turn_user_id = Common.getFirstTurnUserId();
+
+                    var avatar = this.findAvatarOfPlayer(first_turn_user_id);
+                    if (avatar !== null && matchbeginresponse.getCountdowntimer() > 0){
+                        avatar.getComponent("Avatar").resetProcessCircleBar();
+                        avatar.getComponent("Avatar").updateProgressCircleBar(matchbeginresponse.getCountdowntimer());
+
+                        //hien thi cac action cua nguoi choi
+                        if (Common.getUserId() === first_turn_user_id){
+                            this.showBtnPlayerAction(this.player_action);
+                        }
+                    }
+
+                    this.showCall(first_turn_user_id);
                 }
             }
         }
@@ -581,7 +607,7 @@ var Poker = cc.Class({
                     var newOnwer = this.findAvatarOfPlayer(ownerUserId);
                     if (newOnwer !== 0){
                         // newOnwer->showChuong(true);
-                        // newOnwer->setBetMoney(0);
+                        newOnwer.getComponent("Avatar").setBetMoney(0);
                     }
                 }
 
@@ -693,6 +719,19 @@ var Poker = cc.Class({
                     if (objNextCards.player_id === Common.getUserId()){
                         for (var j = 0; j < objNextCards.card_value.length; j++){
                             cc.log("nguoi choi");
+                            var item = cc.instantiate(this.card_prefab);
+                            item.setScale(0.5, 0.5);
+                            // var toPos = cc.p(pokerAvatar.getPositionX(), pokerAvatar.getPositionY()).addSelf(avatar.getCardCoverPosition());
+                            // toPos.addSelf(cc.p(0.5*j*item.node.getContentSize().width,0));
+                            var posX = (j - 1) * item.getContentSize().width/2;
+                            var posY = - item.getContentSize().height/2;
+                            item.getComponent('CardItem').replaceCard(objNextCards.card_value[j]);
+                            item.setPositionY(posY);
+                            item.setPositionX(posX);
+                            // item.setPosition(toPos);
+
+                            this.node.addChild(item);
+
                             // var sizeCard = cardWidth();
                             //
                             // Card card;
@@ -760,12 +799,12 @@ var Poker = cc.Class({
     },
 
     setMoneyBetTable(moneyBet){
-        // if (moneyBet == 0){
-        //     lb_money_bet->setVisible(false);
-        //     return;
-        // }
-        // lb_money_bet->setString(Common::getInstance()->numberFormat(moneyBet));
-        // lb_money_bet->setVisible(true);
+        if (moneyBet === 0){
+            this.lb_money_bet.node.active = false;
+            return;
+        }
+        this.lb_money_bet.string = moneyBet;
+        this.lb_money_bet.node.active = true;
     },
 
     raiseEvent(){
@@ -963,7 +1002,7 @@ var Poker = cc.Class({
                                 }
                                 else if (entry.getKey() === "currentMoneyBet" && avatar_current_turn !== 0){
                                     var moneyTurn = entry.getValue();
-                                    // avatar_current_turn->setBetMoney(moneyTurn);
+                                    avatar_current_turn.getComponent("Avatar").setBetMoney(moneyTurn);
                                 }
                             }
 
@@ -999,23 +1038,300 @@ var Poker = cc.Class({
     },
 
     showCommunityCard(lstCard){
-        // var sizeCard = cardWidth() * 0.75;
-        // var width_card_tags = 4 * sizeCard * 1.1;
-        // for (var i = 0; i < lstCard.length; i++){
-        //     PokerCardSprite* cardSprite = PokerCardSprite::createCard(Card(lstCard[i]), sizeCard);
-        //     cardSprite->setPosition(MVec2(visibleSize.width * 0.5f + width_card_tags * 0.5f + 0.5f * sizeCard,
-        //     visibleSize.height * 0.63f ));  //+ cardSprite->getHeight() / 2
-        //
-        //     auto moveTo = MoveTo::create(0.3f*(0.4f+i), MVec2(visibleSize.width * 0.5f - width_card_tags * 0.5f + (i + card_community.size()) * 1.1f * sizeCard,
-        //     visibleSize.height * 0.63f));
-        //
-        //     this->addChild(cardSprite);
-        //     cardSprite->runAction(moveTo);
-        //
-        //     card_community_tag.push_back(cardSprite);
+        var sizeCard = cardWidth() * 0.75;
+        var width_card_tags = 4 * sizeCard * 1.1;
+        for (var i = 0; i < lstCard.length; i++){
+            var item = cc.instantiate(this.card_prefab);
+
+            var item = cc.instantiate(this.card_prefab);
+            var posX = (i - 1) * item.getContentSize().width/2;
+            var posY = - item.getContentSize().height/2;
+            item.getComponent('CardItem').replaceCard(lstCard[i]);
+            item.setPositionY(posY);
+            item.setPositionX(posX);
+
+            this.node.addChild(item);
+
+            // PokerCardSprite* cardSprite = PokerCardSprite::createCard(Card(lstCard[i]), sizeCard);
+            // cardSprite->setPosition(MVec2(visibleSize.width * 0.5f + width_card_tags * 0.5f + 0.5f * sizeCard,
+            // visibleSize.height * 0.63f ));  //+ cardSprite->getHeight() / 2
+            //
+            // var moveTo = MoveTo::create(0.3f*(0.4f+i), MVec2(visibleSize.width * 0.5f - width_card_tags * 0.5f + (i + card_community.size()) * 1.1f * sizeCard,
+            // visibleSize.height * 0.63f));
+            //
+            // this->addChild(cardSprite);
+            // cardSprite->runAction(moveTo);
+
+            this.card_community_tag.push(item);
+        }
+
+        this.card_community.push(lstCard);
+    },
+
+    matchEndResponseHandler(endmatchresponse){
+
+        if (endmatchresponse !== null) {
+            if (endmatchresponse.hasMessage() && endmatchresponse.getMessage() !== "") {
+                Common.showToast(endmatchresponse.getMessage());
+            }
+            if(endmatchresponse.hasZoneid()){
+                var zoneId = endmatchresponse.getZoneid();
+
+                    if (endmatchresponse.getResponsecode()) {
+                        this.showBtnPlayerAction(false);
+
+                        for (var i = 0; i < this.avatars.length; i++){
+                            if (this.avatars[i].getComponent("Avatar").isPlayer()){
+                                // this.avatars[i]->resetProcessCircleBar();
+                                hiddenPlayStatus(this.avatars[i].getComponent("Avatar").getPlayerId());
+                                this.avatars[i].getComponent("Avatar").setBetMoney(0);
+                            }
+                        }
+
+                        handleWinLose(endmatchresponse);
+
+                        //lat bai cua nguoi choi
+                        for (var i = 0; i < endmatchresponse.getArgsList().length; i++) {
+                            var entry = endmatchresponse.getArgsList()[i];
+                            if (entry.getKey() === "currentCards"){
+                                var json_val = entry.getValue();
+                                var card_values = this.parseCardValue(json_val);
+                                if (card_values !== null) {
+                                    for (var j = 0; j < card_values.length; j++) {
+                                        if (Common.getUserId() !== card_values[j].getFirst()) {
+                                            var avatar = this.findAvatarOfPlayer(card_values[j].getFirst());
+                                            if (avatar !== null){
+                                                // //lat cay bai con lai cua avatar
+                                                // avatar->flipCards(card_values[j].second);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            else if (entry.getKey() === "highLightCard"){
+                                var json_val = entry.getValue();
+                                var card_values = this.parseCardValue(json_val);
+                                if (card_values !== null) {
+                                    var lst_user_id_highlight;
+                                    for (var it in card_values){
+                                        showHighLightCard(card_values[it].getFirst(), card_values[it].getSecond());
+                                        lst_user_id_highlight.push(card_values[it].getFirst());
+                                    }
+
+                                    for (var i in this.avatars){
+                                        if (this.avatars[i].getComponent("Avatar").isPlayer() && !Common.containInList(lst_user_id_highlight, this.avatars[i].getComponent("Avatar").getPlayerId())){
+                                            if (this.avatars[i].getComponent("Avatar").getPlayerId() === Common.getUserId()){
+                                                for (var itCard in this.card_tag){
+                                                    // itCard->addHidden();
+                                                    // itCard->showHidden(true);
+                                                }
+                                            }
+                                        else {
+                                                // pokerAvatar->addAllHiddenCard();
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        for (var i = 0; i < endmatchresponse.getTextemoticonsList().length; i++) {
+                            var text_emoticon = endmatchresponse.getTextemoticonsList()[i];
+                            //get user id
+                            var user_id = text_emoticon.getUserid();
+                            //get text_emotion_id
+                            var emotion_id = text_emoticon.getEmoticonid();
+                            //string txt msg
+                            var msg_emoticon = text_emoticon.getMessage();
+
+                            var avatar = this.findAvatarOfPlayer(user_id);
+                            if (avatar !== null){
+                                showTextEmoticon(msg_emoticon, emotion_id, avatar, 2);
+                            }
+                        }
+
+                        //reset tien tren ban choi
+                        setMoneyBetTable(0);
+                    }
+
+            }
+        }
+    },
+
+    preparenewMatchHandler(response){
+        // BINPrepareNewMatchResponse *response = (BINPrepareNewMatchResponse*)
+        // Common::getInstance()->checkEvent(NetworkManager::PREPARE_NEW_MATCH);
+        if (response !== null) {
+
+            if (response.getResponsecode()){
+                // this.player_action.clear();
+
+                // //show coutdown bat dau van tiep theo
+                // if (this->getChildByTag(TAG_TIME_COUNTDOWN) != nullptr){
+                //     this->removeChildByTag(TAG_TIME_COUNTDOWN);
+                // }
+                // addCountDown(response->countdowntimer() / 1000, true);
+
+                // //clear carg_tag
+                // for (var i = 0; i < this.card_tag.length; i++) {
+                //     if (this.card_tag[i]->getParent() !== null) {
+                //         card_tag[i]->removeFromParentAndCleanup(true);
+                //     }
+                // }
+                // card_tag.clear();
+
+                //clear card community
+                for (var i = 0; i < this.card_community_tag.length; i++) {
+                    if (this.card_community_tag[i].getParent() != null) {
+                        // card_community_tag[i]->removeFromParentAndCleanup(true);
+                    }
+                }
+                // this.card_community.clear();
+                // this.card_community_tag.clear();
+
+                //clear card in avatar
+                for (var i = 0; i < this.avatars.length; i++) {
+                    if (this.avatars[i].getComponent("Avatar").isPlayer()){
+                        // avatars[i]->clear();
+                        hiddenTextEmotion(this.avatars[i].getComponent("Avatar").getPlayerId());
+                        this.avatars[i].getComponent("Avatar").setBetMoney(0);
+
+                        // //reset allin
+                        // if (avatars[i]->isAllIn()){
+                        //     avatars[i]->setAllIn(false);
+                        // }
+                    }
+                }
+
+                showTitleBtnCall(0);
+
+                //reset action nguoi choi
+                this.showBtnPlayerAction(false);
+
+                //clear money bet
+                setMoneyBetTable(0);
+
+                var sizePlayer = this.getCurrentSizePlayers();
+
+                if (Common.getUserId() === Common.getOwnerUserId() && sizePlayer >= 2) {
+                    //btn_start_match->setVisible(true);
+                }
+            }
+
+            if (response.hasMessage()){
+                Common.showToast(response.getMessage());
+            }
+        }
+    },
+
+    betResponseHandler(response){
+    //     BINBetResponse *response = (BINBetResponse *)Common::getInstance()
+    // ->checkEvent(NetworkManager::BET);
+        if (response !== null) {
+            if (response.hasMessage() && response.getMessage() !== "") {
+                Common.showToast(response.getMessage());
+            }
+        }
+    },
+
+    updateMoneyResponseHandler(updatemoneyresponse){
+
+        if (updatemoneyresponse !== null) {
+            if (updatemoneyresponse.hasMessage() && updatemoneyresponse.getMessage() !== "") {
+                Common.showToast(updatemoneyresponse.getMessage());
+            }
+            if(updatemoneyresponse.hasZoneid()){
+                var zoneId = updatemoneyresponse.getZoneid();
+
+                if (updatemoneyresponse.getResponsecode()) {
+                    /// code in here
+                    if (updatemoneyresponse.getMoneyboxesList().length > 0) {
+                        var moneyBox;
+                        var origin_money; //so tien ma nguoi choi dang co
+                        var player;
+
+                        var avatar;
+                        for (var i = 0; i < updatemoneyresponse.getMoneyboxesList().length; i++) {
+                            moneyBox = updatemoneyresponse.getMoneyboxesList()[i]; //money_boxe : userId , money, reason
+                            var isCash = moneyBox.getIscash();
+                            player = this.findPlayer(moneyBox.getUserid());
+
+                            if (player !== null){
+                                //lay ra tien cua nguoi choi dua vao cash hay gold
+                                origin_money = moneyBox.getCurrentmoney();
+
+                                //set lai tien cho nguoi choi
+                                player.setMoney(isCash, origin_money);
+
+                                //neu la nguoi dang nhap thi cap nhat lai tien vao common
+                                if (moneyBox.getUserid() === Common.getUserId()){
+                                    if (isCash){
+                                        Common.setCash(origin_money);
+                                    }
+                                    else {
+                                        Common.setGold(origin_money);
+                                    }
+                                }
+
+                                avatar = this.findAvatarOfPlayer(moneyBox.getUserid());
+                                if (avatar !== null){
+                                    avatar.setMoney(origin_money);
+                                    if (Common.getFirstTurnUserId() === null){
+                                        avatar.getComponent("Avatar").setBetMoney(moneyBox.getDisplaychangemoney());
+                                        avatar.showStatusBet(Config.PLAYER_ACTION.BET);
+                                    }
+
+                                    if (moneyBox.getDisplaychangemoney() !== 0 ){
+                                        // var moneyText = MLabel::createUpdateMoney(moneyBox.displaychangemoney());
+                                        // moneyText->setPosition(Vec2(avatar->getPosition().x,
+                                        //     avatar->getPosition().y + avatar->getHeight()* avatar->getScale() / 2));
+                                        // this->addChild(moneyText, INDEX_UPDATE_MONEY);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+
+    showCall(player_id){
+        //neu thang tiep theo danh la minh thi hien thi theo bao nhieu
+        //vi du: thang dang danh raise 10 thi hien thi call la 10
+        if (player_id === Common.getUserId()){
+            var avatar = this.findAvatarOfPlayer(player_id);
+            var max_raise_money = 0;
+            if (this.avatars.length !== 0){
+                max_raise_money = this.avatars[0].getComponent("Avatar").getBetMoney();
+                for (var it in this.avatars){
+                    if (this.avatars[it].getComponent("Avatar").isPlayer()
+                        && this.avatars[it].getComponent("Avatar").getBetMoney() > max_raise_money){
+                        max_raise_money = this.avatars[it].getComponent("Avatar").getBetMoney();
+                    }
+                }
+            }
+            if (max_raise_money !== 0 && avatar !== null && max_raise_money > avatar.getComponent("Avatar").getBetMoney()){
+                var money_call = max_raise_money - avatar.getComponent("Avatar").getBetMoney();
+                if (money_call > Common.getCash()){
+                    money_call = Common.getCash();
+                }
+                this.showTitleBtnCall(money_call);
+            }
+        }
+    },
+
+    showTitleBtnCall(money){
+        // if (money > 0){
+        //     btn_call->setTitleText(StringUtils::format("%s +%s", getLanguageStringWithKey("TITLE_BTN_CALL").c_str(), Common::getInstance()->numberFormatWithCommas(money).c_str()));
+        //     //lb_call->setString(StringUtils::format("%s +%s", getLanguageStringWithKey("TITLE_BTN_CALL").c_str(), Common::getInstance()->numberFormatWithCommas(money).c_str()));
+        // }
+        // else {
+        //     btn_call->setTitleText(getLanguageStringWithKey("TITLE_BTN_CALL"));
+        //     //lb_call->setString(getLanguageStringWithKey("TITLE_BTN_CALL"));
         // }
         //
-        // this.card_community.insert(card_community.end(), lstCard.begin(), lstCard.end());
+        // btn_call->setTitlePosition();
     },
 
 

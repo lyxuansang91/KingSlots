@@ -14,7 +14,8 @@ cc.Class({
         user_money: cc.Label,
         bet_status: cc.Node,
         playerId: 0,
-        avatar : cc.Node
+        avatar : cc.Node,
+        lbl_bet_money: cc.Label
     },
 
     onLoad : function () {
@@ -26,12 +27,16 @@ cc.Class({
     },
 
     init: function (duration) {
-        this.duration = duration;
-        this.deltaTime = 0;
+        // this.duration = duration;
+        // this.deltaTime = 0;
+        // this.progressBar.progress = 0;
+        // this.isProgressing = true;
+        // this.checkColorProcess();
+        // this.light_follow.resetSystem();
+
+        this.isProgressing = false;
+        this.duration = 0;
         this.progressBar.progress = 0;
-        this.isProgressing = true;
-        this.checkColorProcess();
-        this.light_follow.resetSystem();
     },
 
     setParticlePosition: function (index) {
@@ -44,6 +49,22 @@ cc.Class({
     },
 
     stop: function () {
+        this.isProgressing = false;
+        this.duration = 0;
+        this.progressBar.progress = 0;
+        this.light_follow.stopSystem();
+    },
+
+    updateProgressCircleBar: function(duration){
+        this.duration = duration;
+        this.deltaTime = 0;
+        this.progressBar.progress = 0;
+        this.isProgressing = true;
+        this.checkColorProcess();
+        this.light_follow.resetSystem();
+    },
+
+    resetProcessCircleBar: function(){
         this.isProgressing = false;
         this.duration = 0;
         this.progressBar.progress = 0;
@@ -249,6 +270,31 @@ cc.Class({
 
     getPositionIndex(){
         return this.posIndex;
+    },
+
+    showBetMoney(){
+        this.bet_money.active = true;
+    },
+
+    setBetMoney(betMoney) {
+        // var is_visible_bet_money = bg_bet_money->isVisible();
+        this.value_bet_money = betMoney;
+        // bet_money->setString(Common::getInstance()->convertLongToMoneyViewK((int)betMoney));
+        // bet_money->setVisible(betMoney != 0);
+        // bg_bet_money->setVisible(betMoney != 0);
+        //
+        // if (!is_visible_bet_money && betMoney != 0){
+        //     bg_bet_money->setScale(0.1f);
+        //
+        //     bg_bet_money->runAction(ScaleTo::create(0.4f, 1));
+        // }
+        if(betMoney !== 0){
+            this.lbl_bet_money.string = betMoney;
+        }
+    },
+
+    getBetMoney(){
+        return this.value_bet_money;
     }
 
 });
