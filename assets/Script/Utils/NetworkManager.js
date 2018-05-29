@@ -1011,7 +1011,7 @@ var NetworkManager = {
                     && mid !== NetworkManager.MESSAGE_ID.EXTRA_BET && mid !== NetworkManager.MESSAGE_ID.ZONE_STATUS
                     && mid !== NetworkManager.MESSAGE_ID.FILTER_ROOM && mid !== NetworkManager.MESSAGE_ID.LOOK_UP_GAME_HISTORY ){
 
-                    self.showLoading();
+                    // self.showLoading();
                 }
                 window.ws.send(ackBuf);
             }
