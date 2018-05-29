@@ -199,21 +199,21 @@ var Common = {
     fingerprint: "",
     setFingerprint: function() {
         var fp = cc.sys.localStorage.getItem("fingerprint");
-        cc.log("fp:", fp);
-        cc.log("PLATFORM : ",cc.sys.platform," " ,cc.sys.IPHONE, " ", cc.sys.ANDROID);
 
         if(fp == null) {
             if(cc.sys.isBrowser) {
-                new Fingerprint2().get(function (result, components) {
-                    console.log("result:", result); //a hash, representing your device fingerprint
-                    cc.sys.localStorage.setItem("fingerprint", result);
-                    this.fingerprint = result;
-                    console.log("component:", components); // an array of FP components
-                });
+                var deviceId = Common.guid();
+                cc.sys.localStorage.setItem("fingerprint", deviceId);
+                this.fingerprint = deviceId;
+                // new Fingerprint2().get(function (result, components) {
+                //     console.log("result:", result); //a hash, representing your device fingerprint
+                //     cc.sys.localStorage.setItem("fingerprint", result);
+                //     this.fingerprint = result;
+                //     console.log("component:", components); // an array of FP components
+                // });
             } else {
                 if(cc.sys.platform === cc.sys.ANDROID){
                     var deviceId = jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getDeviceId", "()Ljava/lang/String;");
-                    console.log("result:", deviceId); //a hash, representing your device fingerprint
                     cc.sys.localStorage.setItem("fingerprint", deviceId);
                     this.fingerprint = deviceId;
                 }else if(cc.sys.platform === cc.sys.IPHONE || cc.sys.platform === cc.sys.IPAD){
