@@ -90,8 +90,6 @@ cc.Class({
 
     requestJar: function(isLoading) {
         if(!this.isRequestJar) {
-            if(isLoading)
-                NetworkManager.showLoading();
             this.isRequestJar = true;
             NetworkManager.getJarRequest(-1, -1, isLoading);
         }
