@@ -521,7 +521,6 @@ var Treasure = cc.Class({
             this.betType = parseInt(this.indexCash);
             // call jar request
             this.reloadJarRequest();
-            // NetworkManager.getJarRequest(Common.getZoneId(), this.betType + 1);
 
             var money_bet = this.turnCashValue[this.indexCash]*this.lst_line_selected.length;
             if(money_bet >= 0){
