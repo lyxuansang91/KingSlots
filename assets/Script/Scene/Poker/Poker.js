@@ -13,7 +13,10 @@ var Poker = cc.Class({
         countIncrease: 10,
         sprite_cover_card: cc.Node,
         card_prefab: cc.Prefab,
-        lb_money_bet: cc.Label
+        lb_money_bet: cc.Label,
+        card_community: [],
+        card_community_tag: [],
+        card_tag: []
 
     },
     statics: {
@@ -85,7 +88,7 @@ var Poker = cc.Class({
                 this.cancelExitAfterMatchEndResponseHandler(msg);
                 break;
             case NetworkManager.MESSAGE_ID.TURN:
-                this.turnResponse(msg);
+                this.turnResponseHandler(msg);
                 break;
             case NetworkManager.MESSAGE_ID.READY_TO_PLAY:
                 this.readyToPlayResponse(msg);
@@ -99,6 +102,15 @@ var Poker = cc.Class({
             case NetworkManager.MESSAGE_ID.MATCH_END:
                 this.matchEndResponseHandler(msg);
                 break;
+            case NetworkManager.MESSAGE_ID.ROOM_OWNER_CHANGED:
+                this.roomOwnerChangedResponseHandler(msg);
+                break;
+            case NetworkManager.MESSAGE_ID.MATCH_BEGIN:
+                this.matchBeginResponseHandler(msg);
+                break;
+            case NetworkManager.MESSAGE_ID.PREPARE_NEW_MATCH:
+                this.preparenewMatchHandler(msg);
+                break;
             default:
                 isDone = false;
                 break;
@@ -111,18 +123,15 @@ var Poker = cc.Class({
         if (this.lst_player.length != null) this.lst_player = [];
 
         for (var i = 0; i < player_list.length; i++) {
-            cc.log("lst player i =", this.convertFromBINPlayer(player_list[i]));
             this.lst_player.push(this.convertFromBINPlayer(player_list[i]));
         }
 
         for (var i = 0; i < waiting_player_list.length; i++) {
-            cc.log("waiting_player_list i =", waiting_player_list[i]);
             var pokerPlayer = this.convertFromBINPlayer(waiting_player_list[i]);
             pokerPlayer.setPlayer(false);
             this.lst_player.push(pokerPlayer);
         }
 
-        cc.log("this.lst_player =", this.lst_player);
 
         this.displayInfoRemainCard(this.lst_player);
     },
@@ -142,7 +151,6 @@ var Poker = cc.Class({
 
         for (i = 0; i < remain_card_infos.length; i++) {
             var val = remain_card_infos[i].getID();
-            cc.log("val =", val);
 
             if (Common.getUserId() === val) {
                 this.currentTableIndex = remain_card_infos[i].getTableIndex();
@@ -166,7 +174,6 @@ var Poker = cc.Class({
     },
 
     setPositionPlayer(player, position){
-        cc.log("position =", position);
         if (player.getTableIndex() < 0){
             return;
         }
@@ -237,7 +244,6 @@ var Poker = cc.Class({
     //     }
     //
         this.avatars.push(avatar);
-        cc.log("avatars =", this.avatars);
     //
     //     if (avatar->getParent() == nullptr)
     //         this->addChild(avatar);
@@ -291,7 +297,7 @@ var Poker = cc.Class({
                                 // if (this->getChildByTag(TAG_TIME_COUNTDOWN) != nullptr){
                                 //     this->removeChildByTag(TAG_TIME_COUNTDOWN);
                                 // }
-                                // addCountDown(countDown, true);
+                                this.addCountDown(countDown, true);
                             }
                             else {
                                 var avatar = this.findAvatarOfPlayer(enter_room_response.getCurrentturnuserid());
@@ -321,7 +327,7 @@ var Poker = cc.Class({
                             else if (table_status === Config.TABLE_STATUS.MATCH_END){
                                     var avatar = this.findAvatarOfPlayer(card_values[j].getFirst());
                                     if (avatar != 0){
-                                        avatar.flipCards(card_values[j].getSecond());
+                                        avatar.getComponent("Avatar").flipCards(card_values[j].getSecond());
                                     }
                                 }
                             }
@@ -330,17 +336,17 @@ var Poker = cc.Class({
                     else if (entry.getKey() === "communityCard"){
                         var lst_card = entry.getValue().split(",");
 
-                        prepareCommunityCard(lst_card);
+                        this.prepareCommunityCard(lst_card);
                     }
                     else if (entry.getKey() === "turnPokerType"){
                         //hien thi tren avatar current turn trang thai tuong ung voi turnPokerType tra ve
                         var json_val = entry.getValue();
-                        turntype_values = parseTurnType(json_val);
+                        turntype_values = this.parseTurnType(json_val);
                     }
                     else if (entry.getKey() === "currentMoneyBet"){
                         var json_val = entry.getValue();
                         if (json_val != null){
-                            var moneybet_values = parseTurnType(json_val);
+                            var moneybet_values = this.parseTurnType(json_val);
 
                             for (var j = 0; j < moneybet_values.length; j++){
                                 var avatar = this.findAvatarOfPlayer(moneybet_values[j].getFirst());
@@ -352,8 +358,8 @@ var Poker = cc.Class({
                     }
                     else if (entry.getKey() === "currentPlayerAction"){
                         var json_val = entry.getValue();
-                        this.player_action = parseNextPlayerAction(json_val);
-                        this.showBtnPlayerAction(player_action);
+                        this.player_action = this.parseNextPlayerAction(json_val);
+                        this.showBtnPlayerAction(this.player_action);
                     }
                     else if (entry.getKey() === "totalMoneyBet"){
                         //hien thi tong tien dat tren ban choi
@@ -368,13 +374,29 @@ var Poker = cc.Class({
                     for (var j = 0; j < turntype_values.length; j++){
                         var avatar = this.findAvatarOfPlayer(turntype_values[j].getFirst());
                         if (avatar != 0 && turntype_values[j].getSecond() > 0){
-                            avatar.setPlayStatus(turntype_values[j].getSecond());
-                            showPlayStatus(turntype_values[j].getSecond(), avatar);
+                            avatar.getComponent("Avatar").setPlayStatus(turntype_values[j].getSecond());
+                            this.showPlayStatus(turntype_values[j].getSecond(), avatar);
                         }
                     }
                 }
             }
         }
+    },
+
+    parseTurnType(json_value){
+        var result = [];
+        try {
+            for (var i = 0; i < json_value.toString().length; i++) {
+                var user_id = json_value[i].getName();
+                var point = json_value[i].getValue();
+                result.push(user_id, point);
+            }
+        }
+        catch (e) {
+            // result.clear();
+        }
+
+        return result;
     },
 
     getCurrentSizePlayers(){
@@ -409,7 +431,7 @@ var Poker = cc.Class({
 
     findWaiting(player_id){
         for (var i = 0; i < this.lst_player.length; i++){
-            if (!this.lst_player[i].isPlayer() && lst_player[i].getID() == player_id){
+            if (!this.lst_player[i].isPlayer() && this.lst_player[i].getID() === player_id){
                 return this.lst_player[i];
             }
         }
@@ -417,9 +439,7 @@ var Poker = cc.Class({
     },
 
     findAvatarOfPlayer(player_id){
-        cc.log("player id =", player_id);
         for (var i = 0; i < this.avatars.length; i++){
-            cc.log("this.avatars =", this.avatars);
             if (this.avatars[i].getComponent("Avatar").getPlayerId() === player_id){
                 return this.avatars[i];
             }
@@ -429,11 +449,13 @@ var Poker = cc.Class({
 
     parseCardValue(json_value){
         var result = [];
+        json_value = JSON.parse(json_value);
+        cc.log("json_value =", json_value);
         try {
             for (var itr = 0; itr < json_value.length; itr++) {
-                var val = itr.getValue();
+                var val = json_value[itr].getValue();
                 var card_values = val.split(",");
-                var user_id = itr.getName();
+                var user_id = json_value[itr].getName();
                 result.push(user_id, card_values);
             }
         }
@@ -441,13 +463,12 @@ var Poker = cc.Class({
             cc.log("exception");
             result = [];
         }
-
+        cc.log("result =", result);
         return result;
     },
 
     startMatchResponseHandler(response){
         if (response !== 0) {
-            cc.log("startMatchResponseHandler =", response);
             if (response.hasMessage() && response.getMessage() != null){
                 Common.showToast(response.getMessage());
             }
@@ -462,7 +483,7 @@ var Poker = cc.Class({
                 Common.setFirstTurnUserId(response.getFirstturnuserid());
 
                 var avatar_first_turn = this.findAvatarOfPlayer(response.getFirstturnuserid());
-                if (avatar_first_turn !== 0 && response.getCountdowntimer() > 0) {
+                if (avatar_first_turn !== null && response.getCountdowntimer() > 0) {
 
                     avatar_first_turn.getComponent("Avatar").resetProcessCircleBar();
                     avatar_first_turn.getComponent("Avatar").updateProgressCircleBar(response.getCountdowntimer());
@@ -477,25 +498,20 @@ var Poker = cc.Class({
                                 player_id: Common.getUserId(),
                                 card_value: current_card_values
                             });
-                            cc.log("vt_pair_card_current =", vt_pair_card_current);
                             this.distributeNextCard(vt_pair_card_current);
                         }
                     else if (response.getArgsList()[i].getKey() === "nextPlayerAction"){
                             var json_val = response.getArgsList()[i].getValue();
-                            cc.log("json_val =", json_val);
                             this.player_action = this.parseNextPlayerAction(json_val);
                         }
                         else if (response.getArgsList()[i].getKey() === "totalMoneyBet"){
                             //hien thi tong tien dat tren ban choi
-                            cc.log("totalMoneyBet =", response.getArgsList()[i].getValue());
                             this.setMoneyBetTable(response.getArgsList()[i].getValue());
                         }
                         else if (response.getArgsList()[i].getKey() === "limitBetRatio"){
-                            cc.log("limitBetRatio =", response.getArgsList()[i].getValue());
                             this.countIncrease = response.getArgsList()[i].getValue();
                         }
                         else if (response.getArgsList()[i].getKey() === "sid"){
-                            cc.log("sid =", response.getArgsList()[i].getValue());
                             this.showValueMatch(response.getArgsList()[i].getValue());
                         }
                     }
@@ -549,7 +565,6 @@ var Poker = cc.Class({
 
     playerEnterRoomResponseHandler(newplayerresponse){
         if (newplayerresponse !== 0) {
-            cc.log("newplayerresponse =", newplayerresponse);
             if (newplayerresponse.getResponsecode()) {
                 var player = this.convertFromBINPlayer(newplayerresponse.getPlayer());
 
@@ -571,8 +586,8 @@ var Poker = cc.Class({
                         //     this->removeChildByTag(TAG_TIME_COUNTDOWN);
                         // }
                         //
-                        // int time_wait = newplayerresponse->changeownerroomcd() / 1000;
-                        // addCountDown(time_wait, true);
+                        var time_wait = newplayerresponse.getChangeownerroomcd() / 1000;
+                        this.addCountDown(time_wait, true);
                     }
                 }
                 else {
@@ -592,7 +607,6 @@ var Poker = cc.Class({
 
     playerExitRoomResponse(_player_exit_room_response){
         if (_player_exit_room_response !== 0) {
-            cc.log("_player_exit_room_response =", _player_exit_room_response);
             if (_player_exit_room_response.getResponsecode()) {
                 var leng = this.lst_player.length;
 
@@ -651,7 +665,6 @@ var Poker = cc.Class({
     },
 
     cancelExitAfterMatchEndResponseHandler(cancel_exit_room_response){
-        cc.log("cancel_exit_room_response =", cancel_exit_room_response);
         if (cancel_exit_room_response !== 0 && cancel_exit_room_response.getCancelexituserid()) {
             if (cancel_exit_room_response.getResponsecode()) {
 
@@ -675,7 +688,6 @@ var Poker = cc.Class({
     },
 
     playerExitAfterMatchEndResponse(exit_room_player_response){
-        cc.log("exit_room_player_response =", exit_room_player_response);
         if (exit_room_player_response !== 0) {
             if (exit_room_player_response.getResponsecode()) {
                 var leng = this.lst_player.length;
@@ -684,8 +696,8 @@ var Poker = cc.Class({
                     var user_id = this.lst_player[i].getID();
                     if (user_id === exit_room_player_response.getExituserid()){
                         var avatar = this.findAvatarOfPlayer(exit_room_player_response.getExituserid());
-                        if (avatar !== 0){
-                            // avatar->showRegisterExitRoom(true);
+                        if (avatar !== null){
+                            avatar.getComponent("Avatar").showRegisterExitRoom(true);
                         }
                         break;
                     }
@@ -707,18 +719,17 @@ var Poker = cc.Class({
             var width_card_tags = 0;
             for (var i = 0; i < nextCards.length; i++){
                 var objNextCards = nextCards[i];
+                cc.log("objNextCards =", objNextCards);
                 cc.log("objNextCards player id =", objNextCards.player_id);
                 cc.log("objNextCards value =", objNextCards.card_value);
                 var pokerAvatar = this.findAvatarOfPlayer(objNextCards.player_id);
                 var avatar = pokerAvatar.getComponent("Avatar");
-                cc.log("pokerAvatar =", pokerAvatar);
                 if (pokerAvatar !== null){
                     var from = this.sprite_cover_card.getPosition();
                     var to;
 
                     if (objNextCards.player_id === Common.getUserId()){
                         for (var j = 0; j < objNextCards.card_value.length; j++){
-                            cc.log("nguoi choi");
                             var item = cc.instantiate(this.card_prefab);
                             item.setScale(0.5, 0.5);
                             // var toPos = cc.p(pokerAvatar.getPositionX(), pokerAvatar.getPositionY()).addSelf(avatar.getCardCoverPosition());
@@ -762,8 +773,6 @@ var Poker = cc.Class({
                             var toPos = cc.p(pokerAvatar.getPositionX(), pokerAvatar.getPositionY()).addSelf(avatar.getCardCoverPosition());
                             toPos.addSelf(cc.p(0.5*j*card_cover.width,0));
 
-                            console.log("width : ",card_cover.width);
-                            console.log("to : ",toPos);
                             avatar.addCardCover(card_cover);
 
                             card_cover.runAction(cc.moveTo(0.5 + j*0.5, toPos).easing(cc.easeCubicActionOut()));
@@ -788,13 +797,13 @@ var Poker = cc.Class({
         var card_values = [];
         try {
             for (var i = 0; i < json_value.length; i++){
-                card_values.push(json_value[i]);
+                card_values.push(json_value[i].match(/\d+/)[0]);
             }
         }
         catch (e) {
             card_values = [];
         }
-
+        cc.log("card_values =", card_values);
         return card_values;
     },
 
@@ -847,30 +856,29 @@ var Poker = cc.Class({
     },
 
     resetDisplayAvatar(){
-        if (!avatars.empty()){
+        if (this.avatars !== null){
          for (var i = 0; i < this.avatars.length; i++){
              //avatars[i].clear();
-              //hiddenPlayStatus(avatars[i]->getPlayerId());
-              //hiddenTextEmotion(avatars[i]->getPlayerId());
+              this.hiddenPlayStatus(this.avatars[i].getComponent("Avatar").getPlayerId());
+              this.hiddenTextEmotion(this.avatars[i].getComponent("Avatar").getPlayerId());
 
-               if (avatars[i].getParent() != 0){
-                   avatars[i].removeFromParent(true);
+               if (this.avatars[i].getParent() !== null){
+                   this.avatars[i].removeFromParent(true);
                 }
             }
 
-            this.avatars.cleanup();
+            // this.avatars.cleanup();
         }
     },
 
     readyToPlayResponse(msg){
-        cc.log("ready to play response =", msg);
         if (msg !== 0) {
             if (msg.getResponsecode()){
                 var ready_player_id = msg.getReadyuserid();
                 var table_index = msg.getTableindex();
                 var player = this.findWaiting(ready_player_id);
 
-                if (player != 0){
+                if (player !== null){
                     //day vao lst playing
                     player.setTableIndex(table_index);
                     player.setPlayer(true);
@@ -878,16 +886,16 @@ var Poker = cc.Class({
                     //remove avatar tren ban choi
                     this.resetDisplayAvatar();
                     //dat waiting player len ban choi
-                    displayInfoRemainCard(this.lst_player);
+                    this.displayInfoRemainCard(this.lst_player);
 
-                    var sizePlayer = getCurrentSizePlayers();
+                    var sizePlayer = this.getCurrentSizePlayers();
                 }
 
-                // int countDown = ready_to_play_response->countdowntimer() / 1000;
+                var countDown = msg.getCountdowntimer() / 1000;
                 // if (this->getChildByTag(TAG_TIME_COUNTDOWN) != nullptr){
                 //     this->removeChildByTag(TAG_TIME_COUNTDOWN);
                 // }
-                //this.addCountDown(countDown, true);
+                this.addCountDown(countDown, true);
             }
 
             if (msg.hasMessage()){
@@ -896,20 +904,15 @@ var Poker = cc.Class({
         }
     },
 
-    turnResponse(turnresponse){
-        cc.log("turnresponse =", turnresponse);
+    turnResponseHandler(turnresponse){
         if (turnresponse !== 0) {
             if (turnresponse.hasMessage() && turnresponse.getMessage() !== "") {
                 Common.showToast(turnresponse.getMessage());
             }
             if(turnresponse.hasZoneid()){
-                var zoneId = turnresponse.getZoneid();
                     if (turnresponse.getResponsecode()) {
                         var current_turn_id = turnresponse.getCurrentturnuserid();
                         var next_turn_id = turnresponse.getNextturnuserid();
-
-                        cc.log("current_turn_id =", current_turn_id);
-                        cc.log("next_turn_id =", next_turn_id);
 
                         if (next_turn_id > 0){
                             Common.setFirstTurnUserId(next_turn_id);
@@ -917,24 +920,23 @@ var Poker = cc.Class({
 
                         //neu la nguoi choi hien tai thi reset countdown
                         var avatar_current_turn = this.findAvatarOfPlayer(current_turn_id);
-                        cc.log("avatar_current_turn =", avatar_current_turn);
                         if (avatar_current_turn !== null){
                             this.stopProcessCircleBar();
                             avatar_current_turn.getComponent("Avatar").init(10);
                             this.showBtnPlayerAction(false);
 
-                            // showRaise(false);
+                            this.showRaise(false);
                         }
 
                         //neu chua ket thuc van choi
                         if (!turnresponse.getMatchend()){
                             //set countdown cho nguoi tiep theo
                             var avatar_next_turn = this.findAvatarOfPlayer(next_turn_id);
-                            cc.log("avatar_next_turn =", avatar_next_turn);
                             if (avatar_next_turn !== null){
-                                this.stopProcessCircleBar();
-                                avatar_next_turn.getComponent("Avatar").init(10);
-                                // avatar_next_turn.updateProgressCircleBar(100, turnresponse.getCountdowntimer());
+                                // this.stopProcessCircleBar();
+                                // avatar_next_turn.getComponent("Avatar").init(10);
+                                avatar_next_turn.getComponent("Avatar").resetProcessCircleBar();
+                                avatar_next_turn.getComponent("Avatar").updateProgressCircleBar(turnresponse.getCountdowntimer());
                             }
                         }
 
@@ -985,8 +987,8 @@ var Poker = cc.Class({
                                     //hien thi tren avatar current turn trang thai tuong ung voi turnXiToType tra ve
                                     var turnType = entry.getValue();
                                     if (turnType > 0){
-                                        // avatar_current_turn->setPlayStatus(turnType);
-                                        // showPlayStatus(turnType, avatar_current_turn);
+                                        avatar_current_turn.getComponent("Avatar").setPlayStatus(turnType);
+                                        this.showPlayStatus(turnType, avatar_current_turn);
 
                                         if (turnType === Config.PLAYER_ACTION.RAISE){  //neu to thi clear to va theo cua nhung thang khac
                                             for (var i = 0; i < this.avatars.length; i++){
@@ -994,7 +996,7 @@ var Poker = cc.Class({
                                                     && (this.avatars[i].getComponent("Avatar").getTurnType() === Config.PLAYER_ACTION.CALL
                                                     || this.avatars[i].getComponent("Avatar").getTurnType() === Config.PLAYER_ACTION.RAISE
                                                         || this.avatars[i].getComponent("Avatar").getTurnType() === Config.PLAYER_ACTION.CONDESCEND)){
-                                                    // hiddenPlayStatus(xtAvatar->getPlayerId());
+                                                    this.hiddenPlayStatus(this.avatars[i].getComponent("Avatar").getPlayerId());
                                                 }
                                             }
                                         }
@@ -1006,7 +1008,7 @@ var Poker = cc.Class({
                                 }
                             }
 
-                            // showCall(next_turn_id);
+                            this.showCall(next_turn_id);
 
                         }
                     }
@@ -1022,13 +1024,13 @@ var Poker = cc.Class({
     },
 
     prepareCommunityCard(lstCard){
-        var last_community;
+        var last_community = [];
         if (this.card_community.length === 0){
             last_community = lstCard;
         }
         else {
             for (var i = 0; i < lstCard.length; i++){
-                if (!Common.containInList(this.card_community, lstCard[i])){
+                if (Common.containInList(this.card_community, lstCard[i]) !== null){
                     last_community.push(lstCard[i]);
                 }
             }
@@ -1038,8 +1040,8 @@ var Poker = cc.Class({
     },
 
     showCommunityCard(lstCard){
-        var sizeCard = cardWidth() * 0.75;
-        var width_card_tags = 4 * sizeCard * 1.1;
+        // var sizeCard = cardWidth() * 0.75;
+        // var width_card_tags = 4 * sizeCard * 1.1;
         for (var i = 0; i < lstCard.length; i++){
             var item = cc.instantiate(this.card_prefab);
 
@@ -1069,96 +1071,133 @@ var Poker = cc.Class({
     },
 
     matchEndResponseHandler(endmatchresponse){
-
+        console.log("endmatchresponse =", endmatchresponse);
         if (endmatchresponse !== null) {
             if (endmatchresponse.hasMessage() && endmatchresponse.getMessage() !== "") {
                 Common.showToast(endmatchresponse.getMessage());
             }
-            if(endmatchresponse.hasZoneid()){
-                var zoneId = endmatchresponse.getZoneid();
+            if (endmatchresponse.getResponsecode()) {
+                this.showBtnPlayerAction(false);
 
-                    if (endmatchresponse.getResponsecode()) {
-                        this.showBtnPlayerAction(false);
-
-                        for (var i = 0; i < this.avatars.length; i++){
-                            if (this.avatars[i].getComponent("Avatar").isPlayer()){
-                                // this.avatars[i]->resetProcessCircleBar();
-                                hiddenPlayStatus(this.avatars[i].getComponent("Avatar").getPlayerId());
-                                this.avatars[i].getComponent("Avatar").setBetMoney(0);
-                            }
-                        }
-
-                        handleWinLose(endmatchresponse);
-
-                        //lat bai cua nguoi choi
-                        for (var i = 0; i < endmatchresponse.getArgsList().length; i++) {
-                            var entry = endmatchresponse.getArgsList()[i];
-                            if (entry.getKey() === "currentCards"){
-                                var json_val = entry.getValue();
-                                var card_values = this.parseCardValue(json_val);
-                                if (card_values !== null) {
-                                    for (var j = 0; j < card_values.length; j++) {
-                                        if (Common.getUserId() !== card_values[j].getFirst()) {
-                                            var avatar = this.findAvatarOfPlayer(card_values[j].getFirst());
-                                            if (avatar !== null){
-                                                // //lat cay bai con lai cua avatar
-                                                // avatar->flipCards(card_values[j].second);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            else if (entry.getKey() === "highLightCard"){
-                                var json_val = entry.getValue();
-                                var card_values = this.parseCardValue(json_val);
-                                if (card_values !== null) {
-                                    var lst_user_id_highlight;
-                                    for (var it in card_values){
-                                        showHighLightCard(card_values[it].getFirst(), card_values[it].getSecond());
-                                        lst_user_id_highlight.push(card_values[it].getFirst());
-                                    }
-
-                                    for (var i in this.avatars){
-                                        if (this.avatars[i].getComponent("Avatar").isPlayer() && !Common.containInList(lst_user_id_highlight, this.avatars[i].getComponent("Avatar").getPlayerId())){
-                                            if (this.avatars[i].getComponent("Avatar").getPlayerId() === Common.getUserId()){
-                                                for (var itCard in this.card_tag){
-                                                    // itCard->addHidden();
-                                                    // itCard->showHidden(true);
-                                                }
-                                            }
-                                        else {
-                                                // pokerAvatar->addAllHiddenCard();
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        for (var i = 0; i < endmatchresponse.getTextemoticonsList().length; i++) {
-                            var text_emoticon = endmatchresponse.getTextemoticonsList()[i];
-                            //get user id
-                            var user_id = text_emoticon.getUserid();
-                            //get text_emotion_id
-                            var emotion_id = text_emoticon.getEmoticonid();
-                            //string txt msg
-                            var msg_emoticon = text_emoticon.getMessage();
-
-                            var avatar = this.findAvatarOfPlayer(user_id);
-                            if (avatar !== null){
-                                showTextEmoticon(msg_emoticon, emotion_id, avatar, 2);
-                            }
-                        }
-
-                        //reset tien tren ban choi
-                        setMoneyBetTable(0);
+                for (var i = 0; i < this.avatars.length; i++){
+                    if (this.avatars[i].getComponent("Avatar").isPlayer()){
+                        this.avatars[i].getComponent("Avatar").resetProcessCircleBar();
+                        this.hiddenPlayStatus(this.avatars[i].getComponent("Avatar").getPlayerId());
+                        this.avatars[i].getComponent("Avatar").setBetMoney(0);
                     }
+                }
 
+                this.handleWinLose(endmatchresponse);
+
+                //lat bai cua nguoi choi
+                for (var i = 0; i < endmatchresponse.getArgsList().length; i++) {
+                    var entry = endmatchresponse.getArgsList()[i];
+                    if (entry.getKey() === "currentCards"){
+                        var json_val = entry.getValue();
+                        var card_values = this.parseCardValue(json_val);
+                        if (card_values !== null) {
+                            for (var j = 0; j < card_values.length; j++) {
+                                if (Common.getUserId() !== card_values[j].getFirst()) {
+                                    var avatar = this.findAvatarOfPlayer(card_values[j].getFirst());
+                                    if (avatar !== null){
+                                        // //lat cay bai con lai cua avatar
+                                        avatar.getComponent("Avatar").flipCards(card_values[j].second);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else if (entry.getKey() === "highLightCard"){
+                        var json_val = entry.getValue();
+                        var card_values = this.parseCardValue(json_val);
+                        if (card_values !== null) {
+                            cc.log("highLightCard card_values =", card_values);
+                            var lst_user_id_highlight = [];
+                            for (var it in card_values){
+                                cc.log("highLightCard card_values 1 =", card_values[it].getFirst());
+                                cc.log("highLightCard card_values 2 =", card_values[it].getSecond());
+                                this.showHighLightCard(card_values[it].getFirst(), card_values[it].getSecond());
+                                lst_user_id_highlight.push(card_values[it].getFirst());
+                            }
+
+                            for (var i in this.avatars){
+                                if (this.avatars[i].getComponent("Avatar").isPlayer() && !Common.containInList(lst_user_id_highlight, this.avatars[i].getComponent("Avatar").getPlayerId())){
+                                    if (this.avatars[i].getComponent("Avatar").getPlayerId() === Common.getUserId()){
+                                        for (var itCard in this.card_tag){
+                                            this.card_tag[itCard].getComponent("CardItem").addHidden();
+                                            this.card_tag[itCard].getComponent("CardItem").showHidden(true);
+                                        }
+                                    }
+                                    else {
+                                        this.avatars[i].getComponent("Avatar").addAllHiddenCard();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                for (var i = 0; i < endmatchresponse.getTextemoticonsList().length; i++) {
+                    var text_emoticon = endmatchresponse.getTextemoticonsList()[i];
+                    //get user id
+                    var user_id = text_emoticon.getUserid();
+                    //get text_emotion_id
+                    var emotion_id = text_emoticon.getEmoticonid();
+                    //string txt msg
+                    var msg_emoticon = text_emoticon.getMessage();
+
+                    var avatar = this.findAvatarOfPlayer(user_id);
+                    if (avatar !== null){
+                        this.showTextEmoticon(msg_emoticon, emotion_id, avatar, 2);
+                    }
+                }
+
+                //reset tien tren ban choi
+                this.setMoneyBetTable(0);
             }
         }
     },
 
+    showHighLightCard(user_id, card_high_light){
+    //     //highlight quan bai tren ban
+    //     for (var i in this.card_community_tag){
+    //         var valueCard = card.getCard().getValue();
+    //         if (Common::getInstance()->containInList(card_high_light, valueCard)){
+    //             auto sprite = getSpriteEatAnimation();
+    //             sprite->setScale(card->getWidth() / sprite->getContentSize().width);
+    //             card->addChild(sprite);
+    //         }
+    //     else {
+    //             card->addHidden();
+    //             card->showHidden(true);
+    //         }
+    //     }
+    //
+    //     //highlight quan bai tren tay
+    //     if (user_id == Common::getInstance()->getUserId()){
+    //         for (PokerCardSprite* card : card_tag){
+    //             int valueCard = card->getCard().getValue();
+    //             if (Common::getInstance()->containInList(card_high_light, valueCard)){
+    //                 auto sprite = getSpriteEatAnimation();
+    //                 sprite->setScale(card->getWidth() / sprite->getContentSize().width);
+    //                 card->addChild(sprite);
+    //             }
+    //         else {
+    //                 card->addHidden();
+    //                 card->showHidden(true);
+    //             }
+    //         }
+    //     }
+    // else {
+    //         PokerAvatar* avatar = (PokerAvatar*)findAvatarOfPlayer(user_id);
+    //         if (avatar != 0){
+    //             avatar->showHighLightCard(card_high_light);
+    //         }
+    //     }
+    },
+
     preparenewMatchHandler(response){
+        cc.log("preparenewMatchHandler response =", response);
         // BINPrepareNewMatchResponse *response = (BINPrepareNewMatchResponse*)
         // Common::getInstance()->checkEvent(NetworkManager::PREPARE_NEW_MATCH);
         if (response !== null) {
@@ -1170,7 +1209,7 @@ var Poker = cc.Class({
                 // if (this->getChildByTag(TAG_TIME_COUNTDOWN) != nullptr){
                 //     this->removeChildByTag(TAG_TIME_COUNTDOWN);
                 // }
-                // addCountDown(response->countdowntimer() / 1000, true);
+                this.addCountDown(response.getCountdowntimer() / 1000, true);
 
                 // //clear carg_tag
                 // for (var i = 0; i < this.card_tag.length; i++) {
@@ -1193,7 +1232,7 @@ var Poker = cc.Class({
                 for (var i = 0; i < this.avatars.length; i++) {
                     if (this.avatars[i].getComponent("Avatar").isPlayer()){
                         // avatars[i]->clear();
-                        hiddenTextEmotion(this.avatars[i].getComponent("Avatar").getPlayerId());
+                        this.hiddenTextEmotion(this.avatars[i].getComponent("Avatar").getPlayerId());
                         this.avatars[i].getComponent("Avatar").setBetMoney(0);
 
                         // //reset allin
@@ -1203,13 +1242,13 @@ var Poker = cc.Class({
                     }
                 }
 
-                showTitleBtnCall(0);
+                this.showTitleBtnCall(0);
 
                 //reset action nguoi choi
                 this.showBtnPlayerAction(false);
 
                 //clear money bet
-                setMoneyBetTable(0);
+                this.setMoneyBetTable(0);
 
                 var sizePlayer = this.getCurrentSizePlayers();
 
@@ -1235,14 +1274,12 @@ var Poker = cc.Class({
     },
 
     updateMoneyResponseHandler(updatemoneyresponse){
-
+        cc.log("updateMoneyResponseHandler response =", updatemoneyresponse);
         if (updatemoneyresponse !== null) {
             if (updatemoneyresponse.hasMessage() && updatemoneyresponse.getMessage() !== "") {
                 Common.showToast(updatemoneyresponse.getMessage());
             }
             if(updatemoneyresponse.hasZoneid()){
-                var zoneId = updatemoneyresponse.getZoneid();
-
                 if (updatemoneyresponse.getResponsecode()) {
                     /// code in here
                     if (updatemoneyresponse.getMoneyboxesList().length > 0) {
@@ -1275,7 +1312,7 @@ var Poker = cc.Class({
 
                                 avatar = this.findAvatarOfPlayer(moneyBox.getUserid());
                                 if (avatar !== null){
-                                    avatar.setMoney(origin_money);
+                                    avatar.getComponent("Avatar").setMoney(origin_money);
                                     if (Common.getFirstTurnUserId() === null){
                                         avatar.getComponent("Avatar").setBetMoney(moneyBox.getDisplaychangemoney());
                                         avatar.showStatusBet(Config.PLAYER_ACTION.BET);
@@ -1321,6 +1358,21 @@ var Poker = cc.Class({
         }
     },
 
+    showRaise(isShow){
+        // nodeBetTable->setVisible(isShow);
+        // btn_confirm->setVisible(isShow);
+        // btn_cancel->setVisible(isShow);
+
+        // if (isShow){
+        //     var max_percent = getMinBetRoom() * (countIncrease - 1);
+        //     slider_raise->setMaxPercent(max_percent);
+        //
+        //     raiseMoney = getMinBetRoom() + slider_raise->getPercent();
+        //
+        //     label_muccuoc->setString(Common::getInstance()->numberFormatWithCommas(raiseMoney));
+        // }
+    },
+
     showTitleBtnCall(money){
         // if (money > 0){
         //     btn_call->setTitleText(StringUtils::format("%s +%s", getLanguageStringWithKey("TITLE_BTN_CALL").c_str(), Common::getInstance()->numberFormatWithCommas(money).c_str()));
@@ -1332,6 +1384,97 @@ var Poker = cc.Class({
         // }
         //
         // btn_call->setTitlePosition();
+    },
+
+    handleWinLose(response) {
+        //handle win
+        for (var i = 0; i < response.getWinninguseridsList().length; i++) {
+            var val = response.getWinninguseridsList()[i];
+            for (var j = 0; j < this.lst_player.length; j++) {
+                var player_uid = this.lst_player[j].getID();
+                if (val === player_uid) {
+                    this.lst_player[j].setWin(true);
+                    break;
+                }
+            }
+        }
+        //handle lose
+        for (var i = 0; i < response.getLosinguseridsList().length; i++) {
+            var val = response.getLosinguseridsList()[i];
+            for (var j = 0; j < this.lst_player.length; j++) {
+                var player_uid = this.lst_player[j].getID();
+                if (val === player_uid) {
+                    this.lst_player[j].setWin(false);
+                    break;
+                }
+            }
+        }
+
+        for (var it in this.lst_player){
+            if (this.lst_player[it].isPlayer()){
+                var avatar = this.findAvatarOfPlayer(this.lst_player[it].getID());
+                if (avatar !== null){
+                    if (this.lst_player[it].isWin()){
+                        avatar.getComponent("Avatar").setWin(5.0);
+                        this.throwMoney(avatar, false);
+                    }
+                    else{
+                        avatar.getComponent("Avatar").setLose(5.0);
+                    }
+                }
+            }
+        }
+    },
+
+    throwMoney(avatar, isThrowOut){
+        var from;
+        var to;
+        // if (isThrowOut){
+        //     from = avatar->getPosition();
+        //     to = money_sprite->getPosition() + Vec2(money_sprite->getWidth() * 0.1f, money_sprite->getHeight() * 0.4f);
+        // }
+        // else {
+        //     from = money_sprite->getPosition() + Vec2(money_sprite->getWidth() / 2, money_sprite->getHeight() / 2);
+        //     to = avatar->getPosition();
+        // }
+        //
+        // moveChip(from,to);
+    },
+
+    roomOwnerChangedResponseHandler(response){
+        // BINRoomOwnerChangedResponse* response =
+        //     (BINRoomOwnerChangedResponse *)Common::getInstance()->checkEvent(NetworkManager::ROOM_OWNER_CHANGED);
+        if (response !== null) {
+            if (response.getResponsecode()) {
+                var newOwnerUserId = response.getNewowneruserid();
+
+                Common.setOwnerUserId(newOwnerUserId);
+                // setOwnerUserId(newOwnerUserId);
+                this.is_create_room = Common.getUserId() === newOwnerUserId;
+
+                // displayLockRoomForOwner(newOwnerUserId);
+
+                var sizePlayer = this.getCurrentSizePlayers();
+
+                //btn_start_match->setVisible(is_create_room && sizePlayer >= 2);
+
+                //show chu phong moi
+                var newOnwer = this.findAvatarOfPlayer(newOwnerUserId);
+                if (newOnwer !== null){
+                    // newOnwer->showChuong(true);
+                }
+
+                // thoi gian doi khi thay doi chu phong
+                if (response.getChangeownerroomcd() > 0) {
+                    // if (this->getChildByTag(TAG_TIME_COUNTDOWN) != nullptr){
+                    //     this->removeChildByTag(TAG_TIME_COUNTDOWN);
+                    // }
+
+                    var time_wait = response.getChangeownerroomcd() / 1000;
+                    this.addCountDown(time_wait);
+                }
+            }
+        }
     },
 
 

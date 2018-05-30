@@ -312,6 +312,7 @@ var NetworkManager = {
     getTypeMessage: function(msg, messageid, protoBufVar) {
         var bytes = new Uint8Array(protoBufVar.toArrayBuffer());
         msg = null;
+        cc.log("messageid =", messageid);
         switch (messageid) {
             case NetworkManager.MESSAGE_ID.INITIALIZE:
                 msg = proto.BINInitializeResponse.deserializeBinary(bytes);
@@ -432,6 +433,21 @@ var NetworkManager = {
                 break;
             case NetworkManager.MESSAGE_ID.CANCEL_EXIT_AFTER_MATCH_END:
                 msg = proto.BINCancelExitAfterMatchEndResponse.deserializeBinary(bytes);
+                break;
+            case NetworkManager.MESSAGE_ID.READY_TO_PLAY:
+                msg = proto.BINReadyToPlayResponse.deserializeBinary(bytes);
+                break;
+            case NetworkManager.MESSAGE_ID.PREPARE_NEW_MATCH:
+                msg = proto.BINPrepareNewMatchResponse.deserializeBinary(bytes);
+                break;
+            case NetworkManager.MESSAGE_ID.ROOM_OWNER_CHANGED:
+                msg = proto.BINRoomOwnerChangedResponse.deserializeBinary(bytes);
+                break;
+            case NetworkManager.MESSAGE_ID.LEVEL_UP:
+                msg = proto.BINLevelUpResponse.deserializeBinary(bytes);
+                break;
+            case NetworkManager.MESSAGE_ID.SEND_TEXT_EMOTICON:
+                msg = proto.BINSendTextEmoticonResponse.deserializeBinary(bytes);
                 break;
             default:
                 break;
@@ -754,6 +770,7 @@ var NetworkManager = {
         return request;
     },
     getTurnMessageFromServer: function(zoneId, room_index, entries) {
+        cc.log("entries =", entries);
         var request = this.initTurnMessage(zoneId, room_index, entries);
         this.requestMessage(request.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.TURN, Common.getSessionId());
     },
@@ -992,7 +1009,9 @@ var NetworkManager = {
                 // NetworkManager.requestInitializeMessage("24", "15","xxxxx","xxxxx", "vn", "vi", "com.gamebai.tienlen", false, "");
                 NetworkManager.requestInitializeMessage(Common.getCp(), Common.getVersionCode(), Common.getFingerprint(),
                     Common.getFingerprint(), "vn", "vi", Common.getPackageName(), false, "");
-
+                self.myInterval = setInterval(function() {
+                    NetworkManager.requestPingMessage(0);
+                }, 15000);
             };
             window.ws.onclose = function () {
                 cc.log("Websocket instance was closed");
