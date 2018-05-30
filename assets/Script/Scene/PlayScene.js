@@ -9,9 +9,15 @@ cc.Class({
         btn_purchase : cc.Button,
         btn_message : cc.Button,
         btn_setting : cc.Button,
+        btn_raise: cc.Button,
+        btn_call: cc.Button,
+        btn_all_in: cc.Button,
+        btn_fold: cc.Button,
+        btn_condescend: cc.Button,
         //so nguoi choi toi da vao ban
         capacity_size : 5,
-        room_index : 0
+        room_index : 0,
+        timer : cc.Label,
     },
 
     update : function(dt){
@@ -70,11 +76,11 @@ cc.Class({
     instantMessageResponseHandler: function(res){
         if(res != null){
             cc.log("chat room response: %s", res);
-            if (!res.getMessage().empty()){
+            if (res.getMessage() != null){
                 Common.showToast(res.getMessage());
             }
-            if (res.getResponsecode() && res.getScope() == SCOPE_CHAT.CHAT_ROOM) {
-                if (res.getRoomIndex() == this.room_index) {
+            if (res.getResponsecode() && res.getScope() === Config.SCOPE_CHAT.CHAT_ROOM) {
+                if (res.getRoomIndex() === this.room_index) {
                     /*
                     xu ly hien thi message cho thang noi
                     */
@@ -106,10 +112,10 @@ cc.Class({
     instantMessageHistoryResponseHandler: function(res){
         if(res != null){
             cc.log("chat room response: %s", res);
-            if (!res.getMessage().empty()){
+            if (res.getMessage() != null){
                 Common.showToast(res.getMessage());
             }
-            if (res.getResponsecode() && res.getScope() == SCOPE_CHAT.CHAT_ROOM) {
+            if (res.getResponsecode() && res.getScope() === Config.SCOPE_CHAT.CHAT_ROOM) {
 
             }
         }
@@ -117,18 +123,17 @@ cc.Class({
 
     viewUserInfoResponseHandler: function (res) {
         if (res != null){
-            CCLOG("view userinfo response: %s", res);
             if (res.getResponsecode()){
                 //call popup user infor
             }
-            if (!res.getMessage().empty()){
+            if (res.getMessage() != null){
                 Common.showToast(res.getMessage());
             }
         }
     },
 
     textEmoticonResponseHandler: function(res){
-        if (text_emoticon_response != null){
+        if (res !== null){
             cc.log("text emoticon response: %s", res);
 
             if (res.getResponsecode()){
@@ -142,25 +147,25 @@ cc.Class({
                 // }
             }
 
-            if (!res.getMessage().empty()){
+            if (res.getMessage() != null){
                 Common.showToast(res.getMessage());
             }
         }
     },
 
     replyToInviteResponseHandler: function(res){
-        if (res != 0){
+        if (res !== null){
             cc.log("reply to invite response: %s", res);
-            if (!res.getMessage().empty()){
+            if (res.getMessage() != null){
                 Common.showToast(res.getMessage());
             }
         }
     },
 
     exitRoomResponseHandler: function(res) {
-        if (res != 0) {
-            cc.log("exit room response: %s", res);
-            if (!res.getMessage().empty()){
+        cc.log("exit room response: ", res);
+        if (res != null) {
+            if (res.getMessage() != null){
                 Common.showToast(res.getMessage());
             }
 
@@ -170,8 +175,8 @@ cc.Class({
                     //int default_room_type = Common::getInstance()->getRequestRoomType() !=
                  //-1 ? Common::getInstance()->getRequestRoomType() : ROOM_TYPE::XU;
 
-                 //this->notEnoughmoney = exit_room_response->notenoughmoney();
-                 //this->message = exit_room_response->has_message() ? exit_room_response->message() : "";
+                    this.notEnoughmoney = res.getNotenoughmoney();
+                    this.message = res.getMessage();
                     cc.director.loadScene('Login');
                 }
                 else {
@@ -230,26 +235,13 @@ cc.Class({
     getMinBet(){
         return this.minBet;
     },
-    // addCountDown(countDown, start){
-    //     auto background_countDown = MSprite::create(BGK_COUNTDOWN);
-    //     background_countDown->setPosition(MVec2(width / 2 + background_countDown->getWidth()*0.2f,
-    //     height*0.6 - background_countDown->getHeight() / 2));
-    //     background_countDown->setTag(TAG_TIME_COUNTDOWN);
-    //     this->addChild(background_countDown);
-    //
-    //     //string bg = !start ? CHANGE_OWNER : WAIT_NEXT_MATCH;
-    //     auto background_countDownLeft = MSprite::create(WAIT_NEXT_MATCH);
-    //     background_countDownLeft->setPosition(Vec2(-background_countDownLeft->getWidth(),
-    //         background_countDown->getHeight() / 2 -
-    //             background_countDownLeft->getHeight() / 2));
-    //     background_countDown->addChild(background_countDownLeft);
-    //
-    //     auto timerCountDown = MLabel::createCountDown(countDown);
-    //     timerCountDown->setPosition(Vec2(background_countDown->getWidth() / 2, background_countDown->getHeight()*0.5));
-    //     background_countDown->addChild(timerCountDown);
-    //
-    //     background_countDown->runAction(Sequence::create(DelayTime::create(countDown), RemoveSelf::create(), NULL));
-    // },
+    addCountDown(countDown, start){
+
+        this.timer.string = countDown;
+        this.timer.node.runAction(cc.sequence(cc.delayTime(countDown), cc.removeSelf()));
+        // countDown-- ;
+
+    },
     showValueMatch(value_match){
         if (value_match.length != null){
             // lb_value_match->setString(StringUtils::format("#%s", value_match.c_str()));
@@ -258,13 +250,160 @@ cc.Class({
 
     btnExitClick(){
         if (!this.check_exit_room) {
-            NetworkManager.getExitRoomMessageFromServer(Common.getZoneId(), this.roomIndex);
+            NetworkManager.getExitRoomMessageFromServer(Common.ZONE_ID.POKER, this.roomIndex);
         }
         else {
-            NetworkManager.getCancelExitRoomMessageFromServer(Common.getZoneId(), this.roomIndex);
+            NetworkManager.getCancelExitRoomMessageFromServer(Common.ZONE_ID.POKER, this.roomIndex);
         }
         this.check_exit_room = !this.check_exit_room;
-    }
+    },
+
+    showBtnPlayerAction(isShow) {
+        this.btn_raise.node.active = isShow;
+        this.btn_call.node.active = isShow;
+        this.btn_all_in.node.active = isShow;
+        this.btn_fold.node.active = isShow;
+        this.btn_condescend.node.active = isShow;
+
+        // if (isShow){
+        //     btn_raise->setEnabled(false);
+        //
+        //     btn_call->setEnabled(false);
+        //
+        //     btn_all_in->setEnabled(false);
+        //
+        //     btn_fold->setEnabled(false);
+        //
+        //     btn_condescend->setEnabled(false);
+        // }
+    },
+
+    hiddenPlayStatus(player_id){
+        var tag_name = player_id.toString();
+        // if (this->getChildByName(tag_name) != nullptr){
+        //     this->removeChildByName(tag_name);
+        //     this->removeChildByName(TAG_NAME_BG_PLAY_STATUS + tag_name);
+        // }
+    },
+
+    showTextEmoticon(txt, emoticonId, avatar, cardSize, isPoint){
+        // string tag_name = StringUtils::format("%lld_%s", avatar->getPlayerId(), TAG_NAME_EMOTICON);
+        // if (!txt.empty()){
+        //     this->removeChildByName(tag_name);
+        //
+        //     if (emoticonId == TEXT_EMOTICON_XITO::XITO_FOLD || emoticonId == TEXT_EMOTICON_LIENG::LIENG_FOLD){
+        //         return;
+        //     }
+        //
+        //     MSprite* sp_point = MSprite::create(EFFECT_BGR);
+        //     sp_point->setAnchorPoint(Point::ANCHOR_MIDDLE_BOTTOM);
+        //     sp_point->setName(tag_name);
+        //     sp_point->setLocalZOrder(1);
+        //     this->addChild(sp_point);
+        //
+        //     if (!isPoint){
+        //         MLabel* lb_point = MLabel::createBMFont(FONT_CARD_TYPE, txt);
+        //         lb_point->setTag(1);
+        //         lb_point->setAnchorPoint(Point::ANCHOR_MIDDLE);
+        //         lb_point->setPosition(Vec2(sp_point->getWidth() / 2, sp_point->getHeight() * 0.5f));
+        //         sp_point->addChild(lb_point);
+        //     }
+        //     else {
+        //         vector<string> str_point_type = Common::getInstance()->split(txt, ' ');
+        //
+        //         if (str_point_type.size() >= 1){
+        //             Node* node_point = Node::create();
+        //             node_point->setTag(1);
+        //             node_point->setContentSize(sp_point->getContentSize());
+        //
+        //             string str_type = "";
+        //             if (str_point_type.size() > 1){
+        //                 for (int i = 1; i < str_point_type.size(); i++){
+        //                     if (i != (str_point_type.size() - 1)){
+        //                         str_type += str_point_type[i] + " ";
+        //                     }
+        //                     else {
+        //                         str_type += str_point_type[i];
+        //                     }
+        //                 }
+        //             }
+        //
+        //             MLabel* lb_point = MLabel::createBMFont(FONT_CARD_POINT, str_point_type[0]);
+        //             MLabel* lb_type = MLabel::createBMFont(FONT_CARD_TYPE, str_type);
+        //
+        //             lb_point->setAnchorPoint(Point::ANCHOR_MIDDLE_LEFT);
+        //             lb_type->setAnchorPoint(Point::ANCHOR_MIDDLE_LEFT);
+        //
+        //             node_point->addChild(lb_point);
+        //             node_point->addChild(lb_type);
+        //
+        //             float width_text = lb_point->getWidth() + lb_type->getWidth() + 5;
+        //
+        //             lb_point->setPosition(Vec2(node_point->getContentSize().width / 2 - width_text / 2, node_point->getContentSize().height * 0.5f));
+        //             lb_type->setPosition(Vec2(lb_point->getPositionX() + lb_point->getWidth() + 5, lb_point->getPositionY()));
+        //
+        //             sp_point->addChild(node_point);
+        //         }
+        //     }
+        //
+        //
+        //     if (avatar->getPositionIndex() == 0 && avatar->isPlayer() && avatar->getPlayerId() == Common::getInstance()->getUserId()){
+        //         sp_point->setLocalZOrder(INDEX_CARD + 1);
+        //         if (Common::getInstance()->getZoneId() == zone::XITO || Common::getInstance()->getZoneId() == zone::POKER){
+        //             sp_point->setPosition(Vec2(origin.x + visibleSize.width * paddingInitCard + (cardSize - 1) * cardWidth() * 0.25f
+        //                 , posYCard() - cardWidth() * CARD_RATIO * 0.39f));
+        //         }
+        //     else {
+        //             sp_point->setPosition(Vec2(origin.x + visibleSize.width * paddingInitCard + (cardSize - 1) * cardWidth() * 0.5f
+        //                 , posYCard() - cardWidth() * CARD_RATIO * 0.39f));
+        //         }
+        //     }
+        // else {
+        //         sp_point->setScale(0.7f);
+        //         sp_point->setPosition(getInitPos(avatar, cardSize));
+        //     }
+        //
+        //
+        // }
+    },
+
+    hiddenTextEmotion(player_id){
+        // var tag_name = StringUtils::format("%lld_%s", player_id, TAG_NAME_EMOTICON);
+        // if (this->getChildByName(tag_name) != nullptr){
+        //     this->removeChildByName(tag_name);
+        // }
+    },
+
+    showPlayStatus(turnType, avatar){
+        // string texture_name = StringUtils::format(IMG_PLAY_STATUS, turnType);
+        // string tag_name = StringUtils::toString(avatar->getPlayerId());
+        // MSprite* sp_play_status = (MSprite*) this->getChildByName(tag_name);
+        // MSprite* sp_bg_status = (MSprite*) this->getChildByName(TAG_NAME_BG_PLAY_STATUS + tag_name);
+        // if (sp_play_status == nullptr && sp_bg_status == nullptr){
+        //     sp_bg_status = MSprite::create(IMG_BG_PLAY_STATUS);
+        //     sp_bg_status->setName(TAG_NAME_BG_PLAY_STATUS + tag_name);
+        //     sp_bg_status->setAnchorPoint(Point::ANCHOR_MIDDLE_BOTTOM);
+        //     this->addChild(sp_bg_status, INDEX_CARD + 1);
+        //     sp_bg_status->setPosition(Vec2(avatar->getPositionX(), avatar->getPositionY() - avatar->getContentSize().height * 0.3f));
+        //
+        //     sp_play_status = MSprite::create(texture_name);
+        //     sp_play_status->setAnchorPoint(Point::ANCHOR_MIDDLE_BOTTOM);
+        //     sp_play_status->setName(tag_name);
+        //
+        //     sp_play_status->setPosition(Vec2(avatar->getPositionX(), avatar->getPositionY() - avatar->getContentSize().height * 0.3f));
+        //     this->addChild(sp_play_status, INDEX_CARD + 1);
+        // }
+        // else {
+        //     sp_play_status->loadEnryptTexture(texture_name);
+        // }
+        //
+        // //animation
+        // sp_bg_status->setScale(0);
+        // sp_play_status->setScale(0);
+        //
+        // sp_bg_status->runAction(Sequence::create(ScaleTo::create(0.096f, 0.4f, 1.2f), ScaleTo::create(0.124f, 1.0f, 1.0f), NULL));
+        // sp_play_status->runAction(Sequence::create(ScaleTo::create(0.066f, 1.25f), ScaleTo::create(0.154f, 1.0f), NULL));
+    },
 
 });
 

@@ -21,6 +21,7 @@ var Player = cc.Class({
         this.gold = g;
         this.avatar_id = h;
         this._win = false;
+        this.player = true;
     },
     getName() {
         return this.name;

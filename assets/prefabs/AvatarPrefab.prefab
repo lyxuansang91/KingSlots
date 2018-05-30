@@ -1484,7 +1484,13 @@
     "bet_status": {
       "__id__": 12
     },
-    "playerId": 0
+    "playerId": 0,
+    "avatar": {
+      "__id__": 1
+    },
+    "lbl_bet_money": {
+      "__id__": 37
+    }
   },
   {
     "__type__": "cc.PrefabInfo",

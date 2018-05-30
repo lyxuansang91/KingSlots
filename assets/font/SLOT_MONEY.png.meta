@@ -1,14 +1,14 @@
 {
   "ver": "1.0.0",
-  "uuid": "e5c236ec-3712-4c9c-8fa7-f8ff9c64441b",
+  "uuid": "c5279938-a8d5-4fbf-9dce-2e62dbbd0c76",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
   "subMetas": {
-    "sprites": {
+    "SLOT_MONEY": {
       "ver": "1.0.3",
-      "uuid": "c3c3e08d-763f-4337-aab2-4fc9a355b3aa",
-      "rawTextureUuid": "e5c236ec-3712-4c9c-8fa7-f8ff9c64441b",
+      "uuid": "96687d46-4a94-4e08-9f87-7748267d7846",
+      "rawTextureUuid": "c5279938-a8d5-4fbf-9dce-2e62dbbd0c76",
       "trimType": "auto",
       "trimThreshold": 1,
       "rotated": false,
@@ -16,10 +16,10 @@
       "offsetY": 1,
       "trimX": 0,
       "trimY": 0,
-      "width": 334,
-      "height": 375,
-      "rawWidth": 336,
-      "rawHeight": 377,
+      "width": 224,
+      "height": 194,
+      "rawWidth": 226,
+      "rawHeight": 196,
       "borderTop": 0,
       "borderBottom": 0,
       "borderLeft": 0,

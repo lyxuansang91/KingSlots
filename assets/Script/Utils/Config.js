@@ -163,6 +163,16 @@ var Config = {
         START_MATCH : 1,
         TURN : 2,
         MATCH_END : 8
+    },
+
+    PLAYER_ACTION: {
+        RAISE : 1,   //to
+        CALL : 2,    //theo
+        ALL_IN : 3,  //tat tay
+        FOLD : 4,	//bo bai
+        CONDESCEND : 5, //nhuong
+        FLIP_UP_CARD : 6,  //lat bai,
+        BET : 7
     }
 
 };
