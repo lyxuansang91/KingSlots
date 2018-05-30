@@ -6,6 +6,8 @@ var Poker = cc.Class({
 
     properties: {
         table: cc.Node,
+        node_card : cc.Node,
+        node_card_center : cc.Node,
         avatar_prefab : cc.Prefab,
         lst_player: [],
         avatars: [],
@@ -709,14 +711,6 @@ var Poker = cc.Class({
     distributeNextCard(nextCards, animation){
 
         if (nextCards.length !== 0){
-            this.sprite_cover_card.active = true;
-
-            var call_hidden_cover_card_func = cc.callFunc(function () {
-                this.sprite_cover_card.active = false;
-            },this);
-
-            var init_pos_card = this.sprite_cover_card.getContentSize().width;
-            var width_card_tags = 0;
             for (var i = 0; i < nextCards.length; i++){
                 var objNextCards = nextCards[i];
                 cc.log("objNextCards =", objNextCards);
@@ -741,7 +735,7 @@ var Poker = cc.Class({
                             item.setPositionX(posX);
                             // item.setPosition(toPos);
 
-                            this.node.addChild(item);
+                            this.node_card.addChild(item);
 
                             // var sizeCard = cardWidth();
                             //
@@ -1040,29 +1034,18 @@ var Poker = cc.Class({
     },
 
     showCommunityCard(lstCard){
-        // var sizeCard = cardWidth() * 0.75;
-        // var width_card_tags = 4 * sizeCard * 1.1;
         for (var i = 0; i < lstCard.length; i++){
             var item = cc.instantiate(this.card_prefab);
 
             var item = cc.instantiate(this.card_prefab);
-            var posX = (i - 1) * item.getContentSize().width/2;
-            var posY = - item.getContentSize().height/2;
+            var posX = (i - 1) * item.width/2;
+            var posY = 0;
             item.getComponent('CardItem').replaceCard(lstCard[i]);
+            item.getComponent('CardItem').scaleCard(0.6);
             item.setPositionY(posY);
             item.setPositionX(posX);
 
-            this.node.addChild(item);
-
-            // PokerCardSprite* cardSprite = PokerCardSprite::createCard(Card(lstCard[i]), sizeCard);
-            // cardSprite->setPosition(MVec2(visibleSize.width * 0.5f + width_card_tags * 0.5f + 0.5f * sizeCard,
-            // visibleSize.height * 0.63f ));  //+ cardSprite->getHeight() / 2
-            //
-            // var moveTo = MoveTo::create(0.3f*(0.4f+i), MVec2(visibleSize.width * 0.5f - width_card_tags * 0.5f + (i + card_community.size()) * 1.1f * sizeCard,
-            // visibleSize.height * 0.63f));
-            //
-            // this->addChild(cardSprite);
-            // cardSprite->runAction(moveTo);
+            this.node_card_center.addChild(item);
 
             this.card_community_tag.push(item);
         }
@@ -1198,8 +1181,8 @@ var Poker = cc.Class({
 
     preparenewMatchHandler(response){
         cc.log("preparenewMatchHandler response =", response);
-        // BINPrepareNewMatchResponse *response = (BINPrepareNewMatchResponse*)
-        // Common::getInstance()->checkEvent(NetworkManager::PREPARE_NEW_MATCH);
+        this.node_card.removeAllChildren(true);
+        this.node_card_center.removeAllChildren(true);
         if (response !== null) {
 
             if (response.getResponsecode()){

@@ -57,7 +57,7 @@ cc.Class({
     },
 
     updateProgressCircleBar: function(duration){
-        this.duration = duration;
+        this.duration = parseInt(duration/1000);
         this.deltaTime = 0;
         this.progressBar.progress = 0;
         this.isProgressing = true;

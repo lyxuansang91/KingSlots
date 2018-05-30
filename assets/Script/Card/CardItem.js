@@ -38,6 +38,11 @@ cc.Class({
         this.suit.node.active = null;
 
     },
+
+    scaleCard : function (scale) {
+        this.node.scale = scale;
+    },
+
     replaceCard: function (cardValue) {
         var pointValue = this.getPoint(cardValue);
         var suitValue = this.getSuit(cardValue);
