@@ -75,5 +75,18 @@ cc.Class({
         var suit = cardValue % 4;
 
         return suit;
+    },
+    addHidden() {
+        // hidden = Sprite::createWithSpriteFrameName(IMG_CARD_HIDDEN);
+        // hidden->setColor(Color3B::BLACK);
+        // hidden->setOpacity(90);
+        // hidden->setScale(this->getWidth()/hidden->getContentSize().width,
+        //     this->getHeight()/hidden->getContentSize().height);
+        // hidden->setPosition(Vec2(this->getWidth()/2,this->getHeight()/2));
+        // this->addChild(hidden);
+        // hidden->setVisible(false);
+    },
+    showHidden(show){
+        // hidden->setVisible(show);
     }
 });
