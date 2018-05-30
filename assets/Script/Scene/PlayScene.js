@@ -80,31 +80,31 @@ cc.Class({
                 Common.showToast(res.getMessage());
             }
             if (res.getResponsecode() && res.getScope() === Config.SCOPE_CHAT.CHAT_ROOM) {
-                if (res.getRoomIndex() === this.room_index) {
-                    /*
-                    xu ly hien thi message cho thang noi
-                    */
-                    var userId = res.getSenderuserid();
-                    var message = res.getInstantmessage();
-
-                    //show lich su chat
-                    // if (lstMsgChat.size() == MAX_ITEM_CHAT){  //neu lon hon max so dong chat
-                    //     lstMsgChat.erase(lstMsgChat.begin());
-                    // }
-                    //
-                    // ItemChat itemChat = ItemChat();
-                    // itemChat.setEmoticonId(response->textemoticonid());
-                    // itemChat.setMessageChat(message.c_str());
-                    // itemChat.setSenderUserId(response->senderuserid());
-                    // itemChat.setSenderUserName(response->senderusername());
-                    // itemChat.setColorCode(response->colorcode());
-                    // lstMsgChat.push_back(itemChat);
-                    //
-                    // PopupChat* popupChat = (PopupChat*) this->getChildByTag(POPUP_TAG_CHAT);
-                    // if (popupChat != nullptr){
-                    //     popupChat->showHistoryChat(itemChat, (int)lstMsgChat.size());
-                    // }
-                }
+                // if (res.getRoomIndex() === this.room_index) {
+                //     /*
+                //     xu ly hien thi message cho thang noi
+                //     */
+                //     var userId = res.getSenderuserid();
+                //     var message = res.getInstantmessage();
+                //
+                //     //show lich su chat
+                //     // if (lstMsgChat.size() == MAX_ITEM_CHAT){  //neu lon hon max so dong chat
+                //     //     lstMsgChat.erase(lstMsgChat.begin());
+                //     // }
+                //     //
+                //     // ItemChat itemChat = ItemChat();
+                //     // itemChat.setEmoticonId(response->textemoticonid());
+                //     // itemChat.setMessageChat(message.c_str());
+                //     // itemChat.setSenderUserId(response->senderuserid());
+                //     // itemChat.setSenderUserName(response->senderusername());
+                //     // itemChat.setColorCode(response->colorcode());
+                //     // lstMsgChat.push_back(itemChat);
+                //     //
+                //     // PopupChat* popupChat = (PopupChat*) this->getChildByTag(POPUP_TAG_CHAT);
+                //     // if (popupChat != nullptr){
+                //     //     popupChat->showHistoryChat(itemChat, (int)lstMsgChat.size());
+                //     // }
+                // }
             }
         }
     },
