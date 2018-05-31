@@ -6,8 +6,10 @@ cc.Class({
     properties: {
         edit_number : cc.EditBox,
         edit_serial : cc.EditBox,
+        edit_list : cc.EditBox,
         scroll_view : cc.ScrollView,
         itemProviderPrefab : cc.Prefab,
+        lstItemPrefab : cc.Prefab,
 
         isValid_viettel : false,
         isValid_mobifone : false,
@@ -18,12 +20,17 @@ cc.Class({
         node_nm_mobi : cc.Node,
 
         nm_frames : [cc.SpriteFrame],
+
+        btn_select: cc.Button,
+        scroll_view_lst: cc.ScrollView
     },
     purchaseMoney: function() {
         if(this.providercode !== null) {
             var cardSerial = this.edit_serial.string;
             var cardPin = this.edit_number.string;
-            NetworkManager.requestPurchaseMoneyMessage(this.providercode, cardSerial, cardPin, "", "");
+            var cardValue = this.edit_list.string;
+            cc.log("cardValue =", cardValue);
+            NetworkManager.requestPurchaseMoneyMessage(this.providercode, cardSerial, cardPin, "", "", true, cardValue);
         } else {
             cc.log("Không tồn tại provider code");
         }
@@ -108,8 +115,8 @@ cc.Class({
         }
 
         var productList = this.tabInfo[index].productsList;
+        this.lstItem = this.tabInfo[index].productsList;
         this.providercode = this.tabInfo[index].providercode;
-        cc.log("provider code:", this.providercode);
         var num = productList.length;
 
         this.scroll_view.content.removeAllChildren();
@@ -197,4 +204,35 @@ cc.Class({
     start: function () {
 
     },
+    
+    btnSelectClick: function () {
+        this.scroll_view_lst.node.active = true;
+        var innerSize = cc.size(this.scroll_view_lst.content.getContentSize().width, 0);
+        var num = this.lstItem.length;
+        var self = this;
+        this.scroll_view_lst.content.removeAllChildren();
+        for(var i = 0; i < num; i++){
+            var item = cc.instantiate(this.lstItemPrefab);
+            item.getComponent('ListItem').init(this.lstItem[i].parvalue,this.lstItem[i].cashvalue, function (index) {
+                self.selectLstItem(index);
+            });
+            var size = item.getComponent('ListItem').node.getContentSize();
+
+            item.setPosition(cc.p(0, - (0.5 + i)*item.height * 1.1));
+
+            innerSize.height += size.height*1.1;
+
+            this.scroll_view_lst.content.addChild(item);
+        }
+
+        this.scroll_view_lst.content.setContentSize(innerSize);
+    },
+
+    selectLstItem: function (parValue) {
+        cc.log("parValue =", parValue);
+        this.scroll_view_lst.node.active = false;
+
+        this.btn_select.node.getChildByName("Label").getComponent(cc.Label).string = parValue;
+        this.edit_list.string = parValue;
+    }
 });

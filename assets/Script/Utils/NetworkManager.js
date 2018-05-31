@@ -234,6 +234,7 @@ var NetworkManager = {
     SERVER_TEST: "139.162.63.66",
     SERVER_DEBUG: "192.168.0.200",
     URL: "wss://gamemoni.com:2280/megajackpot",
+    // URL: "wss://gamebaivocuc.club:2280/megajackpot",
     sessionId: "",
     tryReconnect: false,
     getSessionId: function() {
@@ -590,18 +591,20 @@ var NetworkManager = {
     },
 
     /* purchase money */
-    initPurchaseMoneyMessage: function(provider, cardSerial, cardPin, securityKey, captcha) {
+    initPurchaseMoneyMessage: function(provider, cardSerial, cardPin, securityKey, captcha, toCash, cardValue) {
         var message = new proto.BINPurchaseMoneyRequest();
         message.setProvider(provider);
         message.setCardserial(cardSerial);
         message.setCardpin(cardPin);
         message.setSecuritykey(securityKey);
         message.setCaptcha(captcha);
+        message.setTocash(toCash);
+        message.setCardvalue(cardValue);
         return message;
     },
 
-    requestPurchaseMoneyMessage: function(provider, cardSerial, cardPin, securityKey, captcha) {
-        var message = NetworkManager.initPurchaseMoneyMessage(provider, cardSerial, cardPin, securityKey, captcha);
+    requestPurchaseMoneyMessage: function(provider, cardSerial, cardPin, securityKey, captcha, toCash, cardValue) {
+        var message = NetworkManager.initPurchaseMoneyMessage(provider, cardSerial, cardPin, securityKey, captcha, toCash, cardValue);
         this.requestMessage(message.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.PURCHASE_MONEY, Common.getSessionId());
     },
     // exit room message
@@ -940,6 +943,7 @@ var NetworkManager = {
         return null;
     },
     connectNetwork: function() {
+        cc.log("NetworkManager.URL ", NetworkManager.URL);
         if(window.ws === null || typeof(window.ws) === 'undefined' || window.ws.readyState === WebSocket.CLOSED) {
             window.ws = new WebSocket(NetworkManager.URL);
             window.listMessage = [];
