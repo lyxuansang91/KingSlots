@@ -1490,7 +1490,28 @@
     },
     "lbl_bet_money": {
       "__id__": 37
-    }
+    },
+    "bet_status_frame": [
+      {
+        "__uuid__": "71a8fca7-7750-443d-939c-a41362500c61"
+      },
+      {
+        "__uuid__": "5b4df067-07f6-4a4d-bd6f-91db62103290"
+      },
+      {
+        "__uuid__": "d4da86d5-0ff5-4ab4-9d09-37abef2dde9a"
+      },
+      {
+        "__uuid__": "36116dc2-873c-47da-9e0b-ba3026d2f70c"
+      },
+      {
+        "__uuid__": "dd71f548-4bf3-44c9-b3a4-174277060162"
+      },
+      null,
+      {
+        "__uuid__": "db818e55-fd66-4fb3-bc3c-762c4f45f73b"
+      }
+    ]
   },
   {
     "__type__": "cc.PrefabInfo",
