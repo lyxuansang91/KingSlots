@@ -18,7 +18,8 @@ var Poker = cc.Class({
         lb_money_bet: cc.Label,
         card_community: [],
         card_community_tag: [],
-        card_tag: []
+        card_tag: [],
+        total_bet_cash: cc.Label
 
     },
     statics: {
@@ -803,11 +804,11 @@ var Poker = cc.Class({
 
     setMoneyBetTable(moneyBet){
         if (moneyBet === 0){
-            this.lb_money_bet.node.active = false;
+            this.total_bet_cash.node.active = false;
             return;
         }
-        this.lb_money_bet.string = moneyBet;
-        this.lb_money_bet.node.active = true;
+        this.total_bet_cash.string = moneyBet;
+        this.total_bet_cash.node.active = true;
     },
 
     raiseEvent(){
@@ -904,112 +905,117 @@ var Poker = cc.Class({
                 Common.showToast(turnresponse.getMessage());
             }
             if(turnresponse.hasZoneid()){
-                    if (turnresponse.getResponsecode()) {
-                        var current_turn_id = turnresponse.getCurrentturnuserid();
-                        var next_turn_id = turnresponse.getNextturnuserid();
+                if (turnresponse.getResponsecode()) {
+                    var current_turn_id = turnresponse.getCurrentturnuserid();
+                    var next_turn_id = turnresponse.getNextturnuserid();
 
-                        if (next_turn_id > 0){
-                            Common.setFirstTurnUserId(next_turn_id);
+                    if (next_turn_id > 0){
+                        Common.setFirstTurnUserId(next_turn_id);
+                    }
+
+                    //neu la nguoi choi hien tai thi reset countdown
+                    var avatar_current_turn = this.findAvatarOfPlayer(current_turn_id);
+                    if (avatar_current_turn !== null){
+                        this.stopProcessCircleBar();
+                        avatar_current_turn.getComponent("Avatar").init(10);
+                        this.showBtnPlayerAction(false);
+
+                        this.showRaise(false);
+                    }
+
+                    //neu chua ket thuc van choi
+                    if (!turnresponse.getMatchend()){
+                        //set countdown cho nguoi tiep theo
+                        var avatar_next_turn = this.findAvatarOfPlayer(next_turn_id);
+                        if (avatar_next_turn !== null){
+                            // this.stopProcessCircleBar();
+                            // avatar_next_turn.getComponent("Avatar").init(10);
+                            avatar_next_turn.getComponent("Avatar").resetProcessCircleBar();
+                            avatar_next_turn.getComponent("Avatar").updateProgressCircleBar(turnresponse.getCountdowntimer());
                         }
+                    }
 
-                        //neu la nguoi choi hien tai thi reset countdown
-                        var avatar_current_turn = this.findAvatarOfPlayer(current_turn_id);
-                        if (avatar_current_turn !== null){
-                            this.stopProcessCircleBar();
-                            avatar_current_turn.getComponent("Avatar").init(10);
-                            this.showBtnPlayerAction(false);
-
-                            this.showRaise(false);
-                        }
-
-                        //neu chua ket thuc van choi
-                        if (!turnresponse.getMatchend()){
-                            //set countdown cho nguoi tiep theo
-                            var avatar_next_turn = this.findAvatarOfPlayer(next_turn_id);
-                            if (avatar_next_turn !== null){
-                                // this.stopProcessCircleBar();
-                                // avatar_next_turn.getComponent("Avatar").init(10);
-                                avatar_next_turn.getComponent("Avatar").resetProcessCircleBar();
-                                avatar_next_turn.getComponent("Avatar").updateProgressCircleBar(turnresponse.getCountdowntimer());
+                    if (turnresponse.getArgsList().length > 0) {
+                        for (var i = 0; i < turnresponse.getArgsList().length; i++){
+                            var entry = turnresponse.getArgsList()[i];
+                            if (entry.getKey() === "nextPlayerAction" && next_turn_id === Common.getUserId()) {
+                                var json_val = entry.getValue();
+                                this.player_action = this.parseNextPlayerAction(json_val);
+                                //hien thi cac action cua next turn
+                                this.showBtnPlayerAction(this.player_action);
                             }
-                        }
+                        else if (entry.getKey() === "communityCard"){
+                                var lst_card = entry.getValue().split(",");
 
-                        if (turnresponse.getArgsList().length > 0) {
-                            for (var i = 0; i < turnresponse.getArgsList().length; i++){
-                                var entry = turnresponse.getArgsList()[i];
-                                if (entry.getKey() === "nextPlayerAction" && next_turn_id === Common.getUserId()) {
-                                    var json_val = entry.getValue();
-                                    this.player_action = this.parseNextPlayerAction(json_val);
-                                    //hien thi cac action cua next turn
-                                    this.showBtnPlayerAction(this.player_action);
-                                }
-                            else if (entry.getKey() === "communityCard"){
-                                    var lst_card = entry.getValue().split(",");
+                                this.prepareCommunityCard(lst_card);
+                            }
+                            else if (entry.getKey() === "totalMoneyBet"){  //tong cuoc tren ban
+                                var self = this;
+                                var callFuncSetTotalMoneyBet = cc.callFunc(function () {
+                                    //clear status theo, va to
+                                    for (var i in self.avatars){
+                                        if (self.avatars[i].getComponent("Avatar").isPlayer()){
+                                            if (self.avatars[i].getComponent("Avatar").getTurnType() === Config.PLAYER_ACTION.CONDESCEND){
+                                                this.hiddenPlayStatus(self.avatars[i].getComponent("Avatar").getPlayerId());
+                                            }
+                                            if (self.avatars[i].getComponent("Avatar").getTurnType() === Config.PLAYER_ACTION.CALL
+                                                || self.avatars[i].getComponent("Avatar").getTurnType() === Config.PLAYER_ACTION.RAISE){
+                                                self.hiddenPlayStatus(this.avatars[i].getComponent("Avatar").getPlayerId());
+                                                // throwMoney(xtAvatar, true);
+                                            }
+                                        else if (self.avatars[i].getComponent("Avatar").getTurnType() === Config.PLAYER_ACTION.ALL_IN && !self.avatars[i].getComponent("Avatar").isAllIn()){
+                                                // throwMoney(xtAvatar, true);
+                                                self.avatars[i].getComponent("Avatar").setAllIn(true);
+                                            }
+                                            self.avatars[i].getComponent("Avatar").setBetMoney(0);
+                                        }
+                                    }
 
-                                    this.prepareCommunityCard(lst_card);
-                                }
-                                else if (entry.getKey() === "totalMoneyBet"){  //tong cuoc tren ban
-                                    // auto callFuncSetTotalMoneyBet = CallFunc::create([=]{
-                                    //     //clear status theo, va to
-                                    //     for (PokerAvatar* xtAvatar : avatars){
-                                    //         if (xtAvatar->isPlayer()){
-                                    //             if (xtAvatar->getTurnType() == PLAYER_ACTION::CONDESCEND){
-                                    //                 hiddenPlayStatus(xtAvatar->getPlayerId());
-                                    //             }
-                                    //             if (xtAvatar->getTurnType() == PLAYER_ACTION::CALL
-                                    //                 || xtAvatar->getTurnType() == PLAYER_ACTION::RAISE){
-                                    //                 hiddenPlayStatus(xtAvatar->getPlayerId());
-                                    //                 throwMoney(xtAvatar, true);
-                                    //             }
-                                    //         else if (xtAvatar->getTurnType() == PLAYER_ACTION::ALL_IN && !xtAvatar->isAllIn()){
-                                    //                 throwMoney(xtAvatar, true);
-                                    //                 xtAvatar->setAllIn(true);
-                                    //             }
-                                    //             xtAvatar->setBetMoney(0);
-                                    //         }
-                                    //     }
-                                    //
-                                    //     //hien thi tong tien dat tren ban choi
-                                    //     //setMoneyBetTable(Common::getInstance()->convertStringToLongLong(entry.value()));
-                                    // });
-                                    //
-                                    // bkgTable->runAction(Sequence::create(DelayTime::create(0.6f), callFuncSetTotalMoneyBet, DelayTime::create(0.1f),
-                                    // CallFunc::create([=]{ setMoneyBetTable(Common::getInstance()->convertStringToLongLong(entry.value()));
-                                    // }), nullptr));
-                                }
-                                else if (entry.getKey() === "turnPokerType" && avatar_current_turn !== 0){
-                                    //hien thi tren avatar current turn trang thai tuong ung voi turnXiToType tra ve
-                                    var turnType = entry.getValue();
-                                    if (turnType > 0){
-                                        avatar_current_turn.getComponent("Avatar").setPlayStatus(turnType);
-                                        this.showPlayStatus(turnType, avatar_current_turn);
+                                    //hien thi tong tien dat tren ban choi
+                                    self.setMoneyBetTable(entry.getValue());
+                                });
 
-                                        if (turnType === Config.PLAYER_ACTION.RAISE){  //neu to thi clear to va theo cua nhung thang khac
-                                            for (var i = 0; i < this.avatars.length; i++){
-                                                if (this.avatars[i] !== avatar_current_turn && this.avatars[i].getComponent("Avatar").isPlayer()
-                                                    && (this.avatars[i].getComponent("Avatar").getTurnType() === Config.PLAYER_ACTION.CALL
-                                                    || this.avatars[i].getComponent("Avatar").getTurnType() === Config.PLAYER_ACTION.RAISE
-                                                        || this.avatars[i].getComponent("Avatar").getTurnType() === Config.PLAYER_ACTION.CONDESCEND)){
-                                                    this.hiddenPlayStatus(this.avatars[i].getComponent("Avatar").getPlayerId());
-                                                }
+                                this.table.runAction(cc.sequence(cc.delayTime(0.6), callFuncSetTotalMoneyBet, cc.delayTime(0.1),
+                                    cc.callFunc(function () { self.setMoneyBetTable(entry.getValue());
+                                })));
+                            }
+                            else if (entry.getKey() === "turnPokerType" && avatar_current_turn !== 0){
+                                //hien thi tren avatar current turn trang thai tuong ung voi turnXiToType tra ve
+                                var turnType = entry.getValue();
+                                if (turnType > 0){
+                                    avatar_current_turn.getComponent("Avatar").setPlayStatus(turnType);
+                                    this.showPlayStatus(turnType, avatar_current_turn);
+
+                                    if (turnType === Config.PLAYER_ACTION.RAISE){  //neu to thi clear to va theo cua nhung thang khac
+                                        for (var i = 0; i < this.avatars.length; i++){
+                                            if (this.avatars[i] !== avatar_current_turn && this.avatars[i].getComponent("Avatar").isPlayer()
+                                                && (this.avatars[i].getComponent("Avatar").getTurnType() === Config.PLAYER_ACTION.CALL
+                                                || this.avatars[i].getComponent("Avatar").getTurnType() === Config.PLAYER_ACTION.RAISE
+                                                    || this.avatars[i].getComponent("Avatar").getTurnType() === Config.PLAYER_ACTION.CONDESCEND)){
+                                                this.hiddenPlayStatus(this.avatars[i].getComponent("Avatar").getPlayerId());
                                             }
                                         }
                                     }
                                 }
-                                else if (entry.getKey() === "currentMoneyBet" && avatar_current_turn !== 0){
-                                    var moneyTurn = entry.getValue();
-                                    avatar_current_turn.getComponent("Avatar").setBetMoney(moneyTurn);
-                                }
                             }
-
-                            this.showCall(next_turn_id);
-
+                            else if (entry.getKey() === "currentMoneyBet" && avatar_current_turn !== 0){
+                                var moneyTurn = entry.getValue();
+                                avatar_current_turn.getComponent("Avatar").setBetMoney(moneyTurn);
+                            }
                         }
+
+                        this.showCall(next_turn_id);
+
                     }
+                }
 
             }
         }
     },
+
+    // showPlayStatus(){
+    //
+    // },
 
     stopProcessCircleBar(){
         for (var i = 0; i < this.avatars.length; i++){
