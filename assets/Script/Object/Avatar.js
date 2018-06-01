@@ -15,7 +15,8 @@ cc.Class({
         bet_status: cc.Node,
         playerId: 0,
         avatar : cc.Node,
-        lbl_bet_money: cc.Label
+        lbl_bet_money: cc.Label,
+        bet_status_frame: [cc.SpriteFrame]
     },
 
     onLoad : function () {
@@ -428,31 +429,8 @@ cc.Class({
     },
 
     showStatusBet(statusBet){
-        // MSprite* sp_status = (MSprite*) bg_bet_money->getChildByTag(1);
-        // if (sp_status != nullptr){
-        //     switch (statusBet){
-        //         case PLAYER_ACTION::BET:
-        //             sp_status->loadEnryptTexture(STATUS_CUOC);
-        //             break;
-        //         case PLAYER_ACTION::FOLD:
-        //             sp_status->loadEnryptTexture(STATUS_BO);
-        //             break;
-        //         case PLAYER_ACTION::CALL:
-        //             sp_status->loadEnryptTexture(STATUS_THEO);
-        //             break;
-        //         case PLAYER_ACTION::RAISE:
-        //             sp_status->loadEnryptTexture(STATUS_TO);
-        //             break;
-        //         case PLAYER_ACTION::ALL_IN:
-        //             sp_status->loadEnryptTexture(STATUS_TO_TAT);
-        //             break;
-        //         case PLAYER_ACTION::CONDESCEND:
-        //             sp_status->loadEnryptTexture(STATUS_NHUONG);
-        //             break;
-        //         default:
-        //             break;
-        //     }
-        // }
+        cc.log("status bet =", statusBet);
+        this.bet_status.getComponent(cc.Sprite).spriteFrame = this.bet_status_frame[statusBet];
     },
 
     showRegisterExitRoom(isShow){
@@ -467,6 +445,14 @@ cc.Class({
         // for (MSprite* it : cardCover){
         //     addHiddenCard(it);
         // }
+    },
+
+    setAllIn(all_in){
+        this.all_in = all_in;
+    },
+
+    isAllIn(){
+        return this.all_in;
     }
 
 });
