@@ -233,7 +233,7 @@ var NetworkManager = {
     MAX_KILL_MSG: 10000,
     SERVER_TEST: "139.162.63.66",
     SERVER_DEBUG: "192.168.0.200",
-    URL: "wss://gamemoni.com:2280/megajackpot",
+    URL: "wss://gamebaivocuc.club:2280/megajackpot",
      //URL: "ws://192.168.0.200:2280/megajackpot",
     sessionId: "",
     tryReconnect: false,
@@ -242,7 +242,7 @@ var NetworkManager = {
     },
     checkEvent: function (checkMessage) {
         if(window.listMessage !== null && typeof(window.listMessage) !== 'undefined'  && window.listMessage.length > 0) {
-            if(window.listMessage.length > 7 && !this.tryReconnect) {
+            if(window.listMessage.length > 100 && !this.tryReconnect) {
                 NetworkManager.showPopupReconnect();
                 this.tryReconnect = true;
                 return;
@@ -1019,11 +1019,11 @@ var NetworkManager = {
                     window.isLogout = false;
                     NetworkManager.showPopupReconnect();
                 }
+                clearInterval(self.myInterval);
             };
 
             window.ws.onmessage = this.onGameStatus.bind(this);
             window.ws.onerror = function(e) {
-                cc.log("on event:", e);
                 NetworkManager.showPopupReconnect();
             }
         } else {

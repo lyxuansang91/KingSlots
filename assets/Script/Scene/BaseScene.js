@@ -88,7 +88,7 @@ cc.Class({
         }
     },
     pingMessageResponseHandler: function(res) {
-
+        cc.log("ping response handler:", res.toObject());
         if(res.getResponsecode()) {
             if(res.getDisconnect()) {
                 cc.log("disconnected");
