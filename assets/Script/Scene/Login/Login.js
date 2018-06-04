@@ -321,7 +321,7 @@ cc.Class({
     //     }
     // },
     goIntroScene: function(e) {
-        cc.director.loadScene("Intro");
+        cc.director.loadScene("IntroScene");
     },
 
     login: function() {

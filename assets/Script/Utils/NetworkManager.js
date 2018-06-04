@@ -241,11 +241,11 @@ var NetworkManager = {
     },
     checkEvent: function (checkMessage) {
         if(window.listMessage !== null && typeof(window.listMessage) !== 'undefined'  && window.listMessage.length > 0) {
-            if(window.listMessage.length > 20 && !this.tryReconnect) {
-                NetworkManager.showPopupReconnect();
-                this.tryReconnect = true;
-                return;
-            }
+            // if(window.listMessage.length > 100 && !this.tryReconnect) {
+            //     NetworkManager.showPopupReconnect();
+            //     this.tryReconnect = true;
+            //     return;
+            // }
             var buffer = window.listMessage[0];
             var result = checkMessage(buffer);
             if(result) {
@@ -984,7 +984,22 @@ var NetworkManager = {
         if(event.data!==null || typeof(event.data) !== 'undefined') {
             var lstMessage = NetworkManager.parseFrom(event.data, event.data.byteLength);
             for(var i = 0; i < lstMessage.length; i++) {
-                window.listMessage.push(lstMessage[i]);
+                var message = lstMessage[i];
+                // check if ping or not
+                if(message.message_id === NetworkManager.MESSAGE_ID.PING) {
+                    var res = message.response;
+                    cc.log("ping response handler:", res.toObject());
+                    if(res.getResponsecode()) {
+                        if(res.getDisconnect()) {
+                            cc.log("disconnected");
+                            window.disConnectMessage = res.getMessage();
+                        }
+                    }
+
+                } else {
+                    window.listMessage.push(message);
+                }
+
             }
         }
     },

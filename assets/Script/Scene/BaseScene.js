@@ -7,6 +7,18 @@ cc.Class({
 
 
     update : function(dt){
+        this.checkDisconnect();
+    },
+    checkDisconnect: function() {
+        if(window.disConnectMessage !== null) {
+            Common.setSessionId("-1");
+            Common.showToast(window.disConnectMessage, 2.0);
+            window.disConnectMessage = null;
+            NetworkManager.closeConnection();
+            this.scheduleOnce(function() {
+                cc.director.loadScene('IntroScene');
+            }, 2.0);
+        }
     },
 
     onLoad: function () {
@@ -22,13 +34,13 @@ cc.Class({
         switch (buffer.message_id) {
             case NetworkManager.MESSAGE_ID.INITIALIZE:
                 var msg = buffer.response;
-                cc.log("end time init:", Date.now() - window.timeInit);
+                // cc.log("end time init:", Date.now() - window.timeInit);
                 this.initialMessageResponseHandler(msg);
                 break;
-            case NetworkManager.MESSAGE_ID.PING:
-                var msg = buffer.response;
-                this.pingMessageResponseHandler(msg);
-                break;
+            // case NetworkManager.MESSAGE_ID.PING:
+            //     var msg = buffer.response;
+            //     this.pingMessageResponseHandler(msg);
+            //     break;
             case NetworkManager.MESSAGE_ID.LOGOUT:
                 var msg = buffer.response;
                 this.logOutMessageResponseHandler(msg);

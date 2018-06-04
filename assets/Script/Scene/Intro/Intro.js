@@ -20,6 +20,7 @@ cc.Class({
 
     // use this for initialization
     onLoad: function () {
+        window.disConnectMessage = null;
         window.jarInfoList = null;
         window.loginSuccess = false;
         window.isLogout = false;
