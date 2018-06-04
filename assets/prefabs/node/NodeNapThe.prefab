@@ -1202,7 +1202,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 51.4,
+      "width": 51,
       "height": 35
     },
     "_rotationX": 0,
@@ -1305,15 +1305,18 @@
     "edit_serial": {
       "__id__": 30
     },
-    "table_view": {
-      "__id__": 9
-    },
-    "ui_left": {
-      "__id__": 5
-    },
-    "tabLeftPrefab": {
-      "__uuid__": "987bf0f0-38b8-4b3e-a027-9e2112881c17"
-    }
+    "scroll_view": null,
+    "itemProviderPrefab": null,
+    "isValid_viettel": false,
+    "isValid_mobifone": false,
+    "isValid_vinaphone": false,
+    "node_nm_viettel": null,
+    "node_nm_vina": null,
+    "node_nm_mobi": null,
+    "nm_frames": [],
+    "btn_select": null,
+    "scroll_view_lst_node": null,
+    "scroll_view_lst": null
   },
   {
     "__type__": "cc.PrefabInfo",

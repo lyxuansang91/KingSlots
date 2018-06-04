@@ -1,0 +1,30 @@
+{
+  "ver": "1.0.0",
+  "uuid": "b35ff746-9c94-43fc-a0f2-5ade0e2d5c77",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "subMetas": {
+    "Bt_DangNhapBangFB": {
+      "ver": "1.0.3",
+      "uuid": "ffed081a-2198-4c4b-9617-717bb79e7bbd",
+      "rawTextureUuid": "b35ff746-9c94-43fc-a0f2-5ade0e2d5c77",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 227,
+      "height": 69,
+      "rawWidth": 227,
+      "rawHeight": 69,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

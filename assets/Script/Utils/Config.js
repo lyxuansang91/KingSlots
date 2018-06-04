@@ -56,7 +56,7 @@ var Config = {
         POPUP_HISTORY : "PopupHistory",
         POPUP_THREECARD_HISTORY : "PopupThreeCardHistory",
         POPUP_USERINFO : "PopupUserInfo",
-        POPUP_CHARGING : "PopupCharging",
+        POPUP_NAPTIEN : "PopupNapTien",
         POPUP_EXCHANGE: "PopupExchange",
         POPUP_WEBVIEW : "PopupWebview",
         POPUP_MAIL : "PopupMail",
@@ -70,6 +70,7 @@ var Config = {
         POPUP_SELECT_LINE : "PopupSelectLine",
         POPUP_TAIXIU_SESSION_HISTORY : "PopupTaixiuSession",
         POPUP_TAIXIU_STATIS : "PopupTaixiuStatis",
+        POPUP_REGISTER : "PopupRegister",
     },
 
     ON_EVENT: {

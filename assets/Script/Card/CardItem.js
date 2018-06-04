@@ -48,12 +48,12 @@ cc.Class({
         this.suit.node.active = null;
 
     },
-    replaceCard: function (cardValue) {
+    replaceCard: function (cardValue, zoneId) {
         var pointValue = this.getPoint(cardValue);
         var suitValue = this.getSuit(cardValue);
 
         var isFaceCard = false;
-        if(Common.getZoneId() === Config.TAG_GAME_ITEM.MINI_POKER){
+        if(zoneId === Config.TAG_GAME_ITEM.MINI_POKER){
             if(pointValue > 9 && pointValue <= 12){
                 isFaceCard = true;
             }
@@ -64,14 +64,14 @@ cc.Class({
         }
 
         if (isFaceCard) {
-            if(Common.getZoneId() === Config.TAG_GAME_ITEM.MINI_POKER){
+            if(zoneId === Config.TAG_GAME_ITEM.MINI_POKER){
                 this.mainPic.spriteFrame = this.texFaces[pointValue - 10];
             } else {
                 this.mainPic.spriteFrame = this.texFaces[pointValue - 10 - 1];
             }
         }
         else {
-            if(Common.getZoneId() === Config.TAG_GAME_ITEM.MINI_POKER){
+            if(zoneId === Config.TAG_GAME_ITEM.MINI_POKER){
                 this.mainPic.spriteFrame = this.texSuitBigPoker[suitValue];
             } else {
                 this.mainPic.spriteFrame = this.texSuitBig[suitValue];
@@ -79,15 +79,15 @@ cc.Class({
         }
 
         // for jsb
-        this.point.string = Common.getPointName(pointValue, Common.getZoneId());
+        this.point.string = Common.getPointName(pointValue, zoneId);
 
-        if (Common.isRedSuit(suitValue, Common.getZoneId())) {
+        if (Common.isRedSuit(suitValue, zoneId)) {
             this.point.node.color = this.redTextColor;
         }
         else {
             this.point.node.color = this.blackTextColor;
         }
-        if(Common.getZoneId() === Config.TAG_GAME_ITEM.MINI_POKER){
+        if(zoneId === Config.TAG_GAME_ITEM.MINI_POKER){
             this.suit.spriteFrame = this.texSuitSmallPoker[suitValue];
         } else {
             this.suit.spriteFrame = this.texSuitSmall[suitValue];

@@ -21,7 +21,7 @@ cc.Class({
     },
 
     init: function(msg, type, callback) {
-        this.message.string = msg;
+        this.message.string = Common.wordWrap(msg, 40);
         switch (type) {
             case 0:
                 this.btnCancel.node.active = false;

@@ -1,0 +1,30 @@
+{
+  "ver": "1.0.0",
+  "uuid": "f25c2f09-3224-450d-b3df-ddd23a52d58d",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "subMetas": {
+    "icon_caoboi": {
+      "ver": "1.0.3",
+      "uuid": "a9ff2da3-a950-4a40-a5f5-e390f3a1b044",
+      "rawTextureUuid": "f25c2f09-3224-450d-b3df-ddd23a52d58d",
+      "trimType": "custom",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 249,
+      "height": 445,
+      "rawWidth": 249,
+      "rawHeight": 445,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

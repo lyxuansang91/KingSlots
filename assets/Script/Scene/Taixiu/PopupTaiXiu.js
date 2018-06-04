@@ -65,20 +65,41 @@ cc.Class({
         can_keo: cc.Sprite,
         bat : cc.Sprite,
 
+        chatPopup: cc.Node,
+        btnCloseChat: cc.Button,
+        groupKeyboard: cc.Node,
+        background: cc.Sprite,
+        oldVal: 0
     },
 
     // use this for initialization
     onLoad: function() {
-        cc.log("on load tai xiu");
-        function onTouchDown (event) {
-            return true;
-        }
-
-        this.node.on('touchstart', onTouchDown, this.bg_dark);
         this.betState = -1;
         Common.setExistTaiXiu(true);
         this.lstTaiXiuResult = [];
         this.countDownTimer = 0;
+
+        var self = this;
+        this.background.node.on("touchstart", function( touch) {
+            var locationInNode = self.background.node.convertToNodeSpace(touch.getLocation());
+            var rect = self.background.spriteFrame.getRect();
+
+            if (cc.rectContainsPoint(rect,locationInNode)){
+                var touch_location = touch.getLocation();
+                self.touchOffset = cc.p(self.background.node.getPosition().x - touch_location.x,
+                    self.background.node.getPosition().y - touch_location.y);
+                var currentLocal = Common.getCurrentLocal() !== this.node.getLocalZOrder() ?  Common.getCurrentLocal() : this.node.getLocalZOrder() + 1;
+                Common.setCurrentLocal(currentLocal);
+                this.node.setLocalZOrder(currentLocal);
+                return true;
+            }
+
+            return false;
+        }, this);
+
+        this.background.node.on("touchmove", function( touch) {
+            this.background.node.setPosition(cc.p(touch.getLocation()).add(self.touchOffset));
+        }, this);
     },
 
     start: function () {
@@ -122,7 +143,7 @@ cc.Class({
     },
 
     cancel: function() {
-
+        this.groupKeyboard.active = false;
     },
     accept: function() {
         if (this.getTableStage() === TABLE_STATE.BET) {
@@ -204,8 +225,13 @@ cc.Class({
     * Example: this.setTotalMoneyTaiXiu(this.total_money_tai, 5000);
     */
     setTotalMoneyTaiXiu: function(target, val) {
+        this.oldVal = val;
+        cc.log("this.oldVal =", this.oldVal);
         if(target instanceof cc.Label) {
-            target.string = Common.numberFormatWithCommas(val);
+
+            var oldValue = Common.stringWithCommasToNumber(target.string);
+            cc.log("oldVal =", oldValue);
+            Common.countNumberAnim(target, oldValue, val, 0, 1);
         }
     },
     sendMessageTaiXiu: function(message) {
@@ -267,6 +293,7 @@ cc.Class({
 
     datTai: function() {
         cc.log("dat cua tai", Common.getCash());
+        this.groupKeyboard.active = true;
         if(this.betState !== BET_STATE.TAI) {
             this.betState = BET_STATE.TAI;
             this.bet_money_xiu.string = "Đặt xỉu";
@@ -276,6 +303,7 @@ cc.Class({
     },
     datXiu: function() {
         cc.log("dat cua xiu", Common.getCash());
+        this.groupKeyboard.active = true;
         if(this.betState !== BET_STATE.XIU) {
             this.betState = BET_STATE.XIU;
             this.bet_money_tai.string = "Đặt tài";
@@ -301,48 +329,82 @@ cc.Class({
     getTableStage: function() {
         return this.tableStage;
     },
-    handleMessage: function(buffer) {
-        var isDone = this._super(buffer);
-        if(isDone)
-            return true;
-        isDone = true;
-        switch (buffer.message_id) {
-            case NetworkManager.MESSAGE_ID.START_MATCH:
-                var msg = buffer.response;
-                this.handleStartMatchResponseHandler(msg);
-                break;
-            case NetworkManager.MESSAGE_ID.MATCH_END:
-                var msg = buffer.response;
-                this.handleMatchEndResponseHandler(msg);
-                break;
-            case NetworkManager.MESSAGE_ID.MATCH_BEGIN:
-                var msg = buffer.response;
-                this.handleMatchBeginResponseHandler(msg);
-                break;
-            case NetworkManager.MESSAGE_ID.TURN:
-                var msg = buffer.response;
-                this.handleTurnResponseHandler(msg);
-                break;
-            case NetworkManager.MESSAGE_ID.EXIT_ROOM:
-                var msg = buffer.response;
-                this.exitRoomResponseHandler(msg);
-                break;
-            case NetworkManager.MESSAGE_ID.EXIT_ZONE:
-                this.exitZoneResponseHandler(buffer.response);
-                break;
-            case NetworkManager.MESSAGE_ID.BET:
-                var msg = buffer.response;
-                this.betResponseHandler(msg);
-                break;
-            case NetworkManager.MESSAGE_ID.INSTANT_MESSAGE:
-                var msg = buffer.response;
-                this.instantMessageResponseHandler(msg);
-                break;
-            default:
-                isDone = false;
-                break;
+    // handleMessage: function(buffer) {
+    //     var isDone = this._super(buffer);
+    //     if(isDone)
+    //         return true;
+    //     isDone = true;
+    //     switch (buffer.message_id) {
+    //         case NetworkManager.MESSAGE_ID.START_MATCH:
+    //             var msg = buffer.response;
+    //             this.handleStartMatchResponseHandler(msg);
+    //             break;
+    //         case NetworkManager.MESSAGE_ID.MATCH_END:
+    //             var msg = buffer.response;
+    //             this.handleMatchEndResponseHandler(msg);
+    //             break;
+    //         case NetworkManager.MESSAGE_ID.MATCH_BEGIN:
+    //             var msg = buffer.response;
+    //             this.handleMatchBeginResponseHandler(msg);
+    //             break;
+    //         case NetworkManager.MESSAGE_ID.TURN:
+    //             var msg = buffer.response;
+    //             this.handleTurnResponseHandler(msg);
+    //             break;
+    //         case NetworkManager.MESSAGE_ID.EXIT_ROOM:
+    //             var msg = buffer.response;
+    //             this.exitRoomResponseHandler(msg);
+    //             break;
+    //         case NetworkManager.MESSAGE_ID.EXIT_ZONE:
+    //             this.exitZoneResponseHandler(buffer.response);
+    //             break;
+    //         case NetworkManager.MESSAGE_ID.BET:
+    //             var msg = buffer.response;
+    //             this.betResponseHandler(msg);
+    //             break;
+    //         case NetworkManager.MESSAGE_ID.INSTANT_MESSAGE:
+    //             var msg = buffer.response;
+    //             this.instantMessageResponseHandler(msg);
+    //             break;
+    //         default:
+    //             isDone = false;
+    //             break;
+    //     }
+    //     return isDone;
+    // },
+    handleMessage: function(response, typeMessage) {
+        cc.log("tai xiu response =", response);
+        cc.log("tai xiu typeMessage =", typeMessage);
+        if (typeMessage === NetworkManager.MESSAGE_ID.START_MATCH){
+            this.handleStartMatchResponseHandler(response);
         }
-        return isDone;
+        else if (typeMessage === NetworkManager.MESSAGE_ID.MATCH_END){
+            this.handleMatchEndResponseHandler(response);
+        }
+        else if (typeMessage === NetworkManager.MESSAGE_ID.MATCH_BEGIN){
+            this.handleMatchBeginResponseHandler(response);
+        }
+        else if (typeMessage === NetworkManager.MESSAGE_ID.TURN) {
+            this.handleTurnResponseHandler(response);
+        }
+        else if (typeMessage === NetworkManager.MESSAGE_ID.EXIT_ROOM){
+            this.exitRoomResponseHandler(response);
+        }
+        else if (typeMessage === NetworkManager.MESSAGE_ID.EXIT_ZONE){
+            this.exitZoneResponseHandler(response);
+        }
+        else if (typeMessage === NetworkManager.MESSAGE_ID.BET){
+            this.betResponseHandler(response);
+        }
+        else if (typeMessage === NetworkManager.MESSAGE_ID.INSTANT_MESSAGE){
+            this.instantMessageResponseHandler(response);
+        }
+        // else if (typeMessage === NetworkManager.MESSAGE_ID.){
+        //     this.instantMessageHistoryHandler(response);
+        // }
+        // else if (typeMessage == NetworkManager.MESSAGE_ID.UPDATE_MONEY){
+        //     this.updateMoneyResponseHandler(response);
+        // }
     },
     exitZoneResponseHandler: function(resp) {
         cc.log("exit zone response:", resp.toObject());
@@ -350,6 +412,13 @@ cc.Class({
             Common.setZoneId(-1);
             Common.closePopup("PopupTaiXiu");
         }
+
+        // if (resp.getResponsecode()) {
+        //     this.isRunning = false;
+        //     Common.setMiniGameZoneId(-1);
+        //     this.node.removeFromParent(true);
+        //     Common.closeMinigame(resp.getZoneid());
+        // }
     },
 
     instantMessageResponseHandler: function(resp) {
@@ -591,16 +660,16 @@ cc.Class({
             this.result_node.active = false;
         }
     },
-    onGameEvent: function() {
-        var self = this;
-        NetworkManager.checkEvent(function(buffer) {
-            return self.handleMessage(buffer);
-        });
-    },
+    // onGameEvent: function() {
+    //     var self = this;
+    //     NetworkManager.checkEvent(function(buffer) {
+    //         return self.handleMessage(buffer);
+    //     });
+    // },
 
     // called every frame, uncomment this function to activate update callback
     update: function (dt) {
-        this.onGameEvent();
+        // this.onGameEvent();
     },
 
     updateBetGateInfo: function(bet_gate_info) {
@@ -650,20 +719,22 @@ cc.Class({
     updateLstMatchView: function() {
         cc.log("OK");
         for (var j = 0; j < this.lstMatch.length; j++) {
+            cc.log("lst match =", this.lstMatch.length);
             // if (j < this.lstMatch.length) {
-            if( this.lstTaiXiuResult.length < 16) {
+            if( this.lstTaiXiuResult.length < 14) {
                 var taixiu_result = cc.instantiate(this.taiXiuResult);
                 var taixiu_result_component = taixiu_result.getComponent("TaiXiuResult");
                 taixiu_result_component.initNumber(this.lstMatch[j].sum());
                 taixiu_result_component.initResult(this.lstMatch[j].sum() >= 11);
-                taixiu_result.setPosition((j-this.lstMatch.length / 2) * taixiu_result_component.node.getContentSize().width * 1.2, 0);
+                taixiu_result.setPosition((j-this.lstMatch.length / 2 + 1.5) * taixiu_result_component.node.getContentSize().width , 0);
                 this.lstMatch_view.addChild(taixiu_result);
                 this.lstTaiXiuResult.push(taixiu_result_component);
-            } else {
-                var taixiu_result_component = this.lstTaiXiuResult[j];
-                taixiu_result_component.initNumber(this.lstMatch[j].sum());
-                taixiu_result_component.initResult(this.lstMatch[j].sum() >= 11);
             }
+            // else {
+            //     var taixiu_result_component = this.lstTaiXiuResult[j];
+            //     taixiu_result_component.initNumber(this.lstMatch[j].sum());
+            //     taixiu_result_component.initResult(this.lstMatch[j].sum() >= 11);
+            // }
 
             // if (this.lstMatch[j].sum() < 11) {
             //     cc.log("xiu");
@@ -717,4 +788,55 @@ cc.Class({
             popup.appear();
         });
     },
+    
+    btnCloseChatClick: function () {
+        this.chatPopup.active = false;
+        this.btnCloseChat.node.active = false;
+    },
+
+    btnChatClick: function () {
+        this.chatPopup.active = true;
+        this.btnCloseChat.node.active = true;
+    },
+
+    btnBetClick: function () {
+        this.groupKeyboard.active = true;
+    },
+
+    // updateMoneyResponseHandler: function(rs) {
+    //     if (rs.getResponsecode()) {
+    //         for (var i = 0; i < rs.getMoneyboxesList().length; i++) {
+    //             if (rs.getMoneyboxesList()[i].getUserid() === Common.getUserId()) {
+    //                 var currentMoney = rs.getMoneyboxesList()[i].getCurrentmoney();
+    //                 if (rs.getMoneyboxesList()[i].getIscash()) {
+    //                     Common.setCash(currentMoney);
+    //                     this->moneyEvent->onEventMoneyMiniGame(true,Common.getCash());
+    //                     this.isCashShow = true;
+    //                 }
+    //
+    //                 var displayMoney = rs.getMoneyboxesList()[i].getDisplaychangemoney();
+    //                 if(tableState == balanceState){
+    //                     displayMoneyShow = (int)displayMoney;
+    //                     showMoney(displayMoneyShow);
+    //                     displayMoneyShow = 0;
+    //                 }else if(tableState == resultState){
+    //                     displayMoneyResultShow = (int)displayMoney;
+    //                     if(displayMoneyResultShow > 0){
+    //
+    //
+    //                         auto label_text = MLabel::createUpdateMoney(displayMoneyResultShow,0.25f);
+    //                         label_text->setAnchorPoint(Point::ANCHOR_MIDDLE_BOTTOM);
+    //                         label_text->setPosition(Vec2(diaSprite->getPosition().x
+    //                             , isCashShow == true ? diaSprite->getPosition().y - diaSprite->getHeight()/2 :
+    //                         (diaSprite->getPosition().y - diaSprite->getHeight() / 6)));
+    //                         bg_content->addChild(label_text,2);
+    //
+    //                         displayMoneyResultShow = 0;
+    //                     }
+    //                 }
+    //
+    //             }
+    //         }
+    //     }
+    // }
 });

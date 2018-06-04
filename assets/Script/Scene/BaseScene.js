@@ -7,6 +7,18 @@ cc.Class({
 
 
     update : function(dt){
+        this.checkDisconnect();
+    },
+    checkDisconnect: function() {
+        if(window.disConnectMessage !== null) {
+            Common.setSessionId("-1");
+            Common.showToast(window.disConnectMessage, 2.0);
+            window.disConnectMessage = null;
+            NetworkManager.closeConnection();
+            this.scheduleOnce(function() {
+                cc.director.loadScene('IntroScene');
+            }, 2.0);
+        }
     },
 
     onLoad: function () {
@@ -22,12 +34,13 @@ cc.Class({
         switch (buffer.message_id) {
             case NetworkManager.MESSAGE_ID.INITIALIZE:
                 var msg = buffer.response;
+                // cc.log("end time init:", Date.now() - window.timeInit);
                 this.initialMessageResponseHandler(msg);
                 break;
-            case NetworkManager.MESSAGE_ID.PING:
-                var msg = buffer.response;
-                this.pingMessageResponseHandler(msg);
-                break;
+            // case NetworkManager.MESSAGE_ID.PING:
+            //     var msg = buffer.response;
+            //     this.pingMessageResponseHandler(msg);
+            //     break;
             case NetworkManager.MESSAGE_ID.LOGOUT:
                 var msg = buffer.response;
                 this.logOutMessageResponseHandler(msg);
@@ -79,7 +92,7 @@ cc.Class({
                 cc.log("game id = ", _gameIds);
                 Common.setEnableGameIds(_gameIds);
                 // NetworkManager.hideLoading();
-                cc.director.loadScene('Login');
+                NetworkManager.getJarRequest(-1, -1);
 
             }else {
                 Common.showToast(initialMessage.getMessage());
@@ -87,9 +100,10 @@ cc.Class({
         }
     },
     pingMessageResponseHandler: function(res) {
-        //cc.log("ping response handler:", res);
+        cc.log("ping response handler:", res.toObject());
         if(res.getResponsecode()) {
             if(res.getDisconnect()) {
+                cc.log("disconnected");
                 Common.setSessionId("-1");
                 if(res.hasMessage() && res.getMessage() !== "") {
                     Common.showToast(res.getMessage(), 2.0);

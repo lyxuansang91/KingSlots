@@ -56,7 +56,7 @@ var Treasure = cc.Class({
 
         if (this.enterRoomResponse.getArgsList().length > 0) {
             var entry = this.enterRoomResponse.getArgsList()[0];
-            if (entry.getKey() == "initValue") {
+            if (entry.getKey() === "initValue") {
                 this.initValue(entry.getValue());
             }
         }
@@ -209,13 +209,13 @@ var Treasure = cc.Class({
         },this);
 
 
-        item.node.runAction(cc.sequence(cc.delayTime(2), callFunc2, cc.delayTime(1), cc.fadeOut(1), cc.removeSelf(), null));
+        item.node.runAction(cc.sequence(cc.delayTime(2), callFunc2, cc.delayTime(1), cc.fadeOut(1), cc.removeSelf()));
     },
 
-    implementSpinTreasure: function (textEmotionId, listItem,listWin) {
+    implementSpinTreasure: function (textEmotionId, listItem, listWin) {
         this.resetLineResult();
         cc.log("lst_line_results : xxx ",this.lst_line_result);
-        if(listItem.length == 0){
+        if(listItem.length === 0){
             return;
         }
 
@@ -305,13 +305,14 @@ var Treasure = cc.Class({
     },
     implementDisplayChangeMoney: function(displayChangeMoney) {
         //TODO: hieu ung cong tien su dung bien displayChangeMoney
-
-        this.money_display.node.setPositionY(0);
-        this.money_display.string = "+" + displayChangeMoney;
-        this.money_display.node.runAction(cc.sequence(
-            cc.fadeIn(0.1),
-            cc.moveBy(1,cc.p(0,50)),
-            cc.fadeOut(0.5)));
+        if(this.money_display !== null) {
+            this.money_display.node.setPositionY(0);
+            this.money_display.string = "+" + displayChangeMoney;
+            this.money_display.node.runAction(cc.sequence(
+                cc.fadeIn(0.1),
+                cc.moveBy(1,cc.p(0,50)),
+                cc.fadeOut(0.5)));
+        }
     },
 
     resetLineResult: function () {
@@ -413,7 +414,7 @@ var Treasure = cc.Class({
                 var lineWin = null;
                 for(var i = 0; i < resp.getArgsList().length; i++) {
                     var entry = resp.getArgsList()[i];
-                    if(entry.getKey() == "listItem") {
+                    if(entry.getKey() === "listItem") {
                         listItem = entry.getValue().split(", ").map(function(item) {
                             item = parseInt(item);
                             return item;
@@ -430,13 +431,9 @@ var Treasure = cc.Class({
                     }
                 }
                 if(listItem !== null && lineWin !== null) {
-
-                    cc.log("list item:", listItem);
-                    cc.log("line win:", lineWin);
-
                     // TODO:
 
-                    this.implementSpinTreasure(textEmotionId, listItem,lineWin);
+                    this.implementSpinTreasure(textEmotionId, listItem, lineWin);
                 }
             }
         }
@@ -456,7 +453,7 @@ var Treasure = cc.Class({
         cc.log("exit zone response message:", resp.toObject());
         if(resp.getResponsecode()) {
             Common.setZoneId(-1);
-            cc.director.loadScene('Lobby');
+            cc.director.loadScene('Login');
         }
 
         if(resp.hasMessage() && resp.getMessage() !== "") {
@@ -464,7 +461,6 @@ var Treasure = cc.Class({
         }
     },
     jarResponseHandler: function(resp) {
-        cc.log("jar response message:", resp.toObject());
         if(resp.getResponsecode()) {
             this.isRequestJar = false;
             var jar_type_response = 0;
@@ -488,7 +484,7 @@ var Treasure = cc.Class({
         }
 
         if(resp.hasMessage() && resp.getMessage() !== "") {
-
+            Common.showToast(resp.getMessage(), 2);
         }
     },
 
@@ -508,6 +504,13 @@ var Treasure = cc.Class({
         this.popup_bet_select.active = this.is_bet_select;
     },
 
+    reloadJarRequest: function() {
+        this.unschedule(this.requestJar);
+        this.isRequestJar = false;
+        this.requestJar();
+        this.schedule(this.requestJar, 5);
+    },
+
     chonMucCuocEvent: function (event,data) {
         if(data < this.bets_select.length && data > -1){
             this.indexCash = data;
@@ -515,12 +518,14 @@ var Treasure = cc.Class({
             this.txt_bet_money.string = Common.convertIntToMoneyView(this.turnCashValue[this.indexCash]);
             this.is_bet_select = false;
             this.popup_bet_select.active = this.is_bet_select;
+            this.betType = parseInt(this.indexCash);
+            // call jar request
+            this.reloadJarRequest();
 
             var money_bet = this.turnCashValue[this.indexCash]*this.lst_line_selected.length;
             if(money_bet >= 0){
                 this.txt_total_bet_money.string = Common.numberFormatWithCommas(money_bet);
             }
-
         }
     },
 
@@ -539,8 +544,6 @@ var Treasure = cc.Class({
                     break;
                 }
             }
-
-            cc.log("contain :",contain);
 
             if (!contain){
                 this.lst_line_selected.push(data);
@@ -578,6 +581,7 @@ var Treasure = cc.Class({
             var contain = false;
             for(var j = 0; j < this.lst_line_selected.length; j++){
                 if(this.lst_line_selected[j] == this.lst_line_selected_sprite[i].name){
+                    cc.log("index:", i, "name:", this.lst_line_selected_sprite[i].name);
                     contain = true;
                     break;
                 }
@@ -585,8 +589,9 @@ var Treasure = cc.Class({
 
             var line = this.lst_line_selected_sprite[i];
             if(contain){
+                cc.log("contain", contain);
                 line.initHighLight(true);
-                count ++;
+                count++;
             }else{
                 line.initHighLight(false);
             }
@@ -602,7 +607,6 @@ var Treasure = cc.Class({
     },
 
     resetLineSelected: function () {
-
         this.lst_line_selected.clear();
     },
 
@@ -614,23 +618,19 @@ var Treasure = cc.Class({
         isDone = true;
         switch (buffer.message_id) {
             case NetworkManager.MESSAGE_ID.UPDATE_MONEY:
-                var msg = buffer.response;
-                this.updateMoneyMessageResponseHandler(msg);
+                this.updateMoneyMessageResponseHandler(buffer.response);
                 break;
             case NetworkManager.MESSAGE_ID.MATCH_END:
                 this.matchEndResponseHandler(buffer.response);
                 break;
             case NetworkManager.MESSAGE_ID.EXIT_ROOM:
-                var msg = buffer.response;
-                this.exitRoomResponseHandler(msg);
+                this.exitRoomResponseHandler(buffer.response);
                 break;
             case NetworkManager.MESSAGE_ID.EXIT_ZONE:
-                var msg = buffer.response;
-                this.exitZoneResponseHandler(msg);
+                this.exitZoneResponseHandler(buffer.response);
                 break;
             case NetworkManager.MESSAGE_ID.JAR:
-                var msg = buffer.response;
-                this.jarResponseHandler(msg);
+                this.jarResponseHandler(buffer.response);
                 break;
             default:
                 isDone = false;

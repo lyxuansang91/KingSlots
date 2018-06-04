@@ -15,8 +15,10 @@ cc.Class({
     },
 
     change: function (isSelected) {
+
         this.getComponent(cc.Sprite).spriteFrame = isSelected ?
             this.frames_selected[this.index - 1] : this.frames_deselect[this.index - 1];
+        this.isSelect = isSelected;
     },
 
     eventTouch : function () {

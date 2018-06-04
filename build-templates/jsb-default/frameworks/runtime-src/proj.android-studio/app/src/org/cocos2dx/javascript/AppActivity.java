@@ -26,6 +26,8 @@ package org.cocos2dx.javascript;
 import org.cocos2dx.lib.Cocos2dxActivity;
 import org.cocos2dx.lib.Cocos2dxGLSurfaceView;
 
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import org.cocos2dx.javascript.SDKWrapper;
@@ -66,6 +68,28 @@ public class AppActivity extends Cocos2dxActivity {
             return s;
         } else {
             return Character.toUpperCase(first) + s.substring(1);
+        }
+    }
+
+    public static String getVersionNameJNI() {
+        try {
+            PackageInfo pInfo = app.getPackageManager().getPackageInfo(app.getPackageName(), 0);
+            String versionName = pInfo.versionName;
+            return versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    public static String getVersionCodeJNI() {
+        try {
+            PackageInfo pInfo = app.getPackageManager().getPackageInfo(app.getPackageName(), 0);
+            String version = String.format("%d", pInfo.versionCode);
+            return version;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return "0";
         }
     }
 

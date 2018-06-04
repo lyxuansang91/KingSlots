@@ -57,7 +57,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 800,
+      "width": 1150,
       "height": 64
     },
     "_rotationX": 0,
@@ -111,8 +111,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 754,
-      "height": 58
+      "width": 1103,
+      "height": 57
     },
     "_rotationX": 0,
     "_rotationY": 0,
@@ -139,7 +139,7 @@
     },
     "_enabled": true,
     "_spriteFrame": {
-      "__uuid__": "1bdb9dd0-d73f-431e-adf9-4bf1bed480f5"
+      "__uuid__": "eb91c532-eddf-49de-8199-8f6f298c29e3"
     },
     "_type": 0,
     "_sizeMode": 1,
@@ -211,7 +211,7 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": -335,
+      "x": -499,
       "y": 0
     },
     "_skewX": 0,
@@ -280,9 +280,9 @@
     "_opacity": 255,
     "_color": {
       "__type__": "cc.Color",
-      "r": 112,
-      "g": 48,
-      "b": 16,
+      "r": 255,
+      "g": 255,
+      "b": 255,
       "a": 255
     },
     "_cascadeOpacityEnabled": true,
@@ -293,7 +293,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 204.4,
+      "width": 204,
       "height": 40
     },
     "_rotationX": 0,
@@ -302,8 +302,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": -287,
-      "y": 11
+      "x": -420,
+      "y": 14
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -362,9 +362,9 @@
     "_opacity": 255,
     "_color": {
       "__type__": "cc.Color",
-      "r": 112,
-      "g": 48,
-      "b": 16,
+      "r": 253,
+      "g": 253,
+      "b": 253,
       "a": 255
     },
     "_cascadeOpacityEnabled": true,
@@ -375,7 +375,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 178.59,
+      "width": 179,
       "height": 24
     },
     "_rotationX": 0,
@@ -384,8 +384,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": -286,
-      "y": -16
+      "x": -419,
+      "y": -13
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -478,8 +478,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 307,
-      "y": 0
+      "x": 455,
+      "y": 3
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -708,7 +708,9 @@
     },
     "btn_delete": {
       "__id__": 19
-    }
+    },
+    "mailId": -1,
+    "index": 0
   },
   {
     "__type__": "cc.PrefabInfo",

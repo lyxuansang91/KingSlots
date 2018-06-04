@@ -6,15 +6,31 @@ cc.Class({
     properties: {
         edit_number : cc.EditBox,
         edit_serial : cc.EditBox,
-        table_view : cc.Node,
-        ui_left : cc.Node,
-        tabLeftPrefab: cc.Prefab,
+        edit_list : cc.EditBox,
+        scroll_view : cc.ScrollView,
+        itemProviderPrefab : cc.Prefab,
+        lstItemPrefab : cc.Prefab,
+
+        isValid_viettel : false,
+        isValid_mobifone : false,
+        isValid_vinaphone: false,
+
+        node_nm_viettel : cc.Node,
+        node_nm_vina : cc.Node,
+        node_nm_mobi : cc.Node,
+
+        nm_frames : [cc.SpriteFrame],
+
+        btn_select: cc.Button,
+        scroll_view_lst: cc.ScrollView
     },
     purchaseMoney: function() {
         if(this.providercode !== null) {
             var cardSerial = this.edit_serial.string;
             var cardPin = this.edit_number.string;
-            NetworkManager.requestPurchaseMoneyMessage(this.providercode, cardSerial, cardPin, "", "");
+            var cardValue = this.edit_list.string;
+            cc.log("cardValue =", cardValue);
+            NetworkManager.requestPurchaseMoneyMessage(this.providercode, cardSerial, cardPin, "", "", true, cardValue);
         } else {
             cc.log("Không tồn tại provider code");
         }
@@ -32,27 +48,98 @@ cc.Class({
             };
         });
 
-        cc.log("tabString:", this.tabInfo);
+        for(var i = 0; i < this.tabString.length; i++){
+            if(this.tabString[i] == "Viettel"){
+                this.isValid_viettel = true;
+            }else if(this.tabString[i] == "Vinaphone"){
+                this.isValid_vinaphone = true;
+            }else if(this.tabString[i] == "Mobifone"){
+                this.isValid_mobifone = true;
+            }
+        }
 
-        var item = cc.instantiate(this.tabLeftPrefab);
-        item.getComponent("UITabLeft").setTab(this.tabString, 1, function(index){
-            this.onLeftEvent(index-1);
-        }.bind(this));
-        this.ui_left.addChild(item);
+        this.resetButton();
+
+        this.onEventData("Vinaphone");
     },
 
     onLoad: function () {
         // this.initTabLeft();
     },
 
-    onLeftEvent: function(index) {
+    resetButton : function () {
+        this.node_nm_viettel.getComponent(cc.Sprite).spriteFrame = this.nm_frames[0];
+        this.node_nm_vina.getComponent(cc.Sprite).spriteFrame = this.nm_frames[0];
+        this.node_nm_mobi.getComponent(cc.Sprite).spriteFrame = this.nm_frames[0];
+    },
+
+    onEventData: function (data) {
+
+        if(data == "Viettel"){
+            if(!this.isValid_viettel){
+                Common.showToast("Nhà mạng Viettel hiện không nhận nạp thẻ.",2);
+                return;
+            }else{
+                this.resetButton();
+                this.node_nm_viettel.getComponent(cc.Sprite).spriteFrame = this.nm_frames[1];
+            }
+        }else if(data == "Mobifone"){
+            if(!this.isValid_mobifone){
+                Common.showToast("Nhà mạng Mobifone hiện không nhận nạp thẻ.",2);
+                return;
+            }else{
+                this.resetButton();
+                this.node_nm_mobi.getComponent(cc.Sprite).spriteFrame = this.nm_frames[1];
+            }
+        }else if(data == "Vinaphone"){
+            if(!this.isValid_vinaphone){
+                Common.showToast("Nhà mạng Vinaphone hiện không nhận nạp thẻ.",2);
+                return;
+            }else{
+                this.resetButton();
+                this.node_nm_vina.getComponent(cc.Sprite).spriteFrame = this.nm_frames[1];
+            }
+        }
+
+        var innerSize = cc.size(0,
+            this.scroll_view.content.getContentSize().height);
+
+        var index = null;
+        for(var i = 0; i < this.tabString.length; i++){
+            if(data == this.tabString[i]){
+                index = i;
+            }
+        }
+        if(index == null){
+            return;
+        }
+
         var productList = this.tabInfo[index].productsList;
+        this.lstItem = this.tabInfo[index].productsList;
         this.providercode = this.tabInfo[index].providercode;
-        cc.log("provider code:", this.providercode);
         var num = productList.length;
-        var headerCell = ["Mệnh giá thẻ", "KM", "Số BIT"];
-        var data = this._getdata(productList, headerCell, num);
-        this.table_view.getComponent(cc.tableView).initTableView(data.length, { array: data, target: this });
+
+        this.scroll_view.content.removeAllChildren();
+        for(var i = 0; i < num; i++){
+            var item = cc.instantiate(this.itemProviderPrefab);
+            item.getComponent('ItemProvider').init(productList[i].parvalue,productList[i].cashvalue);
+            var size = item.getComponent('ItemProvider').node.getContentSize();
+
+            item.setPosition(cc.p(size.width*(i*1.0 + 0.5),0));
+
+            innerSize.width += size.width*1.0;
+
+            this.scroll_view.content.addChild(item);
+        }
+
+        this.scroll_view.content.setContentSize(innerSize);
+    },
+
+    onLeftEvent: function(event,data) {
+        console.log("data : ",data);
+
+        this.onEventData(data);
+
     },
 
     _getdata: function (val, headCell, num) {
@@ -117,4 +204,35 @@ cc.Class({
     start: function () {
 
     },
+    
+    btnSelectClick: function () {
+        this.scroll_view_lst.node.active = true;
+        var innerSize = cc.size(this.scroll_view_lst.content.getContentSize().width, 0);
+        var num = this.lstItem.length;
+        var self = this;
+        this.scroll_view_lst.content.removeAllChildren();
+        for(var i = 0; i < num; i++){
+            var item = cc.instantiate(this.lstItemPrefab);
+            item.getComponent('ListItem').init(this.lstItem[i].parvalue,this.lstItem[i].cashvalue, function (index) {
+                self.selectLstItem(index);
+            });
+            var size = item.getComponent('ListItem').node.getContentSize();
+
+            item.setPosition(cc.p(0, - (0.5 + i)*item.height * 1.1));
+
+            innerSize.height += size.height*1.1;
+
+            this.scroll_view_lst.content.addChild(item);
+        }
+
+        this.scroll_view_lst.content.setContentSize(innerSize);
+    },
+
+    selectLstItem: function (parValue) {
+        cc.log("parValue =", parValue);
+        this.scroll_view_lst.node.active = false;
+
+        this.btn_select.node.getChildByName("Label").getComponent(cc.Label).string = parValue;
+        this.edit_list.string = parValue;
+    }
 });

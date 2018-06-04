@@ -44,7 +44,7 @@ cc.Class({
         entry1.setKey("isCash");
         entry1.setValue(isCash ? "true" : "false");
         entries.push(entry1);
-        NetworkManager.getLookUpGameHistoryRequest(firstResult,
+        NetworkManager.getLookUpGameHistoryRequest(Common.getZoneId(), firstResult,
             maxResult, entries, -1, false);
     },
 

@@ -39,13 +39,14 @@ cc.Class({
     },
 
     openChargePopup: function () {
-        var tabString = ["Thẻ cào", "SMS"];
-
-        Common.showPopup(Config.name.POPUP_CHARGING,function(popup) {
-            popup.addTabs(tabString, 1);
-            popup.appear();
-        });
-
+        if(Common.enablePurchaseCash) {
+            Common.showPopup(Config.name.POPUP_NAPTIEN, function(popup) {
+                //popup.addTabs(tabString, 1);
+                popup.appear();
+            });
+        } else {
+            Common.showToast("Chức năng này đang cập nhật, vui lòng thử lại");
+        }
     },
     openUserInfoPopup: function () {
 
@@ -61,18 +62,21 @@ cc.Class({
         Common.showPopup(Config.name.POPUP_SETTING,function(popup) {
             popup.appear();
         });
-
     },
+
     openGiftPopup: function () {
+        if(Common.enableGiftCode) {
+            var tabString = ["Nhập giftcode", "Giftcode đã nhận"];
 
-        var tabString = ["Nhập giftcode", "Giftcode đã nhận"];
-
-        Common.showPopup(Config.name.POPUP_GIFT,function(popup) {
-            popup.addTabs(tabString, 1);
-            popup.appear();
-        });
-
+            Common.showPopup(Config.name.POPUP_GIFT, function (popup) {
+                popup.addTabs(tabString, 1);
+                popup.appear();
+            });
+        } else {
+            Common.showToast("Chức năng này đang cập nhật, vui lòng thử lại");
+        }
     },
+
     setUserInfo: function() {
         this.userName.string = Common.getDisplayName();
         this.userGold.string = Common.numberFormatWithCommas(Common.getCash());
@@ -161,22 +165,6 @@ cc.Class({
             Common.showToast(resp.getMessage());
         }
     },
-    updateMoneyResponseHandler: function(resp) {
-        cc.log("update money response handler: ", resp.toObject());
-        if(resp.getResponsecode()) {
-            if(resp.getMoneyboxesList().length > 0) {
-                var money_box = resp.getMoneyboxesList()[0];
-                if(money_box.getUserid() === Common.getUserId()) {
-                    Common.setCash(money_box.getCurrentmoney());
-                    this.setUserInfo();
-                }
-            }
-        }
-
-        if(resp.hasMessage() && resp.getMessage() !== "") {
-            Common.showToast(resp.getMessage());
-        }
-    },
     assetConfigResponseHandler: function(resp) {
         cc.log("asset config response handler:", resp.toObject());
         Common.assetsConfigList = [];
@@ -210,9 +198,6 @@ cc.Class({
                 break;
             case NetworkManager.MESSAGE_ID.SMS_CONFIG:
                 this.smsConfigResponseHandler(resp);
-                break;
-            case NetworkManager.MESSAGE_ID.UPDATE_MONEY:
-                this.updateMoneyResponseHandler(resp);
                 break;
             case NetworkManager.MESSAGE_ID.ASSET_CONFIG:
                 this.assetConfigResponseHandler(resp);

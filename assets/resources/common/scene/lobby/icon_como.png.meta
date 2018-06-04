@@ -1,0 +1,30 @@
+{
+  "ver": "1.0.0",
+  "uuid": "4fb6aa3a-4c5d-44a6-a859-8d86a0c27c40",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "subMetas": {
+    "icon_como": {
+      "ver": "1.0.3",
+      "uuid": "035a20f3-871b-4178-9015-02ba3fd7767a",
+      "rawTextureUuid": "4fb6aa3a-4c5d-44a6-a859-8d86a0c27c40",
+      "trimType": "custom",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 249,
+      "height": 445,
+      "rawWidth": 249,
+      "rawHeight": 445,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}
