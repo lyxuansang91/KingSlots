@@ -23,23 +23,30 @@ cc.Class({
         this.tabString = this.providersList.map(function(provider) {
             return provider.providername;
         });
+
+        this.providercodes = this.providersList.map(function(provider) {
+            return provider.providercode;
+        });
+
+        cc.log("provider codes:", this.providercodes);
+
         this.tabInfo = Common.smsConfigLists.map(function(provider) {
             return provider.providerLists;
         });
 
-        for(var i = 0; i < this.tabString.length; i++){
-            if(this.tabString[i] == "Viettel"){
+        for(var i = 0; i < this.providercodes.length; i++){
+            if(this.providercodes[i] == "VTT"){
                 this.isValid_viettel = true;
-            }else if(this.tabString[i] == "Vinaphone"){
+            }else if(this.providercodes[i] == "VNP"){
                 this.isValid_vinaphone = true;
-            }else if(this.tabString[i] == "Mobifone"){
+            }else if(this.providercodes[i] == "VMS"){
                 this.isValid_mobifone = true;
             }
         }
 
         this.resetButton();
 
-        this.onEventData("Viettel");
+        this.onEventData("VTT");
     },
 
     onLoad: function () {
@@ -53,7 +60,7 @@ cc.Class({
 
     onEventData: function (data) {
 
-        if(data == "Viettel"){
+        if(data == "VTT"){
             if(!this.isValid_viettel){
                 Common.showToast("Nhà mạng Viettel hiện không nhận nạp SMS.",2);
                 return;
@@ -61,7 +68,7 @@ cc.Class({
                 this.resetButton();
                 this.node_nm_viettel.getComponent(cc.Sprite).spriteFrame = this.nm_frames[1];
             }
-        }else if(data == "Mobifone"){
+        }else if(data == "VMS"){
             if(!this.isValid_mobifone){
                 Common.showToast("Nhà mạng Mobifone hiện không nhận nạp SMS.",2);
                 return;
@@ -69,7 +76,7 @@ cc.Class({
                 this.resetButton();
                 this.node_nm_mobi.getComponent(cc.Sprite).spriteFrame = this.nm_frames[1];
             }
-        }else if(data == "Vinaphone"){
+        }else if(data == "VNP"){
             if(!this.isValid_vinaphone){
                 Common.showToast("Nhà mạng Vinaphone hiện không nhận nạp SMS.",2);
                 return;
@@ -85,8 +92,8 @@ cc.Class({
         var padding = 0;
 
         var index = null;
-        for(var i = 0; i < this.tabString.length; i++){
-            if(data == this.tabString[i]){
+        for(var i = 0; i < this.providercodes.length; i++){
+            if(data == this.providercodes[i]){
                 index = i;
             }
         }
