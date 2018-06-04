@@ -428,7 +428,6 @@ var Common = {
         } else if(url.includes("gamemoni.com")) {
             return "13";
         }
-        cc.log("get cp:", 14);
         return "14";
     },
     getVersionCode: function() {
