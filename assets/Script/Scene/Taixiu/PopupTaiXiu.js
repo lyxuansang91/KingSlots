@@ -69,7 +69,7 @@ cc.Class({
         btnCloseChat: cc.Button,
         groupKeyboard: cc.Node,
         background: cc.Sprite,
-
+        oldVal: 0
     },
 
     // use this for initialization
@@ -225,8 +225,13 @@ cc.Class({
     * Example: this.setTotalMoneyTaiXiu(this.total_money_tai, 5000);
     */
     setTotalMoneyTaiXiu: function(target, val) {
+        this.oldVal = val;
+        cc.log("this.oldVal =", this.oldVal);
         if(target instanceof cc.Label) {
-            target.string = Common.numberFormatWithCommas(val);
+
+            var oldValue = Common.stringWithCommasToNumber(target.string);
+            cc.log("oldVal =", oldValue);
+            Common.countNumberAnim(target, oldValue, val, 0, 1);
         }
     },
     sendMessageTaiXiu: function(message) {
@@ -714,20 +719,22 @@ cc.Class({
     updateLstMatchView: function() {
         cc.log("OK");
         for (var j = 0; j < this.lstMatch.length; j++) {
+            cc.log("lst match =", this.lstMatch.length);
             // if (j < this.lstMatch.length) {
-            if( this.lstTaiXiuResult.length < 16) {
+            if( this.lstTaiXiuResult.length < 14) {
                 var taixiu_result = cc.instantiate(this.taiXiuResult);
                 var taixiu_result_component = taixiu_result.getComponent("TaiXiuResult");
                 taixiu_result_component.initNumber(this.lstMatch[j].sum());
                 taixiu_result_component.initResult(this.lstMatch[j].sum() >= 11);
-                taixiu_result.setPosition((j-this.lstMatch.length / 2 + 0.5) * taixiu_result_component.node.getContentSize().width , 0);
+                taixiu_result.setPosition((j-this.lstMatch.length / 2 + 1.5) * taixiu_result_component.node.getContentSize().width , 0);
                 this.lstMatch_view.addChild(taixiu_result);
                 this.lstTaiXiuResult.push(taixiu_result_component);
-            } else {
-                var taixiu_result_component = this.lstTaiXiuResult[j];
-                taixiu_result_component.initNumber(this.lstMatch[j].sum());
-                taixiu_result_component.initResult(this.lstMatch[j].sum() >= 11);
             }
+            // else {
+            //     var taixiu_result_component = this.lstTaiXiuResult[j];
+            //     taixiu_result_component.initNumber(this.lstMatch[j].sum());
+            //     taixiu_result_component.initResult(this.lstMatch[j].sum() >= 11);
+            // }
 
             // if (this.lstMatch[j].sum() < 11) {
             //     cc.log("xiu");

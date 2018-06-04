@@ -514,6 +514,18 @@ var Common = {
     numberFormatWithCommas: function(value){
         return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
+    stringWithCommasToNumber: function(value){
+        // return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        cc.log("value =", value);
+        if(value !== 0 && value !== null){
+            value = value.replace(".","");
+            cc.log("value 2 =", value);
+            return parseInt(value);
+        }
+
+        return 0;
+
+    },
     convertIntToMoneyView: function (value) {
         var i = 0;
         var end = [ "", "K", "M", "B" ];
