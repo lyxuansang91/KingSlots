@@ -424,10 +424,11 @@ var Common = {
     getCp: function() {
         var url = window.location.href;
         if(url.includes("gamebaivocuc.club")) {
-            return "13";
-        } else if(url.includes("gamemoni.com")) {
             return "14";
+        } else if(url.includes("gamemoni.com")) {
+            return "13";
         }
+        cc.log("get cp:", 14);
         return "14";
     },
     getVersionCode: function() {
