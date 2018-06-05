@@ -220,6 +220,7 @@ var Treasure = cc.Class({
         }
 
         var index_item = 4;
+
         this.txt_user_money.string = Common.numberFormatWithCommas(this.prevMoney);
 
         for(var i = 0; i < this.list_item.length; i++){
@@ -266,6 +267,7 @@ var Treasure = cc.Class({
 
             var delay = cc.delayTime(y*0.3);
 
+            // stop spin
             if(i == this.list_item.length - 1){
                 // khi dừng hiệu ứng
                 var self = this;
@@ -293,9 +295,10 @@ var Treasure = cc.Class({
                         self.showNoHu();
                         return;
                     }
-
                     self.txt_win_money.string = Common.numberFormatWithCommas(self.displayChangeMoney);
-                    self.implementDisplayChangeMoney(self.displayChangeMoney);
+                    if(self.displayChangeMoney > 0) {
+                        self.implementDisplayChangeMoney(self.displayChangeMoney);
+                    }
                 });
                 item.runAction(cc.sequence(delay,move1,move2,call_func, call_func_display_money));
             }else{
@@ -385,11 +388,14 @@ var Treasure = cc.Class({
         cc.log("update money response:", resp.toObject());
         if(resp.getResponsecode()) {
             var money_box_treasureSpin = resp.getMoneyboxesList()[0];
+            this.prevMoney = money_box_treasureSpin.getCurrentmoney();
             if(resp.getMoneyboxesList().length === 1) {
                 Common.setCash(money_box_treasureSpin.getCurrentmoney());
-                this.txt_user_money.string = Common.numberFormatWithCommas(money_box_treasureSpin.getCurrentmoney());
+                cc.log("current cash:", Common.getCash());
+                this.txt_user_money.string = Common.numberFormatWithCommas(Common.getCash());
+                this.lastMoney = Common.getCash();
+                this.displayChangeMoney = 0;
             } else {
-                this.prevMoney = money_box_treasureSpin.getCurrentmoney();
                 this.lastMoney = resp.getMoneyboxesList()[1].getCurrentmoney();
                 this.displayChangeMoney = resp.getMoneyboxesList()[1].getDisplaychangemoney();
 
@@ -398,7 +404,7 @@ var Treasure = cc.Class({
 
         }
         if(resp.hasMessage() && resp.getMessage() !== "") {
-
+            Common.showToast(resp.getMessage(), 2.0);
         }
     },
 
