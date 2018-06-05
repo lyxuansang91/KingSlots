@@ -73,7 +73,6 @@ cc.Class({
         btnCloseChat: cc.Button,
         groupKeyboard: cc.Node,
         background: cc.Sprite,
-
     },
 
     // use this for initialization
@@ -188,7 +187,7 @@ cc.Class({
             } else if (key === "sessionId") {
                 //set current session
                 this.currentMatch = new TXMatch(value, 1, 1, 1);
-                this.session.string = value;
+                this.session.string ="#" +  value;
                 this.currentSession = value;
             } else if (key === "resultHistorys") {
                 //xu ly cau
@@ -235,9 +234,16 @@ cc.Class({
     * Example: this.setTotalMoneyTaiXiu(this.total_money_tai, 5000);
     */
     setTotalMoneyTaiXiu: function(target, val) {
-        if(target instanceof cc.Label) {
-            target.string = Common.numberFormatWithCommas(val);
+        cc.log("target =", target);
+        if(target.node.name === "tai_number_user" || target.node.name === "xiu_number_user"){
+            target.string = "(" + val + ")";
+        } else {
+            if(target instanceof cc.Label) {
+                var oldValue = Common.stringWithCommasToNumber(target.string);
+                Common.countNumberAnim(target, oldValue, val, 0, 1);
+            }
         }
+
     },
     sendMessageTaiXiu: function(message) {
         cc.log("message",message.string);
@@ -578,7 +584,7 @@ cc.Class({
                     var intValue = parseInt(value);
                     this.setTableStage(intValue);
                     if (intValue === TABLE_STATE.BALANCE) {
-                        Common.showToast("Cân cửa");
+                        //Common.showToast("Cân cửa");
                         this.can_keo.node.active = true;
                         this.timer.node.active = false;
                     } else if (intValue === TABLE_STATE.RESULT) {
@@ -617,11 +623,12 @@ cc.Class({
                 var value = resp.getArgsList()[i].getValue();
                 if (key === "sessionId") {
                     this.currentMatch.setSestionID(value);
-                    this.session.string = value;
+                    this.session.string = "#" + value;
                     this.currentSession = value;
                 }
             }
-            Common.showToast(resp.getMessage());
+            if(resp.hasMessage() && resp.getMessage() !== "")
+                Common.showToast(resp.getMessage());
         }
     },
 
@@ -650,7 +657,7 @@ cc.Class({
         cc.log("match begin response:", resp.toObject());
         if(resp.getResponsecode()) {
             this.setTableStage(TABLE_STATE.BET);
-            Common.showToast("Bat đầu đặt cược");
+            // Common.showToast("Bat đầu đặt cược");
             //TODO: bắt đầu chạy thời gian đặt cửa trên đĩa với thời gian là countdown
             var self = this;
 
@@ -765,9 +772,7 @@ cc.Class({
     },
 
     updateLstMatchView: function() {
-        cc.log("OK");
         for (var j = 0; j < this.lstMatch.length; j++) {
-            // if (j < this.lstMatch.length) {
             if( this.lstTaiXiuResult.length < 16) {
                 var taixiu_result = cc.instantiate(this.taiXiuResult);
                 var taixiu_result_component = taixiu_result.getComponent("TaiXiuResult");
@@ -780,24 +785,7 @@ cc.Class({
                 if(j === this.lstMatch.length - 1){
                     taixiu_result_component.highLight(this.lstMatch[j].sum() >= 11);
                 }
-            } else {
-                var taixiu_result_component = this.lstTaiXiuResult[j];
-                taixiu_result_component.initNumber(this.lstMatch[j].sum());
-                taixiu_result_component.initResult(this.lstMatch[j].sum() >= 11);
             }
-
-            // if (this.lstMatch[j].sum() < 11) {
-            //     cc.log("xiu");
-            //     //set texture xiu cho sprite
-            //     taixiu_result_component.initResult(false);
-            // } else {
-            //     cc.log("tai");
-            //     taixiu_result_component.initResult(true);
-            //     //set texture tai cho sprite
-            // }
-            // } else {
-            //     sprite.active = false;
-            // }
         }
     },
 
