@@ -27,6 +27,10 @@ cc.Class({
         btnClose: cc.Button,
         taiGate: Gate,
         xiuGate: Gate,
+        tai_sprite : cc.Node,
+        xiu_sprite : cc.Node,
+        mini_countdown : cc.Node,
+        mini_result : cc.Label,
         lstMatch_view : cc.Node,
         money_keyboard : cc.Node,
         number_keyboard : cc.Node,
@@ -78,6 +82,7 @@ cc.Class({
         Common.setExistTaiXiu(true);
         this.lstTaiXiuResult = [];
         this.countDownTimer = 0;
+        this.result_dice = [];
 
         var self = this;
         this.background.node.on("touchstart", function( touch) {
@@ -117,6 +122,8 @@ cc.Class({
         this.taixiu_xoc_anim.node.active = false;
         if(this.currentMatch.getResult().length > 0){
             this.result_node.active = true;
+
+            this.displayResult();
             for(var i = 0; i < this.result_sprites.length; i ++){
                 var value = this.currentMatch.getResult()[i];
                 if(value > 0 && value <= 6){
@@ -162,12 +169,15 @@ cc.Class({
             } else if (key === "cdTimerRemaining") {
                 //thoi gian con lai
 
-                this.bat.node.active = false;
+                //this.bat.node.active = false;
                 var self = this;
                 var duration = parseInt(value/1000);
                 this.countDownTimer = duration;
                 this.timer.string = "";
                 this.timer.node.active = true;
+
+                this.mini_result.string = "";
+                this.mini_result.node.active = false;
 
                 // clear timeout
                 this.unscheduleAllCallbacks();
@@ -580,8 +590,8 @@ cc.Class({
                     if (this.getTableStage() == TABLE_STATE.RESULT) {
                         var dicesvalue = value.split('-').map(Number);
                         this.currentMatch.setResult(dicesvalue[0], dicesvalue[1], dicesvalue[2]);
-                        cc.log("OK");
-                        //show animation con xuc sac quay
+
+                        this.result_dice = dicesvalue;
 
                         this.bat.node.active = false;
                         this.can_keo.node.active = false;
@@ -630,6 +640,8 @@ cc.Class({
                 this.lstMatch.shift();
             }
             this.updateLstMatchView();
+
+            var countdown = resp.getCountdowntimer()/1000;
         }
         if(resp.hasMessage() && resp.getMessage() !== "")
             Common.showToast(resp.getMessage());
@@ -646,6 +658,14 @@ cc.Class({
             this.countDownTimer = parseInt(resp.getCountdowntimer()/1000);
             this.timer.string = "";
             this.timer.node.active = true;
+
+            this.mini_result.string = "";
+            this.mini_result.node.active = false;
+
+            this.tai_sprite.stopAllActions();
+            this.xiu_sprite.stopAllActions();
+            this.tai_sprite.opacity = 255;
+            this.xiu_sprite.opacity = 255;
 
             this.unscheduleAllCallbacks();
             self.schedule(function () {
@@ -711,6 +731,39 @@ cc.Class({
         }
     },
 
+    displayResult : function () {
+        if(this.result_dice.length > 0){
+
+            var totalValue = 0;
+            for(var i = 0; i < this.result_dice.length; i++){
+                totalValue += this.result_dice[i];
+            }
+
+            if(totalValue > 0){
+                if(totalValue > 10){
+                    this.mini_result.node.color = cc.hexToColor("#ffffff");
+                }else{
+                    this.mini_result.node.color = cc.hexToColor("#ff1900");
+                }
+
+                this.mini_result.string = totalValue;
+                this.mini_result.node.active = true;
+
+                this.timer.string = "";
+                this.timer.node.active = false;
+                this.unscheduleAllCallbacks();
+            }
+
+            var action = cc.repeat(cc.sequence(cc.fadeOut(0.1),cc.delayTime(0.15),cc.fadeIn(0.1)),20);
+
+            if(totalValue > 10){
+                this.tai_sprite.runAction(action);
+            }else{
+                this.xiu_sprite.runAction(action);
+            }
+        }
+    },
+
     updateLstMatchView: function() {
         cc.log("OK");
         for (var j = 0; j < this.lstMatch.length; j++) {
@@ -720,9 +773,13 @@ cc.Class({
                 var taixiu_result_component = taixiu_result.getComponent("TaiXiuResult");
                 taixiu_result_component.initNumber(this.lstMatch[j].sum());
                 taixiu_result_component.initResult(this.lstMatch[j].sum() >= 11);
-                taixiu_result.setPosition((j-this.lstMatch.length / 2 + 0.5) * taixiu_result_component.node.getContentSize().width , 0);
+                taixiu_result.setPosition((j-this.lstMatch.length / 2 + 0.5) * taixiu_result_component.node.getContentSize().width*0.95, 0);
                 this.lstMatch_view.addChild(taixiu_result);
                 this.lstTaiXiuResult.push(taixiu_result_component);
+
+                if(j === this.lstMatch.length - 1){
+                    taixiu_result_component.highLight(this.lstMatch[j].sum() >= 11);
+                }
             } else {
                 var taixiu_result_component = this.lstTaiXiuResult[j];
                 taixiu_result_component.initNumber(this.lstMatch[j].sum());
