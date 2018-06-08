@@ -57,6 +57,7 @@ cc.Class({
     },
 
     handleRegisterResponseHandler: function(e) {
+        cc.log("handleRegisterResponseHandler =", e);
         const buffer = e;
         if(buffer.getResponsecode()) {
             this.disappear();

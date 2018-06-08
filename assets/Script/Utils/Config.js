@@ -146,6 +146,14 @@ var Config = {
         DONG_LE: 2,
         DONG_ALL: 3,
         CHON_LAI: 4
+    },
+
+    TableState : {
+        betState : 1,
+        balanceState : 2,
+        resultState : 3,
+        matchEndState : 4,
+        prepareNewMatchState : 5
     }
 
 };

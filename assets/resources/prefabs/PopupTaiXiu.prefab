@@ -12238,6 +12238,7 @@
     "session": {
       "__id__": 131
     },
+    "userMoney": null,
     "currentSession": 0,
     "isNumber": true,
     "currentBet": 0,

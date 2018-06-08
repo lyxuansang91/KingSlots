@@ -98,6 +98,7 @@ cc.Class({
         var self = this;
         NetworkManager.checkEvent(function(buffer) {
             return self.handleMessage(buffer);
+
         });
 
     },
@@ -156,7 +157,8 @@ cc.Class({
             return true;
         }
         isDone = true;
-
+        cc.log("msid =", buffer.message_id);
+        cc.log("msid UPDATE_MONEY =", NetworkManager.MESSAGE_ID.UPDATE_MONEY);
         switch (buffer.message_id) {
             case NetworkManager.MESSAGE_ID.ENTER_ZONE:
                 var msg = buffer.response;
@@ -205,6 +207,10 @@ cc.Class({
             case NetworkManager.MESSAGE_ID.INSTANT_MESSAGE:
                 var msg = buffer.response;
                 this.instantMessageResponseHandler(msg);
+                break;
+            case NetworkManager.MESSAGE_ID.LEVEL_UP:
+                var msg = buffer.response;
+                // this.instantMessageResponseHandler(msg);
                 break;
             default:
                 isDone = false;
@@ -401,28 +407,6 @@ cc.Class({
                 Common.setMiniGameZoneId(zoneId);
 
                 if (zoneId === Common.ZONE_ID.TAIXIU){
-                    // // auto node = TamXiNgau::create(this);
-                    // // node->setPosition(MVec2(0, 0));
-                    // // this->addChild(node, INDEX_MINIGAME);
-                    // // node->onHandlerMessage(response, typeMessage);
-                    //
-                    // if(cc.isValid(scene) && !cc.isValid(scene.getChildByName("PopupTaiXiu"))){
-                    //     cc.loader.loadRes("prefabs/PopupTaiXiu",function(error, prefab) {
-                    //         if(!error){
-                    //             var taixiu = cc.instantiate(prefab);
-                    //             if(cc.isValid(taixiu)){
-                    //                 taixiu.x = Common.width / 2;
-                    //                 taixiu.y = Common.height / 2;
-                    //                 scene.addChild(taixiu);
-                    //                 taixiu.getComponent("PopupTaiXiu").setEnterRoomResponse(response);
-                    //                 taixiu.getComponent("PopupTaiXiu").handleMessage(response, typeMessage);
-                    //             }
-                    //         }
-                    //     });
-                    // }
-                    // // else {
-                    // //     this.node.getComponent("PopupTaiXiu").handleMessage(response, typeMessage);
-                    // // }
 
                     if(cc.isValid(scene) && !cc.isValid(scene.getChildByName("PopupTaiXiu"))){
                         cc.loader.loadRes("prefabs/PopupTaiXiu",function(error, prefab) {
@@ -599,9 +583,9 @@ cc.Class({
     },
 
     betResponseHandler: function(response){
-
+        cc.log("betResponseHandler =", response);
         if (response !== 0) {
-            if (response.hasMessage() && response.getMessage() != '') {
+            if (response.hasMessage() && response.getMessage() !== '') {
                 Common.showToast(response.getMessage());
             }
             if(response.hasZoneid()){
@@ -654,41 +638,16 @@ cc.Class({
         }
     },
     updateMoneyResponseHandler: function(response){
-        cc.log("response =", response);
-        if (response !== 0) {
+        cc.log("updateMoneyResponseHandler =", response);
+        if (response !== "") {
 
             if (response.hasMessage() && response.getMessage() !== '') {
                 Common.showToast(response.getMessage());
             }
+
             if(response.hasZoneid()){
                 var zoneId = response.getZoneid();
-                if(zoneId <= 0 || zoneId === Common.ZONE_ID.TAIXIU ){
-                    if (response.getResponsecode()) {
-                        if (zoneId === Common.ZONE_ID.TAIXIU){
-                            this.handlerMessageMiniGame(zoneId, response, NetworkManager.MESSAGE_ID.UPDATE_MONEY);
-                        }
-                        if (response.getMoneyboxesList().length > 0){
-                            var moneyBox;
-                            var origin_money;
-                            var result = "";
-
-                            for (var i = 0; i < response.getMoneyboxesList().length; i++) {
-                                moneyBox = response.getMoneyboxesList()[i];
-                                var isCash = moneyBox.getIscash();
-                                if (moneyBox.getUserid() === Common.getUserId()){
-                                    origin_money = moneyBox.getCurrentmoney();
-                                    //set lai tien cho nguoi choi
-                                    if (isCash){
-                                        Common.setCash(origin_money);
-                                        this.userGold.string = Common.numberFormatWithCommas(Common.getCash());
-                                        // this.setUserInfo();
-                                        // label_cash->setString(common->numberFormatWithCommas(common->getCash()));
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }else if(Common.inMiniGame(zoneId) && zoneId !== Common.ZONE_ID.TAIXIU){
+                if(Common.inMiniGame(zoneId)){
                     this.handlerMessageMiniGame(zoneId, response, NetworkManager.MESSAGE_ID.UPDATE_MONEY);
                 }
             }
