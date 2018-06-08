@@ -43,7 +43,7 @@ cc.Class({
         tai_number_user : cc.Label,
         xiu_number_user : cc.Label,
         session: cc.Label,
-
+        userMoney: cc.Label,
         currentSession: 0,
         isNumber: false,
         currentBet: 0,
@@ -413,9 +413,9 @@ cc.Class({
         // else if (typeMessage === NetworkManager.MESSAGE_ID.){
         //     this.instantMessageHistoryHandler(response);
         // }
-        // else if (typeMessage == NetworkManager.MESSAGE_ID.UPDATE_MONEY){
-        //     this.updateMoneyResponseHandler(response);
-        // }
+        else if (typeMessage === NetworkManager.MESSAGE_ID.UPDATE_MONEY){
+            this.updateMoneyResponseHandler(response);
+        }
     },
     exitZoneResponseHandler: function(resp) {
         cc.log("exit zone response:", resp.toObject());
@@ -533,6 +533,7 @@ cc.Class({
         if(resp.getResponsecode()) {
             var typeId = resp.getBettype();
             var betMoney = resp.getBetmoney();
+            cc.log("bentMoney =", betMoney);
             if (resp.getSourceuserid() === Common.getUserId()) {
                 this.currentBet = 0;
                 if (this.betState === BET_STATE.TAI) {
@@ -540,6 +541,8 @@ cc.Class({
                 } else if (this.betState === BET_STATE.XIU) {
                     this.setTotalMoneyTaiXiu(this.bet_money_xiu, 0);
                 }
+                var newCash = Common.getCash() - betMoney;
+                Common.setCash(newCash);
             }
 
             for (var i = 0; i < resp.getArgsList().length; i++) {
@@ -841,40 +844,47 @@ cc.Class({
         this.groupKeyboard.active = true;
     },
 
-    // updateMoneyResponseHandler: function(rs) {
-    //     if (rs.getResponsecode()) {
-    //         for (var i = 0; i < rs.getMoneyboxesList().length; i++) {
-    //             if (rs.getMoneyboxesList()[i].getUserid() === Common.getUserId()) {
-    //                 var currentMoney = rs.getMoneyboxesList()[i].getCurrentmoney();
-    //                 if (rs.getMoneyboxesList()[i].getIscash()) {
-    //                     Common.setCash(currentMoney);
-    //                     this->moneyEvent->onEventMoneyMiniGame(true,Common.getCash());
-    //                     this.isCashShow = true;
-    //                 }
-    //
-    //                 var displayMoney = rs.getMoneyboxesList()[i].getDisplaychangemoney();
-    //                 if(tableState == balanceState){
-    //                     displayMoneyShow = (int)displayMoney;
-    //                     showMoney(displayMoneyShow);
-    //                     displayMoneyShow = 0;
-    //                 }else if(tableState == resultState){
-    //                     displayMoneyResultShow = (int)displayMoney;
-    //                     if(displayMoneyResultShow > 0){
-    //
-    //
-    //                         auto label_text = MLabel::createUpdateMoney(displayMoneyResultShow,0.25f);
-    //                         label_text->setAnchorPoint(Point::ANCHOR_MIDDLE_BOTTOM);
-    //                         label_text->setPosition(Vec2(diaSprite->getPosition().x
-    //                             , isCashShow == true ? diaSprite->getPosition().y - diaSprite->getHeight()/2 :
-    //                         (diaSprite->getPosition().y - diaSprite->getHeight() / 6)));
-    //                         bg_content->addChild(label_text,2);
-    //
-    //                         displayMoneyResultShow = 0;
-    //                     }
-    //                 }
-    //
-    //             }
-    //         }
-    //     }
-    // }
+    updateMoneyResponseHandler: function(rs) {
+
+        if (rs.getResponsecode()) {
+            for (var i = 0; i < rs.getMoneyboxesList().length; i++) {
+                if (rs.getMoneyboxesList()[i].getUserid() === Common.getUserId()) {
+                    var currentMoney = rs.getMoneyboxesList()[i].getCurrentmoney();
+                    rs.getMoneyboxesList()[i].getDisplaychangemoney();
+                    if (rs.getMoneyboxesList()[i].getIscash()) {
+                        Common.setCash(currentMoney);
+                        //showGame->label_cash->setString(cmInst->numberFormat(cmInst->getCash()));
+                        // this->moneyEvent->onEventMoneyMiniGame(true,Common.getCash());
+                        // isCashShow = true;
+                    }
+
+                    var displayMoney = rs.getMoneyboxesList()[i].getDisplaychangemoney();
+                    if(this.tableStage === TABLE_STATE.balanceState){
+                        var displayMoneyShow = displayMoney;
+                        // showMoney(displayMoney);
+                        // this.userMoney.string = Common.numberFormatWithCommas(displayMoneyShow);
+                        Common.setCash(displayMoneyShow);
+                        displayMoneyShow = 0;
+                    }else if(this.tableStage === TABLE_STATE.resultState){
+                        var  displayMoneyResultShow = displayMoney;
+                        if(displayMoneyResultShow > 0){
+                            Common.setCash(displayMoneyResultShow);
+                            // this.userMoney.string = Common.numberFormatWithCommas(displayMoneyResultShow);
+
+                            // auto label_text = MLabel::createUpdateMoney(displayMoneyResultShow,0.25f);
+                            // label_text->setAnchorPoint(Point::ANCHOR_MIDDLE_BOTTOM);
+                            // label_text->setPosition(Vec2(diaSprite->getPosition().x
+                            //     , isCashShow == true ? diaSprite->getPosition().y - diaSprite->getHeight()/2 :
+                            // (diaSprite->getPosition().y - diaSprite->getHeight() / 6)));
+                            // bg_content->addChild(label_text,2);
+
+                            displayMoneyResultShow = 0;
+                        }
+                    }
+
+                }
+            }
+        }
+    },
+
 });
