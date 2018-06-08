@@ -19,7 +19,7 @@
     "portrait": false,
     "upsideDown": false
   },
-  "packageName": "org.cocos2d.helloworld",
+  "packageName": "com.bigbingo.club.ultimate",
   "privateKey": "",
   "qqplay": {
     "orientation": "portrait"

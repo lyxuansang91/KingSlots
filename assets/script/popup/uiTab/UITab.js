@@ -5,6 +5,8 @@ cc.Class({
         scroll_view : cc.ScrollView,
         tab : cc.Sprite,
         tab_item : cc.Prefab,
+        tab_deactive: cc.Node,
+        tab_deactive_item : cc.Node
     },
 
     setTab: function (tabs,tab_active,callBack) {
@@ -42,7 +44,7 @@ cc.Class({
 
     showTab: function (index,disableAnimation) {
         var number = index - 1;
-        var time_move = 0.2;
+        var time_move = 0;
 
         var posY = this.tab.node.getPositionY();
         var posX = this.tab.node.getContentSize().width * (number + 0.5);
@@ -70,6 +72,15 @@ cc.Class({
             }
 
             this.scroll_view.content.runAction(cc.moveTo(time_move,cc.p(posX_content,0)));
+        }
+
+        for(var i = 0; i < this.tab_size; i++){
+            var tab = cc.instantiate(this.tab_deactive_item);
+            tab.active = true;
+            this.tab_deactive.addChild(tab);
+            var distance = this.tab_size === 2 ? 1 : 0.5;
+            var posX = (i + distance) * tab.getContentSize().width;
+            tab.setPosition(cc.p(posX,0));
         }
 
     },

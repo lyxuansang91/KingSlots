@@ -233,7 +233,7 @@ var NetworkManager = {
     MAX_KILL_MSG: 10000,
     SERVER_TEST: "139.162.63.66",
     SERVER_DEBUG: "192.168.0.200",
-    URL: "ws://118.70.118.135:2280/megajackpot",
+    URL: "wss://gamebaivocuc.club:2280/megajackpot",
     sessionId: "",
     tryReconnect: false,
     getSessionId: function() {
@@ -241,11 +241,11 @@ var NetworkManager = {
     },
     checkEvent: function (checkMessage) {
         if(window.listMessage !== null && typeof(window.listMessage) !== 'undefined'  && window.listMessage.length > 0) {
-            if(window.listMessage.length > 7 && !this.tryReconnect) {
-                NetworkManager.showPopupReconnect();
-                this.tryReconnect = true;
-                return;
-            }
+            // if(window.listMessage.length > 100 && !this.tryReconnect) {
+            //     NetworkManager.showPopupReconnect();
+            //     this.tryReconnect = true;
+            //     return;
+            // }
             var buffer = window.listMessage[0];
             var result = checkMessage(buffer);
             if(result) {
@@ -590,18 +590,20 @@ var NetworkManager = {
     },
 
     /* purchase money */
-    initPurchaseMoneyMessage: function(provider, cardSerial, cardPin, securityKey, captcha) {
+    initPurchaseMoneyMessage: function(provider, cardSerial, cardPin, securityKey, captcha, toCash, cardValue) {
         var message = new proto.BINPurchaseMoneyRequest();
         message.setProvider(provider);
         message.setCardserial(cardSerial);
         message.setCardpin(cardPin);
         message.setSecuritykey(securityKey);
         message.setCaptcha(captcha);
+        message.setTocash(toCash);
+        message.setCardvalue(cardValue);
         return message;
     },
 
-    requestPurchaseMoneyMessage: function(provider, cardSerial, cardPin, securityKey, captcha) {
-        var message = NetworkManager.initPurchaseMoneyMessage(provider, cardSerial, cardPin, securityKey, captcha);
+    requestPurchaseMoneyMessage: function(provider, cardSerial, cardPin, securityKey, captcha, toCash, cardValue) {
+        var message = NetworkManager.initPurchaseMoneyMessage(provider, cardSerial, cardPin, securityKey, captcha, toCash, cardValue);
         this.requestMessage(message.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.PURCHASE_MONEY, Common.getSessionId());
     },
     // exit room message
@@ -633,6 +635,7 @@ var NetworkManager = {
         return message;
     }, requestLoginMessage: function(userName, password){
         const message = NetworkManager.initInitializeMessage(userName, password);
+        window.timeLogin = Date.now();
         this.requestMessage(message.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.LOGIN, "");
     },
 
@@ -738,7 +741,8 @@ var NetworkManager = {
     },
     getJarRequest: function(zone_id, jarType, isLoading) {
         var request = this.initJarRequest(zone_id, jarType);
-        this.requestMessage(request.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.JAR, Common.getSessionId(), isLoading);
+        this.requestMessage(request.serializeBinary(), Common.getOS(), NetworkManager.MESSAGE_ID.JAR,
+            (zone_id === -1 ? "": Common.getSessionId()), isLoading);
     },
     initJarRequest: function(zone_id, jarType) {
         var request = new proto.BINJarRequest();
@@ -938,31 +942,40 @@ var NetworkManager = {
         return null;
     },
     connectNetwork: function() {
+        cc.log("NetworkManager.URL ", NetworkManager.URL);
         if(window.ws === null || typeof(window.ws) === 'undefined' || window.ws.readyState === WebSocket.CLOSED) {
             window.ws = new WebSocket(NetworkManager.URL);
             window.listMessage = [];
             window.ws.binaryType = "arraybuffer";
 
+            var self = this;
+
             window.ws.onopen = function (event) {
-                console.log("on web socket");
+                cc.log("on web socket");
                 // NetworkManager.requestInitializeMessage("24", "15","xxxxx","xxxxx", "vn", "vi", "com.gamebai.tienlen", false, "");
                 NetworkManager.requestInitializeMessage(Common.getCp(), Common.getVersionCode(), Common.getFingerprint(),
                     Common.getFingerprint(), "vn", "vi", Common.getPackageName(), false, "");
-                setTimeout(function() {
-                    window.myInterval = setInterval(function() {
-                        NetworkManager.requestPingMessage(0);
-                    }, 15000);
-                }, 1);
-
+                self.myInterval = setInterval(function() {
+                    NetworkManager.requestPingMessage(0);
+                }, 15000);
             };
             window.ws.onclose = function () {
-                NetworkManager.showPopupReconnect();
-                console.log("Websocket instance was closed");
-                clearInterval(window.myInterval);
-
+                clearInterval(self.myInterval);
+                cc.log("Websocket instance was closed");
+                if(window.isLogout === null || window.isLogout) {
+                    window.isLogout = false;
+                    NetworkManager.showPopupReconnect();
+                }
             };
 
             window.ws.onmessage = this.onGameStatus.bind(this);
+            window.ws.onerror = function(e) {
+                cc.log("on event:", e);
+                clearInterval(self.myInterval);
+                NetworkManager.showPopupReconnect();
+            }
+        } else {
+            NetworkManager.showPopupReconnect();
         }
     },
     closeConnection: function() {
@@ -974,7 +987,22 @@ var NetworkManager = {
         if(event.data!==null || typeof(event.data) !== 'undefined') {
             var lstMessage = NetworkManager.parseFrom(event.data, event.data.byteLength);
             for(var i = 0; i < lstMessage.length; i++) {
-                window.listMessage.push(lstMessage[i]);
+                var message = lstMessage[i];
+                // check if ping or not
+                if(message.message_id === NetworkManager.MESSAGE_ID.PING) {
+                    var res = message.response;
+                    cc.log("ping response handler:", res.toObject());
+                    if(res.getResponsecode()) {
+                        if(res.getDisconnect()) {
+                            cc.log("disconnected");
+                            window.disConnectMessage = res.getMessage();
+                        }
+                    }
+
+                } else {
+                    window.listMessage.push(message);
+                }
+
             }
         }
     },
@@ -985,19 +1013,7 @@ var NetworkManager = {
         if (typeof(isLoading) === 'undefined' && isLoading !== null) isLoading = false;
 
         if(window.ws === null || typeof(window.ws) === 'undefined' || window.ws.readyState === WebSocket.CLOSED) {
-            window.ws = new WebSocket(NetworkManager.URL);
-            window.listMessage = [];
-            window.ws.binaryType = "arraybuffer";
-
-            window.ws.onopen = function () {
-                cc.log("on web socket");
-                setTimeout(function(){
-                    window.ws.send(ackBuf);
-                }, 0.5);
-            };
-            window.ws.onclose = function () {
-                console.log("Websocket instance was closed");
-            };
+            NetworkManager.showPopupReconnect();
         }
         else {
             if(window.ws.readyState === WebSocket.OPEN) {
@@ -1013,10 +1029,8 @@ var NetworkManager = {
                     && mid !== NetworkManager.MESSAGE_ID.EXTRA_BET && mid !== NetworkManager.MESSAGE_ID.ZONE_STATUS
                     && mid !== NetworkManager.MESSAGE_ID.FILTER_ROOM && mid !== NetworkManager.MESSAGE_ID.LOOK_UP_GAME_HISTORY ){
 
-                    self.showLoading();
+                    // self.showLoading();
                 }
-
-                cc.log("send request");
                 window.ws.send(ackBuf);
             }
         }

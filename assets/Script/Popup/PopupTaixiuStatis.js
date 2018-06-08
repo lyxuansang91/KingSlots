@@ -53,7 +53,7 @@ cc.Class({
         entry.setValue(Config.LookupTypeRequest.sessionHist.toString());
         entries.push(entry);
 
-        NetworkManager.getLookUpGameHistoryRequest(firstResult, maxResult, entries);
+        NetworkManager.getLookUpGameHistoryRequest(Common.ZONE_ID.TAIXIU, firstResult, maxResult, entries);
     },
 
     lookupGameHistoryResponse: function(rs){

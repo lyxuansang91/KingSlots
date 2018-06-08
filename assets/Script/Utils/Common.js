@@ -199,21 +199,21 @@ var Common = {
     fingerprint: "",
     setFingerprint: function() {
         var fp = cc.sys.localStorage.getItem("fingerprint");
-        cc.log("fp:", fp);
-        cc.log("PLATFORM : ",cc.sys.platform," " ,cc.sys.IPHONE, " ", cc.sys.ANDROID);
 
         if(fp == null) {
             if(cc.sys.isBrowser) {
-                new Fingerprint2().get(function (result, components) {
-                    console.log("result:", result); //a hash, representing your device fingerprint
-                    cc.sys.localStorage.setItem("fingerprint", result);
-                    this.fingerprint = result;
-                    console.log("component:", components); // an array of FP components
-                });
+                var deviceId = Common.guid();
+                cc.sys.localStorage.setItem("fingerprint", deviceId);
+                this.fingerprint = deviceId;
+                // new Fingerprint2().get(function (result, components) {
+                //     console.log("result:", result); //a hash, representing your device fingerprint
+                //     cc.sys.localStorage.setItem("fingerprint", result);
+                //     this.fingerprint = result;
+                //     console.log("component:", components); // an array of FP components
+                // });
             } else {
                 if(cc.sys.platform === cc.sys.ANDROID){
                     var deviceId = jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getDeviceId", "()Ljava/lang/String;");
-                    console.log("result:", deviceId); //a hash, representing your device fingerprint
                     cc.sys.localStorage.setItem("fingerprint", deviceId);
                     this.fingerprint = deviceId;
                 }else if(cc.sys.platform === cc.sys.IPHONE || cc.sys.platform === cc.sys.IPAD){
@@ -226,7 +226,6 @@ var Common = {
         } else {
             this.fingerprint = fp;
         }
-
     },
     getFingerprint: function() {
         if(this.fingerprint == "") {
@@ -287,7 +286,7 @@ var Common = {
     setGameTag: function(gameTag) {
         this.gameTag = gameTag;
     },
-    getGameTag: function() {
+    GameTag: function() {
         return this.gameTag;
     },
     _requestRoomType: -1,
@@ -412,21 +411,35 @@ var Common = {
             cc.log("getPackageName");
             if(cc.sys.platform == cc.sys.ANDROID){
                 cc.log("getPackageName ANDROID");
-                return "com.moniclub.gamedanhbai";//jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getPackageNameJNI", "()Ljava/lang/String;");
+                var packageName = jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getPackageNameJNI", "()Ljava/lang/String;");
+                cc.log("package name:", packageName);
+                return packageName;
             }else if(cc.sys.platform == cc.sys.IPHONE || cc.sys.platform == cc.sys.IPAD){
-                console.log("PACKAGE : com.gamebai.tienlen");
-                return "com.moniclub.gamedanhbai";//jsb.reflection.callStaticMethod("NativeUtility", "getPackage");
+                return "com.bigbingo.club.ultimate";//jsb.reflection.callStaticMethod("NativeUtility", "getPackage");
             }
         } else {
-            return "com.moniclub.gamedanhbai";
+            return "com.bigbingo.club.ultimate";
         }
-
     },
     getCp: function() {
-        return "10";
+        var url = window.location.href;
+        if(url.includes("gamebaivocuc.club")) {
+            return "14";
+        } else if(url.includes("gamemoni.com")) {
+            return "13";
+        }
+        return "13";
     },
     getVersionCode: function() {
-        return "20";
+        if(cc.sys.isNative) {
+            if(cc.sys.platform == cc.sys.ANDROID) {
+                var versionCode = jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getVersionCodeJNI", "()Ljava/lang/String;");
+                cc.log("version Code:", versionCode);
+                return versionCode;
+            }
+        }
+        return "2";
+
     },
     phoneNumber: "",
     setPhoneNunber: function(phoneNumber){
@@ -501,6 +514,26 @@ var Common = {
     numberFormatWithCommas: function(value){
         return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
+    stringWithCommasToNumber: function(value){
+        if(value !== 0 && value !== null && value !== ""){
+            value = value.toString().replace(".","");
+            return parseInt(value);
+        }
+
+        return 0;
+
+    },
+    stringWithDotToNumber: function(value){
+        cc.log("value =", value);
+        if(value !== 0 && value !== null && value !== ""){
+            value = value.toString().replace(",","");
+            cc.log("value 2 =", value);
+            return parseInt(value);
+        }
+
+        return 0;
+
+    },
     convertIntToMoneyView: function (value) {
         var i = 0;
         var end = [ "", "K", "M", "B" ];
@@ -523,6 +556,32 @@ var Common = {
     },
     setMiniGameZoneId: function(miniGameZoneId) {
         this._miniGameZoneId = miniGameZoneId;
+    },
+    _miniGameZoneIds: [],
+    openMinigame: function(miniGameZoneId){
+        if (!this._miniGameZoneIds.includes(miniGameZoneId)){
+            this._miniGameZoneIds.push(miniGameZoneId);
+        }
+    },
+
+    closeMinigame: function(miniGameZoneId){
+        if (this._miniGameZoneIds.length != 0){
+            for (var i = 0; i < this._miniGameZoneIds.length; i++){
+                if (this._miniGameZoneIds[i] == miniGameZoneId){
+                    this._miniGameZoneIds.splice(i, 1);
+                    // this._miniGameZoneIds.erase(_miniGameZoneIds.begin() + i);
+                    break;
+                }
+            }
+        }
+    },
+
+    getMiniGameZoneIds: function(){
+        return this._miniGameZoneIds;
+    },
+
+    clearMiniGame: function(){
+        this._miniGameZoneIds = [];
     },
 
     setHeadLineEmergency: function (message) {
@@ -576,7 +635,9 @@ var Common = {
         }
     },
     showPopupMessageBox: function() {
+        var self = this;
         var scene = cc.director.getScene();
+        var self = this;
         if(cc.isValid(scene)){
             if(!cc.isValid(scene.getChildByName(Config.name.POPUP_MESSAGE_RECONNECT))) {
                 cc.loader.loadRes("prefabs/" + Config.name.POPUP_MESSAGE_RECONNECT, function (error, prefab) {
@@ -589,12 +650,12 @@ var Common = {
                             var component = popup.getComponent(namePopup);
                             component.setNamePopup(Config.name.POPUP_MESSAGE_RECONNECT);
                             scene.addChild(popup, Config.index.POPUP);
-                            this.message_box = component;
-                            this.message_box.init("Bạn bị đứt kết nối, bạn có muốn kết nối lại không?", Config.COMMON_POPUP_TYPE.MESSAGE_BOX.CONFIRM_TYPE, function() {
+                            self.message_box = component;
+                            self.message_box.init("Bạn bị đứt kết nối, bạn có muốn kết nối lại không?", Config.COMMON_POPUP_TYPE.MESSAGE_BOX.CONFIRM_TYPE, function() {
                                 cc.director.loadScene('IntroScene');
                                 Common.tryReconnect = false;
                             });
-                            this.message_box.appear();
+                            self.message_box.appear();
 
                         }
                     } else {
@@ -602,7 +663,7 @@ var Common = {
                     }
                 })
             } else {
-                this.message_box.appear();
+                self.message_box.appear();
             }
         }
     },
@@ -1006,5 +1067,16 @@ var Common = {
             });
         }
 
+    },
+    inMiniGame: function(zoneId) {
+        return (zoneId === Common.ZONE_ID.TAIXIU || zoneId === Common.ZONE_ID.MINI_POKER
+            || zoneId === Common.ZONE_ID.MINI_BACAY || zoneId === Common.ZONE_ID.TREASURE);
+    },
+    zIndex: 0,
+    setCurrentLocal: function (zIndex) {
+        this.zIndex = zIndex;
+    },
+    getCurrentLocal: function () {
+        return this.zIndex;
     }
 };

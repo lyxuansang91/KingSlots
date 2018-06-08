@@ -7,23 +7,53 @@ cc.Class({
     properties: {
         edt_username: cc.EditBox,
         edt_password: cc.EditBox,
-        edt_username_register: cc.EditBox,
-        edt_pass_register: cc.EditBox,
-        edt_repass_register: cc.EditBox,
-        edt_displayname_register: cc.EditBox,
         toastPrefab: cc.Prefab,
         messagePopup: cc.Prefab,
-        popup_login : cc.Sprite,
-        popup_register : cc.Sprite
+        bar_top_login : cc.Node,
+        bar_top_lobby : cc.Node,
+        popup_setting : cc.Node,
+        list_frame: [cc.SpriteFrame],
+        musicBtn: cc.Button,
+        soundBtn: cc.Button,
+        vibrateBtn: cc.Button,
+        isSetting: false
     },
     // use this for initialization
     onLoad: function () {
-        window.jarInfoList = null;
-        window.loginSuccess = false;
         Common.setFingerprint();
         this.isLoadScene = false;
+
         if(cc.sys.isNative)
             sdkbox.PluginFacebook.init();
+        if(window.loginSuccess !== null && window.loginSuccess) {
+            this.bar_top_login.active = false;
+            this.bar_top_lobby.active = true;
+        } else {
+            this.bar_top_login.active = true;
+            this.bar_top_lobby.active = false;
+        }
+
+        var musicStatus = Common.getPrefs(Config.prefKey.MUSIC);
+        var soundStatus = Common.getPrefs(Config.prefKey.SOUND);
+        var vibrateStatus = Common.getPrefs(Config.prefKey.VIBARTE);
+        if(musicStatus === "true"){
+            this.musicBtn.getComponent(cc.Sprite).spriteFrame = this.list_frame[1];
+        } else {
+            this.musicBtn.getComponent(cc.Sprite).spriteFrame = this.list_frame[0];
+        }
+
+        if(soundStatus === "true"){
+            this.soundBtn.getComponent(cc.Sprite).spriteFrame = this.list_frame[1];
+        } else {
+            this.soundBtn.getComponent(cc.Sprite).spriteFrame = this.list_frame[0];
+        }
+
+        if(vibrateStatus === "true"){
+            this.vibrateBtn.getComponent(cc.Sprite).spriteFrame = this.list_frame[1];
+        } else {
+            this.vibrateBtn.getComponent(cc.Sprite).spriteFrame = this.list_frame[0];
+        }
+
     },
 
     start : function () {
@@ -102,7 +132,6 @@ cc.Class({
     },
     smsConfigResponseHandler: function(resp) {
         cc.log("sms config response handler:", resp.toObject());
-
         if(resp.getResponsecode()) {
             Common.smsConfigLists = [];
             for(var i = 0; i < resp.getNumbersList().length; i++) {
@@ -142,7 +171,6 @@ cc.Class({
     },
     jarResponseHandler: function(resp) {
         cc.log("jar response handler:", resp.toObject());
-
         if(resp.getResponsecode()) {
             if(resp.getJarinfoList().length > 0) {
                 // first time request
@@ -175,9 +203,6 @@ cc.Class({
             case NetworkManager.MESSAGE_ID.LOGIN:
                 this.handleLoginResponseHandler(msg);
                 break;
-            case NetworkManager.MESSAGE_ID.REGISTER:
-                this.handleRegisterResponseHandler(msg);
-                break;
             case NetworkManager.MESSAGE_ID.ASSET_CONFIG:
                 this.assetConfigResponseHandler(msg);
                 break;
@@ -187,9 +212,9 @@ cc.Class({
             case NetworkManager.MESSAGE_ID.SMS_CONFIG:
                 this.smsConfigResponseHandler(msg);
                 break;
-            case NetworkManager.MESSAGE_ID.JAR:
-                this.jarResponseHandler(msg);
-                break;
+            // case NetworkManager.MESSAGE_ID.JAR:
+            //     this.jarResponseHandler(msg);
+            //     break;
             case NetworkManager.MESSAGE_ID.PAYMENT_STATUS:
                 this.paymentStatusResponseHandler(msg);
                 break;
@@ -211,7 +236,9 @@ cc.Class({
         });
         if(this.checkPurchaseList() && !this.isLoadScene) {
             this.isLoadScene = true;
-            cc.director.loadScene('Lobby');
+            cc.log("login time:", Date.now() - window.timeLogin);
+            this.bar_top_login.active = false;
+            this.bar_top_lobby.active = true;
         }
 
     },
@@ -219,35 +246,8 @@ cc.Class({
         this.onGameEvent();
     },
 
-    switchLoginToRegister : function () {
-        var posXleft = -cc.director.getWinSize().width/2 - this.popup_login.node.getContentSize().width;
-
-        this.popup_login.node.runAction(cc.moveTo(0.5,cc.p(posXleft,0)).easing(cc.easeBackOut()));
-        this.popup_register.node.runAction(cc.moveTo(0.2,cc.p(0,0)).easing(cc.easeBackIn()));
-    },
-
-    switchRegisterToLogin : function () {
-        var posXright= cc.director.getWinSize().width/2 + this.popup_register.node.getContentSize().width;
-        this.popup_login.node.runAction(cc.moveTo(0.2,cc.p(0,0)).easing(cc.easeBackIn()));
-        this.popup_register.node.runAction(cc.moveTo(0.5,cc.p(posXright,0)).easing(cc.easeBackOut()));
-    },
-
-    handleRegisterResponseHandler: function(e) {
-        const buffer = e;
-        if(buffer.getResponsecode()) {
-            NetworkManager.requestLoginMessage(this.edt_username_register.string, this.edt_pass_register.string);
-        } else {
-
-            Common.showPopup(Config.name.POPUP_MESSAGE_BOX,function(message_box) {
-                message_box.init(buffer.getMessage(), Config.COMMON_POPUP_TYPE.MESSAGE_BOX.CONFIRM_TYPE, function() {
-                    cc.log("on callback");
-                });
-                message_box.appear();
-            });
-        }
-    },
-
     handleLoginResponseHandler: function(res) {
+        cc.log("login time 2:", Date.now() - window.timeLogin);
         cc.log("login response handler:", res.toObject());
         window.loginMessage = null;
         if(res.getResponsecode()) {
@@ -259,6 +259,7 @@ cc.Class({
             cc.sys.localStorage.setItem("user_name",this.edt_username.string);
             cc.sys.localStorage.setItem("user_password",this.edt_password.string);
             window.loginSuccess = true;
+            window.isLogout = false;
 
             if (res.hasUserinfo()) {
                 this.saveUserInfo(res.getUserinfo());
@@ -294,8 +295,6 @@ cc.Class({
             if(Common.assetsConfigList === null) {
                 NetworkManager.requestAssetsConfigMessage(1);
             }
-            NetworkManager.getJarRequest(0, null);
-            return;
         }
 
         if(res.hasMessage() && res.getMessage() !== "") {
@@ -308,25 +307,25 @@ cc.Class({
         }
     },
 
-    handlePingResponseHandler: function(res) {
-        cc.log("ping response handler:", res);
-        if(res.getResponsecode()) {
-            if(res.getDisconnect()) {
-                Common.setSessionId("-1");
-                if(res.hasMessage() && res.getMessage() !== "") {
-                    Common.showToast(res.getMessage());
-                }
-                NetworkManager.closeConnection();
-                this.scheduleOnce(this.goIntroScene, 2.0);
-            }
-        }
-    },
+    // handlePingResponseHandler: function(res) {
+    //     cc.log("ping response handler:", res);
+    //     if(res.getResponsecode()) {
+    //         if(res.getDisconnect()) {
+    //             Common.setSessionId("-1");
+    //             if(res.hasMessage() && res.getMessage() !== "") {
+    //                 Common.showToast(res.getMessage());
+    //             }
+    //             NetworkManager.closeConnection();
+    //             this.scheduleOnce(this.goIntroScene, 2.0);
+    //         }
+    //     }
+    // },
     goIntroScene: function(e) {
-        cc.director.loadScene("Intro");
+        cc.director.loadScene("IntroScene");
     },
 
     login: function() {
-
+        cc.log("do login");
         var username = this.edt_username.string;
         var password = this.edt_password.string;
 
@@ -353,25 +352,15 @@ cc.Class({
         NetworkManager.requestLoginMessage(username, password);
     },
 
-    register: function() {
-        if(this.edt_username_register.string === "" || this.edt_pass_register.string === "" ||
-            this.edt_repass_register.string === "" || this.edt_displayname_register === "") {
-            Common.showToast("Dữ liệu không được để trống");
-            return;
-        }
-        if(this.edt_pass_register.string !== this.edt_repass_register.string) {
-            Common.showToast("Mật khẩu phải giống nhau!");
-            return;
-        }
-        NetworkManager.requestRegisterMessage(this.edt_username_register.string, this.edt_pass_register.string,
-            this.edt_repass_register.string, this.edt_displayname_register.string, "");
+    showPopupRegister: function () {
+        Common.showPopup(Config.name.POPUP_REGISTER,function(popup) {
+            popup.appear();
+        });
     },
 
-    moveToRegister: function() {
-        cc.director.loadScene('Register');
-    },
     loginFacebook: function() {
-        if(cc.sys.platform === cc.sys.isNative) {
+        if(cc.sys.platform == cc.sys.isNative) {
+            cc.log("login facebook native");
             sdkbox.PluginFacebook.login();
         }else if(cc.sys.isBrowser){
             window.loginFb(["public_profile"], function(code, response){
@@ -383,7 +372,7 @@ cc.Class({
 
                     if (accessToken !== null) {
                         NetworkManager.getOpenIdLoginMessageFromServer(
-                            1, userID + ";" + accessToken, "", "");
+                            Common.FACEBOOK_CHANNEL, userID + ";" + accessToken, "", "");
 
                     }else {
                         this.loginFacebook();
@@ -444,5 +433,95 @@ cc.Class({
             Common.setAutoDenyInvitation(userSetting.getAutodenyinvitation());
             cc.sys.localStorage.setItem("DENY_INVITES", userSetting.getAutodenyinvitation());
         }
-    }
+    },
+    settingClick: function () {
+        if(this.isSetting === false){
+            this.popup_setting.active = true;
+        } else {
+            this.popup_setting.active = false;
+        }
+        this.isSetting = !this.isSetting;
+    },
+    connectFacebook: function () {
+        Common.openIdConnectRequest(Common.FACEBOOK_CHANNEL);
+    },
+
+    onClickExit: function(){
+
+        Common.showPopup(Config.name.POPUP_MESSAGE_BOX,function(message_box) {
+            message_box.init(Common.KEYTEXT.MSG_LOG_OUT, Config.COMMON_POPUP_TYPE.MESSAGE_BOX.MESSAGEBOX_TYPE, function() {
+                window.isLogout = true;
+                NetworkManager.getLogoutMessageFromServer(true);
+            });
+            message_box.appear();
+        });
+    },
+
+
+
+    musicClick: function () {
+        this.changeOnOffSetting(Config.prefKey.MUSIC);
+    },
+
+    soundClick: function () {
+        this.changeOnOffSetting(Config.prefKey.SOUND);
+    },
+
+    vibrateClick: function () {
+        this.changeOnOffSetting(Config.prefKey.VIBARTE);
+    },
+
+    changeOnOffSetting: function(pkey) {
+        if (Common.getPrefs(pkey) === 'true'){
+            Common.setPrefs(pkey, false);
+            if(pkey === Config.prefKey.MUSIC){
+                this.musicBtn.getComponent(cc.Sprite).spriteFrame = this.list_frame[0];
+            } else if(pkey === Config.prefKey.SOUND){
+                this.soundBtn.getComponent(cc.Sprite).spriteFrame = this.list_frame[0];
+            } else if(pkey === Config.prefKey.VIBARTE){
+                this.vibrateBtn.getComponent(cc.Sprite).spriteFrame = this.list_frame[0];
+            }
+        }
+        else {
+            Common.setPrefs(pkey, true);
+            if(pkey === Config.prefKey.MUSIC){
+                this.musicBtn.getComponent(cc.Sprite).spriteFrame = this.list_frame[1];
+            } else if(pkey === Config.prefKey.SOUND){
+                this.soundBtn.getComponent(cc.Sprite).spriteFrame = this.list_frame[1];
+            } else if(pkey === Config.prefKey.VIBARTE){
+                this.vibrateBtn.getComponent(cc.Sprite).spriteFrame = this.list_frame[1];
+            }
+        }
+    },
+    openGiftPopup: function () {
+        if(window.loginSuccess) {
+            if(Common.enableGiftCode)
+            var tabString = ["Nhập giftcode", "Giftcode đã nhận"];
+
+            Common.showPopup(Config.name.POPUP_GIFT,function(popup) {
+                popup.addTabs(tabString, 1);
+                popup.appear();
+            });
+        } else {
+            Common.showToast("Bạn cần đăng nhập để thực hiện chức năng này", 2);
+        }
+
+    },
+
+    openChargePopup: function () {
+        if(window.loginSuccess) {
+            if(Common.enablePurchaseCash) {
+                Common.showPopup(Config.name.POPUP_NAPTIEN, function (popup) {
+                    popup.appear();
+                });
+            } else {
+                Common.showToast("Chức năng này đang cập nhât, vui lòng thử lại!");
+            }
+        } else {
+            Common.showToast("Bạn cần đăng nhập để thực hiện chức năng này", 2);
+        }
+    },
+    openFriendPopup: function() {
+        Common.showToast("Chức năng này đang cập nhật, vui lòng thử lại!", 2);
+    },
 });
