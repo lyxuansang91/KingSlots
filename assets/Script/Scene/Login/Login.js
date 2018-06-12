@@ -188,7 +188,17 @@ cc.Class({
             Common.setEnableTopup(resp.getEnabletopup());
         }
         if(resp.hasMessage() && resp.getMessage() !== "") {
-            Common.showToast(resp.hasMessage(), 2);
+            Common.showToast(resp.getMessage(), 2);
+        }
+    },
+    levelUpResponseHandler: function(resp) {
+        cc.log("level up response handler:", resp.toObject());
+        if(resp.getResponsecode()); {
+
+        }
+
+        if(resp.hasMessage() && resp.getMessage() !== "") {
+            Common.showToast(resp.getMessage(), 2);
         }
     },
     handleMessage: function(e) {
@@ -215,6 +225,9 @@ cc.Class({
             // case NetworkManager.MESSAGE_ID.JAR:
             //     this.jarResponseHandler(msg);
             //     break;
+            case NetworkManager.MESSAGE_ID.LEVEL_UP:
+                this.levelUpResponseHandler(msg);
+                break;
             case NetworkManager.MESSAGE_ID.PAYMENT_STATUS:
                 this.paymentStatusResponseHandler(msg);
                 break;

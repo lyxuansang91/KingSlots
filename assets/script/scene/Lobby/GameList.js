@@ -654,7 +654,7 @@ cc.Class({
         }
     },
     updateMoneyResponseHandler: function(response){
-        cc.log("response =", response);
+        cc.log("update money response:", response.toObject());
         if (response !== 0) {
 
             if (response.hasMessage() && response.getMessage() !== '') {

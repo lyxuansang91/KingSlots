@@ -420,11 +420,14 @@ var NetworkManager = {
             case NetworkManager.MESSAGE_ID.PAYMENT_STATUS:
                 msg = proto.BINPaymentStatusResponse.deserializeBinary(bytes);
                 break;
+            case NetworkManager.MESSAGE_ID.LEVEL_UP:
+                msg = proto.BINLevelUpResponse.deserializeBinary(bytes);
+                break;
             default:
                 break;
         }
         if(msg === null) {
-            cc.log("message error");
+            cc.log("message error:", messageid);
         }
 
         return msg;
@@ -989,6 +992,9 @@ var NetworkManager = {
             for(var i = 0; i < lstMessage.length; i++) {
                 var message = lstMessage[i];
                 // check if ping or not
+                if(message.message_id == NetworkManager.MESSAGE_ID.UPDATE_MONEY) {
+                    cc.log("update money:", message.response);
+                }
                 if(message.message_id === NetworkManager.MESSAGE_ID.PING) {
                     var res = message.response;
                     cc.log("ping response handler:", res.toObject());
