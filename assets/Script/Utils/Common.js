@@ -428,7 +428,7 @@ var Common = {
         } else if(url.includes("gamemoni.com")) {
             return "13";
         }
-        return "14";
+        return "13";
     },
     getVersionCode: function() {
         if(cc.sys.isNative) {
@@ -513,6 +513,26 @@ var Common = {
     },
     numberFormatWithCommas: function(value){
         return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
+    stringWithCommasToNumber: function(value){
+        if(value !== 0 && value !== null && value !== ""){
+            value = value.toString().replace(".","");
+            return parseInt(value);
+        }
+
+        return 0;
+
+    },
+    stringWithDotToNumber: function(value){
+        cc.log("value =", value);
+        if(value !== 0 && value !== null && value !== ""){
+            value = value.toString().replace(",","");
+            cc.log("value 2 =", value);
+            return parseInt(value);
+        }
+
+        return 0;
+
     },
     convertIntToMoneyView: function (value) {
         var i = 0;

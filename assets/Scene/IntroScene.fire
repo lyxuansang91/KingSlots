@@ -96,8 +96,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 2001,
-      "height": 1125
+      "width": 1334,
+      "height": 750
     },
     "_rotationX": 0,
     "_rotationY": 0,
@@ -105,8 +105,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 1000.5,
-      "y": 562.5
+      "x": 667,
+      "y": 375
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -151,8 +151,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 2001,
-      "height": 1125
+      "width": 1334,
+      "height": 750
     },
     "_rotationX": 0,
     "_rotationY": 0,
@@ -178,7 +178,9 @@
       "__id__": 3
     },
     "_enabled": true,
-    "_spriteFrame": null,
+    "_spriteFrame": {
+      "__uuid__": "a3976df1-e8d4-4c3b-839d-e0ca5b843532"
+    },
     "_type": 0,
     "_sizeMode": 0,
     "_fillType": 0,
@@ -342,7 +344,9 @@
       "__id__": 7
     },
     "_enabled": true,
-    "_spriteFrame": null,
+    "_spriteFrame": {
+      "__uuid__": "8d142f80-fc57-4824-bd5f-d01652b012eb"
+    },
     "_type": 1,
     "_sizeMode": 0,
     "_fillType": 0,
@@ -418,7 +422,9 @@
       "__id__": 9
     },
     "_enabled": true,
-    "_spriteFrame": null,
+    "_spriteFrame": {
+      "__uuid__": "48dcec9f-57c7-466f-9cdc-aa1869c3c179"
+    },
     "_type": 0,
     "_sizeMode": 1,
     "_fillType": 0,
@@ -442,7 +448,9 @@
       "__id__": 6
     },
     "_enabled": true,
-    "_spriteFrame": null,
+    "_spriteFrame": {
+      "__uuid__": "423b3c39-9e4b-469e-9bb6-f2d437b87e8b"
+    },
     "_type": 0,
     "_sizeMode": 0,
     "_fillType": 0,
@@ -534,7 +542,9 @@
       "__id__": 13
     },
     "_enabled": true,
-    "_spriteFrame": null,
+    "_spriteFrame": {
+      "__uuid__": "1f5d9f38-4053-4870-af0d-e0497212b92d"
+    },
     "_type": 0,
     "_sizeMode": 0,
     "_fillType": 0,
@@ -634,8 +644,8 @@
     "_enabled": true,
     "_designResolution": {
       "__type__": "cc.Size",
-      "width": 2001,
-      "height": 1125
+      "width": 1334,
+      "height": 750
     },
     "_fitWidth": true,
     "_fitHeight": false
