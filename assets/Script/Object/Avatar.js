@@ -430,7 +430,7 @@ cc.Class({
 
     showStatusBet(statusBet){
         cc.log("status bet =", statusBet);
-        this.bet_status.getComponent(cc.Sprite).spriteFrame = this.bet_status_frame[statusBet];
+        this.bet_status.getComponent(cc.Sprite).spriteFrame = this.bet_status_frame[statusBet-1];
     },
 
     showRegisterExitRoom(isShow){

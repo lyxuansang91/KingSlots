@@ -592,7 +592,7 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 1,
+      "x": 0,
       "y": 38
     },
     "_skewX": 0,
@@ -1668,7 +1668,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "btn_rase",
+    "_name": "btn_raise",
     "_objFlags": 0,
     "_parent": {
       "__id__": 35
@@ -2548,7 +2548,7 @@
       "__id__": 54
     },
     "btn_fold": {
-      "__id__": 46
+      "__id__": 38
     },
     "btn_condescend": {
       "__id__": 46
