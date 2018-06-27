@@ -231,12 +231,12 @@ cc.Class({
     },
     setMinBet(minBet){
         this.minBet = minBet;
+        this.bet_money.string = minBet;
     },
     getMinBet(){
         return this.minBet;
     },
     addCountDown(countDown, start){
-
         this.timer.string = countDown;
         this.timer.node.runAction(cc.sequence(cc.delayTime(countDown), cc.removeSelf()));
         // countDown-- ;
@@ -264,18 +264,35 @@ cc.Class({
         this.btn_all_in.node.active = isShow;
         this.btn_fold.node.active = isShow;
         this.btn_condescend.node.active = isShow;
+    },
 
-        // if (isShow){
-        //     btn_raise->setEnabled(false);
-        //
-        //     btn_call->setEnabled(false);
-        //
-        //     btn_all_in->setEnabled(false);
-        //
-        //     btn_fold->setEnabled(false);
-        //
-        //     btn_condescend->setEnabled(false);
-        // }
+    showBtnPlayerActionArr(player_action){
+        this.showBtnPlayerAction(true);
+
+        for (var i = 0; i < player_action.length; i++){
+            switch (player_action[i])
+            {
+                case Config.PLAYER_ACTION.RAISE:
+                    this.btn_raise.node.active = true;
+                    break;
+                case Config.PLAYER_ACTION.CALL:
+                    this.btn_condescend.node.active = false;
+                    this.btn_call.node.active = true;
+                    break;
+                case Config.PLAYER_ACTION.ALL_IN:
+                    this.btn_all_in.node.active = true;
+                    break;
+                case Config.PLAYER_ACTION.FOLD:
+                    this.btn_fold.node.active = true;
+                    break;
+                case Config.PLAYER_ACTION.CONDESCEND:
+                    this.btn_call.node.active = false;
+                    this.btn_condescend.node.active = true;
+                    break;
+                default:
+                    break;
+            }
+        }
     },
 
     hiddenPlayStatus(player_id){

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+	<dict>
+		<key>frames</key>
+		<dict>
+			<key>background_toast.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{0,76},{408,62}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,0},{408,62}}</string>
+				<key>sourceSize</key>
+				<string>{408,62}</string>
+			</dict>
+
+			<key>bg_tab.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{0,0},{818,54}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,0},{818,54}}</string>
+				<key>sourceSize</key>
+				<string>{818,54}</string>
+			</dict>
+
+			<key>edit_box_null.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{0,139},{352,72}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,0},{352,72}}</string>
+				<key>sourceSize</key>
+				<string>{352,72}</string>
+			</dict>
+
+			<key>loading_inside.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{0,55},{468,20}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,0},{468,20}}</string>
+				<key>sourceSize</key>
+				<string>{468,20}</string>
+			</dict>
+
+			<key>sprite_keo.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{0,324},{75,58}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,0},{75,58}}</string>
+				<key>sourceSize</key>
+				<string>{75,58}</string>
+			</dict>
+
+			<key>sprite_sliderbar.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{0,246},{269,33}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,0},{269,33}}</string>
+				<key>sourceSize</key>
+				<string>{269,33}</string>
+			</dict>
+
+			<key>sprite_sliderprogress.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{0,212},{269,33}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,0},{269,33}}</string>
+				<key>sourceSize</key>
+				<string>{269,33}</string>
+			</dict>
+
+			<key>status_completed.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{0,302},{242,21}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,0},{242,21}}</string>
+				<key>sourceSize</key>
+				<string>{242,21}</string>
+			</dict>
+
+			<key>status_inprocess.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{0,280},{242,21}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,0},{242,21}}</string>
+				<key>sourceSize</key>
+				<string>{242,21}</string>
+			</dict>
+
+		</dict>
+
+		<key>metadata</key>
+		<dict>
+			<key>format</key>
+			<integer>2</integer>
+			<key>size</key>
+			<string>{819,383}</string>
+			<key>textureFileName</key>
+			<string>sprite_other_image.png</string>
+			</dict>
+		</dict>
+</plist>
