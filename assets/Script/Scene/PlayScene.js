@@ -231,14 +231,13 @@ cc.Class({
     },
     setMinBet(minBet){
         this.minBet = minBet;
+        this.bet_money.string = minBet;
     },
     getMinBet(){
         return this.minBet;
     },
     addCountDown(countDown, start){
-        for(var i = countDown; i > 0; i--){
-            this.timer.string = i;
-        }
+        this.timer.string = countDown;
         this.timer.node.runAction(cc.sequence(cc.delayTime(countDown), cc.removeSelf()));
         // countDown-- ;
 

@@ -19,7 +19,12 @@ var Poker = cc.Class({
         card_community: [],
         card_community_tag: [],
         card_tag: [],
-        total_bet_cash: cc.Label
+        total_bet_cash: cc.Label,
+        slider: cc.Slider,
+        bet_money: cc.Label,
+        node_raise: cc.Node,
+        bg_slider_sprite_frame: [cc.SpriteFrame],
+        bg_slider_sprite: cc.Sprite
 
     },
     statics: {
@@ -369,7 +374,7 @@ var Poker = cc.Class({
                         this.setMoneyBetTable(entry.getValue());
                     }
                     else if (entry.getKey() === "limitBetRatio"){
-                        this.countIncrease = entry.getValue();
+                        this.countIncrease = parseInt(entry.getValue());
                     }
                 }
 
@@ -510,7 +515,7 @@ var Poker = cc.Class({
                             this.setMoneyBetTable(response.getArgsList()[i].getValue());
                         }
                         else if (response.getArgsList()[i].getKey() === "limitBetRatio"){
-                            this.countIncrease = response.getArgsList()[i].getValue();
+                            this.countIncrease = parseInt(response.getArgsList()[i].getValue());
                         }
                         else if (response.getArgsList()[i].getKey() === "sid"){
                             this.showValueMatch(response.getArgsList()[i].getValue());
@@ -810,7 +815,7 @@ var Poker = cc.Class({
     },
 
     raiseEvent(){
-        this.onEventTypeConfirm(1000, Config.PLAYER_ACTION.RAISE);
+        this.showRaise(true);
     },
 
     callEvent(){
@@ -1004,7 +1009,6 @@ var Poker = cc.Class({
                                 avatar_current_turn.getComponent("Avatar").setBetMoney(moneyTurn);
                             }
                         }
-
                         this.showCall(next_turn_id);
 
                     }
@@ -1350,18 +1354,13 @@ var Poker = cc.Class({
     },
 
     showRaise(isShow){
-        // nodeBetTable->setVisible(isShow);
-        // btn_confirm->setVisible(isShow);
-        // btn_cancel->setVisible(isShow);
+        if(isShow){
+            this.node_raise.active = true;
+            this.showBtnPlayerAction(false);
+        } else {
+            this.node_raise.active = false;
+        }
 
-        // if (isShow){
-        //     var max_percent = getMinBetRoom() * (countIncrease - 1);
-        //     slider_raise->setMaxPercent(max_percent);
-        //
-        //     raiseMoney = getMinBetRoom() + slider_raise->getPercent();
-        //
-        //     label_muccuoc->setString(Common::getInstance()->numberFormatWithCommas(raiseMoney));
-        // }
     },
 
     showTitleBtnCall(money){
@@ -1468,6 +1467,34 @@ var Poker = cc.Class({
         }
     },
 
+    sliderEvent: function(){
+
+        var _minbet = this.getMinBet();
+
+        var max_money = _minbet * (this.countIncrease - 1);
+        cc.log("max_money =", max_money);
+        var raiseMoney = _minbet + this.slider.progress*max_money;
+        cc.log("raiseMoney 1 =", raiseMoney);
+        if(this.slider.progress > 0.5){
+            this.bg_slider_sprite.spriteFrame = this.bg_slider_sprite_frame[1];
+        } else {
+            this.bg_slider_sprite.spriteFrame = this.bg_slider_sprite_frame[0];
+        }
+        this.bet_money.string = parseInt(raiseMoney);
+    },
+
+    btnCancelEvent: function(){
+        this.showRaise(false);
+        this.showBtnPlayerActionArr(this.player_action);
+    },
+
+    btnConfirmEvent: function(){
+        var raiseMoney = this.bet_money.string;
+        cc.log("raiseMoney =", raiseMoney);
+        this.onEventTypeConfirm(1000, Config.PLAYER_ACTION.RAISE, raiseMoney);
+        this.showRaise(false);
+        this.showBtnPlayerAction(false);
+    },
 
     initAvatar: function (capacity) {
 
