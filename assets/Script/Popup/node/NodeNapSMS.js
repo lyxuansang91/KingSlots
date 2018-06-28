@@ -89,7 +89,6 @@ cc.Class({
         this.content = this.scroll_view.content;
         var innerSize = cc.size(this.content.getContentSize().width,
             this.content.getContentSize().height);
-        var padding = 0;
 
         var index = null;
         for(var i = 0; i < this.providercodes.length; i++){
@@ -101,18 +100,17 @@ cc.Class({
             return;
         }
         var provider = this.providersList[index];
-        console.log("provider",provider);
+        console.log("provider", provider);
         var length = provider.syntaxesList.length;
+        cc.log("length: ", length);
         this.content.removeAllChildren(false);
         for(var i = 0; i < length; i++) {
             var _syntax = provider.syntaxesList[i];
             var item = cc.instantiate(this.smsItemPrefab);
             item.getComponent("SmsItem").init(i,_syntax.parvalue, _syntax.cashvalue, _syntax.syntax, _syntax.targetnumber);
             var size = item.getComponent('SmsItem').node.getContentSize();
-            cc.log("item size:", size, ", i:", parseInt(i% 3));
             if(i == 0){
-                padding = innerSize.width/3 - size.width;
-                var ind = parseInt(length % 3);
+                var ind = length;
                 if(ind > 0) {
                     ind++;
                 }
@@ -120,10 +118,10 @@ cc.Class({
                 this.content.setContentSize(innerSize);
             }
 
-            var x = parseInt(i%3);
-            var y = parseInt(i/3);
+            var x = 0;
+            var y = i;
 
-            var posX = (x - 1)*size.width * 1.25;
+            var posX = 0;
             var posY = (-0.5 - y)*size.height*1.15;
 
             item.setPositionX(posX);
