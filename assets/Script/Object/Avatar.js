@@ -16,7 +16,8 @@ cc.Class({
         playerId: 0,
         avatar : cc.Node,
         lbl_bet_money: cc.Label,
-        bet_status_frame: [cc.SpriteFrame]
+        bet_status_frame: [cc.SpriteFrame],
+        ic_exit_room: cc.Node
     },
 
     onLoad : function () {
@@ -434,7 +435,7 @@ cc.Class({
     },
 
     showRegisterExitRoom(isShow){
-        // ic_register_exit_room->setVisible(isShow);
+        this.ic_exit_room.active = isShow;
     },
 
     getTurnType(){
@@ -453,6 +454,7 @@ cc.Class({
 
     isAllIn(){
         return this.all_in;
-    }
+    },
+
 
 });
