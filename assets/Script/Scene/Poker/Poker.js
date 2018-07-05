@@ -680,7 +680,7 @@ var Poker = cc.Class({
                 if (playCancelExitRoom !== 0){
                     var avatar = this.findAvatarOfPlayer(cancel_exit_room_response.getCancelexituserid());
                     if (avatar !== 0){
-                        // avatar->showRegisterExitRoom(false);
+                        avatar.getComponent("Avatar").showRegisterExitRoom(false);
                         if (cancel_exit_room_response.getCancelexituserid() === Common.getUserId()){
                             Common.showToast("TXT_CANCEL_EXITROOM");
                         }
@@ -1049,7 +1049,7 @@ var Poker = cc.Class({
             var item = cc.instantiate(this.card_prefab);
 
             var item = cc.instantiate(this.card_prefab);
-            var posX = (i - 2) * item.getComponent('CardItem').node.width/2;
+            var posX = (i - 2) * item.getComponent('CardItem').node.width*0.8;
             var posY = 0;
             item.getComponent('CardItem').replaceCard(lstCard[i]);
             item.setPositionY(posY);
@@ -1157,6 +1157,7 @@ var Poker = cc.Class({
             var valueCard = this.card_community_tag[i];
             cc.log("valueCard on table =", valueCard);
             if (Common.containInList(card_high_light, valueCard)){
+                this.card_community_tag[i].setScale(1.2);
                 // var sprite = getSpriteEatAnimation();
                 // sprite->setScale(card->getWidth() / sprite->getContentSize().width);
                 // card->addChild(sprite);
@@ -1173,6 +1174,7 @@ var Poker = cc.Class({
                 // var valueCard = this.card_tag[i].getCard().getValue();
                 cc.log("valueCard on hand =", this.card_tag[i]);
                 if (Common.containInList(card_high_light, valueCard)){
+                    this.card_tag[i].setScale(1.2);
                     // auto sprite = getSpriteEatAnimation();
                     // sprite->setScale(card->getWidth() / sprite->getContentSize().width);
                     // card->addChild(sprite);
