@@ -237,11 +237,25 @@ cc.Class({
         return this.minBet;
     },
     addCountDown(countDown, start){
-        this.timer.string = countDown;
-        this.timer.node.runAction(cc.sequence(cc.delayTime(countDown), cc.removeSelf()));
-        // countDown-- ;
-
+        var self = this;
+        this.countDownStartMatch = countDown;
+        this.unscheduleAllCallbacks();
+        this.timer.string = parseInt(this.countDownStartMatch);
+        self.schedule(function () {
+            self.addScheduleTimer();
+        },1);
     },
+
+    addScheduleTimer : function(){
+        this.countDownStartMatch--;
+        this.timer.string = parseInt(this.countDownStartMatch);
+        if(this.countDownStartMatch <= 0){
+            this.timer.string = "";
+            this.unscheduleAllCallbacks();
+        }
+        
+    },
+
     showValueMatch(value_match){
         if (value_match.length != null){
             // lb_value_match->setString(StringUtils::format("#%s", value_match.c_str()));

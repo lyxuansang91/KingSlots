@@ -726,15 +726,13 @@ var Poker = cc.Class({
                     if (objNextCards.player_id === Common.getUserId()){
                         for (var j = 0; j < objNextCards.card_value.length; j++){
                             var item = cc.instantiate(this.card_prefab);
-                            item.setScale(0.5, 0.5);
-                            // var toPos = cc.p(pokerAvatar.getPositionX(), pokerAvatar.getPositionY()).addSelf(avatar.getCardCoverPosition());
-                            // toPos.addSelf(cc.p(0.5*j*item.node.getContentSize().width,0));
-                            var posX = (j - 1) * item.getContentSize().width/2;
-                            var posY = - item.getContentSize().height/2;
+                            item.setScale(0.75, 0.75);
+                            item.rotation = j == 0 ? -15 : 15;
+                            var posX = (j - 1) * item.getContentSize().width*0.55;
+                            var posY = - item.getContentSize().height*0.75;
                             item.getComponent('CardItem').replaceCard(objNextCards.card_value[j]);
                             item.setPositionY(posY);
                             item.setPositionX(posX);
-                            // item.setPosition(toPos);
 
                             this.node_card.addChild(item);
 
@@ -1005,6 +1003,7 @@ var Poker = cc.Class({
                                 }
                             }
                             else if (entry.getKey() === "currentMoneyBet" && avatar_current_turn !== 0){
+                                cc.log("currentMoneyBet =", entry.getValue());
                                 var moneyTurn = entry.getValue();
                                 avatar_current_turn.getComponent("Avatar").setBetMoney(moneyTurn);
                             }
@@ -1049,7 +1048,7 @@ var Poker = cc.Class({
             var item = cc.instantiate(this.card_prefab);
 
             var item = cc.instantiate(this.card_prefab);
-            var posX = (i - 2) * item.getComponent('CardItem').node.width*0.8;
+            var posX = (i - 2) * item.getComponent('CardItem').node.width*0.65;
             var posY = 0;
             item.getComponent('CardItem').replaceCard(lstCard[i]);
             item.setPositionY(posY);
