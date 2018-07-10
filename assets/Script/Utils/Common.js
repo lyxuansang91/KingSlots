@@ -517,6 +517,19 @@ var Common = {
         }
         return value + end[i];
     },
+    convertLongToMoneyViewK(money){
+        //int i = 0;
+        //vector<string> end = { "", "K" };
+        money = parseInt(money);
+
+        if (money < 100000){
+            return this.numberFormatWithCommas(money);
+        }
+    
+        money = parseInt(money / 1000);
+    
+        return (this.numberFormatWithCommas(money) + "K");
+    },
     enterZone: [],
     setEnterZone: function(enterZone){
         this.enterZone = enterZone;

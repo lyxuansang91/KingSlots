@@ -286,7 +286,7 @@ cc.Class({
     setBetMoney(betMoney) {
         var is_visible_bet_money = this.bet_money.active;
         this.value_bet_money = betMoney;
-        this.lbl_bet_money.string = (Common.convertIntToMoneyView(betMoney));
+        this.lbl_bet_money.string = (Common.convertLongToMoneyViewK(betMoney));
 	    this.bet_money.active = (betMoney != 0);
 
 	    if (!is_visible_bet_money && betMoney != 0){
