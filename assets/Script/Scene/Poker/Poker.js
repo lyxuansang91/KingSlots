@@ -868,7 +868,7 @@ var Poker = cc.Class({
     resetDisplayAvatar(){
         if (this.avatars != null){
          for (var i = 0; i < this.avatars.length; i++){
-             //avatars[i].clear();
+              this.avatars[i].getComponent("Avatar").clear();
               this.hiddenPlayStatus(this.avatars[i].getComponent("Avatar"));
               this.hiddenTextEmotion(this.avatars[i].getComponent("Avatar").getPlayerId());
 
@@ -877,7 +877,7 @@ var Poker = cc.Class({
                 }
             }
 
-            // this.avatars.cleanup();
+            this.avatars = [];
         }
     },
 
