@@ -1018,6 +1018,7 @@ var Common = {
         return (zoneId === Common.ZONE_ID.TAIXIU || zoneId === Common.ZONE_ID.MINI_POKER
             || zoneId === Common.ZONE_ID.MINI_BACAY || zoneId === Common.ZONE_ID.TREASURE);
     },
+    _firstTurnUserId : 0,
     setFirstTurnUserId(_firstTurnUserId) {
         this._firstTurnUserId = _firstTurnUserId;
     },

@@ -42,6 +42,10 @@ cc.Class({
         this.light_follow.stopSystem();
     },
 
+    getBgBetMoney: function(){
+        return this.bet_money;
+    },
+
     setParticlePosition: function (index) {
         var r = this.node.width/2;
         var angel = (90 - index*360)*Math.PI/180;
@@ -280,20 +284,16 @@ cc.Class({
     },
 
     setBetMoney(betMoney) {
-        // var is_visible_bet_money = bg_bet_money->isVisible();
+        var is_visible_bet_money = this.bet_money.active;
         this.value_bet_money = betMoney;
-        // bet_money->setString(Common::getInstance()->convertLongToMoneyViewK((int)betMoney));
-        // bet_money->setVisible(betMoney != 0);
-        // bg_bet_money->setVisible(betMoney != 0);
-        //
-        // if (!is_visible_bet_money && betMoney != 0){
-        //     bg_bet_money->setScale(0.1f);
-        //
-        //     bg_bet_money->runAction(ScaleTo::create(0.4f, 1));
-        // }
-        if(betMoney !== 0){
-            this.lbl_bet_money.string = Common.numberFormatWithCommas(betMoney);
-        }
+        this.lbl_bet_money.string = (Common.convertIntToMoneyView(betMoney));
+	    this.bet_money.active = (betMoney != 0);
+
+	    if (!is_visible_bet_money && betMoney != 0){
+            this.bet_money.setScale(0.1);
+
+            this.bet_money.runAction(cc.scaleTo(0.4, 1));
+	    }
     },
 
     getBetMoney(){
@@ -302,6 +302,13 @@ cc.Class({
 
     setMoney(_money){
         this.lbl_bet_money.string = Common.numberFormatWithCommas(_money);
+    },
+
+    clear(){
+        for (var i = 0; i < this.cardCover.length; i++){
+            this.cardCover[i].removeFromParent(true);
+        }
+        this.cardCover.splice(0, this.cardCover.length);
     },
 
     setWin(duration){
@@ -432,6 +439,11 @@ cc.Class({
     showStatusBet(statusBet){
         cc.log("status bet =", statusBet);
         this.bet_status.getComponent(cc.Sprite).spriteFrame = this.bet_status_frame[statusBet-1];
+        this.bet_status.active = true;
+    },
+
+    hiddenPlayStatus(){
+        this.bet_status.active = false;
     },
 
     showRegisterExitRoom(isShow){
@@ -443,8 +455,8 @@ cc.Class({
     },
 
     addAllHiddenCard(){
-        // for (MSprite* it : cardCover){
-        //     addHiddenCard(it);
+        // for (var i = 0; i < this.cardCover.length; i++){
+        //     this.addHiddenCard(it);
         // }
     },
 
@@ -454,7 +466,6 @@ cc.Class({
 
     isAllIn(){
         return this.all_in;
-    },
-
+    }
 
 });
