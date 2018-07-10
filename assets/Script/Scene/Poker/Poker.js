@@ -258,6 +258,7 @@ var Poker = cc.Class({
     },
 
     handleReEnterRoom(enter_room_response){
+        cc.log("reenter room response", enter_room_response.toObject());
         if (enter_room_response.hasMessage()){
             Common.showToast(enter_room_response.getMessage());
         }
@@ -266,7 +267,7 @@ var Poker = cc.Class({
                 //btn_start_match->setVisible(false);
             }
 
-            if (enter_room_response.getEnterroomstatus() === Config.PlayerState.WAITING && enter_room_response.getRoomisplaying()){
+            if (enter_room_response.getEnterroomstatus() == Config.PlayerState.WAITING && enter_room_response.getRoomisplaying()){
                 // showNotifyWating();
             }
 
@@ -277,15 +278,15 @@ var Poker = cc.Class({
 
                 for (var i = 0; i < enter_room_response.getArgsList().length; i++) {
                     var entry = enter_room_response.getArgsList()[i];
-                    if (entry.getKey() === "tableStatus" && entry.getValue().length !== 0){
+                    if (entry.getKey() == "tableStatus" && entry.getValue().length != 0){
                         table_status = parseInt(entry.getValue());
 
-                        if (table_status !== Config.TABLE_STATUS.NOT_PLAYING){
+                        if (table_status != Config.TABLE_STATUS.NOT_PLAYING){
                             var temp = 0;
 
                             for (var i = 0; i < this.avatars.length; i++) {
-                                if (this.avatars[i] !== 0 && this.avatars[i].getComponent("Avatar").isPlayer()
-                                    && this.avatars[i].getComponent("Avatar").getPlayerId() !== Common.getUserId()){
+                                if (this.avatars[i] != 0 && this.avatars[i].getComponent("Avatar").isPlayer()
+                                    && this.avatars[i].getComponent("Avatar").getPlayerId() != Common.getUserId()){
                                     var vt_pair_card_other = [];
                                     vt_pair_card_other.push({
                                         player_id: this.avatars[i].getComponent("Avatar").getPlayerId(),
@@ -297,10 +298,10 @@ var Poker = cc.Class({
                             }
                         }
                     }
-                    else if (entry.getKey() === "startMatchCdRemaining"){ //thoi gian coutdown bat dau van
-                        if (entry.getValue().length !== 0) {
+                    else if (entry.getKey() == "startMatchCdRemaining"){ //thoi gian coutdown bat dau van
+                        if (entry.getValue().length != 0) {
                             var sizePlayer = this.getCurrentSizePlayers();
-                            if (table_status === Config.TABLE_STATUS.NOT_PLAYING && this.isUserPlaying() && sizePlayer > 1){
+                            if (table_status == Config.TABLE_STATUS.NOT_PLAYING && this.isUserPlaying() && sizePlayer > 1){
                                 var countDown = entry.getValue() / 1000;
                                 // if (this->getChildByTag(TAG_TIME_COUNTDOWN) != nullptr){
                                 //     this->removeChildByTag(TAG_TIME_COUNTDOWN);
@@ -309,20 +310,20 @@ var Poker = cc.Class({
                             }
                             else {
                                 var avatar = this.findAvatarOfPlayer(enter_room_response.getCurrentturnuserid());
-                                if (avatar !== 0){
+                                if (avatar != 0){
                                     avatar.getComponent("Avatar").resetProcessCircleBar();
                                     avatar.getComponent("Avatar").updateProgressCircleBar(entry.getValue());
                                 }
                             }
                         }
                     }
-                    else if (entry.getKey() === "currentCards"){
+                    else if (entry.getKey() == "currentCards"){
                         //////////////////////////////////////
                         var json_val = entry.getValue();
                         var card_values = this.parseCardValue(json_val);
                         if (card_values != null) {
                             for (var j = 0; j < card_values.length; j++) {
-                                if (Common.getUserId() === card_values[j].getFirst()) {
+                                if (Common.getUserId() == card_values[j].getFirst()) {
                                     var avatar = this.findAvatarOfPlayer(card_values[j].getFirst());
                                     var my_vt_pair_card = [];
                                     my_vt_pair_card.push({
@@ -332,7 +333,7 @@ var Poker = cc.Class({
                                     // my_vt_pair_card.push(my_pair_card);
                                     this.distributeNextCard(my_vt_pair_card);
                                 }
-                            else if (table_status === Config.TABLE_STATUS.MATCH_END){
+                            else if (table_status == Config.TABLE_STATUS.MATCH_END){
                                     var avatar = this.findAvatarOfPlayer(card_values[j].getFirst());
                                     if (avatar != 0){
                                         avatar.getComponent("Avatar").flipCards(card_values[j].getSecond());
@@ -341,21 +342,21 @@ var Poker = cc.Class({
                             }
                         }
                     }
-                    else if (entry.getKey() === "communityCard"){
+                    else if (entry.getKey() == "communityCard"){
                         var lst_card = entry.getValue().split(",");
 
                         this.prepareCommunityCard(lst_card);
                     }
-                    else if (entry.getKey() === "turnPokerType"){
+                    else if (entry.getKey() == "turnPokerType"){
                         //hien thi tren avatar current turn trang thai tuong ung voi turnPokerType tra ve
                         var json_val = entry.getValue();
                         turntype_values = this.parseTurnType(json_val);
                     }
-                    else if (entry.getKey() === "currentMoneyBet"){
+                    else if (entry.getKey() == "currentMoneyBet"){
                         var json_val = entry.getValue();
                         if (json_val != null){
                             var moneybet_values = this.parseTurnType(json_val);
-
+                            cc.log("moneybet_values----", moneybet_values);
                             for (var j = 0; j < moneybet_values.length; j++){
                                 var avatar = this.findAvatarOfPlayer(moneybet_values[j].getFirst());
                                 if (avatar != 0 && moneybet_values[j].getSecond > 0){
@@ -364,16 +365,16 @@ var Poker = cc.Class({
                             }
                         }
                     }
-                    else if (entry.getKey() === "currentPlayerAction"){
+                    else if (entry.getKey() == "currentPlayerAction"){
                         var json_val = entry.getValue();
                         this.player_action = this.parseNextPlayerAction(json_val);
                         this.showBtnPlayerActionArr(this.player_action);
                     }
-                    else if (entry.getKey() === "totalMoneyBet"){
+                    else if (entry.getKey() == "totalMoneyBet"){
                         //hien thi tong tien dat tren ban choi
                         this.setMoneyBetTable(entry.getValue());
                     }
-                    else if (entry.getKey() === "limitBetRatio"){
+                    else if (entry.getKey() == "limitBetRatio"){
                         this.countIncrease = parseInt(entry.getValue());
                     }
                 }
@@ -474,6 +475,7 @@ var Poker = cc.Class({
 
     startMatchResponseHandler(response){
         if (response !== 0) {
+            cc.log("start match response handler:", response.toObject());
             if (response.hasMessage() && response.getMessage() != null){
                 Common.showToast(response.getMessage());
             }
@@ -505,7 +507,7 @@ var Poker = cc.Class({
                             });
                             this.distributeNextCard(vt_pair_card_current);
                         }
-                    else if (response.getArgsList()[i].getKey() === "nextPlayerAction"){
+                        else if (response.getArgsList()[i].getKey() === "nextPlayerAction"){
                             var json_val = response.getArgsList()[i].getValue();
                             cc.log("player_action = ", this.parseNextPlayerAction(json_val));
                             this.player_action = this.parseNextPlayerAction(json_val);
@@ -523,7 +525,7 @@ var Poker = cc.Class({
                     }
                 }
 
-                if (Common.getFirstTurnUserId() === 0){  //lan dau chia bai
+                if (Common.getFirstTurnUserId() == 0){  //lan dau chia bai
                     //show card cover
                     var other_card;
                     for (var i = 0; i < this.avatars.length; i++){
@@ -639,13 +641,13 @@ var Poker = cc.Class({
 
                         var avatar = this.findAvatarOfPlayer(_player_exit_room_response.getExituserid());
                         if (avatar !== 0){
-                            //avatar = [];
-                            // hiddenPlayStatus(_player_exit_room_response.getExituserid());
-                            // hiddenTextEmotion(_player_exit_room_response.getExituserid());
+                            avatar.getComponent("Avatar").clear();
+                            this.hiddenPlayStatus(avatar.getComponent("Avatar"));
+                            this.hiddenTextEmotion(_player_exit_room_response.getExituserid());
                             //xoa avatar khoi ban choi (khong hien thi nua)
                             this.removeOutTablePlay(avatar);
                             //xoa khoi danh sach luu avatars
-                            // avatars.erase(std::remove(avatars.begin(), avatars.end(), avatar), avatars.end());
+                            this.avatars.splice(i, 1);
                         }
 
                         break;
@@ -713,7 +715,6 @@ var Poker = cc.Class({
     },
 
     distributeNextCard(nextCards, animation){
-
         if (nextCards.length !== 0){
             for (var i = 0; i < nextCards.length; i++){
                 var objNextCards = nextCards[i];
@@ -726,10 +727,10 @@ var Poker = cc.Class({
                     if (objNextCards.player_id === Common.getUserId()){
                         for (var j = 0; j < objNextCards.card_value.length; j++){
                             var item = cc.instantiate(this.card_prefab);
-                            item.setScale(0.75, 0.75);
+                            item.setScale(0.6, 0.6);
                             item.rotation = j == 0 ? -15 : 15;
-                            var posX = (j - 1) * item.getContentSize().width*0.55;
-                            var posY = - item.getContentSize().height*0.75;
+                            var posX = (j - 1) * item.getContentSize().width*0.53;
+                            var posY = - item.getContentSize().height*0.78;
                             item.getComponent('CardItem').replaceCard(objNextCards.card_value[j]);
                             item.setPositionY(posY);
                             item.setPositionX(posX);
@@ -756,7 +757,7 @@ var Poker = cc.Class({
                             //     sprite_cover_card->setVisible(false);
                             // }
                             //
-                            // card_tag.push_back(card_cover);
+                            this.card_tag.push(item);
                         }
                     }
                 else {
@@ -855,7 +856,7 @@ var Poker = cc.Class({
         if (this.avatars !== null){
          for (var i = 0; i < this.avatars.length; i++){
              //avatars[i].clear();
-              this.hiddenPlayStatus(this.avatars[i].getComponent("Avatar").getPlayerId());
+              this.hiddenPlayStatus(this.avatars[i].getComponent("Avatar"));
               this.hiddenTextEmotion(this.avatars[i].getComponent("Avatar").getPlayerId());
 
                if (this.avatars[i].getParent() !== null){
@@ -902,6 +903,7 @@ var Poker = cc.Class({
 
     turnResponseHandler(turnresponse){
         if (turnresponse !== 0) {
+            cc.log("turnResponse handler:", turnresponse.toObject());
             if (turnresponse.hasMessage() && turnresponse.getMessage() !== "") {
                 Common.showToast(turnresponse.getMessage());
             }
@@ -948,7 +950,7 @@ var Poker = cc.Class({
                                 //hien thi cac action cua next turn
                                 this.showBtnPlayerActionArr(this.player_action);
                             }
-                        else if (entry.getKey() === "communityCard"){
+                            else if (entry.getKey() === "communityCard"){
                                 var lst_card = entry.getValue().split(",");
 
                                 this.prepareCommunityCard(lst_card);
@@ -960,14 +962,14 @@ var Poker = cc.Class({
                                     for (var i in self.avatars){
                                         if (self.avatars[i].getComponent("Avatar").isPlayer()){
                                             if (self.avatars[i].getComponent("Avatar").getTurnType() === Config.PLAYER_ACTION.CONDESCEND){
-                                                this.hiddenPlayStatus(self.avatars[i].getComponent("Avatar").getPlayerId());
+                                                this.hiddenPlayStatus(self.avatars[i].getComponent("Avatar"));
                                             }
                                             if (self.avatars[i].getComponent("Avatar").getTurnType() === Config.PLAYER_ACTION.CALL
                                                 || self.avatars[i].getComponent("Avatar").getTurnType() === Config.PLAYER_ACTION.RAISE){
-                                                self.hiddenPlayStatus(this.avatars[i].getComponent("Avatar").getPlayerId());
+                                                self.hiddenPlayStatus(this.avatars[i].getComponent("Avatar"));
                                                 // throwMoney(xtAvatar, true);
                                             }
-                                        else if (self.avatars[i].getComponent("Avatar").getTurnType() === Config.PLAYER_ACTION.ALL_IN && !self.avatars[i].getComponent("Avatar").isAllIn()){
+                                            else if (self.avatars[i].getComponent("Avatar").getTurnType() === Config.PLAYER_ACTION.ALL_IN && !self.avatars[i].getComponent("Avatar").isAllIn()){
                                                 // throwMoney(xtAvatar, true);
                                                 self.avatars[i].getComponent("Avatar").setAllIn(true);
                                             }
@@ -996,7 +998,7 @@ var Poker = cc.Class({
                                                 && (this.avatars[i].getComponent("Avatar").getTurnType() === Config.PLAYER_ACTION.CALL
                                                 || this.avatars[i].getComponent("Avatar").getTurnType() === Config.PLAYER_ACTION.RAISE
                                                     || this.avatars[i].getComponent("Avatar").getTurnType() === Config.PLAYER_ACTION.CONDESCEND)){
-                                                this.hiddenPlayStatus(this.avatars[i].getComponent("Avatar").getPlayerId());
+                                                this.hiddenPlayStatus(this.avatars[i].getComponent("Avatar"));
                                             }
                                         }
                                     }
@@ -1074,7 +1076,7 @@ var Poker = cc.Class({
                 for (var i = 0; i < this.avatars.length; i++){
                     if (this.avatars[i].getComponent("Avatar").isPlayer()){
                         this.avatars[i].getComponent("Avatar").resetProcessCircleBar();
-                        this.hiddenPlayStatus(this.avatars[i].getComponent("Avatar").getPlayerId());
+                        this.hiddenPlayStatus(this.avatars[i].getComponent("Avatar"));
                         this.avatars[i].getComponent("Avatar").setBetMoney(0);
                     }
                 }
@@ -1208,33 +1210,33 @@ var Poker = cc.Class({
                 this.addCountDown(response.getCountdowntimer() / 1000, true);
 
                 // //clear carg_tag
-                // for (var i = 0; i < this.card_tag.length; i++) {
-                //     if (this.card_tag[i]->getParent() !== null) {
-                //         card_tag[i]->removeFromParentAndCleanup(true);
-                //     }
-                // }
-                // card_tag.clear();
+                for (var i = 0; i < this.card_tag.length; i++) {
+                    if (this.card_tag[i].getParent() != null) {
+                        this.card_tag[i].removeFromParent(true);
+                    }
+                }
+                this.card_tag.splice(0, this.card_tag.length);
 
                 //clear card community
                 for (var i = 0; i < this.card_community_tag.length; i++) {
                     if (this.card_community_tag[i].getParent() != null) {
-                        // card_community_tag[i]->removeFromParentAndCleanup(true);
+                        this.card_community_tag[i].removeFromParent(true);
                     }
                 }
-                // this.card_community.clear();
-                // this.card_community_tag.clear();
+                this.card_community.splice(0, this.card_community.length);
+                this.card_community_tag.splice(0, this.card_community_tag.length);
 
                 //clear card in avatar
                 for (var i = 0; i < this.avatars.length; i++) {
                     if (this.avatars[i].getComponent("Avatar").isPlayer()){
-                        // avatars[i]->clear();
+                        this.avatars[i].getComponent("Avatar").clear();
                         this.hiddenTextEmotion(this.avatars[i].getComponent("Avatar").getPlayerId());
                         this.avatars[i].getComponent("Avatar").setBetMoney(0);
 
                         // //reset allin
-                        // if (avatars[i]->isAllIn()){
-                        //     avatars[i]->setAllIn(false);
-                        // }
+                        if (this.avatars[i].getComponent("Avatar").isAllIn()){
+                            this.avatars[i].getComponent("Avatar").setAllIn(false);
+                        }
                     }
                 }
 
@@ -1309,12 +1311,12 @@ var Poker = cc.Class({
                                 avatar = this.findAvatarOfPlayer(moneyBox.getUserid());
                                 if (avatar !== null){
                                     avatar.getComponent("Avatar").setMoney(origin_money);
-                                    if (Common.getFirstTurnUserId() === null){
-                                        avatar.getComponent("Avatar").setBetMoney(moneyBox.getDisplaychangemoney());
-                                        avatar.showStatusBet(Config.PLAYER_ACTION.BET);
+                                    if (Common.getFirstTurnUserId() == 0){
+                                        avatar.getComponent("Avatar").setBetMoney(Math.abs(moneyBox.getDisplaychangemoney()));
+                                        avatar.getComponent("Avatar").showStatusBet(Config.PLAYER_ACTION.BET);
                                     }
 
-                                    if (moneyBox.getDisplaychangemoney() !== 0 ){
+                                    if (moneyBox.getDisplaychangemoney() != 0 ){
                                         // var moneyText = MLabel::createUpdateMoney(moneyBox.displaychangemoney());
                                         // moneyText->setPosition(Vec2(avatar->getPosition().x,
                                         //     avatar->getPosition().y + avatar->getHeight()* avatar->getScale() / 2));

@@ -309,12 +309,14 @@ cc.Class({
         }
     },
 
-    hiddenPlayStatus(player_id){
-        var tag_name = player_id.toString();
+    hiddenPlayStatus(avatar){
+        //var tag_name = player_id.toString();
         // if (this->getChildByName(tag_name) != nullptr){
         //     this->removeChildByName(tag_name);
         //     this->removeChildByName(TAG_NAME_BG_PLAY_STATUS + tag_name);
         // }
+
+        avatar.hiddenPlayStatus();
     },
 
     showTextEmoticon(txt, emoticonId, avatar, cardSize, isPoint){

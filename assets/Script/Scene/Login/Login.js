@@ -131,6 +131,7 @@ cc.Class({
             Common.showToast(resp.getMessage());
         }
     },
+
     smsConfigResponseHandler: function(resp) {
         cc.log("sms config response handler:", resp.toObject());
 
@@ -171,6 +172,7 @@ cc.Class({
             Common.showToast(resp.getMessage());
         }
     },
+
     jarResponseHandler: function(resp) {
         cc.log("jar response handler:", resp.toObject());
         if(resp.getResponsecode()) {
@@ -180,6 +182,7 @@ cc.Class({
             }
         }
     },
+
     paymentStatusResponseHandler: function(resp) {
         cc.log("payment status response handler:", resp.toObject());
         if(resp.getResponsecode()) {
@@ -193,6 +196,7 @@ cc.Class({
             Common.showToast(resp.hasMessage(), 2);
         }
     },
+
     handleMessage: function(e) {
         const buffer = e;
         var isDone = this._super(buffer);
@@ -230,7 +234,7 @@ cc.Class({
         return isDone;
     },
     checkPurchaseList: function() {
-        return (Common.assetsConfigList !== null && Common.smsConfigLists !== null
+        return (Common.assetsConfigList !== null && Common.smsConfigLists !== null && Common.getCashRoomList().length > 0
             && Common.providerLists !== null && window.jarInfoList !== null && window.loginSuccess === true);
     },
 
@@ -239,14 +243,15 @@ cc.Class({
         NetworkManager.checkEvent(function(buffer) {
             return self.handleMessage(buffer);
         });
+        
         if(this.checkPurchaseList() && !this.isLoadScene) {
             this.isLoadScene = true;
 
             this.bar_top_login.active = false;
             this.bar_top_lobby.active = true;
         }
-
     },
+    
     update: function(dt) {
         this.onGameEvent();
     },
@@ -300,8 +305,11 @@ cc.Class({
                 NetworkManager.requestAssetsConfigMessage(1);
             }
 
-            cc.log("requestEnterZoneMessage");
-            //add Poker new version
+            // cc.log("requestEnterZoneMessage");
+            // //add Poker new version
+            // if(!res.getHasplayingmatch()){
+            // }
+
             NetworkManager.requestEnterZoneMessage(Common.ZONE_ID.POKER);
         }
 
@@ -464,8 +472,6 @@ cc.Class({
             message_box.appear();
         });
     },
-
-
 
     musicClick: function () {
         this.changeOnOffSetting(Config.prefKey.MUSIC);
