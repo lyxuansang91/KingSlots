@@ -415,20 +415,20 @@ var Common = {
                 cc.log("package name:", packageName);
                 return packageName;
             }else if(cc.sys.platform == cc.sys.IPHONE || cc.sys.platform == cc.sys.IPAD){
-                return "com.bigbingo.club.ultimate";//jsb.reflection.callStaticMethod("NativeUtility", "getPackage");
+                return "com.vocucplus.ultimate";//jsb.reflection.callStaticMethod("NativeUtility", "getPackage");
             }
         } else {
-            return "com.bigbingo.club.ultimate";
+            return "com.vocucplus.ultimate";
         }
     },
     getCp: function() {
         var url = window.location.href;
         if(url.includes("gamebaivocuc.club")) {
-            return "14";
+            return "32";
         } else if(url.includes("gamemoni.com")) {
             return "13";
         }
-        return "13";
+        return "32";
     },
     getVersionCode: function() {
         if(cc.sys.isNative) {
@@ -438,7 +438,7 @@ var Common = {
                 return versionCode;
             }
         }
-        return "2";
+        return "1";
 
     },
     phoneNumber: "",
