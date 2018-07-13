@@ -233,7 +233,7 @@ var NetworkManager = {
     MAX_KILL_MSG: 10000,
     SERVER_TEST: "139.162.63.66",
     SERVER_DEBUG: "192.168.0.200",
-    URL: "wss://gamebaivocuc.club:2280/megajackpot",
+    URL: "wss://gamebaivocuc.club:1280/megajackpot",
     sessionId: "",
     tryReconnect: false,
     getSessionId: function() {
@@ -422,6 +422,9 @@ var NetworkManager = {
                 break;
             case NetworkManager.MESSAGE_ID.LEVEL_UP:
                 msg = proto.BINLevelUpResponse.deserializeBinary(bytes);
+                break;
+            case NetworkManager.MESSAGE_ID.EXCHANGE_ASSET:
+                msg = proto.BINExchangeAssetResponse.deserializeBinary(bytes);
                 break;
             default:
                 break;
@@ -944,6 +947,29 @@ var NetworkManager = {
         cc.log("check lai scope di em");
         return null;
     },
+    getExchangeAssetFromServer: function(assetId, amount, userSecurityKey, captchaSecurityKey, captcha){
+        var request = this.initExchangeAssetMessage(assetId, amount, userSecurityKey, captchaSecurityKey, captcha);
+        this.callNetwork(this.initData(request.serializeBinary(), Common.getOS(),
+            NetworkManager.MESSAGE_ID.EXCHANGE_ASSET, Common.getSessionId()));
+    },
+
+    initExchangeAssetMessage: function(assetId, amount, userSecurityKey, captchaSecurityKey, captcha){
+        var request = new proto.BINExchangeAssetRequest();
+        request.setAssetid(assetId);
+        request.setAmount(amount);
+        if (userSecurityKey != null){
+            request.setUsersecuritykey(userSecurityKey);
+        }
+        if (captchaSecurityKey != null){
+            request.setCaptchasecuritykey(captchaSecurityKey);
+        }
+        if (captcha != null){
+            request.setCaptcha(captcha);
+        }
+
+        return request;
+    },
+
     connectNetwork: function() {
         cc.log("NetworkManager.URL ", NetworkManager.URL);
         if(window.ws === null || typeof(window.ws) === 'undefined' || window.ws.readyState === WebSocket.CLOSED) {

@@ -533,8 +533,22 @@ cc.Class({
         } else {
             Common.showToast("Bạn cần đăng nhập để thực hiện chức năng này", 2);
         }
+
     },
     openFriendPopup: function() {
         Common.showToast("Chức năng này đang cập nhật, vui lòng thử lại!", 2);
+    },
+    openShopPopup: function () {
+        if(window.loginSuccess) {
+            if(Common.enablePurchaseCash) {
+                Common.showPopup(Config.name.POPUP_DOITHE, function (popup) {
+                    popup.appear();
+                });
+            } else {
+                Common.showToast("Chức năng này đang cập nhât, vui lòng thử lại!");
+            }
+        } else {
+            Common.showToast("Bạn cần đăng nhập để thực hiện chức năng này", 2);
+        }
     },
 });

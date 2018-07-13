@@ -71,6 +71,7 @@ var Config = {
         POPUP_TAIXIU_SESSION_HISTORY : "PopupTaixiuSession",
         POPUP_TAIXIU_STATIS : "PopupTaixiuStatis",
         POPUP_REGISTER : "PopupRegister",
+        POPUP_DOITHE : "PopupDoiThe",
     },
 
     ON_EVENT: {
@@ -154,6 +155,11 @@ var Config = {
         resultState : 3,
         matchEndState : 4,
         prepareNewMatchState : 5
+    },
+
+    AssetConfig : {
+        THE_CAO : 1,
+        HIEN_VAT : 2
     }
 
 };
