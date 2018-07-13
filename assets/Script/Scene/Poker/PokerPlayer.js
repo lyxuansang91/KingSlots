@@ -23,68 +23,68 @@ cc.Class({
         this.tableIndex = tableIndex;
         this.player = true;
     },
-    getName() {
+    getName : function() {
         return this.name;
     },
 
-    getID() {
+    getID: function() {
         return this.id;
     },
 
-    getCash() {
+    getCash: function() {
         return this.cash;
     },
 
-    getGold() {
+    getGold: function() {
         return this.gold;
     },
 
-    getMoney(isCash) {
+    getMoney: function(isCash) {
         return isCash ? this.cash : this.gold;
     },
 
-    getAvatarId(){
+    getAvatarId: function(){
         if (this.avatar_id < 100000){
             return 0;
         }
         return this.avatar_id;
     },
 
-    isPlayer(){
+    isPlayer: function(){
         return this.player;
     },
 
     //=========== set
-    setPlayer(player){
+    setPlayer: function(player){
         this.player = player;
     },
 
-    setName(n) {
+    setName: function(n) {
         this.name = n;
     },
 
-    setID(i) {
+    setID: function(i) {
         this.id = i;
     },
 
-    setCash(c){
+    setCash: function(c){
         this.cash = c;
     },
 
-    setGold(g){
+    setGold: function(g){
         this.gold = g;
     },
 
-    isWin() {
+    isWin: function() {
         return this._win;
     },
 
-    setWin(_win) {
+    setWin: function(_win) {
         this._win = _win;
     },
 
     //set tien cho nguoi choi la cash hay gold
-    setMoney(isCash, money){
+    setMoney: function(isCash, money){
         if (isCash){
             this.cash = money;
         }
@@ -93,35 +93,35 @@ cc.Class({
         }
     },
 
-    getNumberCard() {
+    getNumberCard: function() {
         return this.numberCard;
     },
 
-    setNumberCard(number){
+    setNumberCard: function(number){
         this.numberCard = number;
     },
 
-    getPostion() {
+    getPostion: function() {
         return this.position;
     },
 
-    setPostion(position) {
+    setPostion: function(position) {
         this.position = position;
     },
 
-    getTableIndex() {
+    getTableIndex: function() {
         return this.tableIndex;
     },
 
-    setTableIndex(tableIndex) {
+    setTableIndex: function(tableIndex) {
         this.tableIndex = tableIndex;
     },
 
-    getState() {
+    getState: function() {
         return this.state;
     },
 
-    setState(state) {
+    setState: function(state) {
         this.state = state;
     }
 

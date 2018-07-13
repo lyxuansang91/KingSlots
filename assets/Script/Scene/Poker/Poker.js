@@ -127,7 +127,7 @@ var Poker = cc.Class({
     },
 
 
-    setListPlayerFromParams(player_list, waiting_player_list){
+    setListPlayerFromParams: function(player_list, waiting_player_list){
         if (this.lst_player.length != null) this.lst_player = [];
 
         for (var i = 0; i < player_list.length; i++) {
@@ -144,7 +144,7 @@ var Poker = cc.Class({
         this.displayInfoRemainCard(this.lst_player);
     },
 
-    convertFromBINPlayer(binplayer){
+    convertFromBINPlayer: function(binplayer){
         var uid = binplayer.getUserid();
 
         var numberCard = 0;
@@ -154,7 +154,7 @@ var Poker = cc.Class({
         return player;
     },
 
-    displayInfoRemainCard(remain_card_infos){
+    displayInfoRemainCard : function(remain_card_infos){
         this.currentTableIndex = -1;
 
         for (i = 0; i < remain_card_infos.length; i++) {
@@ -181,12 +181,12 @@ var Poker = cc.Class({
         }*/
     },
 
-    setPositionPlayer(player, position){
+    setPositionPlayer: function(player, position){
         if (player.getTableIndex() < 0){
             return;
         }
 
-        if (player.getTableIndex() >= 5 && player.getId() != Common.getUserId()){
+        if (player.getTableIndex() >= 5 && player.getID() != Common.getUserId()){
             return;
         }
 
@@ -257,7 +257,7 @@ var Poker = cc.Class({
     //         this->addChild(avatar);
     },
 
-    handleReEnterRoom(enter_room_response){
+    handleReEnterRoom: function(enter_room_response){
         cc.log("reenter room response", enter_room_response.toObject());
         if (enter_room_response.hasMessage()){
             Common.showToast(enter_room_response.getMessage());
@@ -400,7 +400,7 @@ var Poker = cc.Class({
         }
     },
 
-    parseTurnType(json_value){
+    parseTurnType: function(json_value){
         var result = [];
         var json_object = JSON.parse(json_value);
         try {
@@ -421,7 +421,7 @@ var Poker = cc.Class({
         return result;
     },
 
-    getCurrentSizePlayers(){
+    getCurrentSizePlayers: function(){
         var result = 0;
 
         for (var i = 0; i < this.lst_player.length; i++){
@@ -433,7 +433,7 @@ var Poker = cc.Class({
         return result;
     },
 
-    isUserPlaying(){
+    isUserPlaying: function(){
         var user_id = Common.getUserId();
         var player = this.findPlayer(user_id);
         if (player != 0){
@@ -442,7 +442,7 @@ var Poker = cc.Class({
         return false;
     },
 
-    findPlayer(player_id){
+    findPlayer: function(player_id){
         for (var i = 0; i < this.lst_player.length; i++){
             if (this.lst_player[i].isPlayer() && this.lst_player[i].getID() == player_id){
                 return this.lst_player[i];
@@ -451,7 +451,7 @@ var Poker = cc.Class({
         return null;
     },
 
-    findWaiting(player_id){
+    findWaiting: function(player_id){
         for (var i = 0; i < this.lst_player.length; i++){
             if (!this.lst_player[i].isPlayer() && this.lst_player[i].getID() == player_id){
                 return this.lst_player[i];
@@ -460,7 +460,7 @@ var Poker = cc.Class({
         return null;
     },
 
-    findAvatarOfPlayer(player_id){
+    findAvatarOfPlayer: function(player_id){
         for (var i = 0; i < this.avatars.length; i++){
             if (this.avatars[i].getComponent("Avatar").getPlayerId() == player_id){
                 return this.avatars[i];
@@ -469,7 +469,7 @@ var Poker = cc.Class({
         return null;
     },
 
-    parseCardValue(json_value){
+    parseCardValue: function(json_value){
         var result = [];
         json_value = JSON.parse(json_value);
         try {
@@ -486,7 +486,7 @@ var Poker = cc.Class({
         return result;
     },
 
-    startMatchResponseHandler(response){
+    startMatchResponseHandler: function(response){
         if (response != 0) {
             cc.log("start match response handler:", response.toObject());
             if (response.hasMessage() && response.getMessage() != null){
@@ -558,7 +558,7 @@ var Poker = cc.Class({
         }
     },
 
-    matchBeginResponseHandler(matchbeginresponse){
+    matchBeginResponseHandler: function(matchbeginresponse){
         if (matchbeginresponse != null) {
             if (matchbeginresponse.hasMessage() && matchbeginresponse.getMessage() != "") {
                 Common.showToast(matchbeginresponse.getMessage());
@@ -584,8 +584,9 @@ var Poker = cc.Class({
         }
     },
 
-    playerEnterRoomResponseHandler(newplayerresponse){
+    playerEnterRoomResponseHandler: function(newplayerresponse){
         if (newplayerresponse != 0) {
+            cc.log("playerEnterRoomResponseHandler =", newplayerresponse.toObject());
             if (newplayerresponse.getResponsecode()) {
                 var player = this.convertFromBINPlayer(newplayerresponse.getPlayer());
 
@@ -626,8 +627,9 @@ var Poker = cc.Class({
         }
     },
 
-    playerExitRoomResponse(_player_exit_room_response){
+    playerExitRoomResponse: function(_player_exit_room_response){
         if (_player_exit_room_response != 0) {
+            cc.log("_player_exit_room_response =", _player_exit_room_response.toObject());
             if (_player_exit_room_response.getResponsecode()) {
                 var leng = this.lst_player.length;
 
@@ -650,10 +652,10 @@ var Poker = cc.Class({
                     //xoa nguoi choi khoi ban choi
                     var user_id = this.lst_player[i].getID();
                     if (user_id == _player_exit_room_response.getExituserid()){
-                        // this.lst_player.erase(lst_player.begin() + i);
+                        this.lst_player.splice(i, 1);
 
                         var avatar = this.findAvatarOfPlayer(_player_exit_room_response.getExituserid());
-                        if (avatar != 0){
+                        if (avatar != null){
                             avatar.getComponent("Avatar").clear();
                             this.hiddenPlayStatus(avatar.getComponent("Avatar"));
                             this.hiddenTextEmotion(_player_exit_room_response.getExituserid());
@@ -681,11 +683,11 @@ var Poker = cc.Class({
         }
     },
 
-    removeOutTablePlay(avatar){
+    removeOutTablePlay: function(avatar){
         avatar.removeFromParent(true);
     },
 
-    cancelExitAfterMatchEndResponseHandler(cancel_exit_room_response){
+    cancelExitAfterMatchEndResponseHandler: function(cancel_exit_room_response){
         if (cancel_exit_room_response != 0 && cancel_exit_room_response.getCancelexituserid()) {
             if (cancel_exit_room_response.getResponsecode()) {
 
@@ -708,7 +710,7 @@ var Poker = cc.Class({
         }
     },
 
-    playerExitAfterMatchEndResponse(exit_room_player_response){
+    playerExitAfterMatchEndResponse: function(exit_room_player_response){
         if (exit_room_player_response != 0) {
             if (exit_room_player_response.getResponsecode()) {
                 var leng = this.lst_player.length;
@@ -727,7 +729,7 @@ var Poker = cc.Class({
         }
     },
 
-    distributeNextCard(nextCards, animation){
+    distributeNextCard: function(nextCards, animation){
         if (nextCards.length != 0){
             for (var i = 0; i < nextCards.length; i++){
                 var objNextCards = nextCards[i];
@@ -800,7 +802,7 @@ var Poker = cc.Class({
         }
     },
 
-    parseNextPlayerAction(json_value){
+    parseNextPlayerAction: function(json_value){
         var card_values = [];
         try {
             for (var i = 0; i < json_value.length; i++){
@@ -817,7 +819,7 @@ var Poker = cc.Class({
         return card_values;
     },
 
-    setMoneyBetTable(moneyBet){
+    setMoneyBetTable: function(moneyBet){
         if (moneyBet == 0){
             this.total_bet_cash.node.active = false;
             return;
@@ -826,27 +828,27 @@ var Poker = cc.Class({
         this.total_bet_cash.node.active = true;
     },
 
-    raiseEvent(){
+    raiseEvent: function(){
         this.showRaise(true);
     },
 
-    callEvent(){
+    callEvent: function(){
         this.onEventTypeConfirm(1000, Config.PLAYER_ACTION.CALL);
     },
 
-    foldEvent(){
+    foldEvent: function(){
         this.onEventTypeConfirm(1000, Config.PLAYER_ACTION.FOLD);
     },
 
-    allInEvent(){
+    allInEvent: function(){
         this.onEventTypeConfirm(1000, Config.PLAYER_ACTION.ALL_IN);
     },
 
-    condescendEvent(){
+    condescendEvent: function(){
         this.onEventTypeConfirm(1000, Config.PLAYER_ACTION.CONDESCEND);
     },
 
-    onEventTypeConfirm(enventType, turnType, raiseMoney){
+    onEventTypeConfirm: function(enventType, turnType, raiseMoney){
         // if (enventType == OnEvenConfirmRaise::EVENT_CONFIRM_OK){
             var entries = [];
 
@@ -865,9 +867,9 @@ var Poker = cc.Class({
         // }
     },
 
-    resetDisplayAvatar(){
-        if (this.avatars != null){
-         for (var i = 0; i < this.avatars.length; i++){
+    resetDisplayAvatar: function(){
+        if (this.avatars.length > 0){
+            for (var i = 0; i < this.avatars.length; i++){
               this.avatars[i].getComponent("Avatar").clear();
               this.hiddenPlayStatus(this.avatars[i].getComponent("Avatar"));
               this.hiddenTextEmotion(this.avatars[i].getComponent("Avatar").getPlayerId());
@@ -881,7 +883,7 @@ var Poker = cc.Class({
         }
     },
 
-    readyToPlayResponse(msg){
+    readyToPlayResponse: function(msg){
         if (msg != 0) {
             if (msg.getResponsecode()){
                 var ready_player_id = msg.getReadyuserid();
@@ -914,9 +916,9 @@ var Poker = cc.Class({
         }
     },
 
-    turnResponseHandler(turnresponse){
+    turnResponseHandler: function(turnresponse){
         if (turnresponse != 0) {
-            cc.log("turnResponse handler:", turnresponse.toObject());
+            //cc.log("turnResponse handler:", turnresponse.toObject());
             if (turnresponse.hasMessage() && turnresponse.getMessage() != "") {
                 Common.showToast(turnresponse.getMessage());
             }
@@ -954,11 +956,8 @@ var Poker = cc.Class({
                     if (turnresponse.getArgsList().length > 0) {
                         for (var i = 0; i < turnresponse.getArgsList().length; i++){
                             var entry = turnresponse.getArgsList()[i];
-                            cc.log("turnresponse entry = ", entry);
                             if (entry.getKey() == "nextPlayerAction" && next_turn_id == Common.getUserId()) {
                                 var json_val = entry.getValue();
-                                cc.log("turnresponse json_val =",json_val);
-                                cc.log("turn button =", this.parseNextPlayerAction(json_val));
                                 this.player_action = this.parseNextPlayerAction(json_val);
                                 //hien thi cac action cua next turn
                                 this.showBtnPlayerActionArr(this.player_action);
@@ -1018,7 +1017,6 @@ var Poker = cc.Class({
                                 }
                             }
                             else if (entry.getKey() == "currentMoneyBet" && avatar_current_turn != 0){
-                                cc.log("currentMoneyBet =", entry.getValue());
                                 var moneyTurn = entry.getValue();
                                 avatar_current_turn.getComponent("Avatar").setBetMoney(moneyTurn);
                             }
@@ -1036,13 +1034,13 @@ var Poker = cc.Class({
     //
     // },
 
-    stopProcessCircleBar(){
+    stopProcessCircleBar: function(){
         for (var i = 0; i < this.avatars.length; i++){
             this.avatars[i].getComponent("Avatar").stop();
         }
     },
 
-    prepareCommunityCard(lstCard){
+    prepareCommunityCard: function(lstCard){
         var last_community = [];
         if (this.card_community.length == 0){
             last_community = lstCard;
@@ -1058,7 +1056,7 @@ var Poker = cc.Class({
         this.showCommunityCard(last_community);
     },
 
-    showCommunityCard(lstCard){
+    showCommunityCard: function(lstCard){
         for (var i = 0; i < lstCard.length; i++){
             var item = cc.instantiate(this.card_prefab);
 
@@ -1077,7 +1075,7 @@ var Poker = cc.Class({
         this.card_community.push(lstCard);
     },
 
-    matchEndResponseHandler(endmatchresponse){
+    matchEndResponseHandler: function(endmatchresponse){
         console.log("endmatchresponse =", endmatchresponse);
         if (endmatchresponse != null) {
             if (endmatchresponse.hasMessage() && endmatchresponse.getMessage() != "") {
@@ -1165,7 +1163,7 @@ var Poker = cc.Class({
         }
     },
 
-    showHighLightCard(user_id, card_high_light){
+    showHighLightCard: function(user_id, card_high_light){
         //highlight quan bai tren ban
         for (var i in this.card_community_tag){
             var valueCard = this.card_community_tag[i];
@@ -1207,8 +1205,8 @@ var Poker = cc.Class({
         }
     },
 
-    preparenewMatchHandler(response){
-        cc.log("preparenewMatchHandler response =", response);
+    preparenewMatchHandler: function(response){
+        cc.log("preparenewMatchHandler response =", response.toObject());
         this.node_card.removeAllChildren(true);
         this.node_card_center.removeAllChildren(true);
         if (response != null) {
@@ -1274,7 +1272,7 @@ var Poker = cc.Class({
         }
     },
 
-    betResponseHandler(response){
+    betResponseHandler: function(response){
     //     BINBetResponse *response = (BINBetResponse *)Common::getInstance()
     // ->checkEvent(NetworkManager::BET);
         if (response != null) {
@@ -1284,9 +1282,9 @@ var Poker = cc.Class({
         }
     },
 
-    updateMoneyResponseHandler(updatemoneyresponse){
-        cc.log("updateMoneyResponseHandler response =", updatemoneyresponse);
+    updateMoneyResponseHandler: function(updatemoneyresponse){
         if (updatemoneyresponse != null) {
+           // cc.log("updateMoneyResponseHandler response =", updatemoneyresponse);
             if (updatemoneyresponse.hasMessage() && updatemoneyresponse.getMessage() != "") {
                 Common.showToast(updatemoneyresponse.getMessage());
             }
@@ -1344,7 +1342,7 @@ var Poker = cc.Class({
         }
     },
 
-    showCall(player_id){
+    showCall: function(player_id){
         //neu thang tiep theo danh la minh thi hien thi theo bao nhieu
         //vi du: thang dang danh raise 10 thi hien thi call la 10
         if (player_id == Common.getUserId()){
@@ -1369,7 +1367,7 @@ var Poker = cc.Class({
         }
     },
 
-    showRaise(isShow){
+    showRaise: function(isShow){
         if(isShow){
             this.node_raise.active = true;
             this.showBtnPlayerAction(false);
@@ -1379,7 +1377,7 @@ var Poker = cc.Class({
 
     },
 
-    showTitleBtnCall(money){
+    showTitleBtnCall: function(money){
         // if (money > 0){
         //     btn_call->setTitleText(StringUtils::format("%s +%s", getLanguageStringWithKey("TITLE_BTN_CALL").c_str(), Common::getInstance()->numberFormatWithCommas(money).c_str()));
         //     //lb_call->setString(StringUtils::format("%s +%s", getLanguageStringWithKey("TITLE_BTN_CALL").c_str(), Common::getInstance()->numberFormatWithCommas(money).c_str()));
@@ -1392,7 +1390,7 @@ var Poker = cc.Class({
         // btn_call->setTitlePosition();
     },
 
-    handleWinLose(response) {
+    handleWinLose: function(response) {
         //handle win
         for (var i = 0; i < response.getWinninguseridsList().length; i++) {
             var val = response.getWinninguseridsList()[i];
@@ -1432,7 +1430,7 @@ var Poker = cc.Class({
         }
     },
 
-    throwMoney(avatar, isThrowOut){
+    throwMoney: function(avatar, isThrowOut){
         var from;
         var to;
         // if (isThrowOut){
@@ -1447,7 +1445,7 @@ var Poker = cc.Class({
         // moveChip(from,to);
     },
 
-    roomOwnerChangedResponseHandler(response){
+    roomOwnerChangedResponseHandler: function(response){
         // BINRoomOwnerChangedResponse* response =
         //     (BINRoomOwnerChangedResponse *)Common::getInstance()->checkEvent(NetworkManager::ROOM_OWNER_CHANGED);
         if (response != null) {
@@ -1467,7 +1465,7 @@ var Poker = cc.Class({
                 //show chu phong moi
                 var newOnwer = this.findAvatarOfPlayer(newOwnerUserId);
                 if (newOnwer != null){
-                    // newOnwer->showChuong(true);
+                    // newOnwer.showChuong(true);
                 }
 
                 // thoi gian doi khi thay doi chu phong
@@ -1484,7 +1482,6 @@ var Poker = cc.Class({
     },
 
     sliderEvent: function(){
-
         var _minbet = this.getMinBet();
 
         var max_money = _minbet * (this.countIncrease - 1);
@@ -1513,7 +1510,6 @@ var Poker = cc.Class({
     },
 
     initAvatar: function (capacity) {
-
         for(var i = 0; i < capacity; i++){
             var avatar = cc.instantiate(this.avatar_prefab);
             var avatar_comp = avatar.getComponent("Avatar");

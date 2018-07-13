@@ -185,58 +185,59 @@ cc.Class({
             }
         }
     },
+
     //Tu atula
-    setRoomIndex(roomIndex){
+    setRoomIndex : function(roomIndex){
         cc.log("roomIndex =", roomIndex);
         this.roomIndex = roomIndex;
     },
-    getRoomIndex() {
+    getRoomIndex: function() {
         return this.roomIndex;
     },
-    setVipRoom(is_vip_room){
+    setVipRoom: function(is_vip_room){
         this.is_vip_room = is_vip_room;
     },
-    isVipRoom(){
+    isVipRoom: function(){
         return this.is_vip_room;
     },
-    setPassWordRequired(passwordRequired){
+    setPassWordRequired: function(passwordRequired){
         this.passwordRequired = passwordRequired;
     },
-    getPassWordRequired() {
+    getPassWordRequired: function() {
             return this.passwordRequired;
     },
-    setPlayerList(player_list){
+    setPlayerList: function(player_list){
         this.player_list = player_list;
     },
-    getPlayerList(){
+    getPlayerList: function(){
         return this.player_list;
     },
-    setCreateRoom(is_create_room){
+    setCreateRoom: function(is_create_room){
         this.is_create_room = is_create_room;
     },
-    isCreateRoom(){
+    isCreateRoom: function(){
         return this.is_create_room;
     },
-    setWaitingPlayerList(waiting_player_list){
+    setWaitingPlayerList: function(waiting_player_list){
         this.waiting_player_list = waiting_player_list;
     },
-    getWaitingPlayerList(){
+    getWaitingPlayerList: function(){
         return this.waiting_player_list;
     },
-    setEnterRoomResponse(reEnterRoomResponse){
+    setEnterRoomResponse: function(reEnterRoomResponse){
         this.enter_room_response = reEnterRoomResponse;
     },
-    getEnterRoomResponse(){
+    getEnterRoomResponse: function(){
         return this.enter_room_response;
     },
-    setMinBet(minBet){
+    setMinBet: function(minBet){
         this.minBet = minBet;
         this.bet_money.string = minBet;
     },
-    getMinBet(){
+    getMinBet: function(){
         return this.minBet;
     },
-    addCountDown(countDown, start){
+    addCountDown: function(countDown, start){
         var self = this;
         this.countDownStartMatch = countDown;
         this.unscheduleAllCallbacks();
@@ -256,13 +257,13 @@ cc.Class({
         
     },
 
-    showValueMatch(value_match){
+    showValueMatch: function(value_match){
         if (value_match.length != null){
             // lb_value_match->setString(StringUtils::format("#%s", value_match.c_str()));
         }
     },
 
-    btnExitClick(){
+    btnExitClick: function(){
         if (!this.check_exit_room) {
             NetworkManager.getExitRoomMessageFromServer(Common.ZONE_ID.POKER, this.roomIndex);
         }
@@ -272,7 +273,7 @@ cc.Class({
         this.check_exit_room = !this.check_exit_room;
     },
 
-    showBtnPlayerAction(isShow) {
+    showBtnPlayerAction: function(isShow) {
         this.btn_raise.node.active = isShow;
         this.btn_call.node.active = isShow;
         this.btn_all_in.node.active = isShow;
@@ -280,7 +281,7 @@ cc.Class({
         this.btn_condescend.node.active = isShow;
     },
 
-    showBtnPlayerActionArr(player_action){
+    showBtnPlayerActionArr: function(player_action){
         this.showBtnPlayerAction(true);
 
         for (var i = 0; i < player_action.length; i++){
@@ -309,7 +310,7 @@ cc.Class({
         }
     },
 
-    hiddenPlayStatus(avatar){
+    hiddenPlayStatus: function(avatar){
         //var tag_name = player_id.toString();
         // if (this->getChildByName(tag_name) != nullptr){
         //     this->removeChildByName(tag_name);
@@ -319,7 +320,7 @@ cc.Class({
         avatar.hiddenPlayStatus();
     },
 
-    showTextEmoticon(txt, emoticonId, avatar, cardSize, isPoint){
+    showTextEmoticon: function(txt, emoticonId, avatar, cardSize, isPoint){
         // string tag_name = StringUtils::format("%lld_%s", avatar->getPlayerId(), TAG_NAME_EMOTICON);
         // if (!txt.empty()){
         //     this->removeChildByName(tag_name);
@@ -400,14 +401,14 @@ cc.Class({
         // }
     },
 
-    hiddenTextEmotion(player_id){
+    hiddenTextEmotion: function(player_id){
         // var tag_name = StringUtils::format("%lld_%s", player_id, TAG_NAME_EMOTICON);
         // if (this->getChildByName(tag_name) != nullptr){
         //     this->removeChildByName(tag_name);
         // }
     },
 
-    showPlayStatus(turnType, avatar){
+    showPlayStatus: function(turnType, avatar){
         // string texture_name = StringUtils::format(IMG_PLAY_STATUS, turnType);
         // string tag_name = StringUtils::toString(avatar->getPlayerId());
         // MSprite* sp_play_status = (MSprite*) this->getChildByName(tag_name);
