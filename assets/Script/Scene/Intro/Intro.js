@@ -39,7 +39,7 @@ cc.Class({
     update: function(dt) {
         if (this.isProgressing) {
             this.deltaTime += dt;
-            this.matchProgress.progress = this.deltaTime/this.timeSchedule;
+            this.matchProgress.progress = this.deltaTime/this.timeSchedule > 1 ? 1 : this.deltaTime/this.timeSchedule;
             this.icon_gold.x = this.matchProgress.node.width * (this.matchProgress.progress - 0.5);
 
             this.loading_text.string = "Loading " + Math.floor(this.matchProgress.progress*100) + "%";

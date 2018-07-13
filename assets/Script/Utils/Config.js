@@ -49,12 +49,9 @@ var Config = {
     },
 
     name : {
-        COMMON_POPUP : "CommonPopup",
         POPUP_MESSAGE_BOX : "PopupMessageBox",
         POPUP_MESSAGE_RECONNECT : "PopupMessageReconnect",
-        POPUP_SETTING : "PopupSetting",
         POPUP_HISTORY : "PopupHistory",
-        POPUP_THREECARD_HISTORY : "PopupThreeCardHistory",
         POPUP_USERINFO : "PopupUserInfo",
         POPUP_NAPTIEN : "PopupNapTien",
         POPUP_EXCHANGE: "PopupExchange",

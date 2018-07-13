@@ -174,9 +174,7 @@ cc.Class({
     },
 
     openPopupSetting : function () {
-        Common.showPopup(Config.name.POPUP_SETTING,function(popup) {
-            popup.appear();
-        });
+
     }
 });
 

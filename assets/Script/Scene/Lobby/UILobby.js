@@ -59,9 +59,7 @@ cc.Class({
 
     },
     openSettingPopup: function () {
-        Common.showPopup(Config.name.POPUP_SETTING,function(popup) {
-            popup.appear();
-        });
+
     },
 
     openGiftPopup: function () {
